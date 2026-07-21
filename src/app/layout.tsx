@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Maven_Pro } from "next/font/google";
 import "./globals.css";
 import RatingWidget from "@/components/RatingWidget";
+import LaunchGuard from "@/components/LaunchGuard";
 
 const mavenPro = Maven_Pro({
   subsets: ["latin"],
@@ -41,7 +42,9 @@ export default function RootLayout({
         `}</style>
       </head>
       <body>
-        {children}
+        <LaunchGuard>
+          {children}
+        </LaunchGuard>
         <RatingWidget />
       </body>
     </html>

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useTheme } from "@/context/VariantContext";
+import { usePathname } from "next/navigation";
 
 const navLinks = [
   { label: "Home", href: "/#hero" },
@@ -17,6 +18,7 @@ export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const { theme } = useTheme();
+  const pathname = usePathname();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60);
@@ -32,7 +34,7 @@ export default function Header() {
     >
       <div className="max-w-[1200px] mx-auto pr-6 pl-2">
         <div className="flex items-center justify-between h-32">
-          <a href="#" className="flex-shrink-0">
+          <a href="/" className="flex-shrink-0">
             <img
               src="/images/logo.jpg"
               alt="ChemLife Innovations"
@@ -41,15 +43,26 @@ export default function Header() {
           </a>
 
           <nav className="hidden lg:flex items-center gap-10">
-            {navLinks.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                className="text-[19px] font-semibold transition-colors text-brand-navy hover:text-brand-orange tracking-wide"
-              >
-                {link.label}
-              </a>
-            ))}
+            {navLinks.map((link) => {
+              const isActive =
+                pathname === link.href ||
+                (link.href === "/#hero" && pathname === "/") ||
+                (pathname && pathname.startsWith(link.href) && link.href !== "/");
+
+              return (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  className={`text-[19px] font-semibold transition-colors tracking-wide ${
+                    isActive
+                      ? "text-brand-orange"
+                      : "text-brand-navy hover:text-brand-orange"
+                  }`}
+                >
+                  {link.label}
+                </a>
+              );
+            })}
           </nav>
 
           <button
@@ -73,16 +86,27 @@ export default function Header() {
        {mobileOpen && (
           <div className="lg:hidden bg-white border-t border-brand-navy/10 shadow-xl">
             <div className="px-6 py-4 space-y-3">
-              {navLinks.map((link) => (
-                <a
-                  key={link.label}
-                  href={link.href}
-                  className="block text-sm text-brand-navy hover:text-brand-orange font-medium"
-                  onClick={() => setMobileOpen(false)}
-                >
-                  {link.label}
-                </a>
-              ))}
+              {navLinks.map((link) => {
+                const isActive =
+                  pathname === link.href ||
+                  (link.href === "/#hero" && pathname === "/") ||
+                  (pathname && pathname.startsWith(link.href) && link.href !== "/");
+
+                return (
+                  <a
+                    key={link.label}
+                    href={link.href}
+                    className={`block text-sm font-medium ${
+                      isActive
+                        ? "text-brand-orange"
+                        : "text-brand-navy hover:text-brand-orange"
+                    }`}
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    {link.label}
+                  </a>
+                );
+              })}
             </div>
           </div>
         )}
