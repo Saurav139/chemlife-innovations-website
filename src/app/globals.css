@@ -1,0 +1,127 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-orange: #E65C38;
+  --color-brand-orange-light: #FFFFFF;
+  --color-brand-green: #305280;
+  --color-brand-navy: #305280;
+  --color-brand-gold: #FFCD1E;
+  --color-warm-white: #FFFFFF;
+  --color-warm-light: #FFFFFF;
+  --color-muted: #305280;
+  --color-near-black: #305280;
+  
+  /* Additional colors mapped strictly to the 4 core colors */
+  --color-deep-blue: #305280;
+  --color-warm-orange: #E65C38;
+  --color-light-orange: #FFFFFF;
+  --color-process-bg: #305280;
+
+  --font-family-heading: var(--font-maven-pro), Calibri, system-ui, sans-serif;
+  --font-family-body: var(--font-maven-pro), Calibri, system-ui, sans-serif;
+}
+
+@font-face {
+  font-family: "Galaxy";
+  src: url("/fonts/LTGalaxyRegular.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Galaxy";
+  src: url("/fonts/LTGalaxyMedium.woff") format("woff");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Galaxy";
+  src: url("/fonts/LTGalaxyBold.woff") format("woff");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: var(--font-family-body);
+    color: var(--color-muted);
+    background-color: var(--color-warm-white);
+    line-height: 1.75;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-family-heading);
+    color: var(--color-near-black);
+  }
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  animation: marquee 60s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+@keyframes marquee-reverse {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+
+.animate-marquee-reverse {
+  animation: marquee-reverse 60s linear infinite;
+}
+
+.animate-marquee-reverse:hover {
+  animation-play-state: paused;
+}
+
+@keyframes ken-burns {
+  0% { transform: scale(1) translate(0, 0); }
+  50% { transform: scale(1.08) translate(-1%, -1%); }
+  100% { transform: scale(1) translate(0, 0); }
+}
+
+.animate-ken-burns {
+  animation: ken-burns 20s ease-in-out infinite;
+}
+
+/* 3D Flip Animation for Social Responsibilities */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.transform-style-preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+
+/* Hide Next.js dev indicators & overlays in dev environment */
+nextjs-portal,
+#nextjs-portal,
+.nextjs-static-indicator,
+[data-nextjs-toast],
+[data-nextjs-dialog] {
+  display: none !important;
+}

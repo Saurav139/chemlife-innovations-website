@@ -1,0 +1,158 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
+import SectionWrapper from "./SectionWrapper";
+
+const items = [
+  {
+    id: 0,
+    title: "Empowering Students",
+    emoji: "🚲",
+    desc: "Bicycles donation for empowering students below the poverty line",
+    bgType: "video",
+    bgSrc: "/videos/social1.mp4",
+  },
+  {
+    id: 1,
+    title: "Prevention of Sexual Harassment",
+    emoji: "🛡️",
+    desc: "Chemlife certified with Prevention of Sexual Harassment at Work place",
+    bgType: "image",
+    bgSrc: "/images/social2.jpeg",
+  },
+  {
+    id: 2,
+    title: "Animal Welfare",
+    emoji: "🐄",
+    desc: "Supporting feeding of two cows for one full year",
+    bgType: "image",
+    bgSrc: "/images/social3.jpeg",
+  },
+];
+
+export default function SocialResponsibilities() {
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [bgIndex, setBgIndex] = useState(0);
+
+  // Auto-rotate the background every 5 seconds if not hovering
+  useEffect(() => {
+    if (hoveredIndex !== null) return;
+    const timer = setInterval(() => {
+      setBgIndex((prev) => (prev + 1) % items.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [hoveredIndex]);
+
+  // Hover overrides the active background slideshow
+  const activeBgIndex = hoveredIndex !== null ? hoveredIndex : bgIndex;
+  const activeBg = items[activeBgIndex];
+
+  return (
+    <SectionWrapper className="relative py-32 lg:py-40 bg-white overflow-hidden border-b border-gray-100">
+      {/* Dynamic Background Media with cross-fade */}
+      <div className="absolute inset-0 z-0 select-none pointer-events-none">
+        <AnimatePresence initial={false}>
+          {activeBg.bgType === "video" ? (
+            <motion.div
+              key={activeBg.bgSrc}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.45 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 1.0, ease: "easeInOut" }}
+              className="absolute inset-0 w-full h-full"
+            >
+              <video
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="w-full h-full object-cover"
+              >
+                <source src={activeBg.bgSrc} type="video/mp4" />
+              </video>
+            </motion.div>
+          ) : (
+            <motion.div
+              key={activeBg.bgSrc}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.65 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 1.0, ease: "easeInOut" }}
+              className="absolute inset-0 w-full h-full"
+            >
+              <Image
+                src={activeBg.bgSrc}
+                alt="Social Responsibility Background"
+                fill
+                className="object-cover"
+                priority
+                unoptimized
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
+        <div className="absolute inset-0 bg-white/40" />
+      </div>
+
+      <div className="relative z-10 max-w-[1200px] mx-auto px-6">
+        <div className="text-center mb-16ß">
+          <span className="text-teal-600 text-base lg:text-lg font-semibold tracking-widest uppercase">
+            Our Commitment
+          </span>
+          <h2 className="font-heading text-4xl lg:text-5xl text-brand-navy mt-3 leading-tight">
+            Social Responsibilities
+          </h2>
+        </div>
+
+        {/* 3-Column Centered Layout */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-5xl mx-auto">
+          {items.map((item, index) => (
+            <motion.div
+              key={item.title}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: index * 0.1, ease: [0.25, 0.1, 0, 1] }}
+              className="text-center group cursor-pointer"
+              onMouseEnter={() => setHoveredIndex(index)}
+              onMouseLeave={() => setHoveredIndex(null)}
+            >
+              {/* Card resized to w-44 h-44 to be less obtrusive */}
+              <div className="relative w-33 h-33 mx-auto mb-6 perspective-1000">
+                <div
+                  className={`w-full h-full transition-transform duration-500 transform-style-preserve-3d ${hoveredIndex === index ? 'rotate-y-180' : ''
+                    }`}
+                >
+                  {/* Front side - Logo/Emoji (Scaled emoji to text-6xl) */}
+                  <div className="absolute inset-0 w-full h-full bg-brand-navy rounded-xl flex items-center justify-center backface-hidden shadow-lg group-hover:shadow-xl transition-shadow duration-300">
+                    <span className="text-6xl select-none" role="img" aria-label={item.title}>
+                      {item.emoji}
+                    </span>
+                  </div>
+
+                  {/* Back side - Description (p-4 padding and text-xs fits text cleanly within w-44 box) */}
+                  <div className="absolute inset-0 w-full h-full bg-brand-navy rounded-xl flex items-center justify-center backface-hidden rotate-y-180 p-4 border border-white/10">
+                    <span className="text-white text-xs font-semibold text-center leading-relaxed">
+                      {item.desc}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div
+                className={`transition-transform duration-300 ${hoveredIndex === index ? 'transform translate-y-1 scale-105' : ''
+                  }`}
+              >
+                <h3 className="font-heading text-xl text-brand-navy mb-3 group-hover:text-teal-600 transition-colors duration-300">
+                  {item.title}
+                </h3>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </SectionWrapper>
+  );
+}

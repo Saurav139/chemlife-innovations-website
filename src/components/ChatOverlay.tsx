@@ -1,0 +1,161 @@
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { AnimatePresence, motion } from "framer-motion";
+import { routeQuery } from "@/utils/chatService";
+
+export default function ChatOverlay() {
+  const router = useRouter();
+  const [isOpen, setIsOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const trimmed = query.trim();
+    if (!trimmed || loading) return;
+
+    setLoading(true);
+    setError("");
+
+    try {
+      const bot = await routeQuery(trimmed);
+      setIsOpen(false);
+      setQuery("");
+      router.push(`/chat/${bot}?q=${encodeURIComponent(trimmed)}`);
+    } catch (err) {
+      console.error(err);
+      setError("Unable to connect to assistant. Try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="fixed bottom-6 right-6 z-50 font-sans">
+      <AnimatePresence>
+        {/* Expanded Panel */}
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: 30, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 30, scale: 0.95 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
+            className="mb-4 w-[380px] max-w-[calc(100vw-2rem)] bg-white rounded-2xl shadow-2xl border border-slate-200/50 overflow-hidden flex flex-col"
+          >
+            {/* Header with Brand Navy and Accent gradient */}
+            <div className="p-5 bg-linear-to-r from-brand-navy to-[#1e3452] text-white flex justify-between items-center relative">
+              <div className="flex items-center gap-3">
+                <div className="flex -space-x-3.5">
+                  <div className="w-12 h-12 rounded-full border-2 border-white bg-white overflow-hidden shadow-lg flex items-center justify-center p-0.5">
+                    <img
+                      src="/images/poultry-mascot.png"
+                      alt="Dr. Kukku"
+                      className="w-full h-full object-contain"
+                    />
+                  </div>
+                  <div className="w-12 h-12 rounded-full border-2 border-white bg-white overflow-hidden shadow-lg flex items-center justify-center p-0.5">
+                    <img
+                      src="/images/dairy-mascot.png"
+                      alt="Dr. Mikku"
+                      className="w-full h-full object-contain"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <h3 className="font-heading font-bold text-[18px] leading-tight text-white tracking-wide">
+                    ChemLife AI Experts
+                  </h3>
+                  <p className="text-[11px] text-teal-400 font-semibold tracking-wider uppercase">
+                    Poultry & Dairy Nutritionists
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setIsOpen(false)}
+                className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors text-white text-xl font-bold cursor-pointer"
+                aria-label="Close panel"
+              >
+                &times;
+              </button>
+            </div>
+
+            {/* Content Body */}
+            <div className="p-6 flex-grow flex flex-col items-center text-center gap-4">
+              <span className="px-3 py-1 rounded-full bg-brand-orange/10 text-brand-orange text-[10px] font-black uppercase tracking-wider">
+                📣 Coming Soon
+              </span>
+              <p className="text-xs text-brand-navy font-bold leading-relaxed">
+                Dr. Kukku and Dr. Mikku are currently undergoing strict scientific validation.
+              </p>
+              <p className="text-[11px] text-slate-500 leading-relaxed font-light">
+                Our customized AI consultants will be online soon to assist you with feed additive formulations and poultry/dairy clinical questions.
+              </p>
+              <div className="flex -space-x-3.5 my-2">
+                <div className="w-14 h-14 rounded-full border-2 border-white bg-slate-50 overflow-hidden shadow-md flex items-center justify-center p-1">
+                  <img
+                    src="/images/poultry-mascot.png"
+                    alt="Dr. Kukku"
+                    className="w-full h-full object-contain"
+                  />
+                </div>
+                <div className="w-14 h-14 rounded-full border-2 border-white bg-slate-50 overflow-hidden shadow-md flex items-center justify-center p-1">
+                  <img
+                    src="/images/dairy-mascot.png"
+                    alt="Dr. Mikku"
+                    className="w-full h-full object-contain"
+                  />
+                </div>
+              </div>
+            </div>
+ 
+            {/* Footer with matched styling */}
+            <div className="px-6 py-3 bg-slate-50 border-t border-slate-100 flex justify-between items-center text-[10px] text-slate-400 font-semibold uppercase tracking-wider">
+              <span>Powered by ChemLife AI</span>
+              <button
+                onClick={() => {
+                  setIsOpen(false);
+                  router.push("/chat");
+                }}
+                className="text-brand-navy hover:text-brand-orange cursor-pointer transition-colors"
+              >
+                Learn More →
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Collapsed Bubble Trigger with LARGER Mascot Avatars */}
+      <motion.button
+        onClick={() => setIsOpen(!isOpen)}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        className="flex items-center gap-3 bg-brand-orange text-white px-5 py-3.5 rounded-full shadow-2xl hover:bg-brand-orange/95 transition-all group border-2 border-white/20 cursor-pointer"
+      >
+        <div className="flex -space-x-4">
+          <div className="w-10 h-10 rounded-full border-2 border-white bg-white overflow-hidden shadow-md flex-shrink-0 flex items-center justify-center p-0.5">
+            <img
+              src="/images/poultry-mascot.png"
+              alt="Dr. Kukku"
+              className="w-full h-full object-contain"
+            />
+          </div>
+          <div className="w-10 h-10 rounded-full border-2 border-white bg-white overflow-hidden shadow-md flex-shrink-0 flex items-center justify-center p-0.5">
+            <img
+              src="/images/dairy-mascot.png"
+              alt="Dr. Mikku"
+              className="w-full h-full object-contain"
+            />
+          </div>
+        </div>
+        <span className="font-heading font-bold text-xs tracking-wider uppercase select-none">
+          Ask our AI Experts
+        </span>
+        <span className="text-emerald-400 animate-pulse text-xs select-none">●</span>
+      </motion.button>
+    </div>
+  );
+}

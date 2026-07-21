@@ -1,0 +1,189 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import Image from "next/image";
+import { motion, AnimatePresence } from "framer-motion";
+import { useTheme } from "@/context/VariantContext";
+
+const certificates = [
+  {
+    file: "c-camp-logo.png",
+    title: "K-SAP BIO 50 Cohort",
+    organization: "Centre for Cellular and Molecular Platforms (C-CAMP)",
+    year: "2020-21",
+    description: "Accelerated at the C-CAMP initiated K-SAP BIO 50, 2nd cohort 2020-21, validating and scaling our biotechnology solutions in animal agriculture.",
+  },
+  {
+    file: "animal-husbandry.png",
+    title: "Animal Husbandry Grand Finalist",
+    organization: "Department of Animal Husbandry, Dairying & Fisheries",
+    year: "2019",
+    description: "Recognized as a finalist in the Animal Husbandry Grand Challenge 2019, honoring our pioneering innovation in sustainable animal nutrition.",
+  },
+  {
+    file: "birac.png",
+    title: "BIRAC Supported Innovator",
+    organization: "Biotechnology Industry Research Assistance Council (BIRAC)",
+    year: "2021",
+    description: "Supported and incubated by BIRAC, Department of Biotechnology, Government of India, for accelerating novel product development in agriculture.",
+  },
+  {
+    file: "naarm.png",
+    title: "a-IDEA NAARM Incubated Startup",
+    organization: "a-IDEA, ICAR-NAARM",
+    year: "2020",
+    description: "Incubated at a-IDEA, the Technology Business Incubator of ICAR-NAARM (National Academy of Agricultural Research Management) to scale sustainable agri-tech solutions.",
+  },
+];
+
+const easeOut = [0.25, 0.1, 0, 1] as const;
+
+export default function AwardsRecognition() {
+  const [activeStep, setActiveStep] = useState(0);
+  const { theme } = useTheme();
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActiveStep((prev) => (prev + 1) % certificates.length);
+    }, 6000);
+
+    return () => clearInterval(timer);
+  }, [activeStep]);
+
+  return (
+    <section className="bg-white py-24 lg:py-32 overflow-hidden">
+      <div className="max-w-[1200px] mx-auto px-6">
+        <div className="text-center mb-16">
+          <span className="text-teal-400 text-base lg:text-lg font-semibold tracking-widest uppercase">
+            Honors
+          </span>
+          <h2 className="font-heading text-4xl lg:text-5xl text-brand-navy mt-2 mb-4 leading-tight">
+            Awards & Recognition
+          </h2>
+        </div>
+
+        {/* Plaque frame */}
+        <motion.div 
+          className="relative max-w-[900px] mx-auto"
+          whileHover={{ y: -8, scale: 1.015 }}
+          transition={{ duration: 0.4, ease: [0.25, 0.1, 0, 1] }}
+        >
+          <div className="bg-brand-orange rounded-2xl p-[3px] shadow-2xl">
+            <div className="bg-white rounded-xl p-6 lg:p-8 min-h-[320px] flex items-center">
+              <AnimatePresence mode="wait">
+                {activeStep >= 0 && (
+                  <motion.div
+                    key={activeStep}
+                    initial={{ opacity: 0, x: 40 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -40 }}
+                    transition={{ duration: 0.4, ease: easeOut }}
+                    className="flex flex-col sm:flex-row items-center gap-8 lg:gap-10 w-full"
+                  >
+                    {/* Digital Award Plaque */}
+                    <div className="relative w-full sm:w-80 lg:w-[360px] aspect-[4/3] shrink-0">
+                      {/* Uniform light orange base card */}
+                      <div className="absolute inset-0 bg-orange-200 rounded-2xl shadow-2xl border-4 border-orange-300 p-4 flex items-center justify-center">
+                        {/* Subtle inset overlay */}
+                        <div className="absolute inset-1.5 border border-white/15 rounded-lg pointer-events-none" />
+
+                        {/* Logo Image centered on the wood plaque */}
+                        <div className="relative w-full h-full bg-white rounded-lg overflow-hidden shadow-inner p-4 flex items-center justify-center">
+                          <Image
+                            src={`/images/awards/${certificates[activeStep].file}`}
+                            alt={certificates[activeStep].title}
+                            fill
+                            className="object-contain p-2"
+                            sizes="(max-width: 640px) 90vw, 320px"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Caption */}
+                    <div className="flex-1 text-center sm:text-left">
+                      <span className="text-teal-600 text-sm font-semibold tracking-widest uppercase">
+                        {certificates[activeStep].organization} &bull; {certificates[activeStep].year}
+                      </span>
+                       {certificates[activeStep].title && (
+                         <h3 className="font-heading text-2xl lg:text-3xl text-brand-navy mt-2 mb-4 leading-tight">
+                           {certificates[activeStep].title}
+                         </h3>
+                       )}
+                       <p className="text-brand-navy/85 text-base lg:text-lg leading-relaxed">
+                        {certificates[activeStep].description}
+                      </p>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          </div>
+
+          {/* Top decorative ribbon */}
+          <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 flex gap-1">
+            <div className="w-6 h-3 bg-brand-orange rounded-b-sm skew-x-[20deg]" />
+            <div className="w-6 h-3 bg-brand-orange rounded-b-sm -skew-x-[20deg]" />
+          </div>
+        </motion.div>
+
+        {/* Train-track railway navigation */}
+        <div className="w-full max-w-[700px] mx-auto mt-10">
+          <div className="relative h-20">
+            {/* Top rail */}
+            <div className="absolute top-0 left-0 right-0 h-[3px] bg-teal-400/30 rounded-full" />
+
+            {/* Bottom rail */}
+            <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-teal-400/30 rounded-full" />
+
+            {/* Train diamond on top rail */}
+            <motion.div
+              className="absolute -top-[3px] w-4 h-4 bg-teal-400 rotate-45 z-10 shadow-lg shadow-teal-400/40"
+              animate={{
+                left: `${(activeStep / (certificates.length - 1)) * (100 - 100 / certificates.length)}%`,
+              }}
+              transition={{ duration: 0.7, ease: easeOut }}
+              style={{ marginLeft: `${50 / certificates.length}%` }}
+            />
+
+            <div className="relative flex justify-between h-full">
+              {certificates.map((_, i) => {
+                const isActive = i === activeStep;
+                const isCompleted = i < activeStep;
+
+                return (
+                  <button
+                    key={i}
+                    onClick={() => setActiveStep(i)}
+                    className="relative flex flex-col items-center justify-between h-full cursor-pointer"
+                    style={{ width: `${100 / certificates.length}%` }}
+                    aria-label={`Go to certificate ${i + 1}`}
+                  >
+                     {/* Top cross-tie */}
+                     <div className={`w-[2px] h-5 transition-colors duration-500 ${isCompleted ? 'bg-teal-400/70' : isActive ? 'bg-teal-400' : 'bg-teal-400/20'}`} />
+
+                    {/* Station marker */}
+                    <div
+                      className={`w-12 h-12 flex items-center justify-center rounded-md border-2 transition-all duration-500 ${
+                         isActive
+                          ? 'bg-teal-400 border-teal-400 text-brand-navy scale-110 shadow-lg shadow-teal-400/30'
+                          : isCompleted
+                          ? 'bg-teal-400/20 border-teal-400/40 text-teal-400/80'
+                          : 'bg-transparent border-teal-400/30 text-teal-400/50'
+                      }`}
+                    >
+                      <span className="text-sm font-bold">{`0${i + 1}`}</span>
+                    </div>
+
+                     {/* Bottom cross-tie */}
+                     <div className={`w-[2px] h-5 transition-colors duration-500 ${isCompleted ? 'bg-teal-400/70' : isActive ? 'bg-teal-400' : 'bg-teal-400/20'}`} />
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}

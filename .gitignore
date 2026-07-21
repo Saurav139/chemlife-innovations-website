@@ -1,0 +1,51 @@
+# Dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# Testing
+/coverage
+
+# Next.js build output
+/.next/
+/out/
+
+# Production / local environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Logs and databases
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+ratings.json
+
+# TypeScript build info
+tsconfig.tsbuildinfo
+
+# IDEs and editors
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.DS_Store
+
+# Agent specific files
+/.agents/
+/skills-lock.json
+
+# Root-level unreferenced download media
+# (Keeps the public folder assets, but ignores files dropped in the root directory)
+/*.jpg
+/*.jpeg
+/*.png
+/*.webp
+/*.avif
+/*.mp4
