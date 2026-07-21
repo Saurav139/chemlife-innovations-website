@@ -10,7 +10,7 @@ export default function RatingWidget() {
     return null;
   }
 
-  const googleReviewUrl = process.env.NEXT_PUBLIC_GOOGLE_REVIEW_URL || "https://www.google.com/search?q=ChemLife+Innovations+Doddaballapura";
+  const googleReviewUrl = process.env.NEXT_PUBLIC_GOOGLE_REVIEW_URL || "https://www.google.com/search?q=ChemLife+Innovations+Doddaballapura#lrd=0x3bb1df3ba153f331:0x220cf5694e9f1948,3,,,,";
 
   return (
     <div className="fixed right-0 top-1/2 -translate-y-1/2 z-50 flex items-start select-none font-sans">
