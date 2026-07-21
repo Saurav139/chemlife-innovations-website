@@ -17,6 +17,15 @@ export default function RatingWidget() {
     return null;
   }
 
+  const handleClose = () => {
+    setIsOpen(false);
+    setTimeout(() => {
+      setSubmitStatus("idle");
+      setRating(0);
+      setComment("");
+    }, 300);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (rating === 0) return;
@@ -32,12 +41,13 @@ export default function RatingWidget() {
       if (res.ok) {
         setSubmitStatus("success");
         setComment("");
-        // Close widget after 2 seconds on success
-        setTimeout(() => {
-          setIsOpen(false);
-          setSubmitStatus("idle");
-          setRating(0);
-        }, 2000);
+        // Close widget after 2 seconds on success ONLY if rating is low. 
+        // For 4/5 stars, keep it open so they can click the Google Review link.
+        if (rating <= 3) {
+          setTimeout(() => {
+            handleClose();
+          }, 2000);
+        }
       } else {
         setSubmitStatus("error");
         setTimeout(() => setSubmitStatus("idle"), 3000);
@@ -86,7 +96,7 @@ export default function RatingWidget() {
             </h4>
           </div>
           <button
-            onClick={() => setIsOpen(false)}
+            onClick={handleClose}
             className="text-white/60 hover:text-white transition-colors cursor-pointer text-lg font-black"
           >
             ✕
@@ -96,12 +106,40 @@ export default function RatingWidget() {
         {/* Card Body */}
         <div className="p-6">
           {submitStatus === "success" ? (
-            <div className="flex flex-col items-center justify-center py-8 text-center animate-fade-in">
+            <div className="flex flex-col items-center justify-center py-4 text-center animate-fade-in">
               <div className="w-12 h-12 rounded-full bg-teal-50 text-teal-600 flex items-center justify-center mb-4 text-xl border border-teal-200">
                 ✓
               </div>
               <h5 className="font-bold text-brand-navy text-base">Feedback Submitted!</h5>
-              <p className="text-gray-400 text-xs mt-1">Thank you for helping us launch!</p>
+              <p className="text-gray-500 text-xs mt-1 px-4 leading-relaxed">
+                Thank you for helping us launch! Your local rating has been saved.
+              </p>
+
+              {rating >= 4 && (
+                <div className="mt-6 pt-6 border-t border-slate-100 w-full flex flex-col items-center gap-3 animate-fade-in">
+                  <p className="text-xs font-semibold text-slate-500 max-w-[220px]">
+                    Would you mind sharing your review on Google to support us?
+                  </p>
+                  <a
+                    href="https://www.google.com/search?q=ChemLife+Innovations+Doddaballapura"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full max-w-[200px] py-2.5 px-4 rounded-xl bg-brand-orange hover:bg-brand-orange/95 text-white font-bold text-xs shadow hover:scale-102 transition-all duration-300 text-center flex items-center justify-center gap-1.5"
+                  >
+                    <span>Write Google Review</span>
+                    <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20">
+                      <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z" />
+                      <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" />
+                    </svg>
+                  </a>
+                  <button
+                    onClick={handleClose}
+                    className="text-xs font-medium text-slate-400 hover:text-slate-600 transition-colors mt-1 cursor-pointer"
+                  >
+                    Maybe Later
+                  </button>
+                </div>
+              )}
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-5">
