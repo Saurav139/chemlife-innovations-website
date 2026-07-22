@@ -33,7 +33,7 @@ const researchTopics: ResearchTopic[] = [
     challenge: "Modern feed industries demand high bioavailability, consistent efficacy, low residue, and sustainable manufacturing. Conventional extraction methods often fall short, leaving bioactives trapped, relying on toxic solvents, and wasting valuable phytochemical potential.",
     advantage: "Uses nutrient media with natural hydrogen-bond donors and acceptors (deep eutectic solvents) to mimic and accelerate natural biological transformations. This liberates hidden bioactive compounds without relying on toxic organic solvents.",
     recognition: "BIRAC / DBT ecosystem, and the Technology Development Board (TDB), Government of India.",
-    banner: "/images/anbiot.jpg"
+    banner: "/images/anbiot.png"
   },
   {
     id: 2,
@@ -45,7 +45,7 @@ const researchTopics: ResearchTopic[] = [
     advantage: "Employs plant and animal derived hydroxy amino acids as a natural ligand base. Combined with deep eutectic solvents, this green chelation workflow completely avoids downstream effluent generation while delivering superior diet stability.",
     recognition: "Technology Development Board (TDB), Govt. of India.",
     applications: "Poultry, dairy, and swine diets to maximize bioavailability.",
-    banner: "/images/green_technology.jpg"
+    banner: "/images/green_technology.png"
   },
   {
     id: 3,
@@ -121,7 +121,7 @@ export default function ResearchPage() {
               Research & Development
             </span>
             <h1 className="font-heading text-4xl lg:text-5xl font-bold leading-tight mb-4 text-white">
-              Biotechnology And Chemistry <span className="text-teal-400">Research Pipelines</span>
+              Synergy In Action: <br /><span className="text-teal-400">Animal Nutrition, Biotechnology & Chemistry</span>
             </h1>
             <p className="text-white/85 text-lg lg:text-xl leading-relaxed max-w-3xl font-light">
               Science-backed studies and platforms formulated for superior bioavailability, green chelation, and stable animal nutrition.
@@ -167,7 +167,7 @@ export default function ResearchPage() {
             </div>
 
             {/* Research Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 items-start">
               {filteredTopics.map((topic) => {
                 const isExpanded = expandedId === topic.id;
                 const emailSubject = encodeURIComponent(`Collaboration Inquiry: ${topic.title}`);
@@ -181,24 +181,24 @@ export default function ResearchPage() {
                     key={topic.id}
                     layout
                     transition={{ duration: 0.4, ease: easeOut }}
-                    className="border-2 border-slate-200 rounded-2xl bg-slate-50/50 hover:bg-slate-50/85 transition-colors duration-300 overflow-hidden shadow-xs hover:border-brand-orange/40 flex flex-col h-full group"
+                    className="border-2 border-slate-200 rounded-2xl bg-slate-50/50 hover:bg-slate-50/85 transition-colors duration-300 overflow-hidden shadow-xs hover:border-brand-orange/40 flex flex-col group"
                   >
                     {/* Card Header (Image/Banner + Title) */}
                     <div
                       onClick={() => toggleExpand(topic.id)}
-                      className="cursor-pointer select-none flex flex-col h-full flex-grow"
+                      className="cursor-pointer select-none flex flex-col"
                     >
-                      {/* Top: Product Image or Icon Container */}
-                      <div className="w-full aspect-video relative overflow-hidden bg-slate-100 border-b border-slate-200">
+                      {/* Top: Product Image or Icon Container - Full Uncropped View */}
+                      <div className="w-full aspect-[4/3] relative overflow-hidden bg-white border-b border-slate-200 p-3 flex items-center justify-center">
                         <img
                           src={topic.banner}
                           alt={`${topic.title} banner`}
-                          className="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-102 transition-transform duration-500"
+                          className="w-full h-full object-contain object-center group-hover:scale-105 transition-transform duration-500"
                         />
                       </div>
 
                       {/* Content: Title */}
-                      <div className="p-6 flex flex-col gap-3 flex-grow">
+                      <div className="p-6 flex flex-col gap-3">
                         <h3 className="font-heading text-2xl font-black text-brand-navy group-hover:text-brand-orange transition-colors duration-300 leading-tight">
                           {topic.title}
                         </h3>
@@ -209,7 +209,7 @@ export default function ResearchPage() {
                           </p>
                         )}
 
-                        <div className="flex items-center gap-1.5 text-brand-orange text-sm font-bold mt-auto pt-2">
+                        <div className="flex items-center gap-1.5 text-brand-orange text-sm font-bold pt-2">
                           <span>{isExpanded ? "Show Less" : "Explore Dossier"}</span>
                           <motion.span
                             animate={{ rotate: isExpanded ? 180 : 0 }}
@@ -233,33 +233,33 @@ export default function ResearchPage() {
                           transition={{ duration: 0.4, ease: easeOut }}
                           className="overflow-hidden bg-white border-t-2 border-slate-200"
                         >
-                          <div className="p-6 space-y-6">
+                          <div className="p-6 space-y-5">
                             {/* Summary section */}
                             <div>
-                              <span className="text-xs font-bold uppercase text-teal-655 tracking-wider block mb-2">
+                              <span className="text-xs font-bold uppercase text-teal-655 tracking-wider block mb-1.5">
                                 Executive Summary
                               </span>
-                              <p className="text-slate-655 text-base leading-relaxed font-light">
+                              <p className="text-slate-655 text-sm lg:text-base leading-relaxed font-light">
                                 {topic.preview}
                               </p>
                             </div>
 
                             {/* Challenge section */}
                             <div>
-                              <span className="text-xs font-bold uppercase text-teal-655 tracking-wider block mb-2">
+                              <span className="text-xs font-bold uppercase text-teal-655 tracking-wider block mb-1.5">
                                 Core Challenge
                               </span>
-                              <p className="text-slate-655 text-base leading-relaxed font-light">
+                              <p className="text-slate-655 text-sm lg:text-base leading-relaxed font-light">
                                 {topic.challenge}
                               </p>
                             </div>
 
                             {/* Efficacy & Advantage section */}
                             <div>
-                              <span className="text-xs font-bold uppercase text-teal-655 tracking-wider block mb-2">
+                              <span className="text-xs font-bold uppercase text-teal-655 tracking-wider block mb-1.5">
                                 Mechanism & Advantage
                               </span>
-                              <p className="text-slate-655 text-base leading-relaxed font-light">
+                              <p className="text-slate-655 text-sm lg:text-base leading-relaxed font-light">
                                 {topic.advantage}
                               </p>
                             </div>
@@ -267,10 +267,10 @@ export default function ResearchPage() {
                             {/* Target Applications (if any) */}
                             {topic.applications && (
                               <div>
-                                <span className="text-xs font-bold uppercase text-teal-655 tracking-wider block mb-2">
+                                <span className="text-xs font-bold uppercase text-teal-655 tracking-wider block mb-1.5">
                                   Target Applications
                                 </span>
-                                <p className="text-slate-655 text-base leading-relaxed font-light">
+                                <p className="text-slate-655 text-sm lg:text-base leading-relaxed font-light">
                                   {topic.applications}
                                 </p>
                               </div>
@@ -278,21 +278,21 @@ export default function ResearchPage() {
 
                             {/* Recognition & Support (if any) */}
                             {topic.recognition && (
-                              <div className="bg-teal-50/70 border border-teal-150 p-4 rounded-xl">
-                                <span className="text-xs font-bold uppercase text-teal-800 tracking-wider block mb-1.5">
+                              <div className="bg-teal-50/70 border border-teal-150 p-3.5 rounded-xl">
+                                <span className="text-xs font-bold uppercase text-teal-800 tracking-wider block mb-1">
                                   Support & Recognition
                                 </span>
-                                <p className="text-teal-700 text-base leading-relaxed font-black">
+                                <p className="text-teal-700 text-sm lg:text-base leading-relaxed font-black">
                                   {topic.recognition}
                                 </p>
                               </div>
                             )}
 
                             {/* Mailto Inquiry Button */}
-                            <div className="pt-2">
+                            <div className="pt-1">
                               <a
                                 href={emailHref}
-                                className="w-full inline-flex items-center justify-center py-3 rounded-full border-2 border-teal-600 hover:border-teal-700 text-teal-650 hover:text-teal-750 font-bold text-base hover:bg-teal-50/50 transition-colors duration-300 text-center"
+                                className="w-full inline-flex items-center justify-center py-2.5 rounded-full border-2 border-teal-600 hover:border-teal-700 text-teal-650 hover:text-teal-750 font-bold text-sm hover:bg-teal-50/50 transition-colors duration-300 text-center"
                               >
                                 Inquire About Collaboration
                               </a>

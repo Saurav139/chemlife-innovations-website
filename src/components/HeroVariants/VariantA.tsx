@@ -23,8 +23,8 @@ const bgImages = [
 
 const stats = [
   { value: 30, suffix: "+", label: "Years of Research" },
-  { value: 12, suffix: "+", label: "Products" },
-  { value: 5, suffix: "+", label: "States Served" },
+  { value: 16, suffix: "+", label: "Products" },
+  { value: 22, suffix: "+", label: "Customers Served" },
   { value: 7, suffix: "+", label: "Awards Won" },
 ];
 
@@ -139,10 +139,10 @@ export default function HeroVariantA() {
             </AnimatePresence>
 
             <div className="flex flex-wrap gap-4 justify-center w-full mt-2">
-              <a 
-                href="https://youtu.be/-amOgNcjYNg?si=a5jh1ag8rOQ14QxX" 
-                target="_blank" 
-                rel="noopener noreferrer" 
+              <a
+                href="https://youtu.be/-amOgNcjYNg?si=a5jh1ag8rOQ14QxX"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-flex items-center gap-3 px-7 py-3 rounded-full text-sm font-semibold bg-white border-2 border-brand-orange text-brand-orange hover:bg-brand-orange hover:text-white shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5"
               >
                 <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current">
@@ -173,11 +173,10 @@ export default function HeroVariantA() {
             <button
               key={i}
               onClick={() => setCurrentTag(i)}
-              className={`w-3.5 h-3.5 rounded-full transition-all duration-350 ${
-                isActive
-                  ? "bg-teal-400 scale-125 shadow-lg shadow-teal-400/50"
-                  : "bg-white/30 border border-white/10 hover:bg-white/60"
-              }`}
+              className={`w-3.5 h-3.5 rounded-full transition-all duration-350 ${isActive
+                ? "bg-teal-400 scale-125 shadow-lg shadow-teal-400/50"
+                : "bg-white/30 border border-white/10 hover:bg-white/60"
+                }`}
               aria-label={`Go to slide ${i + 1}`}
             />
           );

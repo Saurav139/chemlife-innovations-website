@@ -34,7 +34,7 @@ const steps: Step[] = [
   {
     step: 4,
     title: "Delivery",
-    description: "Protected feed additive bio-actives en route to the site of absorption with enhanced bioavailability and targeted release systems.",
+    description: "The integrated supply chain moves feed additives from the Bengaluru facility through warehouses and varied transport networks to final delivery via direct or distributor channels.",
     image: "/images/process-delivery_crop.png",
   },
 ];

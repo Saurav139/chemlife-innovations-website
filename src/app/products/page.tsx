@@ -109,8 +109,8 @@ const productsData: Product[] = [
     ],
     inclusionRate: "Transition Dairy Animals: 20 g/animal/day\nEarly lactation Dairy Animals: 15-25 g/cow/day\nMid-late lactation Dairy Animals: 10-15 g/cow/day\nSmall Ruminants: 5-10 g/animal/day\nFor Dairy Feed: 0.5-2 kg/MT\n\nOr as per the recommendation of a Nutritionist",
     packSize: "25kg Bag",
-    icon: "/images/icon-methiowiz.png",
-    banner: "/images/banner-methiowiz.jpg"
+    icon: "/images/icon-choliwiz.png",
+    banner: "/images/banner-choliwiz.jpg"
   },
   {
     id: 6,
@@ -160,8 +160,8 @@ const productsData: Product[] = [
     ],
     inclusionRate: "Dairy Cattle & Buffalo: 25 g/head/day\nHigh-yield dairy cows & Buffaloes in transition: 25 - 50 g/head/day\n\nFeed inclusion:\nDairy Cow: 0.75 - 2 kg/MT of Dairy Feed\nGoat/Sheep: 2 - 5 g per animal per day\n\nOr as per the recommendation of a Nutritionist",
     packSize: "25kg Bag",
-    icon: "/images/icon-choliwiz.png",
-    banner: "/images/banner-choliwiz.jpg"
+    icon: "/images/icon-methiowiz.png",
+    banner: "/images/banner-methiowiz.jpg"
   },
   {
     id: 9,
@@ -411,7 +411,7 @@ export default function ProductsPage() {
           <div className="relative z-10 max-w-[1200px] mx-auto px-6 w-full text-center md:text-left">
             <span className="text-teal-400 text-xs md:text-sm font-semibold tracking-widest uppercase block mb-3">Our Offerings</span>
             <h1 className="font-heading text-4xl lg:text-5xl font-bold leading-tight mb-4 text-white">
-              Feed <span className="text-teal-400">Additives</span> and Solutions
+              Feed <span className="text-teal-400">Additives & Solutions</span>
             </h1>
             <p className="text-white/85 text-base lg:text-lg leading-relaxed max-w-3xl font-light">
               Science-backed solutions formulated for superior mold inhibition, pathogen control, and grain preservation.
@@ -538,13 +538,12 @@ export default function ProductsPage() {
                             {product.name}
                           </h3>
 
-                          <span className={`px-2.5 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-wider border whitespace-nowrap ${
-                            product.category === "Mono-gastric"
-                              ? "bg-orange-50 border-orange-150 text-brand-orange"
-                              : product.category === "Ruminants"
-                                ? "bg-blue-50 border-blue-150 text-blue-700"
-                                : "bg-emerald-50 border-emerald-150 text-emerald-700"
-                          }`}>
+                          <span className={`px-2.5 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-wider border whitespace-nowrap ${product.category === "Mono-gastric"
+                            ? "bg-orange-50 border-orange-150 text-brand-orange"
+                            : product.category === "Ruminants"
+                              ? "bg-blue-50 border-blue-150 text-blue-700"
+                              : "bg-emerald-50 border-emerald-150 text-emerald-700"
+                            }`}>
                             {product.category}
                           </span>
                         </div>
