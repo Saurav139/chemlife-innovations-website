@@ -115,12 +115,15 @@ export const Images = {
     natureIdenticalBio: "/images/research/nature_identical_bio.png",
     capsuleDelivery: "/images/research/capsule_delivery.png",
     pellets: "/images/research/pellets.webp",
+    /** General research/lab photo used in process steps and blog thumbnails */
+    researchImage: "/images/research/research_image.jpeg",
   },
 
   /** "How We Do It" / process step images */
   process: {
     howWeDoBg: "/images/process/how-we-do-bg.avif",
-    researchImage: "/images/process/research_image.jpeg",
+    /** Alias to research.researchImage — used for the Research process step */
+    researchImage: "/images/research/research_image.jpeg",
     developmentImage: "/images/process/development_image.jpeg",
     manufacturingImage: "/images/process/manufacturing_image.jpeg",
     delivery: "/images/process/process-delivery.png",
