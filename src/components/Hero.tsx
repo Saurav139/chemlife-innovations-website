@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { useTheme } from "@/context/VariantContext";
+import { Images } from "@/lib/assets";
 
 export default function Hero() {
   const { theme } = useTheme();
@@ -14,7 +15,7 @@ export default function Hero() {
 
       {theme.heroBg === "bg-brand-navy" && (
         <div className="absolute right-0 top-0 bottom-0 w-[45%] hidden lg:block">
-          <Image src="/images/product-rumi.png" alt="" fill className="object-cover" priority />
+          <Image src={Images.products.categoryRumi} alt="" fill className="object-cover" priority />
           <div className="absolute inset-0 bg-gradient-to-l from-transparent via-transparent to-brand-navy" />
         </div>
       )}
@@ -86,7 +87,7 @@ export default function Hero() {
                 <div className="relative">
                   <div className="absolute -top-4 -left-4 w-full h-full border-2 border-brand-orange/30 rounded-2xl" />
                   <div className="relative rounded-2xl overflow-hidden shadow-xl aspect-[4/5]">
-                    <Image src="/images/product-value.png" alt="Feed ingredients" fill className="object-cover" priority />
+                    <Image src={Images.products.categoryValue} alt="Feed ingredients" fill className="object-cover" priority />
                   </div>
                   <div className="absolute -bottom-3 -right-3 w-24 h-24 bg-brand-orange rounded-2xl flex items-center justify-center shadow-lg">
                     <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="1.5">
@@ -98,7 +99,7 @@ export default function Hero() {
                 <div className="relative w-full max-w-md aspect-[4/3]">
                   <div className="absolute inset-0 bg-white/10 rounded-[2rem] blur-3xl" />
                   <div className="relative z-10 w-full h-full rounded-2xl overflow-hidden border border-white/20 shadow-2xl">
-                    <Image src="/images/product-mono.png" alt="Poultry farming" fill className="object-cover" priority />
+                    <Image src={Images.products.categoryMono} alt="Poultry farming" fill className="object-cover" priority />
                   </div>
                 </div>
               )}

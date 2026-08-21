@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { routeQuery } from "@/utils/chatService";
+import { Images } from "@/lib/assets";
 
 export default function ChatOverlay() {
   const router = useRouter();
@@ -51,14 +52,14 @@ export default function ChatOverlay() {
                 <div className="flex -space-x-3.5">
                   <div className="w-12 h-12 rounded-full border-2 border-white bg-white overflow-hidden shadow-lg flex items-center justify-center p-0.5">
                     <img
-                      src="/images/poultry-mascot.png"
+                      src={Images.mascots.poultry}
                       alt="Dr. Kukku"
                       className="w-full h-full object-contain"
                     />
                   </div>
                   <div className="w-12 h-12 rounded-full border-2 border-white bg-white overflow-hidden shadow-lg flex items-center justify-center p-0.5">
                     <img
-                      src="/images/dairy-mascot.png"
+                      src={Images.mascots.dairy}
                       alt="Dr. Mikku"
                       className="w-full h-full object-contain"
                     />
@@ -96,14 +97,14 @@ export default function ChatOverlay() {
               <div className="flex -space-x-3.5 my-2">
                 <div className="w-14 h-14 rounded-full border-2 border-white bg-slate-50 overflow-hidden shadow-md flex items-center justify-center p-1">
                   <img
-                    src="/images/poultry-mascot.png"
+                    src={Images.mascots.poultry}
                     alt="Dr. Kukku"
                     className="w-full h-full object-contain"
                   />
                 </div>
                 <div className="w-14 h-14 rounded-full border-2 border-white bg-slate-50 overflow-hidden shadow-md flex items-center justify-center p-1">
                   <img
-                    src="/images/dairy-mascot.png"
+                    src={Images.mascots.dairy}
                     alt="Dr. Mikku"
                     className="w-full h-full object-contain"
                   />
@@ -138,14 +139,14 @@ export default function ChatOverlay() {
         <div className="flex -space-x-4">
           <div className="w-10 h-10 rounded-full border-2 border-white bg-white overflow-hidden shadow-md flex-shrink-0 flex items-center justify-center p-0.5">
             <img
-              src="/images/poultry-mascot.png"
+              src={Images.mascots.poultry}
               alt="Dr. Kukku"
               className="w-full h-full object-contain"
             />
           </div>
           <div className="w-10 h-10 rounded-full border-2 border-white bg-white overflow-hidden shadow-md flex-shrink-0 flex items-center justify-center p-0.5">
             <img
-              src="/images/dairy-mascot.png"
+              src={Images.mascots.dairy}
               alt="Dr. Mikku"
               className="w-full h-full object-contain"
             />

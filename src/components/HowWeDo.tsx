@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { useTheme } from "@/context/VariantContext";
+import { Images } from "@/lib/assets";
 
 interface Step {
   step: number;
@@ -17,25 +18,25 @@ const steps: Step[] = [
     step: 1,
     title: "Research",
     description: "In-depth scientific research and analysis to identify bioactive molecules and their applications in animal nutrition.",
-    image: "/images/research_image.jpeg",
+    image: Images.process.researchImage,
   },
   {
     step: 2,
     title: "Development",
     description: "Formulation and development of innovative feed additives using patented technologies and green chemistry pathways.",
-    image: "/images/development_image.jpeg",
+    image: Images.process.developmentImage,
   },
   {
     step: 3,
     title: "Manufacturing",
     description: "Scalable feed-additives manufacturing setup with rigorous quality control to ensure consistency, safety, and efficacy.",
-    image: "/images/manufacturing_image.jpeg",
+    image: Images.process.manufacturingImage,
   },
   {
     step: 4,
     title: "Delivery",
     description: "The integrated supply chain moves feed additives from the Bengaluru facility through warehouses and varied transport networks to final delivery via direct or distributor channels.",
-    image: "/images/process-delivery_crop.png",
+    image: Images.process.delivery,
   },
 ];
 
@@ -47,7 +48,7 @@ export default function HowWeDo() {
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0 select-none pointer-events-none">
         <Image
-          src="/images/how-we-do-bg.avif"
+          src={Images.process.howWeDoBg}
           alt="How We Do It Process Background"
           fill
           className="object-cover opacity-35"

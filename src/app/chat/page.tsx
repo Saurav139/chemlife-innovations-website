@@ -6,6 +6,7 @@ import { VariantProvider } from "@/context/VariantContext";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SiteSearch from "@/components/SiteSearch";
+import { Images } from "@/lib/assets";
 
 const easeOut = [0.25, 0.1, 0, 1] as const;
 
@@ -48,7 +49,7 @@ export default function ChatLandingPage() {
               <div className="bg-slate-50/50 border border-slate-100 rounded-2xl p-6 flex flex-col items-center text-center">
                 <div className="w-32 h-32 rounded-full bg-blue-50 border border-blue-100/50 p-3 flex items-center justify-center mb-4 shadow-sm">
                   <img
-                    src="/images/poultry-mascot.png"
+                    src={Images.mascots.poultry}
                     alt="Dr. Kukku Mascot"
                     className="w-full h-full object-contain"
                   />
@@ -63,7 +64,7 @@ export default function ChatLandingPage() {
               <div className="bg-slate-50/50 border border-slate-100 rounded-2xl p-6 flex flex-col items-center text-center">
                 <div className="w-32 h-32 rounded-full bg-orange-50 border border-orange-100/50 p-3 flex items-center justify-center mb-4 shadow-sm">
                   <img
-                    src="/images/dairy-mascot.png"
+                    src={Images.mascots.dairy}
                     alt="Dr. Mikku Mascot"
                     className="w-full h-full object-contain"
                   />

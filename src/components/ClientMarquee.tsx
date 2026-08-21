@@ -3,30 +3,10 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { Images } from "@/lib/assets";
 
-const frontLogos = [
-  "aac.png",
-  "abesca.png",
-  "carg.png",
-  "el.png",
-  "ew_nutr.png",
-  "groxel.png",
-  "huve.png",
-  "mybio.png",
-  "nt.png",
-];
-
-const backLogos = [
-  "nutr.png",
-  "sneha_farma_logo.png",
-  "varsha.png",
-  "vt.png",
-  "yg.png",
-  "16.png",
-  "17.png",
-  "nuqo_logo.jpg",
-  "aac.png", // duplicated first to make exactly 9 cards
-];
+const frontLogos = [...Images.partnerLogos.frontRow];
+const backLogos = [...Images.partnerLogos.backRow];
 
 interface FlipCardProps {
   frontLogo: string;
@@ -63,7 +43,7 @@ function FlipCard({ frontLogo, backLogo, index, flipped }: FlipCardProps) {
         <div className={`absolute inset-0 backface-hidden ${cardBg} ${borderStyle} rounded-2xl flex items-center justify-center p-6 ${shadowStyle} hover:scale-[1.02] transition-all duration-300`}>
           <div className="relative w-full h-full">
             <Image
-              src={`/images/partner-logos/${frontLogo}`}
+              src={Images.partnerLogos.path(frontLogo)}
               alt="Partner logo"
               fill
               className="object-contain transition-all duration-300"
@@ -76,7 +56,7 @@ function FlipCard({ frontLogo, backLogo, index, flipped }: FlipCardProps) {
         <div className={`absolute inset-0 backface-hidden rotate-y-180 ${cardBg} ${borderStyle} rounded-2xl flex items-center justify-center p-6 ${shadowStyle} hover:scale-[1.02] transition-all duration-300`}>
           <div className="relative w-full h-full">
             <Image
-              src={`/images/partner-logos/${backLogo}`}
+              src={Images.partnerLogos.path(backLogo)}
               alt="Partner logo"
               fill
               className="object-contain transition-all duration-300"

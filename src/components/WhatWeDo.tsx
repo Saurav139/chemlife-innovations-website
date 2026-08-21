@@ -3,6 +3,7 @@
 import SectionWrapper from "./SectionWrapper";
 import ProductCard from "./ProductCard";
 import { useTheme } from "@/context/VariantContext";
+import { Images } from "@/lib/assets";
 
 export default function WhatWeDo() {
   const { theme } = useTheme();
@@ -13,21 +14,21 @@ export default function WhatWeDo() {
       description:
         "Eco-friendly concepts that promote health and productivity in poultry and swine through nature-derived functional feed additives.",
       link: "#",
-      imageSrc: "/images/product-mono.png",
+      imageSrc: Images.products.categoryMono,
     },
     {
       title: "Ruminants",
       description:
         "Innovative bio-active concepts that focus on health, increase milk yield and quality in cattle through targeted nutrition.",
       link: "#",
-      imageSrc: "/images/product-rumi.png",
+      imageSrc: Images.products.categoryRumi,
     },
     {
       title: "Value Addition to Feed Ingredients",
       description:
         "Feed Additives concepts for multiple species designed for better growth and feed conversion ratios through enhanced nutrition.",
       link: "#",
-      imageSrc: "/images/product-value.png",
+      imageSrc: Images.products.categoryValue,
     },
   ];
 

@@ -7,6 +7,7 @@ import Footer from "@/components/Footer";
 import SectionWrapper from "@/components/SectionWrapper";
 import { VariantProvider } from "@/context/VariantContext";
 import SiteSearch from "@/components/SiteSearch";
+import { Images } from "@/lib/assets";
 
 const easeOut = [0.25, 0.1, 0, 1] as const;
 
@@ -39,8 +40,8 @@ const productsData: Product[] = [
     ],
     inclusionRate: "25 g/MT of feed or feed ingredients (or as recommended by the Nutritionist)",
     packSize: "25 kg Bag",
-    icon: "/images/icon-maxdmold.png",
-    banner: "/images/banner-maxdmold.jpg"
+    icon: Images.products.icons.maxdmold,
+    banner: Images.products.banners.maxdmold
   },
   {
     id: 2,
@@ -57,8 +58,8 @@ const productsData: Product[] = [
     ],
     inclusionRate: "Spray 250 g of MaxDMold spray diluted with 250 mL water per metric ton of feed or feed ingredients (or as recommended by the Nutritionist)",
     packSize: "35L can",
-    icon: "/images/icon-maxdmold-spray.png",
-    banner: "/images/banner-maxdmold-spray.jpg"
+    icon: Images.products.icons.maxdmoldSpray,
+    banner: Images.products.banners.maxdmoldSpray
   },
   {
     id: 3,
@@ -74,8 +75,8 @@ const productsData: Product[] = [
     ],
     inclusionRate: "50 g/MT of feed or feed ingredients (or as recommended by the Nutritionist)",
     packSize: "25 kg Bag",
-    icon: "/images/icon-syndmold.png",
-    banner: "/images/banner-syndmold.jpg"
+    icon: Images.products.icons.syndmold,
+    banner: Images.products.banners.syndmold
   },
   {
     id: 4,
@@ -92,8 +93,8 @@ const productsData: Product[] = [
     ],
     inclusionRate: "250 g/MT of feed or feed ingredients (or as recommended by the Nutritionist)",
     packSize: "25 kg Bag",
-    icon: "/images/icon-maxdmold-plus.png",
-    banner: "/images/banner-maxdmold-plus.jpg"
+    icon: Images.products.icons.maxdmoldPlus,
+    banner: Images.products.banners.maxdmoldPlus
   },
   {
     id: 5,
@@ -109,8 +110,8 @@ const productsData: Product[] = [
     ],
     inclusionRate: "Transition Dairy Animals: 20 g/animal/day\nEarly lactation Dairy Animals: 15-25 g/cow/day\nMid-late lactation Dairy Animals: 10-15 g/cow/day\nSmall Ruminants: 5-10 g/animal/day\nFor Dairy Feed: 0.5-2 kg/MT\n\nOr as per the recommendation of a Nutritionist",
     packSize: "25kg Bag",
-    icon: "/images/icon-choliwiz.png",
-    banner: "/images/banner-choliwiz.jpg"
+    icon: Images.products.icons.methiowiz,
+    banner: Images.products.banners.methiowiz
   },
   {
     id: 6,
@@ -126,8 +127,8 @@ const productsData: Product[] = [
     ],
     inclusionRate: "1 kg/MT of feed (or as recommended by the Nutritionist)",
     packSize: "25kg Bag",
-    icon: "/images/icon-mbiowiz-plus.png",
-    banner: "/images/banner-mbiowiz-plus.jpg"
+    icon: Images.products.icons.mbiowizPlus,
+    banner: Images.products.banners.mbiowizPlus
   },
   {
     id: 7,
@@ -143,8 +144,8 @@ const productsData: Product[] = [
     ],
     inclusionRate: "1 kg/MT of feed (or as recommended by the Nutritionist)",
     packSize: "25kg Bag",
-    icon: "/images/icon-mbiowiz-ts.png",
-    banner: "/images/banner-mbiowiz-ts.jpg"
+    icon: Images.products.icons.mbiowizTs,
+    banner: Images.products.banners.mbiowizTs
   },
   {
     id: 8,
@@ -160,8 +161,8 @@ const productsData: Product[] = [
     ],
     inclusionRate: "Dairy Cattle & Buffalo: 25 g/head/day\nHigh-yield dairy cows & Buffaloes in transition: 25 - 50 g/head/day\n\nFeed inclusion:\nDairy Cow: 0.75 - 2 kg/MT of Dairy Feed\nGoat/Sheep: 2 - 5 g per animal per day\n\nOr as per the recommendation of a Nutritionist",
     packSize: "25kg Bag",
-    icon: "/images/icon-methiowiz.png",
-    banner: "/images/banner-methiowiz.jpg"
+    icon: Images.products.icons.choliwiz,
+    banner: Images.products.banners.choliwiz
   },
   {
     id: 9,
@@ -177,8 +178,8 @@ const productsData: Product[] = [
     ],
     inclusionRate: "1 kg/MT As recommended by the Nutritionist",
     packSize: "25kg Bag",
-    icon: "/images/icon-rumiwiz.png",
-    banner: "/images/banner-rumiwiz.jpg"
+    icon: Images.products.icons.rumiwiz,
+    banner: Images.products.banners.rumiwiz
   },
   {
     id: 10,
@@ -202,8 +203,8 @@ const productsData: Product[] = [
     ],
     inclusionRate: "As recommended by the Nutritionist",
     packSize: "25kg Bag",
-    icon: "/images/icon-minbiozen.png",
-    banner: "/images/banner-minbiozen.jpg"
+    icon: Images.products.icons.minbiozen,
+    banner: Images.products.banners.minbiozen
   },
   {
     id: 11,
@@ -219,8 +220,8 @@ const productsData: Product[] = [
     ],
     inclusionRate: "GroGenie 12%: 500 g/MT of feed (up to 1 kg/MT under challenge conditions)\nGroGenie 60%: 100 g/MT of feed (up to 500 g/MT under challenge conditions)",
     packSize: "25kg Bag",
-    icon: "/images/icon-grogenie.png",
-    banner: "/images/banner-grogenie.jpg"
+    icon: Images.products.icons.grogenie,
+    banner: Images.products.banners.grogenie
   },
   {
     id: 12,
@@ -236,8 +237,8 @@ const productsData: Product[] = [
     ],
     inclusionRate: "Broilers: 10 ml/ 100 birds: 2-3 weeks\nBroilers: 20 ml/100 birds: 4th week onward\nBreeders & layers: 20 ml/100 birds\n\nOr as recommended by the Nutritionist",
     packSize: "5L | 35L | 200L",
-    icon: "/images/icon-livprogenie.png",
-    banner: "/images/banner-livprogenie.jpg"
+    icon: Images.products.icons.livprogenie,
+    banner: Images.products.banners.livprogenie
   },
   {
     id: 13,
@@ -253,8 +254,8 @@ const productsData: Product[] = [
     ],
     inclusionRate: "Standard Inclusion: 500g/MT feed\nStress Conditions: 750g/MT feed\n\nOr as recommended by the Nutritionist",
     packSize: "25kg Bag",
-    icon: "/images/icon-egggenie.png",
-    banner: "/images/banner-egggenie.jpg"
+    icon: Images.products.icons.egggenie,
+    banner: Images.products.banners.egggenie
   },
   {
     id: 14,
@@ -270,8 +271,8 @@ const productsData: Product[] = [
     ],
     inclusionRate: "Chicks: 2-4 ml / L of water\nBroilers: 1-2 ml/L of water\nBreeders & Layers: 1-2 ml/L of water\n\nOr as recommended by the Nutritionist",
     packSize: "5L | 35L | 200L",
-    icon: "/images/icon-gutprogenie.png",
-    banner: "/images/banner-gutprogenie.jpg"
+    icon: Images.products.icons.gutprogenie,
+    banner: Images.products.banners.gutprogenie
   },
   {
     id: 15,
@@ -287,8 +288,8 @@ const productsData: Product[] = [
     ],
     inclusionRate: "1kg /MT",
     packSize: "25kg Bag",
-    icon: "/images/icon-aflamlock.png",
-    banner: "/images/banner-aflamlock.jpg"
+    icon: Images.products.icons.aflamlock,
+    banner: Images.products.banners.aflamlock
   },
   {
     id: 16,
@@ -304,8 +305,8 @@ const productsData: Product[] = [
     ],
     inclusionRate: "1-2kg /MT",
     packSize: "25kg Bag",
-    icon: "/images/icon-feedgenie.png",
-    banner: "/images/banner-feedgenie-forte.jpg"
+    icon: Images.products.icons.feedgenie,
+    banner: Images.products.banners.feedgenieFort
   },
   {
     id: 17,
@@ -322,8 +323,8 @@ const productsData: Product[] = [
     ],
     inclusionRate: "Compatible with standard DDGS processing systems (or as recommended by the Nutritionist)",
     packSize: "25kg Bag",
-    icon: "/images/icon-ddgs-dtox.png",
-    banner: "/images/banner-ddgs-dtox.jpg"
+    icon: Images.products.icons.ddgsDtox,
+    banner: Images.products.banners.ddgsDtox
   },
   {
     id: 18,
@@ -339,8 +340,8 @@ const productsData: Product[] = [
     ],
     inclusionRate: "1-2 kg/MT of feed (or as recommended by the Nutritionist)",
     packSize: "25kg Bag",
-    icon: "/images/icon-feedgenie-prime.png",
-    banner: "/images/banner-feedgenie-prime.jpg"
+    icon: Images.products.icons.feedgeniePrime,
+    banner: Images.products.banners.feedgeniePrime
   }
 ];
 
@@ -400,7 +401,7 @@ export default function ProductsPage() {
         <SectionWrapper className="pt-32 pb-20 lg:pt-40 lg:pb-28 text-white relative overflow-hidden bg-brand-navy flex items-center">
           <div className="absolute inset-0 z-0">
             <img
-              src="/images/products_hero_banner.png"
+              src={Images.products.heroBanner}
               alt="Products Hero Background"
               className="w-full h-full object-cover opacity-60"
             />
@@ -424,7 +425,7 @@ export default function ProductsPage() {
           {/* Subtle Product-based Background Image */}
           <div className="absolute inset-0 z-0 pointer-events-none select-none opacity-[0.04]">
             <img
-              src="/images/products-custom-bg.jpg"
+              src={Images.products.customBg}
               alt="Products Background"
               className="w-full h-full object-cover object-center"
             />

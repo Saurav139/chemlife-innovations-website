@@ -8,6 +8,7 @@ import Footer from "@/components/Footer";
 import SectionWrapper from "@/components/SectionWrapper";
 import { VariantProvider } from "@/context/VariantContext";
 import SiteSearch from "@/components/SiteSearch";
+import { Images } from "@/lib/assets";
 
 const easeOut = [0.25, 0.1, 0, 1] as const;
 
@@ -104,7 +105,7 @@ export default function ContactPage() {
         <SectionWrapper className="pt-32 pb-24 lg:pt-40 lg:pb-32 text-white relative overflow-hidden bg-brand-navy flex items-center">
           <div className="absolute inset-0 z-0">
             <Image
-              src="/images/contact-hero-bg.jpg"
+              src={Images.heroes.contact}
               alt="Scientific consulting and support contact background"
               fill
               className="object-cover opacity-65"

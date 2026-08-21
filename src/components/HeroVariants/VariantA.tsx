@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "@/context/VariantContext";
+import { Images } from "@/lib/assets";
 
 const taglines = [
   { id: 1, line1: "Nature Driven", line2: "Functional Feed", line3: "Additives" },
@@ -15,10 +16,10 @@ const taglines = [
 ];
 
 const bgImages = [
-  { id: "poultry", src: "/images/chicken-bg.jpg", alt: "Free range chicken farm" },
-  { id: "dairy", src: "/images/dairy-bg.jpg", alt: "Dairy cattle farm" },
-  { id: "img76", src: "/images/76.png", alt: "Nature visualization" },
-  { id: "img87", src: "/images/87.png", alt: "Farm visualization" },
+  { id: "poultry", src: Images.heroes.chicken, alt: "Free range chicken farm" },
+  { id: "dairy", src: Images.heroes.dairy, alt: "Dairy cattle farm" },
+  { id: "img76", src: Images.heroes.slide76, alt: "Nature visualization" },
+  { id: "img87", src: Images.heroes.slide87, alt: "Farm visualization" },
 ];
 
 const stats = [

@@ -7,6 +7,7 @@ import Footer from "@/components/Footer";
 import SectionWrapper from "@/components/SectionWrapper";
 import { VariantProvider } from "@/context/VariantContext";
 import SiteSearch from "@/components/SiteSearch";
+import { Images } from "@/lib/assets";
 
 const easeOut = [0.25, 0.1, 0, 1] as const;
 
@@ -33,7 +34,7 @@ const researchTopics: ResearchTopic[] = [
     challenge: "Modern feed industries demand high bioavailability, consistent efficacy, low residue, and sustainable manufacturing. Conventional extraction methods often fall short, leaving bioactives trapped, relying on toxic solvents, and wasting valuable phytochemical potential.",
     advantage: "Uses nutrient media with natural hydrogen-bond donors and acceptors (deep eutectic solvents) to mimic and accelerate natural biological transformations. This liberates hidden bioactive compounds without relying on toxic organic solvents.",
     recognition: "BIRAC / DBT ecosystem, and the Technology Development Board (TDB), Government of India.",
-    banner: "/images/anbiot.png"
+    banner: Images.research.anbiot
   },
   {
     id: 2,
@@ -45,7 +46,7 @@ const researchTopics: ResearchTopic[] = [
     advantage: "Employs plant and animal derived hydroxy amino acids as a natural ligand base. Combined with deep eutectic solvents, this green chelation workflow completely avoids downstream effluent generation while delivering superior diet stability.",
     recognition: "Technology Development Board (TDB), Govt. of India.",
     applications: "Poultry, dairy, and swine diets to maximize bioavailability.",
-    banner: "/images/green_technology.png"
+    banner: Images.research.greenTechnology
   },
   {
     id: 3,
@@ -56,7 +57,7 @@ const researchTopics: ResearchTopic[] = [
     challenge: "Traditional administration of sensitive bioactives leads to premature degradation in the stomach or rumen, reducing nutritional efficacy and increasing waste.",
     advantage: "Develops microencapsulated granules tailored for intestinal delivery in monogastrics and rumen-bypass in ruminants. The botanical coatings ensure biocompatibility and controlled release. Synthesized in an ANBioT deep eutectic solvent system.",
     applications: "Rumen bypass and targeted intestinal bioactive release in dairy and monogastric feeds.",
-    banner: "/images/microencapsulation.png"
+    banner: Images.research.microencapsulation
   },
   {
     id: 4,
@@ -67,7 +68,7 @@ const researchTopics: ResearchTopic[] = [
     challenge: "Conventional inorganic trace mineral supplements suffer from very low absorption rates, demanding higher dosages that cause gut irritation and heavy environmental waste.",
     advantage: "Nanoscale minerals coupled with bioactive molecules show dual-action: extremely high bioavailability via cross-intestinal wall absorption and targeted cellular delivery of desired activities. Sourced from chemical synthesis, bio-transformation, and phytoactives, prepared within an ANBioT deep eutectic solvent system.",
     applications: "Providing antimicrobial, probiotic, and metabolic stimulation effects at micro-dosages.",
-    banner: "/images/nano_trace_mineral.jpg"
+    banner: Images.research.nanoTraceMineral
   },
   {
     id: 5,
@@ -78,7 +79,7 @@ const researchTopics: ResearchTopic[] = [
     challenge: "Natural plant extracts are highly variable due to seasonal, geographical, and extraction differences, making consistent therapeutic performance difficult to guarantee at scale.",
     advantage: "Synthesizes nature-identical molecules that match botanical compounds exactly, ensuring standardized potency, high quality, and a stable delivery matrix. Synthesized in an ANBioT deep eutectic solvent medium.",
     applications: "Stable natural alternatives to chemical feed growth promoters and preservatives.",
-    banner: "/images/nature_identical_bio.png"
+    banner: Images.research.natureIdenticalBio
   }
 ];
 
@@ -108,7 +109,7 @@ export default function ResearchPage() {
         <SectionWrapper className="pt-32 pb-20 lg:pt-40 lg:pb-28 text-white relative overflow-hidden bg-brand-navy flex items-center">
           <div className="absolute inset-0 z-0">
             <img
-              src="/images/research_hero_banner.png"
+              src={Images.research.heroBanner}
               alt="Research Hero Background"
               className="w-full h-full object-cover opacity-60"
             />

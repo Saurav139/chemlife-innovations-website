@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import SectionWrapper from "./SectionWrapper";
+import { Images, Videos } from "@/lib/assets";
 
 const items = [
   {
@@ -12,7 +13,7 @@ const items = [
     emoji: "🚲",
     desc: "Bicycles donation for empowering students below the poverty line",
     bgType: "video",
-    bgSrc: "/videos/social1.mp4",
+    bgSrc: Videos.social1,
   },
   {
     id: 1,
@@ -20,7 +21,7 @@ const items = [
     emoji: "🛡️",
     desc: "Chemlife certified with Prevention of Sexual Harassment at Work place",
     bgType: "image",
-    bgSrc: "/images/social2.jpeg",
+    bgSrc: Images.social.image2,
   },
   {
     id: 2,
@@ -28,7 +29,7 @@ const items = [
     emoji: "🐄",
     desc: "Supporting feeding of two cows for one full year",
     bgType: "image",
-    bgSrc: "/images/social3.jpeg",
+    bgSrc: Images.social.image3,
   },
 ];
 

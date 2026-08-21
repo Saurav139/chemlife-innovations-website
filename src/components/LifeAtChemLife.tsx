@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "@/context/VariantContext";
+import { Videos } from "@/lib/assets";
 
 const easeOut = [0.25, 0.1, 0, 1] as const;
 
@@ -14,9 +15,9 @@ const bulletPoints = [
 ];
 
 const videos = [
-  "/videos/trip1.mp4",
-  "/videos/trip2.mp4",
-  "/videos/trip3.mp4",
+  Videos.trip1,
+  Videos.trip2,
+  Videos.trip3,
 ];
 
 export default function LifeAtChemLife() {

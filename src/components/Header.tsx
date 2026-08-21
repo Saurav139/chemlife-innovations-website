@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useTheme } from "@/context/VariantContext";
 import { usePathname } from "next/navigation";
+import { Images } from "@/lib/assets";
 
 const navLinks = [
   { label: "Home", href: "/#hero" },
@@ -36,7 +37,7 @@ export default function Header() {
         <div className="flex items-center justify-between h-32">
           <a href="/" className="flex-shrink-0">
             <img
-              src="/images/logo.jpg"
+              src={Images.branding.logo}
               alt="ChemLife Innovations"
               className="h-28 w-auto"
             />

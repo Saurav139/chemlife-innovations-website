@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "@/context/VariantContext";
+import { Images } from "@/lib/assets";
 
 const certificates = [
   {
@@ -90,7 +91,7 @@ export default function AwardsRecognition() {
                         {/* Logo Image centered on the wood plaque */}
                         <div className="relative w-full h-full bg-white rounded-lg overflow-hidden shadow-inner p-4 flex items-center justify-center">
                           <Image
-                            src={`/images/awards/${certificates[activeStep].file}`}
+                            src={Images.awards.path(certificates[activeStep].file)}
                             alt={certificates[activeStep].title}
                             fill
                             className="object-contain p-2"

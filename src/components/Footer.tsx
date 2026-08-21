@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { Images } from "@/lib/assets";
 
 export default function Footer() {
   return (
@@ -20,7 +21,7 @@ export default function Footer() {
           <div className="lg:col-span-4 space-y-6">
             <Link href="/" className="inline-block">
               <Image
-                src="/images/logo.jpg"
+                src={Images.branding.logo}
                 alt="ChemLife Innovations Logo"
                 width={120}
                 height={80}
@@ -156,7 +157,7 @@ export default function Footer() {
         <div className="max-w-[1200px] mx-auto px-6 py-6 flex flex-col sm:flex-row justify-between items-center gap-4">
           <div className="flex items-center gap-3">
             <Image
-              src="/images/logo.jpg"
+              src={Images.branding.logo}
               alt="ChemLife Innovations Logo"
               width={50}
               height={33}

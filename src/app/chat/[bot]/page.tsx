@@ -13,6 +13,7 @@ import { VariantProvider } from "@/context/VariantContext";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SiteSearch from "@/components/SiteSearch";
+import { Images } from "@/lib/assets";
 
 interface Message {
   role: "user" | "assistant";
@@ -24,7 +25,7 @@ interface Message {
 const BOT_META = {
   kukku: {
     name: "Dr. Kukku",
-    image: "/images/poultry-mascot.png",
+    image: Images.mascots.poultry,
     subtitle: "Poultry Nutrition Expert",
     accent: "#3b82f6", // Blue
     border: "border-blue-100",
@@ -35,7 +36,7 @@ const BOT_META = {
   },
   mikku: {
     name: "Dr. Mikku",
-    image: "/images/dairy-mascot.png",
+    image: Images.mascots.dairy,
     subtitle: "Dairy Nutrition Expert",
     accent: "#e65c38", // Brand Orange
     border: "border-orange-100",

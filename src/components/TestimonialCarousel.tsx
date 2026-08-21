@@ -5,6 +5,7 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import SectionWrapper from "./SectionWrapper";
 import { useTheme } from "@/context/VariantContext";
+import { Images } from "@/lib/assets";
 
 const testimonials = [
   {
@@ -12,21 +13,21 @@ const testimonials = [
     name: "Akmal Reyaz",
     role: "Business Head – Dairy & Aqua",
     company: "Huvepharma Sea (Pune) Private Limited",
-    logo: "/images/testimonials/huve_logo.png",
+    logo: Images.testimonials.huve,
   },
   {
     quote: "We are associated with M/S Chemlife Innovations Pvt Ltd at # 18, KIADB Industrial Area, 3rd Phase, Obadenahalli, Doddaballapur, Bengaluru Rural District for last 2 years. Chemlife is our Technology partner and Product developer in the field of mold inhibition and toxin management using innovative technology for animal health. We are highly satisfied with the quality of Chemlife's Products and Technologies.",
     name: "Dr Manjunatha B P",
     role: "Chief Executive Officer",
     company: "GROEXL Vet Private Limited",
-    logo: "/images/testimonials/groxel_logo.png",
+    logo: Images.testimonials.groxel,
   },
   {
     quote: "We are happy to inform, that we have collaboration arrangement with Chemlife Innovations Private Limited, since 2016 and continuing to have technology developer & novel product manufacturing understanding with them. We have been able to launch PromoGen (Natural Growth promoter for poultry) and SlimEat (Lean meat inducer for swine) for export market and Bio-trace minerals for poultry for domestic market specifically with the support of Chemlife Innovations using their ANBioT technology. We are pleased with quality and service/support of ChemLife Innovation.",
     name: "Lakshmikanth Yadav",
     role: "Managing Director",
     company: "Quadragen VetHealth Private Limited",
-    logo: "/images/testimonials/quadragen_logo.png",
+    logo: Images.testimonials.quadragen,
   },
 ];
 

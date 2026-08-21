@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { Images } from "@/lib/assets";
 
 // Hardcoded fallback data in case API keys are not supplied or fail
 const fallbackData = {
@@ -9,7 +10,7 @@ const fallbackData = {
       description: "In livestock farming, every feed choice determines your operational margins. Discover how functional feed additives and active mycotoxin binders like AflaMlock minimize mycotoxin risk and optimize herd performance.",
       meta: "5 min read",
       date: "July 15, 2026",
-      imageUrl: "/images/rotate_2_1.jpeg",
+      imageUrl: Images.gallery.rotate21,
       linkUrl: "https://www.linkedin.com/posts/chemlifeinnovations_feedbites-chemlifeinnovations-feedbites-activity-7243916601449336832-r_xQ",
       content: `In livestock farming, every feed choice determines your operational margins. Feed quality isn't just about weight; it is about gut performance and biochemical stability.
 
@@ -27,7 +28,7 @@ Make smarter decisions for better outcomes.`
       description: "ChemLife Innovations achieves a milestone partnership with the Technology Development Board (TDB), Department of Science & Technology (DST), Govt of India, to scale and manufacture bio-trace minerals using ANBioT platform.",
       meta: "6 min read",
       date: "July 12, 2026",
-      imageUrl: "/images/rotate_3_2.jpeg",
+      imageUrl: Images.gallery.rotate32,
       linkUrl: "https://www.linkedin.com/company/chemlifeinnovations/posts/?feedView=all",
       content: `We are proud to share a major milestone: ChemLife Innovations has entered into a strategic collaboration with the Technology Development Board (TDB), Department of Science & Technology, Government of India.
 
@@ -69,7 +70,7 @@ Here are six practical solutions to help strengthen poultry profitability:
       description: "Bridging traditional plant-based wisdom with modern biotechnology: how ANBioT biotransforms crude inorganic minerals into highly bioavailable organic supplements.",
       meta: "5 min read",
       date: "March 22, 2026",
-      imageUrl: "/images/research_image.jpeg",
+      imageUrl: Images.process.researchImage,
       linkUrl: "https://www.linkedin.com/company/chemlifeinnovations/posts/?feedView=all",
       content: `Bridging traditional plant-based wisdom with modern biotechnology is the core mission of ChemLife Innovations.
 
@@ -83,7 +84,7 @@ This organic chelation increases absorption efficiency, optimizes digestion, and
       description: "How mold contamination silently erodes livestock farm profits through FCR drop and vet bills. Clean feed leads to pure milk and secure margins.",
       meta: "4 min read",
       date: "January 10, 2026",
-      imageUrl: "/images/pellets.webp",
+      imageUrl: Images.research.pellets,
       linkUrl: "https://www.linkedin.com/company/chemlifeinnovations/posts/?feedView=all",
       content: `In poultry and cattle farming, feed accounts for up to 70% of production costs. If your feed is compromised by fungal mold or bacteria, your entire margin is at risk.
 
@@ -95,7 +96,7 @@ Clean feed ensures that animals absorb maximum nutrients, which directly impacts
       description: "Discover how non-antibiotic gut performance solutions like GroGenie improve intestinal microbial balance and support high growth rates.",
       meta: "4 min read",
       date: "November 15, 2025",
-      imageUrl: "/images/rotate_1_1.jpeg",
+      imageUrl: Images.gallery.rotate11,
       linkUrl: "https://www.linkedin.com/company/chemlifeinnovations/posts/?feedView=all",
       content: `Maintaining poultry gut integrity is key to modern, sustainable farming. Intestinal health directly dictates how well broilers and layers absorb crucial nutrients.
 
@@ -107,7 +108,7 @@ GroGenie provides a non-antibiotic approach to managing enteric pathogens. By su
       description: "Feed hygiene is a cornerstone of livestock management, directly impacting animal health, growth performance, and overall farm profitability.",
       meta: "8 min read",
       date: "September 28, 2025",
-      imageUrl: "/images/rotate_1_2.jpeg",
+      imageUrl: Images.gallery.rotate12,
       linkUrl: "https://www.linkedin.com/company/chemlifeinnovations/posts/?feedView=all",
       content: `Feed hygiene is a cornerstone of livestock management, directly impacting animal health, growth performance, and overall farm profitability. Contaminated or improperly stored feed can lead to serious health issues, including reduced immunity, digestive disorders, and in severe cases, mortality. Implementing structured feed hygiene practices is therefore not just a precaution, it is an essential investment in your livestock’s wellbeing and your farm’s operational efficiency.
 
@@ -133,7 +134,7 @@ Here are the seven key practices:
       description: "For centuries, copper has held a unique place in human civilization, celebrated in Ayurveda for therapeutic qualities. Yet, modern misuse through misinformation and excessive consumption raises important health concerns.",
       meta: "5 min read",
       date: "September 26, 2025",
-      imageUrl: "/images/rotate_2_2.jpeg",
+      imageUrl: Images.gallery.rotate22,
       linkUrl: "https://www.linkedin.com/company/chemlifeinnovations/posts/?feedView=all",
       content: `For centuries, copper has held a unique place in human civilization, celebrated in Ayurveda for its exceptional therapeutic qualities. Ayurvedic texts recommend storing water in copper vessels (Tamra Jal) to balance the three doshas—Vata, Pitta, and Kapha—and to naturally purify the water.
 
@@ -149,7 +150,7 @@ In livestock and animal nutrition, copper must be supplied scientifically. Crude
       description: "In poultry and livestock farming, feed hygiene often gets overlooked. Contaminated or poorly stored feed silently erodes profits through disease outbreaks, poor growth, and higher veterinary bills.",
       meta: "4 min read",
       date: "September 22, 2025",
-      imageUrl: "/images/rotate_1_3.jpeg",
+      imageUrl: Images.gallery.rotate13,
       linkUrl: "https://www.linkedin.com/company/chemlifeinnovations/posts/?feedView=all",
       content: `In poultry and livestock farming, feed hygiene often gets overlooked. However, contaminated or poorly stored feed silently erodes profits through disease outbreaks, poor growth, and higher veterinary bills.
 
@@ -173,7 +174,7 @@ Here are the top six reasons why feed hygiene is critical for your bottom line:
       description: "Across the globe, mold outbreaks have led to devastating losses for farmers, jeopardizing both animal welfare and human livelihoods. Explore real-world cases of mold contamination and their lessons.",
       meta: "6 min read",
       date: "September 20, 2025",
-      imageUrl: "/images/rotate_2_3.jpeg",
+      imageUrl: Images.gallery.rotate23,
       linkUrl: "https://www.linkedin.com/company/chemlifeinnovations/posts/?feedView=all",
       content: `Across the globe, mold outbreaks have led to devastating losses for farmers, jeopardizing both animal welfare and human livelihoods. Mold species like Aspergillus and Fusarium produce dangerous mycotoxins—including Aflatoxins and Ochratoxins—which are highly toxic even in minute quantities.
 
@@ -413,7 +414,7 @@ export async function GET() {
               description: text.substring(0, 150) + (text.length > 150 ? "..." : ""),
               meta: "3 min read",
               date: formattedDate,
-              imageUrl: share.content?.contentEntities?.[0]?.thumbnails?.[0]?.resolvedUrl || "/images/rotate_2_1.jpeg",
+              imageUrl: share.content?.contentEntities?.[0]?.thumbnails?.[0]?.resolvedUrl || Images.gallery.rotate21,
               linkUrl: `https://www.linkedin.com/feed/update/urn:li:activity:${share.id}`,
               content: text,
             };

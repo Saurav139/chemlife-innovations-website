@@ -7,6 +7,7 @@ import Footer from "@/components/Footer";
 import SectionWrapper from "@/components/SectionWrapper";
 import { VariantProvider } from "@/context/VariantContext";
 import SiteSearch from "@/components/SiteSearch";
+import { Images } from "@/lib/assets";
 
 const easeOut = [0.25, 0.1, 0, 1] as const;
 
@@ -22,7 +23,7 @@ export default function AboutPage() {
         <SectionWrapper className="py-24 lg:py-32 text-white relative overflow-hidden min-h-[500px] flex items-center">
           <div className="absolute inset-0 z-0">
             <Image
-              src="/images/about-hero-bg.png"
+              src={Images.heroes.about}
               alt="Sustainable science glass plant background"
               fill
               className="object-cover opacity-80"
@@ -70,7 +71,7 @@ export default function AboutPage() {
                 style={{ backgroundColor: "#55c2fa" }}
               >
                 <Image
-                  src="/images/founders_new.jpg"
+                  src={Images.people.foundersNew}
                   alt="ChemLife Founders and Leadership"
                   fill
                   sizes="(max-w-768px) 100vw, 550px"
@@ -427,28 +428,28 @@ export default function AboutPage() {
                   role: "Chairman & MD",
                   degree: "Ph.D, PG-Dip in Mgmt",
                   bio: "Finance & Go-to-Market. 30 years in Innovation of Animal Nutraceuticals",
-                  image: "/images/leader_radhakrishna.jpg"
+                  image: Images.people.leaderRadhakrishna
                 },
                 {
                   name: "Sharada KC",
                   role: "Director- Technical",
                   degree: "Ph.D",
                   bio: "Research & Technology. 23 years in R&D of Animal Feed additives & Bio-actives",
-                  image: "/images/leader_sharada.jpg"
+                  image: Images.people.leaderSharada
                 },
                 {
                   name: "Sneha R",
                   role: "Director - HR & Finance",
                   degree: "M.Com",
                   bio: "15 years in Supply Chain Accounting & HR. Experienced Management Professional",
-                  image: "/images/leader_sneha_cropped.jpg"
+                  image: Images.people.leaderSneehaCropped
                 },
                 {
                   name: "Shankar CV",
                   role: "Director - Business & Development",
                   degree: "BE, MBA",
                   bio: "Business development & 38 years in commercial project management",
-                  image: "/images/leader_shankar.png"
+                  image: Images.people.leaderShankar
                 }
               ].map((leader, i) => (
                 <motion.div

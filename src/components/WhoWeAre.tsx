@@ -3,22 +3,23 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
+import { Images } from "@/lib/assets";
 
 const cards = [
   {
     title: "Mono-Gastric",
     description: "Eco-friendly concepts promoting health and productivity in poultry and swine through nature-derived feed additives.",
-    images: ["/images/rotate_1_1.jpeg", "/images/rotate_1_2.jpeg", "/images/rotate_1_3.jpeg"],
+    images: [Images.gallery.rotate11, Images.gallery.rotate12, Images.gallery.rotate13],
   },
   {
     title: "Ruminants",
     description: "Innovative bio-active feed additives focusing on cattle health, increasing milk yield and quality.",
-    images: ["/images/rotate_2_1.jpeg", "/images/rotate_2_2.jpeg", "/images/rotate_2_3.jpeg"],
+    images: [Images.gallery.rotate21, Images.gallery.rotate22, Images.gallery.rotate23],
   },
   {
     title: "Value Addition",
     description: "Feed additives for multiple species designed for better growth and conversion ratios.",
-    images: ["/images/pellets.webp", "/images/rotate_3_2.jpeg", "/images/rotate_3_3.jpeg"],
+    images: [Images.research.pellets, Images.gallery.rotate32, Images.gallery.rotate33],
   },
 ];
 

@@ -8,6 +8,7 @@ import Footer from "@/components/Footer";
 import SectionWrapper from "@/components/SectionWrapper";
 import { VariantProvider } from "@/context/VariantContext";
 import SiteSearch from "@/components/SiteSearch";
+import { Images } from "@/lib/assets";
 
 const easeOut = [0.25, 0.1, 0, 1] as const;
 
@@ -26,7 +27,7 @@ const internshipRoles: InternshipPosition[] = [
     id: "research-intern",
     title: "Research Intern",
     department: "Research & Development Labs",
-    bgImage: "/images/careers_research_intern.png",
+    bgImage: Images.careers.researchIntern,
     requirements: [
       "Biotechnology (B.Tech / M.Tech / M.Sc)",
       "Chemistry (M.Sc Organic or Biochemistry or Analytical Chemistry)",
@@ -43,7 +44,7 @@ const internshipRoles: InternshipPosition[] = [
     id: "animal-nutrition-intern",
     title: "Animal Nutrition Intern",
     department: "Formulation & Product Development",
-    bgImage: "/images/careers_animal_nutrition.png",
+    bgImage: Images.careers.animalNutrition,
     requirements: [
       "Animal Nutrition Expertise (Masters in Animal Science or Poultry Science or Dairy Science or Nutrition)",
       "Understanding of Functional Feed Additives & Safety Metrics"
@@ -59,7 +60,7 @@ const internshipRoles: InternshipPosition[] = [
     id: "hr-marketing-intern",
     title: "Operations, Marketing  and Human Resources Intern",
     department: "Operations & Business Relations",
-    bgImage: "/images/careers_hr_marketing.png",
+    bgImage: Images.careers.hrMarketing,
     requirements: [
       "Masters in Human Resources Management",
       "Masters in Marketing, Branding, or Business Communications focus",
@@ -126,7 +127,7 @@ export default function CareersPage() {
         <SectionWrapper className="pt-32 pb-24 lg:pt-40 lg:pb-32 text-white relative overflow-hidden bg-brand-navy flex items-center">
           <div className="absolute inset-0 z-0">
             <Image
-              src="/images/careers-hero-bg.jpg"
+              src={Images.heroes.careers}
               alt="Chemlife biotechnology research laboratory"
               fill
               className="object-cover opacity-50"
