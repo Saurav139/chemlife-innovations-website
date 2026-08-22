@@ -12,7 +12,7 @@ module.exports = {
     },
     {
       name: "chemlife-backend",
-      cwd: "../chemlife-chatbots",
+      cwd: "./chatbot-backend",
       script: "./.venv/bin/uvicorn",
       args: "backend.app:app --port 8001 --host 127.0.0.1",
       env: {
