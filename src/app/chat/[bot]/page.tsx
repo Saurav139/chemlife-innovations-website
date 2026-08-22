@@ -72,13 +72,12 @@ function parseInline(str: string): React.ReactNode[] {
       const labelEnd = part.indexOf("](");
       const label = part.slice(1, labelEnd);
       const url = part.slice(labelEnd + 2, -1);
-      const isExternal = url.startsWith("http://") || url.startsWith("https://") || url.startsWith("mailto:");
       parts.push(
         <a
           key={i}
           href={url}
-          target={isExternal ? "_blank" : undefined}
-          rel={isExternal ? "noopener noreferrer" : undefined}
+          target="_blank"
+          rel="noopener noreferrer"
           className="text-brand-orange hover:text-orange-700 underline underline-offset-2 font-medium"
         >
           {label}
