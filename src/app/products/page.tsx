@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -352,6 +352,47 @@ export default function ProductsPage() {
 
   const categories = ["All", "Mono-gastric", "Ruminants", "Value Addition"];
 
+  // Handle auto-expansion and search filtering via query parameter (e.g. ?expand=MaxDmold) or hash (#MaxDmold)
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const query = params.get("q") || params.get("query") || "";
+      
+      // Check query parameter 'expand' or hash fragment
+      let expand = params.get("expand") || "";
+      if (!expand && window.location.hash) {
+        expand = decodeURIComponent(window.location.hash.substring(1));
+      }
+
+      if (query) {
+        setSearchQuery(query);
+      }
+      
+      if (expand) {
+        const prod = productsData.find(
+          (p) => p.name.toLowerCase() === expand.toLowerCase()
+        );
+        if (prod) {
+          // If the product belongs to a specific category, ensure that category is selected (or select All)
+          if (prod.category) {
+            setSelectedCategory(prod.category);
+          } else {
+            setSelectedCategory("All");
+          }
+          setExpandedId(prod.id);
+          
+          // Smooth scroll to the product element
+          setTimeout(() => {
+            const el = document.getElementById(`product-${prod.id}`);
+            if (el) {
+              el.scrollIntoView({ behavior: "smooth", block: "center" });
+            }
+          }, 300);
+        }
+      }
+    }
+  }, []);
+
   const toggleExpand = (id: number) => {
     setExpandedId((prev) => (prev === id ? null : id));
   };
@@ -502,6 +543,7 @@ export default function ProductsPage() {
                 return (
                   <motion.div
                     key={product.id}
+                    id={`product-${product.id}`}
                     layout
                     transition={{ duration: 0.4, ease: easeOut }}
                     className="border border-slate-200 rounded-2xl bg-slate-50/50 hover:bg-slate-50/85 transition-colors duration-300 overflow-hidden shadow-xs hover:border-brand-orange/30 flex flex-col h-fit group"
