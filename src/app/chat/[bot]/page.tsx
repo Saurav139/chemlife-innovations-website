@@ -192,9 +192,9 @@ function BotBubble({
             <div className="space-y-0.5 leading-relaxed">{parseMarkdownToJSX(content)}</div>
           )}
         </div>
-        {!isError && sources && sources.length > 0 && (
+        {!isError && sources && sources.filter(s => !s.url.startsWith("/products")).length > 0 && (
           <div className="mt-2 flex flex-wrap gap-1.5">
-            {sources.map((s, i) => (
+            {sources.filter(s => !s.url.startsWith("/products")).map((s, i) => (
               <a key={i} href={s.url} target={s.url.startsWith("http") ? "_blank" : undefined} rel={s.url.startsWith("http") ? "noopener noreferrer" : undefined}
                 className="inline-flex items-center gap-1 text-[11px] bg-white border border-slate-200 hover:border-slate-300 text-slate-600 hover:text-slate-900 rounded-lg px-2.5 py-1 transition-all font-medium">
                 <span className="opacity-60">📄</span> {s.title}
