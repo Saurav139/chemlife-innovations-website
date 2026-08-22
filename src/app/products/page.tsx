@@ -371,6 +371,10 @@ export default function ProductsPage() {
       if (expand) {
         const prod = productsData.find(
           (p) => p.name.toLowerCase() === expand.toLowerCase()
+        ) || productsData.find(
+          (p) => p.name.toLowerCase().startsWith(expand.toLowerCase())
+        ) || productsData.find(
+          (p) => p.name.toLowerCase().includes(expand.toLowerCase())
         );
         if (prod) {
           // If the product belongs to a specific category, ensure that category is selected (or select All)
