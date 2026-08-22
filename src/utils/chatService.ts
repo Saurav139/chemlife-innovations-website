@@ -1,4 +1,4 @@
-const API_URL = process.env.NEXT_PUBLIC_CHATBOT_API_URL || 'http://localhost:8000';
+const API_URL = process.env.NEXT_PUBLIC_CHATBOT_API_URL || '/chatbot-api';
 
 export interface Turn {
   role: 'user' | 'assistant';
