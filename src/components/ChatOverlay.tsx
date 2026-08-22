@@ -84,31 +84,47 @@ export default function ChatOverlay() {
             </div>
 
             {/* Content Body */}
-            <div className="p-6 flex-grow flex flex-col items-center text-center gap-4">
-              <span className="px-3 py-1 rounded-full bg-brand-orange/10 text-brand-orange text-[10px] font-black uppercase tracking-wider">
-                📣 Coming Soon
-              </span>
-              <p className="text-xs text-brand-navy font-bold leading-relaxed">
-                Dr. Kukku and Dr. Mikku are currently undergoing strict scientific validation.
+            <div className="p-5 flex-grow flex flex-col gap-3">
+              <p className="text-xs text-brand-navy font-bold text-center leading-relaxed mb-1">
+                Select an expert to consult:
               </p>
-              <p className="text-[11px] text-slate-500 leading-relaxed font-light">
-                Our customized AI consultants will be online soon to assist you with feed additive formulations and poultry/dairy clinical questions.
-              </p>
-              <div className="flex -space-x-3.5 my-2">
-                <div className="w-14 h-14 rounded-full border-2 border-white bg-slate-50 overflow-hidden shadow-md flex items-center justify-center p-1">
-                  <img
-                    src={Images.mascots.poultry}
-                    alt="Dr. Kukku"
-                    className="w-full h-full object-contain"
-                  />
-                </div>
-                <div className="w-14 h-14 rounded-full border-2 border-white bg-slate-50 overflow-hidden shadow-md flex items-center justify-center p-1">
-                  <img
-                    src={Images.mascots.dairy}
-                    alt="Dr. Mikku"
-                    className="w-full h-full object-contain"
-                  />
-                </div>
+              
+              <div className="flex flex-col gap-2.5 w-full">
+                {/* Dr. Kukku */}
+                <button
+                  onClick={() => {
+                    setIsOpen(false);
+                    router.push("/chat/kukku");
+                  }}
+                  className="flex items-center gap-3 p-2.5 rounded-xl border border-blue-100 bg-blue-50/50 hover:bg-blue-50 transition-all text-left cursor-pointer group"
+                >
+                  <div className="w-9 h-9 rounded-full bg-white border border-slate-200 flex items-center justify-center overflow-hidden p-0.5 shadow-xs flex-shrink-0 group-hover:scale-105 transition-transform">
+                    <img src={Images.mascots.poultry} alt="Dr. Kukku" className="w-full h-full object-contain" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-[12px] font-bold text-slate-800">Dr. Kukku</p>
+                    <p className="text-[10px] text-slate-500 truncate">Poultry Nutrition Specialist</p>
+                  </div>
+                  <span className="text-[11px] font-semibold text-blue-600 flex-shrink-0">Chat →</span>
+                </button>
+
+                {/* Dr. Mikku */}
+                <button
+                  onClick={() => {
+                    setIsOpen(false);
+                    router.push("/chat/mikku");
+                  }}
+                  className="flex items-center gap-3 p-2.5 rounded-xl border border-orange-100 bg-orange-50/50 hover:bg-orange-50 transition-all text-left cursor-pointer group"
+                >
+                  <div className="w-9 h-9 rounded-full bg-white border border-slate-200 flex items-center justify-center overflow-hidden p-0.5 shadow-xs flex-shrink-0 group-hover:scale-105 transition-transform">
+                    <img src={Images.mascots.dairy} alt="Dr. Mikku" className="w-full h-full object-contain" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-[12px] font-bold text-slate-800">Dr. Mikku</p>
+                    <p className="text-[10px] text-slate-500 truncate">Dairy & Ruminant Specialist</p>
+                  </div>
+                  <span className="text-[11px] font-semibold text-brand-orange flex-shrink-0">Chat →</span>
+                </button>
               </div>
             </div>
  
@@ -122,7 +138,7 @@ export default function ChatOverlay() {
                 }}
                 className="text-brand-navy hover:text-brand-orange cursor-pointer transition-colors"
               >
-                Learn More →
+                All Specialists →
               </button>
             </div>
           </motion.div>

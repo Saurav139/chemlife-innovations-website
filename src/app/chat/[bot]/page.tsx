@@ -172,10 +172,10 @@ function UserBubble({ content, bubbleClass }: { content: string; bubbleClass: st
 }
 
 function BotBubble({
-  image, name, content, sources, isError, accentBgLight, accentBorder,
+  image, name, content, sources, isError, accentBgLight, accentBorder, isGreeting,
 }: {
   image: string; name: string; content: string; sources?: Source[];
-  isError?: boolean; accentBgLight: string; accentBorder: string;
+  isError?: boolean; accentBgLight: string; accentBorder: string; isGreeting?: boolean;
 }) {
   return (
     <div className="flex items-start gap-3">
@@ -195,11 +195,19 @@ function BotBubble({
         {!isError && sources && sources.length > 0 && (
           <div className="mt-2 flex flex-wrap gap-1.5">
             {sources.map((s, i) => (
-              <a key={i} href={s.url} target="_blank" rel="noopener noreferrer"
+              <a key={i} href={s.url} target={s.url.startsWith("http") ? "_blank" : undefined} rel={s.url.startsWith("http") ? "noopener noreferrer" : undefined}
                 className="inline-flex items-center gap-1 text-[11px] bg-white border border-slate-200 hover:border-slate-300 text-slate-600 hover:text-slate-900 rounded-lg px-2.5 py-1 transition-all font-medium">
                 <span className="opacity-60">📄</span> {s.title}
               </a>
             ))}
+          </div>
+        )}
+        {!isError && !isGreeting && (!sources || sources.length === 0) && (
+          <div className="mt-2 flex flex-wrap items-center gap-1.5 text-[11px] text-slate-500 font-medium px-1">
+            <span>Explore:</span>
+            <Link href="/research" className="text-brand-orange hover:text-orange-700 underline underline-offset-2 font-semibold">Research Hub</Link>
+            <span>•</span>
+            <Link href="/insights" className="text-brand-orange hover:text-orange-700 underline underline-offset-2 font-semibold">Insights & Blog</Link>
           </div>
         )}
       </div>
@@ -258,19 +266,31 @@ function ChatSessionContent() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [botKey, initialQuery]);
 
+  const handleRefreshFaqs = useCallback(async () => {
+    try {
+      setFaqsLoading(true);
+      const questions = await fetchFaqs(botKey, 4);
+      setFaqs(questions);
+      setCountdown(20);
+    } catch { /* non-critical */ }
+    finally { setFaqsLoading(false); }
+  }, [botKey]);
+
   useEffect(() => {
     let alive = true;
-    const loadFaqs = async () => {
+    const load = async () => {
       try {
         setFaqsLoading(true);
         const questions = await fetchFaqs(botKey, 4);
-        if (alive) setFaqs(questions);
+        if (alive) {
+          setFaqs(questions);
+          setCountdown(20);
+        }
       } catch { /* non-critical */ }
       finally { if (alive) setFaqsLoading(false); }
     };
-    loadFaqs();
-    setCountdown(20);
-    const refreshInterval = setInterval(() => { loadFaqs(); setCountdown(20); }, 20_000);
+    load();
+    const refreshInterval = setInterval(() => { if (alive) load(); }, 20_000);
     const countdownInterval = setInterval(() => setCountdown((p) => Math.max(0, p - 1)), 1_000);
     return () => { alive = false; clearInterval(refreshInterval); clearInterval(countdownInterval); };
   }, [botKey]);
@@ -362,7 +382,7 @@ function ChatSessionContent() {
 
           {/* Messages area */}
           <div className="flex-1 overflow-y-auto px-5 py-5 space-y-4 scroll-smooth">
-            <BotBubble image={meta.image} name={meta.name} content={greetingMessage} accentBgLight={meta.accentBgLight} accentBorder={meta.accentBorder} />
+            <BotBubble image={meta.image} name={meta.name} content={greetingMessage} accentBgLight={meta.accentBgLight} accentBorder={meta.accentBorder} isGreeting={true} />
             {messages.map((msg, i) =>
               msg.role === "user" ? (
                 <UserBubble key={i} content={msg.content} bubbleClass={meta.userBubble} />
@@ -421,7 +441,14 @@ function ChatSessionContent() {
           <div className="bg-white border border-slate-200/80 rounded-2xl shadow-sm overflow-hidden">
             <div className={`px-4 py-3 border-b border-slate-100 ${meta.accentBgLight} flex items-center justify-between`}>
               <h3 className="text-[11px] font-bold text-slate-700 uppercase tracking-wider">Suggested</h3>
-              <span className="text-[10px] text-slate-400 font-semibold tabular-nums" title="Auto-refreshes every 20 seconds">↻ {countdown}s</span>
+              <button
+                onClick={handleRefreshFaqs}
+                disabled={faqsLoading}
+                className="text-[10px] text-slate-400 hover:text-slate-600 transition-colors font-semibold tabular-nums flex items-center gap-1 cursor-pointer disabled:opacity-50"
+                title="Click to refresh questions"
+              >
+                ↻ {countdown}s
+              </button>
             </div>
             <div className="p-3 space-y-2">
               {faqsLoading && faqs.length === 0 ? (

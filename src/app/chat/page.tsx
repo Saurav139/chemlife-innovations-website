@@ -27,60 +27,66 @@ export default function ChatLandingPage() {
             transition={{ duration: 0.6, ease: easeOut }}
             className="w-full max-w-[850px] bg-white border border-slate-200 rounded-3xl p-8 md:p-12 shadow-sm text-center relative overflow-hidden flex flex-col items-center"
           >
-            {/* Subtle Top Badge */}
-            <span className="px-4 py-1.5 rounded-full bg-brand-orange/10 text-brand-orange text-xs font-black uppercase tracking-wider block mb-6">
-              📣 Coming Soon
-            </span>
-
-            {/* Title */}
+            {/* Active Specialist Title */}
             <h1 className="font-heading text-3xl md:text-5xl font-black text-brand-navy leading-tight mb-4 max-w-xl">
               Meet Our AI Animal Nutrition Experts
             </h1>
             <div className="h-1.5 w-20 bg-teal-500 rounded-full mb-6" />
 
-            <p className="text-slate-600 text-base md:text-lg leading-relaxed max-w-2xl mb-10 font-light">
-              We are currently fine-tuning our customized animal health specialists. 
-              Dr. Kukku and Dr. Mikku will be live soon to provide instant, validated scientific insights for your feed additive and veterinary formulations.
+            <p className="text-slate-650 text-base md:text-lg leading-relaxed max-w-2xl mb-10 font-light">
+              Select one of our specialized digital assistants below to start a conversation about feed hygiene, mycotoxins, gut health, or poultry and dairy nutrition.
             </p>
 
             {/* Side-by-side Mascot Display */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 w-full max-w-2xl mb-12">
-              {/* Dr. Kukku */}
-              <div className="bg-slate-50/50 border border-slate-100 rounded-2xl p-6 flex flex-col items-center text-center">
-                <div className="w-32 h-32 rounded-full bg-blue-50 border border-blue-100/50 p-3 flex items-center justify-center mb-4 shadow-sm">
+              {/* Dr. Kukku (Poultry) */}
+              <Link
+                href="/chat/kukku"
+                className="group bg-slate-50/50 hover:bg-white border border-slate-100 hover:border-blue-200 rounded-2xl p-6 flex flex-col items-center text-center shadow-2xs hover:shadow-md transition-all duration-300 cursor-pointer"
+              >
+                <div className="w-32 h-32 rounded-full bg-blue-50/50 border border-blue-100/50 p-3 flex items-center justify-center mb-4 shadow-sm group-hover:scale-105 transition-transform duration-300">
                   <img
                     src={Images.mascots.poultry}
                     alt="Dr. Kukku Mascot"
                     className="w-full h-full object-contain"
                   />
                 </div>
-                <h3 className="text-xl font-bold text-slate-800 mb-1">Dr. Kukku</h3>
-                <p className="text-sm text-blue-650 font-bold uppercase tracking-wider">
+                <h3 className="text-xl font-bold text-slate-800 mb-1 group-hover:text-blue-600 transition-colors">Dr. Kukku</h3>
+                <p className="text-xs text-blue-600 font-bold uppercase tracking-wider mb-4">
                   Poultry Nutrition Expert
                 </p>
-              </div>
+                <span className="text-[11px] font-bold text-white bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-xl transition-all">
+                  Consult Specialist →
+                </span>
+              </Link>
 
-              {/* Dr. Mikku */}
-              <div className="bg-slate-50/50 border border-slate-100 rounded-2xl p-6 flex flex-col items-center text-center">
-                <div className="w-32 h-32 rounded-full bg-orange-50 border border-orange-100/50 p-3 flex items-center justify-center mb-4 shadow-sm">
+              {/* Dr. Mikku (Dairy) */}
+              <Link
+                href="/chat/mikku"
+                className="group bg-slate-50/50 hover:bg-white border border-slate-100 hover:border-orange-200 rounded-2xl p-6 flex flex-col items-center text-center shadow-2xs hover:shadow-md transition-all duration-300 cursor-pointer"
+              >
+                <div className="w-32 h-32 rounded-full bg-orange-50/50 border border-orange-100/50 p-3 flex items-center justify-center mb-4 shadow-sm group-hover:scale-105 transition-transform duration-300">
                   <img
                     src={Images.mascots.dairy}
                     alt="Dr. Mikku Mascot"
                     className="w-full h-full object-contain"
                   />
                 </div>
-                <h3 className="text-xl font-bold text-slate-800 mb-1">Dr. Mikku</h3>
-                <p className="text-sm text-brand-orange font-bold uppercase tracking-wider">
+                <h3 className="text-xl font-bold text-slate-800 mb-1 group-hover:text-brand-orange transition-colors">Dr. Mikku</h3>
+                <p className="text-xs text-brand-orange font-bold uppercase tracking-wider mb-4">
                   Dairy & Ruminant Specialist
                 </p>
-              </div>
+                <span className="text-[11px] font-bold text-white bg-brand-orange hover:bg-orange-600 px-4 py-2 rounded-xl transition-all">
+                  Consult Specialist →
+                </span>
+              </Link>
             </div>
 
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 w-full justify-center">
               <Link
                 href="/products"
-                className="px-8 py-3.5 rounded-full bg-brand-navy hover:bg-teal-650 text-white font-bold text-sm shadow transition-colors duration-300 text-center"
+                className="px-8 py-3.5 rounded-full bg-brand-navy hover:bg-teal-600 hover:text-white text-white font-bold text-sm shadow transition-colors duration-300 text-center"
               >
                 Explore Feed Additives
               </Link>
