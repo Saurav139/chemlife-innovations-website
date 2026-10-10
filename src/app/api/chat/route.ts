@@ -2,12 +2,15 @@ import { NextResponse } from "next/server";
 import { Pinecone } from "@pinecone-database/pinecone";
 import { PROMPTS } from "./prompts";
 
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY || "";
+const PINECONE_API_KEY = process.env.PINECONE_API_KEY || "";
+
 // Configure Pinecone Client
 let pcClient: Pinecone | null = null;
 function getPineconeIndex() {
   if (!pcClient) {
     pcClient = new Pinecone({
-      apiKey: process.env.PINECONE_API_KEY || "",
+      apiKey: PINECONE_API_KEY,
     });
   }
   return pcClient.index("chemlife-knowledge");
@@ -61,7 +64,7 @@ const PRODUCT_URLS: Record<string, string> = {
 };
 
 async function classifyQuery(message: string): Promise<"kukku" | "mikku"> {
-  const apiKey = process.env.OPENAI_API_KEY;
+  const apiKey = OPENAI_API_KEY;
   if (!apiKey) throw new Error("Missing OPENAI_API_KEY");
 
   const resp = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -88,7 +91,7 @@ async function classifyQuery(message: string): Promise<"kukku" | "mikku"> {
 }
 
 async function getEmbedding(text: string): Promise<number[]> {
-  const apiKey = process.env.OPENAI_API_KEY;
+  const apiKey = OPENAI_API_KEY;
   if (!apiKey) throw new Error("Missing OPENAI_API_KEY");
 
   const resp = await fetch("https://api.openai.com/v1/embeddings", {
@@ -273,7 +276,7 @@ User question: ${message}`;
     messages.push({ role: "user", content: augmentedUserPrompt });
 
     // 6. Generate Response
-    const apiKey = process.env.OPENAI_API_KEY;
+    const apiKey = OPENAI_API_KEY;
     if (!apiKey) throw new Error("Missing OPENAI_API_KEY");
 
     const chatResponse = await fetch("https://api.openai.com/v1/chat/completions", {

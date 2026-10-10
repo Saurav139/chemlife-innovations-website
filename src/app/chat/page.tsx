@@ -27,6 +27,11 @@ export default function ChatLandingPage() {
             transition={{ duration: 0.6, ease: easeOut }}
             className="w-full max-w-[850px] bg-white border border-slate-200 rounded-3xl p-8 md:p-12 shadow-sm text-center relative overflow-hidden flex flex-col items-center"
           >
+            {/* Beta Version Badge */}
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-50 border border-teal-200 text-teal-600 text-xs font-bold uppercase tracking-wider mb-3 select-none no-underline">
+              Beta Version
+            </div>
+
             {/* Active Specialist Title */}
             <h1 className="font-heading text-3xl md:text-5xl font-black text-brand-navy leading-tight mb-4 max-w-xl">
               Meet Our AI Animal Nutrition Experts

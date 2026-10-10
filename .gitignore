@@ -41,6 +41,10 @@ tsconfig.tsbuildinfo
 /.agents/
 /skills-lock.json
 
+# Python cache
+__pycache__/
+*.pyc
+
 # Root-level unreferenced download media
 # (Keeps the public folder assets, but ignores files dropped in the root directory)
 /*.jpg
