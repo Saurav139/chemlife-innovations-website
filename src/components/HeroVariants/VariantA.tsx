@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import Image from "next/image";
+import Image, { getImageProps } from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "@/context/VariantContext";
@@ -19,9 +19,13 @@ const taglines = [
 const bgImages = [
   { id: "poultry", src: Images.heroes.chicken, alt: "Free range chicken farm" },
   { id: "dairy", src: Images.heroes.dairy, alt: "Dairy cattle farm" },
-  { id: "img76", src: Images.heroes.slide76, alt: "Nature visualization" },
-  { id: "img87", src: Images.heroes.slide87, alt: "Farm visualization" },
+  { id: "img76", src: Images.heroes.slide76, alt: "Cow with her calf in a green pasture" },
+  { id: "img87", src: Images.heroes.slide87, alt: "Chick drinking from a poultry drinker" },
 ];
+
+// The slides are up to 2:1 and cover the hero, so on screens taller than 2:1 they are drawn
+// about twice the screen height wide. This makes phones fetch a version sharp enough for that.
+const SLIDE_SIZES = "(min-aspect-ratio: 2/1) 100vw, 200vh";
 
 const STORY_VIDEO_ID = "-amOgNcjYNg";
 
@@ -107,6 +111,18 @@ export default function HeroVariantA() {
     return () => clearInterval(timer);
   }, []);
 
+  // Fetch the next slide while this one is showing, so on slow connections it doesn't fade in blank.
+  // The browser picks the same size from srcset as the slide itself will, so it's reused from the cache.
+  useEffect(() => {
+    const next = bgImages[(bgIndex + 1) % bgImages.length];
+    const { props } = getImageProps({ src: next.src, alt: "", fill: true, sizes: SLIDE_SIZES });
+    const img = document.createElement("img");
+    img.fetchPriority = "low";
+    img.sizes = props.sizes ?? "";
+    img.srcset = props.srcSet ?? "";
+    img.src = props.src;
+  }, [bgIndex]);
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-brand-navy">
       {/* Deep Navy Backdrop Base */}
@@ -127,9 +143,9 @@ export default function HeroVariantA() {
               src={bgImages[bgIndex].src}
               alt={bgImages[bgIndex].alt}
               fill
+              sizes={SLIDE_SIZES}
               className="object-cover animate-ken-burns"
-              priority
-              unoptimized
+              priority={bgIndex === 0}
             />
           </motion.div>
         </AnimatePresence>
