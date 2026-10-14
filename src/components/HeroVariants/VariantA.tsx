@@ -108,7 +108,7 @@ export default function HeroVariantA() {
   }, []);
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-brand-navy">
+    <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden bg-brand-navy">
       {/* Deep Navy Backdrop Base */}
       <div className="absolute inset-0 bg-brand-navy z-0" />
 
