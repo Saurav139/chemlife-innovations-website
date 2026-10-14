@@ -42,6 +42,11 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  images: {
+    // Cache resized images for 30 days (default 4 hours). File names don't change when an image does,
+    // so save a replacement under a new name in src/lib/assets.ts.
+    minimumCacheTTL: 2592000,
+  },
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },
