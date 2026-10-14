@@ -161,8 +161,8 @@ export const Images = {
 
   /** Chat bot mascot images */
   mascots: {
-    poultry: "/images/mascots/poultry-mascot.png",
-    dairy: "/images/mascots/dairy-mascot.png",
+    poultry: "/images/mascots/poultry-mascot.webp",
+    dairy: "/images/mascots/dairy-mascot.webp",
   },
 
   /** Partner / client logos (used in the flip-card marquee) */
