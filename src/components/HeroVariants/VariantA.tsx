@@ -30,13 +30,16 @@ const stats = [
 ];
 
 function AnimatedCounter({ value, suffix }: { value: number; suffix: string }) {
-  const [count, setCount] = useState(0);
+  // Starts at the real value so the server-rendered HTML (search engines, slow connections)
+  // shows it. The count-up from 0 runs only once the browser is running JavaScript and the number is on screen.
+  const [count, setCount] = useState(value);
   const ref = useRef<HTMLSpanElement>(null);
   const counted = useRef(false);
 
   useEffect(() => {
     const el = ref.current;
-    if (!el) return;
+    if (!el || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    let timer: ReturnType<typeof setInterval> | undefined;
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && !counted.current) {
@@ -45,7 +48,8 @@ function AnimatedCounter({ value, suffix }: { value: number; suffix: string }) {
           const steps = 60;
           const increment = value / steps;
           let current = 0;
-          const timer = setInterval(() => {
+          setCount(0);
+          timer = setInterval(() => {
             current += increment;
             if (current >= value) {
               setCount(value);
@@ -59,7 +63,10 @@ function AnimatedCounter({ value, suffix }: { value: number; suffix: string }) {
       { threshold: 0.5 }
     );
     observer.observe(el);
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+      clearInterval(timer);
+    };
   }, [value]);
 
   return (
