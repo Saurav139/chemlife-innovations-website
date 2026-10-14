@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Header from "@/components/Header";
@@ -44,10 +44,23 @@ export default function ContactPage() {
 
   const inquiryOptions = [
     "General Inquiry",
+    "Talk to a Nutritionist",
     "Product Sales & Distribution",
     "Technical & R&D Partnership",
     "Advisory Services & Careers",
   ];
+
+  // Pre-fill the form when a call to action links here, e.g. /contact?type=nutritionist from the homepage hero
+  useEffect(() => {
+    const type = new URLSearchParams(window.location.search).get("type");
+    if (type === "nutritionist") {
+      setFormData((prev) => ({
+        ...prev,
+        inquiryType: "Talk to a Nutritionist",
+        subject: prev.subject || "I'd like to talk to a nutritionist",
+      }));
+    }
+  }, []);
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
