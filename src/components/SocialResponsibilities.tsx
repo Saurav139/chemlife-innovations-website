@@ -87,9 +87,8 @@ export default function SocialResponsibilities() {
                 src={activeBg.bgSrc}
                 alt="Social Responsibility Background"
                 fill
+                sizes="100vw"
                 className="object-cover"
-                priority
-                unoptimized
               />
             </motion.div>
           )}

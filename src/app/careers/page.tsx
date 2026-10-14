@@ -343,8 +343,8 @@ export default function CareersPage() {
                     src={selectedRole.bgImage}
                     alt={selectedRole.title}
                     fill
+                    sizes="(min-width: 1024px) 42vw, 100vw"
                     className="object-cover"
-                    unoptimized
                   />
                   {/* Subtle fade overlay just on the bottom/edges to frame nicely */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent lg:bg-gradient-to-l lg:from-black/10" />
