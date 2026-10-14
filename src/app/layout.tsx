@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Maven_Pro } from "next/font/google";
 import "./globals.css";
 import RatingWidget from "@/components/RatingWidget";
+import { SITE_URL, pageMetadata } from "@/lib/seo";
 
 const mavenPro = Maven_Pro({
   subsets: ["latin"],
@@ -10,10 +11,14 @@ const mavenPro = Maven_Pro({
   variable: "--font-maven-pro",
 });
 
+// Homepage metadata. Other pages set their own in a layout.tsx next to their page.tsx.
 export const metadata: Metadata = {
-  title: "ChemLife Innovations | Nature Driven Functional Feed Additives",
-  description:
-    "Nature-driven functional feed additives through Ayurvedic holistic approach and novel bio-transformation technology (ANBioT).",
+  metadataBase: new URL(SITE_URL),
+  ...pageMetadata({
+    description:
+      "Nature-derived functional feed additives for poultry, dairy and livestock, made with ANBioT, our bio-transformation technology rooted in Ayurveda.",
+    path: "/",
+  }),
 };
 
 export default function RootLayout({
