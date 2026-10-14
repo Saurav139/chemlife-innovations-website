@@ -3,36 +3,11 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
-import { routeQuery } from "@/utils/chatService";
 import { Images } from "@/lib/assets";
 
 export default function ChatOverlay() {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
-  const [query, setQuery] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const trimmed = query.trim();
-    if (!trimmed || loading) return;
-
-    setLoading(true);
-    setError("");
-
-    try {
-      const bot = await routeQuery(trimmed);
-      setIsOpen(false);
-      setQuery("");
-      router.push(`/chat/${bot}?q=${encodeURIComponent(trimmed)}`);
-    } catch (err) {
-      console.error(err);
-      setError("Unable to connect to assistant. Try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return (
     <div className="fixed bottom-6 right-6 z-50 font-sans">
