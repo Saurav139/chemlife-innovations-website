@@ -30,8 +30,8 @@ export const Images = {
     /** Hero slideshow / rotating panels */
     chicken: "/images/heroes/chicken-bg.jpg",
     dairy: "/images/heroes/dairy-bg.jpg",
-    slide76: "/images/heroes/76.png",
-    slide87: "/images/heroes/87.png",
+    slide76: "/images/heroes/76.jpg",
+    slide87: "/images/heroes/87.jpg",
   },
 
   /** Product icons, banners, and category images */
