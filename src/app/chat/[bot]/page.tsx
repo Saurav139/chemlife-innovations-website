@@ -6,9 +6,13 @@ import Link from "next/link";
 import {
   sendMessage,
   fetchFaqs,
+  fetchChatAvailability,
+  ChatError,
+  type ChatFailureCode,
   type Turn,
   type Source,
 } from "@/utils/chatService";
+import { MAX_MESSAGE_CHARS } from "@/lib/chatErrors";
 import { VariantProvider } from "@/context/VariantContext";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -20,6 +24,40 @@ interface Message {
   content: string;
   sources?: Source[];
   isError?: boolean;
+  /** The question to send again when the visitor taps "Try again". */
+  retry?: { text: string; history: Turn[] };
+}
+
+const CONTACT_LINK = "[contact the Chemlife team](mailto:chemlifeinnovations@gmail.com)";
+
+// Errors that can clear up by themselves, so "Try again" is worth offering.
+const RETRYABLE = new Set<ChatFailureCode>(["offline", "network", "timeout", "busy", "unavailable", "internal"]);
+
+function chatErrorMessage(code: ChatFailureCode, botName: string): string {
+  switch (code) {
+    case "offline":
+      return "You're offline. Check your internet connection, then try again.";
+    case "network":
+      return "I couldn't connect to the server. Check your internet connection, then try again.";
+    case "timeout":
+      return "That took too long to answer. Please try again.";
+    case "message_too_long":
+      return `That message is too long. Please keep it under ${MAX_MESSAGE_CHARS.toLocaleString("en-IN")} characters.`;
+    case "rate_limited":
+      return "You're sending questions faster than I can answer. Please wait a minute, then ask again.";
+    case "daily_limit":
+      return `You've reached today's limit for questions. Please come back tomorrow, or ${CONTACT_LINK}.`;
+    case "busy":
+      return `I'm getting a lot of questions right now. Please try again in a few minutes, or ${CONTACT_LINK}.`;
+    case "unavailable":
+      return `I can't reach my knowledge base right now. Please try again in a few minutes, or ${CONTACT_LINK}.`;
+    case "not_configured":
+      return `${botName} is offline right now. For help today, ${CONTACT_LINK}.`;
+    case "invalid_request":
+      return "Something went wrong sending that message. Please refresh the page and try again.";
+    default:
+      return `Something went wrong on our side. Please try again, or ${CONTACT_LINK}.`;
+  }
 }
 
 const BOT_META = {
@@ -171,10 +209,11 @@ function UserBubble({ content, bubbleClass }: { content: string; bubbleClass: st
 }
 
 function BotBubble({
-  image, name, content, sources, isError, accentBgLight, accentBorder, isGreeting,
+  image, name, content, sources, isError, accentBgLight, accentBorder, isGreeting, onRetry,
 }: {
   image: string; name: string; content: string; sources?: Source[];
   isError?: boolean; accentBgLight: string; accentBorder: string; isGreeting?: boolean;
+  onRetry?: () => void;
 }) {
   return (
     <div className="flex items-start gap-3">
@@ -186,7 +225,18 @@ function BotBubble({
           isError ? "bg-red-50 border-red-200" : `${accentBgLight} ${accentBorder}`
         }`}>
           {isError ? (
-            <p className="text-[13px] text-red-600 leading-relaxed">⚠️ {content}</p>
+            <>
+              <p role="alert" className="text-[13px] text-red-600 leading-relaxed">⚠️ {parseInline(content)}</p>
+              {onRetry && (
+                <button
+                  type="button"
+                  onClick={onRetry}
+                  className="mt-2 text-[12px] font-semibold text-red-700 hover:text-red-800 underline underline-offset-2 cursor-pointer"
+                >
+                  Try again
+                </button>
+              )}
+            </>
           ) : (
             <div className="space-y-0.5 leading-relaxed">{parseMarkdownToJSX(content)}</div>
           )}
@@ -243,6 +293,8 @@ function ChatSessionContent() {
   const [faqs, setFaqs] = useState<string[]>([]);
   const [faqsLoading, setFaqsLoading] = useState(true);
   const [countdown, setCountdown] = useState(20);
+  // null until the server says otherwise; false means the chat API has no keys, so the bots are shown as offline.
+  const [available, setAvailable] = useState<boolean | null>(null);
 
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -256,6 +308,14 @@ function ChatSessionContent() {
     setMessages([]);
     firedQueryRef.current = {};
   }, [botKey]);
+
+  useEffect(() => {
+    let alive = true;
+    fetchChatAvailability().then((ok) => {
+      if (alive && ok !== null) setAvailable(ok);
+    });
+    return () => { alive = false; };
+  }, []);
 
   useEffect(() => {
     if (!initialQuery || firedQueryRef.current[botKey]) return;
@@ -296,8 +356,9 @@ function ChatSessionContent() {
 
   const greetingMessage = useMemo(() => meta.greeting, [meta]);
 
+  // Error bubbles stay on screen but are not part of the conversation the bot sees.
   const buildHistory = (msgs: Message[]): Turn[] =>
-    msgs.slice(-20).map((m) => ({ role: m.role, content: m.content }));
+    msgs.filter((m) => !m.isError).slice(-10).map((m) => ({ role: m.role, content: m.content }));
 
   const fireMessage = useCallback(async (text: string, currentHistory: Turn[]) => {
     setLoading(true);
@@ -309,11 +370,18 @@ function ChatSessionContent() {
         return;
       }
       setMessages((prev) => [...prev, { role: "assistant", content: data.reply, sources: data.sources }]);
-    } catch {
+    } catch (err) {
+      const code: ChatFailureCode = err instanceof ChatError ? err.code : "internal";
+      if (code === "not_configured") {
+        // The offline notice below the messages explains this, so no error bubble as well.
+        setAvailable(false);
+        return;
+      }
       setMessages((prev) => [...prev, {
         role: "assistant",
-        content: "I couldn't reach my knowledge base right now. Please try again in a moment.",
+        content: chatErrorMessage(code, meta.name),
         isError: true,
+        retry: RETRYABLE.has(code) ? { text, history: currentHistory } : undefined,
       }]);
     } finally {
       setLoading(false);
@@ -322,10 +390,12 @@ function ChatSessionContent() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [botKey, router]);
 
+  const offline = available === false;
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const trimmed = input.trim();
-    if (!trimmed || loading) return;
+    if (!trimmed || loading || offline) return;
     const userMsg: Message = { role: "user", content: trimmed };
     const updated = [...messages, userMsg];
     setMessages(updated);
@@ -334,11 +404,18 @@ function ChatSessionContent() {
   };
 
   const handleSelectFaq = async (faqText: string) => {
-    if (loading) return;
+    if (loading || offline) return;
     const userMsg: Message = { role: "user", content: faqText };
     const updated = [...messages, userMsg];
     setMessages(updated);
     await fireMessage(faqText, buildHistory(updated.slice(0, -1)));
+  };
+
+  const handleRetry = (index: number) => {
+    const failed = messages[index];
+    if (loading || !failed?.retry) return;
+    setMessages((prev) => prev.filter((_, i) => i !== index));
+    fireMessage(failed.retry.text, failed.retry.history);
   };
 
   const otherBot = botKey === "kukku" ? "mikku" : "kukku";
@@ -363,8 +440,10 @@ function ChatSessionContent() {
               <div className="min-w-0">
                 <div className="flex items-center gap-2">
                   <span className="font-heading font-bold text-slate-800 text-[15px]">{meta.name}</span>
-                  <span className="w-2 h-2 rounded-full bg-emerald-500 flex-shrink-0" />
-                  <span className="text-[10px] text-emerald-600 font-semibold uppercase tracking-wider hidden sm:block">Live</span>
+                  <span className={`w-2 h-2 rounded-full flex-shrink-0 ${offline ? "bg-slate-300" : "bg-emerald-500"}`} />
+                  <span className={`text-[10px] font-semibold uppercase tracking-wider hidden sm:block ${offline ? "text-slate-400" : "text-emerald-600"}`}>
+                    {offline ? "Offline" : "Live"}
+                  </span>
                 </div>
                 <p className="text-[11px] text-slate-500 font-medium truncate">{meta.specialty}</p>
               </div>
@@ -386,8 +465,12 @@ function ChatSessionContent() {
               msg.role === "user" ? (
                 <UserBubble key={i} content={msg.content} bubbleClass={meta.userBubble} />
               ) : (
-                <BotBubble key={i} image={meta.image} name={meta.name} content={msg.content} sources={msg.sources} isError={msg.isError} accentBgLight={meta.accentBgLight} accentBorder={meta.accentBorder} />
+                <BotBubble key={i} image={meta.image} name={meta.name} content={msg.content} sources={msg.sources} isError={msg.isError} accentBgLight={meta.accentBgLight} accentBorder={meta.accentBorder}
+                  onRetry={msg.retry && i === messages.length - 1 && !loading ? () => handleRetry(i) : undefined} />
               )
+            )}
+            {offline && (
+              <BotBubble image={meta.image} name={meta.name} content={chatErrorMessage("not_configured", meta.name)} isError accentBgLight={meta.accentBgLight} accentBorder={meta.accentBorder} />
             )}
             {loading && (
               <div className="flex items-start gap-3">
@@ -410,14 +493,15 @@ function ChatSessionContent() {
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder={`Ask ${meta.name} a question…`}
-                disabled={loading}
+                placeholder={offline ? `${meta.name} is offline right now` : `Ask ${meta.name} a question…`}
+                disabled={loading || offline}
+                maxLength={MAX_MESSAGE_CHARS}
                 autoComplete="off"
                 className={`flex-1 text-sm px-4 py-2.5 border border-slate-200 rounded-xl bg-slate-50 focus:bg-white transition-all placeholder:text-slate-400 text-slate-800 outline-none disabled:opacity-60 ${meta.inputFocus}`}
               />
               <button
                 type="submit"
-                disabled={loading || !input.trim()}
+                disabled={loading || offline || !input.trim()}
                 aria-label="Send message"
                 className={`w-10 h-10 rounded-xl flex-shrink-0 flex items-center justify-center text-white transition-all disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed ${meta.accentBg}`}
               >
@@ -458,7 +542,7 @@ function ChatSessionContent() {
                 <p className="text-xs text-slate-400 italic text-center py-5">No suggestions yet.</p>
               ) : (
                 faqs.map((faq, i) => (
-                  <button key={i} onClick={() => handleSelectFaq(faq)} disabled={loading}
+                  <button key={i} onClick={() => handleSelectFaq(faq)} disabled={loading || offline}
                     className={`w-full text-left text-[12px] px-3 py-2.5 rounded-xl border border-slate-100 hover:border-slate-200 hover:bg-slate-50/80 transition-all text-slate-700 leading-relaxed cursor-pointer disabled:cursor-not-allowed disabled:opacity-60`}>
                     {faq}
                   </button>
