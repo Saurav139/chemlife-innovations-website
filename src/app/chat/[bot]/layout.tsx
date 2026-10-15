@@ -3,7 +3,7 @@ import { pageMetadata } from "@/lib/seo";
 
 const BOT_SEO = {
   kukku: {
-    title: "Dr. Kukku, AI Poultry Nutrition Expert",
+    title: "Dr. Kukku, AI Poultry Nutritionist",
     description:
       "Ask Dr. Kukku about broiler and layer feed, mycotoxins, gut health and egg quality, and find the right ChemLife product for your flock.",
   },

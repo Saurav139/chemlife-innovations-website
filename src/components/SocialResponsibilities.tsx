@@ -4,7 +4,8 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import SectionWrapper from "./SectionWrapper";
-import { Images, Videos } from "@/lib/assets";
+import { Images, Videos, VideoPosters } from "@/lib/assets";
+import BackgroundVideo, { useNearViewport } from "./BackgroundVideo";
 
 const items = [
   {
@@ -14,6 +15,7 @@ const items = [
     desc: "Bicycles donation for empowering students below the poverty line",
     bgType: "video",
     bgSrc: Videos.social1,
+    bgPoster: VideoPosters.social1,
   },
   {
     id: 1,
@@ -36,6 +38,7 @@ const items = [
 export default function SocialResponsibilities() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [bgIndex, setBgIndex] = useState(0);
+  const [bgRef, near] = useNearViewport<HTMLDivElement>();
 
   // Auto-rotate the background every 5 seconds if not hovering
   useEffect(() => {
@@ -53,7 +56,7 @@ export default function SocialResponsibilities() {
   return (
     <SectionWrapper className="relative py-32 lg:py-40 bg-white overflow-hidden border-b border-gray-100">
       {/* Dynamic Background Media with cross-fade */}
-      <div className="absolute inset-0 z-0 select-none pointer-events-none">
+      <div ref={bgRef} className="absolute inset-0 z-0 select-none pointer-events-none">
         <AnimatePresence initial={false}>
           {activeBg.bgType === "video" ? (
             <motion.div
@@ -64,15 +67,12 @@ export default function SocialResponsibilities() {
               transition={{ duration: 1.0, ease: "easeInOut" }}
               className="absolute inset-0 w-full h-full"
             >
-              <video
-                autoPlay
-                loop
-                muted
-                playsInline
+              <BackgroundVideo
+                src={activeBg.bgSrc}
+                poster={activeBg.bgPoster}
+                active={near}
                 className="w-full h-full object-cover"
-              >
-                <source src={activeBg.bgSrc} type="video/mp4" />
-              </video>
+              />
             </motion.div>
           ) : (
             <motion.div

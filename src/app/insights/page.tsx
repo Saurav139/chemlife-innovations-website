@@ -965,10 +965,10 @@ export default function InsightsPage() {
               
               {/* YouTube Iframe Embed */}
               <iframe
-                src={`https://www.youtube.com/embed/${activeVideoId}?autoplay=1&rel=0`}
+                src={`https://www.youtube-nocookie.com/embed/${activeVideoId}?autoplay=1&rel=0`}
                 title="YouTube video player"
                 frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allow="accelerometer; autoplay; clipboard-write; compute-pressure; encrypted-media; gyroscope; picture-in-picture; web-share"
                 allowFullScreen
                 className="w-full h-full"
               />

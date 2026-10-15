@@ -3,7 +3,8 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "@/context/VariantContext";
-import { Videos } from "@/lib/assets";
+import { Videos, VideoPosters } from "@/lib/assets";
+import BackgroundVideo, { useNearViewport } from "./BackgroundVideo";
 
 const easeOut = [0.25, 0.1, 0, 1] as const;
 
@@ -15,43 +16,43 @@ const bulletPoints = [
 ];
 
 const videos = [
-  Videos.trip1,
-  Videos.trip2,
-  Videos.trip3,
+  { src: Videos.trip1, poster: VideoPosters.trip1 },
+  { src: Videos.trip2, poster: VideoPosters.trip2 },
+  { src: Videos.trip3, poster: VideoPosters.trip3 },
 ];
 
 export default function LifeAtChemLife() {
   const { theme } = useTheme();
   const [videoIndex, setVideoIndex] = useState(0);
+  const [sectionRef, near] = useNearViewport<HTMLElement>();
 
+  // Rotate only while the section is near the screen, so the other videos aren't fetched for nothing.
   useEffect(() => {
+    if (!near) return;
     const timer = setInterval(() => {
       setVideoIndex((prev) => (prev + 1) % videos.length);
     }, 6000);
     return () => clearInterval(timer);
-  }, []);
-  
+  }, [near]);
+
   return (
-    <section className="relative min-h-[600px] flex items-center overflow-hidden">
-      <div className="absolute inset-0 z-0 w-full h-full">
+    <section ref={sectionRef} className="relative min-h-[600px] flex items-center overflow-hidden">
+      <div className="absolute inset-0 z-0 w-full h-full bg-brand-navy">
         <AnimatePresence initial={false}>
           <motion.div
-            key={videos[videoIndex]}
+            key={videos[videoIndex].src}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 1.5, ease: "easeInOut" }}
             className="absolute inset-0 w-full h-full"
           >
-            <video
-              autoPlay
-              loop
-              muted
-              playsInline
+            <BackgroundVideo
+              src={videos[videoIndex].src}
+              poster={videos[videoIndex].poster}
+              active={near}
               className="w-full h-full object-cover"
-            >
-              <source src={videos[videoIndex]} type="video/mp4" />
-            </video>
+            />
           </motion.div>
         </AnimatePresence>
       </div>

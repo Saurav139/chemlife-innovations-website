@@ -29,7 +29,7 @@ interface PageSeo {
 export function pageMetadata({ title, description, path, noIndex }: PageSeo): Metadata {
   const fullTitle = title
     ? `${title} | ${SITE_NAME}`
-    : `${SITE_NAME} | Nature-Driven Functional Feed Additives`;
+    : `${SITE_NAME} | Natural Functional Feed Additives`;
 
   return {
     title: { absolute: fullTitle },
