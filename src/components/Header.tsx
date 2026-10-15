@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { Images } from "@/lib/assets";
 
 const navLinks = [
-  { label: "Home", href: "/#hero" },
+  { label: "Home", href: "/" },
   { label: "About", href: "/about" },
   { label: "Products", href: "/products" },
   { label: "Research", href: "/research" },
@@ -47,7 +47,6 @@ export default function Header() {
             {navLinks.map((link) => {
               const isActive =
                 pathname === link.href ||
-                (link.href === "/#hero" && pathname === "/") ||
                 (pathname && pathname.startsWith(link.href) && link.href !== "/");
 
               return (
@@ -90,7 +89,6 @@ export default function Header() {
               {navLinks.map((link) => {
                 const isActive =
                   pathname === link.href ||
-                  (link.href === "/#hero" && pathname === "/") ||
                   (pathname && pathname.startsWith(link.href) && link.href !== "/");
 
                 return (
