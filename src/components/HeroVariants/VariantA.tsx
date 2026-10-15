@@ -130,7 +130,9 @@ export default function HeroVariantA() {
 
       {/* Dynamic Background Image cross-fading */}
       <div className="absolute inset-0 z-10 opacity-100 transition-opacity duration-1000">
-        <AnimatePresence mode="wait">
+        {/* initial={false}: the first slide and tagline are in the server HTML already visible,
+            so they paint without waiting for JavaScript. Later ones still animate in. */}
+        <AnimatePresence mode="wait" initial={false}>
           <motion.div
             key={bgIndex}
             initial={{ opacity: 0, scale: 1.05 }}
@@ -157,13 +159,9 @@ export default function HeroVariantA() {
 
       <div className="relative z-30 max-w-[1200px] mx-auto px-6 py-32 w-full h-full flex flex-col justify-center">
         <div className="max-w-4xl flex-1 flex flex-col justify-center mx-auto text-center items-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: [0.25, 0.1, 0, 1] }}
-            className="min-h-[340px] flex flex-col justify-center items-center text-center w-full"
-          >
-            <AnimatePresence mode="wait">
+          <div className="min-h-[340px] flex flex-col justify-center items-center text-center w-full">
+            {/* initial={false}: see the background slides above */}
+            <AnimatePresence mode="wait" initial={false}>
               <motion.h1
                 key={taglines[currentTag].id}
                 initial={{ opacity: 0, y: 20 }}
@@ -200,7 +198,7 @@ export default function HeroVariantA() {
               </svg>
               Watch our story
             </button>
-          </motion.div>
+          </div>
         </div>
 
         {/* Serial Embedded Company Stats */}

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { useTheme } from "@/context/VariantContext";
 import { usePathname } from "next/navigation";
 import { Images } from "@/lib/assets";
@@ -36,9 +37,13 @@ export default function Header() {
       <div className="max-w-[1200px] mx-auto pr-6 pl-2">
         <div className="flex items-center justify-between h-32">
           <a href="/" className="flex-shrink-0">
-            <img
+            <Image
               src={Images.branding.logo}
               alt="ChemLife Innovations"
+              width={112}
+              height={112}
+              sizes="112px"
+              loading="eager"
               className="h-28 w-auto"
             />
           </a>
