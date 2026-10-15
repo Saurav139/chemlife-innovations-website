@@ -232,3 +232,11 @@ export const Videos = {
   trip2: "/videos/trip2.mp4",
   trip3: "/videos/trip3.mp4",
 } as const;
+
+/** First frame of each video, shown until it plays (and instead of it for "reduce motion"). */
+export const VideoPosters = {
+  social1: "/images/posters/social1.webp",
+  trip1: "/images/posters/trip1.webp",
+  trip2: "/images/posters/trip2.webp",
+  trip3: "/images/posters/trip3.webp",
+} as const;
