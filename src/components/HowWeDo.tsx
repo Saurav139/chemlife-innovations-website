@@ -89,7 +89,7 @@ export default function HowWeDo() {
                     src={s.image}
                     alt={s.title}
                     fill
-                    sizes="(max-w-768px) 100vw, 425px"
+                    sizes="(max-width: 768px) 100vw, 425px"
                     className={`object-cover group-hover:scale-102 transition-transform duration-700 ${s.objectPosition || ""}`}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/15 to-transparent animate-fade-in" />

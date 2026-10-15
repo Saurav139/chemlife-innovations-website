@@ -74,7 +74,7 @@ export default function AboutPage() {
                   src={Images.people.foundersNew}
                   alt="ChemLife Founders and Leadership"
                   fill
-                  sizes="(max-w-768px) 100vw, 550px"
+                  sizes="(max-width: 768px) 100vw, 550px"
                   className="object-cover group-hover:scale-[1.02] transition-transform duration-500"
                   priority
                 />
@@ -466,7 +466,7 @@ export default function AboutPage() {
                       src={leader.image}
                       alt={leader.name}
                       fill
-                      sizes="(max-w-768px) 112px, 128px"
+                      sizes="(max-width: 768px) 112px, 128px"
                       className="object-cover object-center group-hover:scale-105 transition-transform duration-500"
                     />
                   </div>
