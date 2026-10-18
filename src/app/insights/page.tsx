@@ -706,7 +706,7 @@ export default function InsightsPage() {
                 </div>
               </a>
               <a
-                href="https://www.youtube.com/@chemlifeinnovations"
+                href="https://www.youtube.com/@chemlifeinnovations2739"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-4 p-4 bg-white rounded-2xl border border-gray-200 hover:border-red-500 hover:shadow-xs transition-all duration-300"
