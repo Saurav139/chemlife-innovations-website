@@ -11,13 +11,15 @@ const chatbotApiOrigin = /^https?:\/\//.test(chatbotApiUrl) ? new URL(chatbotApi
 const contentSecurityPolicy = [
   "default-src 'self'",
   // Next.js inlines page data as <script> tags. Nonces would remove 'unsafe-inline' but force every page to render per request.
-  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""}`,
+  // Google Analytics (gtag.js) loads only after a visitor accepts the cookie banner.
+  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""} https://www.googletagmanager.com`,
   "style-src 'self' 'unsafe-inline'",
   // Insights images: WordPress blog, YouTube thumbnails, LinkedIn post thumbnails (once the LinkedIn feed is enabled).
-  "img-src 'self' data: https://chemlifeinnovations.wordpress.com https://img.youtube.com https://media.licdn.com",
+  // Google Analytics hosts below are Google's documented list for GA4 without Google Signals.
+  "img-src 'self' data: https://chemlifeinnovations.wordpress.com https://img.youtube.com https://media.licdn.com https://*.google-analytics.com https://*.googletagmanager.com",
   "font-src 'self'",
   "media-src 'self'",
-  `connect-src 'self'${chatbotApiOrigin ? ` ${chatbotApiOrigin}` : ""}`,
+  `connect-src 'self'${chatbotApiOrigin ? ` ${chatbotApiOrigin}` : ""} https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com`,
   // YouTube player on Insights; Google Maps on Contact (maps.google.com redirects to www.google.com).
   "frame-src https://www.youtube-nocookie.com https://www.youtube.com https://maps.google.com https://www.google.com",
   "object-src 'none'",

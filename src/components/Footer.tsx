@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Images } from "@/lib/assets";
+import { GA_ID, OPEN_CONSENT_EVENT } from "@/lib/analytics";
 
 export default function Footer() {
   return (
@@ -168,8 +169,17 @@ export default function Footer() {
             </p>
           </div>
           <div className="flex gap-6">
-            <Link href="#" className="text-slate-450 text-xs hover:text-brand-orange transition-colors">Privacy Policy</Link>
+            <Link href="/privacy" className="text-slate-450 text-xs hover:text-brand-orange transition-colors">Privacy Policy</Link>
             <Link href="#" className="text-slate-450 text-xs hover:text-brand-orange transition-colors">Terms of Use</Link>
+            {GA_ID && (
+              <button
+                type="button"
+                onClick={() => window.dispatchEvent(new Event(OPEN_CONSENT_EVENT))}
+                className="text-slate-450 text-xs hover:text-brand-orange transition-colors cursor-pointer"
+              >
+                Cookie settings
+              </button>
+            )}
           </div>
         </div>
       </div>

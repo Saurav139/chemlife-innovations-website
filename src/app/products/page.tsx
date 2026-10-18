@@ -558,6 +558,7 @@ export default function ProductsPage() {
                   <motion.div
                     key={product.id}
                     id={`product-${product.id}`}
+                    data-analytics-item={product.name}
                     layout
                     transition={{ duration: 0.4, ease: easeOut }}
                     className="border border-slate-200 rounded-2xl bg-slate-50/50 hover:bg-slate-50/85 transition-colors duration-300 overflow-hidden shadow-xs hover:border-brand-orange/30 flex flex-col h-fit group"
@@ -565,6 +566,7 @@ export default function ProductsPage() {
                     {/* Card Header (Image/Icon + Title & Category) */}
                     <div
                       onClick={() => toggleExpand(product.id)}
+                      data-analytics-click={isExpanded ? "Show Less" : "Learn More"}
                       className="cursor-pointer select-none flex flex-col"
                     >
                       {/* Top: Product Image or Icon Container */}
