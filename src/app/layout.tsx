@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Maven_Pro } from "next/font/google";
 import "./globals.css";
 import RatingWidget from "@/components/RatingWidget";
+import AnalyticsLoader from "@/components/AnalyticsLoader";
+import { GA_ID } from "@/lib/analytics";
 import { SITE_URL, pageMetadata } from "@/lib/seo";
 
 const mavenPro = Maven_Pro({
@@ -48,6 +50,8 @@ export default function RootLayout({
       <body>
         {children}
         <RatingWidget />
+        {/* Without a GA ID, the banner and GA code are neither rendered nor downloaded. */}
+        {GA_ID && <AnalyticsLoader />}
       </body>
     </html>
   );

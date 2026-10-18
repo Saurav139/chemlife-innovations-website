@@ -158,6 +158,8 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
               {/* Featured Blog */}
               {featuredBlog && (
                 <div
+                  data-analytics-item={featuredBlog.title}
+                  data-analytics-click="Read Article"
                   className="bg-gray-55 border border-gray-200 rounded-3xl p-8 lg:p-10 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between group cursor-pointer"
                   onClick={() => setActiveArticle(featuredBlog)}
                 >
@@ -213,6 +215,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
               {/* Featured Video */}
               {featuredVideo && (
                 <div
+                  data-analytics-item={featuredVideo.title}
                   className="bg-gray-55 border border-gray-200 rounded-3xl p-8 lg:p-10 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between group"
                 >
                   <div>
@@ -230,6 +233,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                     {featuredVideo.youtubeId && (
                       <div
                         onClick={() => setActiveVideoId(featuredVideo.youtubeId!)}
+                        data-analytics-click="Watch Now"
                         className="relative w-full aspect-video rounded-2xl overflow-hidden bg-slate-900 border border-slate-200/80 cursor-pointer shadow-sm group/video select-none mb-4"
                       >
                         <Image
@@ -273,6 +277,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
               {/* Featured Podcast */}
               {featuredPodcast && (
                 <div
+                  data-analytics-item={featuredPodcast.title}
                   className="bg-gray-55 border border-gray-200 rounded-3xl p-8 lg:p-10 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between group"
                 >
                   <div>
@@ -290,6 +295,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                     {featuredPodcast.youtubeId && (
                       <div
                         onClick={() => setActiveVideoId(featuredPodcast.youtubeId!)}
+                        data-analytics-click="Listen Now"
                         className="relative w-full aspect-video rounded-2xl overflow-hidden bg-slate-900 border border-slate-200/80 cursor-pointer shadow-sm group/video select-none mb-4"
                       >
                         <Image
@@ -447,6 +453,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                     <motion.div
                       layout
                       key={item.title}
+                      data-analytics-item={item.title}
                       initial={{ opacity: 0, scale: 0.9 }}
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0, scale: 0.9 }}
@@ -456,6 +463,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                       {/* Clickable Area of Card Content */}
                       <div
                         className={isBlog ? "cursor-pointer" : ""}
+                        data-analytics-click={isBlog ? "Read Article" : undefined}
                         onClick={() => {
                           if (isBlog) {
                             if (item.linkUrl?.includes("wordpress.com")) {
@@ -503,6 +511,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                               e.stopPropagation();
                               setActiveVideoId(item.youtubeId!);
                             }}
+                            data-analytics-click={item.type === "Podcast" ? "Listen Now" : "Watch Now"}
                             className="relative w-full aspect-video rounded-xl overflow-hidden mb-4 bg-slate-900 border border-slate-200/80 cursor-pointer shadow-sm group/video select-none"
                           >
                             <Image

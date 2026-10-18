@@ -188,6 +188,7 @@ export default function ResearchPage() {
                 return (
                   <motion.div
                     key={topic.id}
+                    data-analytics-item={topic.title}
                     layout
                     transition={{ duration: 0.4, ease: easeOut }}
                     className="border-2 border-slate-200 rounded-2xl bg-slate-50/50 hover:bg-slate-50/85 transition-colors duration-300 overflow-hidden shadow-xs hover:border-brand-orange/40 flex flex-col group"
@@ -195,6 +196,7 @@ export default function ResearchPage() {
                     {/* Card Header (Image/Banner + Title) */}
                     <div
                       onClick={() => toggleExpand(topic.id)}
+                      data-analytics-click={isExpanded ? "Show Less" : "Explore Dossier"}
                       className="cursor-pointer select-none flex flex-col"
                     >
                       {/* Top: Product Image or Icon Container - Full Uncropped View */}
