@@ -46,6 +46,12 @@ const nextConfig: NextConfig = {
     // Cache resized images for 30 days (default 4 hours). File names don't change when an image does,
     // so save a replacement under a new name in src/lib/assets.ts.
     minimumCacheTTL: 2592000,
+    // Insights images, resized here instead of loading the originals (WordPress uploads run up to 1.9 MB).
+    // Keep in step with isOptimizable in src/app/insights/InsightsView.tsx.
+    remotePatterns: [
+      { protocol: "https", hostname: "chemlifeinnovations.wordpress.com", pathname: "/wp-content/uploads/**" },
+      { protocol: "https", hostname: "img.youtube.com", pathname: "/vi/**" },
+    ],
   },
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
