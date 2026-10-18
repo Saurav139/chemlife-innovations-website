@@ -2,14 +2,17 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import SectionWrapper from "@/components/SectionWrapper";
 import { VariantProvider } from "@/context/VariantContext";
 import SiteSearch from "@/components/SiteSearch";
 import { Images } from "@/lib/assets";
 
 const easeOut = [0.25, 0.1, 0, 1] as const;
+
+// Card image widths for the browser to pick a file size from. They follow the research grid below.
+const BANNER_SIZES = "(min-width: 1024px) 335px, (min-width: 640px) calc(50vw - 68px), calc(100vw - 76px)";
 
 interface ResearchTopic {
   id: number;
@@ -105,13 +108,18 @@ export default function ResearchPage() {
       <Header />
 
       <main className="bg-slate-50/50 min-h-screen text-brand-navy">
-        {/* Research Hero Banner */}
-        <SectionWrapper className="pt-32 pb-20 lg:pt-40 lg:pb-28 text-white relative overflow-hidden bg-brand-navy flex items-center">
+        {/* Hero and research list are plain sections: they're in the first screen, so they show without waiting for a fade-in.
+            The hero image is the page's largest paint (LCP), so it loads first. */}
+        <section className="pt-32 pb-20 lg:pt-40 lg:pb-28 text-white relative overflow-hidden bg-brand-navy flex items-center">
           <div className="absolute inset-0 z-0">
-            <img
+            <Image
               src={Images.research.heroBanner}
               alt="Research Hero Background"
-              className="w-full h-full object-cover opacity-60"
+              fill
+              sizes="100vw"
+              className="object-cover opacity-60"
+              priority
+              fetchPriority="high"
             />
             <div className="absolute inset-0 bg-gradient-to-r from-brand-navy/95 via-brand-navy/75 to-transparent" />
             <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#1e3a8a_1px,transparent_1px)] [background-size:16px_16px]" />
@@ -128,10 +136,10 @@ export default function ResearchPage() {
               Science-backed studies and platforms formulated for superior bioavailability, green chelation, and stable animal nutrition.
             </p>
           </div>
-        </SectionWrapper>
+        </section>
 
         {/* Research List Section */}
-        <SectionWrapper className="py-16 bg-slate-50/30 relative overflow-hidden">
+        <section className="py-16 bg-slate-50/30 relative overflow-hidden">
           <div className="relative z-10 max-w-[1200px] mx-auto px-6">
 
             {/* Left-Aligned Search bar */}
@@ -191,11 +199,15 @@ export default function ResearchPage() {
                     >
                       {/* Top: Product Image or Icon Container - Full Uncropped View */}
                       <div className="w-full aspect-[4/3] relative overflow-hidden bg-white border-b border-slate-200 p-3 flex items-center justify-center">
-                        <img
-                          src={topic.banner}
-                          alt={`${topic.title} banner`}
-                          className="w-full h-full object-contain object-center group-hover:scale-105 transition-transform duration-500"
-                        />
+                        <div className="relative w-full h-full">
+                          <Image
+                            src={topic.banner}
+                            alt={`${topic.title} banner`}
+                            fill
+                            sizes={BANNER_SIZES}
+                            className="object-contain object-center group-hover:scale-105 transition-transform duration-500"
+                          />
+                        </div>
                       </div>
 
                       {/* Content: Title */}
@@ -310,7 +322,7 @@ export default function ResearchPage() {
             </div>
 
           </div>
-        </SectionWrapper>
+        </section>
       </main>
 
       <Footer />
