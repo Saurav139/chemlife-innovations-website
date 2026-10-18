@@ -15,8 +15,6 @@ export const Images = {
   /** Brand identity: logos, wordmarks */
   branding: {
     logo: "/images/branding/logo.jpg",
-    chemlifeLogo: "/images/branding/chemlife-logo.jpg",
-    shapeLeaf: "/images/branding/shape-leaf.png",
   },
 
   /** Full-page hero background images */
