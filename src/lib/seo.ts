@@ -3,6 +3,18 @@ import type { Metadata } from "next";
 export const SITE_URL = "https://chemlifeinnovations.com";
 export const SITE_NAME = "ChemLife Innovations";
 
+const LIVE_HOSTS = ["chemlifeinnovations.com", "www.chemlifeinnovations.com"];
+const LOCAL_HOSTS = ["localhost", "127.0.0.1"];
+
+/**
+ * Any address other than the live site or a developer's machine, e.g. staging.chemlifeinnovations.com or
+ * Hostinger's temporary domain. Staging is kept out of search results and analytics (src/proxy.ts).
+ */
+export function isStagingHost(host: string): boolean {
+  const name = host.split(":")[0].toLowerCase();
+  return name !== "" && !LIVE_HOSTS.includes(name) && !LOCAL_HOSTS.includes(name);
+}
+
 // Generated at build time by src/app/opengraph-image.tsx.
 const SHARE_IMAGE = {
   url: "/opengraph-image",
