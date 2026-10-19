@@ -3,9 +3,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Images } from "@/lib/assets";
-import { GA_ID, OPEN_CONSENT_EVENT } from "@/lib/analytics";
+import { OPEN_CONSENT_EVENT } from "@/lib/analytics";
+import { useAnalyticsEnabled } from "@/lib/useAnalyticsEnabled";
 
 export default function Footer() {
+  const analyticsEnabled = useAnalyticsEnabled();
+
   return (
     <footer id="footer" className="relative bg-[#15273F] text-white border-t-2 border-teal-500/20 overflow-hidden">
       {/* Absolute Decorative Glow */}
@@ -171,7 +174,7 @@ export default function Footer() {
           <div className="flex gap-6">
             <Link href="/privacy" className="text-slate-450 text-xs hover:text-brand-orange transition-colors">Privacy Policy</Link>
             <Link href="#" className="text-slate-450 text-xs hover:text-brand-orange transition-colors">Terms of Use</Link>
-            {GA_ID && (
+            {analyticsEnabled && (
               <button
                 type="button"
                 onClick={() => window.dispatchEvent(new Event(OPEN_CONSENT_EVENT))}
