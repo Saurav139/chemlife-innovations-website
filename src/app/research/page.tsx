@@ -114,7 +114,7 @@ export default function ResearchPage() {
           <div className="absolute inset-0 z-0">
             <Image
               src={Images.research.heroBanner}
-              alt="Research Hero Background"
+              alt="A modern biotechnology laboratory with data screens"
               fill
               sizes="100vw"
               className="object-cover opacity-60"

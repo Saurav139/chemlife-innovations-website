@@ -238,7 +238,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                       >
                         <Image
                           src={`https://img.youtube.com/vi/${featuredVideo.youtubeId}/0.jpg`}
-                          alt="Featured Video Preview"
+                          alt={featuredVideo.title}
                           fill
                           sizes={FEATURED_IMAGE_SIZES}
                           className="object-cover group-hover/video:scale-103 transition-transform duration-500 opacity-90"
@@ -300,7 +300,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                       >
                         <Image
                           src={`https://img.youtube.com/vi/${featuredPodcast.youtubeId}/0.jpg`}
-                          alt="Featured Podcast Video Preview"
+                          alt={featuredPodcast.title}
                           fill
                           sizes={FEATURED_IMAGE_SIZES}
                           className="object-cover group-hover/video:scale-103 transition-transform duration-500 opacity-90"

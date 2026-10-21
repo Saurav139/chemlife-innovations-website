@@ -168,6 +168,26 @@ export const Images = {
   partnerLogos: {
     /** Returns the full path for a given filename */
     path: (filename: string) => `/images/partner-logos/${filename}`,
+    /** Company name for each logo file, used for its alt text */
+    names: {
+      "aac.png": "Antera Agro Chem",
+      "abesca.png": "Abescare",
+      "carg.png": "Cargill",
+      "el.png": "Elpe Labs",
+      "ew_nutr.png": "EW Nutrition",
+      "groxel.png": "GROEXL Vet",
+      "huve.png": "Huvepharma",
+      "mybio.png": "Mystical Biotech",
+      "nt.png": "Noveltech",
+      "nutr.png": "Nutrilivia",
+      "sneha_farma_logo.png": "Sneha",
+      "varsha.png": "Varsha",
+      "vt.png": "Vetfosys",
+      "yg.png": "Yashodavana Goat Farm",
+      "16.png": "Fibroheal Woundcare",
+      "17.png": "QuadraGen",
+      "nuqo_logo.jpg": "NUQO",
+    } as Record<string, string>,
     /** Front-row logo filenames */
     frontRow: [
       "aac.png",

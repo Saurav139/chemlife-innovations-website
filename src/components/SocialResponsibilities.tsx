@@ -85,7 +85,7 @@ export default function SocialResponsibilities() {
             >
               <Image
                 src={activeBg.bgSrc}
-                alt="Social Responsibility Background"
+                alt="ChemLife team members with participants holding certificates at a community programme"
                 fill
                 sizes="100vw"
                 className="object-cover"

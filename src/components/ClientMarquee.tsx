@@ -44,7 +44,7 @@ function FlipCard({ frontLogo, backLogo, index, flipped }: FlipCardProps) {
           <div className="relative w-full h-full">
             <Image
               src={Images.partnerLogos.path(frontLogo)}
-              alt="Partner logo"
+              alt={`${Images.partnerLogos.names[frontLogo] ?? "Partner"} logo`}
               fill
               className="object-contain transition-all duration-300"
               sizes="(max-width: 768px) 50vw, 250px"
@@ -57,7 +57,7 @@ function FlipCard({ frontLogo, backLogo, index, flipped }: FlipCardProps) {
           <div className="relative w-full h-full">
             <Image
               src={Images.partnerLogos.path(backLogo)}
-              alt="Partner logo"
+              alt={`${Images.partnerLogos.names[backLogo] ?? "Partner"} logo`}
               fill
               className="object-contain transition-all duration-300"
               sizes="(max-width: 768px) 50vw, 250px"
