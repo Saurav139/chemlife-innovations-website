@@ -11,9 +11,8 @@ const taglines = [
   { id: 1, line1: "Nature Driven", line2: "Functional Feed", line3: "Additives" },
   { id: 2, line1: "Goodness of Nature", line2: "Ayurvedic Holistic", line3: "Approach" },
   { id: 3, line1: "Novel Accelerated", line2: "Bio-Transformation", line3: "Technology" },
-  { id: 4, line1: "Protected Bio-Actives", line2: "Enroute to Site of", line3: "Absorption" },
-  { id: 5, line1: "Enhanced Bioavailability", line2: "of Bio-Actives where it", line3: "Matters" },
-  { id: 6, line1: "Green Trace Mineral", line2: "Chelation & Nano", line3: "Technologies" },
+  { id: 4, line1: "Protected Bio-Actives", line2: "Bioavailable at the Site", line3: "of Absorption" },
+  { id: 5, line1: "Green Trace Mineral", line2: "Chelation & Nano", line3: "Technologies" },
 ];
 
 // The slides cover the hero, so on screens taller than the image they're drawn wider than the screen:
@@ -94,7 +93,7 @@ function AnimatedCounter({ value, suffix }: { value: number; suffix: string }) {
 }
 
 export default function HeroVariantA() {
-  const [currentTag, setCurrentTag] = useState(0);
+  // One slide index drives both the picture and its headline (taglines[i] goes with bgImages[i]).
   const [bgIndex, setBgIndex] = useState(0);
   const [storyOpen, setStoryOpen] = useState(false);
   const { theme } = useTheme();
@@ -106,15 +105,11 @@ export default function HeroVariantA() {
     return () => window.removeEventListener("keydown", onKey);
   }, [storyOpen]);
 
+  // Restarts on every change, so a slide picked from the dots also stays up for the full 6 s.
   useEffect(() => {
-    const timer = setInterval(() => setCurrentTag((p) => (p + 1) % taglines.length), 4000);
-    return () => clearInterval(timer);
-  }, []);
-
-  useEffect(() => {
-    const timer = setInterval(() => setBgIndex((p) => (p + 1) % bgImages.length), 6000);
-    return () => clearInterval(timer);
-  }, []);
+    const timer = setTimeout(() => setBgIndex((p) => (p + 1) % bgImages.length), 6000);
+    return () => clearTimeout(timer);
+  }, [bgIndex]);
 
   // Fetch the next slide while this one is showing, so on slow connections it doesn't fade in blank.
   // The browser picks the same size from srcset as the slide itself will, so it's reused from the cache.
@@ -172,16 +167,16 @@ export default function HeroVariantA() {
             {/* initial={false}: see the background slides above */}
             <AnimatePresence mode="wait" initial={false}>
               <motion.h1
-                key={taglines[currentTag].id}
+                key={taglines[bgIndex].id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.6, ease: [0.25, 0.1, 0, 1] }}
                 className="font-heading text-5xl md:text-6xl lg:text-7xl leading-[1.1] mb-10 sm:mb-16 text-white font-bold text-center"
               >
-                {taglines[currentTag].line1}<br />
-                <span className="text-teal-400">{taglines[currentTag].line2}</span><br />
-                {taglines[currentTag].line3}
+                {taglines[bgIndex].line1}<br />
+                <span className="text-teal-400">{taglines[bgIndex].line2}</span><br />
+                {taglines[bgIndex].line3}
               </motion.h1>
             </AnimatePresence>
 
@@ -223,12 +218,12 @@ export default function HeroVariantA() {
 
       {/* Floating Vertical Dotted Navigator on the Right */}
       <div className="absolute right-6 lg:right-12 top-1/2 -translate-y-1/2 flex flex-col gap-4 z-40">
-        {taglines.map((_, i) => {
-          const isActive = i === currentTag;
+        {bgImages.map((_, i) => {
+          const isActive = i === bgIndex;
           return (
             <button
               key={i}
-              onClick={() => setCurrentTag(i)}
+              onClick={() => setBgIndex(i)}
               className={`w-3.5 h-3.5 rounded-full transition-all duration-350 ${isActive
                 ? "bg-teal-400 scale-125 shadow-lg shadow-teal-400/50"
                 : "bg-white/30 border border-white/10 hover:bg-white/60"
