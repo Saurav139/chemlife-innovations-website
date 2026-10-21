@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useTheme } from "@/context/VariantContext";
 import { usePathname } from "next/navigation";
 import { Images } from "@/lib/assets";
+import { previewsAllowed } from "@/lib/previews";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -21,6 +22,9 @@ export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { theme } = useTheme();
   const pathname = usePathname();
+  // Staging only: a button to the design mock-ups awaiting approval.
+  const [showPreviews, setShowPreviews] = useState(false);
+  useEffect(() => setShowPreviews(previewsAllowed(location.host)), []);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60);
@@ -48,7 +52,7 @@ export default function Header() {
             />
           </a>
 
-          <nav className="hidden lg:flex items-center gap-10">
+          <nav className={`hidden lg:flex items-center ${showPreviews ? "gap-6 xl:gap-10" : "gap-10"}`}>
             {navLinks.map((link) => {
               const isActive =
                 pathname === link.href ||
@@ -68,6 +72,14 @@ export default function Header() {
                 </a>
               );
             })}
+            {showPreviews && (
+              <a
+                href="/previews"
+                className="shrink-0 whitespace-nowrap rounded-full border-2 border-brand-orange px-4 py-1.5 text-[15px] font-semibold text-brand-orange transition-colors hover:bg-brand-orange hover:text-white"
+              >
+                Design previews
+              </a>
+            )}
           </nav>
 
           <button
@@ -111,6 +123,11 @@ export default function Header() {
                   </a>
                 );
               })}
+              {showPreviews && (
+                <a href="/previews" className="block text-sm font-semibold text-brand-orange" onClick={() => setMobileOpen(false)}>
+                  Design previews
+                </a>
+              )}
             </div>
           </div>
         )}
