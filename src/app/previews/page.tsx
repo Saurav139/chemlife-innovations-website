@@ -5,6 +5,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { VariantProvider } from "@/context/VariantContext";
 import { PREVIEWS, previewsAllowed } from "@/lib/previews";
+import AnbiotFigure from "./AnbiotFigure";
 
 export const metadata: Metadata = { title: "Design previews", robots: { index: false, follow: false } };
 
@@ -21,7 +22,11 @@ export default async function PreviewsPage() {
           <p className="text-brand-navy/70 mt-3 max-w-2xl">
             Proposed designs for review. They open as standalone pages and aren&apos;t part of the live site.
           </p>
-          <ul className="mt-10 grid gap-5 md:grid-cols-2">
+          <div className="mt-10">
+            <AnbiotFigure />
+          </div>
+          <h2 className="font-heading text-2xl font-bold text-brand-navy mt-16">Full-page designs</h2>
+          <ul className="mt-6 grid gap-5 md:grid-cols-2">
             {PREVIEWS.map((p) => (
               <li key={p.slug}>
                 <a
