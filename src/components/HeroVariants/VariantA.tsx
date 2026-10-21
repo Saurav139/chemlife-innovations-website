@@ -6,14 +6,9 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "@/context/VariantContext";
 import { Images } from "@/lib/assets";
+import { useHref, useT } from "@/i18n/LocaleProvider";
 
-const taglines = [
-  { id: 1, line1: "Nature Driven", line2: "Functional Feed", line3: "Additives" },
-  { id: 2, line1: "Goodness of Nature", line2: "Ayurvedic Holistic", line3: "Approach" },
-  { id: 3, line1: "Novel Accelerated", line2: "Bio-Transformation", line3: "Technology" },
-  { id: 4, line1: "Protected Bio-Actives", line2: "Bioavailable at the Site", line3: "of Absorption" },
-  { id: 5, line1: "Green Trace Mineral", line2: "Chelation & Nano", line3: "Technologies" },
-];
+// The headline for each slide is in the language file (home.taglines), in the same order as these photos.
 
 // The slides cover the hero, so on screens taller than the image they're drawn wider than the screen:
 // 1.5× the screen height for 3:2 photos, 2× for 2:1. `sizes` tells the browser which file is sharp enough.
@@ -24,11 +19,11 @@ const sizesFor = (aspect: "3/2" | "2/1") =>
     : "(min-aspect-ratio: 2/1) 100vw, 200vh";
 
 const bgImages = [
-  { id: "leadership", src: Images.heroes.teamLeadership, sizes: sizesFor("3/2"), alt: "The ChemLife Innovations leadership team in the garden at our office" },
-  { id: "warehouse", src: Images.heroes.warehouseVisit, sizes: sizesFor("3/2"), alt: "The ChemLife team showing visitors around a feed warehouse" },
-  { id: "team", src: Images.heroes.teamAnniversary, sizes: sizesFor("3/2"), alt: "The ChemLife Innovations team outside our facility" },
-  { id: "img76", src: Images.heroes.slide76, sizes: sizesFor("2/1"), alt: "Cow with her calf in a green pasture" },
-  { id: "img87", src: Images.heroes.slide87, sizes: sizesFor("2/1"), alt: "Chick drinking from a poultry drinker" },
+  { id: "leadership", src: Images.heroes.teamLeadership, sizes: sizesFor("3/2") },
+  { id: "warehouse", src: Images.heroes.warehouseVisit, sizes: sizesFor("3/2") },
+  { id: "team", src: Images.heroes.teamAnniversary, sizes: sizesFor("3/2") },
+  { id: "img76", src: Images.heroes.slide76, sizes: sizesFor("2/1") },
+  { id: "img87", src: Images.heroes.slide87, sizes: sizesFor("2/1") },
 ];
 
 const STORY_VIDEO_ID = "-amOgNcjYNg";
@@ -38,11 +33,12 @@ const primaryCtaClass =
 const secondaryCtaClass =
   "inline-flex items-center gap-2 px-7 py-3 rounded-full text-sm font-semibold border-2 border-white/80 text-white hover:bg-white hover:text-brand-navy transition-all duration-300 transform hover:-translate-y-0.5";
 
+// Labels are in the language file (home.stats), in this order.
 const stats = [
-  { value: 30, suffix: "+", label: "Years of Research" },
-  { value: 16, suffix: "+", label: "Products" },
-  { value: 22, suffix: "+", label: "Customers Served" },
-  { value: 7, suffix: "+", label: "Awards Won" },
+  { value: 30, suffix: "+" },
+  { value: 16, suffix: "+" },
+  { value: 22, suffix: "+" },
+  { value: 7, suffix: "+" },
 ];
 
 function AnimatedCounter({ value, suffix }: { value: number; suffix: string }) {
@@ -97,6 +93,9 @@ export default function HeroVariantA() {
   const [bgIndex, setBgIndex] = useState(0);
   const [storyOpen, setStoryOpen] = useState(false);
   const { theme } = useTheme();
+  const t = useT();
+  const href = useHref();
+  const tagline = t.home.taglines[bgIndex];
 
   useEffect(() => {
     if (!storyOpen) return;
@@ -147,7 +146,7 @@ export default function HeroVariantA() {
           >
             <Image
               src={bgImages[bgIndex].src}
-              alt={bgImages[bgIndex].alt}
+              alt={t.home.slideAlts[bgIndex]}
               fill
               sizes={bgImages[bgIndex].sizes}
               className="object-cover animate-ken-burns"
@@ -167,28 +166,28 @@ export default function HeroVariantA() {
             {/* initial={false}: see the background slides above */}
             <AnimatePresence mode="wait" initial={false}>
               <motion.h1
-                key={taglines[bgIndex].id}
+                key={bgIndex}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.6, ease: [0.25, 0.1, 0, 1] }}
                 className="font-heading text-5xl md:text-6xl lg:text-7xl leading-[1.1] mb-10 sm:mb-16 text-white font-bold text-center"
               >
-                {taglines[bgIndex].line1}<br />
-                <span className="text-teal-400">{taglines[bgIndex].line2}</span><br />
-                {taglines[bgIndex].line3}
+                {tagline[0]}<br />
+                <span className="text-teal-400">{tagline[1]}</span><br />
+                {tagline[2]}
               </motion.h1>
             </AnimatePresence>
 
             <div className="flex flex-wrap gap-4 justify-center w-full mt-2">
-              <Link href="/products" className={primaryCtaClass}>
-                Find the right product
+              <Link href={href("/products")} className={primaryCtaClass}>
+                {t.home.findProduct}
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
               </Link>
-              <Link href="/contact?type=nutritionist" className={secondaryCtaClass}>
-                Talk to a nutritionist
+              <Link href={href("/contact?type=nutritionist")} className={secondaryCtaClass}>
+                {t.home.talkToNutritionist}
               </Link>
             </div>
 
@@ -200,7 +199,7 @@ export default function HeroVariantA() {
               <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current">
                 <path d="M8 5v14l11-7z" />
               </svg>
-              Watch our story
+              {t.home.watchStory}
             </button>
           </div>
         </div>
@@ -210,7 +209,7 @@ export default function HeroVariantA() {
           {stats.map((stat, idx) => (
             <div key={idx} className="flex flex-col items-center justify-center text-center">
               <AnimatedCounter value={stat.value} suffix={stat.suffix} />
-              <span className="text-white/70 text-sm font-semibold uppercase tracking-widest mt-3">{stat.label}</span>
+              <span className="text-white/70 text-sm font-semibold uppercase tracking-widest mt-3">{t.home.stats[idx]}</span>
             </div>
           ))}
         </div>
@@ -228,7 +227,7 @@ export default function HeroVariantA() {
                 ? "bg-teal-400 scale-125 shadow-lg shadow-teal-400/50"
                 : "bg-white/30 border border-white/10 hover:bg-white/60"
                 }`}
-              aria-label={`Go to slide ${i + 1}`}
+              aria-label={`${t.home.goToSlide} ${i + 1}`}
             />
           );
         })}
@@ -247,7 +246,7 @@ export default function HeroVariantA() {
             onClick={() => setStoryOpen(false)}
             role="dialog"
             aria-modal="true"
-            aria-label="ChemLife Innovations story video"
+            aria-label={t.home.storyVideo}
           >
             {/* m-auto centres the content when it fits and lets the overlay scroll when it does not */}
             <motion.div
@@ -263,7 +262,7 @@ export default function HeroVariantA() {
                 <button
                   onClick={() => setStoryOpen(false)}
                   className="self-end w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all cursor-pointer border border-white/20"
-                  aria-label="Close video player"
+                  aria-label={t.home.closeVideo}
                   autoFocus
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -281,11 +280,11 @@ export default function HeroVariantA() {
                 </div>
               </div>
               <div className="flex flex-wrap gap-4 justify-center">
-                <Link href="/products" className={primaryCtaClass}>
-                  Find the right product
+                <Link href={href("/products")} className={primaryCtaClass}>
+                  {t.home.findProduct}
                 </Link>
-                <Link href="/contact?type=nutritionist" className={secondaryCtaClass}>
-                  Talk to a nutritionist
+                <Link href={href("/contact?type=nutritionist")} className={secondaryCtaClass}>
+                  {t.home.talkToNutritionist}
                 </Link>
               </div>
             </motion.div>

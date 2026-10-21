@@ -5,35 +5,29 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "@/context/VariantContext";
 import { Images } from "@/lib/assets";
+import { useT } from "@/i18n/LocaleProvider";
 
-const certificates = [
+// Titles and descriptions are in the language file (home.awards.items), in this order.
+const certificateFiles = [
   {
     file: "c-camp-logo.png",
-    title: "K-SAP BIO 50 Cohort",
     organization: "Centre for Cellular and Molecular Platforms (C-CAMP)",
     year: "2020-21",
-    description: "Accelerated at the C-CAMP initiated K-SAP BIO 50, 2nd cohort 2020-21, validating and scaling our biotechnology solutions in animal agriculture.",
   },
   {
     file: "animal-husbandry.png",
-    title: "Animal Husbandry Grand Finalist",
     organization: "Department of Animal Husbandry, Dairying & Fisheries",
     year: "2019",
-    description: "Recognized as a finalist in the Animal Husbandry Grand Challenge 2019, honoring our pioneering innovation in sustainable animal nutrition.",
   },
   {
     file: "birac.png",
-    title: "BIRAC Supported Innovator",
     organization: "Biotechnology Industry Research Assistance Council (BIRAC)",
     year: "2021",
-    description: "Supported and incubated by BIRAC, Department of Biotechnology, Government of India, for accelerating novel product development in agriculture.",
   },
   {
     file: "naarm.png",
-    title: "a-IDEA NAARM Incubated Startup",
     organization: "a-IDEA, ICAR-NAARM",
     year: "2020",
-    description: "Incubated at a-IDEA, the Technology Business Incubator of ICAR-NAARM (National Academy of Agricultural Research Management) to scale sustainable agri-tech solutions.",
   },
 ];
 
@@ -42,10 +36,12 @@ const easeOut = [0.25, 0.1, 0, 1] as const;
 export default function AwardsRecognition() {
   const [activeStep, setActiveStep] = useState(0);
   const { theme } = useTheme();
+  const t = useT().home.awards;
+  const certificates = certificateFiles.map((c, i) => ({ ...c, ...t.items[i] }));
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setActiveStep((prev) => (prev + 1) % certificates.length);
+      setActiveStep((prev) => (prev + 1) % certificateFiles.length);
     }, 6000);
 
     return () => clearInterval(timer);
@@ -56,10 +52,10 @@ export default function AwardsRecognition() {
       <div className="max-w-[1200px] mx-auto px-6">
         <div className="text-center mb-16">
           <span className="text-teal-400 text-base lg:text-lg font-semibold tracking-widest uppercase">
-            Honors
+            {t.kicker}
           </span>
           <h2 className="font-heading text-4xl lg:text-5xl text-brand-navy mt-2 mb-4 leading-tight">
-            Awards & Recognition
+            {t.title}
           </h2>
         </div>
 
@@ -158,7 +154,7 @@ export default function AwardsRecognition() {
                     onClick={() => setActiveStep(i)}
                     className="relative flex flex-col items-center justify-between h-full cursor-pointer"
                     style={{ width: `${100 / certificates.length}%` }}
-                    aria-label={`Go to certificate ${i + 1}`}
+                    aria-label={`${t.goTo} ${i + 1}`}
                   >
                      {/* Top cross-tie */}
                      <div className={`w-[2px] h-5 transition-colors duration-500 ${isCompleted ? 'bg-teal-400/70' : isActive ? 'bg-teal-400' : 'bg-teal-400/20'}`} />

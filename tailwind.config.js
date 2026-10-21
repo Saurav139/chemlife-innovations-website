@@ -26,8 +26,8 @@ module.exports = {
         'process-bg': '#305280',
       },
       fontFamily: {
-        'heading': ['var(--font-maven-pro)', 'Calibri', 'system-ui', 'sans-serif'],
-        'body': ['var(--font-maven-pro)', 'Calibri', 'system-ui', 'sans-serif'],
+        'heading': ['var(--font-maven-pro)', 'var(--font-noto-kannada)', 'var(--font-noto-devanagari)', 'Calibri', 'system-ui', 'sans-serif'],
+        'body': ['var(--font-maven-pro)', 'var(--font-noto-kannada)', 'var(--font-noto-devanagari)', 'Calibri', 'system-ui', 'sans-serif'],
       },
     },
   },

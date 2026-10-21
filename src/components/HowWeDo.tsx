@@ -4,50 +4,20 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { useTheme } from "@/context/VariantContext";
 import { Images } from "@/lib/assets";
+import { useT } from "@/i18n/LocaleProvider";
 
-interface Step {
-  step: number;
-  title: string;
-  description: string;
-  image: string;
-  /** Describes the photo for screen readers and search engines */
-  alt: string;
-  objectPosition?: string;
-}
-
-const steps: Step[] = [
-  {
-    step: 1,
-    title: "Research",
-    description: "In-depth scientific research and analysis to identify bioactive molecules and their applications in animal nutrition.",
-    image: Images.process.researchImage,
-    alt: "The ChemLife research laboratory",
-  },
-  {
-    step: 2,
-    title: "Development",
-    description: "Formulation and development of innovative feed additives using patented technologies and green chemistry pathways.",
-    image: Images.process.developmentImage,
-    alt: "The ChemLife team presenting ANBioT at an exhibition stand",
-  },
-  {
-    step: 3,
-    title: "Manufacturing",
-    description: "Scalable feed-additives manufacturing setup with rigorous quality control to ensure consistency, safety, and efficacy.",
-    image: Images.process.manufacturingImage,
-    alt: "Feed additive manufacturing machinery",
-  },
-  {
-    step: 4,
-    title: "Delivery",
-    description: "The integrated supply chain moves feed additives from the Bengaluru facility through warehouses and varied transport networks to final delivery via direct or distributor channels.",
-    image: Images.process.delivery,
-    alt: "Feed bags stacked in a warehouse, a delivery truck and a dairy farm",
-  },
+// Titles, descriptions and photo descriptions are in the language file (home.howWeDo.steps), in this order.
+const stepImages: { image: string; objectPosition?: string }[] = [
+  { image: Images.process.researchImage },
+  { image: Images.process.developmentImage },
+  { image: Images.process.manufacturingImage },
+  { image: Images.process.delivery },
 ];
 
 export default function HowWeDo() {
   const { theme } = useTheme();
+  const t = useT().home.howWeDo;
+  const steps = t.steps.map((step, i) => ({ ...step, ...stepImages[i], step: i + 1 }));
 
   return (
     <section className="relative py-24 lg:py-32 overflow-hidden bg-brand-navy">
@@ -55,7 +25,7 @@ export default function HowWeDo() {
       <div className="absolute inset-0 z-0 select-none pointer-events-none">
         <Image
           src={Images.process.howWeDoBg}
-          alt="Laboratory automation equipment lit in blue"
+          alt={t.bgAlt}
           fill
           className="object-cover opacity-35"
           priority
@@ -67,10 +37,10 @@ export default function HowWeDo() {
         {/* Title Section */}
         <div className="text-center mb-20">
           <span className="text-teal-400 text-sm font-bold tracking-widest uppercase block mb-3">
-            Our Process
+            {t.kicker}
           </span>
           <h2 className="font-heading text-4xl lg:text-5xl font-bold text-white leading-tight">
-            How We Do It?
+            {t.title}
           </h2>
         </div>
 

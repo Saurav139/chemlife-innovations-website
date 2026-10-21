@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { Images } from "@/lib/assets";
+import { useT } from "@/i18n/LocaleProvider";
 
 const frontLogos = [...Images.partnerLogos.frontRow];
 const backLogos = [...Images.partnerLogos.backRow];
@@ -16,6 +17,7 @@ interface FlipCardProps {
 }
 
 function FlipCard({ frontLogo, backLogo, index, flipped }: FlipCardProps) {
+  const t = useT().home.partners;
   // Staggered chessboard effect for 3 columns
   const row = Math.floor(index / 3);
   const col = index % 3;
@@ -44,7 +46,7 @@ function FlipCard({ frontLogo, backLogo, index, flipped }: FlipCardProps) {
           <div className="relative w-full h-full">
             <Image
               src={Images.partnerLogos.path(frontLogo)}
-              alt={`${Images.partnerLogos.names[frontLogo] ?? "Partner"} logo`}
+              alt={`${Images.partnerLogos.names[frontLogo] ?? "Partner"} ${t.logo}`}
               fill
               className="object-contain transition-all duration-300"
               sizes="(max-width: 768px) 50vw, 250px"
@@ -57,7 +59,7 @@ function FlipCard({ frontLogo, backLogo, index, flipped }: FlipCardProps) {
           <div className="relative w-full h-full">
             <Image
               src={Images.partnerLogos.path(backLogo)}
-              alt={`${Images.partnerLogos.names[backLogo] ?? "Partner"} logo`}
+              alt={`${Images.partnerLogos.names[backLogo] ?? "Partner"} ${t.logo}`}
               fill
               className="object-contain transition-all duration-300"
               sizes="(max-width: 768px) 50vw, 250px"
@@ -70,6 +72,7 @@ function FlipCard({ frontLogo, backLogo, index, flipped }: FlipCardProps) {
 }
 
 export default function ClientMarquee() {
+  const t = useT().home.partners;
   const [flipped, setFlipped] = useState(false);
 
   useEffect(() => {
@@ -84,10 +87,10 @@ export default function ClientMarquee() {
       <div className="max-w-[1200px] mx-auto px-6 mb-16">
         <div className="text-center">
           <span className="text-teal-400 text-base lg:text-lg font-semibold tracking-widest uppercase">
-            Our Partners
+            {t.kicker}
           </span>
           <h2 className="font-heading text-4xl lg:text-5xl text-brand-navy mt-2 mb-4 leading-tight">
-            Ecosystem Enablers
+            {t.title}
           </h2>
         </div>
       </div>

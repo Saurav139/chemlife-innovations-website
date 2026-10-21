@@ -1,12 +1,15 @@
 import { timingSafeEqual } from "node:crypto";
 import { NextResponse, type NextRequest } from "next/server";
 import { isStagingHost } from "@/lib/seo";
+import { DEFAULT_LOCALE, isLocale } from "@/i18n/config";
 
-// The staging site (any address other than the live domain) is kept out of search results, and asks for a
-// password when STAGING_PASSWORD is set in its environment. The live site passes straight through.
+// Every page lives under src/app/[locale]. English keeps its plain addresses: /products is served from
+// /en/products behind the scenes, and /en/products redirects to /products. /kn/... and /hi/... pass through.
+// The staging site (any address other than the live domain) is also kept out of search results, and asks for
+// a password when STAGING_PASSWORD is set in its environment.
 export function proxy(request: NextRequest) {
   // Only the Host header: the server routes requests by it, so it can't be faked to look like the live site.
-  if (!isStagingHost(request.headers.get("host") ?? "")) return NextResponse.next();
+  if (!isStagingHost(request.headers.get("host") ?? "")) return localeRouting(request);
 
   const password = process.env.STAGING_PASSWORD;
   if (password && !hasPassword(request.headers.get("authorization"), password)) {
@@ -19,9 +22,27 @@ export function proxy(request: NextRequest) {
     });
   }
 
-  const response = NextResponse.next();
+  const response = localeRouting(request);
   response.headers.set("X-Robots-Tag", "noindex, nofollow");
   return response;
+}
+
+function localeRouting(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+  // API routes and the share image aren't pages; /_... are Next.js internals.
+  if (pathname.startsWith("/api/") || pathname.startsWith("/opengraph-image") || pathname.startsWith("/_")) {
+    return NextResponse.next();
+  }
+  const first = pathname.split("/")[1] ?? "";
+  if (first === DEFAULT_LOCALE) {
+    const url = request.nextUrl.clone();
+    url.pathname = pathname.slice(DEFAULT_LOCALE.length + 1) || "/";
+    return NextResponse.redirect(url, 308);
+  }
+  if (isLocale(first)) return NextResponse.next();
+  const url = request.nextUrl.clone();
+  url.pathname = `/${DEFAULT_LOCALE}${pathname === "/" ? "" : pathname}`;
+  return NextResponse.rewrite(url);
 }
 
 // Browser sign-in prompt: any user name, only the password is checked.

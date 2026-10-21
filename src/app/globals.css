@@ -17,8 +17,9 @@
   --color-light-orange: #FFFFFF;
   --color-process-bg: #305280;
 
-  --font-family-heading: var(--font-maven-pro), Calibri, system-ui, sans-serif;
-  --font-family-body: var(--font-maven-pro), Calibri, system-ui, sans-serif;
+  /* Maven Pro first; the Noto fonts supply the Kannada and Hindi letters it doesn't have. */
+  --font-family-heading: var(--font-maven-pro), var(--font-noto-kannada), var(--font-noto-devanagari), Calibri, system-ui, sans-serif;
+  --font-family-body: var(--font-maven-pro), var(--font-noto-kannada), var(--font-noto-devanagari), Calibri, system-ui, sans-serif;
 }
 
 @font-face {

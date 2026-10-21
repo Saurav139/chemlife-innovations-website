@@ -6,30 +6,26 @@ import Image from "next/image";
 import SectionWrapper from "./SectionWrapper";
 import { Images, Videos, VideoPosters } from "@/lib/assets";
 import BackgroundVideo, { useNearViewport } from "./BackgroundVideo";
+import { useT } from "@/i18n/LocaleProvider";
 
-const items = [
+// Titles and descriptions are in the language file (home.social.items), in this order.
+const itemMedia = [
   {
     id: 0,
-    title: "Empowering Students",
     emoji: "🚲",
-    desc: "Bicycles donation for empowering students below the poverty line",
     bgType: "video",
     bgSrc: Videos.social1,
     bgPoster: VideoPosters.social1,
   },
   {
     id: 1,
-    title: "Prevention of Sexual Harassment",
     emoji: "🛡️",
-    desc: "Chemlife certified with Prevention of Sexual Harassment at Work place",
     bgType: "image",
     bgSrc: Images.social.image2,
   },
   {
     id: 2,
-    title: "Animal Welfare",
     emoji: "🐄",
-    desc: "Supporting feeding of two cows for one full year",
     bgType: "image",
     bgSrc: Images.social.image3,
   },
@@ -39,12 +35,14 @@ export default function SocialResponsibilities() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [bgIndex, setBgIndex] = useState(0);
   const [bgRef, near] = useNearViewport<HTMLDivElement>();
+  const t = useT().home.social;
+  const items = itemMedia.map((m, i) => ({ ...m, ...t.items[i] }));
 
   // Auto-rotate the background every 5 seconds if not hovering
   useEffect(() => {
     if (hoveredIndex !== null) return;
     const timer = setInterval(() => {
-      setBgIndex((prev) => (prev + 1) % items.length);
+      setBgIndex((prev) => (prev + 1) % itemMedia.length);
     }, 5000);
     return () => clearInterval(timer);
   }, [hoveredIndex]);
@@ -85,7 +83,7 @@ export default function SocialResponsibilities() {
             >
               <Image
                 src={activeBg.bgSrc}
-                alt="ChemLife team members with participants holding certificates at a community programme"
+                alt={t.bgAlt}
                 fill
                 sizes="100vw"
                 className="object-cover"
@@ -99,10 +97,10 @@ export default function SocialResponsibilities() {
       <div className="relative z-10 max-w-[1200px] mx-auto px-6">
         <div className="text-center mb-16ß">
           <span className="text-teal-600 text-base lg:text-lg font-semibold tracking-widest uppercase">
-            Our Commitment
+            {t.kicker}
           </span>
           <h2 className="font-heading text-4xl lg:text-5xl text-brand-navy mt-3 leading-tight">
-            Social Responsibilities
+            {t.title}
           </h2>
         </div>
 

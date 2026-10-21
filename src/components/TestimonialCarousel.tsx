@@ -6,6 +6,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import SectionWrapper from "./SectionWrapper";
 import { useTheme } from "@/context/VariantContext";
 import { Images } from "@/lib/assets";
+import { useT } from "@/i18n/LocaleProvider";
+
+// Quotes stay in the words our partners wrote them, in English.
 
 const testimonials = [
   {
@@ -34,16 +37,17 @@ const testimonials = [
 export default function TestimonialCarousel() {
   const [current, setCurrent] = useState(0);
   const { theme } = useTheme();
+  const t = useT().home.testimonials;
 
   return (
     <SectionWrapper className={`py-24 lg:py-32 ${theme.testimonialsBg}`}>
       <div className="max-w-[1200px] mx-auto px-6">
         <div className="text-center mb-16">
           <span className="text-teal-400 text-base lg:text-lg font-semibold tracking-widest uppercase">
-            Testimonials
+            {t.kicker}
           </span>
           <h2 className="font-heading text-3xl lg:text-4xl text-white mt-2 mb-4 leading-tight">
-            What Our Partners Say?
+            {t.title}
           </h2>
         </div>
 
