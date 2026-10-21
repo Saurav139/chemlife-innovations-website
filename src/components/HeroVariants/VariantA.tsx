@@ -26,8 +26,8 @@ const sizesFor = (aspect: "3/2" | "2/1") =>
 
 const bgImages = [
   { id: "leadership", src: Images.heroes.teamLeadership, sizes: sizesFor("3/2"), alt: "The ChemLife Innovations leadership team in the garden at our office" },
-  { id: "team", src: Images.heroes.teamAnniversary, sizes: sizesFor("3/2"), alt: "The ChemLife Innovations team outside our facility" },
   { id: "warehouse", src: Images.heroes.warehouseVisit, sizes: sizesFor("3/2"), alt: "The ChemLife team showing visitors around a feed warehouse" },
+  { id: "team", src: Images.heroes.teamAnniversary, sizes: sizesFor("3/2"), alt: "The ChemLife Innovations team outside our facility" },
   { id: "img76", src: Images.heroes.slide76, sizes: sizesFor("2/1"), alt: "Cow with her calf in a green pasture" },
   { id: "img87", src: Images.heroes.slide87, sizes: sizesFor("2/1"), alt: "Chick drinking from a poultry drinker" },
 ];
