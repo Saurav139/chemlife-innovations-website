@@ -6,6 +6,11 @@ export const SITE_NAME = "ChemLife Innovations";
 const LIVE_HOSTS = ["chemlifeinnovations.com", "www.chemlifeinnovations.com"];
 const LOCAL_HOSTS = ["localhost", "127.0.0.1"];
 
+/** The live site's own addresses. */
+export function isLiveHost(host: string): boolean {
+  return LIVE_HOSTS.includes(host.split(":")[0].toLowerCase());
+}
+
 /**
  * Any address other than the live site or a developer's machine, e.g. staging.chemlifeinnovations.com or
  * Hostinger's temporary domain. Staging is kept out of search results and analytics (src/proxy.ts).

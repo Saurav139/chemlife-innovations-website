@@ -56,7 +56,11 @@ const nextConfig: NextConfig = {
     ],
   },
   async headers() {
-    return [{ source: "/:path*", headers: securityHeaders }];
+    return [
+      { source: "/:path*", headers: securityHeaders },
+      // Staging design previews are standalone pages that embed their fonts as data: URLs.
+      { source: "/previews/:slug", headers: [{ key: "Content-Security-Policy", value: contentSecurityPolicy.replace("font-src 'self'", "font-src 'self' data:") }] },
+    ];
   },
 };
 
