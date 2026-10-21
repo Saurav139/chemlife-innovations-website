@@ -709,7 +709,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                     rel="noopener noreferrer"
                     className="text-xs font-semibold text-teal-600 hover:text-teal-700 transition-colors"
                   >
-                    View post on LinkedIn →
+                    {activeArticle.linkUrl.includes("wordpress.com") ? "Read the full article on WordPress →" : "View post on LinkedIn →"}
                   </a>
                 )}
                 <button

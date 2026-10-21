@@ -126,7 +126,7 @@ GroGenie provides a non-antibiotic approach to managing enteric pathogens. By su
       meta: "8 min read",
       date: "September 28, 2025",
       imageUrl: Images.gallery.rotate12,
-      linkUrl: "https://www.linkedin.com/company/chemlifeinnovations/posts/?feedView=all",
+      linkUrl: "https://chemlifeinnovations.wordpress.com/2025/09/28/7-essential-feed-hygiene-practices-to-safeguard-livestock-health/",
       content: `Feed hygiene is a cornerstone of livestock management, directly impacting animal health, growth performance, and overall farm profitability. Contaminated or improperly stored feed can lead to serious health issues, including reduced immunity, digestive disorders, and in severe cases, mortality. Implementing structured feed hygiene practices is therefore not just a precaution, it is an essential investment in your livestock’s wellbeing and your farm’s operational efficiency.
 
 Here are the seven key practices:
@@ -152,7 +152,7 @@ Here are the seven key practices:
       meta: "5 min read",
       date: "September 26, 2025",
       imageUrl: Images.gallery.rotate22,
-      linkUrl: "https://www.linkedin.com/company/chemlifeinnovations/posts/?feedView=all",
+      linkUrl: "https://chemlifeinnovations.wordpress.com/2025/09/26/the-ayurvedic-connection-copper-in-ancient-medicine-vs-modern-misuse/",
       content: `For centuries, copper has held a unique place in human civilization, celebrated in Ayurveda for its exceptional therapeutic qualities. Ayurvedic texts recommend storing water in copper vessels (Tamra Jal) to balance the three doshas—Vata, Pitta, and Kapha—and to naturally purify the water.
 
 However, modern misuse through misinformation and excessive consumption raises important health concerns. Today, we see an over-reliance on crude copper supplements and unregulated copper feed formulations.
@@ -168,7 +168,7 @@ In livestock and animal nutrition, copper must be supplied scientifically. Crude
       meta: "4 min read",
       date: "September 22, 2025",
       imageUrl: Images.gallery.rotate13,
-      linkUrl: "https://www.linkedin.com/company/chemlifeinnovations/posts/?feedView=all",
+      linkUrl: "https://chemlifeinnovations.wordpress.com/2025/09/22/top-6-reasons-why-feed-hygiene-impacts-profits/",
       content: `In poultry and livestock farming, feed hygiene often gets overlooked. However, contaminated or poorly stored feed silently erodes profits through disease outbreaks, poor growth, and higher veterinary bills.
 
 Here are the top six reasons why feed hygiene is critical for your bottom line:
@@ -192,7 +192,7 @@ Here are the top six reasons why feed hygiene is critical for your bottom line:
       meta: "6 min read",
       date: "September 20, 2025",
       imageUrl: Images.gallery.rotate23,
-      linkUrl: "https://www.linkedin.com/company/chemlifeinnovations/posts/?feedView=all",
+      linkUrl: "https://chemlifeinnovations.wordpress.com/2025/09/20/when-feed-turns-fatal-real-life-case-studies-on-mold-outbreaks-2/",
       content: `Across the globe, mold outbreaks have led to devastating losses for farmers, jeopardizing both animal welfare and human livelihoods. Mold species like Aspergillus and Fusarium produce dangerous mycotoxins—including Aflatoxins and Ochratoxins—which are highly toxic even in minute quantities.
 
 In this article, we analyze two real-world case studies:
@@ -210,7 +210,7 @@ These cases teach us that visual inspection is not enough. Mycotoxins are often 
       meta: "6 min read",
       date: "September 02, 2025",
       imageUrl: "https://chemlifeinnovations.wordpress.com/wp-content/uploads/2025/09/blog-2-featured-image.png",
-      linkUrl: "https://www.linkedin.com/company/chemlifeinnovations/posts/?feedView=all",
+      linkUrl: "https://chemlifeinnovations.wordpress.com/2025/09/02/the-economics-of-prevention-why-mold-control-pays-for-itself/",
       content: `One of the largest costs in chicken and livestock production is feed, representing up to 70% of total operational expenses. Preventing mold contamination is far less expensive than repairing the losses brought on by sick flocks and spoiled feed.
 
 Consider the math:
