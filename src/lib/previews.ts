@@ -12,8 +12,10 @@ export const PREVIEWS = [
   {
     slug: "anbiot-hero-layouts",
     file: "anbiot-hero-layouts.html",
+    // Opens on the stacked layout, the default option.
+    anchor: "#s2",
     title: "ANBioT hero layouts",
-    description: "Four ways to lay out the hero around the ANBioT animation: split, stacked, arch and cycle, on navy or paper.",
+    description: "Four ways to lay out the hero around the ANBioT animation, starting with the stacked layout, then split, arch and cycle, on navy or paper.",
   },
 ] as const;
 

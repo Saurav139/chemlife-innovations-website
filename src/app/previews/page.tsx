@@ -25,7 +25,7 @@ export default async function PreviewsPage() {
             {PREVIEWS.map((p) => (
               <li key={p.slug}>
                 <a
-                  href={`/previews/${p.slug}`}
+                  href={`/previews/${p.slug}${"anchor" in p ? p.anchor : ""}`}
                   target="_blank"
                   rel="noopener"
                   className="block h-full rounded-2xl border border-brand-navy/15 p-6 transition-colors hover:border-brand-orange"
