@@ -6,22 +6,30 @@ import { useTheme } from "@/context/VariantContext";
 import { usePathname } from "next/navigation";
 import { Images } from "@/lib/assets";
 import { previewsAllowed } from "@/lib/previews";
+import { useHref, useLocale, useT } from "@/i18n/LocaleProvider";
+import { splitLocale } from "@/i18n/config";
+import LanguageSwitcher from "./LanguageSwitcher";
 
-const navLinks = [
-  { label: "Home", href: "/" },
-  { label: "About", href: "/about" },
-  { label: "Products", href: "/products" },
-  { label: "Research", href: "/research" },
-  { label: "Insights", href: "/insights" },
-  { label: "Careers", href: "/careers" },
-  { label: "Contact Us", href: "/contact" },
-];
+const NAV = [
+  { key: "home", href: "/" },
+  { key: "about", href: "/about" },
+  { key: "products", href: "/products" },
+  { key: "research", href: "/research" },
+  { key: "insights", href: "/insights" },
+  { key: "careers", href: "/careers" },
+  { key: "contact", href: "/contact" },
+] as const;
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const { theme } = useTheme();
-  const pathname = usePathname();
+  const t = useT();
+  const href = useHref();
+  const locale = useLocale();
+  // The page's address without its language prefix, to highlight the current page.
+  const pathname = splitLocale(usePathname() ?? "/").path;
+  const navLinks = NAV.map((link) => ({ label: t.nav[link.key], path: link.href, href: href(link.href) }));
   // Staging only: a button to the design mock-ups awaiting approval.
   const [showPreviews, setShowPreviews] = useState(false);
   useEffect(() => setShowPreviews(previewsAllowed(location.host)), []);
@@ -40,7 +48,7 @@ export default function Header() {
     >
       <div className="max-w-[1200px] mx-auto pr-6 pl-2">
         <div className="flex items-center justify-between h-32">
-          <a href="/" className="flex-shrink-0">
+          <a href={href("/")} className="flex-shrink-0">
             <Image
               src={Images.branding.logo}
               alt="ChemLife Innovations"
@@ -52,17 +60,16 @@ export default function Header() {
             />
           </a>
 
-          <nav className={`hidden lg:flex items-center ${showPreviews ? "gap-6 xl:gap-10" : "gap-10"}`}>
+          <nav className={`hidden lg:flex items-center ${showPreviews ? "gap-4 xl:gap-8" : "gap-7 xl:gap-10"}`}>
             {navLinks.map((link) => {
               const isActive =
-                pathname === link.href ||
-                (pathname && pathname.startsWith(link.href) && link.href !== "/");
+                pathname === link.path || (pathname.startsWith(link.path) && link.path !== "/");
 
               return (
                 <a
-                  key={link.label}
+                  key={link.path}
                   href={link.href}
-                  className={`text-[19px] font-semibold transition-colors tracking-wide ${
+                  className={`${locale === "en" ? "text-[17px] xl:text-[19px]" : "text-[16px] xl:text-[17px]"} whitespace-nowrap font-semibold transition-colors tracking-wide ${
                     isActive
                       ? "text-brand-orange"
                       : "text-brand-navy hover:text-brand-orange"
@@ -80,12 +87,13 @@ export default function Header() {
                 Design previews
               </a>
             )}
+            <LanguageSwitcher />
           </nav>
 
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
             className="lg:hidden flex flex-col gap-1.5 p-2"
-            aria-label="Toggle menu"
+            aria-label={t.nav.menu}
           >
             <span
               className={`block w-6 h-0.5 transition-all bg-brand-navy ${mobileOpen ? "rotate-45 translate-y-2" : ""}`}
@@ -105,12 +113,11 @@ export default function Header() {
             <div className="px-6 py-4 space-y-3">
               {navLinks.map((link) => {
                 const isActive =
-                  pathname === link.href ||
-                  (pathname && pathname.startsWith(link.href) && link.href !== "/");
+                  pathname === link.path || (pathname.startsWith(link.path) && link.path !== "/");
 
                 return (
                   <a
-                    key={link.label}
+                    key={link.path}
                     href={link.href}
                     className={`block text-sm font-medium ${
                       isActive
@@ -128,6 +135,7 @@ export default function Header() {
                   Design previews
                 </a>
               )}
+              <LanguageSwitcher inline />
             </div>
           </div>
         )}

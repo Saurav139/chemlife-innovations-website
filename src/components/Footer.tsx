@@ -5,9 +5,14 @@ import Link from "next/link";
 import { Images } from "@/lib/assets";
 import { OPEN_CONSENT_EVENT } from "@/lib/analytics";
 import { useAnalyticsEnabled } from "@/lib/useAnalyticsEnabled";
+import { useHref, useLocale, useT } from "@/i18n/LocaleProvider";
 
 export default function Footer() {
   const analyticsEnabled = useAnalyticsEnabled();
+  const t = useT();
+  const href = useHref();
+  // Links to pages that are only in English say so on translated pages.
+  const english = useLocale() === "en" ? "" : ` ${t.footer.englishOnly}`;
 
   return (
     <footer id="footer" className="relative bg-[#15273F] text-white border-t-2 border-teal-500/20 overflow-hidden">
@@ -23,7 +28,7 @@ export default function Footer() {
           
           {/* Brand Bio Column */}
           <div className="lg:col-span-4 space-y-6">
-            <Link href="/" className="inline-block">
+            <Link href={href("/")} className="inline-block">
               <Image
                 src={Images.branding.logo}
                 alt="ChemLife Innovations Logo"
@@ -33,7 +38,7 @@ export default function Footer() {
               />
             </Link>
             <p className="text-slate-350 text-sm leading-relaxed max-w-sm">
-              Pioneering veterinary biotechnology through nature-driven functional feed additives that support animal wellness and maximize livestock farm profitability.
+              {t.footer.bio}
             </p>
             {/* Social Media Links */}
             <div className="flex items-center gap-3.5 pt-2">
@@ -76,14 +81,14 @@ export default function Footer() {
           {/* Column 2: Company Navigation */}
           <div className="lg:col-span-2 space-y-5">
             <h4 className="font-heading text-white text-[15px] font-bold uppercase tracking-wider">
-              Company
+              {t.footer.company}
             </h4>
             <ul className="space-y-3">
               {[
-                { label: "Home", href: "/" },
-                { label: "About Us", href: "/about" },
-                { label: "Careers", href: "/careers" },
-                { label: "Contact Us", href: "/contact" },
+                { label: t.footer.home, href: href("/") },
+                { label: t.footer.about, href: href("/about") },
+                { label: t.footer.careers, href: href("/careers") },
+                { label: t.footer.contact, href: href("/contact") },
               ].map((link) => (
                 <li key={link.label}>
                   <Link
@@ -100,14 +105,14 @@ export default function Footer() {
           {/* Column 3: Solutions & Technology */}
           <div className="lg:col-span-2 space-y-5">
             <h4 className="font-heading text-white text-[15px] font-bold uppercase tracking-wider">
-              Solutions
+              {t.footer.solutions}
             </h4>
             <ul className="space-y-3">
               {[
-                { label: "Functional Additives", href: "/products" },
-                { label: "Scientific Research", href: "/research" },
-                { label: "AI Consult Hub", href: "/chat" },
-                { label: "Innovation Articles", href: "/insights" },
+                { label: t.footer.additives, href: href("/products") },
+                { label: t.footer.research, href: href("/research") },
+                { label: t.footer.aiHub + english, href: "/chat" },
+                { label: t.footer.articles + english, href: "/insights" },
               ].map((link) => (
                 <li key={link.label}>
                   <Link
@@ -124,7 +129,7 @@ export default function Footer() {
           {/* Column 4: Contact & Facilities */}
           <div className="lg:col-span-4 space-y-5">
             <h4 className="font-heading text-white text-[15px] font-bold uppercase tracking-wider">
-              Contact Us
+              {t.footer.contactHeading}
             </h4>
             <ul className="space-y-4 text-slate-350 text-sm">
               <li className="flex items-start gap-3">
@@ -168,19 +173,19 @@ export default function Footer() {
               className="h-7 w-auto rounded-sm object-contain"
             />
             <p className="text-slate-450 text-xs text-center sm:text-left">
-              &copy; {new Date().getFullYear()} ChemLife Innovations Pvt Ltd. All rights reserved.
+              &copy; {new Date().getFullYear()} ChemLife Innovations Pvt Ltd. {t.footer.rights}
             </p>
           </div>
           <div className="flex gap-6">
-            <Link href="/privacy" className="text-slate-450 text-xs hover:text-brand-orange transition-colors">Privacy Policy</Link>
-            <Link href="/terms" className="text-slate-450 text-xs hover:text-brand-orange transition-colors">Terms of Use</Link>
+            <Link href="/privacy" className="text-slate-450 text-xs hover:text-brand-orange transition-colors">{t.footer.privacy + english}</Link>
+            <Link href="/terms" className="text-slate-450 text-xs hover:text-brand-orange transition-colors">{t.footer.terms + english}</Link>
             {analyticsEnabled && (
               <button
                 type="button"
                 onClick={() => window.dispatchEvent(new Event(OPEN_CONSENT_EVENT))}
                 className="text-slate-450 text-xs hover:text-brand-orange transition-colors cursor-pointer"
               >
-                Cookie settings
+                {t.footer.cookies}
               </button>
             )}
           </div>

@@ -4,36 +4,17 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { Images } from "@/lib/assets";
+import { useT } from "@/i18n/LocaleProvider";
+import type { Messages } from "@/i18n/messages/en";
 
-const cards = [
-  {
-    title: "Mono-Gastric",
-    description: "Eco-friendly concepts promoting health and productivity in poultry and swine through nature-derived feed additives.",
-    images: [
-      { src: Images.gallery.rotate11, alt: "Broiler chickens on a poultry farm" },
-      { src: Images.gallery.rotate12, alt: "A pig standing on a farm" },
-      { src: Images.gallery.rotate13, alt: "Turkeys on a grassy farm" },
-    ],
-  },
-  {
-    title: "Ruminants",
-    description: "Innovative bio-active feed additives focusing on cattle health, increasing milk yield and quality.",
-    images: [
-      { src: Images.gallery.rotate21, alt: "A Holstein cow with her calf in a pasture" },
-      { src: Images.gallery.rotate22, alt: "A buffalo with her calf on a farm" },
-      { src: Images.gallery.rotate23, alt: "Goats on a goat farm" },
-    ],
-  },
-  {
-    title: "Value Addition",
-    description: "Feed additives for multiple species designed for better growth and conversion ratios.",
-    images: [
-      { src: Images.research.pellets, alt: "Bowls of feed pellets and powdered feed ingredients" },
-      { src: Images.gallery.rotate32, alt: "Hands holding freshly chopped green fodder" },
-      { src: Images.gallery.rotate33, alt: "Yellow feed granules pouring from a container" },
-    ],
-  },
+// Each card's title, description and photo descriptions are in the language file (home.whoWeAre.cards), in this order.
+const cardImages = [
+  [Images.gallery.rotate11, Images.gallery.rotate12, Images.gallery.rotate13],
+  [Images.gallery.rotate21, Images.gallery.rotate22, Images.gallery.rotate23],
+  [Images.research.pellets, Images.gallery.rotate32, Images.gallery.rotate33],
 ];
+
+type Card = Messages["home"]["whoWeAre"]["cards"][number] & { images: { src: string; alt: string }[] };
 
 // Detailed geometric SVG Snowflake vector component for the outer cell boundary
 function SnowflakeFrame({ className, style }: { className?: string; style?: React.CSSProperties }) {
@@ -108,7 +89,7 @@ function SnowflakeCell({
   index,
   imageIndex,
 }: {
-  card: typeof cards[number];
+  card: Card;
   index: number;
   imageIndex: number;
 }) {
@@ -170,6 +151,11 @@ function SnowflakeCell({
 
 export default function WhoWeAre() {
   const [imageIndex, setImageIndex] = useState(0);
+  const t = useT().home.whoWeAre;
+  const cards: Card[] = t.cards.map((card, i) => ({
+    ...card,
+    images: cardImages[i].map((src, j) => ({ src, alt: card.alts[j] })),
+  }));
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -184,10 +170,10 @@ export default function WhoWeAre() {
         {/* Title Block */}
         <div className="text-center mb-12">
           <span className="text-teal-500 text-sm lg:text-base font-semibold tracking-widest uppercase block mb-2">
-            Get to know
+            {t.kicker}
           </span>
           <h2 className="font-heading text-4xl lg:text-5xl text-brand-navy font-bold leading-tight">
-            Who We Are?
+            {t.title}
           </h2>
         </div>
 

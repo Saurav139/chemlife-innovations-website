@@ -5,15 +5,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "@/context/VariantContext";
 import { Videos, VideoPosters } from "@/lib/assets";
 import BackgroundVideo, { useNearViewport } from "./BackgroundVideo";
+import { useHref, useT } from "@/i18n/LocaleProvider";
 
 const easeOut = [0.25, 0.1, 0, 1] as const;
-
-const bulletPoints = [
-  "Work with cutting-edge animal nutrition science",
-  "Collaborative team culture with industry experts",
-  "Annual team trips and celebration events",
-  "Sports activities and team-building programs",
-];
 
 const videos = [
   { src: Videos.trip1, poster: VideoPosters.trip1 },
@@ -23,6 +17,9 @@ const videos = [
 
 export default function LifeAtChemLife() {
   const { theme } = useTheme();
+  const t = useT().home.life;
+  const href = useHref();
+  const bulletPoints = t.points;
   const [videoIndex, setVideoIndex] = useState(0);
   const [sectionRef, near] = useNearViewport<HTMLElement>();
 
@@ -68,7 +65,7 @@ export default function LifeAtChemLife() {
           className="text-center"
         >
           <h2 className="font-heading text-4xl lg:text-5xl text-white mb-16 leading-tight">
-            Life at ChemLife
+            {t.title}
           </h2>
         </motion.div>
  
@@ -115,10 +112,10 @@ export default function LifeAtChemLife() {
           className="text-center mt-12"
         >
           <a
-            href="/careers"
+            href={href("/careers")}
             className="inline-block border-2 border-brand-orange text-brand-orange bg-white hover:bg-brand-orange hover:text-white font-semibold px-8 py-3 rounded-full shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5"
           >
-            Join Us
+            {t.joinUs}
           </a>
         </motion.div>
       </div>
