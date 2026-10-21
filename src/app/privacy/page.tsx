@@ -5,15 +5,15 @@ import { VariantProvider } from "@/context/VariantContext";
 import { GA_ID } from "@/lib/analytics";
 import { pageMetadata } from "@/lib/seo";
 
-// A generic policy that matches what the site does today: GA only after consent, the chatbot's use of
-// OpenAI and Pinecone, YouTube and Google Maps embeds. Update it when any of those change, and have it reviewed.
+// A generic policy that matches what the site does today: GA only after consent, the contact form sent
+// through Resend, the chatbot's use of OpenAI and Pinecone, YouTube and Google Maps embeds. Update it when any of those change, and have it reviewed.
 export const metadata: Metadata = pageMetadata({
   title: "Privacy Policy",
   description: "How ChemLife Innovations handles personal data, cookies and analytics on this website.",
   path: "/privacy",
 });
 
-const LAST_UPDATED = "19 October 2026";
+const LAST_UPDATED = "21 October 2026";
 const EMAIL = "innovate@chemlifeinnovations.com";
 
 const h2 = "font-heading text-2xl font-bold text-brand-navy mt-12 mb-4";
@@ -80,8 +80,9 @@ export default function PrivacyPage() {
 
             <h3 className={h3}>When you contact us</h3>
             <p>
-              If you email or call us, we receive your name, contact details and whatever you tell us, and we use
-              them only to reply and to follow up on your enquiry.
+              If you use our contact form, email or call us, we receive your name, contact details and whatever you
+              tell us, and we use them only to reply and to follow up on your enquiry. Messages from the contact form
+              are delivered to our inbox by Resend, an email delivery service.
             </p>
 
             <h3 className={h3}>Our AI chatbots, Dr. Kukku and Dr. Mikku</h3>
@@ -96,8 +97,9 @@ export default function PrivacyPage() {
             <h3 className={h3}>Technical information</h3>
             <p>
               Like any website, our hosting provider receives your IP address and browser details with each request
-              and keeps short-term logs to run and protect the site. To prevent abuse, the chatbot briefly counts
-              requests per IP address; these counts are held in memory and discarded within a day.
+              and keeps short-term logs to run and protect the site. To prevent abuse, the chatbot and the contact
+              form briefly count requests per IP address; these counts are held in memory and discarded within a
+              day.
             </p>
 
             <h2 className={h2}>Cookies and browser storage</h2>
@@ -170,6 +172,10 @@ export default function PrivacyPage() {
                 <strong>OpenAI</strong> and <strong>Pinecone</strong> power the chatbots:{" "}
                 <External href="https://openai.com/policies/privacy-policy/">OpenAI privacy policy</External>,{" "}
                 <External href="https://www.pinecone.io/privacy/">Pinecone privacy policy</External>.
+              </li>
+              <li>
+                <strong>Resend</strong> delivers contact form messages to our inbox:{" "}
+                <External href="https://resend.com/legal/privacy-policy">Resend privacy policy</External>.
               </li>
               <li>
                 <strong>Hostinger</strong> hosts the website:{" "}

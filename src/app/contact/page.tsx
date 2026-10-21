@@ -9,17 +9,42 @@ import SectionWrapper from "@/components/SectionWrapper";
 import { VariantProvider } from "@/context/VariantContext";
 import SiteSearch from "@/components/SiteSearch";
 import { Images } from "@/lib/assets";
+import { track } from "@/lib/analytics";
+import {
+  CONTACT_EMAIL,
+  CONTACT_LIMITS,
+  CONTACT_PHONE,
+  EMAIL_PATTERN,
+  INQUIRY_TYPES,
+  type ContactErrorCode,
+  type ContactMessage,
+} from "@/lib/contact";
 
 const easeOut = [0.25, 0.1, 0, 1] as const;
 
-interface FormData {
-  name: string;
-  email: string;
-  phone: string;
-  inquiryType: string;
-  subject: string;
-  message: string;
-}
+// `website` is a hidden spam trap: people never see it, bots fill it in.
+type FormData = ContactMessage & { website: string };
+
+const EMPTY_FORM: FormData = {
+  name: "",
+  email: "",
+  phone: "",
+  inquiryType: INQUIRY_TYPES[0],
+  subject: "",
+  message: "",
+  website: "",
+};
+
+type SubmitError = ContactErrorCode | "network";
+
+// What to tell the visitor when the message couldn't be sent. All of them also offer to email it instead.
+const SUBMIT_ERRORS: Record<SubmitError, string> = {
+  invalid: "Some details look wrong. Please check the form and try again.",
+  rate_limited: "You've sent several messages in a short time, so we've paused the form for a while.",
+  unavailable: "The contact form isn't available right now.",
+  send_failed: "Your message couldn't be sent right now.",
+  network: "Your message couldn't be sent. Please check your connection and try again.",
+};
 
 interface FormErrors {
   name?: string;
@@ -29,26 +54,12 @@ interface FormErrors {
 }
 
 export default function ContactPage() {
-  const [formData, setFormData] = useState<FormData>({
-    name: "",
-    email: "",
-    phone: "",
-    inquiryType: "General Inquiry",
-    subject: "",
-    message: "",
-  });
+  const [formData, setFormData] = useState<FormData>(EMPTY_FORM);
 
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
-
-  const inquiryOptions = [
-    "General Inquiry",
-    "Talk to a Nutritionist",
-    "Product Sales & Distribution",
-    "Technical & R&D Partnership",
-    "Advisory Services & Careers",
-  ];
+  const [submitError, setSubmitError] = useState<SubmitError | null>(null);
 
   // Pre-fill the form when a call to action links here, e.g. /contact?type=nutritionist from the homepage hero
   useEffect(() => {
@@ -71,7 +82,7 @@ export default function ContactPage() {
 
     if (!formData.email.trim()) {
       newErrors.email = "Email address is required.";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+    } else if (!EMAIL_PATTERN.test(formData.email.trim())) {
       newErrors.email = "Please enter a valid email address.";
     }
 
@@ -98,16 +109,43 @@ export default function ContactPage() {
     }
   };
 
+  // Emails the message to the team through /api/contact. "Sent" is only shown once the email has gone.
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateForm()) return;
 
     setIsSubmitting(true);
-    // Simulate API request delay
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    setSubmitError(null);
+    let error: SubmitError | null = null;
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+        signal: AbortSignal.timeout(20_000),
+      });
+      if (!res.ok) {
+        const code = (await res.json().catch(() => null))?.error;
+        error = code && code in SUBMIT_ERRORS ? code : "send_failed";
+      }
+    } catch {
+      error = "network";
+    }
     setIsSubmitting(false);
+    if (error) {
+      setSubmitError(error);
+      return;
+    }
+    track("contact_form_submit", { inquiry_type: formData.inquiryType });
     setIsSubmitted(true);
   };
+
+  // The same message as a pre-filled email, for when the form can't send it.
+  const fallbackEmail = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(
+    formData.subject || "Website enquiry"
+  )}&body=${encodeURIComponent(
+    `${formData.message}\n\n${formData.name}${formData.phone ? `\n${formData.phone}` : ""}`
+  )}`;
 
   return (
     <VariantProvider>
@@ -175,6 +213,8 @@ export default function ContactPage() {
                                 type="text"
                                 id="name"
                                 name="name"
+                                maxLength={CONTACT_LIMITS.name}
+                                autoComplete="name"
                                 value={formData.name}
                                 onChange={handleInputChange}
                                 className={`w-full bg-white border ${errors.name ? "border-red-500" : "border-gray-250"
@@ -195,6 +235,8 @@ export default function ContactPage() {
                                 type="email"
                                 id="email"
                                 name="email"
+                                maxLength={CONTACT_LIMITS.email}
+                                autoComplete="email"
                                 value={formData.email}
                                 onChange={handleInputChange}
                                 className={`w-full bg-white border ${errors.email ? "border-red-500" : "border-gray-250"
@@ -217,6 +259,8 @@ export default function ContactPage() {
                                 type="tel"
                                 id="phone"
                                 name="phone"
+                                maxLength={CONTACT_LIMITS.phone}
+                                autoComplete="tel"
                                 value={formData.phone}
                                 onChange={handleInputChange}
                                 className="w-full bg-white border border-gray-250 rounded-xl px-4 py-3.5 text-sm text-brand-navy focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all"
@@ -237,7 +281,7 @@ export default function ContactPage() {
                                   onChange={handleInputChange}
                                   className="w-full bg-white border border-gray-250 rounded-xl px-4 py-3.5 text-sm text-brand-navy focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all appearance-none cursor-pointer"
                                 >
-                                  {inquiryOptions.map((opt) => (
+                                  {INQUIRY_TYPES.map((opt) => (
                                     <option key={opt} value={opt}>
                                       {opt}
                                     </option>
@@ -261,6 +305,7 @@ export default function ContactPage() {
                               type="text"
                               id="subject"
                               name="subject"
+                              maxLength={CONTACT_LIMITS.subject}
                               value={formData.subject}
                               onChange={handleInputChange}
                               className={`w-full bg-white border ${errors.subject ? "border-red-500" : "border-gray-250"
@@ -280,6 +325,7 @@ export default function ContactPage() {
                             <textarea
                               id="message"
                               name="message"
+                              maxLength={CONTACT_LIMITS.message}
                               rows={5}
                               value={formData.message}
                               onChange={handleInputChange}
@@ -291,6 +337,37 @@ export default function ContactPage() {
                               <p className="text-red-500 text-xs mt-1.5 font-medium">{errors.message}</p>
                             )}
                           </div>
+
+                          {/* Spam trap: hidden from people and screen readers, so only bots fill it in. */}
+                          <div aria-hidden="true" className="absolute -left-[10000px] top-auto w-px h-px overflow-hidden">
+                            <label htmlFor="website">Website</label>
+                            <input
+                              type="text"
+                              id="website"
+                              name="website"
+                              tabIndex={-1}
+                              autoComplete="off"
+                              value={formData.website}
+                              onChange={handleInputChange}
+                            />
+                          </div>
+
+                          {submitError && (
+                            <div role="alert" className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                              <p className="font-semibold">{SUBMIT_ERRORS[submitError]}</p>
+                              <p className="mt-1">
+                                You can{" "}
+                                <a href={fallbackEmail} className="underline font-semibold hover:text-red-800">
+                                  email it to us instead
+                                </a>{" "}
+                                at {CONTACT_EMAIL}, or call{" "}
+                                <a href={`tel:${CONTACT_PHONE.replace(/\s/g, "")}`} className="underline whitespace-nowrap hover:text-red-800">
+                                  {CONTACT_PHONE}
+                                </a>
+                                .
+                              </p>
+                            </div>
+                          )}
 
                           {/* Submit Button */}
                           <div className="pt-2">
@@ -336,14 +413,7 @@ export default function ContactPage() {
                         </p>
                         <button
                           onClick={() => {
-                            setFormData({
-                              name: "",
-                              email: "",
-                              phone: "",
-                              inquiryType: "General Inquiry",
-                              subject: "",
-                              message: "",
-                            });
+                            setFormData(EMPTY_FORM);
                             setIsSubmitted(false);
                           }}
                           className="px-6 py-2.5 bg-gray-150 text-gray-700 hover:bg-gray-200 transition-colors font-bold text-xs rounded-full cursor-pointer"
