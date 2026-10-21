@@ -29,9 +29,9 @@ const contentSecurityPolicy = [
 ].join("; ");
 
 const securityHeaders = [
-  // HSTS rollout: 1 week first, then raise to 1 year (31536000).
+  // HSTS: browsers use HTTPS only, for a year (raised from 1 week on 21 Oct 2026 after a clean trial week).
   // Add includeSubDomains only once every subdomain serves HTTPS (ftp. does not yet).
-  { key: "Strict-Transport-Security", value: "max-age=604800" },
+  { key: "Strict-Transport-Security", value: "max-age=31536000" },
   { key: "Content-Security-Policy", value: contentSecurityPolicy },
   { key: "X-Frame-Options", value: "SAMEORIGIN" },
   { key: "X-Content-Type-Options", value: "nosniff" },
