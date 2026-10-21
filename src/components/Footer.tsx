@@ -173,7 +173,7 @@ export default function Footer() {
           </div>
           <div className="flex gap-6">
             <Link href="/privacy" className="text-slate-450 text-xs hover:text-brand-orange transition-colors">Privacy Policy</Link>
-            <Link href="#" className="text-slate-450 text-xs hover:text-brand-orange transition-colors">Terms of Use</Link>
+            <Link href="/terms" className="text-slate-450 text-xs hover:text-brand-orange transition-colors">Terms of Use</Link>
             {analyticsEnabled && (
               <button
                 type="button"
