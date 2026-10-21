@@ -26,8 +26,9 @@ export const Images = {
     insights: "/images/heroes/insights-hero-bg.jpg",
     research: "/images/heroes/research-hero-bg.jpg",
     /** Hero slideshow / rotating panels */
-    chicken: "/images/heroes/chicken-bg.jpg",
-    dairy: "/images/heroes/dairy-bg.jpg",
+    teamLeadership: "/images/heroes/team-leadership.jpg",
+    teamAnniversary: "/images/heroes/team-anniversary.jpg",
+    warehouseVisit: "/images/heroes/warehouse-visit.jpg",
     slide76: "/images/heroes/76.jpg",
     slide87: "/images/heroes/87.jpg",
   },

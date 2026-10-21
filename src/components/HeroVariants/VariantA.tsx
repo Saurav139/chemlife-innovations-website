@@ -16,16 +16,21 @@ const taglines = [
   { id: 6, line1: "Green Trace Mineral", line2: "Chelation & Nano", line3: "Technologies" },
 ];
 
-const bgImages = [
-  { id: "poultry", src: Images.heroes.chicken, alt: "Free range chicken farm" },
-  { id: "dairy", src: Images.heroes.dairy, alt: "Dairy cattle farm" },
-  { id: "img76", src: Images.heroes.slide76, alt: "Cow with her calf in a green pasture" },
-  { id: "img87", src: Images.heroes.slide87, alt: "Chick drinking from a poultry drinker" },
-];
+// The slides cover the hero, so on screens taller than the image they're drawn wider than the screen:
+// 1.5× the screen height for 3:2 photos, 2× for 2:1. `sizes` tells the browser which file is sharp enough.
+// Phones only show the middle of a 3:2 photo, so they get a half-width file: about 150 KB instead of 1 MB.
+const sizesFor = (aspect: "3/2" | "2/1") =>
+  aspect === "3/2"
+    ? "(min-aspect-ratio: 3/2) 100vw, (max-width: 767px) 75vh, 150vh"
+    : "(min-aspect-ratio: 2/1) 100vw, 200vh";
 
-// The slides are up to 2:1 and cover the hero, so on screens taller than 2:1 they are drawn
-// about twice the screen height wide. This makes phones fetch a version sharp enough for that.
-const SLIDE_SIZES = "(min-aspect-ratio: 2/1) 100vw, 200vh";
+const bgImages = [
+  { id: "leadership", src: Images.heroes.teamLeadership, sizes: sizesFor("3/2"), alt: "The ChemLife Innovations leadership team in the garden at our office" },
+  { id: "team", src: Images.heroes.teamAnniversary, sizes: sizesFor("3/2"), alt: "The ChemLife Innovations team outside our facility" },
+  { id: "warehouse", src: Images.heroes.warehouseVisit, sizes: sizesFor("3/2"), alt: "The ChemLife team showing visitors around a feed warehouse" },
+  { id: "img76", src: Images.heroes.slide76, sizes: sizesFor("2/1"), alt: "Cow with her calf in a green pasture" },
+  { id: "img87", src: Images.heroes.slide87, sizes: sizesFor("2/1"), alt: "Chick drinking from a poultry drinker" },
+];
 
 const STORY_VIDEO_ID = "-amOgNcjYNg";
 
@@ -113,14 +118,18 @@ export default function HeroVariantA() {
 
   // Fetch the next slide while this one is showing, so on slow connections it doesn't fade in blank.
   // The browser picks the same size from srcset as the slide itself will, so it's reused from the cache.
+  // It waits 2.5 s so the first slide, the page's largest paint, has the connection to itself.
   useEffect(() => {
-    const next = bgImages[(bgIndex + 1) % bgImages.length];
-    const { props } = getImageProps({ src: next.src, alt: "", fill: true, sizes: SLIDE_SIZES });
-    const img = document.createElement("img");
-    img.fetchPriority = "low";
-    img.sizes = props.sizes ?? "";
-    img.srcset = props.srcSet ?? "";
-    img.src = props.src;
+    const timer = setTimeout(() => {
+      const next = bgImages[(bgIndex + 1) % bgImages.length];
+      const { props } = getImageProps({ src: next.src, alt: "", fill: true, sizes: next.sizes });
+      const img = document.createElement("img");
+      img.fetchPriority = "low";
+      img.sizes = props.sizes ?? "";
+      img.srcset = props.srcSet ?? "";
+      img.src = props.src;
+    }, 2500);
+    return () => clearTimeout(timer);
   }, [bgIndex]);
 
   return (
@@ -145,7 +154,7 @@ export default function HeroVariantA() {
               src={bgImages[bgIndex].src}
               alt={bgImages[bgIndex].alt}
               fill
-              sizes={SLIDE_SIZES}
+              sizes={bgImages[bgIndex].sizes}
               className="object-cover animate-ken-burns"
               priority={bgIndex === 0}
             />
