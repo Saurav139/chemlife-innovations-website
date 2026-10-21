@@ -451,7 +451,7 @@ export default function ProductsPage() {
           <div className="absolute inset-0 z-0">
             <Image
               src={Images.products.heroBanner}
-              alt="Products Hero Background"
+              alt="Rows of bioreactors in a biotechnology production lab"
               fill
               sizes="100vw"
               className="object-cover opacity-60"
@@ -475,11 +475,12 @@ export default function ProductsPage() {
 
         {/* Products List Section */}
         <section className="py-16 bg-slate-50/30 relative overflow-hidden">
-          {/* Subtle Product-based Background Image. At 4% opacity a small file looks the same as the 3840px original. */}
+          {/* Subtle Product-based Background Image. At 4% opacity a small file looks the same as the 3840px original,
+              and it's decorative, so its empty alt makes screen readers skip it. */}
           <div className="absolute inset-0 z-0 pointer-events-none select-none opacity-[0.04]">
             <Image
               src={Images.products.customBg}
-              alt="Products Background"
+              alt=""
               fill
               sizes="640px"
               className="object-cover object-center"

@@ -10,6 +10,8 @@ interface Step {
   title: string;
   description: string;
   image: string;
+  /** Describes the photo for screen readers and search engines */
+  alt: string;
   objectPosition?: string;
 }
 
@@ -19,24 +21,28 @@ const steps: Step[] = [
     title: "Research",
     description: "In-depth scientific research and analysis to identify bioactive molecules and their applications in animal nutrition.",
     image: Images.process.researchImage,
+    alt: "The ChemLife research laboratory",
   },
   {
     step: 2,
     title: "Development",
     description: "Formulation and development of innovative feed additives using patented technologies and green chemistry pathways.",
     image: Images.process.developmentImage,
+    alt: "The ChemLife team presenting ANBioT at an exhibition stand",
   },
   {
     step: 3,
     title: "Manufacturing",
     description: "Scalable feed-additives manufacturing setup with rigorous quality control to ensure consistency, safety, and efficacy.",
     image: Images.process.manufacturingImage,
+    alt: "Feed additive manufacturing machinery",
   },
   {
     step: 4,
     title: "Delivery",
     description: "The integrated supply chain moves feed additives from the Bengaluru facility through warehouses and varied transport networks to final delivery via direct or distributor channels.",
     image: Images.process.delivery,
+    alt: "Feed bags stacked in a warehouse, a delivery truck and a dairy farm",
   },
 ];
 
@@ -49,7 +55,7 @@ export default function HowWeDo() {
       <div className="absolute inset-0 z-0 select-none pointer-events-none">
         <Image
           src={Images.process.howWeDoBg}
-          alt="How We Do It Process Background"
+          alt="Laboratory automation equipment lit in blue"
           fill
           className="object-cover opacity-35"
           priority
@@ -87,7 +93,7 @@ export default function HowWeDo() {
                 <div className={`relative w-full h-[200px] md:h-full overflow-hidden order-1 ${isEven ? "md:order-1" : "md:order-2"}`}>
                   <Image
                     src={s.image}
-                    alt={s.title}
+                    alt={s.alt}
                     fill
                     sizes="(max-width: 768px) 100vw, 425px"
                     className={`object-cover group-hover:scale-102 transition-transform duration-700 ${s.objectPosition || ""}`}

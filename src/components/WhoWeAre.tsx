@@ -9,17 +9,29 @@ const cards = [
   {
     title: "Mono-Gastric",
     description: "Eco-friendly concepts promoting health and productivity in poultry and swine through nature-derived feed additives.",
-    images: [Images.gallery.rotate11, Images.gallery.rotate12, Images.gallery.rotate13],
+    images: [
+      { src: Images.gallery.rotate11, alt: "Broiler chickens on a poultry farm" },
+      { src: Images.gallery.rotate12, alt: "A pig standing on a farm" },
+      { src: Images.gallery.rotate13, alt: "Turkeys on a grassy farm" },
+    ],
   },
   {
     title: "Ruminants",
     description: "Innovative bio-active feed additives focusing on cattle health, increasing milk yield and quality.",
-    images: [Images.gallery.rotate21, Images.gallery.rotate22, Images.gallery.rotate23],
+    images: [
+      { src: Images.gallery.rotate21, alt: "A Holstein cow with her calf in a pasture" },
+      { src: Images.gallery.rotate22, alt: "A buffalo with her calf on a farm" },
+      { src: Images.gallery.rotate23, alt: "Goats on a goat farm" },
+    ],
   },
   {
     title: "Value Addition",
     description: "Feed additives for multiple species designed for better growth and conversion ratios.",
-    images: [Images.research.pellets, Images.gallery.rotate32, Images.gallery.rotate33],
+    images: [
+      { src: Images.research.pellets, alt: "Bowls of feed pellets and powdered feed ingredients" },
+      { src: Images.gallery.rotate32, alt: "Hands holding freshly chopped green fodder" },
+      { src: Images.gallery.rotate33, alt: "Yellow feed granules pouring from a container" },
+    ],
   },
 ];
 
@@ -123,7 +135,7 @@ function SnowflakeCell({
         >
           <AnimatePresence mode="popLayout">
             <motion.div
-              key={card.images[imageIndex % card.images.length]}
+              key={card.images[imageIndex % card.images.length].src}
               initial={{ rotate: -180, opacity: 0 }}
               animate={{ rotate: 0, opacity: 1 }}
               exit={{ rotate: 180, opacity: 0 }}
@@ -131,8 +143,8 @@ function SnowflakeCell({
               className="absolute inset-0 w-full h-full"
             >
               <Image
-                src={card.images[imageIndex % card.images.length]}
-                alt={card.title}
+                src={card.images[imageIndex % card.images.length].src}
+                alt={card.images[imageIndex % card.images.length].alt}
                 fill
                 sizes="235px"
                 className="object-cover opacity-100 group-hover:scale-105 transition-transform duration-700"
