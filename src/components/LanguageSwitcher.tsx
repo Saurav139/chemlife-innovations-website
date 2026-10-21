@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
-import { LOCALES, LOCALE_NAMES, TRANSLATED_PATHS, localizePath, splitLocale, type Locale } from "@/i18n/config";
+import { LOCALES, LOCALE_COOKIE, LOCALE_NAMES, TRANSLATED_PATHS, localizePath, splitLocale, type Locale } from "@/i18n/config";
 import { useLocale, useT } from "@/i18n/LocaleProvider";
 
 /** The same page in another language, or that language's homepage when the page is English only. */
@@ -19,6 +19,11 @@ function Globe() {
       <path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3Z" />
     </svg>
   );
+}
+
+/** Remember the choice for a year, so it overrides the browser's language on later visits (src/proxy.ts). */
+function remember(l: Locale) {
+  document.cookie = `${LOCALE_COOKIE}=${l}; path=/; max-age=31536000; samesite=lax`;
 }
 
 /** English · ಕನ್ನಡ · हिन्दी. A drop-down in the desktop header, a row of links in the mobile menu (`inline`). */
@@ -48,6 +53,7 @@ export default function LanguageSwitcher({ inline = false }: { inline?: boolean 
       href={addressIn(l, pathname)}
       lang={l}
       hrefLang={l}
+      onClick={() => remember(l)}
       aria-current={l === locale ? "true" : undefined}
       className={
         inline

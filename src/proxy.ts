@@ -1,10 +1,12 @@
 import { timingSafeEqual } from "node:crypto";
 import { NextResponse, type NextRequest } from "next/server";
 import { isStagingHost } from "@/lib/seo";
-import { DEFAULT_LOCALE, isLocale } from "@/i18n/config";
+import { DEFAULT_LOCALE, LOCALE_COOKIE, TRANSLATED_PATHS, isLocale, localizePath, preferredLocale } from "@/i18n/config";
 
 // Every page lives under src/app/[locale]. English keeps its plain addresses: /products is served from
 // /en/products behind the scenes, and /en/products redirects to /products. /kn/... and /hi/... pass through.
+// A visitor whose browser asks for Kannada or Hindi before English is sent from a translated page's plain
+// address to that language's version, unless they picked a language in the switcher (the "lang" cookie).
 // The staging site (any address other than the live domain) is also kept out of search results, and asks for
 // a password when STAGING_PASSWORD is set in its environment.
 export function proxy(request: NextRequest) {
@@ -40,9 +42,29 @@ function localeRouting(request: NextRequest) {
     return NextResponse.redirect(url, 308);
   }
   if (isLocale(first)) return NextResponse.next();
+  const wanted = languageFor(request);
+  if (wanted !== DEFAULT_LOCALE && TRANSLATED_PATHS.includes(pathname)) {
+    const url = request.nextUrl.clone();
+    url.pathname = localizePath(pathname, wanted);
+    const response = NextResponse.redirect(url, 307);
+    // The answer depends on this visitor's browser and cookie, so no shared cache may keep it.
+    response.headers.set("Cache-Control", "private, no-store");
+    response.headers.set("Vary", "Accept-Language, Cookie");
+    return response;
+  }
   const url = request.nextUrl.clone();
   url.pathname = `/${DEFAULT_LOCALE}${pathname === "/" ? "" : pathname}`;
   return NextResponse.rewrite(url);
+}
+
+// Crawlers see every language at its own address (the hreflang links), so they're never redirected.
+const BOT = /bot|crawl|spider|slurp|preview|facebookexternalhit|whatsapp|lighthouse/i;
+
+function languageFor(request: NextRequest) {
+  const picked = request.cookies.get(LOCALE_COOKIE)?.value ?? "";
+  if (isLocale(picked)) return picked;
+  if (request.method !== "GET" || BOT.test(request.headers.get("user-agent") ?? "")) return DEFAULT_LOCALE;
+  return preferredLocale(request.headers.get("accept-language"));
 }
 
 // Browser sign-in prompt: any user name, only the password is checked.

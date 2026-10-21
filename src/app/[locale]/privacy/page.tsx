@@ -14,7 +14,7 @@ export const metadata: Metadata = pageMetadata({
   path: "/privacy",
 });
 
-const LAST_UPDATED = "21 October 2026";
+const LAST_UPDATED = "22 October 2026";
 const EMAIL = "innovate@chemlifeinnovations.com";
 
 const h2 = "font-heading text-2xl font-bold text-brand-navy mt-12 mb-4";
@@ -108,7 +108,8 @@ export default async function PrivacyPage({ params }: { params: Promise<{ locale
             <h2 className={h2}>Cookies and browser storage</h2>
             <p className="mb-4">
               We only set analytics cookies after you accept them. Your choice itself is saved in your browser&apos;s
-              local storage so we don&apos;t ask again on every page.
+              local storage so we don&apos;t ask again on every page. If you pick a language in the header, a small
+              cookie remembers it; it holds only the language code.
             </p>
             <div className="overflow-x-auto">
               <table className="w-full text-sm border border-slate-200">
@@ -129,6 +130,11 @@ export default async function PrivacyPage({ params }: { params: Promise<{ locale
                     <td className="p-3 border-b border-slate-200 font-mono">{sessionCookie}</td>
                     <td className="p-3 border-b border-slate-200">Google Analytics: keeps track of the current visit. Only after you accept.</td>
                     <td className="p-3 border-b border-slate-200">2 years</td>
+                  </tr>
+                  <tr>
+                    <td className="p-3 border-b border-slate-200 font-mono">lang</td>
+                    <td className="p-3 border-b border-slate-200">Remembers the language you picked (English, Kannada or Hindi), so we don&apos;t switch you to your browser&apos;s language. Only after you pick one.</td>
+                    <td className="p-3 border-b border-slate-200">1 year</td>
                   </tr>
                   <tr>
                     <td className="p-3 font-mono">chemlife-analytics-consent</td>
