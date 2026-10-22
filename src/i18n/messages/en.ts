@@ -508,6 +508,7 @@ const en = {
     titleAccent: "Animal Nutrition, Biotechnology & Chemistry",
     intro: "Science-backed studies and platforms formulated for superior bioavailability, green chelation, and stable animal nutrition.",
     search: "Search research pipeline...",
+    clearSearch: "Clear search",
     overview: "Executive Summary",
     challenge: "Core Challenge",
     advantage: "Mechanism & Advantage",
