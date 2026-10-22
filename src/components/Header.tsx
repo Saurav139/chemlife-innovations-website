@@ -47,16 +47,16 @@ export default function Header() {
       }`}
     >
       <div className="max-w-[1200px] mx-auto pr-6 pl-2">
-        <div className="flex items-center justify-between gap-6 h-16 md:h-18 lg:h-20">
+        <div className="flex items-center justify-between gap-6 h-18 md:h-20 lg:h-24">
           <a href={href("/")} className="flex-shrink-0">
             <Image
               src={Images.branding.logoHorizontal}
               alt="ChemLife Innovations"
               width={653}
               height={240}
-              sizes="131px"
+              sizes="174px"
               loading="eager"
-              className="h-10 md:h-11 lg:h-10 xl:h-11 w-auto"
+              className="h-12 md:h-14 xl:h-16 w-auto"
             />
           </a>
 
@@ -82,9 +82,10 @@ export default function Header() {
             {showPreviews && (
               <a
                 href="/previews"
-                className="shrink-0 whitespace-nowrap rounded-full border-2 border-brand-orange px-4 py-1.5 text-[15px] font-semibold text-brand-orange transition-colors hover:bg-brand-orange hover:text-white"
+                title="Design previews"
+                className="shrink-0 whitespace-nowrap rounded-full border-2 border-brand-orange px-3 py-1 text-[14px] font-semibold text-brand-orange transition-colors hover:bg-brand-orange hover:text-white"
               >
-                Design previews
+                Previews
               </a>
             )}
             <LanguageSwitcher />
@@ -110,7 +111,7 @@ export default function Header() {
 
        {mobileOpen && (
           <div className="lg:hidden bg-white border-t border-brand-navy/10 shadow-xl">
-            <div className="px-6 py-4 space-y-2 max-h-[calc(100dvh-4rem)] md:max-h-[calc(100dvh-4.5rem)] overflow-y-auto">
+            <div className="px-6 py-4 space-y-2 max-h-[calc(100dvh-4.5rem)] md:max-h-[calc(100dvh-5rem)] overflow-y-auto">
               {navLinks.map((link) => {
                 const isActive =
                   pathname === link.path || (pathname.startsWith(link.path) && link.path !== "/");
