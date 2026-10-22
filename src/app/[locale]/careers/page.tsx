@@ -112,7 +112,7 @@ export default function CareersPage() {
           </div>
 
           <div className="relative z-10 max-w-[1200px] mx-auto px-6 w-full text-center lg:text-left">
-            <span className="text-teal-400 text-sm font-semibold tracking-widest uppercase block mb-3">
+            <span className="text-teal-300 text-sm font-semibold tracking-widest uppercase block mb-3">
               {t.kicker}
             </span>
             <h1 className="font-heading text-3xl md:text-4xl lg:text-6xl font-bold leading-tight mb-3 md:mb-4 text-white max-w-4xl">
@@ -185,7 +185,7 @@ export default function CareersPage() {
               {/* Considerations & Requirements Card */}
               <div className="bg-white border border-gray-255 rounded-3xl p-8 lg:p-10 shadow-sm">
                 <h3 className="font-heading text-2xl font-bold text-brand-navy mb-6 flex items-center gap-3">
-                  <svg className="w-6 h-6 text-teal-600 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <svg className="w-6 h-6 text-teal-700 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                     <path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A5.5 5.5 0 0 0 12.5 2.5a5.5 5.5 0 0 0-5.5 5.5c0 1.3.5 2.6 1.5 3.5.8.8 1.3 1.5 1.5 2.5"></path>
                     <line x1="9" y1="18" x2="15" y2="18"></line>
                     <line x1="10" y1="22" x2="14" y2="22"></line>
@@ -238,7 +238,7 @@ export default function CareersPage() {
 
             {/* Dropdown Selector */}
             <div className="max-w-md mx-auto mb-16">
-              <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 text-center">
+              <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 text-center">
                 {t.selectPosition}
               </label>
               <select
@@ -261,7 +261,7 @@ export default function CareersPage() {
                 {/* Left Side: Text Details */}
                 <div className="lg:w-7/12 p-8 lg:p-12 flex flex-col justify-between flex-grow">
                   <div>
-                    <span className="text-teal-600 text-sm font-bold uppercase tracking-wider block mb-2">
+                    <span className="text-teal-700 text-sm font-bold uppercase tracking-wider block mb-2">
                       {selectedRole.department}
                     </span>
                     <h3 className="font-heading text-3xl font-bold text-brand-navy mb-6">
@@ -274,7 +274,7 @@ export default function CareersPage() {
 
                     {/* Point-wise Required Qualifications */}
                     <div className="mb-8">
-                      <h4 className="text-xs font-bold uppercase tracking-wider text-brand-navy/60 block mb-3">
+                      <h4 className="text-xs font-bold uppercase tracking-wider text-brand-navy/80 block mb-3">
                         {t.qualifications}
                       </h4>
                       <ul className="space-y-2">
@@ -289,7 +289,7 @@ export default function CareersPage() {
 
                     {/* Eligible Fields */}
                     <div className="border-t border-gray-200/60 pt-6 mb-8">
-                      <h4 className="text-xs font-bold uppercase tracking-wider text-brand-navy/60 block mb-3">
+                      <h4 className="text-xs font-bold uppercase tracking-wider text-brand-navy/80 block mb-3">
                         {t.eligible}
                       </h4>
                       <ul className="space-y-2">
@@ -305,7 +305,7 @@ export default function CareersPage() {
 
                   <button
                     onClick={() => setActiveJob(selectedRole)}
-                    className="w-full py-4 rounded-full bg-brand-orange hover:bg-brand-orange/90 text-white font-bold text-base shadow transition-all duration-300 cursor-pointer text-center lg:max-w-xs"
+                    className="w-full py-4 rounded-full bg-brand-orange-dark hover:bg-brand-orange-darker text-white font-bold text-base shadow transition-all duration-300 cursor-pointer text-center lg:max-w-xs"
                   >
                     {t.apply}
                   </button>
@@ -354,7 +354,7 @@ export default function CareersPage() {
                   >
                     ✕
                   </button>
-                  <span className="text-teal-400 text-xs font-bold uppercase tracking-wider block mb-1">
+                  <span className="text-teal-300 text-xs font-bold uppercase tracking-wider block mb-1">
                     {t.modalTitle}
                   </span>
                   <h3 className="font-heading text-xl lg:text-2xl font-bold">
@@ -431,7 +431,7 @@ export default function CareersPage() {
                   <div className="pt-2">
                     <button
                       type="submit"
-                      className="w-full py-3.5 rounded-full bg-brand-orange hover:bg-brand-orange/90 text-white font-bold text-base shadow transition-all duration-300 cursor-pointer text-center"
+                      className="w-full py-3.5 rounded-full bg-brand-orange-dark hover:bg-brand-orange-darker text-white font-bold text-base shadow transition-all duration-300 cursor-pointer text-center"
                     >
                       {t.draft}
                     </button>
@@ -473,7 +473,7 @@ export default function CareersPage() {
                     setShowAttachReminder(false);
                     setActiveJob(null);
                   }}
-                  className="w-full py-3 rounded-full bg-brand-navy hover:bg-teal-600 text-white text-sm font-bold transition-all duration-300 cursor-pointer"
+                  className="w-full py-3 rounded-full bg-brand-navy hover:bg-teal-700 text-white text-sm font-bold transition-all duration-300 cursor-pointer"
                 >
                   {t.gotIt}
                 </button>

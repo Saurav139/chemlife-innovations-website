@@ -106,7 +106,7 @@ export default function ResearchPage() {
           </div>
 
           <div className="relative z-10 max-w-[1200px] mx-auto px-6 w-full text-center md:text-left">
-            <span className="text-teal-400 text-sm font-semibold tracking-widest uppercase block mb-3">
+            <span className="text-teal-300 text-sm font-semibold tracking-widest uppercase block mb-3">
               {t.kicker}
             </span>
             <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold leading-tight mb-3 md:mb-4 text-white">
@@ -140,7 +140,7 @@ export default function ResearchPage() {
                   placeholder={t.search}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-transparent border-0 px-3 py-3 md:py-2.5 text-base md:text-[15px] text-brand-navy placeholder-slate-400 focus:outline-none focus:ring-0 [&::-webkit-search-cancel-button]:appearance-none"
+                  className="w-full bg-transparent border-0 px-3 py-3 md:py-2.5 text-base md:text-[15px] text-brand-navy placeholder-slate-500 focus:outline-none focus:ring-0 [&::-webkit-search-cancel-button]:appearance-none"
                 />
 
                 {/* Clear Search Button */}
@@ -148,7 +148,7 @@ export default function ResearchPage() {
                   <button
                     onClick={() => setSearchQuery("")}
                     aria-label={t.clearSearch}
-                    className="mr-4 text-slate-400 hover:text-teal-600 transition-colors duration-250 cursor-pointer"
+                    className="mr-4 text-slate-500 hover:text-teal-700 transition-colors duration-250 cursor-pointer"
                   >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" d="M6 18L18 6M6 6l12 12" />
@@ -214,7 +214,7 @@ export default function ResearchPage() {
                           </p>
                         )}
 
-                        <div className="flex items-center gap-1.5 text-brand-orange text-sm font-bold pt-2">
+                        <div className="flex items-center gap-1.5 text-brand-orange-dark text-sm font-bold pt-2">
                           <span>{isExpanded ? t.showLess : t.readMore}</span>
                           <motion.span
                             animate={{ rotate: isExpanded ? 180 : 0 }}

@@ -2,6 +2,10 @@
 
 @theme {
   --color-brand-orange: #E65C38;
+  /* The brand orange darkened to pass WCAG AA (4.5:1) for small text and for white text on it. The bright
+     orange stays for icons, borders, decoration and large headings. */
+  --color-brand-orange-dark: #C44521;
+  --color-brand-orange-darker: #A63A1C;
   --color-brand-orange-light: #FFFFFF;
   --color-brand-green: #305280;
   --color-brand-navy: #305280;
@@ -48,6 +52,12 @@
 
 
 @layer base {
+  /* Placeholder text readable against white fields (4.8:1); the default was half the text colour. */
+  ::placeholder {
+    color: var(--color-slate-500);
+    opacity: 1;
+  }
+
   html {
     scroll-behavior: smooth;
   }

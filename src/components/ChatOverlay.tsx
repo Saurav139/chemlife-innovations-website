@@ -44,7 +44,7 @@ export default function ChatOverlay() {
                   <h3 className="font-heading font-bold text-[18px] leading-tight text-white tracking-wide">
                     ChemLife AI Experts
                   </h3>
-                  <p className="text-[11px] text-teal-400 font-semibold tracking-wider uppercase">
+                  <p className="text-[11px] text-teal-300 font-semibold tracking-wider uppercase">
                     Poultry & Dairy Nutritionists
                   </p>
                 </div>
@@ -98,20 +98,20 @@ export default function ChatOverlay() {
                     <p className="text-[12px] font-bold text-slate-800">Dr. Mikku</p>
                     <p className="text-[10px] text-slate-500 truncate">Dairy & Ruminant Specialist</p>
                   </div>
-                  <span className="text-[11px] font-semibold text-brand-orange flex-shrink-0">Chat →</span>
+                  <span className="text-[11px] font-semibold text-brand-orange-dark flex-shrink-0">Chat →</span>
                 </button>
               </div>
             </div>
  
             {/* Footer with matched styling */}
-            <div className="px-6 py-3 bg-slate-50 border-t border-slate-100 flex justify-between items-center text-[10px] text-slate-400 font-semibold uppercase tracking-wider">
+            <div className="px-6 py-3 bg-slate-50 border-t border-slate-100 flex justify-between items-center text-[10px] text-slate-500 font-semibold uppercase tracking-wider">
               <span>Powered by ChemLife AI</span>
               <button
                 onClick={() => {
                   setIsOpen(false);
                   router.push("/chat");
                 }}
-                className="text-brand-navy hover:text-brand-orange cursor-pointer transition-colors"
+                className="text-brand-navy hover:text-brand-orange-dark cursor-pointer transition-colors"
               >
                 All Specialists →
               </button>
@@ -128,7 +128,7 @@ export default function ChatOverlay() {
         aria-label="Ask our AI experts"
         aria-expanded={isOpen}
         // Phones get a compact bubble with just the mascots; the label appears from tablet width up.
-        className="flex items-center gap-2 md:gap-3 bg-brand-orange text-white p-2 md:px-5 md:py-3.5 rounded-full shadow-2xl hover:bg-brand-orange/95 transition-all group border-2 border-white/20 cursor-pointer"
+        className="flex items-center gap-2 md:gap-3 bg-brand-orange-dark text-white p-2 md:px-5 md:py-3.5 rounded-full shadow-2xl hover:bg-brand-orange-darker transition-all group border-2 border-white/20 cursor-pointer"
       >
         <div className="flex -space-x-4">
           <div className="w-10 h-10 rounded-full border-2 border-white bg-white overflow-hidden shadow-md flex-shrink-0 flex items-center justify-center p-0.5">

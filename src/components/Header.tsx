@@ -71,8 +71,8 @@ export default function Header() {
                   href={link.href}
                   className={`${locale === "en" ? "text-[17px] xl:text-[19px]" : "text-[16px] xl:text-[17px]"} whitespace-nowrap font-semibold transition-colors tracking-wide ${
                     isActive
-                      ? "text-brand-orange"
-                      : "text-brand-navy hover:text-brand-orange"
+                      ? "text-brand-orange-dark"
+                      : "text-brand-navy hover:text-brand-orange-dark"
                   }`}
                 >
                   {link.label}
@@ -83,7 +83,7 @@ export default function Header() {
               <a
                 href="/previews"
                 title="Design previews"
-                className="shrink-0 whitespace-nowrap rounded-full border-2 border-brand-orange px-3 py-1 text-[14px] font-semibold text-brand-orange transition-colors hover:bg-brand-orange hover:text-white"
+                className="shrink-0 whitespace-nowrap rounded-full border-2 border-brand-orange-dark px-3 py-1 text-[14px] font-semibold text-brand-orange-dark transition-colors hover:bg-brand-orange-dark hover:text-white"
               >
                 Previews
               </a>
@@ -122,8 +122,8 @@ export default function Header() {
                     href={link.href}
                     className={`block py-1 text-base font-medium ${
                       isActive
-                        ? "text-brand-orange"
-                        : "text-brand-navy hover:text-brand-orange"
+                        ? "text-brand-orange-dark"
+                        : "text-brand-navy hover:text-brand-orange-dark"
                     }`}
                     onClick={() => setMobileOpen(false)}
                   >
@@ -132,7 +132,7 @@ export default function Header() {
                 );
               })}
               {showPreviews && (
-                <a href="/previews" className="block py-1 text-base font-semibold text-brand-orange" onClick={() => setMobileOpen(false)}>
+                <a href="/previews" className="block py-1 text-base font-semibold text-brand-orange-dark" onClick={() => setMobileOpen(false)}>
                   Design previews
                 </a>
               )}

@@ -133,7 +133,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
           </div>
 
           <div className="relative z-10 max-w-[1200px] mx-auto px-6 w-full">
-            <span className="text-teal-400 text-sm font-semibold tracking-widest uppercase block mb-3">
+            <span className="text-teal-300 text-sm font-semibold tracking-widest uppercase block mb-3">
               Insights
             </span>
             <h1 className="font-heading text-3xl md:text-4xl lg:text-6xl font-bold leading-tight mb-3 md:mb-4 text-white max-w-4xl">
@@ -169,9 +169,9 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                       <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-teal-50 text-teal-700">
                         Blog
                       </span>
-                      <span className="text-[11px] text-gray-400 font-medium">Featured • {featuredBlog.date} • {featuredBlog.meta}</span>
+                      <span className="text-[11px] text-gray-500 font-medium">Featured • {featuredBlog.date} • {featuredBlog.meta}</span>
                     </div>
-                    <h3 className="font-heading text-xl lg:text-2xl font-bold text-brand-navy mb-6 group-hover:text-teal-600 transition-colors duration-300 line-clamp-3">
+                    <h3 className="font-heading text-xl lg:text-2xl font-bold text-brand-navy mb-6 group-hover:text-teal-700 transition-colors duration-300 line-clamp-3">
                       {featuredBlog.title}
                     </h3>
                     
@@ -196,7 +196,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                         e.stopPropagation();
                         setActiveArticle(featuredBlog);
                       }}
-                      className="flex-1 sm:flex-none text-center whitespace-nowrap px-6 py-2.5 rounded-full bg-teal-600 hover:bg-teal-700 text-white font-bold text-sm shadow-sm hover:shadow transition-all duration-300 cursor-pointer"
+                      className="flex-1 sm:flex-none text-center whitespace-nowrap px-6 py-2.5 rounded-full bg-teal-700 hover:bg-teal-800 text-white font-bold text-sm shadow-sm hover:shadow transition-all duration-300 cursor-pointer"
                     >
                       Read Article
                     </button>
@@ -204,7 +204,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                       href={featuredBlog.linkUrl || "https://www.linkedin.com/company/chemlifeinnovations/posts/?feedView=all"}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex-1 sm:flex-none text-center whitespace-nowrap px-6 py-2.5 rounded-full border border-gray-200 text-gray-600 hover:bg-gray-50 hover:text-teal-600 font-bold text-sm transition-all duration-300 cursor-pointer"
+                      className="flex-1 sm:flex-none text-center whitespace-nowrap px-6 py-2.5 rounded-full border border-gray-200 text-gray-600 hover:bg-gray-50 hover:text-teal-700 font-bold text-sm transition-all duration-300 cursor-pointer"
                       onClick={(e) => e.stopPropagation()}
                     >
                       {featuredBlog.linkUrl?.includes("wordpress.com") ? "Read on WordPress" : "View on LinkedIn"}
@@ -224,9 +224,9 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                       <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-blue-50 text-blue-700">
                         Video
                       </span>
-                      <span className="text-[11px] text-gray-400 font-medium">Featured • {featuredVideo.date} • {featuredVideo.meta}</span>
+                      <span className="text-[11px] text-gray-500 font-medium">Featured • {featuredVideo.date} • {featuredVideo.meta}</span>
                     </div>
-                    <h3 className="font-heading text-xl lg:text-2xl font-bold text-brand-navy mb-6 group-hover:text-teal-600 transition-colors duration-300 line-clamp-3">
+                    <h3 className="font-heading text-xl lg:text-2xl font-bold text-brand-navy mb-6 group-hover:text-teal-700 transition-colors duration-300 line-clamp-3">
                       {featuredVideo.title}
                     </h3>
                     
@@ -266,7 +266,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={(e) => playOnPage(e, () => setActiveVideoId(featuredVideo.youtubeId!))}
-                      className="flex-1 sm:flex-none text-center whitespace-nowrap px-6 py-2.5 rounded-full bg-teal-600 hover:bg-teal-700 text-white font-bold text-sm shadow-sm hover:shadow transition-all duration-300 cursor-pointer"
+                      className="flex-1 sm:flex-none text-center whitespace-nowrap px-6 py-2.5 rounded-full bg-teal-700 hover:bg-teal-800 text-white font-bold text-sm shadow-sm hover:shadow transition-all duration-300 cursor-pointer"
                     >
                       Watch Now
                     </a>
@@ -274,7 +274,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                       href={`https://www.youtube.com/watch?v=${featuredVideo.youtubeId}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex-1 sm:flex-none text-center whitespace-nowrap px-6 py-2.5 rounded-full border border-gray-200 text-gray-600 hover:bg-gray-50 hover:text-teal-600 font-bold text-sm transition-all duration-300"
+                      className="flex-1 sm:flex-none text-center whitespace-nowrap px-6 py-2.5 rounded-full border border-gray-200 text-gray-600 hover:bg-gray-50 hover:text-teal-700 font-bold text-sm transition-all duration-300"
                     >
                       Watch on YouTube
                     </a>
@@ -293,9 +293,9 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                       <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-red-50 text-red-700">
                         Podcast
                       </span>
-                      <span className="text-[11px] text-gray-400 font-medium">Featured • {featuredPodcast.date} • {featuredPodcast.meta}</span>
+                      <span className="text-[11px] text-gray-500 font-medium">Featured • {featuredPodcast.date} • {featuredPodcast.meta}</span>
                     </div>
-                    <h3 className="font-heading text-xl lg:text-2xl font-bold text-brand-navy mb-6 group-hover:text-teal-600 transition-colors duration-300 line-clamp-3">
+                    <h3 className="font-heading text-xl lg:text-2xl font-bold text-brand-navy mb-6 group-hover:text-teal-700 transition-colors duration-300 line-clamp-3">
                       {featuredPodcast.title}
                     </h3>
                     
@@ -335,7 +335,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={(e) => playOnPage(e, () => setActiveVideoId(featuredPodcast.youtubeId!))}
-                      className="flex-1 sm:flex-none text-center whitespace-nowrap px-6 py-2.5 rounded-full bg-teal-600 hover:bg-teal-700 text-white font-bold text-sm shadow-sm hover:shadow transition-all duration-300 cursor-pointer"
+                      className="flex-1 sm:flex-none text-center whitespace-nowrap px-6 py-2.5 rounded-full bg-teal-700 hover:bg-teal-800 text-white font-bold text-sm shadow-sm hover:shadow transition-all duration-300 cursor-pointer"
                     >
                       Listen Now
                     </a>
@@ -343,7 +343,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                       href={`https://www.youtube.com/watch?v=${featuredPodcast.youtubeId}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex-1 sm:flex-none text-center whitespace-nowrap px-6 py-2.5 rounded-full border border-gray-200 text-gray-600 hover:bg-gray-50 hover:text-teal-600 font-bold text-sm transition-all duration-300"
+                      className="flex-1 sm:flex-none text-center whitespace-nowrap px-6 py-2.5 rounded-full border border-gray-200 text-gray-600 hover:bg-gray-50 hover:text-teal-700 font-bold text-sm transition-all duration-300"
                     >
                       Watch on YouTube
                     </a>
@@ -373,7 +373,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                 </div>
                 <div>
                   <h4 className="font-bold text-brand-navy text-sm">Follow us on LinkedIn</h4>
-                  <p className="text-gray-400 text-xs mt-0.5">Smarter Decisions for Better Outcomes via #FeedBites</p>
+                  <p className="text-gray-500 text-xs mt-0.5">Smarter Decisions for Better Outcomes via #FeedBites</p>
                 </div>
               </a>
               <a
@@ -389,7 +389,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                 </div>
                 <div>
                   <h4 className="font-bold text-brand-navy text-sm">Subscribe on YouTube</h4>
-                  <p className="text-gray-400 text-xs mt-0.5">Watch expert talks, video insights, and podcast content</p>
+                  <p className="text-gray-500 text-xs mt-0.5">Watch expert talks, video insights, and podcast content</p>
                 </div>
               </a>
             </div>
@@ -403,7 +403,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
               
               {/* Search Bar + Subtitle */}
               <div className="w-full md:max-w-md">
-                <span className="text-gray-400 text-xs font-semibold uppercase tracking-wider block mb-2">
+                <span className="text-gray-500 text-xs font-semibold uppercase tracking-wider block mb-2">
                   Search Podcasts, Blogs and Videos
                 </span>
                 <div className="relative">
@@ -412,9 +412,9 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="Search titles, topics, or authors..."
-                    className="w-full bg-gray-50 border border-gray-250 rounded-full px-6 py-3 text-base md:text-sm text-brand-navy placeholder-gray-400 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all duration-300 shadow-sm"
+                    className="w-full bg-gray-50 border border-gray-250 rounded-full px-6 py-3 text-base md:text-sm text-brand-navy placeholder-slate-500 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all duration-300 shadow-sm"
                   />
-                  <div className="absolute right-4 top-3.5 text-gray-400">
+                  <div className="absolute right-4 top-3.5 text-gray-500">
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
@@ -432,8 +432,8 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                       onClick={() => setSelectedFilter(filter)}
                       className={`px-6 py-2 rounded-full text-sm font-semibold transition-all duration-300 border cursor-pointer ${
                         isActive
-                          ? "bg-teal-600 border-teal-600 text-white shadow-sm"
-                          : "bg-gray-100 border-transparent text-gray-500 hover:bg-gray-200"
+                          ? "bg-teal-700 border-teal-600 text-white shadow-sm"
+                          : "bg-gray-100 border-transparent text-gray-600 hover:bg-gray-200"
                       }`}
                     >
                       {filter}
@@ -449,7 +449,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
         {/* Separator Section */}
         <div className="max-w-[1200px] mx-auto px-6 mb-8">
           <div className="flex items-center gap-4">
-            <span className="text-xs font-bold text-gray-400 uppercase tracking-wider whitespace-nowrap">
+            <span className="text-xs font-bold text-gray-500 uppercase tracking-wider whitespace-nowrap">
               Explore All Insights ({filteredItems.length})
             </span>
             <div className="w-full h-[1px] bg-gray-150" />
@@ -500,7 +500,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                           }`}>
                             {item.type}
                           </span>
-                          <span className="text-[11px] text-gray-400 font-medium">
+                          <span className="text-[11px] text-gray-500 font-medium">
                             {item.date} • {item.meta}
                           </span>
                         </div>
@@ -549,7 +549,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                           </a>
                         )}
 
-                        <h4 className="font-heading text-lg font-bold text-brand-navy mb-4 group-hover:text-teal-600 transition-colors duration-300 line-clamp-3">
+                        <h4 className="font-heading text-lg font-bold text-brand-navy mb-4 group-hover:text-teal-700 transition-colors duration-300 line-clamp-3">
                           {item.title}
                         </h4>
                       </div>
@@ -560,7 +560,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                           <div className="flex items-center gap-2 w-full justify-between">
                             <button
                               onClick={() => setActiveArticle(item)}
-                              className="text-xs font-bold text-teal-600 hover:text-teal-700 transition-colors flex items-center gap-1 cursor-pointer"
+                              className="text-xs font-bold text-teal-700 hover:text-teal-800 transition-colors flex items-center gap-1 cursor-pointer"
                             >
                               Read Article
                             </button>
@@ -568,7 +568,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                               href={item.linkUrl || "https://www.linkedin.com/company/chemlifeinnovations/posts/?feedView=all"}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="text-xs font-semibold text-gray-500 hover:text-teal-600 transition-colors cursor-pointer"
+                              className="text-xs font-semibold text-gray-500 hover:text-teal-700 transition-colors cursor-pointer"
                               onClick={(e) => e.stopPropagation()}
                             >
                               {item.linkUrl?.includes("wordpress.com") ? "Read on WordPress" : "View on LinkedIn"}
@@ -581,7 +581,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                               target="_blank"
                               rel="noopener noreferrer"
                               onClick={(e) => playOnPage(e, () => setActiveVideoId(item.youtubeId!))}
-                              className="text-xs font-bold text-teal-600 hover:text-teal-700 transition-colors flex items-center gap-1"
+                              className="text-xs font-bold text-teal-700 hover:text-teal-800 transition-colors flex items-center gap-1"
                             >
                               {item.type === "Podcast" ? "Listen Now" : "Watch Now"}
                             </a>
@@ -589,7 +589,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                               href={`https://www.youtube.com/watch?v=${item.youtubeId}`}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="text-xs font-semibold text-gray-500 hover:text-teal-600 transition-colors"
+                              className="text-xs font-semibold text-gray-500 hover:text-teal-700 transition-colors"
                               onClick={(e) => e.stopPropagation()}
                             >
                               Watch on YouTube
@@ -605,7 +605,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
 
             {filteredItems.length === 0 && (
               <div className="text-center py-20 bg-gray-50 rounded-2xl border border-dashed border-gray-200">
-                <span className="text-gray-400 text-sm">No insights found matching your search query.</span>
+                <span className="text-gray-500 text-sm">No insights found matching your search query.</span>
               </div>
             )}
 
@@ -680,7 +680,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                   <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-teal-50 text-teal-700">
                     {activeArticle.type}
                   </span>
-                  <span className="text-xs text-gray-400 font-medium">
+                  <span className="text-xs text-gray-500 font-medium">
                     {activeArticle.date}
                   </span>
                 </div>
@@ -726,14 +726,14 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                     href={activeArticle.linkUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-xs font-semibold text-teal-600 hover:text-teal-700 transition-colors"
+                    className="text-xs font-semibold text-teal-700 hover:text-teal-800 transition-colors"
                   >
                     {activeArticle.linkUrl.includes("wordpress.com") ? "Read the full article on WordPress →" : "View post on LinkedIn →"}
                   </a>
                 )}
                 <button
                   onClick={() => setActiveArticle(null)}
-                  className="whitespace-nowrap px-6 py-2.5 rounded-full bg-brand-navy text-white font-bold text-sm hover:bg-teal-600 transition-colors cursor-pointer"
+                  className="whitespace-nowrap px-6 py-2.5 rounded-full bg-brand-navy text-white font-bold text-sm hover:bg-teal-700 transition-colors cursor-pointer"
                 >
                   Close Reader
                 </button>
