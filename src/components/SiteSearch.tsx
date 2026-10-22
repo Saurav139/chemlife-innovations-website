@@ -281,13 +281,13 @@ export default function SiteSearch() {
                             ? "bg-teal-50 text-teal-700 border border-teal-100"
                             : item.category === "Research"
                             ? "bg-purple-50 text-purple-600 border border-purple-100"
-                            : "bg-orange-50 text-brand-orange-dark border border-orange-100"
+                            : "bg-orange-50 text-brand-orange border border-orange-100"
                         }`}
                       >
                         {item.category}
                       </span>
                       <div className="flex-1">
-                        <h4 className="font-heading text-sm font-bold text-slate-800 group-hover:text-brand-orange-dark transition-colors">
+                        <h4 className="font-heading text-sm font-bold text-slate-800 group-hover:text-brand-orange transition-colors">
                           {item.title}
                         </h4>
                         <p className="text-xs text-slate-500 leading-normal line-clamp-1 mt-0.5 font-normal">

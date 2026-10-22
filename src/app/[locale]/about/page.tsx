@@ -466,7 +466,7 @@ export default function AboutPage() {
                     />
                   </div>
 
-                  <h3 className="font-heading text-base md:text-lg font-bold text-brand-orange-dark mb-1">
+                  <h3 className="font-heading text-base md:text-lg font-bold text-brand-orange mb-1">
                     {leader.name}
                   </h3>
                   <p className="text-brand-navy font-bold text-xs md:text-[11px] uppercase tracking-wider mb-0.5">

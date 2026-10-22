@@ -80,11 +80,11 @@ const BOT_META = {
     image: Images.mascots.dairy,
     subtitle: "Dairy & Ruminant Expert",
     specialty: "Dairy Cattle, Buffalo & Rumen Health",
-    accentBg: "bg-brand-orange-dark",
+    accentBg: "bg-brand-orange",
     accentBgLight: "bg-orange-50",
     accentBorder: "border-orange-200",
-    accentText: "text-brand-orange-dark",
-    userBubble: "bg-brand-orange-dark",
+    accentText: "text-brand-orange",
+    userBubble: "bg-brand-orange",
     inputFocus: "focus:border-orange-400",
     greeting:
       "Hello! I'm **Dr. Mikku**, your dairy & ruminant nutrition expert at Chemlife Innovations.\n\nI can help with dairy cattle nutrition, rumen health, milk yield, reproductive performance, aflatoxin management, and Chemlife's ruminant product range.\n\nWhat can I help you with today? 🐄",
@@ -116,7 +116,7 @@ function parseInline(str: string): React.ReactNode[] {
           href={url}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-brand-orange-dark hover:text-brand-orange-darker underline underline-offset-2 font-medium"
+          className="text-brand-orange hover:text-brand-orange-hover underline underline-offset-2 font-medium"
         >
           {label}
         </a>
@@ -254,9 +254,9 @@ function BotBubble({
         {!isError && !isGreeting && (!sources || sources.length === 0) && (
           <div className="mt-2 flex flex-wrap items-center gap-1.5 text-[11px] text-slate-600 font-medium px-1">
             <span>Explore:</span>
-            <Link href="/research" className="text-brand-orange-dark hover:text-brand-orange-darker underline underline-offset-2 font-semibold">Research Hub</Link>
+            <Link href="/research" className="text-brand-orange hover:text-brand-orange-hover underline underline-offset-2 font-semibold">Research Hub</Link>
             <span>•</span>
-            <Link href="/insights" className="text-brand-orange-dark hover:text-brand-orange-darker underline underline-offset-2 font-semibold">Insights & Blog</Link>
+            <Link href="/insights" className="text-brand-orange hover:text-brand-orange-hover underline underline-offset-2 font-semibold">Insights & Blog</Link>
           </div>
         )}
       </div>

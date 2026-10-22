@@ -214,7 +214,7 @@ export default function ResearchPage() {
                           </p>
                         )}
 
-                        <div className="flex items-center gap-1.5 text-brand-orange-dark text-sm font-bold pt-2">
+                        <div className="flex items-center gap-1.5 text-brand-orange text-sm font-bold pt-2">
                           <span>{isExpanded ? t.showLess : t.readMore}</span>
                           <motion.span
                             animate={{ rotate: isExpanded ? 180 : 0 }}

@@ -30,7 +30,7 @@ const bgImages = [
 const STORY_VIDEO_ID = "-amOgNcjYNg";
 
 const primaryCtaClass =
-  "inline-flex items-center justify-center gap-2 w-full max-w-[280px] sm:w-auto sm:max-w-none px-7 py-3 rounded-full text-sm font-semibold bg-brand-orange-dark border-2 border-brand-orange-dark text-white hover:bg-white hover:text-brand-orange-dark shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5";
+  "inline-flex items-center justify-center gap-2 w-full max-w-[280px] sm:w-auto sm:max-w-none px-7 py-3 rounded-full text-sm font-semibold bg-brand-orange border-2 border-brand-orange text-white hover:bg-white hover:text-brand-orange shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5";
 const secondaryCtaClass =
   "inline-flex items-center justify-center gap-2 w-full max-w-[280px] sm:w-auto sm:max-w-none px-7 py-3 rounded-full text-sm font-semibold border-2 border-white/80 text-white hover:bg-white hover:text-brand-navy transition-all duration-300 transform hover:-translate-y-0.5";
 

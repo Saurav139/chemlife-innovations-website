@@ -136,7 +136,7 @@ export default function Analytics() {
             <button
               type="button"
               onClick={() => choose("granted")}
-              className="min-h-11 flex-1 cursor-pointer rounded-full bg-brand-orange-dark px-5 text-sm font-semibold transition-colors hover:bg-brand-orange-darker sm:flex-none"
+              className="min-h-11 flex-1 cursor-pointer rounded-full bg-brand-orange px-5 text-sm font-semibold transition-colors hover:bg-brand-orange-hover sm:flex-none"
             >
               {t.common.cookieAccept}
             </button>
