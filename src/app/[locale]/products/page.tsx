@@ -232,22 +232,26 @@ export default function ProductsPage() {
     "All": {
       focus: "focus-within:border-brand-navy focus-within:ring-brand-navy",
       accent: "hover:text-brand-navy text-slate-400",
-      icon: "text-slate-400"
+      icon: "text-slate-400",
+      chip: "bg-brand-navy border-brand-navy text-white"
     },
     "Mono-gastric": {
       focus: "focus-within:border-brand-orange focus-within:ring-brand-orange",
       accent: "hover:text-brand-orange text-brand-orange",
-      icon: "text-brand-orange"
+      icon: "text-brand-orange",
+      chip: "bg-brand-orange border-brand-orange text-white"
     },
     "Ruminants": {
       focus: "focus-within:border-blue-600 focus-within:ring-blue-600",
       accent: "hover:text-blue-600 text-blue-600",
-      icon: "text-blue-600"
+      icon: "text-blue-600",
+      chip: "bg-blue-600 border-blue-600 text-white"
     },
     "Value Addition": {
       focus: "focus-within:border-emerald-600 focus-within:ring-emerald-600",
       accent: "hover:text-emerald-600 text-emerald-600",
-      icon: "text-emerald-600"
+      icon: "text-emerald-600",
+      chip: "bg-emerald-600 border-emerald-600 text-white"
     }
   };
 
@@ -302,9 +306,9 @@ export default function ProductsPage() {
 
           <div className="relative z-10 max-w-[1200px] mx-auto px-6">
 
-            {/* Left-Aligned Search and Category Selector Container */}
-            <div className="flex flex-col md:flex-row items-center gap-4 mb-10 w-full">
-              <div className={`flex items-center bg-slate-50 border border-slate-200 rounded-full shadow-xs text-sm w-full md:max-w-xl ${activeStyle.focus} focus-within:ring-1 transition-all duration-300 relative`}>
+            {/* Search with the category drop-down inside it on desktop; on phones and tablets the categories are chips underneath */}
+            <div className="flex flex-col lg:flex-row items-center gap-4 mb-8 lg:mb-10 w-full">
+              <div className={`flex items-center bg-slate-50 border border-slate-200 rounded-full shadow-xs text-sm w-full md:max-w-xl md:self-start ${activeStyle.focus} focus-within:ring-1 transition-all duration-300 relative`}>
                 {/* Search Icon */}
                 <div className={`pl-4 ${activeStyle.icon} flex-shrink-0 transition-colors duration-300`}>
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -314,17 +318,20 @@ export default function ProductsPage() {
 
                 {/* Input Text Field */}
                 <input
-                  type="text"
+                  type="search"
+                  enterKeyHint="search"
+                  aria-label={t.search}
                   placeholder={t.search}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-transparent border-0 px-3 py-3 text-brand-navy placeholder-slate-400 focus:outline-none focus:ring-0 text-base md:text-sm"
+                  className="w-full bg-transparent border-0 px-3 py-3 text-brand-navy placeholder-slate-400 focus:outline-none focus:ring-0 text-base md:text-sm [&::-webkit-search-cancel-button]:appearance-none"
                 />
 
                 {/* Clear Search Button */}
                 {searchQuery && (
                   <button
                     onClick={() => setSearchQuery("")}
+                    aria-label={t.clearSearch}
                     className={`mr-2 text-slate-400 ${activeStyle.accent} transition-colors duration-250 cursor-pointer`}
                   >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -334,11 +341,12 @@ export default function ProductsPage() {
                 )}
 
                 {/* Vertical Divider Line */}
-                <div className="h-6 w-[1px] bg-slate-200 flex-shrink-0" />
+                <div className="hidden lg:block h-6 w-[1px] bg-slate-200 flex-shrink-0" />
 
-                {/* Category Dropdown Selector inside Search Bar */}
-                <div className="relative flex-shrink-0">
+                {/* Category Dropdown Selector inside Search Bar (desktop) */}
+                <div className="relative flex-shrink-0 hidden lg:block">
                   <select
+                    aria-label={t.filterBySpecies}
                     value={selectedCategory}
                     onChange={(e) => setSelectedCategory(e.target.value)}
                     className="appearance-none bg-transparent pl-4 pr-10 py-3 font-semibold text-xs text-slate-600 focus:outline-none cursor-pointer"
@@ -356,6 +364,27 @@ export default function ProductsPage() {
                     </svg>
                   </div>
                 </div>
+              </div>
+
+              {/* Category chips (phones and tablets): every option visible, each easy to tap */}
+              <div role="group" aria-label={t.filterBySpecies} className="flex flex-wrap gap-2 w-full lg:hidden">
+                {categories.map((category) => {
+                  const active = selectedCategory === category;
+                  const style = categoryColorStyles[category as keyof typeof categoryColorStyles];
+                  return (
+                    <button
+                      key={category}
+                      type="button"
+                      aria-pressed={active}
+                      onClick={() => setSelectedCategory(category)}
+                      className={`min-h-10 px-4 py-2 rounded-full border text-sm font-semibold transition-colors duration-200 cursor-pointer ${
+                        active ? style.chip : "bg-white border-slate-200 text-slate-600 hover:border-slate-300"
+                      }`}
+                    >
+                      {category === "All" ? t.allSpecies : t.categories[category as keyof typeof t.categories]}
+                    </button>
+                  );
+                })}
               </div>
             </div>
 
