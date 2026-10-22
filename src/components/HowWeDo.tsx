@@ -36,7 +36,7 @@ export default function HowWeDo() {
       <div className="relative z-10 max-w-[1200px] mx-auto px-6">
         {/* Title Section */}
         <div className="text-center mb-10 md:mb-20">
-          <span className="text-teal-400 text-sm font-bold tracking-widest uppercase block mb-3">
+          <span className="text-teal-aa-light text-sm font-bold tracking-widest uppercase block mb-3">
             {t.kicker}
           </span>
           <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight">

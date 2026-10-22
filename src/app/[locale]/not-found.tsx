@@ -12,10 +12,10 @@ export default function NotFound() {
     <VariantProvider>
       <Header />
       <main className="min-h-[70vh] bg-white pt-40 pb-24 text-center px-6">
-        <p className="text-sm font-semibold uppercase tracking-widest text-brand-orange">404</p>
+        <p className="text-sm font-semibold uppercase tracking-widest text-brand-orange-aa">404</p>
         <h1 className="font-heading text-4xl font-bold text-brand-navy mt-3">{t.notFound.title}</h1>
         <p className="text-slate-600 mt-4">{t.notFound.text}</p>
-        <a href={href("/")} className="inline-block mt-8 rounded-full bg-brand-orange px-7 py-3 text-sm font-semibold text-white">
+        <a href={href("/")} className="inline-block mt-8 rounded-full bg-brand-orange-aa px-7 py-3 text-sm font-semibold text-white">
           {t.notFound.home}
         </a>
       </main>

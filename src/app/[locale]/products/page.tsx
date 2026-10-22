@@ -232,8 +232,8 @@ export default function ProductsPage() {
   const categoryColorStyles = {
     "All": {
       focus: "focus-within:border-brand-navy focus-within:ring-brand-navy",
-      accent: "hover:text-brand-navy text-slate-400",
-      icon: "text-slate-400"
+      accent: "hover:text-brand-navy text-slate-aa",
+      icon: "text-slate-aa"
     },
     "Mono-gastric": {
       focus: "focus-within:border-brand-orange focus-within:ring-brand-orange",
@@ -277,7 +277,7 @@ export default function ProductsPage() {
           </div>
 
           <div className="relative z-10 max-w-[1200px] mx-auto px-6 w-full text-center md:text-left">
-            <span className="text-teal-400 text-xs md:text-sm font-semibold tracking-widest uppercase block mb-3">{t.kicker}</span>
+            <span className="text-teal-aa-light text-xs md:text-sm font-semibold tracking-widest uppercase block mb-3">{t.kicker}</span>
             <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold leading-tight mb-3 md:mb-4 text-white">
               {t.titleStart} <span className="text-teal-400">{t.titleAccent}</span>
             </h1>
@@ -321,7 +321,7 @@ export default function ProductsPage() {
                   placeholder={t.search}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-transparent border-0 px-3 py-3 text-brand-navy placeholder-slate-400 focus:outline-none focus:ring-0 text-base md:text-sm [&::-webkit-search-cancel-button]:appearance-none"
+                  className="w-full bg-transparent border-0 px-3 py-3 text-brand-navy placeholder-slate-aa focus:outline-none focus:ring-0 text-base md:text-sm [&::-webkit-search-cancel-button]:appearance-none"
                 />
 
                 {/* Clear Search Button */}
@@ -329,7 +329,7 @@ export default function ProductsPage() {
                   <button
                     onClick={() => setSearchQuery("")}
                     aria-label={t.clearSearch}
-                    className={`mr-2 text-slate-400 ${activeStyle.accent} transition-colors duration-250 cursor-pointer`}
+                    className={`mr-2 text-slate-aa ${activeStyle.accent} transition-colors duration-250 cursor-pointer`}
                   >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" d="M6 18L18 6M6 6l12 12" />
@@ -355,7 +355,7 @@ export default function ProductsPage() {
                     ))}
                   </select>
                   {/* Dropdown Chevron Icon */}
-                  <div className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
+                  <div className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-aa pointer-events-none">
                     <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" />
                     </svg>
@@ -418,12 +418,12 @@ export default function ProductsPage() {
                       {/* Content: Title & Category */}
                       <div className="p-5 flex flex-col gap-2">
                         <div className="flex items-start justify-between gap-3">
-                          <h3 className="font-heading text-lg font-black text-brand-navy group-hover:text-brand-orange transition-colors duration-300 leading-tight">
+                          <h3 className="font-heading text-lg font-black text-brand-navy group-hover:text-brand-orange-aa transition-colors duration-300 leading-tight">
                             {product.name}
                           </h3>
 
                           <span className={`px-2.5 py-0.5 rounded-md text-[10px] md:text-[9px] font-bold uppercase tracking-wider border whitespace-nowrap ${product.category === "Mono-gastric"
-                            ? "bg-orange-50 border-orange-150 text-brand-orange"
+                            ? "bg-orange-50/50 border-orange-150 text-brand-orange-aa"
                             : product.category === "Ruminants"
                               ? "bg-blue-50 border-blue-150 text-blue-700"
                               : "bg-emerald-50 border-emerald-150 text-emerald-700"
@@ -438,7 +438,7 @@ export default function ProductsPage() {
                           </p>
                         )}
 
-                        <div className="flex items-center gap-1.5 text-brand-orange text-xs font-bold mt-2">
+                        <div className="flex items-center gap-1.5 text-brand-orange-aa text-xs font-bold mt-2">
                           <span>{isExpanded ? t.showLess : t.readMore}</span>
                           <motion.span
                             animate={{ rotate: isExpanded ? 180 : 0 }}
@@ -465,7 +465,7 @@ export default function ProductsPage() {
                           <div className="p-5 space-y-5">
                             {/* About section */}
                             <div>
-                              <span className="text-[10px] md:text-[9px] font-black uppercase text-teal-600 tracking-wider block mb-1.5">
+                              <span className="text-[10px] md:text-[9px] font-black uppercase text-teal-aa tracking-wider block mb-1.5">
                                 {t.about}
                               </span>
                               <p className="text-slate-600 text-xs leading-relaxed whitespace-pre-line">
@@ -476,7 +476,7 @@ export default function ProductsPage() {
                             {/* Variants section */}
                             {product.variants && product.variants.length > 0 && (
                               <div>
-                                <span className="text-[10px] md:text-[9px] font-black uppercase text-teal-600 tracking-wider block mb-1.5">
+                                <span className="text-[10px] md:text-[9px] font-black uppercase text-teal-aa tracking-wider block mb-1.5">
                                   {t.variants}
                                 </span>
                                 <ul className="grid grid-cols-1 gap-1.5 text-slate-600 text-xs font-semibold">
@@ -492,7 +492,7 @@ export default function ProductsPage() {
 
                             {/* Key Features section */}
                             <div>
-                              <span className="text-[10px] md:text-[9px] font-black uppercase text-teal-600 tracking-wider block mb-2">
+                              <span className="text-[10px] md:text-[9px] font-black uppercase text-teal-aa tracking-wider block mb-2">
                                 {t.features}
                               </span>
                               <ul className="space-y-2">
@@ -509,20 +509,20 @@ export default function ProductsPage() {
 
                             {/* Usage & Presentation section */}
                             <div className="space-y-3">
-                              <span className="text-[10px] md:text-[9px] font-black uppercase text-teal-600 tracking-wider block">
+                              <span className="text-[10px] md:text-[9px] font-black uppercase text-teal-aa tracking-wider block">
                                 {t.usage}
                               </span>
 
                               <div className="space-y-2.5">
                                 {/* Inclusion rate */}
                                 <div className="flex items-start gap-2.5 p-3 bg-slate-50 rounded-lg border border-slate-100">
-                                  <div className="w-7 h-7 rounded-md bg-teal-50 text-teal-600 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                  <div className="w-7 h-7 rounded-md bg-teal-50 text-teal-aa flex items-center justify-center flex-shrink-0 mt-0.5">
                                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
                                     </svg>
                                   </div>
                                   <div>
-                                    <span className="text-[10px] md:text-[9px] text-slate-400 font-bold uppercase tracking-wider block">{t.inclusionRate}</span>
+                                    <span className="text-[10px] md:text-[9px] text-slate-aa font-bold uppercase tracking-wider block">{t.inclusionRate}</span>
                                     <span className="text-xs text-brand-navy font-semibold leading-relaxed mt-0.5 block whitespace-pre-line">
                                       {product.inclusionRate}
                                     </span>
@@ -531,13 +531,13 @@ export default function ProductsPage() {
 
                                 {/* Pack size */}
                                 <div className="flex items-start gap-2.5 p-3 bg-slate-50 rounded-lg border border-slate-100">
-                                  <div className="w-7 h-7 rounded-md bg-teal-50 text-teal-600 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                  <div className="w-7 h-7 rounded-md bg-teal-50 text-teal-aa flex items-center justify-center flex-shrink-0 mt-0.5">
                                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                                     </svg>
                                   </div>
                                   <div>
-                                    <span className="text-[10px] md:text-[9px] text-slate-400 font-bold uppercase tracking-wider block">{t.packSize}</span>
+                                    <span className="text-[10px] md:text-[9px] text-slate-aa font-bold uppercase tracking-wider block">{t.packSize}</span>
                                     <span className="text-xs text-brand-navy font-semibold leading-relaxed mt-0.5 block whitespace-pre-line">
                                       {product.packSize}
                                     </span>
@@ -549,7 +549,7 @@ export default function ProductsPage() {
                             {/* Enquire button */}
                             <a
                               href={emailHref}
-                              className="w-full py-3 px-4 rounded-xl bg-brand-orange hover:bg-brand-navy text-white text-xs font-semibold transition-all duration-300 shadow-sm hover:shadow flex items-center justify-center gap-2 group/btn cursor-pointer"
+                              className="w-full py-3 px-4 rounded-xl bg-brand-orange-aa hover:bg-brand-navy text-white text-xs font-semibold transition-all duration-300 shadow-sm hover:shadow flex items-center justify-center gap-2 group/btn cursor-pointer"
                             >
                               <svg className="w-3.5 h-3.5 text-white group-hover/btn:translate-x-0.5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />

@@ -23,7 +23,7 @@ const PHONE = "+91 95358 62570";
 
 const h2 = "font-heading text-2xl font-bold text-brand-navy mt-12 mb-4 scroll-mt-28";
 const list = "list-disc pl-6 space-y-2";
-const link = "text-teal-600 underline hover:text-teal-700";
+const link = "text-teal-aa underline hover:text-teal-700";
 const th = "text-left p-3 border-b border-slate-200";
 const td = "p-3 border-b border-slate-200 align-top";
 

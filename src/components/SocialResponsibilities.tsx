@@ -96,7 +96,7 @@ export default function SocialResponsibilities() {
 
       <div className="relative z-10 max-w-[1200px] mx-auto px-6">
         <div className="text-center mb-10 md:mb-16">
-          <span className="text-teal-600 text-base lg:text-lg font-semibold tracking-widest uppercase">
+          <span className="text-teal-aa text-base lg:text-lg font-semibold tracking-widest uppercase">
             {t.kicker}
           </span>
           <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl text-brand-navy mt-3 leading-tight">
@@ -143,7 +143,7 @@ export default function SocialResponsibilities() {
                 className={`transition-transform duration-300 ${hoveredIndex === index ? 'transform translate-y-1 scale-105' : ''
                   }`}
               >
-                <h3 className="font-heading text-xl text-brand-navy mb-3 group-hover:text-teal-600 transition-colors duration-300">
+                <h3 className="font-heading text-xl text-brand-navy mb-3 group-hover:text-teal-aa transition-colors duration-300">
                   {item.title}
                 </h3>
               </div>

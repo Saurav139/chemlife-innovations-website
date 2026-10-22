@@ -81,7 +81,7 @@ export default function AboutPage() {
                   priority
                 />
               </div>
-              <div className="mt-4 bg-teal-50 border border-teal-200 text-teal-600 text-xs md:text-sm font-bold uppercase tracking-wider px-5 py-1.5 rounded-full shadow-xs select-none">
+              <div className="mt-4 bg-teal-50 border border-teal-200 text-teal-aa text-xs md:text-sm font-bold uppercase tracking-wider px-5 py-1.5 rounded-full shadow-xs select-none">
                 {t.founders}
               </div>
             </motion.div>
@@ -93,7 +93,7 @@ export default function AboutPage() {
               viewport={{ once: true }}
               transition={{ duration: 0.6, ease: easeOut }}
             >
-              <span className="text-teal-600 text-sm font-semibold tracking-widest uppercase block mb-3">{t.missionKicker}</span>
+              <span className="text-teal-aa text-sm font-semibold tracking-widest uppercase block mb-3">{t.missionKicker}</span>
               <h2 className="font-heading text-3xl lg:text-4xl text-brand-navy mb-6 font-bold leading-tight">
                 {t.missionTitle}
               </h2>
@@ -108,7 +108,7 @@ export default function AboutPage() {
         <SectionWrapper className="py-16 md:py-24 lg:py-36 bg-brand-navy text-white">
           <div className="max-w-[1200px] mx-auto px-6">
             <div className="text-center mb-10 md:mb-20">
-              <span className="text-teal-400 text-sm font-semibold tracking-widest uppercase block mb-2">{t.valuesKicker}</span>
+              <span className="text-teal-aa-light text-sm font-semibold tracking-widest uppercase block mb-2">{t.valuesKicker}</span>
               <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl text-white font-bold leading-tight">
                 {t.valuesTitle}
               </h2>
@@ -417,7 +417,7 @@ export default function AboutPage() {
         <SectionWrapper className="py-16 md:py-24 lg:py-32 bg-white text-brand-navy border-t border-gray-100">
           <div className="max-w-[1200px] mx-auto px-6">
             <div className="text-center mb-10 md:mb-20">
-              <span className="text-teal-600 text-sm font-semibold tracking-widest uppercase block mb-2">{t.leadersKicker}</span>
+              <span className="text-teal-aa text-sm font-semibold tracking-widest uppercase block mb-2">{t.leadersKicker}</span>
               <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl text-brand-navy font-bold leading-tight">
                 {t.leadersTitle}
               </h2>
@@ -466,7 +466,7 @@ export default function AboutPage() {
                     />
                   </div>
 
-                  <h3 className="font-heading text-base md:text-lg font-bold text-brand-orange mb-1">
+                  <h3 className="font-heading text-base md:text-lg font-bold text-brand-orange-aa mb-1">
                     {leader.name}
                   </h3>
                   <p className="text-brand-navy font-bold text-xs md:text-[11px] uppercase tracking-wider mb-0.5">
@@ -475,7 +475,7 @@ export default function AboutPage() {
                   <p className="text-brand-navy text-xs font-semibold mb-4">
                     {leader.degree}
                   </p>
-                  <p className="text-teal-600 text-xs md:text-sm leading-relaxed max-w-[90%]">
+                  <p className="text-teal-aa text-xs md:text-sm leading-relaxed max-w-[90%]">
                     {leader.bio}
                   </p>
                 </motion.div>
