@@ -40,9 +40,9 @@ export default function TestimonialCarousel() {
   const t = useT().home.testimonials;
 
   return (
-    <SectionWrapper className={`py-24 lg:py-32 ${theme.testimonialsBg}`}>
+    <SectionWrapper className={`py-16 md:py-24 lg:py-32 ${theme.testimonialsBg}`}>
       <div className="max-w-[1200px] mx-auto px-6">
-        <div className="text-center mb-16">
+        <div className="text-center mb-10 md:mb-16">
           <span className="text-teal-400 text-base lg:text-lg font-semibold tracking-widest uppercase">
             {t.kicker}
           </span>
@@ -51,7 +51,7 @@ export default function TestimonialCarousel() {
           </h2>
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-12 lg:gap-16 items-start">
+        <div className="grid lg:grid-cols-3 gap-10 md:gap-12 lg:gap-16 items-start">
           {/* Large Quote Section */}
           <div className="lg:col-span-2">
             <div className="relative">
@@ -63,11 +63,11 @@ export default function TestimonialCarousel() {
                   exit={{ opacity: 0, y: -20 }}
                   transition={{ duration: 0.3, ease: [0.25, 0.1, 0, 1] }}
                 >
-                  <svg className="w-16 h-16 mb-8 text-teal-400" fill="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-10 h-10 mb-5 md:w-16 md:h-16 md:mb-8 text-teal-400" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10H14.017zM0 21v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151C7.563 6.068 6 8.789 6 11h4v10H0z" />
                   </svg>
 
-                  <blockquote className={`text-2xl lg:text-3xl leading-relaxed mb-8 font-light italic ${theme.testimonialsText}`}>
+                  <blockquote className={`text-lg md:text-2xl lg:text-3xl leading-relaxed mb-8 font-light italic ${theme.testimonialsText}`}>
                     &ldquo;{testimonials[current].quote}&rdquo;
                   </blockquote>
 

@@ -52,7 +52,7 @@ export default function SocialResponsibilities() {
   const activeBg = items[activeBgIndex];
 
   return (
-    <SectionWrapper className="relative py-32 lg:py-40 bg-white overflow-hidden border-b border-gray-100">
+    <SectionWrapper className="relative py-16 md:py-32 lg:py-40 bg-white overflow-hidden border-b border-gray-100">
       {/* Dynamic Background Media with cross-fade */}
       <div ref={bgRef} className="absolute inset-0 z-0 select-none pointer-events-none">
         <AnimatePresence initial={false}>
@@ -95,17 +95,17 @@ export default function SocialResponsibilities() {
       </div>
 
       <div className="relative z-10 max-w-[1200px] mx-auto px-6">
-        <div className="text-center mb-16ß">
+        <div className="text-center mb-10 md:mb-16">
           <span className="text-teal-600 text-base lg:text-lg font-semibold tracking-widest uppercase">
             {t.kicker}
           </span>
-          <h2 className="font-heading text-4xl lg:text-5xl text-brand-navy mt-3 leading-tight">
+          <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl text-brand-navy mt-3 leading-tight">
             {t.title}
           </h2>
         </div>
 
         {/* 3-Column Centered Layout */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-12 max-w-5xl mx-auto">
           {items.map((item, index) => (
             <motion.div
               key={item.title}

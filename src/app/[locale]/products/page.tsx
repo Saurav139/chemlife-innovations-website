@@ -417,7 +417,7 @@ export default function ProductsPage() {
                             {product.name}
                           </h3>
 
-                          <span className={`px-2.5 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-wider border whitespace-nowrap ${product.category === "Mono-gastric"
+                          <span className={`px-2.5 py-0.5 rounded-md text-[10px] md:text-[9px] font-bold uppercase tracking-wider border whitespace-nowrap ${product.category === "Mono-gastric"
                             ? "bg-orange-50 border-orange-150 text-brand-orange"
                             : product.category === "Ruminants"
                               ? "bg-blue-50 border-blue-150 text-blue-700"
@@ -460,7 +460,7 @@ export default function ProductsPage() {
                           <div className="p-5 space-y-5">
                             {/* About section */}
                             <div>
-                              <span className="text-[9px] font-black uppercase text-teal-600 tracking-wider block mb-1.5">
+                              <span className="text-[10px] md:text-[9px] font-black uppercase text-teal-600 tracking-wider block mb-1.5">
                                 {t.about}
                               </span>
                               <p className="text-slate-600 text-xs leading-relaxed whitespace-pre-line">
@@ -471,7 +471,7 @@ export default function ProductsPage() {
                             {/* Variants section */}
                             {product.variants && product.variants.length > 0 && (
                               <div>
-                                <span className="text-[9px] font-black uppercase text-teal-600 tracking-wider block mb-1.5">
+                                <span className="text-[10px] md:text-[9px] font-black uppercase text-teal-600 tracking-wider block mb-1.5">
                                   {t.variants}
                                 </span>
                                 <ul className="grid grid-cols-1 gap-1.5 text-slate-600 text-xs font-semibold">
@@ -487,7 +487,7 @@ export default function ProductsPage() {
 
                             {/* Key Features section */}
                             <div>
-                              <span className="text-[9px] font-black uppercase text-teal-600 tracking-wider block mb-2">
+                              <span className="text-[10px] md:text-[9px] font-black uppercase text-teal-600 tracking-wider block mb-2">
                                 {t.features}
                               </span>
                               <ul className="space-y-2">
@@ -504,7 +504,7 @@ export default function ProductsPage() {
 
                             {/* Usage & Presentation section */}
                             <div className="space-y-3">
-                              <span className="text-[9px] font-black uppercase text-teal-600 tracking-wider block">
+                              <span className="text-[10px] md:text-[9px] font-black uppercase text-teal-600 tracking-wider block">
                                 {t.usage}
                               </span>
 
@@ -517,7 +517,7 @@ export default function ProductsPage() {
                                     </svg>
                                   </div>
                                   <div>
-                                    <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider block">{t.inclusionRate}</span>
+                                    <span className="text-[10px] md:text-[9px] text-slate-400 font-bold uppercase tracking-wider block">{t.inclusionRate}</span>
                                     <span className="text-xs text-brand-navy font-semibold leading-relaxed mt-0.5 block whitespace-pre-line">
                                       {product.inclusionRate}
                                     </span>
@@ -532,7 +532,7 @@ export default function ProductsPage() {
                                     </svg>
                                   </div>
                                   <div>
-                                    <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider block">{t.packSize}</span>
+                                    <span className="text-[10px] md:text-[9px] text-slate-400 font-bold uppercase tracking-wider block">{t.packSize}</span>
                                     <span className="text-xs text-brand-navy font-semibold leading-relaxed mt-0.5 block whitespace-pre-line">
                                       {product.packSize}
                                     </span>

@@ -23,11 +23,11 @@ export default function Footer() {
       {/* Top Gradient Border Line */}
       <div className="h-1 w-full bg-gradient-to-r from-teal-500 via-emerald-500 to-brand-orange" />
 
-      <div className="max-w-[1200px] mx-auto px-6 py-16 lg:py-20 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-8">
+      <div className="max-w-[1200px] mx-auto px-6 py-12 md:py-16 lg:py-20 relative z-10">
+        <div className="grid grid-cols-2 lg:grid-cols-12 gap-x-6 gap-y-10 md:gap-12 lg:gap-8">
           
           {/* Brand Bio Column */}
-          <div className="lg:col-span-4 space-y-6">
+          <div className="col-span-2 md:col-span-1 lg:col-span-4 space-y-6">
             <Link href={href("/")} className="inline-block">
               <Image
                 src={Images.branding.logo}
@@ -83,7 +83,7 @@ export default function Footer() {
             <h4 className="font-heading text-white text-[15px] font-bold uppercase tracking-wider">
               {t.footer.company}
             </h4>
-            <ul className="space-y-3">
+            <ul className="space-y-1 md:space-y-3">
               {[
                 { label: t.footer.home, href: href("/") },
                 { label: t.footer.about, href: href("/about") },
@@ -93,7 +93,7 @@ export default function Footer() {
                 <li key={link.label}>
                   <Link
                     href={link.href}
-                    className="text-slate-350 text-sm hover:text-teal-400 hover:translate-x-1 inline-block transition-all duration-300"
+                    className="text-slate-350 text-sm hover:text-teal-400 hover:translate-x-1 inline-block py-1.5 md:py-0 transition-all duration-300"
                   >
                     {link.label}
                   </Link>
@@ -107,7 +107,7 @@ export default function Footer() {
             <h4 className="font-heading text-white text-[15px] font-bold uppercase tracking-wider">
               {t.footer.solutions}
             </h4>
-            <ul className="space-y-3">
+            <ul className="space-y-1 md:space-y-3">
               {[
                 { label: t.footer.additives, href: href("/products") },
                 { label: t.footer.research, href: href("/research") },
@@ -117,7 +117,7 @@ export default function Footer() {
                 <li key={link.label}>
                   <Link
                     href={link.href}
-                    className="text-slate-350 text-sm hover:text-teal-400 hover:translate-x-1 inline-block transition-all duration-300"
+                    className="text-slate-350 text-sm hover:text-teal-400 hover:translate-x-1 inline-block py-1.5 md:py-0 transition-all duration-300"
                   >
                     {link.label}
                   </Link>
@@ -127,7 +127,7 @@ export default function Footer() {
           </div>
 
           {/* Column 4: Contact & Facilities */}
-          <div className="lg:col-span-4 space-y-5">
+          <div className="col-span-2 md:col-span-1 lg:col-span-4 space-y-5">
             <h4 className="font-heading text-white text-[15px] font-bold uppercase tracking-wider">
               {t.footer.contactHeading}
             </h4>

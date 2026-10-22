@@ -22,7 +22,7 @@ export default function AboutPage() {
 
       <main className="bg-brand-navy min-h-screen pt-18 md:pt-20 lg:pt-24">
         {/* Intro Hero Section with Glass Plant Image BG */}
-        <SectionWrapper className="py-24 lg:py-32 text-white relative overflow-hidden min-h-[500px] flex items-center">
+        <SectionWrapper className="py-16 md:py-24 lg:py-32 text-white relative overflow-hidden min-h-[420px] md:min-h-[500px] flex items-center">
           <div className="absolute inset-0 z-0">
             <Image
               src={Images.heroes.about}
@@ -40,7 +40,7 @@ export default function AboutPage() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease: easeOut }}
-              className="font-heading text-4xl lg:text-6xl font-bold leading-tight mb-8"
+              className="font-heading text-[34px] md:text-4xl lg:text-6xl font-bold leading-tight mb-6 md:mb-8"
             >
               <span className="text-teal-400">{t.titleLine1}</span><br />
               <span className="text-white">{t.titleLine2}</span>
@@ -58,7 +58,7 @@ export default function AboutPage() {
         </SectionWrapper>
 
         {/* Founder & Mission Section (White BG) */}
-        <SectionWrapper className="py-24 bg-white text-brand-navy">
+        <SectionWrapper className="py-16 md:py-24 bg-white text-brand-navy">
           <div className="max-w-[1200px] mx-auto px-6 grid md:grid-cols-2 gap-12 lg:gap-20 items-center">
             {/* Founder/Team Image Section with Founders Tag */}
             <motion.div
@@ -105,17 +105,17 @@ export default function AboutPage() {
         </SectionWrapper>
 
         {/* Core Values Section (Brand Navy BG with Honeycomb Hexagons) */}
-        <SectionWrapper className="py-24 lg:py-36 bg-brand-navy text-white">
+        <SectionWrapper className="py-16 md:py-24 lg:py-36 bg-brand-navy text-white">
           <div className="max-w-[1200px] mx-auto px-6">
-            <div className="text-center mb-20">
+            <div className="text-center mb-10 md:mb-20">
               <span className="text-teal-400 text-sm font-semibold tracking-widest uppercase block mb-2">{t.valuesKicker}</span>
-              <h2 className="font-heading text-4xl lg:text-5xl text-white font-bold leading-tight">
+              <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl text-white font-bold leading-tight">
                 {t.valuesTitle}
               </h2>
             </div>
 
             {/* G.I.F.T. Core Values Diamond Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-y-16 md:gap-y-12 md:gap-x-12 max-w-5xl mx-auto pb-12 relative mt-16">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-y-8 md:gap-y-12 md:gap-x-12 max-w-5xl mx-auto pb-4 md:pb-12 relative mt-8 md:mt-16">
 
                {/* Connection Lines for Desktop - Positioned underneath the boxes (z-0) */}
               <svg className="absolute inset-0 w-full h-full pointer-events-none hidden md:block z-0" viewBox="0 0 100 100" preserveAspectRatio="none">
@@ -188,7 +188,7 @@ export default function AboutPage() {
                       <span className="text-brand-navy/30">T</span>
                     </div>
                   </div>
-                  <div className="bg-[#102a43] text-blue-200 font-heading text-[11px] md:text-xs font-bold px-4 py-1.5 rounded-md border border-blue-500/30 inline-block mb-3.5 shadow-md mx-auto relative z-10 uppercase tracking-wider">
+                  <div className="bg-[#102a43] text-blue-200 font-heading text-xs font-bold px-4 py-1.5 rounded-md border border-blue-500/30 inline-block mb-3.5 shadow-md mx-auto relative z-10 uppercase tracking-wider">
                     {t.values.green.name}
                   </div>
                   <p className="text-white/90 text-sm md:text-[14px] leading-relaxed max-w-[75%] mx-auto relative z-10">
@@ -239,7 +239,7 @@ export default function AboutPage() {
                       <span className="text-brand-orange text-xl scale-110">T</span>
                     </div>
                   </div>
-                  <div className="bg-[#102a43] text-blue-200 font-heading text-[11px] md:text-xs font-bold px-4 py-1.5 rounded-md border border-blue-500/30 inline-block mb-3.5 shadow-md mx-auto relative z-10 uppercase tracking-wider">
+                  <div className="bg-[#102a43] text-blue-200 font-heading text-xs font-bold px-4 py-1.5 rounded-md border border-blue-500/30 inline-block mb-3.5 shadow-md mx-auto relative z-10 uppercase tracking-wider">
                     {t.values.trust.name}
                   </div>
                   <p className="text-white/90 text-sm md:text-[14px] leading-relaxed max-w-[75%] mx-auto relative z-10">
@@ -302,7 +302,7 @@ export default function AboutPage() {
                       <span className="text-brand-navy/30">T</span>
                     </div>
                   </div>
-                  <div className="bg-[#102a43] text-blue-200 font-heading text-[11px] md:text-xs font-bold px-4 py-1.5 rounded-md border border-blue-500/30 inline-block mb-3.5 shadow-md mx-auto relative z-10 uppercase tracking-wider">
+                  <div className="bg-[#102a43] text-blue-200 font-heading text-xs font-bold px-4 py-1.5 rounded-md border border-blue-500/30 inline-block mb-3.5 shadow-md mx-auto relative z-10 uppercase tracking-wider">
                     {t.values.innovation.name}
                   </div>
                   <p className="text-white/90 text-sm md:text-[14px] leading-relaxed max-w-[75%] mx-auto relative z-10">
@@ -367,7 +367,7 @@ export default function AboutPage() {
                       <span className="text-brand-navy/30">T</span>
                     </div>
                   </div>
-                  <div className="bg-[#102a43] text-blue-200 font-heading text-[11px] md:text-xs font-bold px-4 py-1.5 rounded-md border border-blue-500/30 inline-block mb-3.5 shadow-md mx-auto relative z-10 uppercase tracking-wider">
+                  <div className="bg-[#102a43] text-blue-200 font-heading text-xs font-bold px-4 py-1.5 rounded-md border border-blue-500/30 inline-block mb-3.5 shadow-md mx-auto relative z-10 uppercase tracking-wider">
                     {t.values.facts.name}
                   </div>
                   <p className="text-white/90 text-sm md:text-[14px] leading-relaxed max-w-[75%] mx-auto relative z-10">
@@ -414,11 +414,11 @@ export default function AboutPage() {
         </SectionWrapper>
 
         {/* Leadership Team Section (Solid White BG) */}
-        <SectionWrapper className="py-24 lg:py-32 bg-white text-brand-navy border-t border-gray-100">
+        <SectionWrapper className="py-16 md:py-24 lg:py-32 bg-white text-brand-navy border-t border-gray-100">
           <div className="max-w-[1200px] mx-auto px-6">
-            <div className="text-center mb-20">
+            <div className="text-center mb-10 md:mb-20">
               <span className="text-teal-600 text-sm font-semibold tracking-widest uppercase block mb-2">{t.leadersKicker}</span>
-              <h2 className="font-heading text-4xl lg:text-5xl text-brand-navy font-bold leading-tight">
+              <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl text-brand-navy font-bold leading-tight">
                 {t.leadersTitle}
               </h2>
             </div>
@@ -469,10 +469,10 @@ export default function AboutPage() {
                   <h3 className="font-heading text-base md:text-lg font-bold text-brand-orange mb-1">
                     {leader.name}
                   </h3>
-                  <p className="text-brand-navy font-bold text-[11px] uppercase tracking-wider mb-0.5">
+                  <p className="text-brand-navy font-bold text-xs md:text-[11px] uppercase tracking-wider mb-0.5">
                     {leader.role}
                   </p>
-                  <p className="text-brand-navy text-[11px] md:text-xs font-semibold mb-4">
+                  <p className="text-brand-navy text-xs font-semibold mb-4">
                     {leader.degree}
                   </p>
                   <p className="text-teal-600 text-xs md:text-sm leading-relaxed max-w-[90%]">

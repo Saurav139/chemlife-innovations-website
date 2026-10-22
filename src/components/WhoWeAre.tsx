@@ -102,17 +102,17 @@ function SnowflakeCell({
       className="flex flex-col items-center text-center group cursor-pointer"
     >
       {/* 3D Visual Snowflake Image Container (No text overlay) */}
-      <div className="relative w-[320px] h-[320px] flex items-center justify-center">
+      <div className="relative w-[260px] h-[260px] md:w-[320px] md:h-[320px] flex items-center justify-center">
         {/* Outer Snowflake Frame (acting as outer border structure) */}
         <SnowflakeFrame
-          className="absolute w-[310px] h-[310px] text-teal-500/20 group-hover:text-brand-orange/45 transition-colors duration-500 z-0 pointer-events-none select-none"
+          className="absolute w-[250px] h-[250px] md:w-[310px] md:h-[310px] text-teal-500/20 group-hover:text-brand-orange/45 transition-colors duration-500 z-0 pointer-events-none select-none"
           style={{ animation: "spin 45s linear infinite" }}
         />
 
         {/* Enlarged Inner Circular Card (100% visible image, zero overlap) */}
         <motion.div
           whileHover={{ scale: 1.05 }}
-          className="relative w-[235px] h-[235px] rounded-full overflow-hidden border-2 border-teal-500/25 group-hover:border-brand-orange transition-all duration-300 z-10 bg-gray-50 shadow-xl"
+          className="relative w-[190px] h-[190px] md:w-[235px] md:h-[235px] rounded-full overflow-hidden border-2 border-teal-500/25 group-hover:border-brand-orange transition-all duration-300 z-10 bg-gray-50 shadow-xl"
         >
           <AnimatePresence mode="popLayout">
             <motion.div
@@ -141,7 +141,7 @@ function SnowflakeCell({
         <h3 className="font-heading text-xl font-bold text-teal-600 mb-2 leading-tight transition-colors duration-300 group-hover:text-brand-orange">
           {card.title}
         </h3>
-        <p className="text-slate-600 text-xs lg:text-sm leading-relaxed font-normal">
+        <p className="text-slate-600 text-sm leading-relaxed font-normal md:text-xs lg:text-sm">
           {card.description}
         </p>
       </div>
@@ -165,20 +165,20 @@ export default function WhoWeAre() {
   }, []);
 
   return (
-    <section className="bg-white py-24 lg:py-32 overflow-hidden border-b border-gray-100">
+    <section className="bg-white py-16 md:py-24 lg:py-32 overflow-hidden border-b border-gray-100">
       <div className="max-w-[1200px] mx-auto px-6">
         {/* Title Block */}
         <div className="text-center mb-12">
           <span className="text-teal-500 text-sm lg:text-base font-semibold tracking-widest uppercase block mb-2">
             {t.kicker}
           </span>
-          <h2 className="font-heading text-4xl lg:text-5xl text-brand-navy font-bold leading-tight">
+          <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl text-brand-navy font-bold leading-tight">
             {t.title}
           </h2>
         </div>
 
         {/* Grid layout containing the Snowflake Cells */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-5xl mx-auto justify-items-center w-full mt-8 z-10 relative">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 max-w-5xl mx-auto justify-items-center w-full mt-8 z-10 relative">
           {cards.map((card, i) => (
             <SnowflakeCell
               key={`snowflake-cell-${i}`}

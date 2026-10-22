@@ -20,7 +20,7 @@ export default function HowWeDo() {
   const steps = t.steps.map((step, i) => ({ ...step, ...stepImages[i], step: i + 1 }));
 
   return (
-    <section className="relative py-24 lg:py-32 overflow-hidden bg-brand-navy">
+    <section className="relative py-16 md:py-24 lg:py-32 overflow-hidden bg-brand-navy">
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0 select-none pointer-events-none">
         <Image
@@ -35,11 +35,11 @@ export default function HowWeDo() {
 
       <div className="relative z-10 max-w-[1200px] mx-auto px-6">
         {/* Title Section */}
-        <div className="text-center mb-20">
+        <div className="text-center mb-10 md:mb-20">
           <span className="text-teal-400 text-sm font-bold tracking-widest uppercase block mb-3">
             {t.kicker}
           </span>
-          <h2 className="font-heading text-4xl lg:text-5xl font-bold text-white leading-tight">
+          <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight">
             {t.title}
           </h2>
         </div>
