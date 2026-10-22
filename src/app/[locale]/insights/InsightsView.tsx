@@ -196,7 +196,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                         e.stopPropagation();
                         setActiveArticle(featuredBlog);
                       }}
-                      className="text-center whitespace-nowrap px-2 sm:px-6 py-2.5 rounded-full text-[13px] sm:text-sm bg-teal-aa hover:bg-teal-700 text-white font-bold shadow-sm hover:shadow transition-all duration-300 cursor-pointer"
+                      className="inline-flex items-center justify-center min-h-11 text-center whitespace-nowrap px-2 sm:px-6 py-2.5 rounded-full text-[13px] sm:text-sm bg-teal-aa hover:bg-teal-700 text-white font-bold shadow-sm hover:shadow transition-all duration-300 cursor-pointer"
                     >
                       Read Article
                     </button>
@@ -204,7 +204,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                       href={featuredBlog.linkUrl || "https://www.linkedin.com/company/chemlifeinnovations/posts/?feedView=all"}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-center whitespace-nowrap px-2 sm:px-6 py-2.5 rounded-full text-[13px] sm:text-sm border border-gray-200 text-gray-600 hover:bg-gray-50 hover:text-teal-aa font-bold transition-all duration-300 cursor-pointer"
+                      className="inline-flex items-center justify-center min-h-11 text-center whitespace-nowrap px-2 sm:px-6 py-2.5 rounded-full text-[13px] sm:text-sm border border-gray-200 text-gray-600 hover:bg-gray-50 hover:text-teal-aa font-bold transition-all duration-300 cursor-pointer"
                       onClick={(e) => e.stopPropagation()}
                     >
                       {featuredBlog.linkUrl?.includes("wordpress.com") ? "Read on WordPress" : "View on LinkedIn"}
@@ -266,7 +266,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={(e) => playOnPage(e, () => setActiveVideoId(featuredVideo.youtubeId!))}
-                      className="text-center whitespace-nowrap px-2 sm:px-6 py-2.5 rounded-full text-[13px] sm:text-sm bg-teal-aa hover:bg-teal-700 text-white font-bold shadow-sm hover:shadow transition-all duration-300 cursor-pointer"
+                      className="inline-flex items-center justify-center min-h-11 text-center whitespace-nowrap px-2 sm:px-6 py-2.5 rounded-full text-[13px] sm:text-sm bg-teal-aa hover:bg-teal-700 text-white font-bold shadow-sm hover:shadow transition-all duration-300 cursor-pointer"
                     >
                       Watch Now
                     </a>
@@ -274,7 +274,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                       href={`https://www.youtube.com/watch?v=${featuredVideo.youtubeId}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-center whitespace-nowrap px-2 sm:px-6 py-2.5 rounded-full text-[13px] sm:text-sm border border-gray-200 text-gray-600 hover:bg-gray-50 hover:text-teal-aa font-bold transition-all duration-300"
+                      className="inline-flex items-center justify-center min-h-11 text-center whitespace-nowrap px-2 sm:px-6 py-2.5 rounded-full text-[13px] sm:text-sm border border-gray-200 text-gray-600 hover:bg-gray-50 hover:text-teal-aa font-bold transition-all duration-300"
                     >
                       Watch on YouTube
                     </a>
@@ -335,7 +335,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={(e) => playOnPage(e, () => setActiveVideoId(featuredPodcast.youtubeId!))}
-                      className="text-center whitespace-nowrap px-2 sm:px-6 py-2.5 rounded-full text-[13px] sm:text-sm bg-teal-aa hover:bg-teal-700 text-white font-bold shadow-sm hover:shadow transition-all duration-300 cursor-pointer"
+                      className="inline-flex items-center justify-center min-h-11 text-center whitespace-nowrap px-2 sm:px-6 py-2.5 rounded-full text-[13px] sm:text-sm bg-teal-aa hover:bg-teal-700 text-white font-bold shadow-sm hover:shadow transition-all duration-300 cursor-pointer"
                     >
                       Listen Now
                     </a>
@@ -343,7 +343,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                       href={`https://www.youtube.com/watch?v=${featuredPodcast.youtubeId}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-center whitespace-nowrap px-2 sm:px-6 py-2.5 rounded-full text-[13px] sm:text-sm border border-gray-200 text-gray-600 hover:bg-gray-50 hover:text-teal-aa font-bold transition-all duration-300"
+                      className="inline-flex items-center justify-center min-h-11 text-center whitespace-nowrap px-2 sm:px-6 py-2.5 rounded-full text-[13px] sm:text-sm border border-gray-200 text-gray-600 hover:bg-gray-50 hover:text-teal-aa font-bold transition-all duration-300"
                     >
                       Watch on YouTube
                     </a>
@@ -430,7 +430,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                     <button
                       key={filter}
                       onClick={() => setSelectedFilter(filter)}
-                      className={`px-6 py-2 rounded-full text-sm font-semibold transition-all duration-300 border cursor-pointer ${
+                      className={`tap-target px-6 py-2 rounded-full text-sm font-semibold transition-all duration-300 border cursor-pointer ${
                         isActive
                           ? "bg-teal-aa border-teal-600 text-white shadow-sm"
                           : "bg-gray-100 border-transparent text-gray-aa hover:bg-gray-200"
@@ -560,7 +560,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                           <div className="flex items-center gap-2 w-full justify-between">
                             <button
                               onClick={() => setActiveArticle(item)}
-                              className="text-xs font-bold text-teal-aa hover:text-teal-700 transition-colors flex items-center gap-1 cursor-pointer"
+                              className="tap-target text-xs font-bold text-teal-aa hover:text-teal-700 transition-colors flex items-center gap-1 cursor-pointer"
                             >
                               Read Article
                             </button>
@@ -568,7 +568,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                               href={item.linkUrl || "https://www.linkedin.com/company/chemlifeinnovations/posts/?feedView=all"}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="text-xs font-semibold text-gray-500 hover:text-teal-aa transition-colors cursor-pointer"
+                              className="tap-target text-xs font-semibold text-gray-500 hover:text-teal-aa transition-colors cursor-pointer"
                               onClick={(e) => e.stopPropagation()}
                             >
                               {item.linkUrl?.includes("wordpress.com") ? "Read on WordPress" : "View on LinkedIn"}
@@ -581,7 +581,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                               target="_blank"
                               rel="noopener noreferrer"
                               onClick={(e) => playOnPage(e, () => setActiveVideoId(item.youtubeId!))}
-                              className="text-xs font-bold text-teal-aa hover:text-teal-700 transition-colors flex items-center gap-1"
+                              className="tap-target text-xs font-bold text-teal-aa hover:text-teal-700 transition-colors flex items-center gap-1"
                             >
                               {item.type === "Podcast" ? "Listen Now" : "Watch Now"}
                             </a>
@@ -589,7 +589,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                               href={`https://www.youtube.com/watch?v=${item.youtubeId}`}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="text-xs font-semibold text-gray-500 hover:text-teal-aa transition-colors"
+                              className="tap-target text-xs font-semibold text-gray-500 hover:text-teal-aa transition-colors"
                               onClick={(e) => e.stopPropagation()}
                             >
                               Watch on YouTube

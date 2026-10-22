@@ -197,7 +197,7 @@ export default function HeroVariantA() {
               target="_blank"
               rel="noopener noreferrer"
               onClick={(e) => playOnPage(e, () => setStoryOpen(true))}
-              className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-white/85 hover:text-white underline-offset-4 hover:underline transition-colors cursor-pointer"
+              className="tap-target mt-5 inline-flex items-center gap-2 text-sm font-semibold text-white/85 hover:text-white underline-offset-4 hover:underline transition-colors cursor-pointer"
             >
               <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current">
                 <path d="M8 5v14l11-7z" />
@@ -205,14 +205,17 @@ export default function HeroVariantA() {
               {t.home.watchStory}
             </a>
 
-            <div className="flex md:hidden gap-2.5 mt-6">
+            {/* 44px buttons around small dots, so they're easy to tap */}
+            <div className="flex md:hidden mt-3">
               {bgImages.map((_, i) => (
                 <button
                   key={i}
                   onClick={() => setBgIndex(i)}
-                  className={`h-2 rounded-full transition-all duration-300 ${i === bgIndex ? "w-6 bg-teal-400" : "w-2 bg-white/40"}`}
+                  className="w-11 h-11 flex items-center justify-center"
                   aria-label={`${t.home.goToSlide} ${i + 1}`}
-                />
+                >
+                  <span className={`h-2 rounded-full transition-all duration-300 ${i === bgIndex ? "w-6 bg-teal-400" : "w-2 bg-white/40"}`} />
+                </button>
               ))}
             </div>
           </div>
@@ -230,19 +233,23 @@ export default function HeroVariantA() {
       </div>
 
       {/* Floating Vertical Dotted Navigator on the Right */}
-      <div className="absolute right-6 lg:right-12 top-1/2 -translate-y-1/2 hidden md:flex flex-col gap-4 z-40">
+      <div className="absolute right-6 lg:right-12 top-1/2 -translate-y-1/2 hidden md:flex flex-col z-40">
         {bgImages.map((_, i) => {
           const isActive = i === bgIndex;
           return (
             <button
               key={i}
               onClick={() => setBgIndex(i)}
-              className={`w-3.5 h-3.5 rounded-full transition-all duration-350 ${isActive
-                ? "bg-teal-400 scale-125 shadow-lg shadow-teal-400/50"
-                : "bg-white/30 border border-white/10 hover:bg-white/60"
-                }`}
+              className="group w-11 h-11 flex items-center justify-center"
               aria-label={`${t.home.goToSlide} ${i + 1}`}
-            />
+            >
+              <span
+                className={`w-3.5 h-3.5 rounded-full transition-all duration-350 ${isActive
+                  ? "bg-teal-400 scale-125 shadow-lg shadow-teal-400/50"
+                  : "bg-white/30 border border-white/10 group-hover:bg-white/60"
+                  }`}
+              />
+            </button>
           );
         })}
       </div>

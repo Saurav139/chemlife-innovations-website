@@ -63,6 +63,23 @@
   font-display: swap;
 }
 
+/* A 44×44px touch area around a small link or button, without changing how it looks. Only for things with room
+   around them: stacked items would overlap, so those get real 44px rows instead. */
+@utility tap-target {
+  position: relative;
+  @media (pointer: coarse) {
+    &::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: max(100%, 44px);
+      height: max(100%, 44px);
+      transform: translate(-50%, -50%);
+    }
+  }
+}
+
 @layer base {
   ::placeholder {
     color: var(--color-slate-aa);

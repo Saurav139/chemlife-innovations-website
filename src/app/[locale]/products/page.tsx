@@ -346,7 +346,7 @@ export default function ProductsPage() {
                     aria-label={t.filterBySpecies}
                     value={selectedCategory}
                     onChange={(e) => setSelectedCategory(e.target.value)}
-                    className="appearance-none bg-transparent pl-4 pr-10 py-3 font-semibold text-xs text-slate-600 focus:outline-none cursor-pointer"
+                    className="appearance-none bg-transparent pl-4 pr-10 py-3.5 font-semibold text-xs text-slate-600 focus:outline-none cursor-pointer"
                   >
                     {categories.map((category) => (
                       <option key={category} value={category} className="text-brand-navy font-semibold">
