@@ -366,8 +366,13 @@ export default function ProductsPage() {
                 </div>
               </div>
 
-              {/* Category chips (phones and tablets): every option visible, each easy to tap */}
-              <div role="group" aria-label={t.filterBySpecies} className="flex flex-wrap gap-2 w-full lg:hidden">
+              {/* Category chips (phones and tablets): one row that scrolls sideways, running to the screen edges so a
+                  chip cut off at the edge shows there are more. No visible scrollbar. */}
+              <div
+                role="group"
+                aria-label={t.filterBySpecies}
+                className="flex gap-2 self-stretch -mx-6 px-6 overflow-x-auto overscroll-x-contain snap-x scroll-px-6 lg:hidden [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+              >
                 {categories.map((category) => {
                   const active = selectedCategory === category;
                   const style = categoryColorStyles[category as keyof typeof categoryColorStyles];
@@ -376,8 +381,11 @@ export default function ProductsPage() {
                       key={category}
                       type="button"
                       aria-pressed={active}
-                      onClick={() => setSelectedCategory(category)}
-                      className={`min-h-10 px-4 py-2 rounded-full border text-sm font-semibold transition-colors duration-200 cursor-pointer ${
+                      onClick={(e) => {
+                        setSelectedCategory(category);
+                        e.currentTarget.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "nearest" });
+                      }}
+                      className={`shrink-0 snap-start whitespace-nowrap min-h-10 px-4 py-2 rounded-full border text-sm font-semibold transition-colors duration-200 cursor-pointer ${
                         active ? style.chip : "bg-white border-slate-200 text-slate-600 hover:border-slate-300"
                       }`}
                     >
