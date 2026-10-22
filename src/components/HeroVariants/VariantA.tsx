@@ -205,13 +205,13 @@ export default function HeroVariantA() {
               {t.home.watchStory}
             </a>
 
-            {/* 44px buttons around small dots, so they're easy to tap */}
+            {/* A 44px-tall tap area around each dot, but narrow, so the row stays compact */}
             <div className="flex md:hidden mt-3">
               {bgImages.map((_, i) => (
                 <button
                   key={i}
                   onClick={() => setBgIndex(i)}
-                  className="w-11 h-11 flex items-center justify-center"
+                  className="py-[18px] px-1.5 flex items-center justify-center"
                   aria-label={`${t.home.goToSlide} ${i + 1}`}
                 >
                   <span className={`h-2 rounded-full transition-all duration-300 ${i === bgIndex ? "w-6 bg-teal-400" : "w-2 bg-white/40"}`} />
