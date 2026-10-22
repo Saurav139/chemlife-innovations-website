@@ -189,7 +189,7 @@ export default function SiteSearch() {
           onClick={() => setIsOpen(true)}
           whileHover={{ scale: 1.08 }}
           whileTap={{ scale: 0.92 }}
-          className="w-12 h-12 rounded-full bg-brand-orange text-white flex items-center justify-center shadow-2xl hover:bg-brand-orange/95 border-2 border-white/20 cursor-pointer transition-colors"
+          className="w-12 h-12 rounded-full bg-brand-orange-aa text-white flex items-center justify-center shadow-2xl hover:bg-brand-orange-aa-hover border-2 border-white/20 cursor-pointer transition-colors"
           title="Search ChemLife website (Ctrl+K)"
           aria-label="Open Site Search"
         >
