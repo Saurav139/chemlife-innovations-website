@@ -9,6 +9,7 @@ import { VariantProvider } from "@/context/VariantContext";
 import SiteSearch from "@/components/SiteSearch";
 import { Images } from "@/lib/assets";
 import { useT } from "@/i18n/LocaleProvider";
+import { previewsAllowed } from "@/lib/previews";
 
 const easeOut = [0.25, 0.1, 0, 1] as const;
 
@@ -167,6 +168,17 @@ export default function ProductsPage() {
   const [selectedCategory, setSelectedCategory] = useState("All");
 
   const categories = ["All", "Mono-gastric", "Ruminants", "Value Addition"];
+  const categoryLabel = (category: string) =>
+    category === "All" ? t.allSpecies : t.categories[category as keyof typeof t.categories];
+
+  // Staging only, while a design is chosen: ?filter=select or ?filter=grid shows other phone layouts of the
+  // category filter. The live site always shows the chips.
+  const [phoneFilter, setPhoneFilter] = useState<"chips" | "select" | "grid">("chips");
+  useEffect(() => {
+    if (!previewsAllowed(location.host)) return;
+    const choice = new URLSearchParams(location.search).get("filter");
+    if (choice === "select" || choice === "grid") setPhoneFilter(choice);
+  }, []);
 
   // Handle auto-expansion and search filtering via query parameter (e.g. ?expand=MaxDmold) or hash (#MaxDmold)
   useEffect(() => {
@@ -233,25 +245,29 @@ export default function ProductsPage() {
       focus: "focus-within:border-brand-navy focus-within:ring-brand-navy",
       accent: "hover:text-brand-navy text-slate-400",
       icon: "text-slate-400",
-      chip: "bg-brand-navy border-brand-navy text-white"
+      chip: "bg-brand-navy border-brand-navy text-white",
+      dot: "bg-brand-navy"
     },
     "Mono-gastric": {
       focus: "focus-within:border-brand-orange focus-within:ring-brand-orange",
       accent: "hover:text-brand-orange text-brand-orange",
       icon: "text-brand-orange",
-      chip: "bg-brand-orange border-brand-orange text-white"
+      chip: "bg-brand-orange border-brand-orange text-white",
+      dot: "bg-brand-orange"
     },
     "Ruminants": {
       focus: "focus-within:border-blue-600 focus-within:ring-blue-600",
       accent: "hover:text-blue-600 text-blue-600",
       icon: "text-blue-600",
-      chip: "bg-blue-600 border-blue-600 text-white"
+      chip: "bg-blue-600 border-blue-600 text-white",
+      dot: "bg-blue-600"
     },
     "Value Addition": {
       focus: "focus-within:border-emerald-600 focus-within:ring-emerald-600",
       accent: "hover:text-emerald-600 text-emerald-600",
       icon: "text-emerald-600",
-      chip: "bg-emerald-600 border-emerald-600 text-white"
+      chip: "bg-emerald-600 border-emerald-600 text-white",
+      dot: "bg-emerald-600"
     }
   };
 
@@ -366,34 +382,75 @@ export default function ProductsPage() {
                 </div>
               </div>
 
-              {/* Category chips (phones and tablets): one row that scrolls sideways, running to the screen edges so a
-                  chip cut off at the edge shows there are more. No visible scrollbar. */}
-              <div
-                role="group"
-                aria-label={t.filterBySpecies}
-                className="flex gap-2 self-stretch -mx-6 px-6 overflow-x-auto overscroll-x-contain snap-x scroll-px-6 lg:hidden [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-              >
-                {categories.map((category) => {
-                  const active = selectedCategory === category;
-                  const style = categoryColorStyles[category as keyof typeof categoryColorStyles];
-                  return (
-                    <button
-                      key={category}
-                      type="button"
-                      aria-pressed={active}
-                      onClick={(e) => {
-                        setSelectedCategory(category);
-                        e.currentTarget.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "nearest" });
-                      }}
-                      className={`shrink-0 snap-start whitespace-nowrap min-h-10 px-4 py-2 rounded-full border text-sm font-semibold transition-colors duration-200 cursor-pointer ${
-                        active ? style.chip : "bg-white border-slate-200 text-slate-600 hover:border-slate-300"
-                      }`}
-                    >
-                      {category === "All" ? t.allSpecies : t.categories[category as keyof typeof t.categories]}
-                    </button>
-                  );
-                })}
-              </div>
+              {phoneFilter === "select" ? (
+                // Option 1: the phone's own picker, full width under the search bar.
+                <div className="relative w-full md:max-w-xl md:self-start lg:hidden">
+                  <span aria-hidden="true" className={`absolute left-4 top-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full ${activeStyle.dot}`} />
+                  <select
+                    aria-label={t.filterBySpecies}
+                    value={selectedCategory}
+                    onChange={(e) => setSelectedCategory(e.target.value)}
+                    className="w-full h-12 appearance-none rounded-full border border-slate-200 bg-white pl-10 pr-11 text-base font-semibold text-brand-navy shadow-xs focus:outline-none focus:border-brand-navy focus:ring-1 focus:ring-brand-navy cursor-pointer"
+                  >
+                    {categories.map((category) => (
+                      <option key={category} value={category}>{categoryLabel(category)}</option>
+                    ))}
+                  </select>
+                  <svg aria-hidden="true" className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
+              ) : phoneFilter === "grid" ? (
+                // Option 2: four equal buttons, two by two (one row of four on tablets).
+                <div role="group" aria-label={t.filterBySpecies} className="grid grid-cols-2 sm:grid-cols-4 gap-2 w-full md:max-w-xl md:self-start lg:hidden">
+                  {categories.map((category) => {
+                    const active = selectedCategory === category;
+                    const style = categoryColorStyles[category as keyof typeof categoryColorStyles];
+                    return (
+                      <button
+                        key={category}
+                        type="button"
+                        aria-pressed={active}
+                        onClick={() => setSelectedCategory(category)}
+                        className={`min-h-11 px-3 py-2 rounded-xl border text-sm font-semibold leading-tight text-center transition-colors duration-200 cursor-pointer ${
+                          active ? style.chip : "bg-white border-slate-200 text-slate-600 hover:border-slate-300"
+                        }`}
+                      >
+                        {categoryLabel(category)}
+                      </button>
+                    );
+                  })}
+                </div>
+              ) : (
+                // Chips (phones and tablets): one row that scrolls sideways, running to the screen edges so a chip
+                // cut off at the edge shows there are more. No visible scrollbar.
+                <div
+                  role="group"
+                  aria-label={t.filterBySpecies}
+                  className="flex gap-2 self-stretch -mx-6 px-6 overflow-x-auto overscroll-x-contain snap-x scroll-px-6 lg:hidden [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+                >
+                  {categories.map((category) => {
+                    const active = selectedCategory === category;
+                    const style = categoryColorStyles[category as keyof typeof categoryColorStyles];
+                    return (
+                      <button
+                        key={category}
+                        type="button"
+                        aria-pressed={active}
+                        onClick={(e) => {
+                          setSelectedCategory(category);
+                          e.currentTarget.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "nearest" });
+                        }}
+                        className={`shrink-0 snap-start whitespace-nowrap min-h-10 px-4 py-2 rounded-full border text-sm font-semibold transition-colors duration-200 cursor-pointer ${
+                          active ? style.chip : "bg-white border-slate-200 text-slate-600 hover:border-slate-300"
+                        }`}
+                      >
+                        {categoryLabel(category)}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
