@@ -93,7 +93,7 @@ export default function Header() {
 
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="lg:hidden flex flex-col gap-1.5 p-2"
+            className="lg:hidden flex flex-col items-center justify-center gap-1.5 w-11 h-11 -mr-2.5"
             aria-label={t.nav.menu}
           >
             <span
@@ -111,7 +111,7 @@ export default function Header() {
 
        {mobileOpen && (
           <div className="lg:hidden bg-white border-t border-brand-navy/10 shadow-xl">
-            <div className="px-6 py-4 space-y-2 max-h-[calc(100dvh-4.5rem)] md:max-h-[calc(100dvh-5rem)] overflow-y-auto">
+            <div className="px-6 py-3 max-h-[calc(100dvh-4.5rem)] md:max-h-[calc(100dvh-5rem)] overflow-y-auto">
               {navLinks.map((link) => {
                 const isActive =
                   pathname === link.path || (pathname.startsWith(link.path) && link.path !== "/");
@@ -120,7 +120,7 @@ export default function Header() {
                   <a
                     key={link.path}
                     href={link.href}
-                    className={`block py-1 text-base font-medium ${
+                    className={`flex items-center min-h-11 text-base font-medium ${
                       isActive
                         ? "text-brand-orange-aa"
                         : "text-brand-navy hover:text-brand-orange-aa"
@@ -132,7 +132,7 @@ export default function Header() {
                 );
               })}
               {showPreviews && (
-                <a href="/previews" className="block py-1 text-base font-semibold text-brand-orange-aa" onClick={() => setMobileOpen(false)}>
+                <a href="/previews" className="flex items-center min-h-11 text-base font-semibold text-brand-orange-aa" onClick={() => setMobileOpen(false)}>
                   Design previews
                 </a>
               )}

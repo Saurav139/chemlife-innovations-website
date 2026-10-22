@@ -453,10 +453,10 @@ function ChatSessionContent() {
               </div>
             </div>
             <div className="flex items-center gap-2 flex-shrink-0">
-              <Link href="/chat" className="text-[11px] font-semibold text-slate-aa hover:text-brand-navy bg-white px-3 py-1.5 rounded-lg border border-slate-200 hover:border-slate-300 transition-all whitespace-nowrap">
+              <Link href="/chat" className="tap-target text-[11px] font-semibold text-slate-aa hover:text-brand-navy bg-white px-3 py-1.5 rounded-lg border border-slate-200 hover:border-slate-300 transition-all whitespace-nowrap">
                 ← Agents
               </Link>
-              <Link href={`/chat/${otherBot}`} className={`text-[11px] font-semibold text-white px-3 py-1.5 rounded-lg transition-all whitespace-nowrap ${meta.accentBg} hover:opacity-90`}>
+              <Link href={`/chat/${otherBot}`} className={`tap-target text-[11px] font-semibold text-white px-3 py-1.5 rounded-lg transition-all whitespace-nowrap ${meta.accentBg} hover:opacity-90`}>
                 Switch to {BOT_META[otherBot].name}
               </Link>
             </div>
@@ -500,13 +500,13 @@ function ChatSessionContent() {
                 disabled={loading || offline}
                 maxLength={MAX_MESSAGE_CHARS}
                 autoComplete="off"
-                className={`flex-1 text-sm px-4 py-2.5 border border-slate-200 rounded-xl bg-slate-50 focus:bg-white transition-all placeholder:text-slate-aa text-slate-800 outline-none disabled:opacity-60 ${meta.inputFocus}`}
+                className={`flex-1 min-h-11 text-sm px-4 py-2.5 border border-slate-200 rounded-xl bg-slate-50 focus:bg-white transition-all placeholder:text-slate-aa text-slate-800 outline-none disabled:opacity-60 ${meta.inputFocus}`}
               />
               <button
                 type="submit"
                 disabled={loading || offline || !input.trim()}
                 aria-label="Send message"
-                className={`w-10 h-10 rounded-xl flex-shrink-0 flex items-center justify-center text-white transition-all disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed ${meta.accentBg}`}
+                className={`w-11 h-11 rounded-xl flex-shrink-0 flex items-center justify-center text-white transition-all disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed ${meta.accentBg}`}
               >
                 {loading ? (
                   <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin block" />
@@ -530,7 +530,7 @@ function ChatSessionContent() {
               <button
                 onClick={handleRefreshFaqs}
                 disabled={faqsLoading}
-                className="text-[10px] text-slate-aa hover:text-slate-600 transition-colors font-semibold tabular-nums flex items-center gap-1 cursor-pointer disabled:opacity-50"
+                className="tap-target text-[10px] text-slate-aa hover:text-slate-600 transition-colors font-semibold tabular-nums flex items-center gap-1 cursor-pointer disabled:opacity-50"
                 title="Click to refresh questions"
               >
                 ↻ {countdown}s
@@ -546,7 +546,7 @@ function ChatSessionContent() {
               ) : (
                 faqs.map((faq, i) => (
                   <button key={i} onClick={() => handleSelectFaq(faq)} disabled={loading || offline}
-                    className={`w-full text-left text-[12px] px-3 py-2.5 rounded-xl border border-slate-100 hover:border-slate-200 hover:bg-slate-50/80 transition-all text-slate-700 leading-relaxed cursor-pointer disabled:cursor-not-allowed disabled:opacity-60`}>
+                    className={`w-full min-h-11 text-left text-[12px] px-3 py-2.5 rounded-xl border border-slate-100 hover:border-slate-200 hover:bg-slate-50/80 transition-all text-slate-700 leading-relaxed cursor-pointer disabled:cursor-not-allowed disabled:opacity-60`}>
                     {faq}
                   </button>
                 ))
@@ -573,7 +573,7 @@ function ChatSessionContent() {
           {/* Disclaimer */}
           <p className="text-[10px] text-slate-aa text-center px-2 leading-relaxed">
             AI responses are for general guidance only. For specific advice,{" "}
-            <a href="mailto:chemlifeinnovations@gmail.com" className="underline hover:text-slate-600 transition-colors">contact the Chemlife team</a>.
+            <a href="mailto:chemlifeinnovations@gmail.com" className="tap-target underline hover:text-slate-600 transition-colors">contact the Chemlife team</a>.
           </p>
         </aside>
       </div>

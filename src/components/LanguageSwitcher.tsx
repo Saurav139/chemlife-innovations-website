@@ -57,7 +57,7 @@ export default function LanguageSwitcher({ inline = false }: { inline?: boolean 
       aria-current={l === locale ? "true" : undefined}
       className={
         inline
-          ? `rounded-full border px-3 py-1 text-sm font-semibold ${l === locale ? "border-brand-orange text-brand-orange-aa" : "border-brand-navy/20 text-brand-navy"}`
+          ? `tap-target rounded-full border px-3 py-1 text-sm font-semibold ${l === locale ? "border-brand-orange text-brand-orange-aa" : "border-brand-navy/20 text-brand-navy"}`
           : `block whitespace-nowrap px-4 py-2 text-[15px] font-semibold hover:bg-slate-50 ${l === locale ? "text-brand-orange-aa" : "text-brand-navy"}`
       }
     >
@@ -67,7 +67,7 @@ export default function LanguageSwitcher({ inline = false }: { inline?: boolean 
 
   if (inline) {
     return (
-      <div className="flex items-center gap-2 pt-2" role="group" aria-label={t.nav.language}>
+      <div className="flex items-center gap-2 pt-3 pb-1" role="group" aria-label={t.nav.language}>
         <span className="text-brand-navy/60"><Globe /></span>
         {links}
       </div>

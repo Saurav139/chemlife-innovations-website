@@ -116,9 +116,9 @@ export default async function PrivacyPage({ params }: { params: Promise<{ locale
 
             <nav aria-label="Contents" className="mt-10">
               <p className="font-heading font-bold text-brand-navy mb-2">Contents</p>
-              <ol className="list-decimal pl-6 space-y-1 columns-1 sm:columns-2 gap-8">
+              <ol className="list-decimal pl-6 columns-1 sm:columns-2 gap-8">
                 {SECTIONS.map(([id, title]) => (
-                  <li key={id}><a href={`#${id}`} className={link}>{title}</a></li>
+                  <li key={id}><a href={`#${id}`} className={`${link} inline-block py-2.5`}>{title}</a></li>
                 ))}
               </ol>
             </nav>
