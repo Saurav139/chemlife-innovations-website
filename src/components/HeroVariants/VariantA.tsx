@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "@/context/VariantContext";
 import { Images } from "@/lib/assets";
 import { useHref, useT } from "@/i18n/LocaleProvider";
+import { playOnPage, youtubeWatchUrl } from "@/lib/youtube";
 
 // The headline for each slide is in the language file (home.taglines), in the same order as these photos.
 
@@ -191,16 +192,18 @@ export default function HeroVariantA() {
               </Link>
             </div>
 
-            <button
-              type="button"
-              onClick={() => setStoryOpen(true)}
+            <a
+              href={youtubeWatchUrl(STORY_VIDEO_ID)}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => playOnPage(e, () => setStoryOpen(true))}
               className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-white/85 hover:text-white underline-offset-4 hover:underline transition-colors cursor-pointer"
             >
               <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current">
                 <path d="M8 5v14l11-7z" />
               </svg>
               {t.home.watchStory}
-            </button>
+            </a>
 
             <div className="flex md:hidden gap-2.5 mt-6">
               {bgImages.map((_, i) => (

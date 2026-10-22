@@ -10,6 +10,7 @@ import { VariantProvider } from "@/context/VariantContext";
 import SiteSearch from "@/components/SiteSearch";
 import { Images } from "@/lib/assets";
 import type { Insights, InsightItem } from "@/lib/insights";
+import { playOnPage, youtubeWatchUrl } from "@/lib/youtube";
 
 const easeOut = [0.25, 0.1, 0, 1] as const;
 
@@ -231,10 +232,14 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                     
                     {/* YouTube Preview Thumbnail */}
                     {featuredVideo.youtubeId && (
-                      <div
-                        onClick={() => setActiveVideoId(featuredVideo.youtubeId!)}
+                      <a
+                        href={youtubeWatchUrl(featuredVideo.youtubeId!)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => playOnPage(e, () => setActiveVideoId(featuredVideo.youtubeId!))}
+                        aria-label={featuredVideo.title}
                         data-analytics-click="Watch Now"
-                        className="relative w-full aspect-video rounded-2xl overflow-hidden bg-slate-900 border border-slate-200/80 cursor-pointer shadow-sm group/video select-none mb-4"
+                        className="block relative w-full aspect-video rounded-2xl overflow-hidden bg-slate-900 border border-slate-200/80 cursor-pointer shadow-sm group/video select-none mb-4"
                       >
                         <Image
                           src={`https://img.youtube.com/vi/${featuredVideo.youtubeId}/0.jpg`}
@@ -251,17 +256,20 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                             </svg>
                           </div>
                         </div>
-                      </div>
+                      </a>
                     )}
                   </div>
 
                   <div className="flex flex-wrap items-center gap-3 sm:gap-4 pt-4 border-t border-gray-100">
-                    <button
-                      onClick={() => setActiveVideoId(featuredVideo.youtubeId!)}
+                    <a
+                      href={youtubeWatchUrl(featuredVideo.youtubeId!)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={(e) => playOnPage(e, () => setActiveVideoId(featuredVideo.youtubeId!))}
                       className="flex-1 sm:flex-none text-center whitespace-nowrap px-6 py-2.5 rounded-full bg-teal-600 hover:bg-teal-700 text-white font-bold text-sm shadow-sm hover:shadow transition-all duration-300 cursor-pointer"
                     >
                       Watch Now
-                    </button>
+                    </a>
                     <a
                       href={`https://www.youtube.com/watch?v=${featuredVideo.youtubeId}`}
                       target="_blank"
@@ -293,10 +301,14 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                     
                     {/* YouTube Preview Thumbnail */}
                     {featuredPodcast.youtubeId && (
-                      <div
-                        onClick={() => setActiveVideoId(featuredPodcast.youtubeId!)}
+                      <a
+                        href={youtubeWatchUrl(featuredPodcast.youtubeId!)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => playOnPage(e, () => setActiveVideoId(featuredPodcast.youtubeId!))}
+                        aria-label={featuredPodcast.title}
                         data-analytics-click="Listen Now"
-                        className="relative w-full aspect-video rounded-2xl overflow-hidden bg-slate-900 border border-slate-200/80 cursor-pointer shadow-sm group/video select-none mb-4"
+                        className="block relative w-full aspect-video rounded-2xl overflow-hidden bg-slate-900 border border-slate-200/80 cursor-pointer shadow-sm group/video select-none mb-4"
                       >
                         <Image
                           src={`https://img.youtube.com/vi/${featuredPodcast.youtubeId}/0.jpg`}
@@ -313,17 +325,20 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                             </svg>
                           </div>
                         </div>
-                      </div>
+                      </a>
                     )}
                   </div>
 
                   <div className="flex flex-wrap items-center gap-3 sm:gap-4 pt-4 border-t border-gray-100">
-                    <button
-                      onClick={() => setActiveVideoId(featuredPodcast.youtubeId!)}
+                    <a
+                      href={youtubeWatchUrl(featuredPodcast.youtubeId!)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={(e) => playOnPage(e, () => setActiveVideoId(featuredPodcast.youtubeId!))}
                       className="flex-1 sm:flex-none text-center whitespace-nowrap px-6 py-2.5 rounded-full bg-teal-600 hover:bg-teal-700 text-white font-bold text-sm shadow-sm hover:shadow transition-all duration-300 cursor-pointer"
                     >
                       Listen Now
-                    </button>
+                    </a>
                     <a
                       href={`https://www.youtube.com/watch?v=${featuredPodcast.youtubeId}`}
                       target="_blank"
@@ -506,13 +521,14 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
 
                         {/* Podcast YouTube Preview (Only in Podcast/Video item types) */}
                         {!isBlog && item.youtubeId && (
-                          <div
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setActiveVideoId(item.youtubeId!);
-                            }}
+                          <a
+                            href={youtubeWatchUrl(item.youtubeId!)}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={(e) => playOnPage(e, () => setActiveVideoId(item.youtubeId!))}
+                            aria-label={item.title}
                             data-analytics-click={item.type === "Podcast" ? "Listen Now" : "Watch Now"}
-                            className="relative w-full aspect-video rounded-xl overflow-hidden mb-4 bg-slate-900 border border-slate-200/80 cursor-pointer shadow-sm group/video select-none"
+                            className="block relative w-full aspect-video rounded-xl overflow-hidden mb-4 bg-slate-900 border border-slate-200/80 cursor-pointer shadow-sm group/video select-none"
                           >
                             <Image
                               src={`https://img.youtube.com/vi/${item.youtubeId}/mqdefault.jpg`}
@@ -530,7 +546,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                                 </svg>
                               </div>
                             </div>
-                          </div>
+                          </a>
                         )}
 
                         <h4 className="font-heading text-lg font-bold text-brand-navy mb-4 group-hover:text-teal-600 transition-colors duration-300 line-clamp-3">
@@ -560,12 +576,15 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                           </div>
                         ) : (
                           <div className="flex items-center gap-2 w-full justify-between">
-                            <button
-                              onClick={() => setActiveVideoId(item.youtubeId!)}
+                            <a
+                              href={youtubeWatchUrl(item.youtubeId!)}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              onClick={(e) => playOnPage(e, () => setActiveVideoId(item.youtubeId!))}
                               className="text-xs font-bold text-teal-600 hover:text-teal-700 transition-colors flex items-center gap-1"
                             >
                               {item.type === "Podcast" ? "Listen Now" : "Watch Now"}
-                            </button>
+                            </a>
                             <a
                               href={`https://www.youtube.com/watch?v=${item.youtubeId}`}
                               target="_blank"
