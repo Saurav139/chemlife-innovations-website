@@ -258,6 +258,8 @@ const hi: Messages = {
     intro: "बेहतर फफूंद रोकथाम, रोगाणु नियंत्रण और अनाज संरक्षण के लिए विज्ञान पर आधारित समाधान।",
     search: "उत्पाद खोजें...",
     allSpecies: "सभी प्रजातियाँ",
+    filterBySpecies: "प्रजाति के अनुसार चुनें",
+    clearSearch: "खोज साफ़ करें",
     categories: { "Mono-gastric": "मोनो-गैस्ट्रिक", Ruminants: "जुगाली करने वाले पशु", "Value Addition": "मूल्य संवर्धन" },
     about: "उत्पाद के बारे में",
     variants: "उपलब्ध प्रकार",

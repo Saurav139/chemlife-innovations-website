@@ -257,6 +257,8 @@ const en = {
     intro: "Science-backed solutions formulated for superior mold inhibition, pathogen control, and grain preservation.",
     search: "Search products...",
     allSpecies: "All Species",
+    filterBySpecies: "Filter by species",
+    clearSearch: "Clear search",
     categories: { "Mono-gastric": "Mono-gastric", Ruminants: "Ruminants", "Value Addition": "Value Addition" },
     about: "About Product",
     variants: "Available Variants",
