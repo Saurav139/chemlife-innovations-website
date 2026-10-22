@@ -1,12 +1,15 @@
 @import "tailwindcss";
 
 @theme {
-  --color-brand-orange: #E65C38;
+  /* Trying #E8614A as the site orange (the brand orange was #E65C38). */
+  --color-brand-orange: #E8614A;
   /* Accessible versions of the original colours, for small text and for backgrounds under white text: the closest
      colour to each original that reaches WCAG AA (4.5:1). The originals stay for icons, borders, decoration and
      large headings, where they already pass. */
-  --color-brand-orange-aa: #CF4128;
-  --color-brand-orange-aa-hover: #B23822;
+  /* While #E8614A is on trial, buttons and orange text use it too (3.4:1 on white, below AA). For AA, set these
+     back to #CF4128 / #B23822. */
+  --color-brand-orange-aa: #E8614A;
+  --color-brand-orange-aa-hover: #C85340;
   --color-teal-aa: #138178;       /* teal-600 #009689 on white */
   --color-teal-aa-light: #1ADBC3; /* teal-400 #00D5BE on navy */
   --color-blue-aa: #2270F0;       /* blue-500 under white text */
@@ -24,7 +27,7 @@
   
   /* Additional colors mapped strictly to the 4 core colors */
   --color-deep-blue: #305280;
-  --color-warm-orange: #E65C38;
+  --color-warm-orange: #E8614A;
   --color-light-orange: #FFFFFF;
   --color-process-bg: #305280;
 
