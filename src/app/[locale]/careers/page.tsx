@@ -305,7 +305,7 @@ export default function CareersPage() {
 
                   <button
                     onClick={() => setActiveJob(selectedRole)}
-                    className="w-full py-4 rounded-full bg-brand-orange-dark hover:bg-brand-orange-darker text-white font-bold text-base shadow transition-all duration-300 cursor-pointer text-center lg:max-w-xs"
+                    className="w-full py-4 rounded-full bg-brand-orange hover:bg-brand-orange-hover text-white font-bold text-base shadow transition-all duration-300 cursor-pointer text-center lg:max-w-xs"
                   >
                     {t.apply}
                   </button>
@@ -431,7 +431,7 @@ export default function CareersPage() {
                   <div className="pt-2">
                     <button
                       type="submit"
-                      className="w-full py-3.5 rounded-full bg-brand-orange-dark hover:bg-brand-orange-darker text-white font-bold text-base shadow transition-all duration-300 cursor-pointer text-center"
+                      className="w-full py-3.5 rounded-full bg-brand-orange hover:bg-brand-orange-hover text-white font-bold text-base shadow transition-all duration-300 cursor-pointer text-center"
                     >
                       {t.draft}
                     </button>

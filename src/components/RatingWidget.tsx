@@ -23,7 +23,7 @@ export default function RatingWidget() {
         href={googleReviewUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="bg-brand-orange-dark hover:bg-brand-orange-darker text-white py-3.5 px-3 rounded-l-2xl shadow-lg border border-r-0 border-white/20 flex flex-col items-center gap-2 cursor-pointer transition-all duration-300 translate-x-0 hover:-translate-x-1"
+        className="bg-brand-orange hover:bg-brand-orange-hover text-white py-3.5 px-3 rounded-l-2xl shadow-lg border border-r-0 border-white/20 flex flex-col items-center gap-2 cursor-pointer transition-all duration-300 translate-x-0 hover:-translate-x-1"
         aria-label={t.common.rateUsLabel}
       >
         {/* Star Icon */}

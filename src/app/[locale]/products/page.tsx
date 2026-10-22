@@ -418,12 +418,12 @@ export default function ProductsPage() {
                       {/* Content: Title & Category */}
                       <div className="p-5 flex flex-col gap-2">
                         <div className="flex items-start justify-between gap-3">
-                          <h3 className="font-heading text-lg font-black text-brand-navy group-hover:text-brand-orange-dark transition-colors duration-300 leading-tight">
+                          <h3 className="font-heading text-lg font-black text-brand-navy group-hover:text-brand-orange transition-colors duration-300 leading-tight">
                             {product.name}
                           </h3>
 
                           <span className={`px-2.5 py-0.5 rounded-md text-[10px] md:text-[9px] font-bold uppercase tracking-wider border whitespace-nowrap ${product.category === "Mono-gastric"
-                            ? "bg-orange-50 border-orange-150 text-brand-orange-dark"
+                            ? "bg-orange-50 border-orange-150 text-brand-orange"
                             : product.category === "Ruminants"
                               ? "bg-blue-50 border-blue-150 text-blue-700"
                               : "bg-emerald-50 border-emerald-150 text-emerald-700"
@@ -438,7 +438,7 @@ export default function ProductsPage() {
                           </p>
                         )}
 
-                        <div className="flex items-center gap-1.5 text-brand-orange-dark text-xs font-bold mt-2">
+                        <div className="flex items-center gap-1.5 text-brand-orange text-xs font-bold mt-2">
                           <span>{isExpanded ? t.showLess : t.readMore}</span>
                           <motion.span
                             animate={{ rotate: isExpanded ? 180 : 0 }}
@@ -549,7 +549,7 @@ export default function ProductsPage() {
                             {/* Enquire button */}
                             <a
                               href={emailHref}
-                              className="w-full py-3 px-4 rounded-xl bg-brand-orange-dark hover:bg-brand-navy text-white text-xs font-semibold transition-all duration-300 shadow-sm hover:shadow flex items-center justify-center gap-2 group/btn cursor-pointer"
+                              className="w-full py-3 px-4 rounded-xl bg-brand-orange hover:bg-brand-navy text-white text-xs font-semibold transition-all duration-300 shadow-sm hover:shadow flex items-center justify-center gap-2 group/btn cursor-pointer"
                             >
                               <svg className="w-3.5 h-3.5 text-white group-hover/btn:translate-x-0.5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />

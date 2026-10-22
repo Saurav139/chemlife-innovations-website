@@ -78,10 +78,10 @@ export default function ChatLandingPage() {
                   />
                 </div>
                 <h3 className="text-xl font-bold text-slate-800 mb-1 group-hover:text-brand-orange transition-colors">Dr. Mikku</h3>
-                <p className="text-xs text-brand-orange-dark font-bold uppercase tracking-wider mb-4">
+                <p className="text-xs text-brand-orange font-bold uppercase tracking-wider mb-4">
                   Dairy & Ruminant Specialist
                 </p>
-                <span className="text-[11px] font-bold text-white bg-brand-orange-dark hover:bg-brand-orange-darker px-4 py-2 rounded-xl transition-all">
+                <span className="text-[11px] font-bold text-white bg-brand-orange hover:bg-brand-orange-hover px-4 py-2 rounded-xl transition-all">
                   Consult Specialist →
                 </span>
               </Link>

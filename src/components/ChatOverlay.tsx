@@ -98,7 +98,7 @@ export default function ChatOverlay() {
                     <p className="text-[12px] font-bold text-slate-800">Dr. Mikku</p>
                     <p className="text-[10px] text-slate-500 truncate">Dairy & Ruminant Specialist</p>
                   </div>
-                  <span className="text-[11px] font-semibold text-brand-orange-dark flex-shrink-0">Chat →</span>
+                  <span className="text-[11px] font-semibold text-brand-orange flex-shrink-0">Chat →</span>
                 </button>
               </div>
             </div>
@@ -111,7 +111,7 @@ export default function ChatOverlay() {
                   setIsOpen(false);
                   router.push("/chat");
                 }}
-                className="text-brand-navy hover:text-brand-orange-dark cursor-pointer transition-colors"
+                className="text-brand-navy hover:text-brand-orange cursor-pointer transition-colors"
               >
                 All Specialists →
               </button>
@@ -128,7 +128,7 @@ export default function ChatOverlay() {
         aria-label="Ask our AI experts"
         aria-expanded={isOpen}
         // Phones get a compact bubble with just the mascots; the label appears from tablet width up.
-        className="flex items-center gap-2 md:gap-3 bg-brand-orange-dark text-white p-2 md:px-5 md:py-3.5 rounded-full shadow-2xl hover:bg-brand-orange-darker transition-all group border-2 border-white/20 cursor-pointer"
+        className="flex items-center gap-2 md:gap-3 bg-brand-orange text-white p-2 md:px-5 md:py-3.5 rounded-full shadow-2xl hover:bg-brand-orange-hover transition-all group border-2 border-white/20 cursor-pointer"
       >
         <div className="flex -space-x-4">
           <div className="w-10 h-10 rounded-full border-2 border-white bg-white overflow-hidden shadow-md flex-shrink-0 flex items-center justify-center p-0.5">
