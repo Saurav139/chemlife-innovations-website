@@ -138,7 +138,7 @@ function SnowflakeCell({
 
       {/* Combined Typography Content (Clean alignment below the image) */}
       <div className="mt-4 max-w-[270px] px-2 flex flex-col items-center">
-        <h3 className="font-heading text-xl font-bold text-teal-700 mb-2 leading-tight transition-colors duration-300 group-hover:text-brand-orange">
+        <h3 className="font-heading text-xl font-bold text-teal-600 mb-2 leading-tight transition-colors duration-300 group-hover:text-brand-orange">
           {card.title}
         </h3>
         <p className="text-slate-600 text-sm leading-relaxed font-normal md:text-xs lg:text-sm">
@@ -169,7 +169,7 @@ export default function WhoWeAre() {
       <div className="max-w-[1200px] mx-auto px-6">
         {/* Title Block */}
         <div className="text-center mb-12">
-          <span className="text-teal-700 text-sm lg:text-base font-semibold tracking-widest uppercase block mb-2">
+          <span className="text-teal-500 text-sm lg:text-base font-semibold tracking-widest uppercase block mb-2">
             {t.kicker}
           </span>
           <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl text-brand-navy font-bold leading-tight">

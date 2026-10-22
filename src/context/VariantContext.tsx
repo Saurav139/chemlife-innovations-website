@@ -119,7 +119,7 @@ const theme: VariantTheme = {
   testimonialsTitle: "text-white",
   testimonialsText: "text-white/80",
   testimonialsName: "text-white",
-  testimonialsRole: "text-white/85",
+  testimonialsRole: "text-white/50",
   testimonialDot: "bg-white/30",
   testimonialDotActive: "bg-brand-orange",
   testimonialQuote: "text-brand-orange/40",

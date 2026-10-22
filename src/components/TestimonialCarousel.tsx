@@ -43,7 +43,7 @@ export default function TestimonialCarousel() {
     <SectionWrapper className={`py-16 md:py-24 lg:py-32 ${theme.testimonialsBg}`}>
       <div className="max-w-[1200px] mx-auto px-6">
         <div className="text-center mb-10 md:mb-16">
-          <span className="text-teal-300 text-base lg:text-lg font-semibold tracking-widest uppercase">
+          <span className="text-teal-400 text-base lg:text-lg font-semibold tracking-widest uppercase">
             {t.kicker}
           </span>
           <h2 className="font-heading text-3xl lg:text-4xl text-white mt-2 mb-4 leading-tight">

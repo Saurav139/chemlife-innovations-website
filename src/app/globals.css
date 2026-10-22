@@ -2,9 +2,6 @@
 
 @theme {
   --color-brand-orange: #E65C38;
-  /* Hover shade for orange buttons and links. Note: the brand orange is below WCAG AA (3.5:1) for small text and
-     for white text on it; #CF3F1A is the brightest shade of the same hue that passes, if that's ever needed. */
-  --color-brand-orange-hover: #CF3F1A;
   --color-brand-orange-light: #FFFFFF;
   --color-brand-green: #305280;
   --color-brand-navy: #305280;
@@ -51,12 +48,6 @@
 
 
 @layer base {
-  /* Placeholder text readable against white fields (4.8:1); the default was half the text colour. */
-  ::placeholder {
-    color: var(--color-slate-500);
-    opacity: 1;
-  }
-
   html {
     scroll-behavior: smooth;
   }

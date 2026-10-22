@@ -167,7 +167,7 @@ export default function ContactPage() {
           </div>
 
           <div className="relative z-10 max-w-[1200px] mx-auto px-6 w-full text-left">
-            <span className="text-teal-300 text-sm font-semibold tracking-widest uppercase block mb-3">
+            <span className="text-teal-400 text-sm font-semibold tracking-widest uppercase block mb-3">
               {t.kicker}
             </span>
             <h1 className="font-heading text-3xl md:text-4xl lg:text-6xl font-bold leading-tight mb-3 md:mb-4 text-white max-w-4xl">
@@ -207,7 +207,7 @@ export default function ContactPage() {
                             {/* Full Name */}
                             <div>
                               <label htmlFor="name" className="block text-xs font-bold text-brand-navy uppercase tracking-wider mb-2">
-                                {t.name} <span className="text-teal-700">*</span>
+                                {t.name} <span className="text-teal-600">*</span>
                               </label>
                               <input
                                 type="text"
@@ -229,7 +229,7 @@ export default function ContactPage() {
                             {/* Email Address */}
                             <div>
                               <label htmlFor="email" className="block text-xs font-bold text-brand-navy uppercase tracking-wider mb-2">
-                                {t.email} <span className="text-teal-700">*</span>
+                                {t.email} <span className="text-teal-600">*</span>
                               </label>
                               <input
                                 type="email"
@@ -253,7 +253,7 @@ export default function ContactPage() {
                             {/* Phone Number */}
                             <div>
                               <label htmlFor="phone" className="block text-xs font-bold text-brand-navy uppercase tracking-wider mb-2">
-                                {t.phone} <span className="text-gray-500 font-normal">{t.optional}</span>
+                                {t.phone} <span className="text-gray-400 font-normal">{t.optional}</span>
                               </label>
                               <input
                                 type="tel"
@@ -287,7 +287,7 @@ export default function ContactPage() {
                                     </option>
                                   ))}
                                 </select>
-                                <div className="pointer-events-none absolute inset-y-0 right-4 flex items-center text-gray-500">
+                                <div className="pointer-events-none absolute inset-y-0 right-4 flex items-center text-gray-400">
                                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
                                   </svg>
@@ -299,7 +299,7 @@ export default function ContactPage() {
                           {/* Subject */}
                           <div>
                             <label htmlFor="subject" className="block text-xs font-bold text-brand-navy uppercase tracking-wider mb-2">
-                              {t.subject} <span className="text-teal-700">*</span>
+                              {t.subject} <span className="text-teal-600">*</span>
                             </label>
                             <input
                               type="text"
@@ -320,7 +320,7 @@ export default function ContactPage() {
                           {/* Message */}
                           <div>
                             <label htmlFor="message" className="block text-xs font-bold text-brand-navy uppercase tracking-wider mb-2">
-                              {t.message} <span className="text-teal-700">*</span>
+                              {t.message} <span className="text-teal-600">*</span>
                             </label>
                             <textarea
                               id="message"
@@ -378,7 +378,7 @@ export default function ContactPage() {
                             <button
                               type="submit"
                               disabled={isSubmitting}
-                              className="w-full md:w-auto px-8 py-3.5 bg-brand-navy text-white font-bold text-sm rounded-full hover:bg-teal-700 focus:outline-none transition-all duration-300 shadow-sm flex items-center justify-center gap-2 cursor-pointer disabled:bg-slate-400"
+                              className="w-full md:w-auto px-8 py-3.5 bg-brand-navy text-white font-bold text-sm rounded-full hover:bg-teal-600 focus:outline-none transition-all duration-300 shadow-sm flex items-center justify-center gap-2 cursor-pointer disabled:bg-slate-400"
                             >
                               {isSubmitting ? (
                                 <>
@@ -404,7 +404,7 @@ export default function ContactPage() {
                         className="py-12 text-center flex flex-col items-center"
                       >
                         {/* Animated Checkmark */}
-                        <div className="w-16 h-16 bg-teal-50 rounded-full flex items-center justify-center text-teal-700 mb-6 border border-teal-100">
+                        <div className="w-16 h-16 bg-teal-50 rounded-full flex items-center justify-center text-teal-600 mb-6 border border-teal-100">
                           <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                           </svg>
@@ -444,16 +444,16 @@ export default function ContactPage() {
                     </p>
                     <div className="space-y-3 text-sm">
                       <div className="flex items-center gap-3 text-gray-500">
-                        <svg className="w-4 h-4 text-teal-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.94.725l.548 2.2a1 1 0 01-.321.988l-1.305.98a10.582 10.582 0 004.872 4.872l.98-1.305a1 1 0 01.988-.321l2.2.548a1 1 0 01.725.94V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                         </svg>
-                        <a href="tel:+919535862570" className="hover:text-teal-700 transition-colors">+91 95358 62570</a>
+                        <a href="tel:+919535862570" className="hover:text-teal-600 transition-colors">+91 95358 62570</a>
                       </div>
                       <div className="flex items-center gap-3 text-gray-500">
-                        <svg className="w-4 h-4 text-teal-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                         </svg>
-                        <a href="mailto:innovate@chemlifeinnovations.com" className="hover:text-teal-700 transition-colors break-all">innovate@chemlifeinnovations.com</a>
+                        <a href="mailto:innovate@chemlifeinnovations.com" className="hover:text-teal-600 transition-colors break-all">innovate@chemlifeinnovations.com</a>
                       </div>
                     </div>
                   </div>
