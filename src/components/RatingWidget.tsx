@@ -2,20 +2,22 @@
 
 import { usePathname } from "next/navigation";
 import { useT } from "@/i18n/LocaleProvider";
+import { splitLocale } from "@/i18n/config";
 
 export default function RatingWidget() {
   const pathname = usePathname();
   const t = useT();
 
   // Don't render the rating widget on the launch game page itself
-  if (pathname === "/launch") {
+  if (splitLocale(pathname ?? "/").path === "/launch") {
     return null;
   }
 
   const googleReviewUrl = process.env.NEXT_PUBLIC_GOOGLE_REVIEW_URL || "https://search.google.com/local/writereview?placeid=ChIJMfNToTvfsTsRSBmfTmn1DCI";
 
   return (
-    <div className="fixed right-0 top-1/2 -translate-y-1/2 z-50 flex items-start select-none font-sans">
+    // Hidden on phones, where it covers page content.
+    <div className="fixed right-0 top-1/2 -translate-y-1/2 z-50 flex items-start select-none font-sans max-md:hidden">
       {/* Floating Tab Link */}
       <a
         href={googleReviewUrl}
