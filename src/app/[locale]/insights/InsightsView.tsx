@@ -116,7 +116,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
       <main className="bg-white min-h-screen text-brand-navy">
         {/* Hero and Featured are plain sections: they're in the first screen, so they show without waiting for a fade-in.
             The hero image is the page's largest paint (LCP), so it loads first. */}
-        <section className="pt-28 pb-24 lg:pt-32 lg:pb-32 text-white relative overflow-hidden bg-brand-navy flex items-center">
+        <section className="pt-30 md:pt-32 pb-24 lg:pt-36 lg:pb-32 text-white relative overflow-hidden bg-brand-navy flex items-center">
           <div className="absolute inset-0 z-0">
             <Image
               src={Images.heroes.insights}
