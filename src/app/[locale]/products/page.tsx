@@ -167,8 +167,6 @@ export default function ProductsPage() {
   const [selectedCategory, setSelectedCategory] = useState("All");
 
   const categories = ["All", "Mono-gastric", "Ruminants", "Value Addition"];
-  const categoryLabel = (category: string) =>
-    category === "All" ? t.allSpecies : t.categories[category as keyof typeof t.categories];
 
 
   // Handle auto-expansion and search filtering via query parameter (e.g. ?expand=MaxDmold) or hash (#MaxDmold)
@@ -235,26 +233,22 @@ export default function ProductsPage() {
     "All": {
       focus: "focus-within:border-brand-navy focus-within:ring-brand-navy",
       accent: "hover:text-brand-navy text-slate-400",
-      icon: "text-slate-400",
-      dot: "bg-brand-navy"
+      icon: "text-slate-400"
     },
     "Mono-gastric": {
       focus: "focus-within:border-brand-orange focus-within:ring-brand-orange",
       accent: "hover:text-brand-orange text-brand-orange",
-      icon: "text-brand-orange",
-      dot: "bg-brand-orange"
+      icon: "text-brand-orange"
     },
     "Ruminants": {
       focus: "focus-within:border-blue-600 focus-within:ring-blue-600",
       accent: "hover:text-blue-600 text-blue-600",
-      icon: "text-blue-600",
-      dot: "bg-blue-600"
+      icon: "text-blue-600"
     },
     "Value Addition": {
       focus: "focus-within:border-emerald-600 focus-within:ring-emerald-600",
       accent: "hover:text-emerald-600 text-emerald-600",
-      icon: "text-emerald-600",
-      dot: "bg-emerald-600"
+      icon: "text-emerald-600"
     }
   };
 
@@ -309,9 +303,9 @@ export default function ProductsPage() {
 
           <div className="relative z-10 max-w-[1200px] mx-auto px-6">
 
-            {/* Search with the category drop-down inside it on desktop; on phones and tablets the drop-down sits underneath */}
-            <div className="flex flex-col lg:flex-row items-center gap-4 mb-8 lg:mb-10 w-full">
-              <div className={`flex items-center bg-slate-50 border border-slate-200 rounded-full shadow-xs text-sm w-full md:max-w-xl md:self-start ${activeStyle.focus} focus-within:ring-1 transition-all duration-300 relative`}>
+            {/* Left-Aligned Search and Category Selector Container */}
+            <div className="flex flex-col md:flex-row items-center gap-4 mb-10 w-full">
+              <div className={`flex items-center bg-slate-50 border border-slate-200 rounded-full shadow-xs text-sm w-full md:max-w-xl ${activeStyle.focus} focus-within:ring-1 transition-all duration-300 relative`}>
                 {/* Search Icon */}
                 <div className={`pl-4 ${activeStyle.icon} flex-shrink-0 transition-colors duration-300`}>
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -344,10 +338,10 @@ export default function ProductsPage() {
                 )}
 
                 {/* Vertical Divider Line */}
-                <div className="hidden lg:block h-6 w-[1px] bg-slate-200 flex-shrink-0" />
+                <div className="h-6 w-[1px] bg-slate-200 flex-shrink-0" />
 
-                {/* Category Dropdown Selector inside Search Bar (desktop) */}
-                <div className="relative flex-shrink-0 hidden lg:block">
+                {/* Category Dropdown Selector inside Search Bar */}
+                <div className="relative flex-shrink-0">
                   <select
                     aria-label={t.filterBySpecies}
                     value={selectedCategory}
@@ -367,24 +361,6 @@ export default function ProductsPage() {
                     </svg>
                   </div>
                 </div>
-              </div>
-
-              {/* Phones and tablets: a full-width field under the search bar that opens the phone's own picker */}
-              <div className="relative w-full md:max-w-xl md:self-start lg:hidden">
-                <span aria-hidden="true" className={`absolute left-4 top-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full ${activeStyle.dot}`} />
-                <select
-                  aria-label={t.filterBySpecies}
-                  value={selectedCategory}
-                  onChange={(e) => setSelectedCategory(e.target.value)}
-                  className="w-full h-12 appearance-none rounded-full border border-slate-200 bg-white pl-10 pr-11 text-base font-semibold text-brand-navy shadow-xs focus:outline-none focus:border-brand-navy focus:ring-1 focus:ring-brand-navy cursor-pointer"
-                >
-                  {categories.map((category) => (
-                    <option key={category} value={category}>{categoryLabel(category)}</option>
-                  ))}
-                </select>
-                <svg aria-hidden="true" className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" />
-                </svg>
               </div>
             </div>
 
