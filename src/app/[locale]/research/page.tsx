@@ -121,29 +121,32 @@ export default function ResearchPage() {
         <section className="py-16 bg-slate-50/30 relative overflow-hidden">
           <div className="relative z-10 max-w-[1200px] mx-auto px-6">
 
-            {/* Left-Aligned Search bar */}
-            <div className="flex flex-col md:flex-row items-center gap-4 mb-10 w-full">
-              <div className="flex items-center bg-slate-50 border border-slate-200 rounded-full shadow-xs text-sm w-full md:max-w-xl focus-within:border-teal-500 focus-within:ring-teal-500 focus-within:ring-1 transition-all duration-300 relative">
+            {/* Left-aligned search bar: 48px tall on phones, 46px on desktop; 16px text on phones so iOS doesn't zoom in */}
+            <div className="flex flex-col md:flex-row items-center gap-4 mb-8 md:mb-10 w-full">
+              <div role="search" className="flex items-center bg-slate-50 border border-slate-200 rounded-full shadow-xs w-full md:max-w-md focus-within:border-teal-500 focus-within:ring-teal-500 focus-within:ring-1 transition-all duration-300 relative">
                 {/* Search Icon */}
                 <div className="pl-4 text-teal-650 flex-shrink-0">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-[18px] h-[18px]" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                   </svg>
                 </div>
 
                 {/* Input Text Field */}
                 <input
-                  type="text"
+                  type="search"
+                  enterKeyHint="search"
+                  aria-label={t.search}
                   placeholder={t.search}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-transparent border-0 px-3 py-3.5 text-brand-navy placeholder-slate-400 focus:outline-none focus:ring-0 text-lg"
+                  className="w-full bg-transparent border-0 px-3 py-3 md:py-2.5 text-base md:text-[15px] text-brand-navy placeholder-slate-400 focus:outline-none focus:ring-0 [&::-webkit-search-cancel-button]:appearance-none"
                 />
 
                 {/* Clear Search Button */}
                 {searchQuery && (
                   <button
                     onClick={() => setSearchQuery("")}
+                    aria-label={t.clearSearch}
                     className="mr-4 text-slate-400 hover:text-teal-600 transition-colors duration-250 cursor-pointer"
                   >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -318,7 +318,7 @@ export default function ProductsPage() {
                   placeholder={t.search}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-transparent border-0 px-3 py-3 text-brand-navy placeholder-slate-400 focus:outline-none focus:ring-0 text-sm"
+                  className="w-full bg-transparent border-0 px-3 py-3 text-brand-navy placeholder-slate-400 focus:outline-none focus:ring-0 text-base md:text-sm"
                 />
 
                 {/* Clear Search Button */}
