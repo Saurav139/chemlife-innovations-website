@@ -22,7 +22,7 @@ export default function AboutPage() {
 
       <main className="bg-brand-navy min-h-screen pt-18 md:pt-20 lg:pt-24">
         {/* Intro Hero Section with Glass Plant Image BG */}
-        <SectionWrapper className="py-16 md:py-24 lg:py-32 text-white relative overflow-hidden min-h-[420px] md:min-h-[500px] flex items-center">
+        <SectionWrapper className="py-12 md:py-24 lg:py-32 text-white relative overflow-hidden md:min-h-[500px] flex items-center">
           <div className="absolute inset-0 z-0">
             <Image
               src={Images.heroes.about}
@@ -50,7 +50,7 @@ export default function AboutPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2, ease: easeOut }}
-              className="text-white/85 text-lg lg:text-2xl leading-relaxed max-w-3xl mx-auto font-light"
+              className="text-white/85 text-base md:text-lg lg:text-2xl leading-relaxed max-w-3xl mx-auto font-light"
             >
               {t.intro}
             </motion.p>
@@ -58,7 +58,7 @@ export default function AboutPage() {
         </SectionWrapper>
 
         {/* Founder & Mission Section (White BG) */}
-        <SectionWrapper className="py-16 md:py-24 bg-white text-brand-navy">
+        <SectionWrapper className="py-12 md:py-24 bg-white text-brand-navy">
           <div className="max-w-[1200px] mx-auto px-6 grid md:grid-cols-2 gap-12 lg:gap-20 items-center">
             {/* Founder/Team Image Section with Founders Tag */}
             <motion.div

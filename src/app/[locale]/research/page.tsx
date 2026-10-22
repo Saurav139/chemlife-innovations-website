@@ -89,7 +89,7 @@ export default function ResearchPage() {
       <main className="bg-slate-50/50 min-h-screen text-brand-navy">
         {/* Hero and research list are plain sections: they're in the first screen, so they show without waiting for a fade-in.
             The hero image is the page's largest paint (LCP), so it loads first. */}
-        <section className="pt-30 md:pt-32 pb-20 lg:pt-36 lg:pb-28 text-white relative overflow-hidden bg-brand-navy flex items-center">
+        <section className="pt-26 md:pt-32 pb-10 md:pb-20 lg:pt-36 lg:pb-28 text-white relative overflow-hidden bg-brand-navy flex items-center">
           <div className="absolute inset-0 z-0">
             <Image
               src={Images.research.heroBanner}
@@ -108,17 +108,17 @@ export default function ResearchPage() {
             <span className="text-teal-400 text-sm font-semibold tracking-widest uppercase block mb-3">
               {t.kicker}
             </span>
-            <h1 className="font-heading text-4xl lg:text-5xl font-bold leading-tight mb-4 text-white">
+            <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold leading-tight mb-3 md:mb-4 text-white">
               {t.titleStart} <br /><span className="text-teal-400">{t.titleAccent}</span>
             </h1>
-            <p className="text-white/85 text-lg lg:text-xl leading-relaxed max-w-3xl font-light">
+            <p className="text-white/85 text-base md:text-lg lg:text-xl leading-relaxed max-w-3xl font-light">
               {t.intro}
             </p>
           </div>
         </section>
 
         {/* Research List Section */}
-        <section className="py-16 bg-slate-50/30 relative overflow-hidden">
+        <section className="pt-8 pb-16 md:py-16 bg-slate-50/30 relative overflow-hidden">
           <div className="relative z-10 max-w-[1200px] mx-auto px-6">
 
             {/* Left-aligned search bar: 48px tall on phones, 46px on desktop; 16px text on phones so iOS doesn't zoom in */}
