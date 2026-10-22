@@ -51,7 +51,7 @@ export default function AwardsRecognition() {
     <section className="bg-white py-16 md:py-24 lg:py-32 overflow-hidden">
       <div className="max-w-[1200px] mx-auto px-6">
         <div className="text-center mb-10 md:mb-16">
-          <span className="text-teal-700 text-base lg:text-lg font-semibold tracking-widest uppercase">
+          <span className="text-teal-400 text-base lg:text-lg font-semibold tracking-widest uppercase">
             {t.kicker}
           </span>
           <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl text-brand-navy mt-2 mb-4 leading-tight">
@@ -99,7 +99,7 @@ export default function AwardsRecognition() {
 
                     {/* Caption */}
                     <div className="flex-1 text-center sm:text-left">
-                      <span className="text-teal-700 text-sm font-semibold tracking-widest uppercase">
+                      <span className="text-teal-600 text-sm font-semibold tracking-widest uppercase">
                         {certificates[activeStep].organization} &bull; {certificates[activeStep].year}
                       </span>
                        {certificates[activeStep].title && (
@@ -163,10 +163,10 @@ export default function AwardsRecognition() {
                     <div
                       className={`w-12 h-12 flex items-center justify-center rounded-md border-2 transition-all duration-500 ${
                          isActive
-                          ? 'bg-teal-300 border-teal-300 text-brand-navy scale-110 shadow-lg shadow-teal-400/30'
+                          ? 'bg-teal-400 border-teal-400 text-brand-navy scale-110 shadow-lg shadow-teal-400/30'
                           : isCompleted
-                          ? 'bg-teal-400/20 border-teal-400/40 text-teal-700'
-                          : 'bg-transparent border-teal-400/30 text-slate-500'
+                          ? 'bg-teal-400/20 border-teal-400/40 text-teal-400/80'
+                          : 'bg-transparent border-teal-400/30 text-teal-400/50'
                       }`}
                     >
                       <span className="text-sm font-bold">{`0${i + 1}`}</span>

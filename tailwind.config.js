@@ -10,7 +10,6 @@ module.exports = {
       colors: {
         // Brand colors restricted strictly to 4 colors
         'brand-orange': '#E65C38',
-        'brand-orange-hover': '#CF3F1A',
         'brand-orange-light': '#FFFFFF',
         'brand-green': '#305280',
         'brand-navy': '#305280',

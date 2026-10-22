@@ -66,11 +66,11 @@ const BOT_META = {
     image: Images.mascots.poultry,
     subtitle: "Poultry Nutrition Expert",
     specialty: "Broilers, Layers & Poultry Feed",
-    accentBg: "bg-blue-600",
+    accentBg: "bg-blue-500",
     accentBgLight: "bg-blue-50",
     accentBorder: "border-blue-200",
     accentText: "text-blue-600",
-    userBubble: "bg-blue-600",
+    userBubble: "bg-blue-500",
     inputFocus: "focus:border-blue-400",
     greeting:
       "Hello! I'm **Dr. Kukku**, your poultry nutrition expert at Chemlife Innovations.\n\nI can help with broiler & layer nutrition, mold control, gut health, mineral supplementation, and Chemlife's poultry product range.\n\nWhat can I help you with today? 🐔",
@@ -116,7 +116,7 @@ function parseInline(str: string): React.ReactNode[] {
           href={url}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-brand-orange hover:text-brand-orange-hover underline underline-offset-2 font-medium"
+          className="text-brand-orange hover:text-orange-700 underline underline-offset-2 font-medium"
         >
           {label}
         </a>
@@ -157,7 +157,7 @@ function parseMarkdownToJSX(text: string): React.ReactNode[] {
       elements.push(<h2 key={`h2-${index}`} className="text-[14px] font-bold text-slate-800 mt-3 mb-2">{parseInline(trimmed.slice(3))}</h2>);
     } else if (trimmed.startsWith("> ")) {
       flushList(`ul-${index}`);
-      elements.push(<blockquote key={`bq-${index}`} className="border-l-2 border-slate-300 pl-3 my-2 text-[12px] text-slate-600 italic">{parseInline(trimmed.slice(2))}</blockquote>);
+      elements.push(<blockquote key={`bq-${index}`} className="border-l-2 border-slate-300 pl-3 my-2 text-[12px] text-slate-500 italic">{parseInline(trimmed.slice(2))}</blockquote>);
     } else if (trimmed.startsWith("- ") || trimmed.startsWith("\u2022 ")) {
       if (!inList || listType !== "ul") { flushList(`ul-${index}`); inList = true; listType = "ul"; listItems = []; }
       listItems.push(<li key={`li-${index}`} className="text-[13px] text-slate-700 leading-relaxed">{parseInline(trimmed.slice(2))}</li>);
@@ -252,11 +252,11 @@ function BotBubble({
           </div>
         )}
         {!isError && !isGreeting && (!sources || sources.length === 0) && (
-          <div className="mt-2 flex flex-wrap items-center gap-1.5 text-[11px] text-slate-600 font-medium px-1">
+          <div className="mt-2 flex flex-wrap items-center gap-1.5 text-[11px] text-slate-500 font-medium px-1">
             <span>Explore:</span>
-            <Link href="/research" className="text-brand-orange hover:text-brand-orange-hover underline underline-offset-2 font-semibold">Research Hub</Link>
+            <Link href="/research" className="text-brand-orange hover:text-orange-700 underline underline-offset-2 font-semibold">Research Hub</Link>
             <span>•</span>
-            <Link href="/insights" className="text-brand-orange hover:text-brand-orange-hover underline underline-offset-2 font-semibold">Insights & Blog</Link>
+            <Link href="/insights" className="text-brand-orange hover:text-orange-700 underline underline-offset-2 font-semibold">Insights & Blog</Link>
           </div>
         )}
       </div>
@@ -445,15 +445,15 @@ function ChatSessionContent() {
                 <div className="flex items-center gap-2">
                   <span className="font-heading font-bold text-slate-800 text-[15px]">{meta.name}</span>
                   <span className={`w-2 h-2 rounded-full flex-shrink-0 ${offline ? "bg-slate-300" : "bg-emerald-500"}`} />
-                  <span className={`text-[10px] font-semibold uppercase tracking-wider hidden sm:block ${offline ? "text-slate-600" : "text-emerald-700"}`}>
+                  <span className={`text-[10px] font-semibold uppercase tracking-wider hidden sm:block ${offline ? "text-slate-400" : "text-emerald-600"}`}>
                     {offline ? "Offline" : "Live"}
                   </span>
                 </div>
-                <p className="text-[11px] text-slate-600 font-medium truncate">{meta.specialty}</p>
+                <p className="text-[11px] text-slate-500 font-medium truncate">{meta.specialty}</p>
               </div>
             </div>
             <div className="flex items-center gap-2 flex-shrink-0">
-              <Link href="/chat" className="text-[11px] font-semibold text-slate-600 hover:text-brand-navy bg-white px-3 py-1.5 rounded-lg border border-slate-200 hover:border-slate-300 transition-all whitespace-nowrap">
+              <Link href="/chat" className="text-[11px] font-semibold text-slate-500 hover:text-brand-navy bg-white px-3 py-1.5 rounded-lg border border-slate-200 hover:border-slate-300 transition-all whitespace-nowrap">
                 ← Agents
               </Link>
               <Link href={`/chat/${otherBot}`} className={`text-[11px] font-semibold text-white px-3 py-1.5 rounded-lg transition-all whitespace-nowrap ${meta.accentBg} hover:opacity-90`}>
@@ -500,7 +500,7 @@ function ChatSessionContent() {
                 disabled={loading || offline}
                 maxLength={MAX_MESSAGE_CHARS}
                 autoComplete="off"
-                className={`flex-1 text-sm px-4 py-2.5 border border-slate-200 rounded-xl bg-slate-50 focus:bg-white transition-all placeholder:text-slate-600 text-slate-800 outline-none disabled:opacity-60 ${meta.inputFocus}`}
+                className={`flex-1 text-sm px-4 py-2.5 border border-slate-200 rounded-xl bg-slate-50 focus:bg-white transition-all placeholder:text-slate-400 text-slate-800 outline-none disabled:opacity-60 ${meta.inputFocus}`}
               />
               <button
                 type="submit"
@@ -530,7 +530,7 @@ function ChatSessionContent() {
               <button
                 onClick={handleRefreshFaqs}
                 disabled={faqsLoading}
-                className="text-[10px] text-slate-600 hover:text-slate-600 transition-colors font-semibold tabular-nums flex items-center gap-1 cursor-pointer disabled:opacity-50"
+                className="text-[10px] text-slate-400 hover:text-slate-600 transition-colors font-semibold tabular-nums flex items-center gap-1 cursor-pointer disabled:opacity-50"
                 title="Click to refresh questions"
               >
                 ↻ {countdown}s
@@ -542,7 +542,7 @@ function ChatSessionContent() {
                   <div key={i} className="h-12 rounded-xl bg-slate-50 border border-slate-100 animate-pulse" />
                 ))
               ) : faqs.length === 0 ? (
-                <p className="text-xs text-slate-600 italic text-center py-5">No suggestions yet.</p>
+                <p className="text-xs text-slate-400 italic text-center py-5">No suggestions yet.</p>
               ) : (
                 faqs.map((faq, i) => (
                   <button key={i} onClick={() => handleSelectFaq(faq)} disabled={loading || offline}
@@ -556,7 +556,7 @@ function ChatSessionContent() {
 
           {/* Switch bot card */}
           <div className="bg-white border border-slate-200/80 rounded-2xl shadow-sm p-4">
-            <p className="text-[11px] text-slate-600 font-medium mb-2.5">Wrong specialist?</p>
+            <p className="text-[11px] text-slate-400 font-medium mb-2.5">Wrong specialist?</p>
             <Link href={`/chat/${otherBot}`}
               className={`flex items-center gap-3 p-2.5 rounded-xl border ${meta.accentBorder} ${meta.accentBgLight} hover:opacity-80 transition-all`}>
               <div className="w-9 h-9 rounded-full bg-white border border-slate-200 flex items-center justify-center overflow-hidden shadow-xs flex-shrink-0">
@@ -564,14 +564,14 @@ function ChatSessionContent() {
               </div>
               <div className="min-w-0">
                 <p className="text-[12px] font-bold text-slate-800">{BOT_META[otherBot].name}</p>
-                <p className="text-[10px] text-slate-600 truncate">{BOT_META[otherBot].specialty}</p>
+                <p className="text-[10px] text-slate-500 truncate">{BOT_META[otherBot].specialty}</p>
               </div>
               <span className={`ml-auto text-[11px] font-semibold flex-shrink-0 ${meta.accentText}`}>Switch</span>
             </Link>
           </div>
 
           {/* Disclaimer */}
-          <p className="text-[10px] text-slate-600 text-center px-2 leading-relaxed">
+          <p className="text-[10px] text-slate-400 text-center px-2 leading-relaxed">
             AI responses are for general guidance only. For specific advice,{" "}
             <a href="mailto:chemlifeinnovations@gmail.com" className="underline hover:text-slate-600 transition-colors">contact the Chemlife team</a>.
           </p>
