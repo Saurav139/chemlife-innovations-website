@@ -47,20 +47,20 @@ export default function Header() {
       }`}
     >
       <div className="max-w-[1200px] mx-auto pr-6 pl-2">
-        <div className="flex items-center justify-between h-20 md:h-24 lg:h-32">
+        <div className="flex items-center justify-between gap-6 h-16 md:h-18 lg:h-20">
           <a href={href("/")} className="flex-shrink-0">
             <Image
-              src={Images.branding.logo}
+              src={Images.branding.logoHorizontal}
               alt="ChemLife Innovations"
-              width={112}
-              height={112}
-              sizes="112px"
+              width={653}
+              height={240}
+              sizes="131px"
               loading="eager"
-              className="h-16 md:h-20 lg:h-28 w-auto"
+              className="h-10 md:h-11 lg:h-10 xl:h-11 w-auto"
             />
           </a>
 
-          <nav className={`hidden lg:flex items-center ${showPreviews ? "gap-4 xl:gap-8" : "gap-7 xl:gap-10"}`}>
+          <nav className={`hidden lg:flex items-center ${showPreviews ? "gap-3 xl:gap-7" : "gap-7 xl:gap-10"}`}>
             {navLinks.map((link) => {
               const isActive =
                 pathname === link.path || (pathname.startsWith(link.path) && link.path !== "/");
@@ -110,7 +110,7 @@ export default function Header() {
 
        {mobileOpen && (
           <div className="lg:hidden bg-white border-t border-brand-navy/10 shadow-xl">
-            <div className="px-6 py-4 space-y-2 max-h-[calc(100dvh-5rem)] md:max-h-[calc(100dvh-6rem)] overflow-y-auto">
+            <div className="px-6 py-4 space-y-2 max-h-[calc(100dvh-4rem)] md:max-h-[calc(100dvh-4.5rem)] overflow-y-auto">
               {navLinks.map((link) => {
                 const isActive =
                   pathname === link.path || (pathname.startsWith(link.path) && link.path !== "/");
