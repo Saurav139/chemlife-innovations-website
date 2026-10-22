@@ -28,7 +28,7 @@ export default function ChatLandingPage() {
             className="w-full max-w-[850px] bg-white border border-slate-200 rounded-3xl p-8 md:p-12 shadow-sm text-center relative overflow-hidden flex flex-col items-center"
           >
             {/* Beta Version Badge */}
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-50 border border-teal-200 text-teal-600 text-xs font-bold uppercase tracking-wider mb-3 select-none no-underline">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-50 border border-teal-200 text-teal-700 text-xs font-bold uppercase tracking-wider mb-3 select-none no-underline">
               Beta Version
             </div>
 
@@ -60,7 +60,7 @@ export default function ChatLandingPage() {
                 <p className="text-xs text-blue-600 font-bold uppercase tracking-wider mb-4">
                   Poultry Nutrition Expert
                 </p>
-                <span className="text-[11px] font-bold text-white bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-xl transition-all">
+                <span className="text-[11px] font-bold text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-xl transition-all">
                   Consult Specialist →
                 </span>
               </Link>
@@ -78,10 +78,10 @@ export default function ChatLandingPage() {
                   />
                 </div>
                 <h3 className="text-xl font-bold text-slate-800 mb-1 group-hover:text-brand-orange transition-colors">Dr. Mikku</h3>
-                <p className="text-xs text-brand-orange font-bold uppercase tracking-wider mb-4">
+                <p className="text-xs text-brand-orange-dark font-bold uppercase tracking-wider mb-4">
                   Dairy & Ruminant Specialist
                 </p>
-                <span className="text-[11px] font-bold text-white bg-brand-orange hover:bg-orange-600 px-4 py-2 rounded-xl transition-all">
+                <span className="text-[11px] font-bold text-white bg-brand-orange-dark hover:bg-brand-orange-darker px-4 py-2 rounded-xl transition-all">
                   Consult Specialist →
                 </span>
               </Link>
@@ -91,7 +91,7 @@ export default function ChatLandingPage() {
             <div className="flex flex-col sm:flex-row gap-4 w-full justify-center">
               <Link
                 href="/products"
-                className="px-8 py-3.5 rounded-full bg-brand-navy hover:bg-teal-600 hover:text-white text-white font-bold text-sm shadow transition-colors duration-300 text-center"
+                className="px-8 py-3.5 rounded-full bg-brand-navy hover:bg-teal-700 hover:text-white text-white font-bold text-sm shadow transition-colors duration-300 text-center"
               >
                 Explore Feed Additives
               </Link>

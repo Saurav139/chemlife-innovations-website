@@ -19,7 +19,7 @@ const EMAIL = "innovate@chemlifeinnovations.com";
 
 const h2 = "font-heading text-2xl font-bold text-brand-navy mt-12 mb-4";
 const list = "list-disc pl-6 space-y-2";
-const link = "text-teal-600 underline hover:text-teal-700";
+const link = "text-teal-700 underline hover:text-teal-800";
 
 // English only for now.
 export default async function TermsPage({ params }: { params: Promise<{ locale: string }> }) {

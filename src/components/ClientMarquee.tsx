@@ -86,7 +86,7 @@ export default function ClientMarquee() {
     <section className="bg-white py-16 md:py-24 lg:py-32 overflow-hidden">
       <div className="max-w-[1200px] mx-auto px-6 mb-10 md:mb-16">
         <div className="text-center">
-          <span className="text-teal-400 text-base lg:text-lg font-semibold tracking-widest uppercase">
+          <span className="text-teal-700 text-base lg:text-lg font-semibold tracking-widest uppercase">
             {t.kicker}
           </span>
           <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl text-brand-navy mt-2 mb-4 leading-tight">
