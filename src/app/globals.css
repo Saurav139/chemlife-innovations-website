@@ -2,38 +2,41 @@
 
 @theme {
   /* Trying #E8614A as the site orange (the brand orange was #E65C38). */
-  --color-brand-orange: #E8614A;
+  --color-brand-orange: #e8614a;
   /* Accessible versions of the original colours, for small text and for backgrounds under white text: the closest
      colour to each original that reaches WCAG AA (4.5:1). The originals stay for icons, borders, decoration and
      large headings, where they already pass. */
-  /* While #E8614A is on trial, buttons and orange text use it too (3.4:1 on white, below AA). For AA, set these
-     back to #CF4128 / #B23822. */
-  --color-brand-orange-aa: #E8614A;
-  --color-brand-orange-aa-hover: #C85340;
-  --color-teal-aa: #138178;       /* teal-600 #009689 on white */
-  --color-teal-aa-light: #1ADBC3; /* teal-400 #00D5BE on navy */
-  --color-blue-aa: #2270F0;       /* blue-500 under white text */
-  --color-emerald-aa: #02814D;
-  --color-slate-aa: #62718D;      /* slate-500, a touch darker so it also passes on tinted panels */
+  /* Buttons, the chat and search bubbles and orange text: #CF4128 (4.5:1 on white). */
+  --color-brand-orange-aa: #cf4128;
+  --color-brand-orange-aa-hover: #b23822;
+  --color-teal-aa: #138178; /* teal-600 #009689 on white */
+  --color-teal-aa-light: #1adbc3; /* teal-400 #00D5BE on navy */
+  --color-blue-aa: #2270f0; /* blue-500 under white text */
+  --color-emerald-aa: #02814d;
+  --color-slate-aa: #62718d; /* slate-500, a touch darker so it also passes on tinted panels */
   --color-gray-aa: #687080;
-  --color-brand-orange-light: #FFFFFF;
+  --color-brand-orange-light: #ffffff;
   --color-brand-green: #305280;
   --color-brand-navy: #305280;
-  --color-brand-gold: #FFCD1E;
-  --color-warm-white: #FFFFFF;
-  --color-warm-light: #FFFFFF;
+  --color-brand-gold: #ffcd1e;
+  --color-warm-white: #ffffff;
+  --color-warm-light: #ffffff;
   --color-muted: #305280;
   --color-near-black: #305280;
-  
+
   /* Additional colors mapped strictly to the 4 core colors */
   --color-deep-blue: #305280;
-  --color-warm-orange: #E8614A;
-  --color-light-orange: #FFFFFF;
+  --color-warm-orange: #e8614a;
+  --color-light-orange: #ffffff;
   --color-process-bg: #305280;
 
   /* Maven Pro first; the Noto fonts supply the Kannada and Hindi letters it doesn't have. */
-  --font-family-heading: var(--font-maven-pro), var(--font-noto-kannada), var(--font-noto-devanagari), Calibri, system-ui, sans-serif;
-  --font-family-body: var(--font-maven-pro), var(--font-noto-kannada), var(--font-noto-devanagari), Calibri, system-ui, sans-serif;
+  --font-family-heading:
+    var(--font-maven-pro), var(--font-noto-kannada),
+    var(--font-noto-devanagari), Calibri, system-ui, sans-serif;
+  --font-family-body:
+    var(--font-maven-pro), var(--font-noto-kannada),
+    var(--font-noto-devanagari), Calibri, system-ui, sans-serif;
 }
 
 @font-face {
@@ -60,7 +63,6 @@
   font-display: swap;
 }
 
-
 @layer base {
   ::placeholder {
     color: var(--color-slate-aa);
@@ -78,15 +80,24 @@
     line-height: 1.75;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-family: var(--font-family-heading);
     color: var(--color-near-black);
   }
 }
 
 @keyframes marquee {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
 }
 
 .animate-marquee {
@@ -98,8 +109,12 @@
 }
 
 @keyframes marquee-reverse {
-  0% { transform: translateX(-50%); }
-  100% { transform: translateX(0); }
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0);
+  }
 }
 
 .animate-marquee-reverse {
@@ -111,9 +126,15 @@
 }
 
 @keyframes ken-burns {
-  0% { transform: scale(1) translate(0, 0); }
-  50% { transform: scale(1.08) translate(-1%, -1%); }
-  100% { transform: scale(1) translate(0, 0); }
+  0% {
+    transform: scale(1) translate(0, 0);
+  }
+  50% {
+    transform: scale(1.08) translate(-1%, -1%);
+  }
+  100% {
+    transform: scale(1) translate(0, 0);
+  }
 }
 
 .animate-ken-burns {
