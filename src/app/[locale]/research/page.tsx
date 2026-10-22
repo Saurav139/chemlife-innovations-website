@@ -12,8 +12,9 @@ import { useT } from "@/i18n/LocaleProvider";
 
 const easeOut = [0.25, 0.1, 0, 1] as const;
 
-// Card image widths for the browser to pick a file size from. They follow the research grid below.
-const BANNER_SIZES = "(min-width: 1024px) 335px, (min-width: 640px) calc(50vw - 68px), calc(100vw - 76px)";
+// Card image widths for the browser to pick a file size from. They follow the research grid below: three
+// columns up to 360px wide on desktop, two on tablets, one on phones.
+const BANNER_SIZES = "(min-width: 1200px) 360px, (min-width: 1024px) 31vw, (min-width: 640px) 47vw, 92vw";
 
 interface ResearchTopic {
   id: number;
@@ -181,17 +182,24 @@ export default function ResearchPage() {
                       data-analytics-click={isExpanded ? "Show Less" : "Explore Dossier"}
                       className="cursor-pointer select-none flex flex-col"
                     >
-                      {/* Top: Product Image or Icon Container - Full Uncropped View */}
-                      <div className="w-full aspect-[4/3] relative overflow-hidden bg-white border-b border-slate-200 p-3 flex items-center justify-center">
-                        <div className="relative w-full h-full">
-                          <Image
-                            src={topic.banner}
-                            alt={`${topic.title} ${t.bannerAlt}`}
-                            fill
-                            sizes={BANNER_SIZES}
-                            className="object-contain object-center group-hover:scale-105 transition-transform duration-500"
-                          />
-                        </div>
+                      {/* Card image: the same 16:10 frame on every card and screen. The whole illustration shows (some
+                          have labels that cropping would cut), over a blurred copy of itself that fills the rest. */}
+                      <div className="w-full aspect-[16/10] relative overflow-hidden bg-slate-100 border-b border-slate-200">
+                        <Image
+                          src={topic.banner}
+                          alt=""
+                          aria-hidden="true"
+                          fill
+                          sizes={BANNER_SIZES}
+                          className="object-cover scale-150 blur-2xl"
+                        />
+                        <Image
+                          src={topic.banner}
+                          alt={`${topic.title} ${t.bannerAlt}`}
+                          fill
+                          sizes={BANNER_SIZES}
+                          className="object-contain object-center group-hover:scale-105 transition-transform duration-500"
+                        />
                       </div>
 
                       {/* Content: Title */}
