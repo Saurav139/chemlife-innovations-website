@@ -2,6 +2,17 @@
 
 @theme {
   --color-brand-orange: #E65C38;
+  /* Accessible versions of the original colours, for small text and for backgrounds under white text: the closest
+     colour to each original that reaches WCAG AA (4.5:1). The originals stay for icons, borders, decoration and
+     large headings, where they already pass. */
+  --color-brand-orange-aa: #CF4128;
+  --color-brand-orange-aa-hover: #B23822;
+  --color-teal-aa: #138178;       /* teal-600 #009689 on white */
+  --color-teal-aa-light: #1ADBC3; /* teal-400 #00D5BE on navy */
+  --color-blue-aa: #2270F0;       /* blue-500 under white text */
+  --color-emerald-aa: #02814D;
+  --color-slate-aa: #62718D;      /* slate-500, a touch darker so it also passes on tinted panels */
+  --color-gray-aa: #687080;
   --color-brand-orange-light: #FFFFFF;
   --color-brand-green: #305280;
   --color-brand-navy: #305280;
@@ -48,6 +59,11 @@
 
 
 @layer base {
+  ::placeholder {
+    color: var(--color-slate-aa);
+    opacity: 1;
+  }
+
   html {
     scroll-behavior: smooth;
   }

@@ -57,8 +57,8 @@ export default function LanguageSwitcher({ inline = false }: { inline?: boolean 
       aria-current={l === locale ? "true" : undefined}
       className={
         inline
-          ? `rounded-full border px-3 py-1 text-sm font-semibold ${l === locale ? "border-brand-orange text-brand-orange" : "border-brand-navy/20 text-brand-navy"}`
-          : `block whitespace-nowrap px-4 py-2 text-[15px] font-semibold hover:bg-slate-50 ${l === locale ? "text-brand-orange" : "text-brand-navy"}`
+          ? `rounded-full border px-3 py-1 text-sm font-semibold ${l === locale ? "border-brand-orange text-brand-orange-aa" : "border-brand-navy/20 text-brand-navy"}`
+          : `block whitespace-nowrap px-4 py-2 text-[15px] font-semibold hover:bg-slate-50 ${l === locale ? "text-brand-orange-aa" : "text-brand-navy"}`
       }
     >
       {LOCALE_NAMES[l]}
@@ -81,7 +81,7 @@ export default function LanguageSwitcher({ inline = false }: { inline?: boolean 
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
         aria-label={`${t.nav.language}: ${LOCALE_NAMES[locale]}`}
-        className="flex items-center gap-1.5 rounded-full border-2 border-brand-navy/15 px-3 py-1.5 text-[15px] font-semibold text-brand-navy transition-colors hover:border-brand-orange hover:text-brand-orange cursor-pointer"
+        className="flex items-center gap-1.5 rounded-full border-2 border-brand-navy/15 px-3 py-1.5 text-[15px] font-semibold text-brand-navy transition-colors hover:border-brand-orange hover:text-brand-orange-aa cursor-pointer"
       >
         <Globe />
         <span className="whitespace-nowrap">{LOCALE_NAMES[locale]}</span>

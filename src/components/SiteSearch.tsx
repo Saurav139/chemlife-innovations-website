@@ -222,7 +222,7 @@ export default function SiteSearch() {
             >
               {/* Search Input Bar */}
               <div className="relative border-b border-slate-100 p-4">
-                <div className="absolute left-7 top-7 text-slate-400">
+                <div className="absolute left-7 top-7 text-slate-aa">
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                   </svg>
@@ -233,11 +233,11 @@ export default function SiteSearch() {
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   placeholder="Search ChemLife website (e.g., ANBioT, poultry, careers...)"
-                  className="w-full text-sm pl-11 pr-12 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-hidden focus:border-brand-navy focus:ring-1 focus:ring-brand-navy text-slate-800 placeholder-slate-400 focus:bg-white transition-all font-medium"
+                  className="w-full text-sm pl-11 pr-12 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-hidden focus:border-brand-navy focus:ring-1 focus:ring-brand-navy text-slate-800 placeholder-slate-aa focus:bg-white transition-all font-medium"
                 />
                 <button
                   onClick={() => setIsOpen(false)}
-                  className="absolute right-7 top-7 w-6 h-6 rounded-md hover:bg-slate-100 flex items-center justify-center text-slate-400 hover:text-slate-600 transition-colors text-sm cursor-pointer"
+                  className="absolute right-7 top-7 w-6 h-6 rounded-md hover:bg-slate-100 flex items-center justify-center text-slate-aa hover:text-slate-600 transition-colors text-sm cursor-pointer"
                   title="Close search"
                 >
                   ESC
@@ -249,7 +249,7 @@ export default function SiteSearch() {
                 {query.trim() === "" ? (
                   // Suggested Searches
                   <div className="py-2">
-                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-3 px-2">
+                    <p className="text-[10px] font-bold text-slate-aa uppercase tracking-wider mb-3 px-2">
                       Suggested Topics
                     </p>
                     <div className="flex flex-wrap gap-2 px-2">
@@ -278,16 +278,16 @@ export default function SiteSearch() {
                           item.category === "Page"
                             ? "bg-blue-50 text-blue-600 border border-blue-100"
                             : item.category === "Product"
-                            ? "bg-teal-50 text-teal-600 border border-teal-100"
+                            ? "bg-teal-50 text-teal-aa border border-teal-100"
                             : item.category === "Research"
                             ? "bg-purple-50 text-purple-600 border border-purple-100"
-                            : "bg-orange-50 text-brand-orange border border-orange-100"
+                            : "bg-orange-50/50 text-brand-orange-aa border border-orange-100"
                         }`}
                       >
                         {item.category}
                       </span>
                       <div className="flex-1">
-                        <h4 className="font-heading text-sm font-bold text-slate-800 group-hover:text-brand-orange transition-colors">
+                        <h4 className="font-heading text-sm font-bold text-slate-800 group-hover:text-brand-orange-aa transition-colors">
                           {item.title}
                         </h4>
                         <p className="text-xs text-slate-500 leading-normal line-clamp-1 mt-0.5 font-normal">
@@ -299,7 +299,7 @@ export default function SiteSearch() {
                 ) : (
                   // No results state
                   <div className="text-center py-10 font-normal">
-                    <span className="text-slate-400 text-sm">
+                    <span className="text-slate-aa text-sm">
                       No matching pages or insights found for &ldquo;<span className="font-semibold text-slate-600">{query}</span>&rdquo;.
                     </span>
                   </div>
@@ -307,7 +307,7 @@ export default function SiteSearch() {
               </div>
 
               {/* Modal Footer */}
-              <div className="px-6 py-3 bg-slate-50 border-t border-slate-100 flex justify-between items-center text-[9px] text-slate-400 font-semibold tracking-wider uppercase">
+              <div className="px-6 py-3 bg-slate-50 border-t border-slate-100 flex justify-between items-center text-[9px] text-slate-aa font-semibold tracking-wider uppercase">
                 <span>Navigate directly by clicking results</span>
                 <span>ChemLife Search</span>
               </div>
