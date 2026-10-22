@@ -15,6 +15,8 @@ export const Images = {
   /** Brand identity: logos, wordmarks */
   branding: {
     logo: "/images/branding/logo.jpg",
+    /** Flask and wordmark side by side on a transparent background, for the header. Built from logo.jpg. */
+    logoHorizontal: "/images/branding/logo-horizontal.png",
   },
 
   /** Full-page hero background images */

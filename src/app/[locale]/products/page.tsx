@@ -260,7 +260,7 @@ export default function ProductsPage() {
       <main className="bg-slate-50/50 min-h-screen text-brand-navy">
         {/* Hero and product list are plain sections: they're in the first screen, so they show without waiting for a fade-in.
             The hero image is the page's largest paint (LCP), so it loads first. */}
-        <section className="pt-32 pb-20 lg:pt-40 lg:pb-28 text-white relative overflow-hidden bg-brand-navy flex items-center">
+        <section className="pt-28 pb-20 lg:pt-32 lg:pb-28 text-white relative overflow-hidden bg-brand-navy flex items-center">
           <div className="absolute inset-0 z-0">
             <Image
               src={Images.products.heroBanner}
