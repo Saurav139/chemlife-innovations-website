@@ -116,7 +116,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
       <main className="bg-white min-h-screen text-brand-navy">
         {/* Hero and Featured are plain sections: they're in the first screen, so they show without waiting for a fade-in.
             The hero image is the page's largest paint (LCP), so it loads first. */}
-        <section className="pt-30 md:pt-32 pb-24 lg:pt-36 lg:pb-32 text-white relative overflow-hidden bg-brand-navy flex items-center">
+        <section className="pt-26 md:pt-32 pb-10 md:pb-24 lg:pt-36 lg:pb-32 text-white relative overflow-hidden bg-brand-navy flex items-center">
           <div className="absolute inset-0 z-0">
             <Image
               src={Images.heroes.insights}
@@ -135,17 +135,17 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
             <span className="text-teal-400 text-sm font-semibold tracking-widest uppercase block mb-3">
               Insights
             </span>
-            <h1 className="font-heading text-4xl lg:text-6xl font-bold leading-tight mb-4 text-white max-w-4xl">
+            <h1 className="font-heading text-3xl md:text-4xl lg:text-6xl font-bold leading-tight mb-3 md:mb-4 text-white max-w-4xl">
               <span className="text-teal-400">Knowledge</span> & Perspectives
             </h1>
-            <p className="text-white/85 text-lg lg:text-xl leading-relaxed max-w-3xl font-light">
+            <p className="text-white/85 text-base md:text-lg lg:text-xl leading-relaxed max-w-3xl font-light">
               Stay updated with the latest industry trends, veterinary research, and biotechnology advancements.
             </p>
           </div>
         </section>
 
         {/* Featured Section (Three Columns) */}
-        <section className="pt-24 pb-8 bg-white">
+        <section className="pt-10 md:pt-24 pb-8 bg-white">
           <div className="max-w-[1200px] mx-auto px-6">
             <div className="mb-10">
               <h2 className="font-heading text-3xl lg:text-4xl font-bold text-brand-navy">
