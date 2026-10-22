@@ -193,7 +193,7 @@ export default function ResearchPage() {
 
                       {/* Content: Title */}
                       <div className="p-6 flex flex-col gap-3">
-                        <h3 className="font-heading text-2xl font-black text-brand-navy group-hover:text-brand-orange transition-colors duration-300 leading-tight">
+                        <h3 className="font-heading text-xl sm:text-2xl font-black text-brand-navy group-hover:text-brand-orange transition-colors duration-300 leading-tight">
                           {topic.title}
                         </h3>
 

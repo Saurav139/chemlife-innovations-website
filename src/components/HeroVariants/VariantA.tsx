@@ -29,9 +29,9 @@ const bgImages = [
 const STORY_VIDEO_ID = "-amOgNcjYNg";
 
 const primaryCtaClass =
-  "inline-flex items-center gap-2 px-7 py-3 rounded-full text-sm font-semibold bg-brand-orange border-2 border-brand-orange text-white hover:bg-white hover:text-brand-orange shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5";
+  "inline-flex items-center justify-center gap-2 w-full max-w-[280px] sm:w-auto sm:max-w-none px-7 py-3 rounded-full text-sm font-semibold bg-brand-orange border-2 border-brand-orange text-white hover:bg-white hover:text-brand-orange shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5";
 const secondaryCtaClass =
-  "inline-flex items-center gap-2 px-7 py-3 rounded-full text-sm font-semibold border-2 border-white/80 text-white hover:bg-white hover:text-brand-navy transition-all duration-300 transform hover:-translate-y-0.5";
+  "inline-flex items-center justify-center gap-2 w-full max-w-[280px] sm:w-auto sm:max-w-none px-7 py-3 rounded-full text-sm font-semibold border-2 border-white/80 text-white hover:bg-white hover:text-brand-navy transition-all duration-300 transform hover:-translate-y-0.5";
 
 // Labels are in the language file (home.stats), in this order.
 const stats = [
@@ -82,7 +82,7 @@ function AnimatedCounter({ value, suffix }: { value: number; suffix: string }) {
   }, [value]);
 
   return (
-    <span ref={ref} className="font-heading text-5xl lg:text-6xl font-bold text-teal-400">
+    <span ref={ref} className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold text-teal-400">
       {count}{suffix}
     </span>
   );
@@ -160,9 +160,9 @@ export default function HeroVariantA() {
       <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent z-20" />
       <div className="absolute inset-0 bg-black/10 z-20" />
 
-      <div className="relative z-30 max-w-[1200px] mx-auto px-6 py-32 w-full h-full flex flex-col justify-center">
+      <div className="relative z-30 max-w-[1200px] mx-auto px-6 pt-28 pb-16 md:py-32 w-full h-full flex flex-col justify-center">
         <div className="max-w-4xl flex-1 flex flex-col justify-center mx-auto text-center items-center">
-          <div className="min-h-[340px] flex flex-col justify-center items-center text-center w-full">
+          <div className="min-h-[300px] md:min-h-[340px] flex flex-col justify-center items-center text-center w-full">
             {/* initial={false}: see the background slides above */}
             <AnimatePresence mode="wait" initial={false}>
               <motion.h1
@@ -171,7 +171,7 @@ export default function HeroVariantA() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.6, ease: [0.25, 0.1, 0, 1] }}
-                className="font-heading text-5xl md:text-6xl lg:text-7xl leading-[1.1] mb-10 sm:mb-16 text-white font-bold text-center"
+                className="font-heading text-[34px] sm:text-5xl md:text-6xl lg:text-7xl leading-[1.1] mb-8 sm:mb-16 text-white font-bold text-center"
               >
                 {tagline[0]}<br />
                 <span className="text-teal-400">{tagline[1]}</span><br />
@@ -179,7 +179,7 @@ export default function HeroVariantA() {
               </motion.h1>
             </AnimatePresence>
 
-            <div className="flex flex-wrap gap-4 justify-center w-full mt-2">
+            <div className="flex flex-col sm:flex-row sm:flex-wrap items-center gap-3 sm:gap-4 justify-center w-full mt-2">
               <Link href={href("/products")} className={primaryCtaClass}>
                 {t.home.findProduct}
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -201,22 +201,33 @@ export default function HeroVariantA() {
               </svg>
               {t.home.watchStory}
             </button>
+
+            <div className="flex md:hidden gap-2.5 mt-6">
+              {bgImages.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setBgIndex(i)}
+                  className={`h-2 rounded-full transition-all duration-300 ${i === bgIndex ? "w-6 bg-teal-400" : "w-2 bg-white/40"}`}
+                  aria-label={`${t.home.goToSlide} ${i + 1}`}
+                />
+              ))}
+            </div>
           </div>
         </div>
 
         {/* Serial Embedded Company Stats */}
-        <div className="w-full mt-24 pt-12 grid grid-cols-2 md:grid-cols-4 gap-8">
+        <div className="w-full mt-12 md:mt-24 md:pt-12 grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-8 md:gap-8">
           {stats.map((stat, idx) => (
             <div key={idx} className="flex flex-col items-center justify-center text-center">
               <AnimatedCounter value={stat.value} suffix={stat.suffix} />
-              <span className="text-white/70 text-sm font-semibold uppercase tracking-widest mt-3">{t.home.stats[idx]}</span>
+              <span className="text-white/70 text-xs md:text-sm font-semibold uppercase tracking-wider md:tracking-widest mt-2 md:mt-3">{t.home.stats[idx]}</span>
             </div>
           ))}
         </div>
       </div>
 
       {/* Floating Vertical Dotted Navigator on the Right */}
-      <div className="absolute right-6 lg:right-12 top-1/2 -translate-y-1/2 flex flex-col gap-4 z-40">
+      <div className="absolute right-6 lg:right-12 top-1/2 -translate-y-1/2 hidden md:flex flex-col gap-4 z-40">
         {bgImages.map((_, i) => {
           const isActive = i === bgIndex;
           return (

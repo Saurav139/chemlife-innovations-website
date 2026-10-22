@@ -189,13 +189,13 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                     )}
                   </div>
 
-                  <div className="flex items-center gap-4 pt-4 border-t border-gray-100">
+                  <div className="flex flex-wrap items-center gap-3 sm:gap-4 pt-4 border-t border-gray-100">
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
                         setActiveArticle(featuredBlog);
                       }}
-                      className="px-6 py-2.5 rounded-full bg-teal-600 hover:bg-teal-700 text-white font-bold text-sm shadow-sm hover:shadow transition-all duration-300 cursor-pointer"
+                      className="flex-1 sm:flex-none text-center whitespace-nowrap px-6 py-2.5 rounded-full bg-teal-600 hover:bg-teal-700 text-white font-bold text-sm shadow-sm hover:shadow transition-all duration-300 cursor-pointer"
                     >
                       Read Article
                     </button>
@@ -203,7 +203,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                       href={featuredBlog.linkUrl || "https://www.linkedin.com/company/chemlifeinnovations/posts/?feedView=all"}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="px-6 py-2.5 rounded-full border border-gray-200 text-gray-600 hover:bg-gray-50 hover:text-teal-600 font-bold text-sm transition-all duration-300 cursor-pointer"
+                      className="flex-1 sm:flex-none text-center whitespace-nowrap px-6 py-2.5 rounded-full border border-gray-200 text-gray-600 hover:bg-gray-50 hover:text-teal-600 font-bold text-sm transition-all duration-300 cursor-pointer"
                       onClick={(e) => e.stopPropagation()}
                     >
                       {featuredBlog.linkUrl?.includes("wordpress.com") ? "Read on WordPress" : "View on LinkedIn"}
@@ -255,10 +255,10 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                     )}
                   </div>
 
-                  <div className="flex items-center gap-4 pt-4 border-t border-gray-100">
+                  <div className="flex flex-wrap items-center gap-3 sm:gap-4 pt-4 border-t border-gray-100">
                     <button
                       onClick={() => setActiveVideoId(featuredVideo.youtubeId!)}
-                      className="px-6 py-2.5 rounded-full bg-teal-600 hover:bg-teal-700 text-white font-bold text-sm shadow-sm hover:shadow transition-all duration-300 cursor-pointer"
+                      className="flex-1 sm:flex-none text-center whitespace-nowrap px-6 py-2.5 rounded-full bg-teal-600 hover:bg-teal-700 text-white font-bold text-sm shadow-sm hover:shadow transition-all duration-300 cursor-pointer"
                     >
                       Watch Now
                     </button>
@@ -266,7 +266,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                       href={`https://www.youtube.com/watch?v=${featuredVideo.youtubeId}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="px-6 py-2.5 rounded-full border border-gray-200 text-gray-600 hover:bg-gray-50 hover:text-teal-600 font-bold text-sm transition-all duration-300"
+                      className="flex-1 sm:flex-none text-center whitespace-nowrap px-6 py-2.5 rounded-full border border-gray-200 text-gray-600 hover:bg-gray-50 hover:text-teal-600 font-bold text-sm transition-all duration-300"
                     >
                       Watch on YouTube
                     </a>
@@ -317,10 +317,10 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                     )}
                   </div>
 
-                  <div className="flex items-center gap-4 pt-4 border-t border-gray-100">
+                  <div className="flex flex-wrap items-center gap-3 sm:gap-4 pt-4 border-t border-gray-100">
                     <button
                       onClick={() => setActiveVideoId(featuredPodcast.youtubeId!)}
-                      className="px-6 py-2.5 rounded-full bg-teal-600 hover:bg-teal-700 text-white font-bold text-sm shadow-sm hover:shadow transition-all duration-300 cursor-pointer"
+                      className="flex-1 sm:flex-none text-center whitespace-nowrap px-6 py-2.5 rounded-full bg-teal-600 hover:bg-teal-700 text-white font-bold text-sm shadow-sm hover:shadow transition-all duration-300 cursor-pointer"
                     >
                       Listen Now
                     </button>
@@ -328,7 +328,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                       href={`https://www.youtube.com/watch?v=${featuredPodcast.youtubeId}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="px-6 py-2.5 rounded-full border border-gray-200 text-gray-600 hover:bg-gray-50 hover:text-teal-600 font-bold text-sm transition-all duration-300"
+                      className="flex-1 sm:flex-none text-center whitespace-nowrap px-6 py-2.5 rounded-full border border-gray-200 text-gray-600 hover:bg-gray-50 hover:text-teal-600 font-bold text-sm transition-all duration-300"
                     >
                       Watch on YouTube
                     </a>
@@ -714,7 +714,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                 )}
                 <button
                   onClick={() => setActiveArticle(null)}
-                  className="px-6 py-2.5 rounded-full bg-brand-navy text-white font-bold text-sm hover:bg-teal-600 transition-colors cursor-pointer"
+                  className="whitespace-nowrap px-6 py-2.5 rounded-full bg-brand-navy text-white font-bold text-sm hover:bg-teal-600 transition-colors cursor-pointer"
                 >
                   Close Reader
                 </button>

@@ -42,7 +42,7 @@ function FlipCard({ frontLogo, backLogo, index, flipped }: FlipCardProps) {
         }}
       >
         {/* Front Side */}
-        <div className={`absolute inset-0 backface-hidden ${cardBg} ${borderStyle} rounded-2xl flex items-center justify-center p-6 ${shadowStyle} hover:scale-[1.02] transition-all duration-300`}>
+        <div className={`absolute inset-0 backface-hidden ${cardBg} ${borderStyle} rounded-2xl flex items-center justify-center p-3 sm:p-6 ${shadowStyle} hover:scale-[1.02] transition-all duration-300`}>
           <div className="relative w-full h-full">
             <Image
               src={Images.partnerLogos.path(frontLogo)}
@@ -55,7 +55,7 @@ function FlipCard({ frontLogo, backLogo, index, flipped }: FlipCardProps) {
         </div>
 
         {/* Back Side */}
-        <div className={`absolute inset-0 backface-hidden rotate-y-180 ${cardBg} ${borderStyle} rounded-2xl flex items-center justify-center p-6 ${shadowStyle} hover:scale-[1.02] transition-all duration-300`}>
+        <div className={`absolute inset-0 backface-hidden rotate-y-180 ${cardBg} ${borderStyle} rounded-2xl flex items-center justify-center p-3 sm:p-6 ${shadowStyle} hover:scale-[1.02] transition-all duration-300`}>
           <div className="relative w-full h-full">
             <Image
               src={Images.partnerLogos.path(backLogo)}
@@ -83,20 +83,20 @@ export default function ClientMarquee() {
   }, []);
 
   return (
-    <section className="bg-white py-24 lg:py-32 overflow-hidden">
-      <div className="max-w-[1200px] mx-auto px-6 mb-16">
+    <section className="bg-white py-16 md:py-24 lg:py-32 overflow-hidden">
+      <div className="max-w-[1200px] mx-auto px-6 mb-10 md:mb-16">
         <div className="text-center">
           <span className="text-teal-400 text-base lg:text-lg font-semibold tracking-widest uppercase">
             {t.kicker}
           </span>
-          <h2 className="font-heading text-4xl lg:text-5xl text-brand-navy mt-2 mb-4 leading-tight">
+          <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl text-brand-navy mt-2 mb-4 leading-tight">
             {t.title}
           </h2>
         </div>
       </div>
 
       <div className="max-w-[1200px] mx-auto px-6">
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-6 md:gap-8">
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
           {frontLogos.map((logo, i) => (
             <FlipCard
               key={`flip-${i}`}
