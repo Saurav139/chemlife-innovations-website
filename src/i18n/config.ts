@@ -24,9 +24,8 @@ export function isLocale(value: string): value is Locale {
 /** The language a browser address is in, and the address without its language prefix. */
 export function splitLocale(pathname: string): { locale: Locale; path: string } {
   const first = pathname.split("/")[1] ?? "";
-  if (isLocale(first) && first !== DEFAULT_LOCALE) {
-    return { locale: first, path: pathname.slice(first.length + 1) || "/" };
-  }
+  // English pages are served from /en/... behind the scenes, and the page code can see that address.
+  if (isLocale(first)) return { locale: first, path: pathname.slice(first.length + 1) || "/" };
   return { locale: DEFAULT_LOCALE, path: pathname };
 }
 
