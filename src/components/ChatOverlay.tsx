@@ -10,7 +10,7 @@ export default function ChatOverlay() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 font-sans">
+    <div className="fixed bottom-4 right-4 md:bottom-6 md:right-6 z-50 font-sans flex flex-col items-end">
       <AnimatePresence>
         {/* Expanded Panel */}
         {isOpen && (
@@ -19,7 +19,7 @@ export default function ChatOverlay() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 30, scale: 0.95 }}
             transition={{ duration: 0.25, ease: "easeOut" }}
-            className="mb-4 w-[380px] max-w-[calc(100vw-2rem)] bg-white rounded-2xl shadow-2xl border border-slate-200/50 overflow-hidden flex flex-col"
+            className="mb-3 md:mb-4 w-[380px] max-w-[calc(100vw-2rem)] max-h-[calc(100dvh-7rem)] overflow-y-auto bg-white rounded-2xl shadow-2xl border border-slate-200/50 overflow-hidden flex flex-col"
           >
             {/* Header with Brand Navy and Accent gradient */}
             <div className="p-5 bg-linear-to-r from-brand-navy to-[#1e3452] text-white flex justify-between items-center relative">
@@ -125,7 +125,10 @@ export default function ChatOverlay() {
         onClick={() => setIsOpen(!isOpen)}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        className="flex items-center gap-3 bg-brand-orange text-white px-5 py-3.5 rounded-full shadow-2xl hover:bg-brand-orange/95 transition-all group border-2 border-white/20 cursor-pointer"
+        aria-label="Ask our AI experts"
+        aria-expanded={isOpen}
+        // Phones get a compact bubble with just the mascots; the label appears from tablet width up.
+        className="flex items-center gap-2 md:gap-3 bg-brand-orange text-white p-2 md:px-5 md:py-3.5 rounded-full shadow-2xl hover:bg-brand-orange/95 transition-all group border-2 border-white/20 cursor-pointer"
       >
         <div className="flex -space-x-4">
           <div className="w-10 h-10 rounded-full border-2 border-white bg-white overflow-hidden shadow-md flex-shrink-0 flex items-center justify-center p-0.5">
@@ -143,10 +146,10 @@ export default function ChatOverlay() {
             />
           </div>
         </div>
-        <span className="font-heading font-bold text-xs tracking-wider uppercase select-none">
+        <span className="hidden md:inline font-heading font-bold text-xs tracking-wider uppercase select-none">
           Ask our AI Experts
         </span>
-        <span className="text-emerald-400 animate-pulse text-xs select-none">●</span>
+        <span className="hidden md:inline text-emerald-400 animate-pulse text-xs select-none" aria-hidden="true">●</span>
       </motion.button>
     </div>
   );

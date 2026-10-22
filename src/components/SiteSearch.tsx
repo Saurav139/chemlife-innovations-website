@@ -184,7 +184,7 @@ export default function SiteSearch() {
   return (
     <>
       {/* Floating Search Button on Bottom-Left */}
-      <div className="fixed bottom-6 left-6 z-50">
+      <div className="fixed bottom-4 left-4 md:bottom-6 md:left-6 z-50">
         <motion.button
           onClick={() => setIsOpen(true)}
           whileHover={{ scale: 1.08 }}

@@ -47,7 +47,7 @@ export default function Header() {
       }`}
     >
       <div className="max-w-[1200px] mx-auto pr-6 pl-2">
-        <div className="flex items-center justify-between h-32">
+        <div className="flex items-center justify-between h-20 md:h-24 lg:h-32">
           <a href={href("/")} className="flex-shrink-0">
             <Image
               src={Images.branding.logo}
@@ -56,7 +56,7 @@ export default function Header() {
               height={112}
               sizes="112px"
               loading="eager"
-              className="h-28 w-auto"
+              className="h-16 md:h-20 lg:h-28 w-auto"
             />
           </a>
 
@@ -110,7 +110,7 @@ export default function Header() {
 
        {mobileOpen && (
           <div className="lg:hidden bg-white border-t border-brand-navy/10 shadow-xl">
-            <div className="px-6 py-4 space-y-3">
+            <div className="px-6 py-4 space-y-2 max-h-[calc(100dvh-5rem)] md:max-h-[calc(100dvh-6rem)] overflow-y-auto">
               {navLinks.map((link) => {
                 const isActive =
                   pathname === link.path || (pathname.startsWith(link.path) && link.path !== "/");
@@ -119,7 +119,7 @@ export default function Header() {
                   <a
                     key={link.path}
                     href={link.href}
-                    className={`block text-sm font-medium ${
+                    className={`block py-1 text-base font-medium ${
                       isActive
                         ? "text-brand-orange"
                         : "text-brand-navy hover:text-brand-orange"
@@ -131,7 +131,7 @@ export default function Header() {
                 );
               })}
               {showPreviews && (
-                <a href="/previews" className="block text-sm font-semibold text-brand-orange" onClick={() => setMobileOpen(false)}>
+                <a href="/previews" className="block py-1 text-base font-semibold text-brand-orange" onClick={() => setMobileOpen(false)}>
                   Design previews
                 </a>
               )}
