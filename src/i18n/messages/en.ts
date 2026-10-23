@@ -93,9 +93,8 @@ const en = {
       ["Green Trace Mineral", "Chelation & Nano", "Technologies"],
     ],
     slideAlts: [
-      "The ChemLife Innovations leadership team in the garden at our office",
-      "The ChemLife team showing visitors around a feed warehouse",
-      "The ChemLife Innovations team outside our facility",
+      "Free range chicken farm",
+      "Dairy cattle farm",
       "Cow with her calf in a green pasture",
       "Chick drinking from a poultry drinker",
     ],
