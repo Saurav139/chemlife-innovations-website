@@ -29,10 +29,11 @@ const bgImages = [
 
 const STORY_VIDEO_ID = "-amOgNcjYNg";
 
+// Width hugs each button's own text (not the slide's headline), so it can't change between slides.
 const primaryCtaClass =
-  "inline-flex items-center justify-center gap-2 w-full max-w-[280px] sm:w-auto sm:max-w-none px-7 py-3 rounded-full text-sm font-semibold bg-brand-orange-aa border-2 border-brand-orange-aa text-white hover:bg-white hover:text-brand-orange-aa shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5";
+  "inline-flex items-center justify-center gap-2 w-auto px-7 py-3 rounded-full text-sm font-semibold bg-brand-orange-aa border-2 border-brand-orange-aa text-white hover:bg-white hover:text-brand-orange-aa shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5";
 const secondaryCtaClass =
-  "inline-flex items-center justify-center gap-2 w-full max-w-[280px] sm:w-auto sm:max-w-none px-7 py-3 rounded-full text-sm font-semibold border-2 border-white/80 text-white hover:bg-white hover:text-brand-navy transition-all duration-300 transform hover:-translate-y-0.5";
+  "inline-flex items-center justify-center gap-2 w-auto px-7 py-3 rounded-full text-sm font-semibold border-2 border-white/80 text-white hover:bg-white hover:text-brand-navy transition-all duration-300 transform hover:-translate-y-0.5";
 
 // Labels are in the language file (home.stats), in this order.
 const stats = [
