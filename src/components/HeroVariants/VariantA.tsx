@@ -9,7 +9,7 @@ import { Images } from "@/lib/assets";
 import { useHref, useT } from "@/i18n/LocaleProvider";
 import { playOnPage, youtubeWatchUrl } from "@/lib/youtube";
 
-// The headline for each slide is in the language file (home.taglines), in the same order as these photos.
+// The headlines (home.taglines in the language files) and the photos rotate separately: five headlines, four photos.
 
 // The slides cover the hero, so on screens taller than the image they're drawn wider than the screen:
 // 1.5× the screen height for 3:2 photos, 2× for 2:1. `sizes` tells the browser which file is sharp enough.
@@ -20,9 +20,8 @@ const sizesFor = (aspect: "3/2" | "2/1") =>
     : "(min-aspect-ratio: 2/1) 100vw, 200vh";
 
 const bgImages = [
-  { id: "leadership", src: Images.heroes.teamLeadership, sizes: sizesFor("3/2") },
-  { id: "warehouse", src: Images.heroes.warehouseVisit, sizes: sizesFor("3/2") },
-  { id: "team", src: Images.heroes.teamAnniversary, sizes: sizesFor("3/2") },
+  { id: "poultry", src: Images.heroes.chicken, sizes: sizesFor("3/2") },
+  { id: "dairy", src: Images.heroes.dairy, sizes: sizesFor("3/2") },
   { id: "img76", src: Images.heroes.slide76, sizes: sizesFor("2/1") },
   { id: "img87", src: Images.heroes.slide87, sizes: sizesFor("2/1") },
 ];
@@ -90,13 +89,15 @@ function AnimatedCounter({ value, suffix }: { value: number; suffix: string }) {
 }
 
 export default function HeroVariantA() {
-  // One slide index drives both the picture and its headline (taglines[i] goes with bgImages[i]).
-  const [bgIndex, setBgIndex] = useState(0);
+  // `slide` is the headline (and its dot); `photo` is the background, on its own timer.
+  const [slide, setSlide] = useState(0);
+  const [photo, setPhoto] = useState(0);
   const [storyOpen, setStoryOpen] = useState(false);
   const { theme } = useTheme();
   const t = useT();
   const href = useHref();
-  const tagline = t.home.taglines[bgIndex];
+  const taglines = t.home.taglines;
+  const tagline = taglines[slide];
 
   useEffect(() => {
     if (!storyOpen) return;
@@ -105,18 +106,23 @@ export default function HeroVariantA() {
     return () => window.removeEventListener("keydown", onKey);
   }, [storyOpen]);
 
-  // Restarts on every change, so a slide picked from the dots also stays up for the full 6 s.
+  // Restarts on every change, so a headline picked from the dots also stays up for the full 6 s.
   useEffect(() => {
-    const timer = setTimeout(() => setBgIndex((p) => (p + 1) % bgImages.length), 6000);
+    const timer = setTimeout(() => setSlide((p) => (p + 1) % taglines.length), 6000);
     return () => clearTimeout(timer);
-  }, [bgIndex]);
+  }, [slide, taglines.length]);
+
+  useEffect(() => {
+    const timer = setInterval(() => setPhoto((p) => (p + 1) % bgImages.length), 6000);
+    return () => clearInterval(timer);
+  }, []);
 
   // Fetch the next slide while this one is showing, so on slow connections it doesn't fade in blank.
   // The browser picks the same size from srcset as the slide itself will, so it's reused from the cache.
   // It waits 2.5 s so the first slide, the page's largest paint, has the connection to itself.
   useEffect(() => {
     const timer = setTimeout(() => {
-      const next = bgImages[(bgIndex + 1) % bgImages.length];
+      const next = bgImages[(photo + 1) % bgImages.length];
       const { props } = getImageProps({ src: next.src, alt: "", fill: true, sizes: next.sizes });
       const img = document.createElement("img");
       img.fetchPriority = "low";
@@ -125,7 +131,7 @@ export default function HeroVariantA() {
       img.src = props.src;
     }, 2500);
     return () => clearTimeout(timer);
-  }, [bgIndex]);
+  }, [photo]);
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-brand-navy">
@@ -138,7 +144,7 @@ export default function HeroVariantA() {
             so they paint without waiting for JavaScript. Later ones still animate in. */}
         <AnimatePresence mode="wait" initial={false}>
           <motion.div
-            key={bgIndex}
+            key={photo}
             initial={{ opacity: 0, scale: 1.05 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0 }}
@@ -146,12 +152,12 @@ export default function HeroVariantA() {
             className="absolute inset-0 w-full h-full"
           >
             <Image
-              src={bgImages[bgIndex].src}
-              alt={t.home.slideAlts[bgIndex]}
+              src={bgImages[photo].src}
+              alt={t.home.slideAlts[photo]}
               fill
-              sizes={bgImages[bgIndex].sizes}
+              sizes={bgImages[photo].sizes}
               className="object-cover animate-ken-burns"
-              priority={bgIndex === 0}
+              priority={photo === 0}
             />
           </motion.div>
         </AnimatePresence>
@@ -172,7 +178,7 @@ export default function HeroVariantA() {
               {/* On phones the size follows the screen width so every tagline fits on its three lines, which keeps
                   the buttons below in the same place on every slide. */}
               <motion.h1
-                key={bgIndex}
+                key={slide}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
@@ -213,14 +219,14 @@ export default function HeroVariantA() {
 
             {/* A 44px-tall tap area around each dot, but narrow, so the row stays compact */}
             <div className="flex md:hidden mt-3">
-              {bgImages.map((_, i) => (
+              {taglines.map((_, i) => (
                 <button
                   key={i}
-                  onClick={() => setBgIndex(i)}
+                  onClick={() => setSlide(i)}
                   className="py-[18px] px-1.5 flex items-center justify-center"
                   aria-label={`${t.home.goToSlide} ${i + 1}`}
                 >
-                  <span className={`h-2 rounded-full transition-all duration-300 ${i === bgIndex ? "w-6 bg-teal-400" : "w-2 bg-white/40"}`} />
+                  <span className={`h-2 rounded-full transition-all duration-300 ${i === slide ? "w-6 bg-teal-400" : "w-2 bg-white/40"}`} />
                 </button>
               ))}
             </div>
@@ -240,12 +246,12 @@ export default function HeroVariantA() {
 
       {/* Floating Vertical Dotted Navigator on the Right */}
       <div className="absolute right-6 lg:right-12 top-1/2 -translate-y-1/2 hidden md:flex flex-col z-40">
-        {bgImages.map((_, i) => {
-          const isActive = i === bgIndex;
+        {taglines.map((_, i) => {
+          const isActive = i === slide;
           return (
             <button
               key={i}
-              onClick={() => setBgIndex(i)}
+              onClick={() => setSlide(i)}
               className="group w-11 h-11 flex items-center justify-center"
               aria-label={`${t.home.goToSlide} ${i + 1}`}
             >
