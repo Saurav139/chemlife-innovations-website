@@ -17,6 +17,12 @@ export const PREVIEWS = [
     title: "ANBioT hero layouts",
     description: "Four ways to lay out the hero around the ANBioT animation, starting with the stacked layout, then split, arch and cycle, on navy or paper.",
   },
+  {
+    slug: "mould-loss-calculator",
+    file: "mould-loss-calculator.html",
+    title: "Mould-loss calculator",
+    description: "Farmers enter their feed, feed price and mould losses to see what prevention saves a year, based on the worked example in our Economics of Prevention article.",
+  },
 ] as const;
 
 /** Previews show everywhere except the live site, so they can be checked locally too. */
