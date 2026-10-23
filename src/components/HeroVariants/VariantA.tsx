@@ -29,11 +29,10 @@ const bgImages = [
 
 const STORY_VIDEO_ID = "-amOgNcjYNg";
 
-// Width hugs each button's own text (not the slide's headline), so it can't change between slides.
 const primaryCtaClass =
-  "inline-flex items-center justify-center gap-2 w-auto px-7 py-3 rounded-full text-sm font-semibold bg-brand-orange-aa border-2 border-brand-orange-aa text-white hover:bg-white hover:text-brand-orange-aa shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5";
+  "inline-flex items-center justify-center gap-2 min-h-12 px-7 py-3 rounded-full text-sm font-semibold bg-brand-orange-aa border-2 border-brand-orange-aa text-white hover:bg-white hover:text-brand-orange-aa shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5";
 const secondaryCtaClass =
-  "inline-flex items-center justify-center gap-2 w-auto px-7 py-3 rounded-full text-sm font-semibold border-2 border-white/80 text-white hover:bg-white hover:text-brand-navy transition-all duration-300 transform hover:-translate-y-0.5";
+  "inline-flex items-center justify-center gap-2 min-h-12 px-7 py-3 rounded-full text-sm font-semibold border-2 border-white/80 text-white hover:bg-white hover:text-brand-navy transition-all duration-300 transform hover:-translate-y-0.5";
 
 // Labels are in the language file (home.stats), in this order.
 const stats = [
@@ -170,13 +169,15 @@ export default function HeroVariantA() {
           <div className="min-h-[300px] md:min-h-[340px] flex flex-col justify-center items-center text-center w-full">
             {/* initial={false}: see the background slides above */}
             <AnimatePresence mode="wait" initial={false}>
+              {/* On phones the size follows the screen width so every tagline fits on its three lines, which keeps
+                  the buttons below in the same place on every slide. */}
               <motion.h1
                 key={bgIndex}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.6, ease: [0.25, 0.1, 0, 1] }}
-                className="font-heading text-[34px] sm:text-5xl md:text-6xl lg:text-7xl leading-[1.1] mb-8 sm:mb-16 text-white font-bold text-center"
+                className="font-heading text-[length:clamp(24px,8.8vw_-_4.5px,34px)] sm:text-5xl md:text-6xl lg:text-7xl leading-[1.1] mb-8 sm:mb-16 text-white font-bold text-center"
               >
                 {tagline[0]}<br />
                 <span className="text-teal-400">{tagline[1]}</span><br />
@@ -184,7 +185,8 @@ export default function HeroVariantA() {
               </motion.h1>
             </AnimatePresence>
 
-            <div className="flex flex-col sm:flex-row sm:flex-wrap items-center gap-3 sm:gap-4 justify-center w-full mt-2">
+            {/* Phones: stacked, centred, both as wide as the longer label. Wider screens: side by side. */}
+            <div className="grid justify-center gap-3 sm:flex sm:flex-row sm:flex-wrap sm:items-center sm:gap-4 w-full mt-2">
               <Link href={href("/products")} className={primaryCtaClass}>
                 {t.home.findProduct}
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
