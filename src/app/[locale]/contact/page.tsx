@@ -447,13 +447,13 @@ export default function ContactPage() {
                         <svg className="w-4 h-4 text-teal-aa" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.94.725l.548 2.2a1 1 0 01-.321.988l-1.305.98a10.582 10.582 0 004.872 4.872l.98-1.305a1 1 0 01.988-.321l2.2.548a1 1 0 01.725.94V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                         </svg>
-                        <a href="tel:+919535862570" className="hover:text-teal-aa transition-colors">+91 95358 62570</a>
+                        <a href="tel:+919535862570" className="inline-flex items-center min-h-11 -my-1.5 hover:text-teal-aa transition-colors">+91 95358 62570</a>
                       </div>
                       <div className="flex items-center gap-3 text-gray-500">
                         <svg className="w-4 h-4 text-teal-aa" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                         </svg>
-                        <a href="mailto:innovate@chemlifeinnovations.com" className="hover:text-teal-aa transition-colors break-all">innovate@chemlifeinnovations.com</a>
+                        <a href="mailto:innovate@chemlifeinnovations.com" className="inline-flex items-center min-h-11 -my-1.5 hover:text-teal-aa transition-colors break-all">innovate@chemlifeinnovations.com</a>
                       </div>
                     </div>
                   </div>

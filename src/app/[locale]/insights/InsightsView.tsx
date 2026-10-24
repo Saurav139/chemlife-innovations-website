@@ -190,7 +190,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                     )}
                   </div>
 
-                  <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-2 sm:gap-4 pt-4 border-t border-gray-100">
+                  <div className="grid grid-cols-1 min-[360px]:grid-cols-2 sm:flex sm:flex-wrap items-center gap-2 sm:gap-4 pt-4 border-t border-gray-100">
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
@@ -260,7 +260,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                     )}
                   </div>
 
-                  <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-2 sm:gap-4 pt-4 border-t border-gray-100">
+                  <div className="grid grid-cols-1 min-[360px]:grid-cols-2 sm:flex sm:flex-wrap items-center gap-2 sm:gap-4 pt-4 border-t border-gray-100">
                     <a
                       href={youtubeWatchUrl(featuredVideo.youtubeId!)}
                       target="_blank"
@@ -329,7 +329,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                     )}
                   </div>
 
-                  <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-2 sm:gap-4 pt-4 border-t border-gray-100">
+                  <div className="grid grid-cols-1 min-[360px]:grid-cols-2 sm:flex sm:flex-wrap items-center gap-2 sm:gap-4 pt-4 border-t border-gray-100">
                     <a
                       href={youtubeWatchUrl(featuredPodcast.youtubeId!)}
                       target="_blank"

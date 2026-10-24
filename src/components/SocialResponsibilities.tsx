@@ -117,8 +117,8 @@ export default function SocialResponsibilities() {
               onMouseEnter={() => setHoveredIndex(index)}
               onMouseLeave={() => setHoveredIndex(null)}
             >
-              {/* Card resized to w-44 h-44 to be less obtrusive */}
-              <div className="relative w-33 h-33 mx-auto mb-6 perspective-1000">
+              {/* 176px, so the description on the back fits at 14px */}
+              <div className="relative w-44 h-44 mx-auto mb-6 perspective-1000">
                 <div
                   className={`w-full h-full transition-transform duration-500 transform-style-preserve-3d ${hoveredIndex === index ? 'rotate-y-180' : ''
                     }`}
@@ -130,9 +130,9 @@ export default function SocialResponsibilities() {
                     </span>
                   </div>
 
-                  {/* Back side - Description (p-4 padding and text-xs fits text cleanly within w-44 box) */}
+                  {/* Back side - Description */}
                   <div className="absolute inset-0 w-full h-full bg-brand-navy rounded-xl flex items-center justify-center backface-hidden rotate-y-180 p-4 border border-white/10">
-                    <span className="text-white text-xs font-semibold text-center leading-relaxed">
+                    <span className="text-white text-sm font-semibold text-center leading-snug">
                       {item.desc}
                     </span>
                   </div>
