@@ -25,6 +25,17 @@ const isOptimizable = (src: string) =>
   src.startsWith("https://chemlifeinnovations.wordpress.com/wp-content/uploads/") ||
   src.startsWith("https://img.youtube.com/vi/");
 
+/** A featured-card button label that shortens on the narrowest phones (under 360px), where the full text doesn't fit
+ *  beside the other button. Screen readers always get the full text. */
+function ButtonLabel({ full, short }: { full: string; short: string }) {
+  return (
+    <>
+      <span aria-hidden="true" className="min-[360px]:hidden">{short}</span>
+      <span className="sr-only min-[360px]:not-sr-only">{full}</span>
+    </>
+  );
+}
+
 export default function InsightsView({ blogs, podcasts, videos }: Insights) {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedFilter, setSelectedFilter] = useState("All");
@@ -190,7 +201,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                     )}
                   </div>
 
-                  <div className="grid grid-cols-1 min-[360px]:grid-cols-2 sm:flex sm:flex-wrap items-center gap-2 sm:gap-4 pt-4 border-t border-gray-100">
+                  <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-2 sm:gap-4 pt-4 border-t border-gray-100">
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
@@ -207,7 +218,9 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                       className="inline-flex items-center justify-center min-h-11 text-center whitespace-nowrap px-2 sm:px-6 py-2.5 rounded-full text-[13px] sm:text-sm border border-gray-200 text-gray-600 hover:bg-gray-50 hover:text-teal-aa font-bold transition-all duration-300 cursor-pointer"
                       onClick={(e) => e.stopPropagation()}
                     >
-                      {featuredBlog.linkUrl?.includes("wordpress.com") ? "Read on WordPress" : "View on LinkedIn"}
+                      {featuredBlog.linkUrl?.includes("wordpress.com")
+                        ? <ButtonLabel full="Read on WordPress" short="WordPress" />
+                        : <ButtonLabel full="View on LinkedIn" short="LinkedIn" />}
                     </a>
                   </div>
                 </div>
@@ -260,7 +273,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                     )}
                   </div>
 
-                  <div className="grid grid-cols-1 min-[360px]:grid-cols-2 sm:flex sm:flex-wrap items-center gap-2 sm:gap-4 pt-4 border-t border-gray-100">
+                  <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-2 sm:gap-4 pt-4 border-t border-gray-100">
                     <a
                       href={youtubeWatchUrl(featuredVideo.youtubeId!)}
                       target="_blank"
@@ -276,7 +289,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                       rel="noopener noreferrer"
                       className="inline-flex items-center justify-center min-h-11 text-center whitespace-nowrap px-2 sm:px-6 py-2.5 rounded-full text-[13px] sm:text-sm border border-gray-200 text-gray-600 hover:bg-gray-50 hover:text-teal-aa font-bold transition-all duration-300"
                     >
-                      Watch on YouTube
+                      <ButtonLabel full="Watch on YouTube" short="YouTube" />
                     </a>
                   </div>
                 </div>
@@ -329,7 +342,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                     )}
                   </div>
 
-                  <div className="grid grid-cols-1 min-[360px]:grid-cols-2 sm:flex sm:flex-wrap items-center gap-2 sm:gap-4 pt-4 border-t border-gray-100">
+                  <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-2 sm:gap-4 pt-4 border-t border-gray-100">
                     <a
                       href={youtubeWatchUrl(featuredPodcast.youtubeId!)}
                       target="_blank"
@@ -345,7 +358,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                       rel="noopener noreferrer"
                       className="inline-flex items-center justify-center min-h-11 text-center whitespace-nowrap px-2 sm:px-6 py-2.5 rounded-full text-[13px] sm:text-sm border border-gray-200 text-gray-600 hover:bg-gray-50 hover:text-teal-aa font-bold transition-all duration-300"
                     >
-                      Watch on YouTube
+                      <ButtonLabel full="Watch on YouTube" short="YouTube" />
                     </a>
                   </div>
                 </div>
