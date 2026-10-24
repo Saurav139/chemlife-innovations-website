@@ -40,13 +40,13 @@ export default function TestimonialCarousel() {
   const t = useT().home.testimonials;
 
   return (
-    <SectionWrapper className={`section-y ${theme.testimonialsBg}`}>
+    <SectionWrapper className={`py-16 md:py-24 lg:py-32 ${theme.testimonialsBg}`}>
       <div className="max-w-[1200px] mx-auto px-6">
         <div className="text-center mb-10 md:mb-16">
-          <span className="kicker text-teal-aa-light">
+          <span className="text-teal-aa-light text-base lg:text-lg font-semibold tracking-widest uppercase">
             {t.kicker}
           </span>
-          <h2 className="section-title-lg text-white mt-2 mb-4">
+          <h2 className="font-heading text-3xl lg:text-4xl text-white mt-2 mb-4 leading-tight">
             {t.title}
           </h2>
         </div>
@@ -101,7 +101,7 @@ export default function TestimonialCarousel() {
 
           {/* Person Switcher */}
           <div className="lg:col-span-1">
-            <h3 className={`card-title mb-6 ${theme.testimonialsTitle}`}>
+            <h3 className={`text-lg font-semibold mb-6 ${theme.testimonialsTitle}`}>
               Our Partners
             </h3>
 
@@ -111,7 +111,7 @@ export default function TestimonialCarousel() {
                   key={i}
                   onClick={() => setCurrent(i)}
                   className={`w-full p-4 rounded-xl text-left transition-all duration-200 border ${i === current
-                    ? 'bg-teal-500/20 border-teal-400 shadow-sm shadow-teal-500/10'
+                    ? 'bg-teal-500/20 border-teal-400 shadow-md shadow-teal-500/10'
                     : 'bg-teal-950/20 border-teal-500/10 hover:bg-teal-500/10 hover:border-teal-500/30'
                     }`}
                 >

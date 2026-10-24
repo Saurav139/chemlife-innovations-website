@@ -26,7 +26,9 @@ function FlipCard({ frontLogo, backLogo, index, flipped }: FlipCardProps) {
   const borderStyle = isChessLight 
     ? "border-2 border-brand-orange/35 hover:border-brand-orange/65" 
     : "border-2 border-white";
-  const shadowStyle = "shadow-sm hover:shadow-lg";
+  const shadowStyle = isChessLight
+    ? "shadow-[0_4px_12px_rgba(230,92,56,0.03)] hover:shadow-[0_8px_20px_rgba(230,92,56,0.08)]"
+    : "shadow-[0_4px_12px_rgba(0,0,0,0.01)] hover:shadow-[0_8px_20px_rgba(0,0,0,0.04)]";
 
   return (
     <div className="perspective-1000 w-full aspect-[4/3]">
@@ -81,13 +83,13 @@ export default function ClientMarquee() {
   }, []);
 
   return (
-    <section className="bg-white section-y overflow-hidden">
+    <section className="bg-white py-16 md:py-24 lg:py-32 overflow-hidden">
       <div className="max-w-[1200px] mx-auto px-6 mb-10 md:mb-16">
         <div className="text-center">
-          <span className="kicker text-teal-aa">
+          <span className="text-teal-aa text-base lg:text-lg font-semibold tracking-widest uppercase">
             {t.kicker}
           </span>
-          <h2 className="section-title-lg text-brand-navy mt-2 mb-4">
+          <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl text-brand-navy mt-2 mb-4 leading-tight">
             {t.title}
           </h2>
         </div>

@@ -20,9 +20,9 @@ export default function AboutPage() {
     <VariantProvider>
       <Header />
 
-      <main className="bg-brand-navy min-h-screen">
+      <main className="bg-brand-navy min-h-screen pt-18 md:pt-20 lg:pt-24">
         {/* Intro Hero Section with Glass Plant Image BG */}
-        <SectionWrapper className="pt-26 md:pt-32 lg:pt-36 pb-10 md:pb-20 lg:pb-28 text-white relative overflow-hidden flex items-center">
+        <SectionWrapper className="py-12 md:py-24 lg:py-32 text-white relative overflow-hidden md:min-h-[500px] flex items-center">
           <div className="absolute inset-0 z-0">
             <Image
               src={Images.heroes.about}
@@ -35,12 +35,12 @@ export default function AboutPage() {
             <div className="absolute inset-0 bg-black/20" />
           </div>
 
-          <div className="relative z-10 max-w-[1200px] mx-auto px-6 w-full">
+          <div className="relative z-10 max-w-[900px] mx-auto text-center px-6">
             <motion.h1
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease: easeOut }}
-              className="page-title mb-3 md:mb-4"
+              className="font-heading text-[34px] md:text-4xl lg:text-6xl font-bold leading-tight mb-6 md:mb-8"
             >
               <span className="text-teal-400">{t.titleLine1}</span><br />
               <span className="text-white">{t.titleLine2}</span>
@@ -50,7 +50,7 @@ export default function AboutPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2, ease: easeOut }}
-              className="text-white/85 text-base md:text-lg leading-relaxed max-w-3xl font-light"
+              className="text-white/85 text-base md:text-lg lg:text-2xl leading-relaxed max-w-3xl mx-auto font-light"
             >
               {t.intro}
             </motion.p>
@@ -58,7 +58,7 @@ export default function AboutPage() {
         </SectionWrapper>
 
         {/* Founder & Mission Section (White BG) */}
-        <SectionWrapper className="section-y-first bg-white text-brand-navy">
+        <SectionWrapper className="py-12 md:py-24 bg-white text-brand-navy">
           <div className="max-w-[1200px] mx-auto px-6 grid md:grid-cols-2 gap-12 lg:gap-20 items-center">
             {/* Founder/Team Image Section with Founders Tag */}
             <motion.div
@@ -69,7 +69,7 @@ export default function AboutPage() {
               className="flex flex-col items-center w-full"
             >
               <div
-                className="aspect-[1024/531] w-full border-4 border-orange-200 rounded-2xl relative overflow-hidden shadow-sm group hover:border-brand-orange/60 transition-colors duration-300"
+                className="aspect-[1024/531] w-full border-4 border-orange-200 rounded-2xl relative overflow-hidden shadow-md group hover:border-brand-orange/60 transition-colors duration-300"
                 style={{ backgroundColor: "#55c2fa" }}
               >
                 <Image
@@ -81,7 +81,7 @@ export default function AboutPage() {
                   priority
                 />
               </div>
-              <div className="mt-4 bg-teal-50 border border-teal-200 badge-text text-teal-aa px-5 py-1.5 rounded-full select-none">
+              <div className="mt-4 bg-teal-50 border border-teal-200 text-teal-aa text-xs md:text-sm font-bold uppercase tracking-wider px-5 py-1.5 rounded-full shadow-xs select-none">
                 {t.founders}
               </div>
             </motion.div>
@@ -93,8 +93,8 @@ export default function AboutPage() {
               viewport={{ once: true }}
               transition={{ duration: 0.6, ease: easeOut }}
             >
-              <span className="kicker text-teal-aa block mb-3">{t.missionKicker}</span>
-              <h2 className="section-title text-brand-navy mb-6">
+              <span className="text-teal-aa text-sm font-semibold tracking-widest uppercase block mb-3">{t.missionKicker}</span>
+              <h2 className="font-heading text-3xl lg:text-4xl text-brand-navy mb-6 font-bold leading-tight">
                 {t.missionTitle}
               </h2>
               <p className="text-brand-navy/80 text-base lg:text-lg leading-relaxed">
@@ -105,11 +105,11 @@ export default function AboutPage() {
         </SectionWrapper>
 
         {/* Core Values Section (Brand Navy BG with Honeycomb Hexagons) */}
-        <SectionWrapper className="section-y bg-brand-navy text-white">
+        <SectionWrapper className="py-16 md:py-24 lg:py-36 bg-brand-navy text-white">
           <div className="max-w-[1200px] mx-auto px-6">
             <div className="text-center mb-10 md:mb-20">
-              <span className="kicker text-teal-aa-light block mb-2">{t.valuesKicker}</span>
-              <h2 className="section-title text-white">
+              <span className="text-teal-aa-light text-sm font-semibold tracking-widest uppercase block mb-2">{t.valuesKicker}</span>
+              <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl text-white font-bold leading-tight">
                 {t.valuesTitle}
               </h2>
             </div>
@@ -178,20 +178,20 @@ export default function AboutPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: 0.1, ease: easeOut }}
-                  className="relative w-full max-w-[320px] bg-linear-to-b from-teal-900 to-teal-950 rounded-2xl px-5 pt-6 pb-14 md:px-8 md:pt-8 text-center border border-white/10 shadow-lg hover:border-brand-orange/45 hover:scale-[1.02] transition-all duration-300 group overflow-hidden"
+                  className="relative w-full max-w-[320px] bg-linear-to-b from-teal-900 to-teal-950 rounded-2xl pt-8 pb-14 px-6 text-center border border-white/10 shadow-xl hover:border-brand-orange/45 hover:scale-[1.02] transition-all duration-300 group overflow-hidden"
                 >
-                  <div className="h-10 px-4 rounded-full bg-[#e2e2e2] border-2 border-brand-orange flex items-center justify-center shadow-sm mb-4 mx-auto relative z-10 w-fit">
-                    <div className="flex gap-2.5 font-heading font-bold text-base md:text-lg select-none tracking-wider">
+                  <div className="h-10 px-4 rounded-full bg-[#e2e2e2] border-2 border-brand-orange flex items-center justify-center shadow-md mb-4 mx-auto relative z-10 w-fit">
+                    <div className="flex gap-2.5 font-heading font-black text-base md:text-lg select-none tracking-wider">
                       <span className="text-brand-orange text-xl scale-110">G</span>
                       <span className="text-brand-navy/30">I</span>
                       <span className="text-brand-navy/30">F</span>
                       <span className="text-brand-navy/30">T</span>
                     </div>
                   </div>
-                  <div className="bg-[#102a43] text-blue-200 badge-text px-4 py-1.5 rounded-full border border-blue-500/30 inline-block mb-3.5 shadow-sm mx-auto relative z-10">
+                  <div className="bg-[#102a43] text-blue-200 font-heading text-xs font-bold px-4 py-1.5 rounded-md border border-blue-500/30 inline-block mb-3.5 shadow-md mx-auto relative z-10 uppercase tracking-wider">
                     {t.values.green.name}
                   </div>
-                  <p className="text-white/90 text-sm leading-relaxed max-w-[75%] mx-auto relative z-10">
+                  <p className="text-white/90 text-sm md:text-[14px] leading-relaxed max-w-[75%] mx-auto relative z-10">
                     {t.values.green.text}
                   </p>
 
@@ -229,20 +229,20 @@ export default function AboutPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: 0.4, ease: easeOut }}
-                  className="relative w-full max-w-[320px] bg-linear-to-b from-teal-900 to-teal-950 rounded-2xl px-5 pt-6 pb-14 md:px-8 md:pt-8 text-center border border-white/10 shadow-lg hover:border-brand-orange/45 hover:scale-[1.02] transition-all duration-300 group overflow-hidden"
+                  className="relative w-full max-w-[320px] bg-linear-to-b from-teal-900 to-teal-950 rounded-2xl pt-8 pb-14 px-6 text-center border border-white/10 shadow-xl hover:border-brand-orange/45 hover:scale-[1.02] transition-all duration-300 group overflow-hidden"
                 >
-                  <div className="h-10 px-4 rounded-full bg-[#e2e2e2] border-2 border-brand-orange flex items-center justify-center shadow-sm mb-4 mx-auto relative z-10 w-fit">
-                    <div className="flex gap-2.5 font-heading font-bold text-base md:text-lg select-none tracking-wider">
+                  <div className="h-10 px-4 rounded-full bg-[#e2e2e2] border-2 border-brand-orange flex items-center justify-center shadow-md mb-4 mx-auto relative z-10 w-fit">
+                    <div className="flex gap-2.5 font-heading font-black text-base md:text-lg select-none tracking-wider">
                       <span className="text-brand-navy/30">G</span>
                       <span className="text-brand-navy/30">I</span>
                       <span className="text-brand-navy/30">F</span>
                       <span className="text-brand-orange text-xl scale-110">T</span>
                     </div>
                   </div>
-                  <div className="bg-[#102a43] text-blue-200 badge-text px-4 py-1.5 rounded-full border border-blue-500/30 inline-block mb-3.5 shadow-sm mx-auto relative z-10">
+                  <div className="bg-[#102a43] text-blue-200 font-heading text-xs font-bold px-4 py-1.5 rounded-md border border-blue-500/30 inline-block mb-3.5 shadow-md mx-auto relative z-10 uppercase tracking-wider">
                     {t.values.trust.name}
                   </div>
-                  <p className="text-white/90 text-sm leading-relaxed max-w-[75%] mx-auto relative z-10">
+                  <p className="text-white/90 text-sm md:text-[14px] leading-relaxed max-w-[75%] mx-auto relative z-10">
                     {t.values.trust.text}
                   </p>
 
@@ -292,20 +292,20 @@ export default function AboutPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: 0.2, ease: easeOut }}
-                  className="relative w-full max-w-[320px] bg-linear-to-b from-teal-900 to-teal-950 rounded-2xl px-5 pt-6 pb-14 md:px-8 md:pt-8 text-center border border-white/10 shadow-lg hover:border-brand-orange/45 hover:scale-[1.02] transition-all duration-300 group overflow-hidden"
+                  className="relative w-full max-w-[320px] bg-linear-to-b from-teal-900 to-teal-950 rounded-2xl pt-8 pb-14 px-6 text-center border border-white/10 shadow-xl hover:border-brand-orange/45 hover:scale-[1.02] transition-all duration-300 group overflow-hidden"
                 >
-                  <div className="h-10 px-4 rounded-full bg-[#e2e2e2] border-2 border-brand-orange flex items-center justify-center shadow-sm mb-4 mx-auto relative z-10 w-fit">
-                    <div className="flex gap-2.5 font-heading font-bold text-base md:text-lg select-none tracking-wider">
+                  <div className="h-10 px-4 rounded-full bg-[#e2e2e2] border-2 border-brand-orange flex items-center justify-center shadow-md mb-4 mx-auto relative z-10 w-fit">
+                    <div className="flex gap-2.5 font-heading font-black text-base md:text-lg select-none tracking-wider">
                       <span className="text-brand-navy/30">G</span>
                       <span className="text-brand-orange text-xl scale-110">I</span>
                       <span className="text-brand-navy/30">F</span>
                       <span className="text-brand-navy/30">T</span>
                     </div>
                   </div>
-                  <div className="bg-[#102a43] text-blue-200 badge-text px-4 py-1.5 rounded-full border border-blue-500/30 inline-block mb-3.5 shadow-sm mx-auto relative z-10">
+                  <div className="bg-[#102a43] text-blue-200 font-heading text-xs font-bold px-4 py-1.5 rounded-md border border-blue-500/30 inline-block mb-3.5 shadow-md mx-auto relative z-10 uppercase tracking-wider">
                     {t.values.innovation.name}
                   </div>
-                  <p className="text-white/90 text-sm leading-relaxed max-w-[75%] mx-auto relative z-10">
+                  <p className="text-white/90 text-sm md:text-[14px] leading-relaxed max-w-[75%] mx-auto relative z-10">
                     {t.values.innovation.text}
                   </p>
 
@@ -357,20 +357,20 @@ export default function AboutPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: 0.3, ease: easeOut }}
-                  className="relative w-full max-w-[320px] bg-linear-to-b from-teal-900 to-teal-950 rounded-2xl px-5 pt-6 pb-14 md:px-8 md:pt-8 text-center border border-white/10 shadow-lg hover:border-brand-orange/45 hover:scale-[1.02] transition-all duration-300 group overflow-hidden"
+                  className="relative w-full max-w-[320px] bg-linear-to-b from-teal-900 to-teal-950 rounded-2xl pt-8 pb-14 px-6 text-center border border-white/10 shadow-xl hover:border-brand-orange/45 hover:scale-[1.02] transition-all duration-300 group overflow-hidden"
                 >
-                  <div className="h-10 px-4 rounded-full bg-[#e2e2e2] border-2 border-brand-orange flex items-center justify-center shadow-sm mb-4 mx-auto relative z-10 w-fit">
-                    <div className="flex gap-2.5 font-heading font-bold text-base md:text-lg select-none tracking-wider">
+                  <div className="h-10 px-4 rounded-full bg-[#e2e2e2] border-2 border-brand-orange flex items-center justify-center shadow-md mb-4 mx-auto relative z-10 w-fit">
+                    <div className="flex gap-2.5 font-heading font-black text-base md:text-lg select-none tracking-wider">
                       <span className="text-brand-navy/30">G</span>
                       <span className="text-brand-navy/30">I</span>
                       <span className="text-brand-orange text-xl scale-110">F</span>
                       <span className="text-brand-navy/30">T</span>
                     </div>
                   </div>
-                  <div className="bg-[#102a43] text-blue-200 badge-text px-4 py-1.5 rounded-full border border-blue-500/30 inline-block mb-3.5 shadow-sm mx-auto relative z-10">
+                  <div className="bg-[#102a43] text-blue-200 font-heading text-xs font-bold px-4 py-1.5 rounded-md border border-blue-500/30 inline-block mb-3.5 shadow-md mx-auto relative z-10 uppercase tracking-wider">
                     {t.values.facts.name}
                   </div>
-                  <p className="text-white/90 text-sm leading-relaxed max-w-[75%] mx-auto relative z-10">
+                  <p className="text-white/90 text-sm md:text-[14px] leading-relaxed max-w-[75%] mx-auto relative z-10">
                     {t.values.facts.text}
                   </p>
 
@@ -414,11 +414,11 @@ export default function AboutPage() {
         </SectionWrapper>
 
         {/* Leadership Team Section (Solid White BG) */}
-        <SectionWrapper className="section-y bg-white text-brand-navy border-t border-gray-100">
+        <SectionWrapper className="py-16 md:py-24 lg:py-32 bg-white text-brand-navy border-t border-gray-100">
           <div className="max-w-[1200px] mx-auto px-6">
             <div className="text-center mb-10 md:mb-20">
-              <span className="kicker text-teal-aa block mb-2">{t.leadersKicker}</span>
-              <h2 className="section-title text-brand-navy">
+              <span className="text-teal-aa text-sm font-semibold tracking-widest uppercase block mb-2">{t.leadersKicker}</span>
+              <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl text-brand-navy font-bold leading-tight">
                 {t.leadersTitle}
               </h2>
             </div>
@@ -453,7 +453,7 @@ export default function AboutPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: i * 0.15, ease: easeOut }}
-                  className="bg-gray-50/50 rounded-2xl border border-gray-100 card-pad flex flex-col items-center text-center shadow-sm hover:border-brand-orange/30 hover:shadow-lg transition-all duration-300 group hover:scale-[1.02]"
+                  className="bg-gray-50/50 rounded-2xl border border-gray-100 p-6 flex flex-col items-center text-center shadow-sm hover:border-brand-orange/30 hover:shadow-md transition-all duration-300 group hover:scale-[1.02]"
                 >
                   {/* Headshot container */}
                   <div className="w-28 h-28 md:w-32 md:h-32 rounded-full border-2 border-orange-100 group-hover:border-brand-orange flex items-center justify-center bg-gray-100 mb-6 shadow-sm relative overflow-hidden transition-all duration-300">
@@ -466,16 +466,16 @@ export default function AboutPage() {
                     />
                   </div>
 
-                  <h3 className="card-title text-brand-orange-aa mb-1">
+                  <h3 className="font-heading text-base md:text-lg font-bold text-brand-orange-aa mb-1">
                     {leader.name}
                   </h3>
-                  <p className="badge-text text-brand-navy mb-0.5">
+                  <p className="text-brand-navy font-bold text-xs md:text-[11px] uppercase tracking-wider mb-0.5">
                     {leader.role}
                   </p>
-                  <p className="text-brand-navy text-sm font-semibold mb-4">
+                  <p className="text-brand-navy text-xs font-semibold mb-4">
                     {leader.degree}
                   </p>
-                  <p className="text-teal-aa text-sm leading-relaxed max-w-[90%]">
+                  <p className="text-teal-aa text-xs md:text-sm leading-relaxed max-w-[90%]">
                     {leader.bio}
                   </p>
                 </motion.div>

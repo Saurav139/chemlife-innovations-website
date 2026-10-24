@@ -34,7 +34,7 @@ export default function Footer() {
                 alt="ChemLife Innovations Logo"
                 width={120}
                 height={80}
-                className="h-16 w-auto rounded-xl shadow-sm hover:scale-[1.02] transition-transform duration-350"
+                className="h-16 w-auto rounded-lg shadow-md hover:scale-[1.02] transition-transform duration-350"
               />
             </Link>
             <p className="text-slate-350 text-sm leading-relaxed max-w-sm">
@@ -80,9 +80,9 @@ export default function Footer() {
 
           {/* Column 2: Company Navigation */}
           <div className="lg:col-span-2 space-y-5">
-            <h2 className="kicker text-white">
+            <h4 className="font-heading text-white text-[15px] font-bold uppercase tracking-wider">
               {t.footer.company}
-            </h2>
+            </h4>
             <ul className="md:space-y-3">
               {[
                 { label: t.footer.home, href: href("/") },
@@ -104,9 +104,9 @@ export default function Footer() {
 
           {/* Column 3: Solutions & Technology */}
           <div className="lg:col-span-2 space-y-5">
-            <h2 className="kicker text-white">
+            <h4 className="font-heading text-white text-[15px] font-bold uppercase tracking-wider">
               {t.footer.solutions}
-            </h2>
+            </h4>
             <ul className="md:space-y-3">
               {[
                 { label: t.footer.additives, href: href("/products") },
@@ -128,9 +128,9 @@ export default function Footer() {
 
           {/* Column 4: Contact & Facilities */}
           <div className="col-span-2 md:col-span-1 lg:col-span-4 space-y-5">
-            <h2 className="kicker text-white">
+            <h4 className="font-heading text-white text-[15px] font-bold uppercase tracking-wider">
               {t.footer.contactHeading}
-            </h2>
+            </h4>
             <ul className="space-y-4 text-slate-350 text-sm">
               <li className="flex items-start gap-3">
                 <svg className="w-4 h-4 mt-1 flex-shrink-0 text-brand-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">

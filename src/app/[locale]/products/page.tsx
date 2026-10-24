@@ -261,7 +261,7 @@ export default function ProductsPage() {
       <main className="bg-slate-50/50 min-h-screen text-brand-navy">
         {/* Hero and product list are plain sections: they're in the first screen, so they show without waiting for a fade-in.
             The hero image is the page's largest paint (LCP), so it loads first. */}
-        <section className="pt-26 md:pt-32 lg:pt-36 pb-10 md:pb-20 lg:pb-28 text-white relative overflow-hidden bg-brand-navy flex items-center">
+        <section className="pt-26 md:pt-32 pb-10 md:pb-20 lg:pt-36 lg:pb-28 text-white relative overflow-hidden bg-brand-navy flex items-center">
           <div className="absolute inset-0 z-0">
             <Image
               src={Images.products.heroBanner}
@@ -276,19 +276,19 @@ export default function ProductsPage() {
             <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#1e3a8a_1px,transparent_1px)] [background-size:16px_16px]" />
           </div>
 
-          <div className="relative z-10 max-w-[1200px] mx-auto px-6 w-full">
-            <span className="kicker text-teal-aa-light block mb-3">{t.kicker}</span>
-            <h1 className="page-title mb-3 md:mb-4 text-white">
+          <div className="relative z-10 max-w-[1200px] mx-auto px-6 w-full text-center md:text-left">
+            <span className="text-teal-aa-light text-xs md:text-sm font-semibold tracking-widest uppercase block mb-3">{t.kicker}</span>
+            <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold leading-tight mb-3 md:mb-4 text-white">
               {t.titleStart} <span className="text-teal-400">{t.titleAccent}</span>
             </h1>
-            <p className="text-white/85 text-base md:text-lg leading-relaxed max-w-3xl font-light">
+            <p className="text-white/85 text-base lg:text-lg leading-relaxed max-w-3xl font-light">
               {t.intro}
             </p>
           </div>
         </section>
 
         {/* Products List Section */}
-        <section className="section-y-first bg-slate-50/30 relative overflow-hidden">
+        <section className="pt-8 pb-16 md:py-16 bg-slate-50/30 relative overflow-hidden">
           {/* Subtle Product-based Background Image. At 4% opacity a small file looks the same as the 3840px original,
               and it's decorative, so its empty alt makes screen readers skip it. */}
           <div className="absolute inset-0 z-0 pointer-events-none select-none opacity-[0.04]">
@@ -305,7 +305,7 @@ export default function ProductsPage() {
 
             {/* Left-Aligned Search and Category Selector Container */}
             <div className="flex flex-col md:flex-row items-center gap-4 mb-10 w-full">
-              <div className={`flex items-center bg-slate-50 border border-slate-200 rounded-full shadow-sm text-sm w-full md:max-w-xl ${activeStyle.focus} focus-within:ring-1 transition-all duration-300 relative`}>
+              <div className={`flex items-center bg-slate-50 border border-slate-200 rounded-full shadow-xs text-sm w-full md:max-w-xl ${activeStyle.focus} focus-within:ring-1 transition-all duration-300 relative`}>
                 {/* Search Icon */}
                 <div className={`pl-4 ${activeStyle.icon} flex-shrink-0 transition-colors duration-300`}>
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -380,7 +380,7 @@ export default function ProductsPage() {
                     data-analytics-item={product.name}
                     layout
                     transition={{ duration: 0.4, ease: easeOut }}
-                    className="border border-slate-200 rounded-2xl bg-slate-50/50 hover:bg-slate-50/85 transition-colors duration-300 overflow-hidden shadow-sm hover:border-brand-orange/30 flex flex-col h-fit group"
+                    className="border border-slate-200 rounded-2xl bg-slate-50/50 hover:bg-slate-50/85 transition-colors duration-300 overflow-hidden shadow-xs hover:border-brand-orange/30 flex flex-col h-fit group"
                   >
                     {/* Card Header (Image/Icon + Title & Category) */}
                     <div
@@ -416,13 +416,13 @@ export default function ProductsPage() {
                       )}
 
                       {/* Content: Title & Category */}
-                      <div className="card-pad flex flex-col gap-2">
+                      <div className="p-5 flex flex-col gap-2">
                         <div className="flex items-start justify-between gap-3">
-                          <h3 className="card-title text-brand-navy group-hover:text-brand-orange-aa transition-colors duration-300">
+                          <h3 className="font-heading text-lg font-black text-brand-navy group-hover:text-brand-orange-aa transition-colors duration-300 leading-tight">
                             {product.name}
                           </h3>
 
-                          <span className={`px-2.5 py-0.5 rounded-full badge-text border whitespace-nowrap ${product.category === "Mono-gastric"
+                          <span className={`px-2.5 py-0.5 rounded-md text-[10px] md:text-[9px] font-bold uppercase tracking-wider border whitespace-nowrap ${product.category === "Mono-gastric"
                             ? "bg-orange-50/50 border-orange-150 text-brand-orange-aa"
                             : product.category === "Ruminants"
                               ? "bg-blue-50 border-blue-150 text-blue-700"
@@ -433,12 +433,12 @@ export default function ProductsPage() {
                         </div>
 
                         {product.tagline && (
-                          <p className="text-sm text-slate-550 italic leading-relaxed">
+                          <p className="text-xs text-slate-550 italic leading-relaxed">
                             {product.tagline}
                           </p>
                         )}
 
-                        <div className="flex items-center gap-1.5 text-brand-orange-aa text-sm font-bold mt-2">
+                        <div className="flex items-center gap-1.5 text-brand-orange-aa text-xs font-bold mt-2">
                           <span>{isExpanded ? t.showLess : t.readMore}</span>
                           <motion.span
                             animate={{ rotate: isExpanded ? 180 : 0 }}
@@ -462,13 +462,13 @@ export default function ProductsPage() {
                           transition={{ duration: 0.4, ease: easeOut }}
                           className="overflow-hidden border-t border-slate-100 bg-white"
                         >
-                          <div className="card-pad space-y-5">
+                          <div className="p-5 space-y-5">
                             {/* About section */}
                             <div>
-                              <span className="badge-text text-teal-aa block mb-1.5">
+                              <span className="text-[10px] md:text-[9px] font-black uppercase text-teal-aa tracking-wider block mb-1.5">
                                 {t.about}
                               </span>
-                              <p className="text-slate-600 text-sm leading-relaxed whitespace-pre-line">
+                              <p className="text-slate-600 text-xs leading-relaxed whitespace-pre-line">
                                 {product.about}
                               </p>
                             </div>
@@ -476,10 +476,10 @@ export default function ProductsPage() {
                             {/* Variants section */}
                             {product.variants && product.variants.length > 0 && (
                               <div>
-                                <span className="badge-text text-teal-aa block mb-1.5">
+                                <span className="text-[10px] md:text-[9px] font-black uppercase text-teal-aa tracking-wider block mb-1.5">
                                   {t.variants}
                                 </span>
-                                <ul className="grid grid-cols-1 gap-1.5 text-slate-600 text-sm font-semibold">
+                                <ul className="grid grid-cols-1 gap-1.5 text-slate-600 text-xs font-semibold">
                                   {product.variants.map((variant, index) => (
                                     <li key={index} className="flex items-center gap-2">
                                       <span className="w-1.5 h-1.5 rounded-full bg-teal-500 flex-shrink-0" />
@@ -492,12 +492,12 @@ export default function ProductsPage() {
 
                             {/* Key Features section */}
                             <div>
-                              <span className="badge-text text-teal-aa block mb-2">
+                              <span className="text-[10px] md:text-[9px] font-black uppercase text-teal-aa tracking-wider block mb-2">
                                 {t.features}
                               </span>
                               <ul className="space-y-2">
                                 {product.features.map((feature, idx) => (
-                                  <li key={idx} className="flex items-start gap-2 text-slate-600 text-sm">
+                                  <li key={idx} className="flex items-start gap-2 text-slate-600 text-xs">
                                     <svg className="w-3.5 h-3.5 text-brand-orange mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7" />
                                     </svg>
@@ -509,36 +509,36 @@ export default function ProductsPage() {
 
                             {/* Usage & Presentation section */}
                             <div className="space-y-3">
-                              <span className="badge-text text-teal-aa block">
+                              <span className="text-[10px] md:text-[9px] font-black uppercase text-teal-aa tracking-wider block">
                                 {t.usage}
                               </span>
 
                               <div className="space-y-2.5">
                                 {/* Inclusion rate */}
-                                <div className="flex items-start gap-2.5 p-3 bg-slate-50 rounded-xl border border-slate-100">
-                                  <div className="w-7 h-7 rounded-full bg-teal-50 text-teal-aa flex items-center justify-center flex-shrink-0 mt-0.5">
+                                <div className="flex items-start gap-2.5 p-3 bg-slate-50 rounded-lg border border-slate-100">
+                                  <div className="w-7 h-7 rounded-md bg-teal-50 text-teal-aa flex items-center justify-center flex-shrink-0 mt-0.5">
                                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
                                     </svg>
                                   </div>
                                   <div>
-                                    <span className="badge-text text-slate-aa block">{t.inclusionRate}</span>
-                                    <span className="text-sm text-brand-navy font-semibold leading-relaxed mt-0.5 block whitespace-pre-line">
+                                    <span className="text-[10px] md:text-[9px] text-slate-aa font-bold uppercase tracking-wider block">{t.inclusionRate}</span>
+                                    <span className="text-xs text-brand-navy font-semibold leading-relaxed mt-0.5 block whitespace-pre-line">
                                       {product.inclusionRate}
                                     </span>
                                   </div>
                                 </div>
 
                                 {/* Pack size */}
-                                <div className="flex items-start gap-2.5 p-3 bg-slate-50 rounded-xl border border-slate-100">
-                                  <div className="w-7 h-7 rounded-full bg-teal-50 text-teal-aa flex items-center justify-center flex-shrink-0 mt-0.5">
+                                <div className="flex items-start gap-2.5 p-3 bg-slate-50 rounded-lg border border-slate-100">
+                                  <div className="w-7 h-7 rounded-md bg-teal-50 text-teal-aa flex items-center justify-center flex-shrink-0 mt-0.5">
                                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                                     </svg>
                                   </div>
                                   <div>
-                                    <span className="badge-text text-slate-aa block">{t.packSize}</span>
-                                    <span className="text-sm text-brand-navy font-semibold leading-relaxed mt-0.5 block whitespace-pre-line">
+                                    <span className="text-[10px] md:text-[9px] text-slate-aa font-bold uppercase tracking-wider block">{t.packSize}</span>
+                                    <span className="text-xs text-brand-navy font-semibold leading-relaxed mt-0.5 block whitespace-pre-line">
                                       {product.packSize}
                                     </span>
                                   </div>
@@ -549,7 +549,7 @@ export default function ProductsPage() {
                             {/* Enquire button */}
                             <a
                               href={emailHref}
-                              className="w-full py-3 px-4 rounded-full bg-brand-orange-aa hover:bg-brand-navy text-white text-sm font-semibold transition-all duration-300 shadow-sm hover:shadow-lg flex items-center justify-center gap-2 group/btn cursor-pointer"
+                              className="w-full py-3 px-4 rounded-xl bg-brand-orange-aa hover:bg-brand-navy text-white text-xs font-semibold transition-all duration-300 shadow-sm hover:shadow flex items-center justify-center gap-2 group/btn cursor-pointer"
                             >
                               <svg className="w-3.5 h-3.5 text-white group-hover/btn:translate-x-0.5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />

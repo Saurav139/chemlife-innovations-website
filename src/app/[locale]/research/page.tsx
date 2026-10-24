@@ -90,7 +90,7 @@ export default function ResearchPage() {
       <main className="bg-slate-50/50 min-h-screen text-brand-navy">
         {/* Hero and research list are plain sections: they're in the first screen, so they show without waiting for a fade-in.
             The hero image is the page's largest paint (LCP), so it loads first. */}
-        <section className="pt-26 md:pt-32 lg:pt-36 pb-10 md:pb-20 lg:pb-28 text-white relative overflow-hidden bg-brand-navy flex items-center">
+        <section className="pt-26 md:pt-32 pb-10 md:pb-20 lg:pt-36 lg:pb-28 text-white relative overflow-hidden bg-brand-navy flex items-center">
           <div className="absolute inset-0 z-0">
             <Image
               src={Images.research.heroBanner}
@@ -105,26 +105,26 @@ export default function ResearchPage() {
             <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#1e3a8a_1px,transparent_1px)] [background-size:16px_16px]" />
           </div>
 
-          <div className="relative z-10 max-w-[1200px] mx-auto px-6 w-full">
-            <span className="kicker text-teal-aa-light block mb-3">
+          <div className="relative z-10 max-w-[1200px] mx-auto px-6 w-full text-center md:text-left">
+            <span className="text-teal-aa-light text-sm font-semibold tracking-widest uppercase block mb-3">
               {t.kicker}
             </span>
-            <h1 className="page-title mb-3 md:mb-4 text-white">
+            <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold leading-tight mb-3 md:mb-4 text-white">
               {t.titleStart} <br /><span className="text-teal-400">{t.titleAccent}</span>
             </h1>
-            <p className="text-white/85 text-base md:text-lg leading-relaxed max-w-3xl font-light">
+            <p className="text-white/85 text-base md:text-lg lg:text-xl leading-relaxed max-w-3xl font-light">
               {t.intro}
             </p>
           </div>
         </section>
 
         {/* Research List Section */}
-        <section className="section-y-first bg-slate-50/30 relative overflow-hidden">
+        <section className="pt-8 pb-16 md:py-16 bg-slate-50/30 relative overflow-hidden">
           <div className="relative z-10 max-w-[1200px] mx-auto px-6">
 
             {/* Left-aligned search bar: 48px tall on phones, 46px on desktop; 16px text on phones so iOS doesn't zoom in */}
             <div className="flex flex-col md:flex-row items-center gap-4 mb-8 md:mb-10 w-full">
-              <div role="search" className="flex items-center bg-slate-50 border border-slate-200 rounded-full shadow-sm w-full md:max-w-md focus-within:border-teal-500 focus-within:ring-teal-500 focus-within:ring-1 transition-all duration-300 relative">
+              <div role="search" className="flex items-center bg-slate-50 border border-slate-200 rounded-full shadow-xs w-full md:max-w-md focus-within:border-teal-500 focus-within:ring-teal-500 focus-within:ring-1 transition-all duration-300 relative">
                 {/* Search Icon */}
                 <div className="pl-4 text-teal-650 flex-shrink-0">
                   <svg className="w-[18px] h-[18px]" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -174,7 +174,7 @@ export default function ResearchPage() {
                     data-analytics-item={topic.englishTitle}
                     layout
                     transition={{ duration: 0.4, ease: easeOut }}
-                    className="border border-slate-200 rounded-2xl bg-slate-50/50 hover:bg-slate-50/85 transition-colors duration-300 overflow-hidden shadow-sm hover:border-brand-orange/40 flex flex-col group"
+                    className="border-2 border-slate-200 rounded-2xl bg-slate-50/50 hover:bg-slate-50/85 transition-colors duration-300 overflow-hidden shadow-xs hover:border-brand-orange/40 flex flex-col group"
                   >
                     {/* Card Header (Image/Banner + Title) */}
                     <div
@@ -203,8 +203,8 @@ export default function ResearchPage() {
                       </div>
 
                       {/* Content: Title */}
-                      <div className="card-pad flex flex-col gap-3">
-                        <h3 className="card-title text-brand-navy group-hover:text-brand-orange transition-colors duration-300">
+                      <div className="p-6 flex flex-col gap-3">
+                        <h3 className="font-heading text-xl sm:text-2xl font-black text-brand-navy group-hover:text-brand-orange transition-colors duration-300 leading-tight">
                           {topic.title}
                         </h3>
 
@@ -238,10 +238,10 @@ export default function ResearchPage() {
                           transition={{ duration: 0.4, ease: easeOut }}
                           className="overflow-hidden bg-white border-t-2 border-slate-200"
                         >
-                          <div className="card-pad space-y-5">
+                          <div className="p-6 space-y-5">
                             {/* Summary section */}
                             <div>
-                              <span className="badge-text text-teal-655 block mb-1.5">
+                              <span className="text-xs font-bold uppercase text-teal-655 tracking-wider block mb-1.5">
                                 {t.overview}
                               </span>
                               <p className="text-slate-655 text-sm lg:text-base leading-relaxed font-light">
@@ -251,7 +251,7 @@ export default function ResearchPage() {
 
                             {/* Challenge section */}
                             <div>
-                              <span className="badge-text text-teal-655 block mb-1.5">
+                              <span className="text-xs font-bold uppercase text-teal-655 tracking-wider block mb-1.5">
                                 {t.challenge}
                               </span>
                               <p className="text-slate-655 text-sm lg:text-base leading-relaxed font-light">
@@ -261,7 +261,7 @@ export default function ResearchPage() {
 
                             {/* Efficacy & Advantage section */}
                             <div>
-                              <span className="badge-text text-teal-655 block mb-1.5">
+                              <span className="text-xs font-bold uppercase text-teal-655 tracking-wider block mb-1.5">
                                 {t.advantage}
                               </span>
                               <p className="text-slate-655 text-sm lg:text-base leading-relaxed font-light">
@@ -272,7 +272,7 @@ export default function ResearchPage() {
                             {/* Target Applications (if any) */}
                             {topic.applications && (
                               <div>
-                                <span className="badge-text text-teal-655 block mb-1.5">
+                                <span className="text-xs font-bold uppercase text-teal-655 tracking-wider block mb-1.5">
                                   {t.applications}
                                 </span>
                                 <p className="text-slate-655 text-sm lg:text-base leading-relaxed font-light">
@@ -284,10 +284,10 @@ export default function ResearchPage() {
                             {/* Recognition & Support (if any) */}
                             {topic.recognition && (
                               <div className="bg-teal-50/70 border border-teal-150 p-3.5 rounded-xl">
-                                <span className="badge-text text-teal-800 block mb-1">
+                                <span className="text-xs font-bold uppercase text-teal-800 tracking-wider block mb-1">
                                   {t.recognition}
                                 </span>
-                                <p className="text-teal-700 text-sm lg:text-base leading-relaxed font-bold">
+                                <p className="text-teal-700 text-sm lg:text-base leading-relaxed font-black">
                                   {topic.recognition}
                                 </p>
                               </div>

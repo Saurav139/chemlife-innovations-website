@@ -20,7 +20,7 @@ export default function HowWeDo() {
   const steps = t.steps.map((step, i) => ({ ...step, ...stepImages[i], step: i + 1 }));
 
   return (
-    <section className="relative section-y overflow-hidden bg-brand-navy">
+    <section className="relative py-16 md:py-24 lg:py-32 overflow-hidden bg-brand-navy">
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0 select-none pointer-events-none">
         <Image
@@ -36,10 +36,10 @@ export default function HowWeDo() {
       <div className="relative z-10 max-w-[1200px] mx-auto px-6">
         {/* Title Section */}
         <div className="text-center mb-10 md:mb-20">
-          <span className="kicker text-teal-aa-light block mb-3">
+          <span className="text-teal-aa-light text-sm font-bold tracking-widest uppercase block mb-3">
             {t.kicker}
           </span>
-          <h2 className="section-title-lg text-white">
+          <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight">
             {t.title}
           </h2>
         </div>
@@ -50,7 +50,7 @@ export default function HowWeDo() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.7, ease: [0.25, 0.1, 0, 1] }}
-          className="rounded-2xl overflow-hidden shadow-lg border border-white/10 max-w-[850px] mx-auto bg-white divide-y divide-slate-100"
+          className="rounded-3xl overflow-hidden shadow-2xl border border-white/10 max-w-[850px] mx-auto bg-white divide-y divide-slate-100"
         >
           {steps.map((s, i) => {
             const isEven = i % 2 === 0;
@@ -72,7 +72,7 @@ export default function HowWeDo() {
                 </div>
 
                 {/* Text Box */}
-                <div className={`w-full panel-pad flex flex-col justify-center bg-white order-2 ${isEven ? "md:order-2" : "md:order-1"} relative`}>
+                <div className={`w-full p-6 lg:p-10 flex flex-col justify-center bg-white order-2 ${isEven ? "md:order-2" : "md:order-1"} relative`}>
                   {/* Hover Left Side Accent Line */}
                   <div className="absolute top-0 bottom-0 left-0 w-1.5 bg-brand-orange scale-y-0 group-hover:scale-y-100 transition-transform duration-300 origin-top" />
 
@@ -84,10 +84,10 @@ export default function HowWeDo() {
 
                     {/* Step Description */}
                     <div className="flex-1">
-                      <h3 className="card-title text-slate-800 mb-2 group-hover:text-brand-orange transition-colors duration-300">
+                      <h3 className="font-heading text-xl lg:text-2xl font-bold text-slate-800 mb-2 group-hover:text-brand-orange transition-colors duration-300">
                         {s.title}
                       </h3>
-                      <p className="text-slate-600 text-sm leading-relaxed">
+                      <p className="text-slate-600 text-xs lg:text-sm leading-relaxed font-normal">
                         {s.description}
                       </p>
                     </div>

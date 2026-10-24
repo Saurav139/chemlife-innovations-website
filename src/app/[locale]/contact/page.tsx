@@ -153,7 +153,7 @@ export default function ContactPage() {
 
       <main className="bg-white min-h-screen text-brand-navy">
         {/* Contact Hero Section */}
-        <SectionWrapper className="pt-26 md:pt-32 lg:pt-36 pb-10 md:pb-20 lg:pb-28 text-white relative overflow-hidden bg-brand-navy flex items-center">
+        <SectionWrapper className="pt-26 md:pt-32 pb-10 md:pb-24 lg:pt-36 lg:pb-32 text-white relative overflow-hidden bg-brand-navy flex items-center">
           <div className="absolute inset-0 z-0">
             <Image
               src={Images.heroes.contact}
@@ -166,27 +166,27 @@ export default function ContactPage() {
             <div className="absolute inset-0 bg-black/10" />
           </div>
 
-          <div className="relative z-10 max-w-[1200px] mx-auto px-6 w-full">
-            <span className="kicker text-teal-aa-light block mb-3">
+          <div className="relative z-10 max-w-[1200px] mx-auto px-6 w-full text-left">
+            <span className="text-teal-aa-light text-sm font-semibold tracking-widest uppercase block mb-3">
               {t.kicker}
             </span>
-            <h1 className="page-title mb-3 md:mb-4 text-white max-w-4xl">
+            <h1 className="font-heading text-3xl md:text-4xl lg:text-6xl font-bold leading-tight mb-3 md:mb-4 text-white max-w-4xl">
               {t.titleStart} <span className="text-teal-400">{t.titleAccent}</span> {t.titleEnd}
             </h1>
-            <p className="text-white/85 text-base md:text-lg leading-relaxed max-w-3xl font-light">
+            <p className="text-white/85 text-base md:text-lg lg:text-xl leading-relaxed max-w-3xl font-light">
               {t.intro}
             </p>
           </div>
         </SectionWrapper>
 
         {/* Main Content: Form & Location Details */}
-        <SectionWrapper className="section-y-first bg-white">
+        <SectionWrapper className="py-12 md:py-24 bg-white">
           <div className="max-w-[1200px] mx-auto px-6">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
 
               {/* Left Column: Form Card */}
               <div className="lg:col-span-7">
-                <div className="bg-gray-55 border border-gray-250 rounded-2xl panel-pad shadow-sm relative overflow-hidden">
+                <div className="bg-gray-55 border border-gray-250 rounded-3xl p-8 md:p-10 shadow-sm relative overflow-hidden">
                   <AnimatePresence mode="wait">
                     {!isSubmitted ? (
                       <motion.div
@@ -195,7 +195,7 @@ export default function ContactPage() {
                         exit={{ opacity: 0, y: -20 }}
                         transition={{ duration: 0.3 }}
                       >
-                        <h2 className="section-title text-brand-navy mb-2">
+                        <h2 className="font-heading text-2xl md:text-3xl font-bold text-brand-navy mb-2">
                           {t.formTitle}
                         </h2>
                         <p className="text-gray-500 text-sm mb-8">
@@ -206,7 +206,7 @@ export default function ContactPage() {
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             {/* Full Name */}
                             <div>
-                              <label htmlFor="name" className="block badge-text text-brand-navy mb-2">
+                              <label htmlFor="name" className="block text-xs font-bold text-brand-navy uppercase tracking-wider mb-2">
                                 {t.name} <span className="text-teal-aa">*</span>
                               </label>
                               <input
@@ -228,7 +228,7 @@ export default function ContactPage() {
 
                             {/* Email Address */}
                             <div>
-                              <label htmlFor="email" className="block badge-text text-brand-navy mb-2">
+                              <label htmlFor="email" className="block text-xs font-bold text-brand-navy uppercase tracking-wider mb-2">
                                 {t.email} <span className="text-teal-aa">*</span>
                               </label>
                               <input
@@ -252,7 +252,7 @@ export default function ContactPage() {
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             {/* Phone Number */}
                             <div>
-                              <label htmlFor="phone" className="block badge-text text-brand-navy mb-2">
+                              <label htmlFor="phone" className="block text-xs font-bold text-brand-navy uppercase tracking-wider mb-2">
                                 {t.phone} <span className="text-gray-aa font-normal">{t.optional}</span>
                               </label>
                               <input
@@ -270,7 +270,7 @@ export default function ContactPage() {
 
                             {/* Inquiry Type */}
                             <div>
-                              <label htmlFor="inquiryType" className="block badge-text text-brand-navy mb-2">
+                              <label htmlFor="inquiryType" className="block text-xs font-bold text-brand-navy uppercase tracking-wider mb-2">
                                 {t.inquiryType}
                               </label>
                               <div className="relative">
@@ -298,7 +298,7 @@ export default function ContactPage() {
 
                           {/* Subject */}
                           <div>
-                            <label htmlFor="subject" className="block badge-text text-brand-navy mb-2">
+                            <label htmlFor="subject" className="block text-xs font-bold text-brand-navy uppercase tracking-wider mb-2">
                               {t.subject} <span className="text-teal-aa">*</span>
                             </label>
                             <input
@@ -319,7 +319,7 @@ export default function ContactPage() {
 
                           {/* Message */}
                           <div>
-                            <label htmlFor="message" className="block badge-text text-brand-navy mb-2">
+                            <label htmlFor="message" className="block text-xs font-bold text-brand-navy uppercase tracking-wider mb-2">
                               {t.message} <span className="text-teal-aa">*</span>
                             </label>
                             <textarea
@@ -409,7 +409,7 @@ export default function ContactPage() {
                             <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                           </svg>
                         </div>
-                        <h2 className="section-title text-brand-navy mb-4">
+                        <h2 className="font-heading text-2xl md:text-3xl font-bold text-brand-navy mb-4">
                           {t.sentTitle}
                         </h2>
                         <p className="text-gray-500 text-sm max-w-md mx-auto leading-relaxed mb-8">
@@ -420,7 +420,7 @@ export default function ContactPage() {
                             setFormData(EMPTY_FORM);
                             setIsSubmitted(false);
                           }}
-                          className="px-6 py-2.5 bg-gray-150 text-gray-700 hover:bg-gray-200 transition-colors font-bold text-sm rounded-full cursor-pointer"
+                          className="px-6 py-2.5 bg-gray-150 text-gray-700 hover:bg-gray-200 transition-colors font-bold text-xs rounded-full cursor-pointer"
                         >
                           {t.sendAnother}
                         </button>
@@ -436,7 +436,7 @@ export default function ContactPage() {
                 {/* Office Info Card */}
                 <div className="space-y-6">
                   <div>
-                    <h3 className="card-title text-brand-navy mb-3">
+                    <h3 className="font-heading text-xl font-bold text-brand-navy mb-3">
                       {t.officeTitle}
                     </h3>
                     <p className="text-gray-500 text-sm leading-relaxed mb-4">
@@ -447,13 +447,13 @@ export default function ContactPage() {
                         <svg className="w-4 h-4 text-teal-aa" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.94.725l.548 2.2a1 1 0 01-.321.988l-1.305.98a10.582 10.582 0 004.872 4.872l.98-1.305a1 1 0 01.988-.321l2.2.548a1 1 0 01.725.94V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                         </svg>
-                        <a href="tel:+919535862570" className="inline-flex items-center min-h-11 -my-1.5 hover:text-teal-aa transition-colors">+91 95358 62570</a>
+                        <a href="tel:+919535862570" className="hover:text-teal-aa transition-colors">+91 95358 62570</a>
                       </div>
                       <div className="flex items-center gap-3 text-gray-500">
                         <svg className="w-4 h-4 text-teal-aa" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                         </svg>
-                        <a href="mailto:innovate@chemlifeinnovations.com" className="inline-flex items-center min-h-11 -my-1.5 hover:text-teal-aa transition-colors break-all">innovate@chemlifeinnovations.com</a>
+                        <a href="mailto:innovate@chemlifeinnovations.com" className="hover:text-teal-aa transition-colors break-all">innovate@chemlifeinnovations.com</a>
                       </div>
                     </div>
                   </div>
@@ -462,7 +462,7 @@ export default function ContactPage() {
 
                   {/* Manufacturing & R&D Highlight */}
                   <div>
-                    <h3 className="card-title text-brand-navy mb-2">
+                    <h3 className="font-heading text-lg font-bold text-brand-navy mb-2">
                       {t.plantTitle}
                     </h3>
                     <p className="text-gray-500 text-sm leading-relaxed">
@@ -472,7 +472,7 @@ export default function ContactPage() {
                 </div>
 
                 {/* Google Maps Embed Container */}
-                <div className="relative w-full aspect-[4/3] md:aspect-[16/9] lg:aspect-[4/3] rounded-2xl overflow-hidden border border-gray-200 shadow-sm bg-gray-55 select-none">
+                <div className="relative w-full aspect-[4/3] md:aspect-[16/9] lg:aspect-[4/3] rounded-3xl overflow-hidden border border-gray-200 shadow-sm bg-gray-55 select-none">
                   <iframe
                     src="https://maps.google.com/maps?q=13.273301,77.576311+(Chemlife%20Innovations%20Pvt%20Ltd)&z=16&output=embed"
                     width="100%"

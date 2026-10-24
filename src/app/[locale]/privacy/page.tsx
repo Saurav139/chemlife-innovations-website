@@ -64,7 +64,7 @@ function Activity({ title, data, purpose, basis, kept }: { title: string; data: 
   const row = "grid gap-1 sm:grid-cols-[9rem_1fr] sm:gap-4 py-3 border-t border-slate-200 first:border-t-0";
   return (
     <div className="mt-6 rounded-xl border border-slate-200 bg-slate-50/60 px-5 py-2">
-      <h3 className="card-title text-brand-navy pt-3 pb-1">{title}</h3>
+      <h3 className="font-heading text-lg font-bold text-brand-navy pt-3 pb-1">{title}</h3>
       <dl>
         <div className={row}><dt className="font-semibold text-brand-navy">What we collect</dt><dd>{data}</dd></div>
         <div className={row}><dt className="font-semibold text-brand-navy">Why</dt><dd>{purpose}</dd></div>
@@ -85,14 +85,14 @@ export default async function PrivacyPage({ params }: { params: Promise<{ locale
       <Header />
 
       <main className="bg-white min-h-screen text-brand-navy">
-        <section className="pt-26 md:pt-32 lg:pt-36 pb-10 md:pb-20 lg:pb-28 bg-brand-navy text-white">
+        <section className="pt-26 md:pt-32 pb-10 md:pb-16 lg:pt-36 lg:pb-20 bg-brand-navy text-white">
           <div className="max-w-3xl mx-auto px-6">
-            <h1 className="page-title text-white">Privacy Policy</h1>
+            <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-white">Privacy Policy</h1>
             <p className="mt-4 text-white/75">Last updated {LAST_UPDATED}</p>
           </div>
         </section>
 
-        <section className="section-y-first">
+        <section className="py-16">
           <div className="max-w-3xl mx-auto px-6 text-slate-600 leading-relaxed">
             <p>
               This policy is our notice to you under India&apos;s Digital Personal Data Protection Act, 2023 (the

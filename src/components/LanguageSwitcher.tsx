@@ -88,7 +88,7 @@ export default function LanguageSwitcher({ inline = false }: { inline?: boolean 
         <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
       </button>
       {open && (
-        <div className="absolute right-0 top-full mt-2 min-w-36 overflow-hidden rounded-xl border border-slate-200 bg-white py-1 shadow-lg">
+        <div className="absolute right-0 top-full mt-2 min-w-36 overflow-hidden rounded-xl border border-slate-200 bg-white py-1 shadow-xl">
           {links}
         </div>
       )}

@@ -41,10 +41,10 @@ export default function ChatOverlay() {
                   </div>
                 </div>
                 <div>
-                  <h3 className="card-title text-white">
+                  <h3 className="font-heading font-bold text-[18px] leading-tight text-white tracking-wide">
                     ChemLife AI Experts
                   </h3>
-                  <p className="badge-text text-teal-aa-light">
+                  <p className="text-[11px] text-teal-aa-light font-semibold tracking-wider uppercase">
                     Poultry & Dairy Nutritionists
                   </p>
                 </div>
@@ -73,14 +73,14 @@ export default function ChatOverlay() {
                   }}
                   className="flex items-center gap-3 p-2.5 rounded-xl border border-blue-100 bg-blue-50/50 hover:bg-blue-50 transition-all text-left cursor-pointer group"
                 >
-                  <div className="w-9 h-9 rounded-full bg-white border border-slate-200 flex items-center justify-center overflow-hidden p-0.5 shadow-sm flex-shrink-0 group-hover:scale-105 transition-transform">
+                  <div className="w-9 h-9 rounded-full bg-white border border-slate-200 flex items-center justify-center overflow-hidden p-0.5 shadow-xs flex-shrink-0 group-hover:scale-105 transition-transform">
                     <img src={Images.mascots.poultry} alt="Dr. Kukku" className="w-full h-full object-contain" />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="text-sm font-bold text-slate-800">Dr. Kukku</p>
-                    <p className="text-xs text-slate-500 truncate">Poultry Nutrition Specialist</p>
+                    <p className="text-[12px] font-bold text-slate-800">Dr. Kukku</p>
+                    <p className="text-[10px] text-slate-500 truncate">Poultry Nutrition Specialist</p>
                   </div>
-                  <span className="text-xs font-semibold text-blue-600 flex-shrink-0">Chat →</span>
+                  <span className="text-[11px] font-semibold text-blue-600 flex-shrink-0">Chat →</span>
                 </button>
 
                 {/* Dr. Mikku */}
@@ -91,20 +91,20 @@ export default function ChatOverlay() {
                   }}
                   className="flex items-center gap-3 p-2.5 rounded-xl border border-orange-100 bg-orange-50/50 hover:bg-orange-50 transition-all text-left cursor-pointer group"
                 >
-                  <div className="w-9 h-9 rounded-full bg-white border border-slate-200 flex items-center justify-center overflow-hidden p-0.5 shadow-sm flex-shrink-0 group-hover:scale-105 transition-transform">
+                  <div className="w-9 h-9 rounded-full bg-white border border-slate-200 flex items-center justify-center overflow-hidden p-0.5 shadow-xs flex-shrink-0 group-hover:scale-105 transition-transform">
                     <img src={Images.mascots.dairy} alt="Dr. Mikku" className="w-full h-full object-contain" />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="text-sm font-bold text-slate-800">Dr. Mikku</p>
-                    <p className="text-xs text-slate-500 truncate">Dairy & Ruminant Specialist</p>
+                    <p className="text-[12px] font-bold text-slate-800">Dr. Mikku</p>
+                    <p className="text-[10px] text-slate-500 truncate">Dairy & Ruminant Specialist</p>
                   </div>
-                  <span className="text-xs font-semibold text-brand-orange-aa flex-shrink-0">Chat →</span>
+                  <span className="text-[11px] font-semibold text-brand-orange-aa flex-shrink-0">Chat →</span>
                 </button>
               </div>
             </div>
  
             {/* Footer with matched styling */}
-            <div className="px-6 py-3 bg-slate-50 border-t border-slate-100 flex justify-between items-center badge-text text-slate-aa">
+            <div className="px-6 py-3 bg-slate-50 border-t border-slate-100 flex justify-between items-center text-[10px] text-slate-aa font-semibold uppercase tracking-wider">
               <span>Powered by ChemLife AI</span>
               <button
                 onClick={() => {
@@ -131,14 +131,14 @@ export default function ChatOverlay() {
         className="flex items-center gap-2 md:gap-3 bg-brand-orange-aa text-white p-2 md:px-5 md:py-3.5 rounded-full shadow-2xl hover:bg-brand-orange-aa-hover transition-all group border-2 border-white/20 cursor-pointer"
       >
         <div className="flex -space-x-4">
-          <div className="w-10 h-10 rounded-full border-2 border-white bg-white overflow-hidden shadow-sm flex-shrink-0 flex items-center justify-center p-0.5">
+          <div className="w-10 h-10 rounded-full border-2 border-white bg-white overflow-hidden shadow-md flex-shrink-0 flex items-center justify-center p-0.5">
             <img
               src={Images.mascots.poultry}
               alt="Dr. Kukku"
               className="w-full h-full object-contain"
             />
           </div>
-          <div className="w-10 h-10 rounded-full border-2 border-white bg-white overflow-hidden shadow-sm flex-shrink-0 flex items-center justify-center p-0.5">
+          <div className="w-10 h-10 rounded-full border-2 border-white bg-white overflow-hidden shadow-md flex-shrink-0 flex items-center justify-center p-0.5">
             <img
               src={Images.mascots.dairy}
               alt="Dr. Mikku"
@@ -146,7 +146,7 @@ export default function ChatOverlay() {
             />
           </div>
         </div>
-        <span className="hidden md:inline badge-text select-none">
+        <span className="hidden md:inline font-heading font-bold text-xs tracking-wider uppercase select-none">
           Ask our AI Experts
         </span>
         <span className="hidden md:inline text-emerald-400 animate-pulse text-xs select-none" aria-hidden="true">●</span>
