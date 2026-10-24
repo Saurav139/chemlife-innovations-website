@@ -226,7 +226,7 @@ function BotBubble({
         }`}>
           {isError ? (
             <>
-              <p role="alert" className="text-[13px] text-red-600 leading-relaxed">⚠️ {parseInline(content)}</p>
+              <p role="alert" className="text-[13px] text-red-700 leading-relaxed [&_a]:text-red-800">⚠️ {parseInline(content)}</p>
               {onRetry && (
                 <button
                   type="button"
@@ -436,14 +436,14 @@ function ChatSessionContent() {
           className="flex-none lg:flex-1 flex flex-col min-h-[520px] h-[calc(100dvh_-_136px)] bg-white border border-slate-200/80 rounded-2xl shadow-sm overflow-hidden"
         >
           {/* Bot header */}
-          <div className={`flex items-center justify-between gap-3 px-5 py-3.5 border-b border-slate-100 ${meta.accentBgLight}`}>
+          <div className={`flex items-center justify-between gap-2 sm:gap-3 px-4 sm:px-5 py-3.5 border-b border-slate-100 ${meta.accentBgLight}`}>
             <div className="flex items-center gap-3 min-w-0">
-              <div className="w-12 h-12 rounded-full border-2 border-white bg-white overflow-hidden flex-shrink-0 flex items-center justify-center shadow-md">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-white bg-white overflow-hidden flex-shrink-0 flex items-center justify-center shadow-md">
                 <img src={meta.image} alt={meta.name} className="w-full h-full object-contain" />
               </div>
               <div className="min-w-0">
                 <div className="flex items-center gap-2">
-                  <span className="font-heading font-bold text-slate-800 text-[15px]">{meta.name}</span>
+                  <span className="font-heading font-bold text-slate-800 text-[15px] whitespace-nowrap">{meta.name}</span>
                   <span className={`w-2 h-2 rounded-full flex-shrink-0 ${offline ? "bg-slate-300" : "bg-emerald-500"}`} />
                   <span className={`text-[10px] font-semibold uppercase tracking-wider hidden sm:block ${offline ? "text-slate-aa" : "text-emerald-aa"}`}>
                     {offline ? "Offline" : "Live"}
@@ -453,11 +453,14 @@ function ChatSessionContent() {
               </div>
             </div>
             <div className="flex items-center gap-2 flex-shrink-0">
-              <Link href="/chat" className="tap-target text-[11px] font-semibold text-slate-aa hover:text-brand-navy bg-white px-3 py-1.5 rounded-lg border border-slate-200 hover:border-slate-300 transition-all whitespace-nowrap">
+              {/* Hidden on the narrowest phones (under 360px), where it would squeeze out the bot's name. */}
+              <Link href="/chat" className="hidden min-[360px]:inline tap-target text-[11px] font-semibold text-slate-aa hover:text-brand-navy bg-white px-3 py-1.5 rounded-lg border border-slate-200 hover:border-slate-300 transition-all whitespace-nowrap">
                 ← Agents
               </Link>
-              <Link href={`/chat/${otherBot}`} className={`tap-target text-[11px] font-semibold text-white px-3 py-1.5 rounded-lg transition-all whitespace-nowrap ${meta.accentBg} hover:opacity-90`}>
-                Switch to {BOT_META[otherBot].name}
+              {/* Phones show just "Switch", leaving room for the bot's name. */}
+              <Link href={`/chat/${otherBot}`} aria-label={`Switch to ${BOT_META[otherBot].name}`} className={`tap-target text-[11px] font-semibold text-white px-3 py-1.5 rounded-lg transition-all whitespace-nowrap ${meta.accentBg} hover:opacity-90`}>
+                <span className="sm:hidden">Switch</span>
+                <span className="hidden sm:inline">Switch to {BOT_META[otherBot].name}</span>
               </Link>
             </div>
           </div>
