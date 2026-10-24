@@ -112,7 +112,7 @@ function SnowflakeCell({
         {/* Enlarged Inner Circular Card (100% visible image, zero overlap) */}
         <motion.div
           whileHover={{ scale: 1.05 }}
-          className="relative w-[190px] h-[190px] md:w-[235px] md:h-[235px] rounded-full overflow-hidden border-2 border-teal-500/25 group-hover:border-brand-orange transition-all duration-300 z-10 bg-gray-50 shadow-xl"
+          className="relative w-[190px] h-[190px] md:w-[235px] md:h-[235px] rounded-full overflow-hidden border-2 border-teal-500/25 group-hover:border-brand-orange transition-all duration-300 z-10 bg-gray-50 shadow-lg"
         >
           <AnimatePresence mode="popLayout">
             <motion.div
@@ -138,10 +138,10 @@ function SnowflakeCell({
 
       {/* Combined Typography Content (Clean alignment below the image) */}
       <div className="mt-4 max-w-[270px] px-2 flex flex-col items-center">
-        <h3 className="font-heading text-xl font-bold text-teal-aa mb-2 leading-tight transition-colors duration-300 group-hover:text-brand-orange">
+        <h3 className="card-title text-teal-aa mb-2 transition-colors duration-300 group-hover:text-brand-orange">
           {card.title}
         </h3>
-        <p className="text-slate-600 text-sm leading-relaxed font-normal md:text-xs lg:text-sm">
+        <p className="text-slate-600 text-sm leading-relaxed">
           {card.description}
         </p>
       </div>
@@ -165,14 +165,14 @@ export default function WhoWeAre() {
   }, []);
 
   return (
-    <section className="bg-white py-16 md:py-24 lg:py-32 overflow-hidden border-b border-gray-100">
+    <section className="bg-white section-y overflow-hidden border-b border-gray-100">
       <div className="max-w-[1200px] mx-auto px-6">
         {/* Title Block */}
         <div className="text-center mb-12">
-          <span className="text-teal-aa text-sm lg:text-base font-semibold tracking-widest uppercase block mb-2">
+          <span className="kicker text-teal-aa block mb-2">
             {t.kicker}
           </span>
-          <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl text-brand-navy font-bold leading-tight">
+          <h2 className="section-title-lg text-brand-navy">
             {t.title}
           </h2>
         </div>

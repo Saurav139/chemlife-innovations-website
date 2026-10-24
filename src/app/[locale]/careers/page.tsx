@@ -98,7 +98,7 @@ export default function CareersPage() {
 
       <main className="bg-white min-h-screen text-brand-navy">
         {/* Careers Hero Section */}
-        <SectionWrapper className="pt-26 md:pt-32 pb-10 md:pb-24 lg:pt-36 lg:pb-32 text-white relative overflow-hidden bg-brand-navy flex items-center">
+        <SectionWrapper className="pt-26 md:pt-32 lg:pt-36 pb-10 md:pb-20 lg:pb-28 text-white relative overflow-hidden bg-brand-navy flex items-center">
           <div className="absolute inset-0 z-0">
             <Image
               src={Images.heroes.careers}
@@ -111,27 +111,27 @@ export default function CareersPage() {
             <div className="absolute inset-0 bg-black/10" />
           </div>
 
-          <div className="relative z-10 max-w-[1200px] mx-auto px-6 w-full text-center lg:text-left">
-            <span className="text-teal-aa-light text-sm font-semibold tracking-widest uppercase block mb-3">
+          <div className="relative z-10 max-w-[1200px] mx-auto px-6 w-full">
+            <span className="kicker text-teal-aa-light block mb-3">
               {t.kicker}
             </span>
-            <h1 className="font-heading text-3xl md:text-4xl lg:text-6xl font-bold leading-tight mb-3 md:mb-4 text-white max-w-4xl">
+            <h1 className="page-title mb-3 md:mb-4 text-white max-w-4xl">
               {t.titleStart} <span className="text-teal-400">{t.titleAccent}</span> {t.titleEnd}
             </h1>
-            <p className="text-white/85 text-base md:text-lg lg:text-xl leading-relaxed max-w-3xl font-light">
+            <p className="text-white/85 text-base md:text-lg leading-relaxed max-w-3xl font-light">
               {t.intro}
             </p>
           </div>
         </SectionWrapper>
 
         {/* About & Internship Considerations Section */}
-        <SectionWrapper className="py-12 md:py-20 bg-gray-50 border-b border-gray-150">
+        <SectionWrapper className="section-y-first bg-gray-50 border-b border-gray-150">
           <div className="max-w-[1200px] mx-auto px-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
 
               {/* Program Overview */}
               <div>
-                <h2 className="font-heading text-3xl font-bold text-brand-navy mb-6">
+                <h2 className="section-title text-brand-navy mb-6">
                   {t.aboutTitle}
                 </h2>
                 <p className="text-gray-600 text-base leading-relaxed mb-6">
@@ -148,7 +148,7 @@ export default function CareersPage() {
                       </svg>
                     </div>
                     <div>
-                      <h4 className="font-bold text-brand-navy text-base">{t.duration}</h4>
+                      <h3 className="subheading text-brand-navy">{t.duration}</h3>
                       <p className="text-gray-500 text-sm mt-0.5">{t.durationText}</p>
                     </div>
                   </div>
@@ -160,7 +160,7 @@ export default function CareersPage() {
                       </svg>
                     </div>
                     <div>
-                      <h4 className="font-bold text-brand-navy text-base">{t.stipend}</h4>
+                      <h3 className="subheading text-brand-navy">{t.stipend}</h3>
                       <p className="text-gray-500 text-sm mt-0.5">{t.stipendText}</p>
                     </div>
                   </div>
@@ -175,7 +175,7 @@ export default function CareersPage() {
                       </svg>
                     </div>
                     <div>
-                      <h4 className="font-bold text-brand-navy text-base">{t.lunch}</h4>
+                      <h3 className="subheading text-brand-navy">{t.lunch}</h3>
                       <p className="text-gray-500 text-sm mt-0.5">{t.lunchText}</p>
                     </div>
                   </div>
@@ -183,8 +183,8 @@ export default function CareersPage() {
               </div>
 
               {/* Considerations & Requirements Card */}
-              <div className="bg-white border border-gray-255 rounded-3xl p-8 lg:p-10 shadow-sm">
-                <h3 className="font-heading text-2xl font-bold text-brand-navy mb-6 flex items-center gap-3">
+              <div className="bg-white border border-gray-255 rounded-2xl panel-pad shadow-sm">
+                <h3 className="card-title text-brand-navy mb-6 flex items-center gap-3">
                   <svg className="w-6 h-6 text-teal-aa flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                     <path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A5.5 5.5 0 0 0 12.5 2.5a5.5 5.5 0 0 0-5.5 5.5c0 1.3.5 2.6 1.5 3.5.8.8 1.3 1.5 1.5 2.5"></path>
                     <line x1="9" y1="18" x2="15" y2="18"></line>
@@ -224,11 +224,11 @@ export default function CareersPage() {
         </SectionWrapper>
 
         {/* Internship Dropdown and Details Container */}
-        <SectionWrapper className="py-24 bg-white">
+        <SectionWrapper className="section-y bg-white">
           <div className="max-w-[1200px] mx-auto px-6">
 
             <div className="text-center mb-12">
-              <h2 className="font-heading text-3xl lg:text-4xl font-bold text-brand-navy">
+              <h2 className="section-title text-brand-navy">
                 {t.openTitle}
               </h2>
               <p className="text-gray-500 text-base mt-2 max-w-xl mx-auto">
@@ -238,13 +238,13 @@ export default function CareersPage() {
 
             {/* Dropdown Selector */}
             <div className="max-w-md mx-auto mb-16">
-              <label className="block text-xs font-bold text-gray-aa uppercase tracking-wider mb-2 text-center">
+              <label className="block badge-text text-gray-aa mb-2 text-center">
                 {t.selectPosition}
               </label>
               <select
                 value={selectedRoleId}
                 onChange={(e) => setSelectedRoleId(e.target.value)}
-                className="w-full bg-gray-50 border border-gray-250 rounded-2xl px-6 py-4 text-base text-brand-navy focus:outline-none focus:border-teal-500 font-semibold cursor-pointer shadow-xs"
+                className="w-full bg-gray-50 border border-gray-250 rounded-xl px-6 py-4 text-base text-brand-navy focus:outline-none focus:border-teal-500 font-semibold cursor-pointer shadow-sm"
               >
                 {internshipRoles.map((role) => (
                   <option key={role.id} value={role.id}>
@@ -255,16 +255,16 @@ export default function CareersPage() {
             </div>
 
             {/* Split Details Container */}
-            <div className="bg-gray-55 border border-gray-200 rounded-3xl overflow-hidden shadow-sm">
+            <div className="bg-gray-55 border border-gray-200 rounded-2xl overflow-hidden shadow-sm">
               <div className="flex flex-col lg:flex-row min-h-[550px]">
 
                 {/* Left Side: Text Details */}
-                <div className="lg:w-7/12 p-8 lg:p-12 flex flex-col justify-between flex-grow">
+                <div className="lg:w-7/12 panel-pad flex flex-col justify-between flex-grow">
                   <div>
-                    <span className="text-teal-aa text-sm font-bold uppercase tracking-wider block mb-2">
+                    <span className="kicker text-teal-aa block mb-2">
                       {selectedRole.department}
                     </span>
-                    <h3 className="font-heading text-3xl font-bold text-brand-navy mb-6">
+                    <h3 className="card-title text-brand-navy mb-6">
                       {selectedRole.title}
                     </h3>
 
@@ -274,7 +274,7 @@ export default function CareersPage() {
 
                     {/* Point-wise Required Qualifications */}
                     <div className="mb-8">
-                      <h4 className="text-xs font-bold uppercase tracking-wider text-brand-navy/78 block mb-3">
+                      <h4 className="badge-text text-brand-navy/78 block mb-3">
                         {t.qualifications}
                       </h4>
                       <ul className="space-y-2">
@@ -289,7 +289,7 @@ export default function CareersPage() {
 
                     {/* Eligible Fields */}
                     <div className="border-t border-gray-200/60 pt-6 mb-8">
-                      <h4 className="text-xs font-bold uppercase tracking-wider text-brand-navy/78 block mb-3">
+                      <h4 className="badge-text text-brand-navy/78 block mb-3">
                         {t.eligible}
                       </h4>
                       <ul className="space-y-2">
@@ -305,7 +305,7 @@ export default function CareersPage() {
 
                   <button
                     onClick={() => setActiveJob(selectedRole)}
-                    className="w-full py-4 rounded-full bg-brand-orange-aa hover:bg-brand-orange-aa-hover text-white font-bold text-base shadow transition-all duration-300 cursor-pointer text-center lg:max-w-xs"
+                    className="w-full py-4 rounded-full bg-brand-orange-aa hover:bg-brand-orange-aa-hover text-white font-bold text-base shadow-sm transition-all duration-300 cursor-pointer text-center lg:max-w-xs"
                   >
                     {t.apply}
                   </button>
@@ -344,20 +344,20 @@ export default function CareersPage() {
                 animate={{ scale: 1, y: 0 }}
                 exit={{ scale: 0.95, y: 20 }}
                 transition={{ duration: 0.3 }}
-                className="bg-white rounded-3xl w-full max-w-xl shadow-2xl overflow-hidden relative border border-gray-200 my-8"
+                className="bg-white rounded-2xl w-full max-w-xl shadow-2xl overflow-hidden relative border border-gray-200 my-8"
               >
                 {/* Modal Header */}
-                <div className="bg-brand-navy text-white p-6 relative">
+                <div className="bg-brand-navy text-white panel-pad relative">
                   <button
                     onClick={() => setActiveJob(null)}
                     className="absolute right-6 top-6 text-white/70 hover:text-white transition-colors cursor-pointer text-lg font-semibold"
                   >
                     ✕
                   </button>
-                  <span className="text-teal-aa-light text-xs font-bold uppercase tracking-wider block mb-1">
+                  <span className="kicker text-teal-aa-light block mb-1">
                     {t.modalTitle}
                   </span>
-                  <h3 className="font-heading text-xl lg:text-2xl font-bold">
+                  <h3 className="card-title">
                     {activeJob.title}
                   </h3>
                   <p className="text-white/70 text-sm mt-1">
@@ -366,10 +366,10 @@ export default function CareersPage() {
                 </div>
 
                 {/* Modal Body Form */}
-                <form onSubmit={handleApplySubmit} className="p-6 space-y-5">
+                <form onSubmit={handleApplySubmit} className="panel-pad space-y-5">
                   {/* Name field */}
                   <div>
-                    <label className="block text-sm font-bold text-gray-550 uppercase tracking-wider mb-2">
+                    <label className="block badge-text text-brand-navy mb-2">
                       {t.fullName}
                     </label>
                     <input
@@ -384,7 +384,7 @@ export default function CareersPage() {
 
                   {/* Email field */}
                   <div>
-                    <label className="block text-sm font-bold text-gray-555 uppercase tracking-wider mb-2">
+                    <label className="block badge-text text-brand-navy mb-2">
                       {t.email}
                     </label>
                     <input
@@ -401,7 +401,7 @@ export default function CareersPage() {
 
                   {/* Editable Email Subject preview */}
                   <div>
-                    <label className="block text-sm font-bold text-gray-555 uppercase tracking-wider mb-2">
+                    <label className="block badge-text text-brand-navy mb-2">
                       {t.emailSubject}
                     </label>
                     <input
@@ -409,13 +409,13 @@ export default function CareersPage() {
                       required
                       value={emailSubject}
                       onChange={(e) => setEmailSubject(e.target.value)}
-                      className="w-full bg-gray-55 border border-gray-200 rounded-xl px-4 py-3 text-base text-brand-navy focus:outline-none focus:border-teal-500 transition-colors font-mono text-sm"
+                      className="w-full bg-gray-55 border border-gray-200 rounded-xl px-4 py-3 text-base text-brand-navy focus:outline-none focus:border-teal-500 transition-colors font-mono md:text-sm"
                     />
                   </div>
 
                   {/* Editable Email Body preview */}
                   <div>
-                    <label className="block text-sm font-bold text-gray-555 uppercase tracking-wider mb-2">
+                    <label className="block badge-text text-brand-navy mb-2">
                       {t.emailBody}
                     </label>
                     {locale !== "en" && <p className="text-xs text-gray-500 -mt-1 mb-2">{t.emailNote}</p>}
@@ -431,7 +431,7 @@ export default function CareersPage() {
                   <div className="pt-2">
                     <button
                       type="submit"
-                      className="w-full py-3.5 rounded-full bg-brand-orange-aa hover:bg-brand-orange-aa-hover text-white font-bold text-base shadow transition-all duration-300 cursor-pointer text-center"
+                      className="w-full py-3.5 rounded-full bg-brand-orange-aa hover:bg-brand-orange-aa-hover text-white font-bold text-base shadow-sm transition-all duration-300 cursor-pointer text-center"
                     >
                       {t.draft}
                     </button>
@@ -455,14 +455,14 @@ export default function CareersPage() {
                 initial={{ scale: 0.95, y: 20 }}
                 animate={{ scale: 1, y: 0 }}
                 exit={{ scale: 0.95, y: 20 }}
-                className="bg-white rounded-3xl w-full max-w-md shadow-2xl p-8 border border-gray-200 text-center"
+                className="bg-white rounded-2xl w-full max-w-md shadow-2xl panel-pad border border-gray-200 text-center"
               >
                 <div className="w-14 h-14 rounded-full bg-brand-orange/10 flex items-center justify-center text-brand-orange mx-auto mb-4">
                   <svg className="w-6 h-6 text-brand-orange" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                     <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path>
                   </svg>
                 </div>
-                <h3 className="font-heading text-xl font-bold text-brand-navy mb-2">
+                <h3 className="card-title text-brand-navy mb-2">
                   {t.reminderTitle}
                 </h3>
                 <p className="text-gray-500 text-sm leading-relaxed mb-6">

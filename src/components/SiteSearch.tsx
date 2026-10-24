@@ -237,7 +237,7 @@ export default function SiteSearch() {
                 />
                 <button
                   onClick={() => setIsOpen(false)}
-                  className="absolute right-7 top-7 w-6 h-6 rounded-md hover:bg-slate-100 flex items-center justify-center text-slate-aa hover:text-slate-600 transition-colors text-sm cursor-pointer"
+                  className="absolute right-7 top-7 w-6 h-6 rounded-full hover:bg-slate-100 flex items-center justify-center text-slate-aa hover:text-slate-600 transition-colors text-sm cursor-pointer"
                   title="Close search"
                 >
                   ESC
@@ -249,7 +249,7 @@ export default function SiteSearch() {
                 {query.trim() === "" ? (
                   // Suggested Searches
                   <div className="py-2">
-                    <p className="text-[10px] font-bold text-slate-aa uppercase tracking-wider mb-3 px-2">
+                    <p className="badge-text text-slate-aa mb-3 px-2">
                       Suggested Topics
                     </p>
                     <div className="flex flex-wrap gap-2 px-2">
@@ -257,7 +257,7 @@ export default function SiteSearch() {
                         <button
                           key={term}
                           onClick={() => setQuery(term)}
-                          className="px-3 py-1.5 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-150 text-xs font-semibold text-slate-600 cursor-pointer transition-colors"
+                          className="px-3 py-1.5 rounded-full bg-slate-50 hover:bg-slate-100 border border-slate-150 text-sm font-semibold text-slate-600 cursor-pointer transition-colors"
                         >
                           {term}
                         </button>
@@ -274,7 +274,7 @@ export default function SiteSearch() {
                     >
                       {/* Badge indicator */}
                       <span
-                        className={`text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded shrink-0 ${
+                        className={`badge-text px-2 py-0.5 rounded-full shrink-0 ${
                           item.category === "Page"
                             ? "bg-blue-50 text-blue-600 border border-blue-100"
                             : item.category === "Product"
@@ -307,7 +307,7 @@ export default function SiteSearch() {
               </div>
 
               {/* Modal Footer */}
-              <div className="px-6 py-3 bg-slate-50 border-t border-slate-100 flex justify-between items-center text-[9px] text-slate-aa font-semibold tracking-wider uppercase">
+              <div className="px-6 py-3 bg-slate-50 border-t border-slate-100 flex justify-between items-center badge-text text-slate-aa">
                 <span>Navigate directly by clicking results</span>
                 <span>ChemLife Search</span>
               </div>
