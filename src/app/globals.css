@@ -80,6 +80,126 @@
   }
 }
 
+/* Shared styles. Pages and components use these names instead of choosing their own sizes, so the site stays
+   consistent. Colour is set separately (e.g. `kicker text-teal-aa` on white, `kicker text-teal-aa-light` on navy).
+   Body text: text-base (16px); secondary text: text-sm (14px); captions and badges: text-xs (12px), never smaller.
+   Corners: rounded-xl (12px) for inputs and images inside cards, rounded-2xl (16px) for cards and panels,
+   rounded-full for buttons, pills and badges.
+   Shadows: shadow-sm for cards at rest, shadow-lg for hover or raised cards, shadow-2xl for floating things
+   (the chat bubble, dialogs). */
+
+/* Page titles on inner pages: 30px on phones, 36px on tablets, 48px on desktop. */
+@utility page-title {
+  font-weight: 700;
+  font-size: 1.875rem;
+  line-height: 1.2;
+  @media (width >= 48rem) {
+    font-size: 2.25rem;
+  }
+  @media (width >= 64rem) {
+    font-size: 3rem;
+  }
+}
+
+/* Section headings: 30px on phones, 36px from tablet up. */
+@utility section-title {
+  font-weight: 700;
+  font-size: 1.875rem;
+  line-height: 1.2;
+  @media (width >= 48rem) {
+    font-size: 2.25rem;
+  }
+}
+
+/* Homepage section headings, which sit under a larger hero: up to 48px on desktop. */
+@utility section-title-lg {
+  font-weight: 700;
+  font-size: 1.875rem;
+  line-height: 1.2;
+  @media (width >= 48rem) {
+    font-size: 2.25rem;
+  }
+  @media (width >= 64rem) {
+    font-size: 3rem;
+  }
+}
+
+/* Card titles: 18px on phones, 20px from tablet up. */
+@utility card-title {
+  font-weight: 700;
+  font-size: 1.125rem;
+  line-height: 1.35;
+  @media (width >= 48rem) {
+    font-size: 1.25rem;
+  }
+}
+
+/* Sub-headings inside a card or section. */
+@utility subheading {
+  font-weight: 700;
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+/* The small uppercase label above a heading ("GET TO KNOW"). */
+@utility kicker {
+  font-weight: 600;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* Text inside small badges and tags. */
+@utility badge-text {
+  font-weight: 700;
+  font-size: 0.75rem;
+  line-height: 1.3;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* Space above and below a page section: 64px on phones, 96px on tablets, 128px on desktop. */
+@utility section-y {
+  padding-block: 4rem;
+  @media (width >= 48rem) {
+    padding-block: 6rem;
+  }
+  @media (width >= 64rem) {
+    padding-block: 8rem;
+  }
+}
+
+/* The first section after an inner page's hero: a shorter gap above it (32px on phones, 64px from tablet up), so
+   content shows on the first screen, and the usual space below. */
+@utility section-y-first {
+  padding-top: 2rem;
+  padding-bottom: 4rem;
+  @media (width >= 48rem) {
+    padding-top: 4rem;
+    padding-bottom: 6rem;
+  }
+  @media (width >= 64rem) {
+    padding-bottom: 8rem;
+  }
+}
+
+/* Inside a card: 20px on phones, 24px from tablet up. */
+@utility card-pad {
+  padding: 1.25rem;
+  @media (width >= 48rem) {
+    padding: 1.5rem;
+  }
+}
+
+/* Inside a large panel (forms, featured cards): 20px on phones, 32px from tablet up. */
+@utility panel-pad {
+  padding: 1.25rem;
+  @media (width >= 48rem) {
+    padding: 2rem;
+  }
+}
+
 @layer base {
   ::placeholder {
     color: var(--color-slate-aa);

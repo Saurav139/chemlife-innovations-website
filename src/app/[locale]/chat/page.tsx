@@ -25,15 +25,15 @@ export default function ChatLandingPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: easeOut }}
-            className="w-full max-w-[850px] bg-white border border-slate-200 rounded-3xl p-8 md:p-12 shadow-sm text-center relative overflow-hidden flex flex-col items-center"
+            className="w-full max-w-[850px] bg-white border border-slate-200 rounded-2xl panel-pad shadow-sm text-center relative overflow-hidden flex flex-col items-center"
           >
             {/* Beta Version Badge */}
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-50 border border-teal-200 text-teal-aa text-xs font-bold uppercase tracking-wider mb-3 select-none no-underline">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-50 border border-teal-200 text-teal-aa badge-text mb-3 select-none no-underline">
               Beta Version
             </div>
 
             {/* Active Specialist Title */}
-            <h1 className="font-heading text-3xl md:text-5xl font-black text-brand-navy leading-tight mb-4 max-w-xl">
+            <h1 className="page-title text-brand-navy mb-4 max-w-xl">
               Meet Our AI Animal Nutrition Experts
             </h1>
             <div className="h-1.5 w-20 bg-teal-500 rounded-full mb-6" />
@@ -47,7 +47,7 @@ export default function ChatLandingPage() {
               {/* Dr. Kukku (Poultry) */}
               <Link
                 href="/chat/kukku"
-                className="group bg-slate-50/50 hover:bg-white border border-slate-100 hover:border-blue-200 rounded-2xl p-6 flex flex-col items-center text-center shadow-2xs hover:shadow-md transition-all duration-300 cursor-pointer"
+                className="group bg-slate-50/50 hover:bg-white border border-slate-100 hover:border-blue-200 rounded-2xl card-pad flex flex-col items-center text-center shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer"
               >
                 <div className="w-32 h-32 rounded-full bg-blue-50/50 border border-blue-100/50 p-3 flex items-center justify-center mb-4 shadow-sm group-hover:scale-105 transition-transform duration-300">
                   <img
@@ -56,11 +56,11 @@ export default function ChatLandingPage() {
                     className="w-full h-full object-contain"
                   />
                 </div>
-                <h3 className="text-xl font-bold text-slate-800 mb-1 group-hover:text-blue-600 transition-colors">Dr. Kukku</h3>
-                <p className="text-xs text-blue-600 font-bold uppercase tracking-wider mb-4">
+                <h3 className="card-title text-slate-800 mb-1 group-hover:text-blue-600 transition-colors">Dr. Kukku</h3>
+                <p className="badge-text text-blue-600 mb-4">
                   Poultry Nutrition Expert
                 </p>
-                <span className="text-[11px] font-bold text-white bg-blue-aa hover:bg-blue-600 px-4 py-2 rounded-xl transition-all">
+                <span className="text-sm font-bold text-white bg-blue-aa hover:bg-blue-600 px-5 py-2.5 rounded-full transition-all">
                   Consult Specialist →
                 </span>
               </Link>
@@ -68,7 +68,7 @@ export default function ChatLandingPage() {
               {/* Dr. Mikku (Dairy) */}
               <Link
                 href="/chat/mikku"
-                className="group bg-slate-50/50 hover:bg-white border border-slate-100 hover:border-orange-200 rounded-2xl p-6 flex flex-col items-center text-center shadow-2xs hover:shadow-md transition-all duration-300 cursor-pointer"
+                className="group bg-slate-50/50 hover:bg-white border border-slate-100 hover:border-orange-200 rounded-2xl card-pad flex flex-col items-center text-center shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer"
               >
                 <div className="w-32 h-32 rounded-full bg-orange-50/50 border border-orange-100/50 p-3 flex items-center justify-center mb-4 shadow-sm group-hover:scale-105 transition-transform duration-300">
                   <img
@@ -77,11 +77,11 @@ export default function ChatLandingPage() {
                     className="w-full h-full object-contain"
                   />
                 </div>
-                <h3 className="text-xl font-bold text-slate-800 mb-1 group-hover:text-brand-orange transition-colors">Dr. Mikku</h3>
-                <p className="text-xs text-brand-orange-aa font-bold uppercase tracking-wider mb-4">
+                <h3 className="card-title text-slate-800 mb-1 group-hover:text-brand-orange transition-colors">Dr. Mikku</h3>
+                <p className="badge-text text-brand-orange-aa mb-4">
                   Dairy & Ruminant Specialist
                 </p>
-                <span className="text-[11px] font-bold text-white bg-brand-orange-aa hover:bg-brand-orange-aa-hover px-4 py-2 rounded-xl transition-all">
+                <span className="text-sm font-bold text-white bg-brand-orange-aa hover:bg-brand-orange-aa-hover px-5 py-2.5 rounded-full transition-all">
                   Consult Specialist →
                 </span>
               </Link>
@@ -91,7 +91,7 @@ export default function ChatLandingPage() {
             <div className="flex flex-col sm:flex-row gap-4 w-full justify-center">
               <Link
                 href="/products"
-                className="px-8 py-3.5 rounded-full bg-brand-navy hover:bg-teal-aa hover:text-white text-white font-bold text-sm shadow transition-colors duration-300 text-center"
+                className="px-8 py-3.5 rounded-full bg-brand-navy hover:bg-teal-aa hover:text-white text-white font-bold text-sm shadow-sm transition-colors duration-300 text-center"
               >
                 Explore Feed Additives
               </Link>

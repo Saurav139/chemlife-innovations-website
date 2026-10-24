@@ -48,13 +48,13 @@ export default function AwardsRecognition() {
   }, [activeStep]);
 
   return (
-    <section className="bg-white py-16 md:py-24 lg:py-32 overflow-hidden">
+    <section className="bg-white section-y overflow-hidden">
       <div className="max-w-[1200px] mx-auto px-6">
         <div className="text-center mb-10 md:mb-16">
-          <span className="text-teal-aa text-base lg:text-lg font-semibold tracking-widest uppercase">
+          <span className="kicker text-teal-aa">
             {t.kicker}
           </span>
-          <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl text-brand-navy mt-2 mb-4 leading-tight">
+          <h2 className="section-title-lg text-brand-navy mt-2 mb-4">
             {t.title}
           </h2>
         </div>
@@ -65,8 +65,8 @@ export default function AwardsRecognition() {
           whileHover={{ y: -8, scale: 1.015 }}
           transition={{ duration: 0.4, ease: [0.25, 0.1, 0, 1] }}
         >
-          <div className="bg-brand-orange rounded-2xl p-[3px] shadow-2xl">
-            <div className="bg-white rounded-xl p-6 lg:p-8 min-h-[320px] flex items-center">
+          <div className="bg-brand-orange rounded-2xl p-[3px] shadow-lg">
+            <div className="bg-white rounded-xl panel-pad min-h-[320px] flex items-center">
               <AnimatePresence mode="wait">
                 {activeStep >= 0 && (
                   <motion.div
@@ -80,12 +80,12 @@ export default function AwardsRecognition() {
                     {/* Digital Award Plaque */}
                     <div className="relative w-full sm:w-80 lg:w-[360px] aspect-[4/3] shrink-0">
                       {/* Uniform light orange base card */}
-                      <div className="absolute inset-0 bg-orange-200 rounded-2xl shadow-2xl border-4 border-orange-300 p-4 flex items-center justify-center">
+                      <div className="absolute inset-0 bg-orange-200 rounded-2xl shadow-lg border-4 border-orange-300 p-4 flex items-center justify-center">
                         {/* Subtle inset overlay */}
-                        <div className="absolute inset-1.5 border border-white/15 rounded-lg pointer-events-none" />
+                        <div className="absolute inset-1.5 border border-white/15 rounded-xl pointer-events-none" />
 
                         {/* Logo Image centered on the wood plaque */}
-                        <div className="relative w-full h-full bg-white rounded-lg overflow-hidden shadow-inner p-4 flex items-center justify-center">
+                        <div className="relative w-full h-full bg-white rounded-xl overflow-hidden shadow-inner p-4 flex items-center justify-center">
                           <Image
                             src={Images.awards.path(certificates[activeStep].file)}
                             alt={certificates[activeStep].title}
@@ -99,11 +99,11 @@ export default function AwardsRecognition() {
 
                     {/* Caption */}
                     <div className="flex-1 text-center sm:text-left">
-                      <span className="text-teal-aa text-sm font-semibold tracking-widest uppercase">
+                      <span className="kicker text-teal-aa">
                         {certificates[activeStep].organization} &bull; {certificates[activeStep].year}
                       </span>
                        {certificates[activeStep].title && (
-                         <h3 className="font-heading text-2xl lg:text-3xl text-brand-navy mt-2 mb-4 leading-tight">
+                         <h3 className="card-title text-brand-navy mt-2 mb-4">
                            {certificates[activeStep].title}
                          </h3>
                        )}
@@ -161,7 +161,7 @@ export default function AwardsRecognition() {
 
                     {/* Station marker */}
                     <div
-                      className={`w-12 h-12 flex items-center justify-center rounded-md border-2 transition-all duration-500 ${
+                      className={`w-12 h-12 flex items-center justify-center rounded-xl border-2 transition-all duration-500 ${
                          isActive
                           ? 'bg-teal-aa-light border-teal-aa-light text-brand-navy scale-110 shadow-lg shadow-teal-400/30'
                           : isCompleted

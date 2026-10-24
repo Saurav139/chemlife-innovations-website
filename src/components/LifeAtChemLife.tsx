@@ -56,7 +56,7 @@ export default function LifeAtChemLife() {
 
       <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/90 via-black/60 to-brand-navy/80 z-10" />
 
-      <div className="relative z-20 w-full max-w-[1200px] mx-auto px-6 py-16 md:py-24 lg:py-32">
+      <div className="relative z-20 w-full max-w-[1200px] mx-auto px-6 section-y">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -64,7 +64,7 @@ export default function LifeAtChemLife() {
           transition={{ duration: 0.6, ease: easeOut }}
           className="text-center"
         >
-          <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl text-white mb-10 md:mb-16 leading-tight">
+          <h2 className="section-title-lg text-white mb-10 md:mb-16">
             {t.title}
           </h2>
         </motion.div>
@@ -113,7 +113,7 @@ export default function LifeAtChemLife() {
         >
           <a
             href={href("/careers")}
-            className="inline-block border-2 border-brand-orange text-brand-orange-aa bg-white hover:bg-brand-orange-aa hover:text-white font-semibold px-8 py-3 rounded-full shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5"
+            className="inline-block border-2 border-brand-orange text-brand-orange-aa bg-white hover:bg-brand-orange-aa hover:text-white font-semibold px-8 py-3 rounded-full shadow-sm hover:shadow-lg transition-all duration-300 transform hover:-translate-y-0.5"
           >
             {t.joinUs}
           </a>

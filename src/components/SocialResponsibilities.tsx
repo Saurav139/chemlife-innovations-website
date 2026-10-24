@@ -52,7 +52,7 @@ export default function SocialResponsibilities() {
   const activeBg = items[activeBgIndex];
 
   return (
-    <SectionWrapper className="relative py-16 md:py-32 lg:py-40 bg-white overflow-hidden border-b border-gray-100">
+    <SectionWrapper className="relative section-y bg-white overflow-hidden border-b border-gray-100">
       {/* Dynamic Background Media with cross-fade */}
       <div ref={bgRef} className="absolute inset-0 z-0 select-none pointer-events-none">
         <AnimatePresence initial={false}>
@@ -96,10 +96,10 @@ export default function SocialResponsibilities() {
 
       <div className="relative z-10 max-w-[1200px] mx-auto px-6">
         <div className="text-center mb-10 md:mb-16">
-          <span className="text-teal-aa text-base lg:text-lg font-semibold tracking-widest uppercase">
+          <span className="kicker text-teal-aa">
             {t.kicker}
           </span>
-          <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl text-brand-navy mt-3 leading-tight">
+          <h2 className="section-title-lg text-brand-navy mt-3">
             {t.title}
           </h2>
         </div>
@@ -117,22 +117,22 @@ export default function SocialResponsibilities() {
               onMouseEnter={() => setHoveredIndex(index)}
               onMouseLeave={() => setHoveredIndex(null)}
             >
-              {/* Card resized to w-44 h-44 to be less obtrusive */}
-              <div className="relative w-33 h-33 mx-auto mb-6 perspective-1000">
+              {/* 176px, so the description on the back fits at 14px */}
+              <div className="relative w-44 h-44 mx-auto mb-6 perspective-1000">
                 <div
                   className={`w-full h-full transition-transform duration-500 transform-style-preserve-3d ${hoveredIndex === index ? 'rotate-y-180' : ''
                     }`}
                 >
                   {/* Front side - Logo/Emoji (Scaled emoji to text-6xl) */}
-                  <div className="absolute inset-0 w-full h-full bg-brand-navy rounded-xl flex items-center justify-center backface-hidden shadow-lg group-hover:shadow-xl transition-shadow duration-300">
+                  <div className="absolute inset-0 w-full h-full bg-brand-navy rounded-2xl flex items-center justify-center backface-hidden shadow-sm group-hover:shadow-lg transition-shadow duration-300">
                     <span className="text-6xl select-none" role="img" aria-label={item.title}>
                       {item.emoji}
                     </span>
                   </div>
 
-                  {/* Back side - Description (p-4 padding and text-xs fits text cleanly within w-44 box) */}
-                  <div className="absolute inset-0 w-full h-full bg-brand-navy rounded-xl flex items-center justify-center backface-hidden rotate-y-180 p-4 border border-white/10">
-                    <span className="text-white text-xs font-semibold text-center leading-relaxed">
+                  {/* Back side - Description */}
+                  <div className="absolute inset-0 w-full h-full bg-brand-navy rounded-2xl flex items-center justify-center backface-hidden rotate-y-180 p-4 border border-white/10">
+                    <span className="text-white text-sm font-semibold text-center leading-snug">
                       {item.desc}
                     </span>
                   </div>
@@ -143,7 +143,7 @@ export default function SocialResponsibilities() {
                 className={`transition-transform duration-300 ${hoveredIndex === index ? 'transform translate-y-1 scale-105' : ''
                   }`}
               >
-                <h3 className="font-heading text-xl text-brand-navy mb-3 group-hover:text-teal-aa transition-colors duration-300">
+                <h3 className="card-title text-brand-navy mb-3 group-hover:text-teal-aa transition-colors duration-300">
                   {item.title}
                 </h3>
               </div>
