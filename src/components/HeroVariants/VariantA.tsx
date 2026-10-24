@@ -133,8 +133,9 @@ export default function HeroVariantA() {
     return () => clearTimeout(timer);
   }, [photo]);
 
+  // min-h-svh: the screen height with the browser's toolbars showing, so on phones the stats aren't hidden under them.
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-brand-navy">
+    <section className="relative min-h-svh flex items-center justify-center overflow-hidden bg-brand-navy">
       {/* Deep Navy Backdrop Base */}
       <div className="absolute inset-0 bg-brand-navy z-0" />
 

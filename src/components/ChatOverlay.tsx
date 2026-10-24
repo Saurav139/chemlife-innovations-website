@@ -10,7 +10,7 @@ export default function ChatOverlay() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="fixed bottom-4 right-4 md:bottom-6 md:right-6 z-50 font-sans flex flex-col items-end">
+    <div className="fixed bottom-[max(1rem,env(safe-area-inset-bottom))] right-[max(1rem,env(safe-area-inset-right))] md:bottom-6 md:right-6 z-50 font-sans flex flex-col items-end">
       <AnimatePresence>
         {/* Expanded Panel */}
         {isOpen && (

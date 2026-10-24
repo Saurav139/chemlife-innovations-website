@@ -184,7 +184,7 @@ export default function SiteSearch() {
   return (
     <>
       {/* Floating Search Button on Bottom-Left */}
-      <div className="fixed bottom-4 left-4 md:bottom-6 md:left-6 z-50">
+      <div className="fixed bottom-[max(1rem,env(safe-area-inset-bottom))] left-[max(1rem,env(safe-area-inset-left))] md:bottom-6 md:left-6 z-50">
         <motion.button
           onClick={() => setIsOpen(true)}
           whileHover={{ scale: 1.08 }}
@@ -233,7 +233,7 @@ export default function SiteSearch() {
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   placeholder="Search ChemLife website (e.g., ANBioT, poultry, careers...)"
-                  className="w-full text-sm pl-11 pr-12 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-hidden focus:border-brand-navy focus:ring-1 focus:ring-brand-navy text-slate-800 placeholder-slate-aa focus:bg-white transition-all font-medium"
+                  className="w-full text-base md:text-sm pl-11 pr-12 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-hidden focus:border-brand-navy focus:ring-1 focus:ring-brand-navy text-slate-800 placeholder-slate-aa focus:bg-white transition-all font-medium"
                 />
                 <button
                   onClick={() => setIsOpen(false)}

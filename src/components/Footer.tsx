@@ -163,7 +163,8 @@ export default function Footer() {
 
       {/* Copyright Bar */}
       <div className="border-t border-white/5 bg-[#0F1C2E] relative z-10">
-        <div className="max-w-[1200px] mx-auto px-6 py-6 flex flex-col sm:flex-row justify-between items-center gap-4">
+        {/* Phones: extra room at the bottom so the chat and search buttons don't cover the last line. */}
+        <div className="max-w-[1200px] mx-auto px-6 pt-6 pb-24 md:pb-6 flex flex-col sm:flex-row justify-between items-center gap-4">
           <div className="flex items-center gap-3">
             <Image
               src={Images.branding.logo}
