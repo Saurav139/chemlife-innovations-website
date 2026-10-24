@@ -500,7 +500,7 @@ function ChatSessionContent() {
                 disabled={loading || offline}
                 maxLength={MAX_MESSAGE_CHARS}
                 autoComplete="off"
-                className={`flex-1 min-h-11 text-sm px-4 py-2.5 border border-slate-200 rounded-xl bg-slate-50 focus:bg-white transition-all placeholder:text-slate-aa text-slate-800 outline-none disabled:opacity-60 ${meta.inputFocus}`}
+                className={`flex-1 min-h-11 text-base md:text-sm px-4 py-2.5 border border-slate-200 rounded-xl bg-slate-50 focus:bg-white transition-all placeholder:text-slate-aa text-slate-800 outline-none disabled:opacity-60 ${meta.inputFocus}`}
               />
               <button
                 type="submit"

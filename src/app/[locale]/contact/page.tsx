@@ -218,7 +218,7 @@ export default function ContactPage() {
                                 value={formData.name}
                                 onChange={handleInputChange}
                                 className={`w-full bg-white border ${errors.name ? "border-red-500" : "border-gray-250"
-                                  } rounded-xl px-4 py-3.5 text-sm text-brand-navy focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all`}
+                                  } rounded-xl px-4 py-3.5 text-base md:text-sm text-brand-navy focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all`}
                                 placeholder={t.namePlaceholder}
                               />
                               {errors.name && (
@@ -240,7 +240,7 @@ export default function ContactPage() {
                                 value={formData.email}
                                 onChange={handleInputChange}
                                 className={`w-full bg-white border ${errors.email ? "border-red-500" : "border-gray-250"
-                                  } rounded-xl px-4 py-3.5 text-sm text-brand-navy focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all`}
+                                  } rounded-xl px-4 py-3.5 text-base md:text-sm text-brand-navy focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all`}
                                 placeholder={t.emailPlaceholder}
                               />
                               {errors.email && (
@@ -263,7 +263,7 @@ export default function ContactPage() {
                                 autoComplete="tel"
                                 value={formData.phone}
                                 onChange={handleInputChange}
-                                className="w-full bg-white border border-gray-250 rounded-xl px-4 py-3.5 text-sm text-brand-navy focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all"
+                                className="w-full bg-white border border-gray-250 rounded-xl px-4 py-3.5 text-base md:text-sm text-brand-navy focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all"
                                 placeholder="+91 98765 43210"
                               />
                             </div>
@@ -279,7 +279,7 @@ export default function ContactPage() {
                                   name="inquiryType"
                                   value={formData.inquiryType}
                                   onChange={handleInputChange}
-                                  className="w-full bg-white border border-gray-250 rounded-xl px-4 py-3.5 text-sm text-brand-navy focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all appearance-none cursor-pointer"
+                                  className="w-full bg-white border border-gray-250 rounded-xl px-4 py-3.5 text-base md:text-sm text-brand-navy focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all appearance-none cursor-pointer"
                                 >
                                   {INQUIRY_TYPES.map((opt) => (
                                     <option key={opt} value={opt}>
@@ -309,7 +309,7 @@ export default function ContactPage() {
                               value={formData.subject}
                               onChange={handleInputChange}
                               className={`w-full bg-white border ${errors.subject ? "border-red-500" : "border-gray-250"
-                                } rounded-xl px-4 py-3.5 text-sm text-brand-navy focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all`}
+                                } rounded-xl px-4 py-3.5 text-base md:text-sm text-brand-navy focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all`}
                               placeholder={t.subjectPlaceholder}
                             />
                             {errors.subject && (
@@ -330,7 +330,7 @@ export default function ContactPage() {
                               value={formData.message}
                               onChange={handleInputChange}
                               className={`w-full bg-white border ${errors.message ? "border-red-500" : "border-gray-250"
-                                } rounded-xl px-4 py-3.5 text-sm text-brand-navy focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all resize-none`}
+                                } rounded-xl px-4 py-3.5 text-base md:text-sm text-brand-navy focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all resize-none`}
                               placeholder={t.messagePlaceholder}
                             />
                             {errors.message && (

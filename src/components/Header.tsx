@@ -34,6 +34,24 @@ export default function Header() {
   const [showPreviews, setShowPreviews] = useState(false);
   useEffect(() => setShowPreviews(previewsAllowed(location.host)), []);
 
+  // While the phone menu is open it covers the page: the page underneath stops scrolling, and Escape or
+  // widening the window to the desktop nav closes it.
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const root = document.documentElement;
+    root.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setMobileOpen(false);
+    const desktop = matchMedia("(min-width: 1024px)");
+    const onWide = () => desktop.matches && setMobileOpen(false);
+    window.addEventListener("keydown", onKey);
+    desktop.addEventListener("change", onWide);
+    return () => {
+      root.style.overflow = "";
+      window.removeEventListener("keydown", onKey);
+      desktop.removeEventListener("change", onWide);
+    };
+  }, [mobileOpen]);
+
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60);
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -42,7 +60,7 @@ export default function Header() {
 
   return (
     <header
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 bg-white ${
+      className={`fixed top-0 left-0 w-full ${mobileOpen ? "z-[55]" : "z-50"} transition-all duration-300 bg-white ${
         scrolled ? "shadow-lg shadow-black/10" : ""
       }`}
     >
@@ -93,6 +111,8 @@ export default function Header() {
 
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
+            aria-expanded={mobileOpen}
+            aria-controls="mobile-menu"
             className="lg:hidden flex flex-col items-center justify-center gap-1.5 w-11 h-11 -mr-2.5"
             aria-label={t.nav.menu}
           >
@@ -110,8 +130,9 @@ export default function Header() {
       </div>
 
        {mobileOpen && (
-          <div className="lg:hidden bg-white border-t border-brand-navy/10 shadow-xl">
-            <div className="px-6 py-3 max-h-[calc(100dvh-4.5rem)] md:max-h-[calc(100dvh-5rem)] overflow-y-auto">
+          // Fills the screen below the header (above the chat and search buttons), and scrolls itself if it's taller.
+          <div id="mobile-menu" className="lg:hidden bg-white border-t border-brand-navy/10 h-[calc(100dvh-4.5rem)] md:h-[calc(100dvh-5rem)] overflow-y-auto overscroll-contain">
+            <div className="px-6 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
               {navLinks.map((link) => {
                 const isActive =
                   pathname === link.path || (pathname.startsWith(link.path) && link.path !== "/");

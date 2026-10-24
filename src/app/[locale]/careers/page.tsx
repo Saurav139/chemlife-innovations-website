@@ -424,7 +424,7 @@ export default function CareersPage() {
                       rows={5}
                       value={emailBody}
                       onChange={(e) => setEmailBody(e.target.value)}
-                      className="w-full bg-gray-55 border border-gray-200 rounded-xl p-4 text-sm text-brand-navy focus:outline-none focus:border-teal-500 transition-colors font-mono"
+                      className="w-full bg-gray-55 border border-gray-200 rounded-xl p-4 text-base md:text-sm text-brand-navy focus:outline-none focus:border-teal-500 transition-colors font-mono"
                     />
                   </div>
 
