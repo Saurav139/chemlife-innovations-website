@@ -31,6 +31,10 @@
   --color-process-bg: #305280;
 
   /* Maven Pro first; the Noto fonts supply the Kannada and Hindi letters it doesn't have. */
+  /* `font-sans` (used by the chat pages and pop-up) is the site font too, not the browser's default. */
+  --font-sans:
+    var(--font-maven-pro), var(--font-noto-kannada),
+    var(--font-noto-devanagari), Calibri, system-ui, sans-serif;
   --font-family-heading:
     var(--font-maven-pro), var(--font-noto-kannada),
     var(--font-noto-devanagari), Calibri, system-ui, sans-serif;
