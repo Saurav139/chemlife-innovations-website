@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Header from "@/components/Header";
@@ -57,6 +57,24 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
   const [activeVideoId, setActiveVideoId] = useState<string | null>(null);
   const [activeArticle, setActiveArticle] = useState<InsightItem | null>(null);
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+
+  // Escape closes the video player or the article reader, and the page behind them doesn't scroll while one is open.
+  const overlayOpen = !!activeVideoId || !!activeArticle;
+  useEffect(() => {
+    if (!overlayOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") return;
+      setActiveVideoId(null);
+      setActiveArticle(null);
+    };
+    const root = document.documentElement;
+    root.style.overflow = "hidden";
+    window.addEventListener("keydown", onKey);
+    return () => {
+      root.style.overflow = "";
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [overlayOpen]);
 
   const filters = ["All", "Blogs", "Podcasts", "Videos"];
 
@@ -575,7 +593,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                             className="block relative w-full aspect-video rounded-xl overflow-hidden mb-4 bg-slate-900 border border-slate-200/80 cursor-pointer shadow-sm group/video select-none"
                           >
                             <Image
-                              src={`https://img.youtube.com/vi/${item.youtubeId}/mqdefault.jpg`}
+                              src={`https://img.youtube.com/vi/${item.youtubeId}/hqdefault.jpg`}
                               alt={item.title}
                               fill
                               sizes={CARD_IMAGE_SIZES}
@@ -675,7 +693,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 p-4"
+            className="fixed inset-0 z-[70] flex items-center justify-center bg-black/95 p-4"
             onClick={() => setActiveVideoId(null)}
           >
             <motion.div
@@ -683,20 +701,22 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.95, y: 20 }}
               transition={{ duration: 0.3 }}
-              className="relative w-full max-w-4xl aspect-video bg-black rounded-3xl overflow-hidden shadow-2xl border border-white/10"
+              className="relative w-full max-w-4xl"
               onClick={(e) => e.stopPropagation()}
             >
-              {/* Close Button */}
-              <button
-                onClick={() => setActiveVideoId(null)}
-                className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-black/60 hover:bg-black/80 text-white flex items-center justify-center transition-all cursor-pointer border border-white/10"
-                aria-label="Close video player"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-              
+              {/* Close button above the player, so it doesn't cover YouTube's own controls */}
+              <div className="flex justify-end mb-3">
+                <button
+                  onClick={() => setActiveVideoId(null)}
+                  className="w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors cursor-pointer border border-white/15"
+                  aria-label="Close video player"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+              <div className="aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl border border-white/10">
               {/* YouTube Iframe Embed */}
               <iframe
                 src={`https://www.youtube-nocookie.com/embed/${activeVideoId}?autoplay=1&rel=0`}
@@ -706,6 +726,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                 allowFullScreen
                 className="w-full h-full"
               />
+              </div>
             </motion.div>
           </motion.div>
         )}
@@ -718,7 +739,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 overflow-y-auto"
+            className="fixed inset-0 z-[70] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 overflow-y-auto"
             onClick={() => setActiveArticle(null)}
           >
             <motion.div
