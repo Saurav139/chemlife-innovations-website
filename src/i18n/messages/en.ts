@@ -83,6 +83,7 @@ const en = {
     title: "Page not found",
     text: "The page you're looking for doesn't exist or has moved.",
     home: "Go to the homepage",
+    popular: "Or try one of these",
   },
 
   home: {
