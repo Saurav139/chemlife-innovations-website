@@ -139,6 +139,8 @@ export default function ResearchPage() {
               </div>
             </div>
 
+            {/* For screen readers: the topic cards (h3) sit under this heading */}
+            <h2 className="sr-only">{t.listHeading}</h2>
             {/* Research Grid: a wrapping row, so an incomplete last row is centred instead of leaving an empty slot */}
             <div className="flex flex-wrap justify-center gap-8 items-start">
               {filteredTopics.map((topic) => {

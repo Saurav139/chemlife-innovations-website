@@ -224,6 +224,8 @@ export default function ProductsPage() {
               </div>
             </div>
 
+            {/* For screen readers: the product cards (h3) sit under this heading */}
+            <h2 className="sr-only">{t.listHeading}</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
               {filteredProducts.map((product) => {
                 const isExpanded = expandedId === product.id;

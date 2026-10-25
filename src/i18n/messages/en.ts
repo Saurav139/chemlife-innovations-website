@@ -253,6 +253,7 @@ const en = {
   },
 
   products: {
+    listHeading: "All products",
     heroAlt: "Rows of bioreactors in a biotechnology production lab",
     kicker: "Our Offerings",
     titleStart: "Feed",
@@ -507,6 +508,7 @@ const en = {
   },
 
   research: {
+    listHeading: "Research topics",
     // Closing panel under the topics
     ctaTitle: "Working on something similar?",
     ctaText: "We partner with feed companies, research institutes and universities on bioactives, chelation and delivery technologies. Tell us what you're working on.",
