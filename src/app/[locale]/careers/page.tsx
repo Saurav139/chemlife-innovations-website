@@ -236,26 +236,62 @@ export default function CareersPage() {
               </p>
             </div>
 
-            {/* Dropdown Selector */}
-            <div className="max-w-md mx-auto mb-16">
-              <label className="block text-xs font-bold text-gray-aa uppercase tracking-wider mb-2 text-center">
+            {/* Every position as a tab, so visitors see all the openings at a glance (a drop-down hid all but one).
+                Arrow keys move between tabs, as screen readers expect. */}
+            <div className="max-w-4xl mx-auto mb-12">
+              <p id="positions-label" className="text-xs font-bold text-gray-aa uppercase tracking-wider mb-3 text-center">
                 {t.selectPosition}
-              </label>
-              <select
-                value={selectedRoleId}
-                onChange={(e) => setSelectedRoleId(e.target.value)}
-                className="w-full bg-gray-50 border border-gray-250 rounded-2xl px-6 py-4 text-base text-brand-navy focus:outline-none focus:border-teal-500 font-semibold cursor-pointer shadow-xs"
+              </p>
+              <div
+                role="tablist"
+                aria-labelledby="positions-label"
+                className="grid gap-3 sm:grid-cols-3"
+                onKeyDown={(e) => {
+                  const ids = internshipRoles.map((role) => role.id);
+                  const i = ids.indexOf(selectedRoleId);
+                  const next =
+                    e.key === "ArrowRight" || e.key === "ArrowDown" ? ids[(i + 1) % ids.length]
+                    : e.key === "ArrowLeft" || e.key === "ArrowUp" ? ids[(i - 1 + ids.length) % ids.length]
+                    : e.key === "Home" ? ids[0]
+                    : e.key === "End" ? ids[ids.length - 1]
+                    : null;
+                  if (!next) return;
+                  e.preventDefault();
+                  setSelectedRoleId(next);
+                  document.getElementById(`role-tab-${next}`)?.focus();
+                }}
               >
-                {internshipRoles.map((role) => (
-                  <option key={role.id} value={role.id}>
-                    {role.title}
-                  </option>
-                ))}
-              </select>
+                {internshipRoles.map((role) => {
+                  const active = role.id === selectedRoleId;
+                  return (
+                    <button
+                      key={role.id}
+                      id={`role-tab-${role.id}`}
+                      type="button"
+                      role="tab"
+                      aria-selected={active}
+                      aria-controls="role-panel"
+                      tabIndex={active ? 0 : -1}
+                      onClick={() => setSelectedRoleId(role.id)}
+                      className={`text-left rounded-2xl border-2 px-5 py-4 transition-colors cursor-pointer ${
+                        active ? "border-teal-aa bg-teal-50" : "border-gray-200 bg-white hover:border-teal-aa/50"
+                      }`}
+                    >
+                      <span className="block text-xs font-bold uppercase tracking-wider text-teal-aa">{role.department}</span>
+                      <span className="block mt-1 font-heading font-bold text-brand-navy leading-snug">{role.title}</span>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
 
             {/* Split Details Container */}
-            <div className="bg-gray-55 border border-gray-200 rounded-3xl overflow-hidden shadow-sm">
+            <div
+              id="role-panel"
+              role="tabpanel"
+              aria-labelledby={`role-tab-${selectedRole.id}`}
+              className="bg-gray-55 border border-gray-200 rounded-3xl overflow-hidden shadow-sm"
+            >
               <div className="flex flex-col lg:flex-row min-h-[550px]">
 
                 {/* Left Side: Text Details */}

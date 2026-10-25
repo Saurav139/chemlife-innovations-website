@@ -193,6 +193,12 @@ const en = {
         "Sports activities and team-building programs",
       ],
       joinUs: "Join Us",
+      // Photo collage: the whole team, the leadership team, a warehouse visit.
+      photoAlts: [
+        "The ChemLife Innovations team outside our facility",
+        "The ChemLife Innovations leadership team in the garden at our office",
+        "The ChemLife team showing visitors around a feed warehouse",
+      ],
     },
 
     partners: {
@@ -209,7 +215,6 @@ const en = {
     social: {
       kicker: "Our Commitment",
       title: "Social Responsibilities",
-      bgAlt: "ChemLife team members with participants holding certificates at a community programme",
       items: [
         { title: "Empowering Students", desc: "Bicycles donation for empowering students below the poverty line" },
         { title: "Prevention of Sexual Harassment", desc: "Chemlife certified with Prevention of Sexual Harassment at Work place" },
@@ -588,7 +593,7 @@ const en = {
     opportunity: "Career Opportunity:",
     opportunityText: "Successful completion of the internship program may lead to a permanent pre-placement offer (PPO) depending on performance.",
     openTitle: "Open Internships",
-    openText: "Select an internship position from the dropdown below to view details and apply.",
+    openText: "Choose an internship position below to see the details and apply.",
     selectPosition: "Select Internship Position",
     qualifications: "Required Qualifications",
     eligible: "Eligible Fields & Backgrounds",

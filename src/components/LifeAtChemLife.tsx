@@ -3,11 +3,18 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "@/context/VariantContext";
-import { Videos, VideoPosters } from "@/lib/assets";
+import Image from "next/image";
+import { Images, Videos, VideoPosters } from "@/lib/assets";
 import BackgroundVideo, { useNearViewport } from "./BackgroundVideo";
 import { useHref, useT } from "@/i18n/LocaleProvider";
 
 const easeOut = [0.25, 0.1, 0, 1] as const;
+
+// The collage: the whole team large, the leadership team and a warehouse visit below. Alt text is in the
+// language file (home.life.photoAlts), in this order.
+const photos = [Images.life.team, Images.life.leadership, Images.life.warehouse];
+const LARGE_PHOTO_SIZES = "(min-width: 1024px) 552px, calc(100vw - 48px)";
+const SMALL_PHOTO_SIZES = "(min-width: 1024px) 270px, calc(50vw - 30px)";
 
 const videos = [
   { src: Videos.trip1, poster: VideoPosters.trip1 },
@@ -56,67 +63,87 @@ export default function LifeAtChemLife() {
 
       <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/90 via-black/60 to-brand-navy/80 z-10" />
 
-      <div className="relative z-20 w-full max-w-[1200px] mx-auto px-6 py-16 md:py-24 lg:py-32">
+      {/* Desktop: text on the left, photo collage on the right. Phones: the collage below the text. */}
+      <div className="relative z-20 w-full max-w-[1200px] mx-auto px-6 py-16 md:py-24 lg:py-32 grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+        <div>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, ease: easeOut }}
+            className="text-center lg:text-left"
+          >
+            <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl text-white mb-10 md:mb-12 leading-tight">
+              {t.title}
+            </h2>
+          </motion.div>
+
+          <div className="max-w-2xl mx-auto lg:mx-0">
+            {bulletPoints.map((text, i) => (
+              <div key={text} className="relative flex items-start gap-5 pb-7 md:pb-9 last:pb-0">
+                {i < bulletPoints.length - 1 && (
+                  <motion.div
+                    initial={{ scaleY: 0 }}
+                    whileInView={{ scaleY: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8, delay: (i + 1) * 0.4, ease: easeOut }}
+                    className="absolute w-[3px] bg-brand-navy/40 origin-top"
+                    style={{ left: "10.5px", top: "12px", bottom: "-12px" }}
+                  />
+                )}
+                <motion.div
+                  initial={{ opacity: 0, scale: 0 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.3, delay: i * 0.4, ease: easeOut }}
+                  className="relative z-10 w-6 h-6 rounded-full bg-brand-navy flex items-center justify-center flex-shrink-0"
+                >
+                  <div className="w-3 h-3 rounded-full bg-teal-400" />
+                </motion.div>
+                <motion.span
+                  initial={{ opacity: 0, x: i % 2 === 0 ? -30 : 30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: i * 0.4, ease: easeOut }}
+                  className="text-white/90 text-lg md:text-xl"
+                >
+                  {text}
+                </motion.span>
+              </div>
+            ))}
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 1.6, ease: easeOut }}
+            className="text-center lg:text-left mt-12"
+          >
+            <a
+              href={href("/careers")}
+              className="inline-block border-2 border-brand-orange text-brand-orange-aa bg-white hover:bg-brand-orange-aa hover:text-white font-semibold px-8 py-3 rounded-full shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5"
+            >
+              {t.joinUs}
+            </a>
+          </motion.div>
+        </div>
+
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6, ease: easeOut }}
-          className="text-center"
+          transition={{ duration: 0.7, delay: 0.2, ease: easeOut }}
+          className="grid grid-cols-2 gap-3 md:gap-4"
         >
-          <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl text-white mb-10 md:mb-16 leading-tight">
-            {t.title}
-          </h2>
-        </motion.div>
- 
-         <div className="max-w-2xl mx-auto">
-          {bulletPoints.map((text, i) => (
-            <div key={text} className="relative flex items-start gap-5 pb-7 md:pb-10 last:pb-0">
-              {i < bulletPoints.length - 1 && (
-                <motion.div
-                  initial={{ scaleY: 0 }}
-                  whileInView={{ scaleY: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.8, delay: (i + 1) * 0.4, ease: easeOut }}
-                  className="absolute w-[3px] bg-brand-navy/40 origin-top"
-                  style={{ left: "10.5px", top: "12px", bottom: "-12px" }}
-                />
-              )}
-              <motion.div
-                initial={{ opacity: 0, scale: 0 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.3, delay: i * 0.4, ease: easeOut }}
-                className="relative z-10 w-6 h-6 rounded-full bg-brand-navy flex items-center justify-center flex-shrink-0"
-              >
-                <div className="w-3 h-3 rounded-full bg-teal-400" />
-              </motion.div>
-              <motion.span
-                initial={{ opacity: 0, x: i % 2 === 0 ? -30 : 30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: i * 0.4, ease: easeOut }}
-                className="text-white/90 text-lg md:text-xl lg:text-2xl"
-              >
-                {text}
-              </motion.span>
+          {photos.map((src, i) => (
+            <div
+              key={src}
+              className={`relative aspect-[3/2] rounded-2xl overflow-hidden border border-white/15 shadow-xl ${i === 0 ? "col-span-2" : ""}`}
+            >
+              <Image src={src} alt={t.photoAlts[i]} fill sizes={i === 0 ? LARGE_PHOTO_SIZES : SMALL_PHOTO_SIZES} className="object-cover" />
             </div>
           ))}
-        </div>
- 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 1.6, ease: easeOut }}
-          className="text-center mt-12"
-        >
-          <a
-            href={href("/careers")}
-            className="inline-block border-2 border-brand-orange text-brand-orange-aa bg-white hover:bg-brand-orange-aa hover:text-white font-semibold px-8 py-3 rounded-full shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5"
-          >
-            {t.joinUs}
-          </a>
         </motion.div>
       </div>
     </section>
