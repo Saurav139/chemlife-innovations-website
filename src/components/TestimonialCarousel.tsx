@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import SectionWrapper from "./SectionWrapper";
@@ -36,6 +36,31 @@ const testimonials = [
 
 export default function TestimonialCarousel() {
   const [current, setCurrent] = useState(0);
+  // Phones show the first 6 lines of a long quote, with Read more.
+  const [expanded, setExpanded] = useState(false);
+  const [clamped, setClamped] = useState(false);
+  const quoteEl = useRef<HTMLQuoteElement | null>(null);
+  const measure = useCallback(() => {
+    const el = quoteEl.current;
+    setClamped(!!el && el.scrollHeight > el.clientHeight + 1);
+  }, []);
+  // Measured when each new quote appears (it fades in after the old one leaves), on Read more, and on resize.
+  const quoteRef = useCallback(
+    (el: HTMLQuoteElement | null) => {
+      quoteEl.current = el;
+      if (el) requestAnimationFrame(measure);
+    },
+    [measure]
+  );
+  useEffect(() => {
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, [measure, expanded]);
+  const choose = (i: number) => {
+    setCurrent(i);
+    setExpanded(false);
+  };
   const { theme } = useTheme();
   const t = useT().home.testimonials;
 
@@ -67,9 +92,24 @@ export default function TestimonialCarousel() {
                     <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10H14.017zM0 21v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151C7.563 6.068 6 8.789 6 11h4v10H0z" />
                   </svg>
 
-                  <blockquote className={`text-lg md:text-2xl lg:text-3xl leading-relaxed mb-8 font-light italic ${theme.testimonialsText}`}>
+                  {/* Phones: regular (not light italic) text, which is easier to read at this length, cut to 6 lines. */}
+                  <blockquote
+                    ref={quoteRef}
+                    className={`text-base md:text-2xl lg:text-3xl leading-relaxed font-normal md:font-light not-italic md:italic ${expanded ? "" : "max-md:line-clamp-6"} ${theme.testimonialsText}`}
+                  >
                     &ldquo;{testimonials[current].quote}&rdquo;
                   </blockquote>
+                  {(clamped || expanded) && (
+                    <button
+                      type="button"
+                      onClick={() => setExpanded((open) => !open)}
+                      aria-expanded={expanded}
+                      className="md:hidden mt-2 inline-flex items-center min-h-11 text-sm font-semibold text-teal-aa-light underline underline-offset-4 cursor-pointer"
+                    >
+                      {expanded ? t.showLess : t.readMore}
+                    </button>
+                  )}
+                  <div className="mb-8" />
 
                   <div className="flex items-center gap-4">
                     <div className="relative w-20 h-20 rounded-full border-2 border-brand-orange bg-white overflow-hidden flex-shrink-0">
@@ -101,16 +141,19 @@ export default function TestimonialCarousel() {
 
           {/* Person Switcher */}
           <div className="lg:col-span-1">
-            <h3 className={`text-lg font-semibold mb-6 ${theme.testimonialsTitle}`}>
+            {/* Below desktop the name and role are already under the quote, so the switcher is just a row of logos. */}
+            <h3 className={`hidden lg:block text-lg font-semibold mb-6 ${theme.testimonialsTitle}`}>
               Our Partners
             </h3>
 
-            <div className="space-y-3">
+            <div className="flex gap-3 lg:block lg:space-y-3">
               {testimonials.map((testimonial, i) => (
                 <button
                   key={i}
-                  onClick={() => setCurrent(i)}
-                  className={`w-full p-4 rounded-xl text-left transition-all duration-200 border ${i === current
+                  onClick={() => choose(i)}
+                  aria-label={`${testimonial.name}, ${testimonial.company}`}
+                  aria-pressed={i === current}
+                  className={`shrink-0 p-1 rounded-full lg:w-full lg:p-4 lg:rounded-xl text-left transition-all duration-200 border cursor-pointer ${i === current
                     ? 'bg-teal-500/20 border-teal-400 shadow-md shadow-teal-500/10'
                     : 'bg-teal-950/20 border-teal-500/10 hover:bg-teal-500/10 hover:border-teal-500/30'
                     }`}
@@ -129,7 +172,7 @@ export default function TestimonialCarousel() {
                       />
                     </div>
 
-                    <div className="flex-1 min-w-0">
+                    <div className="hidden lg:block flex-1 min-w-0">
                       <p className={`font-medium text-sm ${theme.testimonialsName}`}>
                         {testimonial.name}
                       </p>
@@ -139,7 +182,7 @@ export default function TestimonialCarousel() {
                     </div>
 
                     {i === current && (
-                      <div className="w-2 h-2 rounded-full bg-teal-400"></div>
+                      <div className="hidden lg:block w-2 h-2 rounded-full bg-teal-400"></div>
                     )}
                   </div>
                 </button>

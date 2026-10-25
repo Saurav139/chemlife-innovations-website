@@ -205,6 +205,8 @@ const en = {
     testimonials: {
       kicker: "Testimonials",
       title: "What Our Partners Say?",
+      readMore: "Read more",
+      showLess: "Show less",
     },
 
     social: {
@@ -504,6 +506,10 @@ const en = {
   },
 
   research: {
+    // Closing panel under the topics
+    ctaTitle: "Working on something similar?",
+    ctaText: "We partner with feed companies, research institutes and universities on bioactives, chelation and delivery technologies. Tell us what you're working on.",
+    ctaButton: "Discuss a research collaboration",
     heroAlt: "A modern biotechnology laboratory with data screens",
     kicker: "Research & Development",
     titleStart: "Synergy In Action:",
@@ -686,6 +692,7 @@ const en = {
     subject: "Subject",
     subjectPlaceholder: "What is this regarding?",
     nutritionistSubject: "I'd like to talk to a nutritionist",
+    researchSubject: "Research collaboration",
     message: "Message",
     messagePlaceholder: "Tell us details about your request...",
     errors: {
