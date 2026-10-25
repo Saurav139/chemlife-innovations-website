@@ -25,9 +25,8 @@ export default function RatingWidget() {
   const googleReviewUrl = process.env.NEXT_PUBLIC_GOOGLE_REVIEW_URL || "https://search.google.com/local/writereview?placeid=ChIJMfNToTvfsTsRSBmfTmn1DCI";
 
   return (
-    // Hidden on phones, where it covers page content.
-    // `invisible` while hidden also takes it out of the tab order.
-    <div className={`fixed right-0 top-1/2 -translate-y-1/2 z-50 flex items-start select-none font-sans max-md:hidden transition-all duration-300 ${shown ? "opacity-100 translate-x-0 visible" : "opacity-0 translate-x-full invisible"}`}>
+    // On every screen size it waits until the visitor scrolls. `invisible` while hidden also takes it out of the tab order.
+    <div className={`fixed right-0 top-1/2 -translate-y-1/2 z-50 flex items-start select-none font-sans transition-all duration-300 ${shown ? "opacity-100 translate-x-0 visible" : "opacity-0 translate-x-full invisible"}`}>
       {/* Floating Tab Link */}
       <a
         href={googleReviewUrl}
