@@ -11,6 +11,8 @@ import SiteSearch from "@/components/SiteSearch";
 import { Images } from "@/lib/assets";
 import type { Insights, InsightItem } from "@/lib/insights";
 import { playOnPage, youtubeWatchUrl } from "@/lib/youtube";
+import { insightAnchor } from "@/lib/catalog";
+import { revealElement, useHashTarget } from "@/lib/deepLink";
 
 const easeOut = [0.25, 0.1, 0, 1] as const;
 
@@ -81,65 +83,64 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
   const featuredPodcast = sortedPodcasts[0];
   const featuredVideo = sortedVideos[0];
 
-  // Filter, sort by date (descending), and search/deduplicate helper
-  const getFilteredAndSorted = (list: InsightItem[]) => {
-    return list
-      .filter((item, index, self) => self.findIndex((x) => x.title === item.title) === index)
-      .sort((a, b) => getTimestamp(b.date) - getTimestamp(a.date))
-      .filter((item) => {
-        const query = searchQuery.toLowerCase();
-        return (
-          item.title.toLowerCase().includes(query) ||
-          item.description.toLowerCase().includes(query)
-        );
-      });
-  };
+  const featuredTitles = new Set([featuredBlog, featuredVideo, featuredPodcast].filter(Boolean).map((item) => item.title));
 
-  const filteredBlogs = getFilteredAndSorted(blogs);
-  const filteredPodcasts = getFilteredAndSorted(podcasts);
-  const filteredVideos = getFilteredAndSorted(videos);
+  // The grid's items for a filter and search: deduplicated, newest first, and for "All" interleaved as 1 video,
+  // 1 podcast, 2 blogs. The newest blog, video and podcast are already in Featured above, so they're left out, unless
+  // the visitor is searching (then every match is listed) or leaving them out would empty the grid.
+  const gridItemsFor = (filter: string, rawQuery: string) => {
+    const query = rawQuery.toLowerCase();
+    const filterAndSort = (list: InsightItem[]) =>
+      list
+        .filter((item, index, self) => self.findIndex((x) => x.title === item.title) === index)
+        .sort((a, b) => getTimestamp(b.date) - getTimestamp(a.date))
+        .filter((item) => item.title.toLowerCase().includes(query) || item.description.toLowerCase().includes(query));
 
-  let filteredItems: InsightItem[] = [];
+    const filteredBlogs = filterAndSort(blogs);
+    const filteredPodcasts = filterAndSort(podcasts);
+    const filteredVideos = filterAndSort(videos);
 
-  if (selectedFilter === "Blogs") {
-    filteredItems = filteredBlogs;
-  } else if (selectedFilter === "Podcasts") {
-    filteredItems = filteredPodcasts;
-  } else if (selectedFilter === "Videos") {
-    filteredItems = filteredVideos;
-  } else {
-    // Interleave: 1 Video, 1 Podcast, 2 Blogs, and repeat
-    let vIndex = 0;
-    let pIndex = 0;
-    let bIndex = 0;
-
-    while (
-      vIndex < filteredVideos.length ||
-      pIndex < filteredPodcasts.length ||
-      bIndex < filteredBlogs.length
-    ) {
-      if (vIndex < filteredVideos.length) {
-        filteredItems.push(filteredVideos[vIndex]);
-        vIndex++;
-      }
-      if (pIndex < filteredPodcasts.length) {
-        filteredItems.push(filteredPodcasts[pIndex]);
-        pIndex++;
-      }
-      for (let k = 0; k < 2; k++) {
-        if (bIndex < filteredBlogs.length) {
-          filteredItems.push(filteredBlogs[bIndex]);
-          bIndex++;
+    let items: InsightItem[] = [];
+    if (filter === "Blogs") {
+      items = filteredBlogs;
+    } else if (filter === "Podcasts") {
+      items = filteredPodcasts;
+    } else if (filter === "Videos") {
+      items = filteredVideos;
+    } else {
+      let vIndex = 0;
+      let pIndex = 0;
+      let bIndex = 0;
+      while (vIndex < filteredVideos.length || pIndex < filteredPodcasts.length || bIndex < filteredBlogs.length) {
+        if (vIndex < filteredVideos.length) items.push(filteredVideos[vIndex++]);
+        if (pIndex < filteredPodcasts.length) items.push(filteredPodcasts[pIndex++]);
+        for (let k = 0; k < 2; k++) {
+          if (bIndex < filteredBlogs.length) items.push(filteredBlogs[bIndex++]);
         }
       }
     }
-  }
 
-  // The newest blog, video and podcast are already in Featured above, so the grid leaves them out, unless the
-  // visitor is searching (then every match is listed) or leaving them out would empty the grid.
-  const featuredTitles = new Set([featuredBlog, featuredVideo, featuredPodcast].filter(Boolean).map((item) => item.title));
-  const withoutFeatured = filteredItems.filter((item) => !featuredTitles.has(item.title));
-  const gridItems = searchQuery.trim() || withoutFeatured.length === 0 ? filteredItems : withoutFeatured;
+    const withoutFeatured = items.filter((item) => !featuredTitles.has(item.title));
+    return rawQuery.trim() || withoutFeatured.length === 0 ? items : withoutFeatured;
+  };
+
+  const gridItems = gridItemsFor(selectedFilter, searchQuery);
+
+  // Opens at one item from a link such as /insights#insight-feed-bites-… (the site search): an article opens in the
+  // reader; a video or podcast is scrolled to (its card in Featured, or in the grid, showing enough cards to reach it).
+  useHashTarget((target) => {
+    const item = [...blogs, ...videos, ...podcasts].find((entry) => insightAnchor(entry.title) === target);
+    if (!item) return;
+    setSelectedFilter("All");
+    setSearchQuery("");
+    if (item.type === "Blog") {
+      setActiveArticle(item);
+      return;
+    }
+    const index = gridItemsFor("All", "").findIndex((entry) => entry.title === item.title);
+    if (index >= 0) setVisibleCount(Math.max(PAGE_SIZE, Math.ceil((index + 1) / PAGE_SIZE) * PAGE_SIZE));
+    revealElement(target, 500);
+  });
   const visibleItems = gridItems.slice(0, visibleCount);
 
   return (
@@ -196,9 +197,10 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
               {/* Featured Blog */}
               {featuredBlog && (
                 <div
+                  id={insightAnchor(featuredBlog.title)}
                   data-analytics-item={featuredBlog.title}
                   data-analytics-click="Read Article"
-                  className="bg-gray-55 border border-gray-200 rounded-2xl md:rounded-3xl p-5 md:p-8 lg:p-5 xl:p-6 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between lg:grid lg:grid-rows-subgrid lg:row-span-4 lg:gap-y-0 group cursor-pointer"
+                  className="scroll-mt-28 bg-gray-55 border border-gray-200 rounded-2xl md:rounded-3xl p-5 md:p-8 lg:p-5 xl:p-6 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between lg:grid lg:grid-rows-subgrid lg:row-span-4 lg:gap-y-0 group cursor-pointer"
                   onClick={() => setActiveArticle(featuredBlog)}
                 >
                   <div className="lg:contents">
@@ -255,8 +257,9 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
               {/* Featured Video */}
               {featuredVideo && (
                 <div
+                  id={insightAnchor(featuredVideo.title)}
                   data-analytics-item={featuredVideo.title}
-                  className="bg-gray-55 border border-gray-200 rounded-2xl md:rounded-3xl p-5 md:p-8 lg:p-5 xl:p-6 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between lg:grid lg:grid-rows-subgrid lg:row-span-4 lg:gap-y-0 group"
+                  className="scroll-mt-28 bg-gray-55 border border-gray-200 rounded-2xl md:rounded-3xl p-5 md:p-8 lg:p-5 xl:p-6 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between lg:grid lg:grid-rows-subgrid lg:row-span-4 lg:gap-y-0 group"
                 >
                   <div className="lg:contents">
                     <div className="flex items-center gap-2 mb-3">
@@ -324,8 +327,9 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
               {/* Featured Podcast */}
               {featuredPodcast && (
                 <div
+                  id={insightAnchor(featuredPodcast.title)}
                   data-analytics-item={featuredPodcast.title}
-                  className="bg-gray-55 border border-gray-200 rounded-2xl md:rounded-3xl p-5 md:p-8 lg:p-5 xl:p-6 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between lg:grid lg:grid-rows-subgrid lg:row-span-4 lg:gap-y-0 group"
+                  className="scroll-mt-28 bg-gray-55 border border-gray-200 rounded-2xl md:rounded-3xl p-5 md:p-8 lg:p-5 xl:p-6 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between lg:grid lg:grid-rows-subgrid lg:row-span-4 lg:gap-y-0 group"
                 >
                   <div className="lg:contents">
                     <div className="flex items-center gap-2 mb-3">
@@ -507,12 +511,13 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                     <motion.div
                       layout
                       key={item.title}
+                      id={featuredTitles.has(item.title) ? undefined : insightAnchor(item.title)}
                       data-analytics-item={item.title}
                       initial={{ opacity: 0, scale: 0.9 }}
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0, scale: 0.9 }}
                       transition={{ duration: 0.4, ease: easeOut }}
-                      className="bg-gray-55 border border-gray-200 rounded-2xl p-5 md:p-6 lg:p-5 xl:p-6 shadow-sm hover:shadow-md hover:border-teal-500/20 transition-all duration-300 group flex flex-col justify-between"
+                      className="scroll-mt-28 bg-gray-55 border border-gray-200 rounded-2xl p-5 md:p-6 lg:p-5 xl:p-6 shadow-sm hover:shadow-md hover:border-teal-500/20 transition-all duration-300 group flex flex-col justify-between"
                     >
                       {/* Clickable Area of Card Content */}
                       <div

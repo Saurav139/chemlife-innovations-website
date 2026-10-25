@@ -9,6 +9,8 @@ import SectionWrapper from "@/components/SectionWrapper";
 import { VariantProvider } from "@/context/VariantContext";
 import SiteSearch from "@/components/SiteSearch";
 import { Images } from "@/lib/assets";
+import { INTERNSHIP_ROLES, roleAnchor } from "@/lib/catalog";
+import { revealElement, useHashTarget } from "@/lib/deepLink";
 import { useLocale, useT } from "@/i18n/LocaleProvider";
 
 const easeOut = [0.25, 0.1, 0, 1] as const;
@@ -23,33 +25,13 @@ interface InternshipPosition {
   qualifications: string[];
 }
 
-// Titles, departments and descriptions are in the language file (careers.roles), in this order. The English title
-// and department go into the application email, which our hiring team reads in English.
-const roleBase: (Pick<InternshipPosition, "id" | "bgImage"> & { englishTitle: string; englishDepartment: string })[] = [
-  {
-    id: "research-intern",
-    englishTitle: "Research Intern",
-    englishDepartment: "Research & Development Labs",
-    bgImage: Images.careers.researchIntern
-  },
-  {
-    id: "animal-nutrition-intern",
-    englishTitle: "Animal Nutrition Intern",
-    englishDepartment: "Formulation & Product Development",
-    bgImage: Images.careers.animalNutrition
-  },
-  {
-    id: "hr-marketing-intern",
-    englishTitle: "Operations, Marketing  and Human Resources Intern",
-    englishDepartment: "Operations & Business Relations",
-    bgImage: Images.careers.hrMarketing
-  }
-];
+// The internships are listed in src/lib/catalog.ts; their titles, departments and descriptions are in the language
+// file (careers.roles), in the same order.
 
 export default function CareersPage() {
   const t = useT().careers;
   const locale = useLocale();
-  const internshipRoles = roleBase.map((role, i) => ({ ...role, ...t.roles[i] }));
+  const internshipRoles = INTERNSHIP_ROLES.map((role, i) => ({ ...role, ...t.roles[i] }));
   const [selectedRoleId, setSelectedRoleId] = useState("research-intern");
   const [activeJob, setActiveJob] = useState<(typeof internshipRoles)[number] | null>(null);
   const [applicantName, setApplicantName] = useState("");
@@ -59,6 +41,15 @@ export default function CareersPage() {
   const [showAttachReminder, setShowAttachReminder] = useState(false);
 
   const selectedRole = internshipRoles.find((role) => role.id === selectedRoleId) || internshipRoles[0];
+
+  // Opens at one internship from a link such as /careers#role-research-intern (the site search): selects its tab and
+  // scrolls to its details.
+  useHashTarget((target) => {
+    const role = internshipRoles.find((item) => roleAnchor(item.id) === target);
+    if (!role) return;
+    setSelectedRoleId(role.id);
+    revealElement("role-panel");
+  });
 
   // Sync email subject and body template when active job changes
   useEffect(() => {
@@ -290,7 +281,7 @@ export default function CareersPage() {
               id="role-panel"
               role="tabpanel"
               aria-labelledby={`role-tab-${selectedRole.id}`}
-              className="bg-gray-55 border border-gray-200 rounded-3xl overflow-hidden shadow-sm"
+              className="scroll-mt-28 bg-gray-55 border border-gray-200 rounded-3xl overflow-hidden shadow-sm"
             >
               <div className="flex flex-col lg:flex-row min-h-[550px]">
 

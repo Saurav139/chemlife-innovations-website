@@ -8,6 +8,8 @@ import Footer from "@/components/Footer";
 import { VariantProvider } from "@/context/VariantContext";
 import SiteSearch from "@/components/SiteSearch";
 import { Images } from "@/lib/assets";
+import { PRODUCTS, productAnchor } from "@/lib/catalog";
+import { revealElement, useHashTarget } from "@/lib/deepLink";
 import { useT } from "@/i18n/LocaleProvider";
 
 const easeOut = [0.25, 0.1, 0, 1] as const;
@@ -29,139 +31,12 @@ interface Product {
   banner?: string;
 }
 
-// Taglines, descriptions, features, dosage and pack sizes are in the language file (products.items), in this order.
-const productBase: Pick<Product, "id" | "name" | "category" | "icon" | "banner">[] = [
-  {
-    id: 1,
-    name: "MaxDmold",
-    category: "Mono-gastric",
-    icon: Images.products.icons.maxdmold,
-    banner: Images.products.banners.maxdmold
-  },
-  {
-    id: 2,
-    name: "MaxDmold Spray",
-    category: "Value Addition",
-    icon: Images.products.icons.maxdmoldSpray,
-    banner: Images.products.banners.maxdmoldSpray
-  },
-  {
-    id: 3,
-    name: "SynDmold",
-    category: "Ruminants",
-    icon: Images.products.icons.syndmold,
-    banner: Images.products.banners.syndmold
-  },
-  {
-    id: 4,
-    name: "MaxDmold Plus",
-    category: "Mono-gastric",
-    icon: Images.products.icons.maxdmoldPlus,
-    banner: Images.products.banners.maxdmoldPlus
-  },
-  {
-    id: 5,
-    name: "MethioWiz",
-    category: "Ruminants",
-    icon: Images.products.icons.methiowiz,
-    banner: Images.products.banners.methiowiz
-  },
-  {
-    id: 6,
-    name: "MBioWiz Plus",
-    category: "Ruminants",
-    icon: Images.products.icons.mbiowizPlus,
-    banner: Images.products.banners.mbiowizPlus
-  },
-  {
-    id: 7,
-    name: "MBioWiz TS",
-    category: "Ruminants",
-    icon: Images.products.icons.mbiowizTs,
-    banner: Images.products.banners.mbiowizTs
-  },
-  {
-    id: 8,
-    name: "CholiWiz",
-    category: "Ruminants",
-    icon: Images.products.icons.choliwiz,
-    banner: Images.products.banners.choliwiz
-  },
-  {
-    id: 9,
-    name: "RumiWiz",
-    category: "Ruminants",
-    icon: Images.products.icons.rumiwiz,
-    banner: Images.products.banners.rumiwiz
-  },
-  {
-    id: 10,
-    name: "MinBioZen",
-    category: "Value Addition",
-    icon: Images.products.icons.minbiozen,
-    banner: Images.products.banners.minbiozen
-  },
-  {
-    id: 11,
-    name: "GroGenie (12% & 60%)",
-    category: "Mono-gastric",
-    icon: Images.products.icons.grogenie,
-    banner: Images.products.banners.grogenie
-  },
-  {
-    id: 12,
-    name: "LivproGenie",
-    category: "Mono-gastric",
-    icon: Images.products.icons.livprogenie,
-    banner: Images.products.banners.livprogenie
-  },
-  {
-    id: 13,
-    name: "EggGenie",
-    category: "Mono-gastric",
-    icon: Images.products.icons.egggenie,
-    banner: Images.products.banners.egggenie
-  },
-  {
-    id: 14,
-    name: "GutproGenie",
-    category: "Mono-gastric",
-    icon: Images.products.icons.gutprogenie,
-    banner: Images.products.banners.gutprogenie
-  },
-  {
-    id: 15,
-    name: "AflaMlock",
-    category: "Ruminants",
-    icon: Images.products.icons.aflamlock,
-    banner: Images.products.banners.aflamlock
-  },
-  {
-    id: 16,
-    name: "FeedGenie Forte",
-    category: "Mono-gastric",
-    icon: Images.products.icons.feedgenie,
-    banner: Images.products.banners.feedgenieFort
-  },
-  {
-    id: 17,
-    name: "DDGS-Dtox",
-    category: "Value Addition",
-    icon: Images.products.icons.ddgsDtox,
-    banner: Images.products.banners.ddgsDtox
-  },
-  {
-    id: 18,
-    name: "FeedGenie Prime",
-    category: "Mono-gastric",
-    icon: Images.products.icons.feedgeniePrime,
-    banner: Images.products.banners.feedgeniePrime
-  }
-];
+// The products are listed in src/lib/catalog.ts; their taglines, descriptions, features, dosage and pack sizes are in
+// the language file (products.items), in the same order.
 
 export default function ProductsPage() {
   const t = useT().products;
-  const productsData: Product[] = productBase.map((p, i) => ({ ...p, ...t.items[i] }));
+  const productsData: Product[] = PRODUCTS.map((p, i) => ({ ...p, ...t.items[i] }));
   const [expandedId, setExpandedId] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -169,49 +44,34 @@ export default function ProductsPage() {
   const categories = ["All", "Mono-gastric", "Ruminants", "Value Addition"];
 
 
-  // Handle auto-expansion and search filtering via query parameter (e.g. ?expand=MaxDmold) or hash (#MaxDmold)
+  // Opens at one product from a link such as /products#product-maxdmold (the site search) or the older
+  // ?expand=MaxDmold and #MaxDmold forms: shows every category, expands the product and scrolls to it.
+  // ?q=… pre-fills the search box.
+  const openProduct = (product: Product) => {
+    setSelectedCategory("All");
+    setSearchQuery("");
+    setExpandedId(product.id);
+    revealElement(productAnchor(product.name));
+  };
+  useHashTarget((target) => {
+    const product =
+      productsData.find((p) => productAnchor(p.name) === target) ||
+      productsData.find((p) => p.name.toLowerCase() === target.toLowerCase());
+    if (product) openProduct(product);
+  });
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const params = new URLSearchParams(window.location.search);
-      const query = params.get("q") || params.get("query") || "";
-      
-      // Check query parameter 'expand' or hash fragment
-      let expand = params.get("expand") || "";
-      if (!expand && window.location.hash) {
-        expand = decodeURIComponent(window.location.hash.substring(1));
-      }
-
-      if (query) {
-        setSearchQuery(query);
-      }
-      
-      if (expand) {
-        const prod = productsData.find(
-          (p) => p.name.toLowerCase() === expand.toLowerCase()
-        ) || productsData.find(
-          (p) => p.name.toLowerCase().startsWith(expand.toLowerCase())
-        ) || productsData.find(
-          (p) => p.name.toLowerCase().includes(expand.toLowerCase())
-        );
-        if (prod) {
-          // If the product belongs to a specific category, ensure that category is selected (or select All)
-          if (prod.category) {
-            setSelectedCategory(prod.category);
-          } else {
-            setSelectedCategory("All");
-          }
-          setExpandedId(prod.id);
-          
-          // Smooth scroll to the product element
-          setTimeout(() => {
-            const el = document.getElementById(`product-${prod.id}`);
-            if (el) {
-              el.scrollIntoView({ behavior: "smooth", block: "center" });
-            }
-          }, 300);
-        }
-      }
+    const params = new URLSearchParams(window.location.search);
+    const query = params.get("q") || params.get("query");
+    if (query) setSearchQuery(query);
+    const expand = params.get("expand")?.toLowerCase();
+    if (expand) {
+      const product =
+        productsData.find((p) => p.name.toLowerCase() === expand) ||
+        productsData.find((p) => p.name.toLowerCase().startsWith(expand)) ||
+        productsData.find((p) => p.name.toLowerCase().includes(expand));
+      if (product) openProduct(product);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- once, on arrival
   }, []);
 
   const toggleExpand = (id: number) => {
@@ -376,11 +236,11 @@ export default function ProductsPage() {
                 return (
                   <motion.div
                     key={product.id}
-                    id={`product-${product.id}`}
+                    id={productAnchor(product.name)}
                     data-analytics-item={product.name}
                     layout
                     transition={{ duration: 0.4, ease: easeOut }}
-                    className="border border-slate-200 rounded-2xl bg-slate-50/50 hover:bg-slate-50/85 transition-colors duration-300 overflow-hidden shadow-xs hover:border-brand-orange/30 flex flex-col h-fit group"
+                    className="scroll-mt-28 border border-slate-200 rounded-2xl bg-slate-50/50 hover:bg-slate-50/85 transition-colors duration-300 overflow-hidden shadow-xs hover:border-brand-orange/30 flex flex-col h-fit group"
                   >
                     {/* Card Header (Image/Icon + Title & Category) */}
                     <div
