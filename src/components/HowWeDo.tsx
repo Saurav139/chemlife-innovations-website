@@ -50,14 +50,14 @@ export default function HowWeDo() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.7, ease: [0.25, 0.1, 0, 1] }}
-          className="rounded-3xl overflow-hidden shadow-2xl border border-white/10 max-w-[850px] mx-auto bg-white divide-y divide-slate-100"
+          className="rounded-3xl overflow-hidden shadow-2xl border border-white/10 max-w-[850px] lg:max-w-[1100px] mx-auto bg-white divide-y divide-slate-100"
         >
           {steps.map((s, i) => {
             const isEven = i % 2 === 0;
             return (
               <div
                 key={s.step}
-                className="grid grid-cols-1 md:grid-cols-2 gap-0 md:h-[260px] items-stretch group"
+                className="grid grid-cols-1 md:grid-cols-2 gap-0 md:h-[260px] lg:h-[300px] items-stretch group"
               >
                 {/* Image Box */}
                 <div className={`relative w-full h-[200px] md:h-full overflow-hidden order-1 ${isEven ? "md:order-1" : "md:order-2"}`}>
@@ -65,7 +65,7 @@ export default function HowWeDo() {
                     src={s.image}
                     alt={s.alt}
                     fill
-                    sizes="(max-width: 768px) 100vw, 425px"
+                    sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 550px"
                     className={`object-cover group-hover:scale-102 transition-transform duration-700 ${s.objectPosition || ""}`}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/15 to-transparent animate-fade-in" />
@@ -87,7 +87,7 @@ export default function HowWeDo() {
                       <h3 className="font-heading text-xl lg:text-2xl font-bold text-slate-800 mb-2 group-hover:text-brand-orange transition-colors duration-300">
                         {s.title}
                       </h3>
-                      <p className="text-slate-600 text-xs lg:text-sm leading-relaxed font-normal">
+                      <p className="text-slate-600 text-xs md:text-sm lg:text-base leading-relaxed font-normal">
                         {s.description}
                       </p>
                     </div>

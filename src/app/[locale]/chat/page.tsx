@@ -60,7 +60,7 @@ export default function ChatLandingPage() {
                 <p className="text-xs text-blue-600 font-bold uppercase tracking-wider mb-4">
                   Poultry Nutrition Expert
                 </p>
-                <span className="text-[11px] font-bold text-white bg-blue-aa hover:bg-blue-600 px-4 py-2 rounded-xl transition-all">
+                <span className="inline-flex items-center justify-center min-h-11 px-6 rounded-full text-sm font-bold text-white bg-blue-aa group-hover:bg-blue-600 shadow-sm transition-colors">
                   Consult Specialist →
                 </span>
               </Link>
@@ -81,7 +81,7 @@ export default function ChatLandingPage() {
                 <p className="text-xs text-brand-orange-aa font-bold uppercase tracking-wider mb-4">
                   Dairy & Ruminant Specialist
                 </p>
-                <span className="text-[11px] font-bold text-white bg-brand-orange-aa hover:bg-brand-orange-aa-hover px-4 py-2 rounded-xl transition-all">
+                <span className="inline-flex items-center justify-center min-h-11 px-6 rounded-full text-sm font-bold text-white bg-brand-orange-aa group-hover:bg-brand-orange-aa-hover shadow-sm transition-colors">
                   Consult Specialist →
                 </span>
               </Link>

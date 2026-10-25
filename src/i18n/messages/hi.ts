@@ -206,6 +206,8 @@ const hi: Messages = {
     testimonials: {
       kicker: "प्रशंसापत्र",
       title: "हमारे साझेदार क्या कहते हैं?",
+      readMore: "और पढ़ें",
+      showLess: "कम दिखाएँ",
     },
 
     social: {
@@ -505,6 +507,10 @@ const hi: Messages = {
   },
 
   research: {
+    // Closing panel under the topics
+    ctaTitle: "क्या आप भी ऐसे ही किसी काम पर हैं?",
+    ctaText: "बायोएक्टिव, कीलेशन और डिलीवरी तकनीकों पर हम फ़ीड कंपनियों, शोध संस्थानों और विश्वविद्यालयों के साथ साझेदारी करते हैं। हमें बताइए कि आप किस पर काम कर रहे हैं।",
+    ctaButton: "शोध सहयोग पर बात करें",
     heroAlt: "डेटा स्क्रीनों वाली आधुनिक जैव प्रौद्योगिकी प्रयोगशाला",
     kicker: "अनुसंधान और विकास",
     titleStart: "विज्ञान का संगम:",
@@ -687,6 +693,7 @@ const hi: Messages = {
     subject: "विषय",
     subjectPlaceholder: "यह किस बारे में है?",
     nutritionistSubject: "मैं पोषण विशेषज्ञ से बात करना चाहता/चाहती हूँ",
+    researchSubject: "शोध सहयोग",
     message: "संदेश",
     messagePlaceholder: "अपनी ज़रूरत के बारे में विस्तार से बताएँ...",
     errors: {
