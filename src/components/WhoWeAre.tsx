@@ -99,20 +99,20 @@ function SnowflakeCell({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-60px" }}
       transition={{ duration: 0.6, delay: index * 0.1, ease: [0.25, 0.1, 0, 1] }}
-      className="flex flex-col items-center text-center group cursor-pointer"
+      className="flex flex-row md:flex-col items-center gap-5 md:gap-0 text-left md:text-center group cursor-pointer"
     >
-      {/* 3D Visual Snowflake Image Container (No text overlay) */}
-      <div className="relative w-[260px] h-[260px] md:w-[320px] md:h-[320px] flex items-center justify-center">
+      {/* 3D Visual Snowflake Image Container (No text overlay). Phones: a smaller circle beside the text. */}
+      <div className="relative shrink-0 w-[132px] h-[132px] sm:w-[160px] sm:h-[160px] md:w-[320px] md:h-[320px] flex items-center justify-center">
         {/* Outer Snowflake Frame (acting as outer border structure) */}
         <SnowflakeFrame
-          className="absolute w-[250px] h-[250px] md:w-[310px] md:h-[310px] text-teal-500/20 group-hover:text-brand-orange/45 transition-colors duration-500 z-0 pointer-events-none select-none"
+          className="absolute w-[128px] h-[128px] sm:w-[156px] sm:h-[156px] md:w-[310px] md:h-[310px] text-teal-500/20 group-hover:text-brand-orange/45 transition-colors duration-500 z-0 pointer-events-none select-none"
           style={{ animation: "spin 45s linear infinite" }}
         />
 
         {/* Enlarged Inner Circular Card (100% visible image, zero overlap) */}
         <motion.div
           whileHover={{ scale: 1.05 }}
-          className="relative w-[190px] h-[190px] md:w-[235px] md:h-[235px] rounded-full overflow-hidden border-2 border-teal-500/25 group-hover:border-brand-orange transition-all duration-300 z-10 bg-gray-50 shadow-xl"
+          className="relative w-[98px] h-[98px] sm:w-[120px] sm:h-[120px] md:w-[235px] md:h-[235px] rounded-full overflow-hidden border-2 border-teal-500/25 group-hover:border-brand-orange transition-all duration-300 z-10 bg-gray-50 shadow-xl"
         >
           <AnimatePresence mode="popLayout">
             <motion.div
@@ -127,7 +127,7 @@ function SnowflakeCell({
                 src={card.images[imageIndex % card.images.length].src}
                 alt={card.images[imageIndex % card.images.length].alt}
                 fill
-                sizes="235px"
+                sizes="(min-width: 768px) 235px, 120px"
                 className="object-cover opacity-100 group-hover:scale-105 transition-transform duration-700"
                 priority={index === 0}
               />
@@ -137,8 +137,8 @@ function SnowflakeCell({
       </div>
 
       {/* Combined Typography Content (Clean alignment below the image) */}
-      <div className="mt-4 max-w-[270px] px-2 flex flex-col items-center">
-        <h3 className="font-heading text-xl font-bold text-teal-aa mb-2 leading-tight transition-colors duration-300 group-hover:text-brand-orange">
+      <div className="flex-1 md:flex-none md:mt-4 md:max-w-[270px] md:px-2 flex flex-col items-start md:items-center">
+        <h3 className="font-heading text-lg md:text-xl font-bold text-teal-aa mb-1 md:mb-2 leading-tight transition-colors duration-300 group-hover:text-brand-orange">
           {card.title}
         </h3>
         <p className="text-slate-600 text-sm leading-relaxed font-normal md:text-xs lg:text-sm">
@@ -178,7 +178,7 @@ export default function WhoWeAre() {
         </div>
 
         {/* Grid layout containing the Snowflake Cells */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 max-w-5xl mx-auto justify-items-center w-full mt-8 z-10 relative">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-12 max-w-5xl mx-auto justify-items-stretch md:justify-items-center w-full mt-8 z-10 relative">
           {cards.map((card, i) => (
             <SnowflakeCell
               key={`snowflake-cell-${i}`}
