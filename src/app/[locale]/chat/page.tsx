@@ -56,7 +56,7 @@ export default function ChatLandingPage() {
                     className="w-full h-full object-contain"
                   />
                 </div>
-                <h3 className="text-xl font-bold text-slate-800 mb-1 group-hover:text-blue-600 transition-colors">Dr. Kukku</h3>
+                <h2 className="text-xl font-bold text-slate-800 mb-1 group-hover:text-blue-600 transition-colors">Dr. Kukku</h2>
                 <p className="text-xs text-blue-600 font-bold uppercase tracking-wider mb-4">
                   Poultry Nutrition Expert
                 </p>
@@ -77,7 +77,7 @@ export default function ChatLandingPage() {
                     className="w-full h-full object-contain"
                   />
                 </div>
-                <h3 className="text-xl font-bold text-slate-800 mb-1 group-hover:text-brand-orange transition-colors">Dr. Mikku</h3>
+                <h2 className="text-xl font-bold text-slate-800 mb-1 group-hover:text-brand-orange transition-colors">Dr. Mikku</h2>
                 <p className="text-xs text-brand-orange-aa font-bold uppercase tracking-wider mb-4">
                   Dairy & Ruminant Specialist
                 </p>
