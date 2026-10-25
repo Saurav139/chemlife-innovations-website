@@ -152,13 +152,6 @@ export const Images = {
     rotate33: "/images/gallery/rotate_3_3.jpeg",
   },
 
-  /** Life at ChemLife photo collage (homepage) */
-  life: {
-    team: "/images/life/team-anniversary.jpg",
-    leadership: "/images/life/team-leadership.jpg",
-    warehouse: "/images/life/warehouse-visit.jpg",
-  },
-
   /** CSR / social responsibility imagery */
   social: {
     image2: "/images/social/social2.jpeg",
