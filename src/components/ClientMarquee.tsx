@@ -18,17 +18,12 @@ interface FlipCardProps {
 
 function FlipCard({ frontLogo, backLogo, index, flipped }: FlipCardProps) {
   const t = useT().home.partners;
-  // Staggered chessboard effect for 3 columns
+  // The flip runs row by row, left to right.
   const row = Math.floor(index / 3);
   const col = index % 3;
-  const isChessLight = (row + col) % 2 === 0;
-  const cardBg = isChessLight ? "bg-white" : "bg-[#f1f5f9]/60";
-  const borderStyle = isChessLight 
-    ? "border-2 border-brand-orange/35 hover:border-brand-orange/65" 
-    : "border-2 border-white";
-  const shadowStyle = isChessLight
-    ? "shadow-[0_4px_12px_rgba(230,92,56,0.03)] hover:shadow-[0_8px_20px_rgba(230,92,56,0.08)]"
-    : "shadow-[0_4px_12px_rgba(0,0,0,0.01)] hover:shadow-[0_8px_20px_rgba(0,0,0,0.04)]";
+  // One card style for every logo, and each logo fitted inside the same box (78% wide, 62% tall), so wide wordmarks
+  // and square badges read at a similar size.
+  const face = "absolute inset-0 backface-hidden bg-white border border-slate-200 hover:border-brand-orange/40 rounded-xl sm:rounded-2xl flex items-center justify-center shadow-sm hover:shadow-md transition-all duration-300";
 
   return (
     <div className="perspective-1000 w-full aspect-[4/3]">
@@ -42,27 +37,27 @@ function FlipCard({ frontLogo, backLogo, index, flipped }: FlipCardProps) {
         }}
       >
         {/* Front Side */}
-        <div className={`absolute inset-0 backface-hidden ${cardBg} ${borderStyle} rounded-2xl flex items-center justify-center p-3 sm:p-6 ${shadowStyle} hover:scale-[1.02] transition-all duration-300`}>
-          <div className="relative w-full h-full">
+        <div className={face}>
+          <div className="relative w-[78%] h-[62%]">
             <Image
               src={Images.partnerLogos.path(frontLogo)}
               alt={`${Images.partnerLogos.names[frontLogo] ?? "Partner"} ${t.logo}`}
               fill
               className="object-contain transition-all duration-300"
-              sizes="(max-width: 768px) 50vw, 250px"
+              sizes="(max-width: 896px) 30vw, 220px"
             />
           </div>
         </div>
 
         {/* Back Side */}
-        <div className={`absolute inset-0 backface-hidden rotate-y-180 ${cardBg} ${borderStyle} rounded-2xl flex items-center justify-center p-3 sm:p-6 ${shadowStyle} hover:scale-[1.02] transition-all duration-300`}>
-          <div className="relative w-full h-full">
+        <div className={`${face} rotate-y-180`}>
+          <div className="relative w-[78%] h-[62%]">
             <Image
               src={Images.partnerLogos.path(backLogo)}
               alt={`${Images.partnerLogos.names[backLogo] ?? "Partner"} ${t.logo}`}
               fill
               className="object-contain transition-all duration-300"
-              sizes="(max-width: 768px) 50vw, 250px"
+              sizes="(max-width: 896px) 30vw, 220px"
             />
           </div>
         </div>
@@ -96,7 +91,8 @@ export default function ClientMarquee() {
       </div>
 
       <div className="max-w-[1200px] mx-auto px-6">
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
+        {/* Three across at every size: 9 logos make a full 3×3 grid, with none left alone on a phone. */}
+        <div className="grid grid-cols-3 gap-3 sm:gap-6 md:gap-8 max-w-4xl mx-auto">
           {frontLogos.map((logo, i) => (
             <FlipCard
               key={`flip-${i}`}
