@@ -25,14 +25,13 @@ const isOptimizable = (src: string) =>
   src.startsWith("https://chemlifeinnovations.wordpress.com/wp-content/uploads/") ||
   src.startsWith("https://img.youtube.com/vi/");
 
-/** A featured-card button label that shortens where the full text doesn't fit beside the other button: on the
- *  narrowest phones (under 360px) and on desktop, where the cards sit three across. Screen readers always get the
- *  full text. */
+/** A featured-card button label that shortens on the narrowest phones (under 360px), where the full text doesn't fit
+ *  beside the other button. Screen readers always get the full text. */
 function ButtonLabel({ full, short }: { full: string; short: string }) {
   return (
     <>
-      <span aria-hidden="true" className="min-[360px]:hidden lg:inline">{short}</span>
-      <span className="sr-only min-[360px]:not-sr-only lg:sr-only">{full}</span>
+      <span aria-hidden="true" className="min-[360px]:hidden">{short}</span>
+      <span className="sr-only min-[360px]:not-sr-only">{full}</span>
     </>
   );
 }
@@ -173,7 +172,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                 <div
                   data-analytics-item={featuredBlog.title}
                   data-analytics-click="Read Article"
-                  className="bg-gray-55 border border-gray-200 rounded-2xl md:rounded-3xl p-5 md:p-8 lg:p-10 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between group cursor-pointer"
+                  className="bg-gray-55 border border-gray-200 rounded-2xl md:rounded-3xl p-5 md:p-8 lg:p-6 xl:p-8 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between group cursor-pointer"
                   onClick={() => setActiveArticle(featuredBlog)}
                 >
                   <div>
@@ -202,13 +201,13 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                     )}
                   </div>
 
-                  <div className="grid grid-cols-2 sm:flex sm:flex-wrap lg:grid items-center gap-2 sm:gap-4 lg:gap-2 pt-4 border-t border-gray-100">
+                  <div className="grid grid-cols-2 sm:flex sm:flex-wrap lg:flex-nowrap items-center gap-2 sm:gap-4 lg:gap-2 pt-4 border-t border-gray-100">
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
                         setActiveArticle(featuredBlog);
                       }}
-                      className="inline-flex items-center justify-center min-h-11 text-center whitespace-nowrap px-2 sm:px-6 lg:px-2 py-2.5 rounded-full text-[13px] sm:text-sm bg-teal-aa hover:bg-teal-700 text-white font-bold shadow-sm hover:shadow transition-all duration-300 cursor-pointer"
+                      className="inline-flex items-center justify-center min-h-11 text-center whitespace-nowrap px-2 sm:px-6 lg:px-2 xl:px-4 lg:flex-auto py-2.5 rounded-full text-[13px] sm:text-sm lg:text-[13px] xl:text-sm bg-teal-aa hover:bg-teal-700 text-white font-bold shadow-sm hover:shadow transition-all duration-300 cursor-pointer"
                     >
                       Read Article
                     </button>
@@ -216,7 +215,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                       href={featuredBlog.linkUrl || "https://www.linkedin.com/company/chemlifeinnovations/posts/?feedView=all"}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center min-h-11 text-center whitespace-nowrap px-2 sm:px-6 lg:px-2 py-2.5 rounded-full text-[13px] sm:text-sm border border-gray-200 text-gray-600 hover:bg-gray-50 hover:text-teal-aa font-bold transition-all duration-300 cursor-pointer"
+                      className="inline-flex items-center justify-center min-h-11 text-center whitespace-nowrap px-2 sm:px-6 lg:px-2 xl:px-4 lg:flex-auto py-2.5 rounded-full text-[13px] sm:text-sm lg:text-[13px] xl:text-sm border border-gray-200 text-gray-600 hover:bg-gray-50 hover:text-teal-aa font-bold transition-all duration-300 cursor-pointer"
                       onClick={(e) => e.stopPropagation()}
                     >
                       {featuredBlog.linkUrl?.includes("wordpress.com")
@@ -231,7 +230,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
               {featuredVideo && (
                 <div
                   data-analytics-item={featuredVideo.title}
-                  className="bg-gray-55 border border-gray-200 rounded-2xl md:rounded-3xl p-5 md:p-8 lg:p-10 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between group"
+                  className="bg-gray-55 border border-gray-200 rounded-2xl md:rounded-3xl p-5 md:p-8 lg:p-6 xl:p-8 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between group"
                 >
                   <div>
                     <div className="flex items-center gap-2 mb-3">
@@ -274,13 +273,13 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                     )}
                   </div>
 
-                  <div className="grid grid-cols-2 sm:flex sm:flex-wrap lg:grid items-center gap-2 sm:gap-4 lg:gap-2 pt-4 border-t border-gray-100">
+                  <div className="grid grid-cols-2 sm:flex sm:flex-wrap lg:flex-nowrap items-center gap-2 sm:gap-4 lg:gap-2 pt-4 border-t border-gray-100">
                     <a
                       href={youtubeWatchUrl(featuredVideo.youtubeId!)}
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={(e) => playOnPage(e, () => setActiveVideoId(featuredVideo.youtubeId!))}
-                      className="inline-flex items-center justify-center min-h-11 text-center whitespace-nowrap px-2 sm:px-6 lg:px-2 py-2.5 rounded-full text-[13px] sm:text-sm bg-teal-aa hover:bg-teal-700 text-white font-bold shadow-sm hover:shadow transition-all duration-300 cursor-pointer"
+                      className="inline-flex items-center justify-center min-h-11 text-center whitespace-nowrap px-2 sm:px-6 lg:px-2 xl:px-4 lg:flex-auto py-2.5 rounded-full text-[13px] sm:text-sm lg:text-[13px] xl:text-sm bg-teal-aa hover:bg-teal-700 text-white font-bold shadow-sm hover:shadow transition-all duration-300 cursor-pointer"
                     >
                       Watch Now
                     </a>
@@ -288,7 +287,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                       href={`https://www.youtube.com/watch?v=${featuredVideo.youtubeId}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center min-h-11 text-center whitespace-nowrap px-2 sm:px-6 lg:px-2 py-2.5 rounded-full text-[13px] sm:text-sm border border-gray-200 text-gray-600 hover:bg-gray-50 hover:text-teal-aa font-bold transition-all duration-300"
+                      className="inline-flex items-center justify-center min-h-11 text-center whitespace-nowrap px-2 sm:px-6 lg:px-2 xl:px-4 lg:flex-auto py-2.5 rounded-full text-[13px] sm:text-sm lg:text-[13px] xl:text-sm border border-gray-200 text-gray-600 hover:bg-gray-50 hover:text-teal-aa font-bold transition-all duration-300"
                     >
                       <ButtonLabel full="Watch on YouTube" short="YouTube" />
                     </a>
@@ -300,7 +299,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
               {featuredPodcast && (
                 <div
                   data-analytics-item={featuredPodcast.title}
-                  className="bg-gray-55 border border-gray-200 rounded-2xl md:rounded-3xl p-5 md:p-8 lg:p-10 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between group"
+                  className="bg-gray-55 border border-gray-200 rounded-2xl md:rounded-3xl p-5 md:p-8 lg:p-6 xl:p-8 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between group"
                 >
                   <div>
                     <div className="flex items-center gap-2 mb-3">
@@ -343,13 +342,13 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                     )}
                   </div>
 
-                  <div className="grid grid-cols-2 sm:flex sm:flex-wrap lg:grid items-center gap-2 sm:gap-4 lg:gap-2 pt-4 border-t border-gray-100">
+                  <div className="grid grid-cols-2 sm:flex sm:flex-wrap lg:flex-nowrap items-center gap-2 sm:gap-4 lg:gap-2 pt-4 border-t border-gray-100">
                     <a
                       href={youtubeWatchUrl(featuredPodcast.youtubeId!)}
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={(e) => playOnPage(e, () => setActiveVideoId(featuredPodcast.youtubeId!))}
-                      className="inline-flex items-center justify-center min-h-11 text-center whitespace-nowrap px-2 sm:px-6 lg:px-2 py-2.5 rounded-full text-[13px] sm:text-sm bg-teal-aa hover:bg-teal-700 text-white font-bold shadow-sm hover:shadow transition-all duration-300 cursor-pointer"
+                      className="inline-flex items-center justify-center min-h-11 text-center whitespace-nowrap px-2 sm:px-6 lg:px-2 xl:px-4 lg:flex-auto py-2.5 rounded-full text-[13px] sm:text-sm lg:text-[13px] xl:text-sm bg-teal-aa hover:bg-teal-700 text-white font-bold shadow-sm hover:shadow transition-all duration-300 cursor-pointer"
                     >
                       Listen Now
                     </a>
@@ -357,7 +356,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                       href={`https://www.youtube.com/watch?v=${featuredPodcast.youtubeId}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center min-h-11 text-center whitespace-nowrap px-2 sm:px-6 lg:px-2 py-2.5 rounded-full text-[13px] sm:text-sm border border-gray-200 text-gray-600 hover:bg-gray-50 hover:text-teal-aa font-bold transition-all duration-300"
+                      className="inline-flex items-center justify-center min-h-11 text-center whitespace-nowrap px-2 sm:px-6 lg:px-2 xl:px-4 lg:flex-auto py-2.5 rounded-full text-[13px] sm:text-sm lg:text-[13px] xl:text-sm border border-gray-200 text-gray-600 hover:bg-gray-50 hover:text-teal-aa font-bold transition-all duration-300"
                     >
                       <ButtonLabel full="Watch on YouTube" short="YouTube" />
                     </a>
