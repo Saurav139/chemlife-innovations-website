@@ -28,6 +28,7 @@ export default function AboutPage() {
               src={Images.heroes.about}
               alt={t.heroAlt}
               fill
+              sizes="100vw"
               className="object-cover opacity-80"
               priority
             />
@@ -115,10 +116,12 @@ export default function AboutPage() {
             </div>
 
             {/* G.I.F.T. Core Values Diamond Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-y-8 md:gap-y-12 md:gap-x-12 max-w-5xl mx-auto pb-4 md:pb-12 relative mt-8 md:mt-16">
+            {/* Desktop: the four values in a diamond around a dashed ring. Tablets: a 2×2 grid; phones: one column, both in
+                G, I, F, T order so they spell the word. */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-8 md:gap-y-12 md:gap-x-12 max-w-5xl mx-auto pb-4 md:pb-12 relative mt-8 md:mt-16">
 
                {/* Connection Lines for Desktop - Positioned underneath the boxes (z-0) */}
-              <svg className="absolute inset-0 w-full h-full pointer-events-none hidden md:block z-0" viewBox="0 0 100 100" preserveAspectRatio="none">
+              <svg className="absolute inset-0 w-full h-full pointer-events-none hidden lg:block z-0" viewBox="0 0 100 100" preserveAspectRatio="none">
                 <style>{`
                   @keyframes stroke-flow {
                     to {
@@ -172,7 +175,7 @@ export default function AboutPage() {
               </svg>
 
               {/* Card G - Top Center */}
-              <div className="col-start-1 md:col-start-2 md:row-start-1 flex justify-center">
+              <div className="order-1 lg:order-none lg:col-start-2 lg:row-start-1 flex justify-center">
                 <motion.div
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -223,7 +226,7 @@ export default function AboutPage() {
               </div>
 
               {/* Card T - Middle Left */}
-              <div className="col-start-1 md:col-start-1 md:row-start-2 flex justify-center md:-translate-y-4">
+              <div className="order-4 lg:order-none lg:col-start-1 lg:row-start-2 flex justify-center lg:-translate-y-4">
                 <motion.div
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -286,7 +289,7 @@ export default function AboutPage() {
               </div>
 
               {/* Card I - Middle Right */}
-              <div className="col-start-1 md:col-start-3 md:row-start-2 flex justify-center md:-translate-y-4">
+              <div className="order-2 lg:order-none lg:col-start-3 lg:row-start-2 flex justify-center lg:-translate-y-4">
                 <motion.div
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -351,7 +354,7 @@ export default function AboutPage() {
               </div>
 
               {/* Card F - Bottom Center */}
-              <div className="col-start-1 md:col-start-2 md:row-start-3 flex justify-center md:-translate-y-8">
+              <div className="order-3 lg:order-none lg:col-start-2 lg:row-start-3 flex justify-center lg:-translate-y-8">
                 <motion.div
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -470,7 +473,7 @@ export default function AboutPage() {
                   <h3 className="font-heading text-base md:text-lg font-bold text-brand-orange-aa mb-1">
                     {leader.name}
                   </h3>
-                  <p className="text-brand-navy font-bold text-xs md:text-[11px] uppercase tracking-wider mb-0.5">
+                  <p className="text-brand-navy font-bold text-xs uppercase tracking-wider mb-0.5">
                     {leader.role}
                   </p>
                   <p className="text-brand-navy text-xs font-semibold mb-4">
