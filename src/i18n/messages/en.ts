@@ -722,6 +722,7 @@ const en = {
     plantText:
       "Our state-of-the-art facility integrates biological research labs and automated manufacturing systems to safely develop and formulate premium nature-driven feed ingredients.",
     mapTitle: "ChemLife Corporate Office Location Map",
+    openInMaps: "Open in Google Maps",
   },
 };
 

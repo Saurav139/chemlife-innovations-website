@@ -478,8 +478,14 @@ export default function ContactPage() {
                   </div>
                 </div>
 
-                {/* Google Maps Embed Container */}
-                <div className="relative w-full aspect-[4/3] md:aspect-[16/9] lg:aspect-[4/3] rounded-3xl overflow-hidden border border-gray-200 shadow-sm bg-gray-55 select-none">
+                {/* Google Maps Embed Container. The pin underneath shows while the map loads (it waits until it's near
+                    the screen), so the box is never blank. */}
+                <div className="relative w-full aspect-[4/3] md:aspect-[16/9] lg:aspect-[4/3] rounded-3xl overflow-hidden border border-gray-200 shadow-sm bg-slate-100 select-none">
+                  <div className="absolute inset-0 flex items-center justify-center text-slate-300" aria-hidden="true">
+                    <svg className="w-12 h-12" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z" />
+                    </svg>
+                  </div>
                   <iframe
                     src="https://maps.google.com/maps?q=13.273301,77.576311+(Chemlife%20Innovations%20Pvt%20Ltd)&z=16&output=embed"
                     width="100%"
@@ -489,9 +495,20 @@ export default function ContactPage() {
                     loading="lazy"
                     referrerPolicy="no-referrer-when-downgrade"
                     title={t.mapTitle}
-                    className="w-full h-full opacity-90 hover:opacity-100 transition-opacity duration-300"
+                    className="relative w-full h-full opacity-90 hover:opacity-100 transition-opacity duration-300"
                   />
                 </div>
+                <a
+                  href="https://www.google.com/maps/search/?api=1&query=13.273301,77.576311"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-3 inline-flex items-center gap-1.5 min-h-11 text-sm font-semibold text-teal-aa hover:text-teal-700 transition-colors"
+                >
+                  {t.openInMaps}
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M14 5h5v5M19 5l-8 8M10 6H6a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4" />
+                  </svg>
+                </a>
 
               </div>
 
