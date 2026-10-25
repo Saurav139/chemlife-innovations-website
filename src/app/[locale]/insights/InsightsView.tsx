@@ -165,17 +165,19 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
               </h2>
             </div>
             
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 md:gap-8">
+            {/* Desktop: each card spans the same four rows (label line, title, image, buttons) through subgrid, so the
+                titles, images and buttons line up across the three cards whatever their text length. */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 md:gap-8 lg:gap-y-0">
               
               {/* Featured Blog */}
               {featuredBlog && (
                 <div
                   data-analytics-item={featuredBlog.title}
                   data-analytics-click="Read Article"
-                  className="bg-gray-55 border border-gray-200 rounded-2xl md:rounded-3xl p-5 md:p-8 lg:p-6 xl:p-8 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between group cursor-pointer"
+                  className="bg-gray-55 border border-gray-200 rounded-2xl md:rounded-3xl p-5 md:p-8 lg:p-6 xl:p-8 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between lg:grid lg:grid-rows-subgrid lg:row-span-4 lg:gap-y-0 group cursor-pointer"
                   onClick={() => setActiveArticle(featuredBlog)}
                 >
-                  <div>
+                  <div className="lg:contents">
                     <div className="flex items-center gap-2 mb-3">
                       <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-teal-50 text-teal-700">
                         Blog
@@ -201,7 +203,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                     )}
                   </div>
 
-                  <div className="grid grid-cols-2 sm:flex sm:flex-wrap lg:flex-nowrap items-center gap-2 sm:gap-4 lg:gap-2 pt-4 border-t border-gray-100">
+                  <div className="grid grid-cols-2 sm:flex sm:flex-wrap lg:flex-nowrap lg:row-start-4 items-center gap-2 sm:gap-4 lg:gap-2 pt-4 border-t border-gray-100">
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
@@ -230,9 +232,9 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
               {featuredVideo && (
                 <div
                   data-analytics-item={featuredVideo.title}
-                  className="bg-gray-55 border border-gray-200 rounded-2xl md:rounded-3xl p-5 md:p-8 lg:p-6 xl:p-8 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between group"
+                  className="bg-gray-55 border border-gray-200 rounded-2xl md:rounded-3xl p-5 md:p-8 lg:p-6 xl:p-8 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between lg:grid lg:grid-rows-subgrid lg:row-span-4 lg:gap-y-0 group"
                 >
-                  <div>
+                  <div className="lg:contents">
                     <div className="flex items-center gap-2 mb-3">
                       <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-blue-50 text-blue-700">
                         Video
@@ -273,7 +275,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                     )}
                   </div>
 
-                  <div className="grid grid-cols-2 sm:flex sm:flex-wrap lg:flex-nowrap items-center gap-2 sm:gap-4 lg:gap-2 pt-4 border-t border-gray-100">
+                  <div className="grid grid-cols-2 sm:flex sm:flex-wrap lg:flex-nowrap lg:row-start-4 items-center gap-2 sm:gap-4 lg:gap-2 pt-4 border-t border-gray-100">
                     <a
                       href={youtubeWatchUrl(featuredVideo.youtubeId!)}
                       target="_blank"
@@ -299,9 +301,9 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
               {featuredPodcast && (
                 <div
                   data-analytics-item={featuredPodcast.title}
-                  className="bg-gray-55 border border-gray-200 rounded-2xl md:rounded-3xl p-5 md:p-8 lg:p-6 xl:p-8 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between group"
+                  className="bg-gray-55 border border-gray-200 rounded-2xl md:rounded-3xl p-5 md:p-8 lg:p-6 xl:p-8 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between lg:grid lg:grid-rows-subgrid lg:row-span-4 lg:gap-y-0 group"
                 >
-                  <div>
+                  <div className="lg:contents">
                     <div className="flex items-center gap-2 mb-3">
                       <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-red-50 text-red-700">
                         Podcast
@@ -342,7 +344,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                     )}
                   </div>
 
-                  <div className="grid grid-cols-2 sm:flex sm:flex-wrap lg:flex-nowrap items-center gap-2 sm:gap-4 lg:gap-2 pt-4 border-t border-gray-100">
+                  <div className="grid grid-cols-2 sm:flex sm:flex-wrap lg:flex-nowrap lg:row-start-4 items-center gap-2 sm:gap-4 lg:gap-2 pt-4 border-t border-gray-100">
                     <a
                       href={youtubeWatchUrl(featuredPodcast.youtubeId!)}
                       target="_blank"
