@@ -205,10 +205,10 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                 >
                   <div className="lg:contents">
                     <div className="flex items-center gap-2 mb-3">
-                      <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-teal-50 text-teal-700">
+                      <span className="text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-teal-50 text-teal-700">
                         Blog
                       </span>
-                      <span className="text-[11px] text-gray-aa font-medium">Featured • {featuredBlog.date} • {featuredBlog.meta}</span>
+                      <span className="text-xs text-gray-aa font-medium">Featured • {featuredBlog.date} • {featuredBlog.meta}</span>
                     </div>
                     <h3 className="font-heading text-lg md:text-xl lg:text-2xl font-bold text-brand-navy mb-4 md:mb-6 group-hover:text-teal-aa transition-colors duration-300 line-clamp-3">
                       {featuredBlog.title}
@@ -263,10 +263,10 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                 >
                   <div className="lg:contents">
                     <div className="flex items-center gap-2 mb-3">
-                      <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-blue-50 text-blue-700">
+                      <span className="text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-blue-50 text-blue-700">
                         Video
                       </span>
-                      <span className="text-[11px] text-gray-aa font-medium">Featured • {featuredVideo.date} • {featuredVideo.meta}</span>
+                      <span className="text-xs text-gray-aa font-medium">Featured • {featuredVideo.date} • {featuredVideo.meta}</span>
                     </div>
                     <h3 className="font-heading text-lg md:text-xl lg:text-2xl font-bold text-brand-navy mb-4 md:mb-6 group-hover:text-teal-aa transition-colors duration-300 line-clamp-3">
                       {featuredVideo.title}
@@ -333,10 +333,10 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                 >
                   <div className="lg:contents">
                     <div className="flex items-center gap-2 mb-3">
-                      <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-red-50 text-red-700">
+                      <span className="text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-red-50 text-red-700">
                         Podcast
                       </span>
-                      <span className="text-[11px] text-gray-aa font-medium">Featured • {featuredPodcast.date} • {featuredPodcast.meta}</span>
+                      <span className="text-xs text-gray-aa font-medium">Featured • {featuredPodcast.date} • {featuredPodcast.meta}</span>
                     </div>
                     <h3 className="font-heading text-lg md:text-xl lg:text-2xl font-bold text-brand-navy mb-4 md:mb-6 group-hover:text-teal-aa transition-colors duration-300 line-clamp-3">
                       {featuredPodcast.title}
@@ -535,7 +535,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                       >
                         {/* Meta Category & Date Info */}
                         <div className="flex items-center gap-2 mb-3">
-                          <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded ${
+                          <span className={`text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md ${
                             item.type === "Blog"
                               ? "bg-teal-50 text-teal-700"
                               : item.type === "Podcast"
@@ -544,7 +544,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                           }`}>
                             {item.type}
                           </span>
-                          <span className="text-[11px] text-gray-aa font-medium">
+                          <span className="text-xs text-gray-aa font-medium">
                             {item.date} • {item.meta}
                           </span>
                         </div>
@@ -732,7 +732,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
               {/* Top Sticky Header */}
               <div className="sticky top-0 bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between z-10">
                 <div className="flex items-center gap-2">
-                  <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-teal-50 text-teal-700">
+                  <span className="text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-teal-50 text-teal-700">
                     {activeArticle.type}
                   </span>
                   <span className="text-xs text-gray-aa font-medium">
