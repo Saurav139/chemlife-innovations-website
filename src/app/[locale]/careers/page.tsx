@@ -40,6 +40,24 @@ export default function CareersPage() {
   const [emailBody, setEmailBody] = useState("");
   const [showAttachReminder, setShowAttachReminder] = useState(false);
 
+  // Escape closes the application form or the reminder, and the page behind doesn't scroll while one is open.
+  const overlayOpen = !!activeJob || showAttachReminder;
+  useEffect(() => {
+    if (!overlayOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") return;
+      setActiveJob(null);
+      setShowAttachReminder(false);
+    };
+    const root = document.documentElement;
+    root.style.overflow = "hidden";
+    window.addEventListener("keydown", onKey);
+    return () => {
+      root.style.overflow = "";
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [overlayOpen]);
+
   const selectedRole = internshipRoles.find((role) => role.id === selectedRoleId) || internshipRoles[0];
 
   // Opens at one internship from a link such as /careers#role-research-intern (the site search): selects its tab and
@@ -95,6 +113,7 @@ export default function CareersPage() {
               src={Images.heroes.careers}
               alt={t.heroAlt}
               fill
+              sizes="100vw"
               className="object-cover opacity-50"
               priority
             />
@@ -139,7 +158,7 @@ export default function CareersPage() {
                       </svg>
                     </div>
                     <div>
-                      <h4 className="font-bold text-brand-navy text-base">{t.duration}</h4>
+                      <h3 className="font-bold text-brand-navy text-base">{t.duration}</h3>
                       <p className="text-gray-500 text-sm mt-0.5">{t.durationText}</p>
                     </div>
                   </div>
@@ -151,7 +170,7 @@ export default function CareersPage() {
                       </svg>
                     </div>
                     <div>
-                      <h4 className="font-bold text-brand-navy text-base">{t.stipend}</h4>
+                      <h3 className="font-bold text-brand-navy text-base">{t.stipend}</h3>
                       <p className="text-gray-500 text-sm mt-0.5">{t.stipendText}</p>
                     </div>
                   </div>
@@ -166,7 +185,7 @@ export default function CareersPage() {
                       </svg>
                     </div>
                     <div>
-                      <h4 className="font-bold text-brand-navy text-base">{t.lunch}</h4>
+                      <h3 className="font-bold text-brand-navy text-base">{t.lunch}</h3>
                       <p className="text-gray-500 text-sm mt-0.5">{t.lunchText}</p>
                     </div>
                   </div>
@@ -364,7 +383,7 @@ export default function CareersPage() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 overflow-y-auto"
+              className="fixed inset-0 z-[70] flex items-center justify-center bg-black/60 p-4 overflow-y-auto"
             >
               <motion.div
                 initial={{ scale: 0.95, y: 20 }}
@@ -376,15 +395,19 @@ export default function CareersPage() {
                 {/* Modal Header */}
                 <div className="bg-brand-navy text-white p-6 relative">
                   <button
+                    type="button"
                     onClick={() => setActiveJob(null)}
-                    className="absolute right-6 top-6 text-white/70 hover:text-white transition-colors cursor-pointer text-lg font-semibold"
+                    aria-label="Close"
+                    className="absolute right-3 top-3 w-11 h-11 rounded-full flex items-center justify-center text-white/70 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
                   >
-                    ✕
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
                   </button>
                   <span className="text-teal-aa-light text-xs font-bold uppercase tracking-wider block mb-1">
                     {t.modalTitle}
                   </span>
-                  <h3 className="font-heading text-xl lg:text-2xl font-bold">
+                  <h3 className="font-heading text-xl lg:text-2xl font-bold text-white pr-10">
                     {activeJob.title}
                   </h3>
                   <p className="text-white/70 text-sm mt-1">
@@ -396,12 +419,13 @@ export default function CareersPage() {
                 <form onSubmit={handleApplySubmit} className="p-6 space-y-5">
                   {/* Name field */}
                   <div>
-                    <label className="block text-sm font-bold text-gray-550 uppercase tracking-wider mb-2">
+                    <label htmlFor="apply-name" className="block text-sm font-bold text-gray-550 uppercase tracking-wider mb-2">
                       {t.fullName}
                     </label>
                     <input
                       type="text"
                       required
+                      id="apply-name"
                       value={applicantName}
                       onChange={(e) => setApplicantName(e.target.value)}
                       placeholder={t.namePlaceholder}
@@ -411,12 +435,13 @@ export default function CareersPage() {
 
                   {/* Email field */}
                   <div>
-                    <label className="block text-sm font-bold text-gray-555 uppercase tracking-wider mb-2">
+                    <label htmlFor="apply-email" className="block text-sm font-bold text-gray-555 uppercase tracking-wider mb-2">
                       {t.email}
                     </label>
                     <input
                       type="email"
                       required
+                      id="apply-email"
                       value={applicantEmail}
                       onChange={(e) => setApplicantEmail(e.target.value)}
                       placeholder={t.emailPlaceholder}
@@ -428,37 +453,39 @@ export default function CareersPage() {
 
                   {/* Editable Email Subject preview */}
                   <div>
-                    <label className="block text-sm font-bold text-gray-555 uppercase tracking-wider mb-2">
+                    <label htmlFor="apply-subject" className="block text-sm font-bold text-gray-555 uppercase tracking-wider mb-2">
                       {t.emailSubject}
                     </label>
                     <input
                       type="text"
                       required
+                      id="apply-subject"
                       value={emailSubject}
                       onChange={(e) => setEmailSubject(e.target.value)}
-                      className="w-full bg-gray-55 border border-gray-200 rounded-xl px-4 py-3 text-base text-brand-navy focus:outline-none focus:border-teal-500 transition-colors font-mono text-sm"
+                      className="w-full bg-gray-55 border border-gray-200 rounded-xl px-4 py-3 text-base text-brand-navy focus:outline-none focus:border-teal-500 transition-colors"
                     />
                   </div>
 
                   {/* Editable Email Body preview */}
                   <div>
-                    <label className="block text-sm font-bold text-gray-555 uppercase tracking-wider mb-2">
+                    <label htmlFor="apply-body" className="block text-sm font-bold text-gray-555 uppercase tracking-wider mb-2">
                       {t.emailBody}
                     </label>
                     {locale !== "en" && <p className="text-xs text-gray-500 -mt-1 mb-2">{t.emailNote}</p>}
                     <textarea
                       required
                       rows={5}
+                      id="apply-body"
                       value={emailBody}
                       onChange={(e) => setEmailBody(e.target.value)}
-                      className="w-full bg-gray-55 border border-gray-200 rounded-xl p-4 text-base md:text-sm text-brand-navy focus:outline-none focus:border-teal-500 transition-colors font-mono"
+                      className="w-full bg-gray-55 border border-gray-200 rounded-xl p-4 text-base md:text-sm leading-relaxed text-brand-navy focus:outline-none focus:border-teal-500 transition-colors"
                     />
                   </div>
 
                   <div className="pt-2">
                     <button
                       type="submit"
-                      className="w-full py-3.5 rounded-full bg-brand-orange-aa hover:bg-brand-orange-aa-hover text-white font-bold text-base shadow transition-all duration-300 cursor-pointer text-center"
+                      className="w-full py-3.5 rounded-full bg-brand-orange-aa hover:bg-brand-orange-aa-hover text-white font-bold text-base shadow-sm transition-colors duration-300 cursor-pointer text-center"
                     >
                       {t.draft}
                     </button>
@@ -476,7 +503,7 @@ export default function CareersPage() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4"
+              className="fixed inset-0 z-[70] flex items-center justify-center bg-black/60 p-4"
             >
               <motion.div
                 initial={{ scale: 0.95, y: 20 }}
