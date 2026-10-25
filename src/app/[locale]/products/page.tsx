@@ -224,6 +224,8 @@ export default function ProductsPage() {
               </div>
             </div>
 
+            {/* For screen readers: the product cards (h3) sit under this heading */}
+            <h2 className="sr-only">{t.listHeading}</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
               {filteredProducts.map((product) => {
                 const isExpanded = expandedId === product.id;
@@ -426,7 +428,17 @@ export default function ProductsPage() {
 
               {filteredProducts.length === 0 && (
                 <div className="text-center py-16 bg-slate-50 border border-dashed border-slate-200 rounded-2xl col-span-full">
-                  <p className="text-slate-500 text-sm">{t.noResults}</p>
+                  <p className="text-slate-600 text-sm">{t.noResults}</p>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSearchQuery("");
+                      setSelectedCategory("All");
+                    }}
+                    className="mt-4 inline-flex items-center min-h-11 px-6 rounded-full border-2 border-brand-navy/20 hover:border-brand-navy text-brand-navy text-sm font-semibold transition-colors cursor-pointer"
+                  >
+                    {t.clearSearch}
+                  </button>
                 </div>
               )}
             </div>

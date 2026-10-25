@@ -105,7 +105,7 @@ function parseInline(str: string): React.ReactNode[] {
     } else if (part.startsWith("*") && part.endsWith("*") && part.length > 2 && !part.startsWith("**")) {
       parts.push(<em key={i} className="italic text-slate-600">{part.slice(1, -1)}</em>);
     } else if (part.startsWith("`") && part.endsWith("`") && part.length > 2) {
-      parts.push(<code key={i} className="px-1.5 py-0.5 bg-slate-100 text-slate-700 rounded text-[11px] font-mono border border-slate-200">{part.slice(1, -1)}</code>);
+      parts.push(<code key={i} className="px-1.5 py-0.5 bg-slate-100 text-slate-700 rounded text-xs font-mono border border-slate-200">{part.slice(1, -1)}</code>);
     } else if (part.startsWith("[") && part.includes("](")) {
       const labelEnd = part.indexOf("](");
       const label = part.slice(1, labelEnd);
@@ -157,14 +157,14 @@ function parseMarkdownToJSX(text: string): React.ReactNode[] {
       elements.push(<h2 key={`h2-${index}`} className="text-[14px] font-bold text-slate-800 mt-3 mb-2">{parseInline(trimmed.slice(3))}</h2>);
     } else if (trimmed.startsWith("> ")) {
       flushList(`ul-${index}`);
-      elements.push(<blockquote key={`bq-${index}`} className="border-l-2 border-slate-300 pl-3 my-2 text-[12px] text-slate-aa italic">{parseInline(trimmed.slice(2))}</blockquote>);
+      elements.push(<blockquote key={`bq-${index}`} className="border-l-2 border-slate-300 pl-3 my-2 text-sm text-slate-aa italic">{parseInline(trimmed.slice(2))}</blockquote>);
     } else if (trimmed.startsWith("- ") || trimmed.startsWith("\u2022 ")) {
       if (!inList || listType !== "ul") { flushList(`ul-${index}`); inList = true; listType = "ul"; listItems = []; }
-      listItems.push(<li key={`li-${index}`} className="text-[13px] text-slate-700 leading-relaxed">{parseInline(trimmed.slice(2))}</li>);
+      listItems.push(<li key={`li-${index}`} className="text-sm text-slate-700 leading-relaxed">{parseInline(trimmed.slice(2))}</li>);
     } else if (/^\d+\.\s/.test(trimmed)) {
       if (!inList || listType !== "ol") { flushList(`ul-${index}`); inList = true; listType = "ol"; listItems = []; }
       const dotIndex = trimmed.indexOf(". ");
-      listItems.push(<li key={`li-${index}`} className="text-[13px] text-slate-700 leading-relaxed">{parseInline(trimmed.slice(dotIndex + 2))}</li>);
+      listItems.push(<li key={`li-${index}`} className="text-sm text-slate-700 leading-relaxed">{parseInline(trimmed.slice(dotIndex + 2))}</li>);
     } else if (trimmed === "---" || trimmed === "***") {
       flushList(`ul-${index}`);
       elements.push(<hr key={`hr-${index}`} className="my-3 border-slate-200" />);
@@ -172,7 +172,7 @@ function parseMarkdownToJSX(text: string): React.ReactNode[] {
       flushList(`ul-${index}`);
     } else {
       flushList(`ul-${index}`);
-      elements.push(<p key={`p-${index}`} className="mb-2.5 text-[13px] leading-relaxed text-slate-700">{parseInline(line)}</p>);
+      elements.push(<p key={`p-${index}`} className="mb-2.5 text-sm leading-relaxed text-slate-700">{parseInline(line)}</p>);
     }
   });
 
@@ -220,13 +220,13 @@ function BotBubble({
       <div className="w-8 h-8 rounded-full border border-slate-200 overflow-hidden flex-shrink-0 flex items-center justify-center bg-white shadow-xs">
         <img src={image} alt={name} className="w-full h-full object-contain" />
       </div>
-      <div className="max-w-[85%] min-w-0">
+      <div className="max-w-[85%] lg:max-w-[42rem] min-w-0">
         <div className={`rounded-2xl rounded-tl-none px-4 py-3 border shadow-xs ${
           isError ? "bg-red-50 border-red-200" : `${accentBgLight} ${accentBorder}`
         }`}>
           {isError ? (
             <>
-              <p role="alert" className="text-[13px] text-red-700 leading-relaxed [&_a]:text-red-800">⚠️ {parseInline(content)}</p>
+              <p role="alert" className="text-sm text-red-700 leading-relaxed [&_a]:text-red-800">⚠️ {parseInline(content)}</p>
               {onRetry && (
                 <button
                   type="button"
@@ -245,14 +245,14 @@ function BotBubble({
           <div className="mt-2 flex flex-wrap gap-1.5">
             {sources.filter(s => !s.url.startsWith("/products")).map((s, i) => (
               <a key={i} href={s.url} target={s.url.startsWith("http") ? "_blank" : undefined} rel={s.url.startsWith("http") ? "noopener noreferrer" : undefined}
-                className="inline-flex items-center gap-1 text-[11px] bg-white border border-slate-200 hover:border-slate-300 text-slate-600 hover:text-slate-900 rounded-lg px-2.5 py-1 transition-all font-medium">
+                className="inline-flex items-center gap-1 text-xs bg-white border border-slate-200 hover:border-slate-300 text-slate-600 hover:text-slate-900 rounded-lg px-2.5 py-1 transition-all font-medium">
                 <span className="opacity-60">📄</span> {s.title}
               </a>
             ))}
           </div>
         )}
         {!isError && !isGreeting && (!sources || sources.length === 0) && (
-          <div className="mt-2 flex flex-wrap items-center gap-1.5 text-[11px] text-slate-aa font-medium px-1">
+          <div className="mt-2 flex flex-wrap items-center gap-1.5 text-xs text-slate-aa font-medium px-1">
             <span>Explore:</span>
             <Link href="/research" className="text-brand-orange-aa hover:text-brand-orange-aa-hover underline underline-offset-2 font-semibold">Research Hub</Link>
             <span>•</span>
@@ -443,22 +443,22 @@ function ChatSessionContent() {
               </div>
               <div className="min-w-0">
                 <div className="flex items-center gap-2">
-                  <span className="font-heading font-bold text-slate-800 text-[15px] whitespace-nowrap">{meta.name}</span>
+                  <h1 className="font-heading font-bold text-slate-800 text-base whitespace-nowrap">{meta.name}</h1>
                   <span className={`w-2 h-2 rounded-full flex-shrink-0 ${offline ? "bg-slate-300" : "bg-emerald-500"}`} />
-                  <span className={`text-[10px] font-semibold uppercase tracking-wider hidden sm:block ${offline ? "text-slate-aa" : "text-emerald-aa"}`}>
+                  <span className={`text-xs font-semibold uppercase tracking-wider hidden sm:block ${offline ? "text-slate-aa" : "text-emerald-aa"}`}>
                     {offline ? "Offline" : "Live"}
                   </span>
                 </div>
-                <p className="text-[11px] text-slate-aa font-medium truncate">{meta.specialty}</p>
+                <p className="text-xs text-slate-aa font-medium truncate">{meta.specialty}</p>
               </div>
             </div>
             <div className="flex items-center gap-2 flex-shrink-0">
               {/* Hidden on the narrowest phones (under 360px), where it would squeeze out the bot's name. */}
-              <Link href="/chat" className="hidden min-[360px]:inline tap-target text-[11px] font-semibold text-slate-aa hover:text-brand-navy bg-white px-3 py-1.5 rounded-lg border border-slate-200 hover:border-slate-300 transition-all whitespace-nowrap">
+              <Link href="/chat" className="hidden min-[360px]:inline tap-target text-xs font-semibold text-slate-aa hover:text-brand-navy bg-white px-3 py-1.5 rounded-lg border border-slate-200 hover:border-slate-300 transition-all whitespace-nowrap">
                 ← Agents
               </Link>
               {/* Phones show just "Switch", leaving room for the bot's name. */}
-              <Link href={`/chat/${otherBot}`} aria-label={`Switch to ${BOT_META[otherBot].name}`} className={`tap-target text-[11px] font-semibold text-white px-3 py-1.5 rounded-lg transition-all whitespace-nowrap ${meta.accentBg} hover:opacity-90`}>
+              <Link href={`/chat/${otherBot}`} aria-label={`Switch to ${BOT_META[otherBot].name}`} className={`tap-target text-xs font-semibold text-white px-3 py-1.5 rounded-lg transition-all whitespace-nowrap ${meta.accentBg} hover:opacity-90`}>
                 <span className="sm:hidden">Switch</span>
                 <span className="hidden sm:inline">Switch to {BOT_META[otherBot].name}</span>
               </Link>
@@ -529,11 +529,11 @@ function ChatSessionContent() {
           {/* Suggested questions */}
           <div className="bg-white border border-slate-200/80 rounded-2xl shadow-sm overflow-hidden">
             <div className={`px-4 py-3 border-b border-slate-100 ${meta.accentBgLight} flex items-center justify-between`}>
-              <h3 className="text-[11px] font-bold text-slate-700 uppercase tracking-wider">Suggested</h3>
+              <h2 className="text-xs font-bold text-slate-700 uppercase tracking-wider">Suggested</h2>
               <button
                 onClick={handleRefreshFaqs}
                 disabled={faqsLoading}
-                className="tap-target text-[10px] text-slate-aa hover:text-slate-600 transition-colors font-semibold tabular-nums flex items-center gap-1 cursor-pointer disabled:opacity-50"
+                className="tap-target text-xs text-slate-aa hover:text-slate-600 transition-colors font-semibold tabular-nums flex items-center gap-1 cursor-pointer disabled:opacity-50"
                 title="Click to refresh questions"
               >
                 ↻ {countdown}s
@@ -549,7 +549,7 @@ function ChatSessionContent() {
               ) : (
                 faqs.map((faq, i) => (
                   <button key={i} onClick={() => handleSelectFaq(faq)} disabled={loading || offline}
-                    className={`w-full min-h-11 text-left text-[12px] px-3 py-2.5 rounded-xl border border-slate-100 hover:border-slate-200 hover:bg-slate-50/80 transition-all text-slate-700 leading-relaxed cursor-pointer disabled:cursor-not-allowed disabled:opacity-60`}>
+                    className={`w-full min-h-11 text-left text-[13px] px-3 py-2.5 rounded-xl border border-slate-100 hover:border-slate-200 hover:bg-slate-50/80 transition-all text-slate-700 leading-relaxed cursor-pointer disabled:cursor-not-allowed disabled:opacity-60`}>
                     {faq}
                   </button>
                 ))
@@ -559,7 +559,7 @@ function ChatSessionContent() {
 
           {/* Switch bot card */}
           <div className="bg-white border border-slate-200/80 rounded-2xl shadow-sm p-4">
-            <p className="text-[11px] text-slate-aa font-medium mb-2.5">Wrong specialist?</p>
+            <p className="text-xs text-slate-aa font-medium mb-2.5">Wrong specialist?</p>
             <Link href={`/chat/${otherBot}`}
               className={`flex items-center gap-3 p-2.5 rounded-xl border ${meta.accentBorder} ${meta.accentBgLight} hover:opacity-80 transition-all`}>
               <div className="w-9 h-9 rounded-full bg-white border border-slate-200 flex items-center justify-center overflow-hidden shadow-xs flex-shrink-0">
@@ -567,14 +567,14 @@ function ChatSessionContent() {
               </div>
               <div className="min-w-0">
                 <p className="text-[12px] font-bold text-slate-800">{BOT_META[otherBot].name}</p>
-                <p className="text-[10px] text-slate-aa truncate">{BOT_META[otherBot].specialty}</p>
+                <p className="text-xs text-slate-aa truncate">{BOT_META[otherBot].specialty}</p>
               </div>
-              <span className={`ml-auto text-[11px] font-semibold flex-shrink-0 ${meta.accentText}`}>Switch</span>
+              <span className={`ml-auto text-xs font-semibold flex-shrink-0 ${meta.accentText}`}>Switch</span>
             </Link>
           </div>
 
           {/* Disclaimer */}
-          <p className="text-[10px] text-slate-aa text-center px-2 leading-relaxed">
+          <p className="text-xs text-slate-aa text-center px-2 leading-relaxed">
             AI responses are for general guidance only. For specific advice,{" "}
             <a href="mailto:chemlifeinnovations@gmail.com" className="tap-target underline hover:text-slate-600 transition-colors">contact the Chemlife team</a>.
           </p>
@@ -591,7 +591,7 @@ export default function ChatSessionPage() {
       <Suspense fallback={<ChatLoadingState />}>
         <ChatSessionContent />
       </Suspense>
-      <SiteSearch />
+      <SiteSearch hideButtonOnPhones />
     </VariantProvider>
   );
 }

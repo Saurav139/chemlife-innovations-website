@@ -45,6 +45,9 @@ const BADGE: Record<Category, string> = {
   Podcast: "bg-orange-50/50 text-brand-orange-aa border border-orange-100",
 };
 
+// British and American spellings both match ("mould" finds "mold" and the other way round).
+const spellings = (word: string) => [word, word.replace(/mould/g, "mold"), word.replace(/mold/g, "mould")];
+
 /** Results that contain every word typed, best first: title matches, then the rest in index order. */
 function search(items: SearchItem[], query: string): SearchItem[] {
   const words = query.toLowerCase().split(/\s+/).filter(Boolean);
@@ -54,8 +57,9 @@ function search(items: SearchItem[], query: string): SearchItem[] {
     .map((item, order) => {
       const title = item.title.toLowerCase();
       const text = `${title} ${item.description.toLowerCase()} ${item.keywords.toLowerCase()}`;
-      if (!words.every((word) => text.includes(word))) return null;
-      const score = title.startsWith(phrase) ? 3 : title.includes(phrase) ? 2 : words.every((word) => title.includes(word)) ? 1 : 0;
+      const has = (haystack: string, word: string) => spellings(word).some((form) => haystack.includes(form));
+      if (!words.every((word) => text.includes(word) || has(text, word))) return null;
+      const score = title.startsWith(phrase) ? 3 : title.includes(phrase) ? 2 : words.every((word) => has(title, word)) ? 1 : 0;
       return { item, score, order };
     })
     .filter((result): result is { item: SearchItem; score: number; order: number } => result !== null)
@@ -64,7 +68,9 @@ function search(items: SearchItem[], query: string): SearchItem[] {
     .map((result) => result.item);
 }
 
-export default function SiteSearch() {
+/** `hideButtonOnPhones`: leave out the floating button on phones (the chat page, where it would cover the message
+ *  box). Ctrl/Cmd + K still opens the search. */
+export default function SiteSearch({ hideButtonOnPhones = false }: { hideButtonOnPhones?: boolean }) {
   const router = useRouter();
   const t = useT();
   const href = useHref();
@@ -157,6 +163,13 @@ export default function SiteSearch() {
   }, [t, href, insights]);
 
   const filteredResults = useMemo(() => search(index, query), [index, query]);
+  // The result picked with the arrow keys (Enter opens it); back to the top one as the query changes.
+  const [active, setActive] = useState(0);
+  useEffect(() => setActive(0), [query]);
+  const listRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    listRef.current?.querySelector(`[data-index="${active}"]`)?.scrollIntoView({ block: "nearest" });
+  }, [active]);
 
   const handleResultClick = (link: string) => {
     setIsOpen(false);
@@ -166,7 +179,7 @@ export default function SiteSearch() {
   return (
     <>
       {/* Floating Search Button on Bottom-Left */}
-      <div className="fixed bottom-[max(1rem,env(safe-area-inset-bottom))] left-[max(1rem,env(safe-area-inset-left))] md:bottom-6 md:left-6 z-50">
+      <div className={`fixed bottom-[max(1rem,env(safe-area-inset-bottom))] left-[max(1rem,env(safe-area-inset-left))] md:bottom-6 md:left-6 z-50 ${hideButtonOnPhones ? "max-md:hidden" : ""}`}>
         <motion.button
           onClick={() => setIsOpen(true)}
           whileHover={{ scale: 1.08 }}
@@ -184,7 +197,7 @@ export default function SiteSearch() {
       {/* Search Modal Overlay */}
       <AnimatePresence>
         {isOpen && (
-          <div className="fixed inset-0 z-50 flex items-start justify-center pt-20 px-4">
+          <div className="fixed inset-0 z-[70] flex items-start justify-center pt-20 px-4">
             {/* Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
@@ -215,27 +228,41 @@ export default function SiteSearch() {
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   onKeyDown={(e) => {
-                    // Enter goes to the top result.
-                    if (e.key === "Enter" && filteredResults[0]) handleResultClick(filteredResults[0].link);
+                    // Up and down move through the results; Enter opens the highlighted one.
+                    if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+                      e.preventDefault();
+                      const last = filteredResults.length - 1;
+                      setActive((i) => (e.key === "ArrowDown" ? (i >= last ? 0 : i + 1) : i <= 0 ? last : i - 1));
+                    } else if (e.key === "Enter" && filteredResults[active]) {
+                      handleResultClick(filteredResults[active].link);
+                    }
                   }}
-                  placeholder="Search ChemLife website (e.g., ANBioT, poultry, careers...)"
-                  className="w-full text-base md:text-sm pl-11 pr-12 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-hidden focus:border-brand-navy focus:ring-1 focus:ring-brand-navy text-slate-800 placeholder-slate-aa focus:bg-white transition-all font-medium"
+                  role="combobox"
+                  aria-expanded={filteredResults.length > 0}
+                  aria-controls="search-results"
+                  aria-activedescendant={filteredResults[active] ? `search-result-${active}` : undefined}
+                  aria-label="Search the ChemLife website"
+                  placeholder="Search products, research, articles…"
+                  className="w-full text-base md:text-sm pl-11 pr-14 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-hidden focus:border-brand-navy focus:ring-1 focus:ring-brand-navy text-slate-800 placeholder-slate-aa focus:bg-white transition-all font-medium"
                 />
                 <button
+                  type="button"
                   onClick={() => setIsOpen(false)}
-                  className="absolute right-7 top-7 w-6 h-6 rounded-md hover:bg-slate-100 flex items-center justify-center text-slate-aa hover:text-slate-600 transition-colors text-sm cursor-pointer"
-                  title="Close search"
+                  aria-label="Close search"
+                  className="absolute right-5 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full hover:bg-slate-100 flex items-center justify-center text-slate-aa hover:text-slate-700 transition-colors cursor-pointer"
                 >
-                  ESC
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
                 </button>
               </div>
 
               {/* Results Area */}
-              <div className="max-h-[350px] overflow-y-auto p-4 flex flex-col gap-2">
+              <div ref={listRef} id="search-results" role="listbox" className="max-h-[min(420px,60dvh)] overflow-y-auto p-3 flex flex-col gap-1">
                 {query.trim() === "" ? (
                   // Suggested Searches
                   <div className="py-2">
-                    <p className="text-[10px] font-bold text-slate-aa uppercase tracking-wider mb-3 px-2">
+                    <p className="text-xs font-bold text-slate-aa uppercase tracking-wider mb-3 px-2">
                       Suggested Topics
                     </p>
                     <div className="flex flex-wrap gap-2 px-2">
@@ -243,7 +270,7 @@ export default function SiteSearch() {
                         <button
                           key={term}
                           onClick={() => setQuery(term)}
-                          className="px-3 py-1.5 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-150 text-xs font-semibold text-slate-600 cursor-pointer transition-colors"
+                          className="inline-flex items-center min-h-9 px-3.5 rounded-full bg-slate-50 hover:bg-slate-100 border border-slate-200 text-sm font-semibold text-slate-600 cursor-pointer transition-colors"
                         >
                           {term}
                         </button>
@@ -252,22 +279,28 @@ export default function SiteSearch() {
                   </div>
                 ) : filteredResults.length > 0 ? (
                   // Search Results
-                  filteredResults.map((item) => (
+                  filteredResults.map((item, i) => (
                     <button
                       key={item.link}
+                      id={`search-result-${i}`}
+                      data-index={i}
+                      role="option"
+                      aria-selected={i === active}
+                      tabIndex={-1}
                       onClick={() => handleResultClick(item.link)}
-                      className="w-full text-left p-3 hover:bg-slate-50 border border-transparent hover:border-slate-100 rounded-xl transition-all flex items-start gap-4 group cursor-pointer"
+                      onMouseMove={() => setActive(i)}
+                      className={`w-full text-left p-3 border rounded-xl transition-colors flex items-start gap-4 group cursor-pointer ${i === active ? "bg-slate-50 border-slate-200" : "border-transparent"}`}
                     >
                       {/* Badge indicator */}
                       <span
-                        className={`text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded shrink-0 ${BADGE[item.category]}`}
+                        className={`w-[4.75rem] text-center text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 mt-0.5 rounded-md shrink-0 ${BADGE[item.category]}`}
                       >
                         {item.category}
                       </span>
-                      <div className="flex-1">
-                        <h4 className="font-heading text-sm font-bold text-slate-800 group-hover:text-brand-orange-aa transition-colors">
+                      <div className="flex-1 min-w-0">
+                        <p className={`font-heading text-sm font-bold transition-colors ${i === active ? "text-brand-orange-aa" : "text-slate-800"}`}>
                           {item.title}
-                        </h4>
+                        </p>
                         <p className="text-xs text-slate-500 leading-normal line-clamp-1 mt-0.5 font-normal">
                           {item.description}
                         </p>
@@ -284,10 +317,11 @@ export default function SiteSearch() {
                 )}
               </div>
 
-              {/* Modal Footer */}
-              <div className="px-6 py-3 bg-slate-50 border-t border-slate-100 flex justify-between items-center text-[9px] text-slate-aa font-semibold tracking-wider uppercase">
-                <span>Navigate directly by clicking results</span>
-                <span>ChemLife Search</span>
+              {/* Keyboard hints (desktop only: there's no keyboard to hint at on a phone) */}
+              <div className="hidden md:flex px-5 py-2.5 bg-slate-50 border-t border-slate-100 items-center gap-4 text-xs text-slate-aa">
+                <span><kbd className="font-sans font-semibold text-slate-600">↑ ↓</kbd> to move</span>
+                <span><kbd className="font-sans font-semibold text-slate-600">Enter</kbd> to open</span>
+                <span><kbd className="font-sans font-semibold text-slate-600">Esc</kbd> to close</span>
               </div>
             </motion.div>
           </div>

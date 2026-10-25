@@ -83,6 +83,7 @@ const en = {
     title: "Page not found",
     text: "The page you're looking for doesn't exist or has moved.",
     home: "Go to the homepage",
+    popular: "Or try one of these",
   },
 
   home: {
@@ -252,6 +253,7 @@ const en = {
   },
 
   products: {
+    listHeading: "All products",
     heroAlt: "Rows of bioreactors in a biotechnology production lab",
     kicker: "Our Offerings",
     titleStart: "Feed",
@@ -506,6 +508,7 @@ const en = {
   },
 
   research: {
+    listHeading: "Research topics",
     // Closing panel under the topics
     ctaTitle: "Working on something similar?",
     ctaText: "We partner with feed companies, research institutes and universities on bioactives, chelation and delivery technologies. Tell us what you're working on.",
@@ -517,6 +520,7 @@ const en = {
     intro: "Science-backed studies and platforms formulated for superior bioavailability, green chelation, and stable animal nutrition.",
     search: "Search research pipeline...",
     clearSearch: "Clear search",
+    noResults: "No research topics match your search.",
     overview: "Executive Summary",
     challenge: "Core Challenge",
     advantage: "Mechanism & Advantage",
@@ -722,6 +726,7 @@ const en = {
     plantText:
       "Our state-of-the-art facility integrates biological research labs and automated manufacturing systems to safely develop and formulate premium nature-driven feed ingredients.",
     mapTitle: "ChemLife Corporate Office Location Map",
+    openInMaps: "Open in Google Maps",
   },
 };
 

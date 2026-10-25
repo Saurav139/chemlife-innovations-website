@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Header from "@/components/Header";
@@ -57,6 +57,24 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
   const [activeVideoId, setActiveVideoId] = useState<string | null>(null);
   const [activeArticle, setActiveArticle] = useState<InsightItem | null>(null);
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+
+  // Escape closes the video player or the article reader, and the page behind them doesn't scroll while one is open.
+  const overlayOpen = !!activeVideoId || !!activeArticle;
+  useEffect(() => {
+    if (!overlayOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") return;
+      setActiveVideoId(null);
+      setActiveArticle(null);
+    };
+    const root = document.documentElement;
+    root.style.overflow = "hidden";
+    window.addEventListener("keydown", onKey);
+    return () => {
+      root.style.overflow = "";
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [overlayOpen]);
 
   const filters = ["All", "Blogs", "Podcasts", "Videos"];
 
@@ -205,10 +223,10 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                 >
                   <div className="lg:contents">
                     <div className="flex items-center gap-2 mb-3">
-                      <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-teal-50 text-teal-700">
+                      <span className="text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-teal-50 text-teal-700">
                         Blog
                       </span>
-                      <span className="text-[11px] text-gray-aa font-medium">Featured • {featuredBlog.date} • {featuredBlog.meta}</span>
+                      <span className="text-xs text-gray-aa font-medium">Featured • {featuredBlog.date} • {featuredBlog.meta}</span>
                     </div>
                     <h3 className="font-heading text-lg md:text-xl lg:text-2xl font-bold text-brand-navy mb-4 md:mb-6 group-hover:text-teal-aa transition-colors duration-300 line-clamp-3">
                       {featuredBlog.title}
@@ -263,10 +281,10 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                 >
                   <div className="lg:contents">
                     <div className="flex items-center gap-2 mb-3">
-                      <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-blue-50 text-blue-700">
+                      <span className="text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-blue-50 text-blue-700">
                         Video
                       </span>
-                      <span className="text-[11px] text-gray-aa font-medium">Featured • {featuredVideo.date} • {featuredVideo.meta}</span>
+                      <span className="text-xs text-gray-aa font-medium">Featured • {featuredVideo.date} • {featuredVideo.meta}</span>
                     </div>
                     <h3 className="font-heading text-lg md:text-xl lg:text-2xl font-bold text-brand-navy mb-4 md:mb-6 group-hover:text-teal-aa transition-colors duration-300 line-clamp-3">
                       {featuredVideo.title}
@@ -333,10 +351,10 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                 >
                   <div className="lg:contents">
                     <div className="flex items-center gap-2 mb-3">
-                      <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-red-50 text-red-700">
+                      <span className="text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-red-50 text-red-700">
                         Podcast
                       </span>
-                      <span className="text-[11px] text-gray-aa font-medium">Featured • {featuredPodcast.date} • {featuredPodcast.meta}</span>
+                      <span className="text-xs text-gray-aa font-medium">Featured • {featuredPodcast.date} • {featuredPodcast.meta}</span>
                     </div>
                     <h3 className="font-heading text-lg md:text-xl lg:text-2xl font-bold text-brand-navy mb-4 md:mb-6 group-hover:text-teal-aa transition-colors duration-300 line-clamp-3">
                       {featuredPodcast.title}
@@ -535,7 +553,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                       >
                         {/* Meta Category & Date Info */}
                         <div className="flex items-center gap-2 mb-3">
-                          <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded ${
+                          <span className={`text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md ${
                             item.type === "Blog"
                               ? "bg-teal-50 text-teal-700"
                               : item.type === "Podcast"
@@ -544,7 +562,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                           }`}>
                             {item.type}
                           </span>
-                          <span className="text-[11px] text-gray-aa font-medium">
+                          <span className="text-xs text-gray-aa font-medium">
                             {item.date} • {item.meta}
                           </span>
                         </div>
@@ -575,7 +593,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                             className="block relative w-full aspect-video rounded-xl overflow-hidden mb-4 bg-slate-900 border border-slate-200/80 cursor-pointer shadow-sm group/video select-none"
                           >
                             <Image
-                              src={`https://img.youtube.com/vi/${item.youtubeId}/mqdefault.jpg`}
+                              src={`https://img.youtube.com/vi/${item.youtubeId}/hqdefault.jpg`}
                               alt={item.title}
                               fill
                               sizes={CARD_IMAGE_SIZES}
@@ -675,7 +693,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 p-4"
+            className="fixed inset-0 z-[70] flex items-center justify-center bg-black/95 p-4"
             onClick={() => setActiveVideoId(null)}
           >
             <motion.div
@@ -683,20 +701,22 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.95, y: 20 }}
               transition={{ duration: 0.3 }}
-              className="relative w-full max-w-4xl aspect-video bg-black rounded-3xl overflow-hidden shadow-2xl border border-white/10"
+              className="relative w-full max-w-4xl"
               onClick={(e) => e.stopPropagation()}
             >
-              {/* Close Button */}
-              <button
-                onClick={() => setActiveVideoId(null)}
-                className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-black/60 hover:bg-black/80 text-white flex items-center justify-center transition-all cursor-pointer border border-white/10"
-                aria-label="Close video player"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-              
+              {/* Close button above the player, so it doesn't cover YouTube's own controls */}
+              <div className="flex justify-end mb-3">
+                <button
+                  onClick={() => setActiveVideoId(null)}
+                  className="w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors cursor-pointer border border-white/15"
+                  aria-label="Close video player"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+              <div className="aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl border border-white/10">
               {/* YouTube Iframe Embed */}
               <iframe
                 src={`https://www.youtube-nocookie.com/embed/${activeVideoId}?autoplay=1&rel=0`}
@@ -706,6 +726,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                 allowFullScreen
                 className="w-full h-full"
               />
+              </div>
             </motion.div>
           </motion.div>
         )}
@@ -718,7 +739,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 overflow-y-auto"
+            className="fixed inset-0 z-[70] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 overflow-y-auto"
             onClick={() => setActiveArticle(null)}
           >
             <motion.div
@@ -732,7 +753,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
               {/* Top Sticky Header */}
               <div className="sticky top-0 bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between z-10">
                 <div className="flex items-center gap-2">
-                  <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-teal-50 text-teal-700">
+                  <span className="text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-teal-50 text-teal-700">
                     {activeArticle.type}
                   </span>
                   <span className="text-xs text-gray-aa font-medium">

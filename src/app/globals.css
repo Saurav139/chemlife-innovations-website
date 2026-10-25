@@ -31,6 +31,10 @@
   --color-process-bg: #305280;
 
   /* Maven Pro first; the Noto fonts supply the Kannada and Hindi letters it doesn't have. */
+  /* `font-sans` (used by the chat pages and pop-up) is the site font too, not the browser's default. */
+  --font-sans:
+    var(--font-maven-pro), var(--font-noto-kannada),
+    var(--font-noto-devanagari), Calibri, system-ui, sans-serif;
   --font-family-heading:
     var(--font-maven-pro), var(--font-noto-kannada),
     var(--font-noto-devanagari), Calibri, system-ui, sans-serif;
@@ -84,6 +88,32 @@
   ::placeholder {
     color: var(--color-slate-aa);
     opacity: 1;
+  }
+
+  /* Headings break into even lines (no single word left on the last line); paragraphs avoid a lone last word. */
+  h1,
+  h2,
+  h3,
+  h4 {
+    text-wrap: balance;
+  }
+
+  p,
+  li,
+  blockquote {
+    text-wrap: pretty;
+  }
+
+  /* A clear outline for keyboard users only (mouse and touch clicks don't show it). Fields that style their own
+     focus keep theirs. */
+  :focus-visible {
+    outline: 2px solid var(--color-teal-aa);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background-color: rgb(20 184 166 / 0.2);
+    color: var(--color-brand-navy);
   }
 
   html {

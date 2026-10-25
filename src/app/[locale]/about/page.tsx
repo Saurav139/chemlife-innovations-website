@@ -28,6 +28,7 @@ export default function AboutPage() {
               src={Images.heroes.about}
               alt={t.heroAlt}
               fill
+              sizes="100vw"
               className="object-cover opacity-80"
               priority
             />
@@ -115,10 +116,12 @@ export default function AboutPage() {
             </div>
 
             {/* G.I.F.T. Core Values Diamond Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-y-8 md:gap-y-12 md:gap-x-12 max-w-5xl mx-auto pb-4 md:pb-12 relative mt-8 md:mt-16">
+            {/* Desktop: the four values in a diamond around a dashed ring. Tablets: a 2×2 grid; phones: one column, both in
+                G, I, F, T order so they spell the word. */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-8 md:gap-y-12 md:gap-x-12 max-w-5xl mx-auto pb-4 md:pb-12 relative mt-8 md:mt-16">
 
                {/* Connection Lines for Desktop - Positioned underneath the boxes (z-0) */}
-              <svg className="absolute inset-0 w-full h-full pointer-events-none hidden md:block z-0" viewBox="0 0 100 100" preserveAspectRatio="none">
+              <svg className="absolute inset-0 w-full h-full pointer-events-none hidden lg:block z-0" viewBox="0 0 100 100" preserveAspectRatio="none">
                 <style>{`
                   @keyframes stroke-flow {
                     to {
@@ -172,7 +175,7 @@ export default function AboutPage() {
               </svg>
 
               {/* Card G - Top Center */}
-              <div className="col-start-1 md:col-start-2 md:row-start-1 flex justify-center">
+              <div className="order-1 lg:order-none lg:col-start-2 lg:row-start-1 flex justify-center">
                 <motion.div
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -223,7 +226,7 @@ export default function AboutPage() {
               </div>
 
               {/* Card T - Middle Left */}
-              <div className="col-start-1 md:col-start-1 md:row-start-2 flex justify-center md:-translate-y-4">
+              <div className="order-4 lg:order-none lg:col-start-1 lg:row-start-2 flex justify-center lg:-translate-y-4">
                 <motion.div
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -286,7 +289,7 @@ export default function AboutPage() {
               </div>
 
               {/* Card I - Middle Right */}
-              <div className="col-start-1 md:col-start-3 md:row-start-2 flex justify-center md:-translate-y-4">
+              <div className="order-2 lg:order-none lg:col-start-3 lg:row-start-2 flex justify-center lg:-translate-y-4">
                 <motion.div
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -351,7 +354,7 @@ export default function AboutPage() {
               </div>
 
               {/* Card F - Bottom Center */}
-              <div className="col-start-1 md:col-start-2 md:row-start-3 flex justify-center md:-translate-y-8">
+              <div className="order-3 lg:order-none lg:col-start-2 lg:row-start-3 flex justify-center lg:-translate-y-8">
                 <motion.div
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -423,7 +426,8 @@ export default function AboutPage() {
               </h2>
             </div>
 
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 max-w-[1200px] mx-auto">
+            {/* Two per row on phones too, so the four leaders take half the scrolling */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 lg:gap-8 max-w-[1200px] mx-auto">
               {[
                 {
                   name: "Radhakrishna PM",
@@ -453,15 +457,15 @@ export default function AboutPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: i * 0.15, ease: easeOut }}
-                  className="bg-gray-50/50 rounded-2xl border border-gray-100 p-6 flex flex-col items-center text-center shadow-sm hover:border-brand-orange/30 hover:shadow-md transition-all duration-300 group hover:scale-[1.02]"
+                  className="bg-gray-50/50 rounded-2xl border border-gray-100 p-4 sm:p-6 flex flex-col items-center text-center shadow-sm hover:border-brand-orange/30 hover:shadow-md transition-all duration-300 group hover:scale-[1.02]"
                 >
                   {/* Headshot container */}
-                  <div className="w-28 h-28 md:w-32 md:h-32 rounded-full border-2 border-orange-100 group-hover:border-brand-orange flex items-center justify-center bg-gray-100 mb-6 shadow-sm relative overflow-hidden transition-all duration-300">
+                  <div className="w-20 h-20 sm:w-28 sm:h-28 md:w-32 md:h-32 rounded-full border-2 border-orange-100 group-hover:border-brand-orange flex items-center justify-center bg-gray-100 mb-4 sm:mb-6 shadow-sm relative overflow-hidden transition-all duration-300">
                     <Image
                       src={leader.image}
                       alt={leader.name}
                       fill
-                      sizes="(max-width: 768px) 112px, 128px"
+                      sizes="(max-width: 639px) 80px, (max-width: 768px) 112px, 128px"
                       className="object-cover object-center group-hover:scale-105 transition-transform duration-500"
                     />
                   </div>
@@ -469,7 +473,7 @@ export default function AboutPage() {
                   <h3 className="font-heading text-base md:text-lg font-bold text-brand-orange-aa mb-1">
                     {leader.name}
                   </h3>
-                  <p className="text-brand-navy font-bold text-xs md:text-[11px] uppercase tracking-wider mb-0.5">
+                  <p className="text-brand-navy font-bold text-xs uppercase tracking-wider mb-0.5">
                     {leader.role}
                   </p>
                   <p className="text-brand-navy text-xs font-semibold mb-4">
