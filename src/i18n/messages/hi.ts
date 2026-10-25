@@ -72,6 +72,7 @@ const hi: Messages = {
   common: {
     rateUs: "रेटिंग दें",
     rateUsLabel: "Google पर हमें रेटिंग दें",
+    hideRateUs: "‘रेटिंग दें’ बटन छिपाएँ",
     cookieText: "हम यह समझने के लिए Google Analytics कुकीज़ का उपयोग करना चाहते हैं कि लोग इस साइट का उपयोग कैसे करते हैं, ताकि हम इसे बेहतर बना सकें।",
     cookiePrivacy: "गोपनीयता नीति",
     cookieDecline: "अस्वीकार करें",
