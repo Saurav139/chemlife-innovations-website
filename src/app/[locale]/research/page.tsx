@@ -8,6 +8,8 @@ import Footer from "@/components/Footer";
 import { VariantProvider } from "@/context/VariantContext";
 import SiteSearch from "@/components/SiteSearch";
 import { Images } from "@/lib/assets";
+import { RESEARCH_TOPICS, researchAnchor } from "@/lib/catalog";
+import { revealElement, useHashTarget } from "@/lib/deepLink";
 import { useT } from "@/i18n/LocaleProvider";
 
 const easeOut = [0.25, 0.1, 0, 1] as const;
@@ -29,46 +31,24 @@ interface ResearchTopic {
   banner: string;
 }
 
-// Titles and text are in the language file (research.topics), in this order. The English title names the topic
-// in enquiry emails to our team and in analytics, whatever language the page is in.
-const topicBase: (Pick<ResearchTopic, "id" | "category" | "banner"> & { englishTitle: string })[] = [
-  {
-    id: 1,
-    englishTitle: "Accelerated Natural BioTransformation (ANBioT)",
-    category: "Research",
-    banner: Images.research.anbiot
-  },
-  {
-    id: 2,
-    englishTitle: "Green Chelation for Smarter Bio-Trace Minerals",
-    category: "Research",
-    banner: Images.research.greenTechnology
-  },
-  {
-    id: 3,
-    englishTitle: "Microencapsulation Technologies: Targeting Rumen-Sustained and Bypass Deliveries",
-    category: "Research",
-    banner: Images.research.microencapsulation
-  },
-  {
-    id: 4,
-    englishTitle: "Nano-Activated Functionalized Trace Minerals: The Next Frontier in Bioavailability",
-    category: "Research",
-    banner: Images.research.nanoTraceMineral
-  },
-  {
-    id: 5,
-    englishTitle: "Synthesis of Nature-Identical Bioactive Molecules: Scaling Green Biotechnology",
-    category: "Research",
-    banner: Images.research.natureIdenticalBio
-  }
-];
+// The topics are listed in src/lib/catalog.ts; their titles and text are in the language file (research.topics),
+// in the same order.
 
 export default function ResearchPage() {
   const t = useT().research;
-  const researchTopics = topicBase.map((topic, i) => ({ ...topic, ...t.topics[i] }));
+  const researchTopics = RESEARCH_TOPICS.map((topic, i) => ({ ...topic, ...t.topics[i] }));
   const [expandedId, setExpandedId] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+
+  // Opens at one topic from a link such as /research#research-accelerated-natural-biotransformation-anbiot (the site
+  // search): clears the search box, expands the topic and scrolls to it.
+  useHashTarget((target) => {
+    const topic = researchTopics.find((item) => researchAnchor(item.englishTitle) === target);
+    if (!topic) return;
+    setSearchQuery("");
+    setExpandedId(topic.id);
+    revealElement(target);
+  });
 
   const toggleExpand = (id: number) => {
     setExpandedId((prev) => (prev === id ? null : id));
@@ -171,10 +151,11 @@ export default function ResearchPage() {
                 return (
                   <motion.div
                     key={topic.id}
+                    id={researchAnchor(topic.englishTitle)}
                     data-analytics-item={topic.englishTitle}
                     layout
                     transition={{ duration: 0.4, ease: easeOut }}
-                    className="border-2 border-slate-200 rounded-2xl bg-slate-50/50 hover:bg-slate-50/85 transition-colors duration-300 overflow-hidden shadow-xs hover:border-brand-orange/40 flex flex-col group"
+                    className="scroll-mt-28 border-2 border-slate-200 rounded-2xl bg-slate-50/50 hover:bg-slate-50/85 transition-colors duration-300 overflow-hidden shadow-xs hover:border-brand-orange/40 flex flex-col group"
                   >
                     {/* Card Header (Image/Banner + Title) */}
                     <div
