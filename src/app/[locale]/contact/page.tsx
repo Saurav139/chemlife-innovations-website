@@ -166,6 +166,7 @@ export default function ContactPage() {
               src={Images.heroes.contact}
               alt={t.heroAlt}
               fill
+              sizes="100vw"
               className="object-cover opacity-65"
               priority
             />
@@ -224,12 +225,12 @@ export default function ContactPage() {
                                 autoComplete="name"
                                 value={formData.name}
                                 onChange={handleInputChange}
-                                className={`w-full bg-white border ${errors.name ? "border-red-500" : "border-gray-250"
+                                className={`w-full bg-white border ${errors.name ? "border-red-600" : "border-gray-250"
                                   } rounded-xl px-4 py-3.5 text-base md:text-sm text-brand-navy focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all`}
                                 placeholder={t.namePlaceholder}
                               />
                               {errors.name && (
-                                <p className="text-red-500 text-xs mt-1.5 font-medium">{errors.name}</p>
+                                <p className="text-red-600 text-xs mt-1.5 font-medium">{errors.name}</p>
                               )}
                             </div>
 
@@ -246,12 +247,12 @@ export default function ContactPage() {
                                 autoComplete="email"
                                 value={formData.email}
                                 onChange={handleInputChange}
-                                className={`w-full bg-white border ${errors.email ? "border-red-500" : "border-gray-250"
+                                className={`w-full bg-white border ${errors.email ? "border-red-600" : "border-gray-250"
                                   } rounded-xl px-4 py-3.5 text-base md:text-sm text-brand-navy focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all`}
                                 placeholder={t.emailPlaceholder}
                               />
                               {errors.email && (
-                                <p className="text-red-500 text-xs mt-1.5 font-medium">{errors.email}</p>
+                                <p className="text-red-600 text-xs mt-1.5 font-medium">{errors.email}</p>
                               )}
                             </div>
                           </div>
@@ -315,12 +316,12 @@ export default function ContactPage() {
                               maxLength={CONTACT_LIMITS.subject}
                               value={formData.subject}
                               onChange={handleInputChange}
-                              className={`w-full bg-white border ${errors.subject ? "border-red-500" : "border-gray-250"
+                              className={`w-full bg-white border ${errors.subject ? "border-red-600" : "border-gray-250"
                                 } rounded-xl px-4 py-3.5 text-base md:text-sm text-brand-navy focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all`}
                               placeholder={t.subjectPlaceholder}
                             />
                             {errors.subject && (
-                              <p className="text-red-500 text-xs mt-1.5 font-medium">{errors.subject}</p>
+                              <p className="text-red-600 text-xs mt-1.5 font-medium">{errors.subject}</p>
                             )}
                           </div>
 
@@ -336,12 +337,12 @@ export default function ContactPage() {
                               rows={5}
                               value={formData.message}
                               onChange={handleInputChange}
-                              className={`w-full bg-white border ${errors.message ? "border-red-500" : "border-gray-250"
+                              className={`w-full bg-white border ${errors.message ? "border-red-600" : "border-gray-250"
                                 } rounded-xl px-4 py-3.5 text-base md:text-sm text-brand-navy focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all resize-none`}
                               placeholder={t.messagePlaceholder}
                             />
                             {errors.message && (
-                              <p className="text-red-500 text-xs mt-1.5 font-medium">{errors.message}</p>
+                              <p className="text-red-600 text-xs mt-1.5 font-medium">{errors.message}</p>
                             )}
                           </div>
 
@@ -446,7 +447,7 @@ export default function ContactPage() {
                     <h3 className="font-heading text-xl font-bold text-brand-navy mb-3">
                       {t.officeTitle}
                     </h3>
-                    <p className="text-gray-500 text-sm leading-relaxed mb-4">
+                    <p className="text-gray-500 text-sm leading-relaxed mb-4 max-w-prose">
                       Plot no 18, KIADB Industrial Area, 3rd Phase, Obadenahalli, Doddaballapura, Greater Bengaluru - 561 203, Karnataka, India.
                     </p>
                     <div className="space-y-3 text-sm">
@@ -472,7 +473,7 @@ export default function ContactPage() {
                     <h3 className="font-heading text-lg font-bold text-brand-navy mb-2">
                       {t.plantTitle}
                     </h3>
-                    <p className="text-gray-500 text-sm leading-relaxed">
+                    <p className="text-gray-500 text-sm leading-relaxed max-w-prose">
                       {t.plantText}
                     </p>
                   </div>
