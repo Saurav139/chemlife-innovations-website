@@ -194,12 +194,6 @@ const en = {
         "Sports activities and team-building programs",
       ],
       joinUs: "Join Us",
-      // Photo collage: the whole team, the leadership team, a warehouse visit.
-      photoAlts: [
-        "The ChemLife Innovations team outside our facility",
-        "The ChemLife Innovations leadership team in the garden at our office",
-        "The ChemLife team showing visitors around a feed warehouse",
-      ],
     },
 
     partners: {
@@ -216,6 +210,7 @@ const en = {
     social: {
       kicker: "Our Commitment",
       title: "Social Responsibilities",
+      bgAlt: "ChemLife team members with participants holding certificates at a community programme",
       items: [
         { title: "Empowering Students", desc: "Bicycles donation for empowering students below the poverty line" },
         { title: "Prevention of Sexual Harassment", desc: "Chemlife certified with Prevention of Sexual Harassment at Work place" },
