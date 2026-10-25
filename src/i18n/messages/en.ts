@@ -71,6 +71,7 @@ const en = {
   common: {
     rateUs: "Rate Us",
     rateUsLabel: "Rate us on Google",
+    hideRateUs: "Hide the Rate us button",
     cookieText: "We'd like to use Google Analytics cookies to see how visitors use this site, so we can improve it.",
     cookiePrivacy: "Privacy policy",
     cookieDecline: "Decline",

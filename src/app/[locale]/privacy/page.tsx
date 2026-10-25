@@ -17,7 +17,7 @@ export const metadata: Metadata = pageMetadata({
   path: "/privacy",
 });
 
-const LAST_UPDATED = "22 October 2026";
+const LAST_UPDATED = "25 October 2026";
 const EMAIL = "innovate@chemlifeinnovations.com";
 const PHONE = "+91 95358 62570";
 
@@ -262,8 +262,13 @@ export default async function PrivacyPage({ params }: { params: Promise<{ locale
                     <td className={td}>1 year</td>
                   </tr>
                   <tr>
-                    <td className="p-3 align-top font-mono">chemlife-analytics-consent</td>
-                    <td className="p-3 align-top">Local storage, not a cookie: remembers whether you accepted or declined analytics.</td>
+                    <td className={`${td} font-mono`}>chemlife-analytics-consent</td>
+                    <td className={td}>Local storage, not a cookie: remembers whether you accepted or declined analytics.</td>
+                    <td className={td}>Until you clear your browser data</td>
+                  </tr>
+                  <tr>
+                    <td className="p-3 align-top font-mono">chemlife-rate-us-hidden</td>
+                    <td className="p-3 align-top">Local storage, not a cookie: remembers that you hid the &ldquo;Rate Us&rdquo; button. Only after you hide it.</td>
                     <td className="p-3 align-top">Until you clear your browser data</td>
                   </tr>
                 </tbody>

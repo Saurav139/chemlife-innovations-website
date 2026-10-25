@@ -72,6 +72,7 @@ const kn: Messages = {
   common: {
     rateUs: "ರೇಟ್ ಮಾಡಿ",
     rateUsLabel: "Google ನಲ್ಲಿ ನಮಗೆ ರೇಟ್ ಮಾಡಿ",
+    hideRateUs: "‘ರೇಟ್ ಮಾಡಿ’ ಬಟನ್ ಮರೆಮಾಡಿ",
     cookieText: "ಸಂದರ್ಶಕರು ಈ ಸೈಟ್ ಅನ್ನು ಹೇಗೆ ಬಳಸುತ್ತಾರೆ ಎಂದು ತಿಳಿದು ಅದನ್ನು ಸುಧಾರಿಸಲು ನಾವು Google Analytics ಕುಕೀಗಳನ್ನು ಬಳಸಲು ಬಯಸುತ್ತೇವೆ.",
     cookiePrivacy: "ಗೌಪ್ಯತಾ ನೀತಿ",
     cookieDecline: "ನಿರಾಕರಿಸಿ",

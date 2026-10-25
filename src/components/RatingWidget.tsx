@@ -5,11 +5,30 @@ import { usePathname } from "next/navigation";
 import { useT } from "@/i18n/LocaleProvider";
 import { splitLocale } from "@/i18n/config";
 
+// Set when the visitor hides the tab, so it stays hidden on this device (listed in the privacy policy, section 5).
+const HIDDEN_KEY = "chemlife-rate-us-hidden";
+
 export default function RatingWidget() {
   const pathname = usePathname();
   const t = useT();
   // Slides in once the visitor has scrolled past the top of the page, so it doesn't compete with the hero.
   const [shown, setShown] = useState(false);
+  const [hidden, setHidden] = useState(false);
+  useEffect(() => {
+    try {
+      setHidden(localStorage.getItem(HIDDEN_KEY) === "1");
+    } catch {
+      // Storage blocked (private browsing): the tab just shows as usual.
+    }
+  }, []);
+  const hide = () => {
+    setHidden(true);
+    try {
+      localStorage.setItem(HIDDEN_KEY, "1");
+    } catch {
+      // Hidden for this page view only.
+    }
+  };
   useEffect(() => {
     const update = () => setShown(window.scrollY > window.innerHeight * 0.4);
     update();
@@ -17,8 +36,8 @@ export default function RatingWidget() {
     return () => window.removeEventListener("scroll", update);
   }, [pathname]);
 
-  // Don't render the rating widget on the launch game page itself
-  if (splitLocale(pathname ?? "/").path === "/launch") {
+  // Not shown once the visitor has hidden it, or on the launch game page.
+  if (hidden || splitLocale(pathname ?? "/").path === "/launch") {
     return null;
   }
 
@@ -27,6 +46,20 @@ export default function RatingWidget() {
   return (
     // On every screen size it waits until the visitor scrolls. `invisible` while hidden also takes it out of the tab order.
     <div className={`fixed right-0 top-1/2 -translate-y-1/2 z-50 flex items-start select-none font-sans transition-all duration-300 ${shown ? "opacity-100 translate-x-0 visible" : "opacity-0 translate-x-full invisible"}`}>
+      {/* Hide button: a small × badge on the tab's top-left corner, inside a 44px tap area. */}
+      <button
+        type="button"
+        onClick={hide}
+        aria-label={t.common.hideRateUs}
+        title={t.common.hideRateUs}
+        className="absolute -top-5 -left-5 z-10 w-11 h-11 flex items-center justify-center cursor-pointer group/hide"
+      >
+        <span className="w-6 h-6 rounded-full bg-white text-brand-navy border border-slate-200 shadow-md flex items-center justify-center group-hover/hide:bg-slate-100 transition-colors">
+          <svg className="w-3 h-3" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+            <path d="M3 3l6 6M9 3l-6 6" />
+          </svg>
+        </span>
+      </button>
       {/* Floating Tab Link */}
       <a
         href={googleReviewUrl}
