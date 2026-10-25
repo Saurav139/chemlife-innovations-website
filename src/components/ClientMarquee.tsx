@@ -21,12 +21,13 @@ function FlipCard({ frontLogo, backLogo, index, flipped }: FlipCardProps) {
   // The flip runs row by row, left to right.
   const row = Math.floor(index / 3);
   const col = index % 3;
-  // One card style for every logo, and each logo fitted inside the same box (78% wide, 62% tall), so wide wordmarks
-  // and square badges read at a similar size.
+  // One card style for every logo, and each logo (trimmed of its empty margins) fitted inside the same box, 78% wide
+  // and 58% tall, so wide wordmarks and square badges read at a similar size.
   const face = "absolute inset-0 backface-hidden bg-white border border-slate-200 hover:border-brand-orange/40 rounded-xl sm:rounded-2xl flex items-center justify-center shadow-sm hover:shadow-md transition-all duration-300";
 
   return (
-    <div className="perspective-1000 w-full aspect-[4/3]">
+    // Two across on phones (wide enough to read the logos), three from tablet up.
+    <div className="perspective-1000 w-[calc(50%-0.375rem)] sm:w-[calc((100%-3rem)/3)] md:w-[calc((100%-4rem)/3)] aspect-[3/2]">
       <motion.div
         className="w-full h-full relative transform-style-preserve-3d"
         animate={{ rotateY: flipped ? 180 : 0 }}
@@ -38,26 +39,26 @@ function FlipCard({ frontLogo, backLogo, index, flipped }: FlipCardProps) {
       >
         {/* Front Side */}
         <div className={face}>
-          <div className="relative w-[78%] h-[62%]">
+          <div className="relative w-[78%] h-[58%]">
             <Image
               src={Images.partnerLogos.path(frontLogo)}
               alt={`${Images.partnerLogos.names[frontLogo] ?? "Partner"} ${t.logo}`}
               fill
               className="object-contain transition-all duration-300"
-              sizes="(max-width: 896px) 30vw, 220px"
+              sizes="(max-width: 639px) 45vw, (max-width: 896px) 30vw, 260px"
             />
           </div>
         </div>
 
         {/* Back Side */}
         <div className={`${face} rotate-y-180`}>
-          <div className="relative w-[78%] h-[62%]">
+          <div className="relative w-[78%] h-[58%]">
             <Image
               src={Images.partnerLogos.path(backLogo)}
               alt={`${Images.partnerLogos.names[backLogo] ?? "Partner"} ${t.logo}`}
               fill
               className="object-contain transition-all duration-300"
-              sizes="(max-width: 896px) 30vw, 220px"
+              sizes="(max-width: 639px) 45vw, (max-width: 896px) 30vw, 260px"
             />
           </div>
         </div>
@@ -91,8 +92,8 @@ export default function ClientMarquee() {
       </div>
 
       <div className="max-w-[1200px] mx-auto px-6">
-        {/* Three across at every size: 9 logos make a full 3×3 grid, with none left alone on a phone. */}
-        <div className="grid grid-cols-3 gap-3 sm:gap-6 md:gap-8 max-w-4xl mx-auto">
+        {/* A wrapping row, so the ninth logo on a phone (two across) sits centred rather than alone on the left. */}
+        <div className="flex flex-wrap justify-center gap-3 sm:gap-6 md:gap-8 max-w-4xl mx-auto">
           {frontLogos.map((logo, i) => (
             <FlipCard
               key={`flip-${i}`}
