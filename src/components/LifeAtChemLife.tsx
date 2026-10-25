@@ -64,7 +64,7 @@ export default function LifeAtChemLife() {
           transition={{ duration: 0.6, ease: easeOut }}
           className="text-center"
         >
-          <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl text-white mb-10 md:mb-16 leading-tight">
+          <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-10 md:mb-16 leading-tight">
             {t.title}
           </h2>
         </motion.div>
