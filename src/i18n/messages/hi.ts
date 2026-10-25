@@ -194,6 +194,12 @@ const hi: Messages = {
         "खेलकूद और टीम-निर्माण कार्यक्रम",
       ],
       joinUs: "हमसे जुड़ें",
+      // Photo collage: the whole team, the leadership team, a warehouse visit.
+      photoAlts: [
+        "हमारी सुविधा के बाहर ChemLife Innovations की टीम",
+        "हमारे कार्यालय के बगीचे में ChemLife Innovations की नेतृत्व टीम",
+        "आगंतुकों को फ़ीड गोदाम दिखाती ChemLife टीम",
+      ],
     },
 
     partners: {
@@ -210,7 +216,6 @@ const hi: Messages = {
     social: {
       kicker: "हमारी प्रतिबद्धता",
       title: "सामाजिक दायित्व",
-      bgAlt: "एक सामुदायिक कार्यक्रम में प्रमाणपत्र लिए प्रतिभागियों के साथ ChemLife टीम के सदस्य",
       items: [
         { title: "विद्यार्थियों का सशक्तिकरण", desc: "गरीबी रेखा से नीचे के विद्यार्थियों को सशक्त बनाने के लिए साइकिलों का दान" },
         { title: "यौन उत्पीड़न की रोकथाम", desc: "ChemLife कार्यस्थल पर यौन उत्पीड़न की रोकथाम (POSH) के तहत प्रमाणित है" },

@@ -28,10 +28,11 @@ const bgImages = [
 
 const STORY_VIDEO_ID = "-amOgNcjYNg";
 
+// Larger on desktop, so the buttons hold their own under the big headline.
 const primaryCtaClass =
-  "inline-flex items-center justify-center gap-2 min-h-12 px-7 py-3 rounded-full text-sm font-semibold bg-brand-orange-aa border-2 border-brand-orange-aa text-white hover:bg-white hover:text-brand-orange-aa shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5";
+  "inline-flex items-center justify-center gap-2 min-h-12 lg:min-h-14 px-7 lg:px-9 py-3 rounded-full text-sm lg:text-base font-semibold bg-brand-orange-aa border-2 border-brand-orange-aa text-white hover:bg-white hover:text-brand-orange-aa shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5";
 const secondaryCtaClass =
-  "inline-flex items-center justify-center gap-2 min-h-12 px-7 py-3 rounded-full text-sm font-semibold border-2 border-white/80 text-white hover:bg-white hover:text-brand-navy transition-all duration-300 transform hover:-translate-y-0.5";
+  "inline-flex items-center justify-center gap-2 min-h-12 lg:min-h-14 px-7 lg:px-9 py-3 rounded-full text-sm lg:text-base font-semibold border-2 border-white/80 text-white hover:bg-white hover:text-brand-navy transition-all duration-300 transform hover:-translate-y-0.5";
 
 // Labels are in the language file (home.stats), in this order.
 const stats = [
@@ -210,7 +211,7 @@ export default function HeroVariantA() {
               target="_blank"
               rel="noopener noreferrer"
               onClick={(e) => playOnPage(e, () => setStoryOpen(true))}
-              className="tap-target mt-5 inline-flex items-center gap-2 text-sm font-semibold text-white/85 hover:text-white underline-offset-4 hover:underline transition-colors cursor-pointer"
+              className="tap-target mt-5 lg:mt-6 inline-flex items-center gap-2 text-sm lg:text-base font-semibold text-white/85 hover:text-white underline-offset-4 hover:underline transition-colors cursor-pointer"
             >
               <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current">
                 <path d="M8 5v14l11-7z" />
@@ -218,8 +219,9 @@ export default function HeroVariantA() {
               {t.home.watchStory}
             </a>
 
-            {/* A 44px-tall tap area around each dot, but narrow, so the row stays compact */}
-            <div className="flex md:hidden mt-3">
+            {/* Slide dots, centred under the buttons at every width (they used to sit on the right edge on desktop,
+                crowding the Rate Us tab). A 44px-tall tap area around each dot, but narrow, so the row stays compact. */}
+            <div className="flex mt-3 lg:mt-4">
               {taglines.map((_, i) => (
                 <button
                   key={i}
@@ -243,28 +245,6 @@ export default function HeroVariantA() {
             </div>
           ))}
         </div>
-      </div>
-
-      {/* Floating Vertical Dotted Navigator on the Right */}
-      <div className="absolute right-6 lg:right-12 top-1/2 -translate-y-1/2 hidden md:flex flex-col z-40">
-        {taglines.map((_, i) => {
-          const isActive = i === slide;
-          return (
-            <button
-              key={i}
-              onClick={() => setSlide(i)}
-              className="group w-11 h-11 flex items-center justify-center"
-              aria-label={`${t.home.goToSlide} ${i + 1}`}
-            >
-              <span
-                className={`w-3.5 h-3.5 rounded-full transition-all duration-350 ${isActive
-                  ? "bg-teal-400 scale-125 shadow-lg shadow-teal-400/50"
-                  : "bg-white/30 border border-white/10 group-hover:bg-white/60"
-                  }`}
-              />
-            </button>
-          );
-        })}
       </div>
 
       <div className={`absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t ${theme.heroBottomGradient} to-transparent`} />

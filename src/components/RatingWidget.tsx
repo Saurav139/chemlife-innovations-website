@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { useT } from "@/i18n/LocaleProvider";
 import { splitLocale } from "@/i18n/config";
@@ -7,6 +8,14 @@ import { splitLocale } from "@/i18n/config";
 export default function RatingWidget() {
   const pathname = usePathname();
   const t = useT();
+  // Slides in once the visitor has scrolled past the top of the page, so it doesn't compete with the hero.
+  const [shown, setShown] = useState(false);
+  useEffect(() => {
+    const update = () => setShown(window.scrollY > window.innerHeight * 0.4);
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    return () => window.removeEventListener("scroll", update);
+  }, [pathname]);
 
   // Don't render the rating widget on the launch game page itself
   if (splitLocale(pathname ?? "/").path === "/launch") {
@@ -17,7 +26,8 @@ export default function RatingWidget() {
 
   return (
     // Hidden on phones, where it covers page content.
-    <div className="fixed right-0 top-1/2 -translate-y-1/2 z-50 flex items-start select-none font-sans max-md:hidden">
+    // `invisible` while hidden also takes it out of the tab order.
+    <div className={`fixed right-0 top-1/2 -translate-y-1/2 z-50 flex items-start select-none font-sans max-md:hidden transition-all duration-300 ${shown ? "opacity-100 translate-x-0 visible" : "opacity-0 translate-x-full invisible"}`}>
       {/* Floating Tab Link */}
       <a
         href={googleReviewUrl}

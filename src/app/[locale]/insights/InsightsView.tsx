@@ -17,6 +17,17 @@ const easeOut = [0.25, 0.1, 0, 1] as const;
 // Card image widths for the browser to pick a file size from. They follow the grid and padding below.
 const FEATURED_IMAGE_SIZES = "(min-width: 1024px) 282px, calc(100vw - 114px)";
 const CARD_IMAGE_SIZES = "(min-width: 1024px) 312px, (min-width: 768px) calc(50vw - 90px), calc(100vw - 98px)";
+
+// The grid shows this many cards at first, and this many more each time "Load more" is pressed.
+const PAGE_SIZE = 6;
+
+// Grid card buttons: the main action and the outside link, side by side at equal width, styled like the featured
+// cards' buttons. Text is 12px where the cards are narrowest (phones under 400px, desktop 1024–1279px) so the longest
+// label, "Read on WordPress", still fits.
+const GRID_BTN =
+  "inline-flex items-center justify-center min-h-11 text-center whitespace-nowrap px-2 py-2.5 rounded-full font-bold leading-5 text-xs min-[400px]:text-[13px] lg:text-xs xl:text-sm transition-all duration-300 cursor-pointer";
+const GRID_BTN_PRIMARY = `${GRID_BTN} bg-teal-aa hover:bg-teal-700 text-white shadow-sm hover:shadow`;
+const GRID_BTN_SECONDARY = `${GRID_BTN} border border-gray-200 text-gray-600 hover:bg-gray-50 hover:text-teal-aa`;
 const READER_IMAGE_SIZES = "(min-width: 800px) 702px, calc(100vw - 82px)";
 
 // Hosts next.config.ts lets the image optimizer fetch from. Anything else (LinkedIn) is shown as is.
@@ -25,7 +36,7 @@ const isOptimizable = (src: string) =>
   src.startsWith("https://chemlifeinnovations.wordpress.com/wp-content/uploads/") ||
   src.startsWith("https://img.youtube.com/vi/");
 
-/** A featured-card button label that shortens on the narrowest phones (under 360px), where the full text doesn't fit
+/** A card button label that shortens on the narrowest phones (under 360px), where the full text doesn't fit
  *  beside the other button. Screen readers always get the full text. */
 function ButtonLabel({ full, short }: { full: string; short: string }) {
   return (
@@ -43,6 +54,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
   const [selectedFilter, setSelectedFilter] = useState("All");
   const [activeVideoId, setActiveVideoId] = useState<string | null>(null);
   const [activeArticle, setActiveArticle] = useState<InsightItem | null>(null);
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
   const filters = ["All", "Blogs", "Podcasts", "Videos"];
 
@@ -122,6 +134,13 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
       }
     }
   }
+
+  // The newest blog, video and podcast are already in Featured above, so the grid leaves them out, unless the
+  // visitor is searching (then every match is listed) or leaving them out would empty the grid.
+  const featuredTitles = new Set([featuredBlog, featuredVideo, featuredPodcast].filter(Boolean).map((item) => item.title));
+  const withoutFeatured = filteredItems.filter((item) => !featuredTitles.has(item.title));
+  const gridItems = searchQuery.trim() || withoutFeatured.length === 0 ? filteredItems : withoutFeatured;
+  const visibleItems = gridItems.slice(0, visibleCount);
 
   return (
     <VariantProvider>
@@ -430,7 +449,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                   <input
                     type="text"
                     value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onChange={(e) => { setSearchQuery(e.target.value); setVisibleCount(PAGE_SIZE); }}
                     placeholder="Search titles, topics, or authors..."
                     className="w-full bg-gray-50 border border-gray-250 rounded-full px-6 py-3 text-base md:text-sm text-brand-navy placeholder-gray-aa focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all duration-300 shadow-sm"
                   />
@@ -449,7 +468,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                   return (
                     <button
                       key={filter}
-                      onClick={() => setSelectedFilter(filter)}
+                      onClick={() => { setSelectedFilter(filter); setVisibleCount(PAGE_SIZE); }}
                       className={`tap-target px-6 py-2 rounded-full text-sm font-semibold transition-all duration-300 border cursor-pointer ${
                         isActive
                           ? "bg-teal-aa border-teal-600 text-white shadow-sm"
@@ -470,7 +489,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
         <div className="max-w-[1200px] mx-auto px-6 mb-8">
           <div className="flex items-center gap-4">
             <span className="text-xs font-bold text-gray-aa uppercase tracking-wider whitespace-nowrap">
-              Explore All Insights ({filteredItems.length})
+              Explore All Insights ({gridItems.length})
             </span>
             <div className="w-full h-[1px] bg-gray-150" />
           </div>
@@ -480,9 +499,9 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
         <SectionWrapper className="pt-0 pb-24 bg-white">
           <div className="max-w-[1200px] mx-auto px-6">
             
-            <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 lg:gap-x-6">
               <AnimatePresence mode="popLayout" initial={false}>
-                {filteredItems.map((item) => {
+                {visibleItems.map((item) => {
                   const isBlog = item.type === "Blog";
                   return (
                     <motion.div
@@ -493,7 +512,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0, scale: 0.9 }}
                       transition={{ duration: 0.4, ease: easeOut }}
-                      className="bg-gray-55 border border-gray-200 rounded-2xl p-6 shadow-sm hover:shadow-md hover:border-teal-500/20 transition-all duration-300 group flex flex-col justify-between"
+                      className="bg-gray-55 border border-gray-200 rounded-2xl p-5 md:p-6 lg:p-5 xl:p-6 shadow-sm hover:shadow-md hover:border-teal-500/20 transition-all duration-300 group flex flex-col justify-between"
                     >
                       {/* Clickable Area of Card Content */}
                       <div
@@ -574,34 +593,33 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                         </h4>
                       </div>
 
-                      {/* Card Action Buttons (Direct + View on LinkedIn) - isolated outside clicking div */}
-                      <div className="flex items-center gap-3 pt-3 border-t border-gray-100 mt-2">
+                      {/* Card buttons, outside the clickable area above */}
+                      <div className="grid grid-cols-2 gap-2 pt-4 mt-2 border-t border-gray-100">
                         {isBlog ? (
-                          <div className="flex items-center gap-2 w-full justify-between">
-                            <button
-                              onClick={() => setActiveArticle(item)}
-                              className="tap-target text-xs font-bold text-teal-aa hover:text-teal-700 transition-colors flex items-center gap-1 cursor-pointer"
-                            >
+                          <>
+                            <button onClick={() => setActiveArticle(item)} className={GRID_BTN_PRIMARY}>
                               Read Article
                             </button>
                             <a
                               href={item.linkUrl || "https://www.linkedin.com/company/chemlifeinnovations/posts/?feedView=all"}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="tap-target text-xs font-semibold text-gray-500 hover:text-teal-aa transition-colors cursor-pointer"
+                              className={GRID_BTN_SECONDARY}
                               onClick={(e) => e.stopPropagation()}
                             >
-                              {item.linkUrl?.includes("wordpress.com") ? "Read on WordPress" : "View on LinkedIn"}
+                              {item.linkUrl?.includes("wordpress.com")
+                                ? <ButtonLabel full="Read on WordPress" short="WordPress" />
+                                : <ButtonLabel full="View on LinkedIn" short="LinkedIn" />}
                             </a>
-                          </div>
+                          </>
                         ) : (
-                          <div className="flex items-center gap-2 w-full justify-between">
+                          <>
                             <a
                               href={youtubeWatchUrl(item.youtubeId!)}
                               target="_blank"
                               rel="noopener noreferrer"
                               onClick={(e) => playOnPage(e, () => setActiveVideoId(item.youtubeId!))}
-                              className="tap-target text-xs font-bold text-teal-aa hover:text-teal-700 transition-colors flex items-center gap-1"
+                              className={GRID_BTN_PRIMARY}
                             >
                               {item.type === "Podcast" ? "Listen Now" : "Watch Now"}
                             </a>
@@ -609,12 +627,12 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                               href={`https://www.youtube.com/watch?v=${item.youtubeId}`}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="tap-target text-xs font-semibold text-gray-500 hover:text-teal-aa transition-colors"
+                              className={GRID_BTN_SECONDARY}
                               onClick={(e) => e.stopPropagation()}
                             >
-                              Watch on YouTube
+                              <ButtonLabel full="Watch on YouTube" short="YouTube" />
                             </a>
-                          </div>
+                          </>
                         )}
                       </div>
                     </motion.div>
@@ -623,7 +641,19 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
               </AnimatePresence>
             </motion.div>
 
-            {filteredItems.length === 0 && (
+            {gridItems.length > visibleCount && (
+              <div className="mt-10 flex justify-center">
+                <button
+                  type="button"
+                  onClick={() => setVisibleCount((count) => count + PAGE_SIZE)}
+                  className="inline-flex items-center justify-center min-h-12 px-8 rounded-full border-2 border-teal-aa text-teal-aa hover:bg-teal-aa hover:text-white text-sm font-bold transition-colors cursor-pointer"
+                >
+                  Load more ({gridItems.length - visibleCount} more)
+                </button>
+              </div>
+            )}
+
+            {gridItems.length === 0 && (
               <div className="text-center py-20 bg-gray-50 rounded-2xl border border-dashed border-gray-200">
                 <span className="text-gray-aa text-sm">No insights found matching your search query.</span>
               </div>
