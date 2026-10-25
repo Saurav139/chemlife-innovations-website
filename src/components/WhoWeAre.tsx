@@ -102,17 +102,17 @@ function SnowflakeCell({
       className="flex flex-row md:flex-col items-center gap-5 md:gap-0 text-left md:text-center group cursor-pointer"
     >
       {/* 3D Visual Snowflake Image Container (No text overlay). Phones: a smaller circle beside the text. */}
-      <div className="relative shrink-0 w-[132px] h-[132px] sm:w-[160px] sm:h-[160px] md:w-[320px] md:h-[320px] flex items-center justify-center">
+      <div className="relative shrink-0 w-[132px] h-[132px] sm:w-[160px] sm:h-[160px] md:w-[220px] md:h-[220px] lg:w-[320px] lg:h-[320px] flex items-center justify-center">
         {/* Outer Snowflake Frame (acting as outer border structure) */}
         <SnowflakeFrame
-          className="absolute w-[128px] h-[128px] sm:w-[156px] sm:h-[156px] md:w-[310px] md:h-[310px] text-teal-500/20 group-hover:text-brand-orange/45 transition-colors duration-500 z-0 pointer-events-none select-none"
+          className="absolute w-[128px] h-[128px] sm:w-[156px] sm:h-[156px] md:w-[214px] md:h-[214px] lg:w-[310px] lg:h-[310px] text-teal-500/20 group-hover:text-brand-orange/45 transition-colors duration-500 z-0 pointer-events-none select-none"
           style={{ animation: "spin 45s linear infinite" }}
         />
 
         {/* Enlarged Inner Circular Card (100% visible image, zero overlap) */}
         <motion.div
           whileHover={{ scale: 1.05 }}
-          className="relative w-[98px] h-[98px] sm:w-[120px] sm:h-[120px] md:w-[235px] md:h-[235px] rounded-full overflow-hidden border-2 border-teal-500/25 group-hover:border-brand-orange transition-all duration-300 z-10 bg-gray-50 shadow-xl"
+          className="relative w-[98px] h-[98px] sm:w-[120px] sm:h-[120px] md:w-[165px] md:h-[165px] lg:w-[235px] lg:h-[235px] rounded-full overflow-hidden border-2 border-teal-500/25 group-hover:border-brand-orange transition-all duration-300 z-10 bg-gray-50 shadow-xl"
         >
           <AnimatePresence mode="popLayout">
             <motion.div
@@ -127,7 +127,7 @@ function SnowflakeCell({
                 src={card.images[imageIndex % card.images.length].src}
                 alt={card.images[imageIndex % card.images.length].alt}
                 fill
-                sizes="(min-width: 768px) 235px, 120px"
+                sizes="(min-width: 1024px) 235px, 165px"
                 className="object-cover opacity-100 group-hover:scale-105 transition-transform duration-700"
                 priority={index === 0}
               />
@@ -141,7 +141,7 @@ function SnowflakeCell({
         <h3 className="font-heading text-lg md:text-xl font-bold text-teal-aa mb-1 md:mb-2 leading-tight transition-colors duration-300 group-hover:text-brand-orange">
           {card.title}
         </h3>
-        <p className="text-slate-600 text-sm leading-relaxed font-normal md:text-xs lg:text-sm">
+        <p className="text-slate-600 text-sm leading-relaxed font-normal">
           {card.description}
         </p>
       </div>
