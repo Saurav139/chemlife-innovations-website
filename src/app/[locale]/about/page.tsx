@@ -423,7 +423,8 @@ export default function AboutPage() {
               </h2>
             </div>
 
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 max-w-[1200px] mx-auto">
+            {/* Two per row on phones too, so the four leaders take half the scrolling */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 lg:gap-8 max-w-[1200px] mx-auto">
               {[
                 {
                   name: "Radhakrishna PM",
@@ -453,15 +454,15 @@ export default function AboutPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: i * 0.15, ease: easeOut }}
-                  className="bg-gray-50/50 rounded-2xl border border-gray-100 p-6 flex flex-col items-center text-center shadow-sm hover:border-brand-orange/30 hover:shadow-md transition-all duration-300 group hover:scale-[1.02]"
+                  className="bg-gray-50/50 rounded-2xl border border-gray-100 p-4 sm:p-6 flex flex-col items-center text-center shadow-sm hover:border-brand-orange/30 hover:shadow-md transition-all duration-300 group hover:scale-[1.02]"
                 >
                   {/* Headshot container */}
-                  <div className="w-28 h-28 md:w-32 md:h-32 rounded-full border-2 border-orange-100 group-hover:border-brand-orange flex items-center justify-center bg-gray-100 mb-6 shadow-sm relative overflow-hidden transition-all duration-300">
+                  <div className="w-20 h-20 sm:w-28 sm:h-28 md:w-32 md:h-32 rounded-full border-2 border-orange-100 group-hover:border-brand-orange flex items-center justify-center bg-gray-100 mb-4 sm:mb-6 shadow-sm relative overflow-hidden transition-all duration-300">
                     <Image
                       src={leader.image}
                       alt={leader.name}
                       fill
-                      sizes="(max-width: 768px) 112px, 128px"
+                      sizes="(max-width: 639px) 80px, (max-width: 768px) 112px, 128px"
                       className="object-cover object-center group-hover:scale-105 transition-transform duration-500"
                     />
                   </div>
