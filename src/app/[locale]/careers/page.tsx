@@ -174,7 +174,7 @@ export default function CareersPage() {
               </div>
 
               {/* Considerations & Requirements Card */}
-              <div className="bg-white border border-gray-255 rounded-3xl p-8 lg:p-10 shadow-sm">
+              <div className="bg-white border border-gray-255 rounded-3xl p-5 sm:p-8 lg:p-10 shadow-sm">
                 <h3 className="font-heading text-2xl font-bold text-brand-navy mb-6 flex items-center gap-3">
                   <svg className="w-6 h-6 text-teal-aa flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                     <path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A5.5 5.5 0 0 0 12.5 2.5a5.5 5.5 0 0 0-5.5 5.5c0 1.3.5 2.6 1.5 3.5.8.8 1.3 1.5 1.5 2.5"></path>
@@ -215,10 +215,10 @@ export default function CareersPage() {
         </SectionWrapper>
 
         {/* Internship Dropdown and Details Container */}
-        <SectionWrapper className="py-24 bg-white">
+        <SectionWrapper className="py-16 md:py-24 bg-white">
           <div className="max-w-[1200px] mx-auto px-6">
 
-            <div className="text-center mb-12">
+            <div className="text-center mb-8 md:mb-12">
               <h2 className="font-heading text-3xl lg:text-4xl font-bold text-brand-navy">
                 {t.openTitle}
               </h2>
@@ -229,7 +229,7 @@ export default function CareersPage() {
 
             {/* Every position as a tab, so visitors see all the openings at a glance (a drop-down hid all but one).
                 Arrow keys move between tabs, as screen readers expect. */}
-            <div className="max-w-4xl mx-auto mb-12">
+            <div className="max-w-4xl mx-auto mb-8 md:mb-12">
               <p id="positions-label" className="text-xs font-bold text-gray-aa uppercase tracking-wider mb-3 text-center">
                 {t.selectPosition}
               </p>
@@ -286,7 +286,7 @@ export default function CareersPage() {
               <div className="flex flex-col lg:flex-row min-h-[550px]">
 
                 {/* Left Side: Text Details */}
-                <div className="lg:w-7/12 p-8 lg:p-12 flex flex-col justify-between flex-grow">
+                <div className="lg:w-7/12 p-5 sm:p-8 lg:p-12 flex flex-col justify-between flex-grow">
                   <div>
                     <span className="text-teal-aa text-sm font-bold uppercase tracking-wider block mb-2">
                       {selectedRole.department}
