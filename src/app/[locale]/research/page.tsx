@@ -295,6 +295,19 @@ export default function ResearchPage() {
               })}
             </div>
 
+            {filteredTopics.length === 0 && (
+              <div className="text-center py-16 bg-slate-50 border border-dashed border-slate-200 rounded-2xl">
+                <p className="text-slate-600 text-sm">{t.noResults}</p>
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery("")}
+                  className="mt-4 inline-flex items-center min-h-11 px-6 rounded-full border-2 border-brand-navy/20 hover:border-brand-navy text-brand-navy text-sm font-semibold transition-colors cursor-pointer"
+                >
+                  {t.clearSearch}
+                </button>
+              </div>
+            )}
+
             {/* A next step after the topics */}
             <div className="mt-14 md:mt-16 rounded-2xl md:rounded-3xl bg-brand-navy text-white p-6 md:p-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
               <div>
