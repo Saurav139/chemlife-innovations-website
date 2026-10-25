@@ -277,7 +277,7 @@ export default function ProductsPage() {
           </div>
 
           <div className="relative z-10 max-w-[1200px] mx-auto px-6 w-full text-center md:text-left">
-            <span className="text-teal-aa-light text-xs md:text-sm font-semibold tracking-widest uppercase block mb-3">{t.kicker}</span>
+            <span className="text-teal-aa-light text-sm font-semibold tracking-widest uppercase block mb-3">{t.kicker}</span>
             <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold leading-tight mb-3 md:mb-4 text-white">
               {t.titleStart} <span className="text-teal-400">{t.titleAccent}</span>
             </h1>
@@ -422,7 +422,7 @@ export default function ProductsPage() {
                             {product.name}
                           </h3>
 
-                          <span className={`px-2.5 py-0.5 rounded-md text-[10px] md:text-[11px] font-bold uppercase tracking-wider border whitespace-nowrap ${product.category === "Mono-gastric"
+                          <span className={`px-2.5 py-0.5 rounded-md text-[11px] font-bold uppercase tracking-wider border whitespace-nowrap ${product.category === "Mono-gastric"
                             ? "bg-orange-50/50 border-orange-150 text-brand-orange-aa"
                             : product.category === "Ruminants"
                               ? "bg-blue-50 border-blue-150 text-blue-700"
@@ -433,12 +433,12 @@ export default function ProductsPage() {
                         </div>
 
                         {product.tagline && (
-                          <p className="text-xs md:text-sm text-slate-550 italic leading-relaxed">
+                          <p className="text-sm text-slate-550 italic leading-relaxed">
                             {product.tagline}
                           </p>
                         )}
 
-                        <div className="flex items-center gap-1.5 text-brand-orange-aa text-xs md:text-sm font-bold mt-2">
+                        <div className="flex items-center gap-1.5 text-brand-orange-aa text-sm font-bold mt-2">
                           <span>{isExpanded ? t.showLess : t.readMore}</span>
                           <motion.span
                             animate={{ rotate: isExpanded ? 180 : 0 }}
@@ -465,10 +465,10 @@ export default function ProductsPage() {
                           <div className="p-5 space-y-5">
                             {/* About section */}
                             <div>
-                              <span className="text-[10px] md:text-xs font-black uppercase text-teal-aa tracking-wider block mb-1.5">
+                              <span className="text-xs font-black uppercase text-teal-aa tracking-wider block mb-1.5">
                                 {t.about}
                               </span>
-                              <p className="text-slate-600 text-xs md:text-sm leading-relaxed whitespace-pre-line">
+                              <p className="text-slate-600 text-sm leading-relaxed whitespace-pre-line">
                                 {product.about}
                               </p>
                             </div>
@@ -476,10 +476,10 @@ export default function ProductsPage() {
                             {/* Variants section */}
                             {product.variants && product.variants.length > 0 && (
                               <div>
-                                <span className="text-[10px] md:text-xs font-black uppercase text-teal-aa tracking-wider block mb-1.5">
+                                <span className="text-xs font-black uppercase text-teal-aa tracking-wider block mb-1.5">
                                   {t.variants}
                                 </span>
-                                <ul className="grid grid-cols-1 gap-1.5 text-slate-600 text-xs md:text-sm font-semibold">
+                                <ul className="grid grid-cols-1 gap-1.5 text-slate-600 text-sm font-semibold">
                                   {product.variants.map((variant, index) => (
                                     <li key={index} className="flex items-center gap-2">
                                       <span className="w-1.5 h-1.5 rounded-full bg-teal-500 flex-shrink-0" />
@@ -492,12 +492,12 @@ export default function ProductsPage() {
 
                             {/* Key Features section */}
                             <div>
-                              <span className="text-[10px] md:text-xs font-black uppercase text-teal-aa tracking-wider block mb-2">
+                              <span className="text-xs font-black uppercase text-teal-aa tracking-wider block mb-2">
                                 {t.features}
                               </span>
                               <ul className="space-y-2">
                                 {product.features.map((feature, idx) => (
-                                  <li key={idx} className="flex items-start gap-2 text-slate-600 text-xs md:text-sm">
+                                  <li key={idx} className="flex items-start gap-2 text-slate-600 text-sm">
                                     <svg className="w-3.5 h-3.5 text-brand-orange mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7" />
                                     </svg>
@@ -509,7 +509,7 @@ export default function ProductsPage() {
 
                             {/* Usage & Presentation section */}
                             <div className="space-y-3">
-                              <span className="text-[10px] md:text-xs font-black uppercase text-teal-aa tracking-wider block">
+                              <span className="text-xs font-black uppercase text-teal-aa tracking-wider block">
                                 {t.usage}
                               </span>
 
@@ -522,8 +522,8 @@ export default function ProductsPage() {
                                     </svg>
                                   </div>
                                   <div>
-                                    <span className="text-[10px] md:text-xs text-slate-aa font-bold uppercase tracking-wider block">{t.inclusionRate}</span>
-                                    <span className="text-xs md:text-sm text-brand-navy font-semibold leading-relaxed mt-0.5 block whitespace-pre-line">
+                                    <span className="text-xs text-slate-aa font-bold uppercase tracking-wider block">{t.inclusionRate}</span>
+                                    <span className="text-sm text-brand-navy font-semibold leading-relaxed mt-0.5 block whitespace-pre-line">
                                       {product.inclusionRate}
                                     </span>
                                   </div>
@@ -537,8 +537,8 @@ export default function ProductsPage() {
                                     </svg>
                                   </div>
                                   <div>
-                                    <span className="text-[10px] md:text-xs text-slate-aa font-bold uppercase tracking-wider block">{t.packSize}</span>
-                                    <span className="text-xs md:text-sm text-brand-navy font-semibold leading-relaxed mt-0.5 block whitespace-pre-line">
+                                    <span className="text-xs text-slate-aa font-bold uppercase tracking-wider block">{t.packSize}</span>
+                                    <span className="text-sm text-brand-navy font-semibold leading-relaxed mt-0.5 block whitespace-pre-line">
                                       {product.packSize}
                                     </span>
                                   </div>
@@ -549,7 +549,7 @@ export default function ProductsPage() {
                             {/* Enquire button */}
                             <a
                               href={emailHref}
-                              className="w-full py-3 px-4 rounded-xl bg-brand-orange-aa hover:bg-brand-navy text-white text-xs md:text-sm font-semibold transition-all duration-300 shadow-sm hover:shadow flex items-center justify-center gap-2 group/btn cursor-pointer"
+                              className="w-full py-3 px-4 rounded-xl bg-brand-orange-aa hover:bg-brand-navy text-white text-sm font-semibold transition-all duration-300 shadow-sm hover:shadow flex items-center justify-center gap-2 group/btn cursor-pointer"
                             >
                               <svg className="w-3.5 h-3.5 text-white group-hover/btn:translate-x-0.5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
