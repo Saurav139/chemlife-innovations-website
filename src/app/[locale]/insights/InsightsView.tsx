@@ -23,13 +23,6 @@ const CARD_IMAGE_SIZES = "(min-width: 1024px) 312px, (min-width: 768px) calc(50v
 // The grid shows this many cards at first, and this many more each time "Load more" is pressed.
 const PAGE_SIZE = 6;
 
-// Grid card buttons: the main action and the outside link, side by side at equal width, styled like the featured
-// cards' buttons. Text is 12px where the cards are narrowest (phones under 400px, desktop 1024–1279px) so the longest
-// label, "Read on WordPress", still fits.
-const GRID_BTN =
-  "inline-flex items-center justify-center min-h-11 text-center whitespace-nowrap px-2 py-2.5 rounded-full font-bold leading-5 text-xs min-[400px]:text-[13px] lg:text-xs xl:text-sm transition-all duration-300 cursor-pointer";
-const GRID_BTN_PRIMARY = `${GRID_BTN} bg-teal-aa hover:bg-teal-700 text-white shadow-sm hover:shadow`;
-const GRID_BTN_SECONDARY = `${GRID_BTN} border border-gray-200 text-gray-600 hover:bg-gray-50 hover:text-teal-aa`;
 const READER_IMAGE_SIZES = "(min-width: 800px) 702px, calc(100vw - 82px)";
 
 // Hosts next.config.ts lets the image optimizer fetch from. Anything else (LinkedIn) is shown as is.
@@ -634,33 +627,34 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                         </h4>
                       </div>
 
-                      {/* Card buttons, outside the clickable area above */}
-                      <div className="grid grid-cols-2 gap-2 pt-4 mt-2 border-t border-gray-100">
+                      {/* Card Action Buttons (Direct + View on LinkedIn) - isolated outside clicking div */}
+                      <div className="flex items-center gap-3 pt-3 border-t border-gray-100 mt-2">
                         {isBlog ? (
-                          <>
-                            <button onClick={() => setActiveArticle(item)} className={GRID_BTN_PRIMARY}>
+                          <div className="flex items-center gap-2 w-full justify-between">
+                            <button
+                              onClick={() => setActiveArticle(item)}
+                              className="tap-target text-xs font-bold text-teal-aa hover:text-teal-700 transition-colors flex items-center gap-1 cursor-pointer"
+                            >
                               Read Article
                             </button>
                             <a
                               href={item.linkUrl || "https://www.linkedin.com/company/chemlifeinnovations/posts/?feedView=all"}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className={GRID_BTN_SECONDARY}
+                              className="tap-target text-xs font-semibold text-gray-500 hover:text-teal-aa transition-colors cursor-pointer"
                               onClick={(e) => e.stopPropagation()}
                             >
-                              {item.linkUrl?.includes("wordpress.com")
-                                ? <ButtonLabel full="Read on WordPress" short="WordPress" />
-                                : <ButtonLabel full="View on LinkedIn" short="LinkedIn" />}
+                              {item.linkUrl?.includes("wordpress.com") ? "Read on WordPress" : "View on LinkedIn"}
                             </a>
-                          </>
+                          </div>
                         ) : (
-                          <>
+                          <div className="flex items-center gap-2 w-full justify-between">
                             <a
                               href={youtubeWatchUrl(item.youtubeId!)}
                               target="_blank"
                               rel="noopener noreferrer"
                               onClick={(e) => playOnPage(e, () => setActiveVideoId(item.youtubeId!))}
-                              className={GRID_BTN_PRIMARY}
+                              className="tap-target text-xs font-bold text-teal-aa hover:text-teal-700 transition-colors flex items-center gap-1"
                             >
                               {item.type === "Podcast" ? "Listen Now" : "Watch Now"}
                             </a>
@@ -668,12 +662,12 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                               href={`https://www.youtube.com/watch?v=${item.youtubeId}`}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className={GRID_BTN_SECONDARY}
+                              className="tap-target text-xs font-semibold text-gray-500 hover:text-teal-aa transition-colors"
                               onClick={(e) => e.stopPropagation()}
                             >
-                              <ButtonLabel full="Watch on YouTube" short="YouTube" />
+                              Watch on YouTube
                             </a>
-                          </>
+                          </div>
                         )}
                       </div>
                     </motion.div>
