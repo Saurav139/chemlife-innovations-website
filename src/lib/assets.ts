@@ -15,6 +15,8 @@ export const Images = {
   /** Brand identity: logos, wordmarks */
   branding: {
     logo: "/images/branding/logo.jpg",
+    /** Flask and wordmark side by side on a transparent background, for the header. Built from logo.jpg. */
+    logoHorizontal: "/images/branding/logo-horizontal.png",
   },
 
   /** Full-page hero background images */
@@ -165,8 +167,9 @@ export const Images = {
 
   /** Partner / client logos (used in the flip-card marquee) */
   partnerLogos: {
-    /** Returns the full path for a given filename */
-    path: (filename: string) => `/images/partner-logos/${filename}`,
+    /** Returns the full path for a given filename. The trimmed/ copies have the empty margins of the originals cut
+     *  off (most logos sat in a mostly empty 500×500 square), so each logo fills its card evenly. */
+    path: (filename: string) => `/images/partner-logos/trimmed/${filename}`,
     /** Company name for each logo file, used for its alt text */
     names: {
       "aac.png": "Antera Agro Chem",

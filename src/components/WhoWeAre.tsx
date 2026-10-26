@@ -4,36 +4,17 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { Images } from "@/lib/assets";
+import { useT } from "@/i18n/LocaleProvider";
+import type { Messages } from "@/i18n/messages/en";
 
-const cards = [
-  {
-    title: "Mono-Gastric",
-    description: "Eco-friendly concepts promoting health and productivity in poultry and swine through nature-derived feed additives.",
-    images: [
-      { src: Images.gallery.rotate11, alt: "Broiler chickens on a poultry farm" },
-      { src: Images.gallery.rotate12, alt: "A pig standing on a farm" },
-      { src: Images.gallery.rotate13, alt: "Turkeys on a grassy farm" },
-    ],
-  },
-  {
-    title: "Ruminants",
-    description: "Innovative bio-active feed additives focusing on cattle health, increasing milk yield and quality.",
-    images: [
-      { src: Images.gallery.rotate21, alt: "A Holstein cow with her calf in a pasture" },
-      { src: Images.gallery.rotate22, alt: "A buffalo with her calf on a farm" },
-      { src: Images.gallery.rotate23, alt: "Goats on a goat farm" },
-    ],
-  },
-  {
-    title: "Value Addition",
-    description: "Feed additives for multiple species designed for better growth and conversion ratios.",
-    images: [
-      { src: Images.research.pellets, alt: "Bowls of feed pellets and powdered feed ingredients" },
-      { src: Images.gallery.rotate32, alt: "Hands holding freshly chopped green fodder" },
-      { src: Images.gallery.rotate33, alt: "Yellow feed granules pouring from a container" },
-    ],
-  },
+// Each card's title, description and photo descriptions are in the language file (home.whoWeAre.cards), in this order.
+const cardImages = [
+  [Images.gallery.rotate11, Images.gallery.rotate12, Images.gallery.rotate13],
+  [Images.gallery.rotate21, Images.gallery.rotate22, Images.gallery.rotate23],
+  [Images.research.pellets, Images.gallery.rotate32, Images.gallery.rotate33],
 ];
+
+type Card = Messages["home"]["whoWeAre"]["cards"][number] & { images: { src: string; alt: string }[] };
 
 // Detailed geometric SVG Snowflake vector component for the outer cell boundary
 function SnowflakeFrame({ className, style }: { className?: string; style?: React.CSSProperties }) {
@@ -108,7 +89,7 @@ function SnowflakeCell({
   index,
   imageIndex,
 }: {
-  card: typeof cards[number];
+  card: Card;
   index: number;
   imageIndex: number;
 }) {
@@ -118,20 +99,20 @@ function SnowflakeCell({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-60px" }}
       transition={{ duration: 0.6, delay: index * 0.1, ease: [0.25, 0.1, 0, 1] }}
-      className="flex flex-col items-center text-center group cursor-pointer"
+      className="flex flex-row md:flex-col items-center gap-5 md:gap-0 text-left md:text-center group cursor-pointer"
     >
-      {/* 3D Visual Snowflake Image Container (No text overlay) */}
-      <div className="relative w-[320px] h-[320px] flex items-center justify-center">
+      {/* 3D Visual Snowflake Image Container (No text overlay). Phones: a smaller circle beside the text. */}
+      <div className="relative shrink-0 w-[132px] h-[132px] sm:w-[160px] sm:h-[160px] md:w-[220px] md:h-[220px] lg:w-[320px] lg:h-[320px] flex items-center justify-center">
         {/* Outer Snowflake Frame (acting as outer border structure) */}
         <SnowflakeFrame
-          className="absolute w-[310px] h-[310px] text-teal-500/20 group-hover:text-brand-orange/45 transition-colors duration-500 z-0 pointer-events-none select-none"
+          className="absolute w-[128px] h-[128px] sm:w-[156px] sm:h-[156px] md:w-[214px] md:h-[214px] lg:w-[310px] lg:h-[310px] text-teal-500/20 group-hover:text-brand-orange/45 transition-colors duration-500 z-0 pointer-events-none select-none"
           style={{ animation: "spin 45s linear infinite" }}
         />
 
         {/* Enlarged Inner Circular Card (100% visible image, zero overlap) */}
         <motion.div
           whileHover={{ scale: 1.05 }}
-          className="relative w-[235px] h-[235px] rounded-full overflow-hidden border-2 border-teal-500/25 group-hover:border-brand-orange transition-all duration-300 z-10 bg-gray-50 shadow-xl"
+          className="relative w-[98px] h-[98px] sm:w-[120px] sm:h-[120px] md:w-[165px] md:h-[165px] lg:w-[235px] lg:h-[235px] rounded-full overflow-hidden border-2 border-teal-500/25 group-hover:border-brand-orange transition-all duration-300 z-10 bg-gray-50 shadow-xl"
         >
           <AnimatePresence mode="popLayout">
             <motion.div
@@ -146,7 +127,7 @@ function SnowflakeCell({
                 src={card.images[imageIndex % card.images.length].src}
                 alt={card.images[imageIndex % card.images.length].alt}
                 fill
-                sizes="235px"
+                sizes="(min-width: 1024px) 235px, 165px"
                 className="object-cover opacity-100 group-hover:scale-105 transition-transform duration-700"
                 priority={index === 0}
               />
@@ -156,11 +137,11 @@ function SnowflakeCell({
       </div>
 
       {/* Combined Typography Content (Clean alignment below the image) */}
-      <div className="mt-4 max-w-[270px] px-2 flex flex-col items-center">
-        <h3 className="font-heading text-xl font-bold text-teal-600 mb-2 leading-tight transition-colors duration-300 group-hover:text-brand-orange">
+      <div className="flex-1 md:flex-none md:mt-4 md:max-w-[270px] md:px-2 flex flex-col items-start md:items-center">
+        <h3 className="font-heading text-lg md:text-xl font-bold text-teal-aa mb-1 md:mb-2 leading-tight transition-colors duration-300 group-hover:text-brand-orange">
           {card.title}
         </h3>
-        <p className="text-slate-600 text-xs lg:text-sm leading-relaxed font-normal">
+        <p className="text-slate-600 text-sm leading-relaxed font-normal">
           {card.description}
         </p>
       </div>
@@ -170,6 +151,11 @@ function SnowflakeCell({
 
 export default function WhoWeAre() {
   const [imageIndex, setImageIndex] = useState(0);
+  const t = useT().home.whoWeAre;
+  const cards: Card[] = t.cards.map((card, i) => ({
+    ...card,
+    images: cardImages[i].map((src, j) => ({ src, alt: card.alts[j] })),
+  }));
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -179,20 +165,20 @@ export default function WhoWeAre() {
   }, []);
 
   return (
-    <section className="bg-white py-24 lg:py-32 overflow-hidden border-b border-gray-100">
+    <section className="bg-white py-16 md:py-24 lg:py-32 overflow-hidden border-b border-gray-100">
       <div className="max-w-[1200px] mx-auto px-6">
         {/* Title Block */}
         <div className="text-center mb-12">
-          <span className="text-teal-500 text-sm lg:text-base font-semibold tracking-widest uppercase block mb-2">
-            Get to know
+          <span className="text-teal-aa text-sm lg:text-base font-semibold tracking-widest uppercase block mb-2">
+            {t.kicker}
           </span>
-          <h2 className="font-heading text-4xl lg:text-5xl text-brand-navy font-bold leading-tight">
-            Who We Are?
+          <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl text-brand-navy font-bold leading-tight">
+            {t.title}
           </h2>
         </div>
 
         {/* Grid layout containing the Snowflake Cells */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-5xl mx-auto justify-items-center w-full mt-8 z-10 relative">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-12 max-w-5xl mx-auto justify-items-stretch md:justify-items-center w-full mt-8 z-10 relative">
           {cards.map((card, i) => (
             <SnowflakeCell
               key={`snowflake-cell-${i}`}

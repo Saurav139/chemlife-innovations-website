@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Script from "next/script";
 import { useReportWebVitals } from "next/web-vitals";
+import { useT } from "@/i18n/LocaleProvider";
 import { GA_ID, OPEN_CONSENT_EVENT, readConsent, saveConsent, track, type Consent } from "@/lib/analytics";
 
 type Metric = Parameters<Parameters<typeof useReportWebVitals>[0]>[0];
@@ -53,6 +54,7 @@ function deleteGaCookies() {
 
 // Rendered by AnalyticsLoader only when GA_ID is set.
 export default function Analytics() {
+  const t = useT();
   // undefined until the stored choice is read after hydration, so the server HTML never contains the banner.
   const [consent, setConsent] = useState<Consent | null | undefined>(undefined);
   const pendingVitals = useRef<Metric[]>([]);
@@ -114,13 +116,13 @@ export default function Analytics() {
       {consent === null && (
         <div
           role="region"
-          aria-label="Cookie consent"
-          className="fixed inset-x-4 bottom-4 z-[60] mx-auto max-w-xl rounded-2xl border border-white/10 bg-brand-navy p-4 text-white shadow-2xl sm:p-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-5"
+          aria-label={t.common.cookieRegion}
+          className="fixed inset-x-4 bottom-[max(1rem,env(safe-area-inset-bottom))] z-[60] mx-auto max-w-xl rounded-2xl border border-white/10 bg-brand-navy p-4 text-white shadow-2xl sm:p-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-5"
         >
           <p className="text-xs leading-relaxed text-white/85 sm:text-sm">
-            We&apos;d like to use Google Analytics cookies to see how visitors use this site, so we can improve it.{" "}
+            {t.common.cookieText}{" "}
             <Link href="/privacy" className="underline hover:text-teal-300">
-              Privacy policy
+              {t.common.cookiePrivacy}
             </Link>
           </p>
           <div className="flex shrink-0 gap-2">
@@ -129,14 +131,14 @@ export default function Analytics() {
               onClick={() => choose("denied")}
               className="min-h-11 flex-1 cursor-pointer rounded-full border border-white/40 px-5 text-sm font-semibold transition-colors hover:bg-white/10 sm:flex-none"
             >
-              Decline
+              {t.common.cookieDecline}
             </button>
             <button
               type="button"
               onClick={() => choose("granted")}
-              className="min-h-11 flex-1 cursor-pointer rounded-full bg-brand-orange px-5 text-sm font-semibold transition-colors hover:bg-orange-600 sm:flex-none"
+              className="min-h-11 flex-1 cursor-pointer rounded-full bg-brand-orange-aa px-5 text-sm font-semibold transition-colors hover:bg-brand-orange-aa-hover sm:flex-none"
             >
-              Accept
+              {t.common.cookieAccept}
             </button>
           </div>
         </div>

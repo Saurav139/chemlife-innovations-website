@@ -5,15 +5,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "@/context/VariantContext";
 import { Videos, VideoPosters } from "@/lib/assets";
 import BackgroundVideo, { useNearViewport } from "./BackgroundVideo";
+import { useHref, useT } from "@/i18n/LocaleProvider";
 
 const easeOut = [0.25, 0.1, 0, 1] as const;
-
-const bulletPoints = [
-  "Work with cutting-edge animal nutrition science",
-  "Collaborative team culture with industry experts",
-  "Annual team trips and celebration events",
-  "Sports activities and team-building programs",
-];
 
 const videos = [
   { src: Videos.trip1, poster: VideoPosters.trip1 },
@@ -23,6 +17,9 @@ const videos = [
 
 export default function LifeAtChemLife() {
   const { theme } = useTheme();
+  const t = useT().home.life;
+  const href = useHref();
+  const bulletPoints = t.points;
   const [videoIndex, setVideoIndex] = useState(0);
   const [sectionRef, near] = useNearViewport<HTMLElement>();
 
@@ -59,7 +56,7 @@ export default function LifeAtChemLife() {
 
       <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/90 via-black/60 to-brand-navy/80 z-10" />
 
-      <div className="relative z-20 w-full max-w-[1200px] mx-auto px-6 py-24 lg:py-32">
+      <div className="relative z-20 w-full max-w-[1200px] mx-auto px-6 py-16 md:py-24 lg:py-32">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -67,14 +64,14 @@ export default function LifeAtChemLife() {
           transition={{ duration: 0.6, ease: easeOut }}
           className="text-center"
         >
-          <h2 className="font-heading text-4xl lg:text-5xl text-white mb-16 leading-tight">
-            Life at ChemLife
+          <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-10 md:mb-16 leading-tight">
+            {t.title}
           </h2>
         </motion.div>
  
          <div className="max-w-2xl mx-auto">
           {bulletPoints.map((text, i) => (
-            <div key={text} className="relative flex items-start gap-5 pb-10 last:pb-0">
+            <div key={text} className="relative flex items-start gap-5 pb-7 md:pb-10 last:pb-0">
               {i < bulletPoints.length - 1 && (
                 <motion.div
                   initial={{ scaleY: 0 }}
@@ -99,7 +96,7 @@ export default function LifeAtChemLife() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: i * 0.4, ease: easeOut }}
-                className="text-white/90 text-xl lg:text-2xl"
+                className="text-white/90 text-lg md:text-xl lg:text-2xl"
               >
                 {text}
               </motion.span>
@@ -115,10 +112,10 @@ export default function LifeAtChemLife() {
           className="text-center mt-12"
         >
           <a
-            href="/careers"
-            className="inline-block border-2 border-brand-orange text-brand-orange bg-white hover:bg-brand-orange hover:text-white font-semibold px-8 py-3 rounded-full shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5"
+            href={href("/careers")}
+            className="inline-block border-2 border-brand-orange text-brand-orange-aa bg-white hover:bg-brand-orange-aa hover:text-white font-semibold px-8 py-3 rounded-full shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5"
           >
-            Join Us
+            {t.joinUs}
           </a>
         </motion.div>
       </div>

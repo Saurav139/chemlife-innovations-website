@@ -4,58 +4,28 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { useTheme } from "@/context/VariantContext";
 import { Images } from "@/lib/assets";
+import { useT } from "@/i18n/LocaleProvider";
 
-interface Step {
-  step: number;
-  title: string;
-  description: string;
-  image: string;
-  /** Describes the photo for screen readers and search engines */
-  alt: string;
-  objectPosition?: string;
-}
-
-const steps: Step[] = [
-  {
-    step: 1,
-    title: "Research",
-    description: "In-depth scientific research and analysis to identify bioactive molecules and their applications in animal nutrition.",
-    image: Images.process.researchImage,
-    alt: "The ChemLife research laboratory",
-  },
-  {
-    step: 2,
-    title: "Development",
-    description: "Formulation and development of innovative feed additives using patented technologies and green chemistry pathways.",
-    image: Images.process.developmentImage,
-    alt: "The ChemLife team presenting ANBioT at an exhibition stand",
-  },
-  {
-    step: 3,
-    title: "Manufacturing",
-    description: "Scalable feed-additives manufacturing setup with rigorous quality control to ensure consistency, safety, and efficacy.",
-    image: Images.process.manufacturingImage,
-    alt: "Feed additive manufacturing machinery",
-  },
-  {
-    step: 4,
-    title: "Delivery",
-    description: "The integrated supply chain moves feed additives from the Bengaluru facility through warehouses and varied transport networks to final delivery via direct or distributor channels.",
-    image: Images.process.delivery,
-    alt: "Feed bags stacked in a warehouse, a delivery truck and a dairy farm",
-  },
+// Titles, descriptions and photo descriptions are in the language file (home.howWeDo.steps), in this order.
+const stepImages: { image: string; objectPosition?: string }[] = [
+  { image: Images.process.researchImage },
+  { image: Images.process.developmentImage },
+  { image: Images.process.manufacturingImage },
+  { image: Images.process.delivery },
 ];
 
 export default function HowWeDo() {
   const { theme } = useTheme();
+  const t = useT().home.howWeDo;
+  const steps = t.steps.map((step, i) => ({ ...step, ...stepImages[i], step: i + 1 }));
 
   return (
-    <section className="relative py-24 lg:py-32 overflow-hidden bg-brand-navy">
+    <section className="relative py-16 md:py-24 lg:py-32 overflow-hidden bg-brand-navy">
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0 select-none pointer-events-none">
         <Image
           src={Images.process.howWeDoBg}
-          alt="Laboratory automation equipment lit in blue"
+          alt={t.bgAlt}
           fill
           className="object-cover opacity-35"
           priority
@@ -65,12 +35,12 @@ export default function HowWeDo() {
 
       <div className="relative z-10 max-w-[1200px] mx-auto px-6">
         {/* Title Section */}
-        <div className="text-center mb-20">
-          <span className="text-teal-400 text-sm font-bold tracking-widest uppercase block mb-3">
-            Our Process
+        <div className="text-center mb-10 md:mb-20">
+          <span className="text-teal-aa-light text-sm lg:text-base font-semibold tracking-widest uppercase block mb-3">
+            {t.kicker}
           </span>
-          <h2 className="font-heading text-4xl lg:text-5xl font-bold text-white leading-tight">
-            How We Do It?
+          <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight">
+            {t.title}
           </h2>
         </div>
 
@@ -80,14 +50,14 @@ export default function HowWeDo() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.7, ease: [0.25, 0.1, 0, 1] }}
-          className="rounded-3xl overflow-hidden shadow-2xl border border-white/10 max-w-[850px] mx-auto bg-white divide-y divide-slate-100"
+          className="rounded-3xl overflow-hidden shadow-2xl border border-white/10 max-w-[850px] lg:max-w-[1100px] mx-auto bg-white divide-y divide-slate-100"
         >
           {steps.map((s, i) => {
             const isEven = i % 2 === 0;
             return (
               <div
                 key={s.step}
-                className="grid grid-cols-1 md:grid-cols-2 gap-0 md:h-[260px] items-stretch group"
+                className="grid grid-cols-1 md:grid-cols-2 gap-0 md:h-[260px] lg:h-[300px] items-stretch group"
               >
                 {/* Image Box */}
                 <div className={`relative w-full h-[200px] md:h-full overflow-hidden order-1 ${isEven ? "md:order-1" : "md:order-2"}`}>
@@ -95,7 +65,7 @@ export default function HowWeDo() {
                     src={s.image}
                     alt={s.alt}
                     fill
-                    sizes="(max-width: 768px) 100vw, 425px"
+                    sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 550px"
                     className={`object-cover group-hover:scale-102 transition-transform duration-700 ${s.objectPosition || ""}`}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/15 to-transparent animate-fade-in" />
@@ -117,7 +87,7 @@ export default function HowWeDo() {
                       <h3 className="font-heading text-xl lg:text-2xl font-bold text-slate-800 mb-2 group-hover:text-brand-orange transition-colors duration-300">
                         {s.title}
                       </h3>
-                      <p className="text-slate-600 text-xs lg:text-sm leading-relaxed font-normal">
+                      <p className="text-slate-600 text-xs md:text-sm lg:text-base leading-relaxed font-normal">
                         {s.description}
                       </p>
                     </div>

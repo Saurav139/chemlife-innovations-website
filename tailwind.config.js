@@ -9,7 +9,7 @@ module.exports = {
     extend: {
       colors: {
         // Brand colors restricted strictly to 4 colors
-        'brand-orange': '#E65C38',
+        'brand-orange': '#E8614A',
         'brand-orange-light': '#FFFFFF',
         'brand-green': '#305280',
         'brand-navy': '#305280',
@@ -26,8 +26,8 @@ module.exports = {
         'process-bg': '#305280',
       },
       fontFamily: {
-        'heading': ['var(--font-maven-pro)', 'Calibri', 'system-ui', 'sans-serif'],
-        'body': ['var(--font-maven-pro)', 'Calibri', 'system-ui', 'sans-serif'],
+        'heading': ['var(--font-maven-pro)', 'var(--font-noto-kannada)', 'var(--font-noto-devanagari)', 'Calibri', 'system-ui', 'sans-serif'],
+        'body': ['var(--font-maven-pro)', 'var(--font-noto-kannada)', 'var(--font-noto-devanagari)', 'Calibri', 'system-ui', 'sans-serif'],
       },
     },
   },

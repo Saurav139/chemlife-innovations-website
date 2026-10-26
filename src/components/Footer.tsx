@@ -5,9 +5,14 @@ import Link from "next/link";
 import { Images } from "@/lib/assets";
 import { OPEN_CONSENT_EVENT } from "@/lib/analytics";
 import { useAnalyticsEnabled } from "@/lib/useAnalyticsEnabled";
+import { useHref, useLocale, useT } from "@/i18n/LocaleProvider";
 
 export default function Footer() {
   const analyticsEnabled = useAnalyticsEnabled();
+  const t = useT();
+  const href = useHref();
+  // Links to pages that are only in English say so on translated pages.
+  const english = useLocale() === "en" ? "" : ` ${t.footer.englishOnly}`;
 
   return (
     <footer id="footer" className="relative bg-[#15273F] text-white border-t-2 border-teal-500/20 overflow-hidden">
@@ -18,12 +23,12 @@ export default function Footer() {
       {/* Top Gradient Border Line */}
       <div className="h-1 w-full bg-gradient-to-r from-teal-500 via-emerald-500 to-brand-orange" />
 
-      <div className="max-w-[1200px] mx-auto px-6 py-16 lg:py-20 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-8">
+      <div className="max-w-[1200px] mx-auto px-6 py-12 md:py-16 lg:py-20 relative z-10">
+        <div className="grid grid-cols-2 lg:grid-cols-12 gap-x-6 gap-y-10 md:gap-12 lg:gap-8">
           
           {/* Brand Bio Column */}
-          <div className="lg:col-span-4 space-y-6">
-            <Link href="/" className="inline-block">
+          <div className="col-span-2 md:col-span-1 lg:col-span-4 space-y-6">
+            <Link href={href("/")} className="inline-block">
               <Image
                 src={Images.branding.logo}
                 alt="ChemLife Innovations Logo"
@@ -33,7 +38,7 @@ export default function Footer() {
               />
             </Link>
             <p className="text-slate-350 text-sm leading-relaxed max-w-sm">
-              Pioneering veterinary biotechnology through nature-driven functional feed additives that support animal wellness and maximize livestock farm profitability.
+              {t.footer.bio}
             </p>
             {/* Social Media Links */}
             <div className="flex items-center gap-3.5 pt-2">
@@ -41,7 +46,7 @@ export default function Footer() {
                 href="https://www.facebook.com/people/Chemlife-Innovations/100063821717542/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 bg-white/5 rounded-full flex items-center justify-center border border-white/10 hover:bg-brand-orange hover:border-brand-orange hover:scale-105 transition-all duration-350"
+                className="w-11 h-11 md:w-10 md:h-10 bg-white/5 rounded-full flex items-center justify-center border border-white/10 hover:bg-brand-orange hover:border-brand-orange hover:scale-105 transition-all duration-350"
                 aria-label="Facebook"
               >
                 <svg className="w-4 h-4 fill-current text-white" viewBox="0 0 24 24">
@@ -52,7 +57,7 @@ export default function Footer() {
                 href="https://www.linkedin.com/company/chemlifeinnovations"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 bg-white/5 rounded-full flex items-center justify-center border border-white/10 hover:bg-brand-orange hover:border-brand-orange hover:scale-105 transition-all duration-350"
+                className="w-11 h-11 md:w-10 md:h-10 bg-white/5 rounded-full flex items-center justify-center border border-white/10 hover:bg-brand-orange hover:border-brand-orange hover:scale-105 transition-all duration-350"
                 aria-label="LinkedIn"
               >
                 <svg className="w-4 h-4 fill-current text-white" viewBox="0 0 24 24">
@@ -63,7 +68,7 @@ export default function Footer() {
                 href="https://www.youtube.com/@chemlifeinnovations2739"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 bg-white/5 rounded-full flex items-center justify-center border border-white/10 hover:bg-brand-orange hover:border-brand-orange hover:scale-105 transition-all duration-350"
+                className="w-11 h-11 md:w-10 md:h-10 bg-white/5 rounded-full flex items-center justify-center border border-white/10 hover:bg-brand-orange hover:border-brand-orange hover:scale-105 transition-all duration-350"
                 aria-label="YouTube"
               >
                 <svg className="w-4 h-4 fill-current text-white" viewBox="0 0 24 24">
@@ -75,20 +80,20 @@ export default function Footer() {
 
           {/* Column 2: Company Navigation */}
           <div className="lg:col-span-2 space-y-5">
-            <h4 className="font-heading text-white text-[15px] font-bold uppercase tracking-wider">
-              Company
-            </h4>
-            <ul className="space-y-3">
+            <h2 className="font-heading text-white text-[15px] font-bold uppercase tracking-wider">
+              {t.footer.company}
+            </h2>
+            <ul className="md:space-y-3">
               {[
-                { label: "Home", href: "/" },
-                { label: "About Us", href: "/about" },
-                { label: "Careers", href: "/careers" },
-                { label: "Contact Us", href: "/contact" },
+                { label: t.footer.home, href: href("/") },
+                { label: t.footer.about, href: href("/about") },
+                { label: t.footer.careers, href: href("/careers") },
+                { label: t.footer.contact, href: href("/contact") },
               ].map((link) => (
                 <li key={link.label}>
                   <Link
                     href={link.href}
-                    className="text-slate-350 text-sm hover:text-teal-400 hover:translate-x-1 inline-block transition-all duration-300"
+                    className="text-slate-350 text-sm hover:text-teal-400 hover:translate-x-1 tap-target inline-block py-3 md:py-0 transition-all duration-300"
                   >
                     {link.label}
                   </Link>
@@ -99,20 +104,20 @@ export default function Footer() {
 
           {/* Column 3: Solutions & Technology */}
           <div className="lg:col-span-2 space-y-5">
-            <h4 className="font-heading text-white text-[15px] font-bold uppercase tracking-wider">
-              Solutions
-            </h4>
-            <ul className="space-y-3">
+            <h2 className="font-heading text-white text-[15px] font-bold uppercase tracking-wider">
+              {t.footer.solutions}
+            </h2>
+            <ul className="md:space-y-3">
               {[
-                { label: "Functional Additives", href: "/products" },
-                { label: "Scientific Research", href: "/research" },
-                { label: "AI Consult Hub", href: "/chat" },
-                { label: "Innovation Articles", href: "/insights" },
+                { label: t.footer.additives, href: href("/products") },
+                { label: t.footer.research, href: href("/research") },
+                { label: t.footer.aiHub + english, href: "/chat" },
+                { label: t.footer.articles + english, href: "/insights" },
               ].map((link) => (
                 <li key={link.label}>
                   <Link
                     href={link.href}
-                    className="text-slate-350 text-sm hover:text-teal-400 hover:translate-x-1 inline-block transition-all duration-300"
+                    className="text-slate-350 text-sm hover:text-teal-400 hover:translate-x-1 tap-target inline-block py-3 md:py-0 transition-all duration-300"
                   >
                     {link.label}
                   </Link>
@@ -122,10 +127,10 @@ export default function Footer() {
           </div>
 
           {/* Column 4: Contact & Facilities */}
-          <div className="lg:col-span-4 space-y-5">
-            <h4 className="font-heading text-white text-[15px] font-bold uppercase tracking-wider">
-              Contact Us
-            </h4>
+          <div className="col-span-2 md:col-span-1 lg:col-span-4 space-y-5">
+            <h2 className="font-heading text-white text-[15px] font-bold uppercase tracking-wider">
+              {t.footer.contactHeading}
+            </h2>
             <ul className="space-y-4 text-slate-350 text-sm">
               <li className="flex items-start gap-3">
                 <svg className="w-4 h-4 mt-1 flex-shrink-0 text-brand-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
@@ -140,13 +145,13 @@ export default function Footer() {
                 <svg className="w-4 h-4 flex-shrink-0 text-brand-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
                 </svg>
-                <a href="tel:+919535862570" className="hover:text-brand-orange transition-colors">+91 95358 62570</a>
+                <a href="tel:+919535862570" className="inline-flex items-center min-h-11 -my-2 hover:text-brand-orange transition-colors">+91 95358 62570</a>
               </li>
               <li className="flex items-center gap-3">
                 <svg className="w-4 h-4 flex-shrink-0 text-brand-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
                 </svg>
-                <a href="mailto:innovate@chemlifeinnovations.com" className="hover:text-brand-orange transition-colors break-all">
+                <a href="mailto:innovate@chemlifeinnovations.com" className="inline-flex items-center min-h-11 -my-2 hover:text-brand-orange transition-colors break-all">
                   innovate@chemlifeinnovations.com
                 </a>
               </li>
@@ -158,7 +163,8 @@ export default function Footer() {
 
       {/* Copyright Bar */}
       <div className="border-t border-white/5 bg-[#0F1C2E] relative z-10">
-        <div className="max-w-[1200px] mx-auto px-6 py-6 flex flex-col sm:flex-row justify-between items-center gap-4">
+        {/* Phones: extra room at the bottom so the chat and search buttons don't cover the last line. */}
+        <div className="max-w-[1200px] mx-auto px-6 pt-6 pb-24 md:pb-6 flex flex-col sm:flex-row justify-between items-center gap-4">
           <div className="flex items-center gap-3">
             <Image
               src={Images.branding.logo}
@@ -168,19 +174,19 @@ export default function Footer() {
               className="h-7 w-auto rounded-sm object-contain"
             />
             <p className="text-slate-450 text-xs text-center sm:text-left">
-              &copy; {new Date().getFullYear()} ChemLife Innovations Pvt Ltd. All rights reserved.
+              &copy; {new Date().getFullYear()} ChemLife Innovations Pvt Ltd. {t.footer.rights}
             </p>
           </div>
           <div className="flex gap-6">
-            <Link href="/privacy" className="text-slate-450 text-xs hover:text-brand-orange transition-colors">Privacy Policy</Link>
-            <Link href="#" className="text-slate-450 text-xs hover:text-brand-orange transition-colors">Terms of Use</Link>
+            <Link href="/privacy" className="tap-target text-slate-450 text-xs hover:text-brand-orange transition-colors">{t.footer.privacy + english}</Link>
+            <Link href="/terms" className="tap-target text-slate-450 text-xs hover:text-brand-orange transition-colors">{t.footer.terms + english}</Link>
             {analyticsEnabled && (
               <button
                 type="button"
                 onClick={() => window.dispatchEvent(new Event(OPEN_CONSENT_EVENT))}
-                className="text-slate-450 text-xs hover:text-brand-orange transition-colors cursor-pointer"
+                className="tap-target text-slate-450 text-xs hover:text-brand-orange transition-colors cursor-pointer"
               >
-                Cookie settings
+                {t.footer.cookies}
               </button>
             )}
           </div>
