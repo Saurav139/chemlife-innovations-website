@@ -63,7 +63,13 @@ export default function ContactPage() {
 
   // Pre-fill the form when a call to action links here, e.g. /contact?type=nutritionist from the homepage hero
   useEffect(() => {
-    const type = new URLSearchParams(window.location.search).get("type");
+    const params = new URLSearchParams(window.location.search);
+    const type = params.get("type");
+    // A message carried over from another page, e.g. the mould-loss calculator's figures. Only fills an empty box.
+    const message = params.get("message");
+    if (message) {
+      setFormData((prev) => ({ ...prev, message: prev.message || message.slice(0, CONTACT_LIMITS.message) }));
+    }
     if (type === "nutritionist") {
       setFormData((prev) => ({
         ...prev,
