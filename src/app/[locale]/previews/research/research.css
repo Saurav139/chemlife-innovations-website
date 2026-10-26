@@ -245,6 +245,46 @@
 .rp .replay { min-height: 40px; padding: 0 1rem; border-radius: 999px; border-color: var(--line); font-family: var(--font-family-heading); font-size: .875rem; color: var(--navy); }
 .rp .replay:hover { border-color: var(--navy); }
 
+/* Phones and small tablets: the three stages become a step-through, one stage at a time at full width. Swipe, or
+   use the arrows and dots under it. The wide drawing's labels would be too small to read below 860px. */
+.rp .stage-nav { display: none; }
+@media (max-width: 860px) {
+  .rp .fig-anim { display: none; }
+  .rp .stages-m {
+    display: flex; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory;
+    scrollbar-width: none; counter-reset: stage;
+  }
+  .rp .stages-m::-webkit-scrollbar { display: none; }
+  .rp .stages-m li { flex: 0 0 100%; min-width: 0; justify-content: flex-start; padding-block: 6px 2px; scroll-snap-align: center; scroll-snap-stop: always; counter-increment: stage; }
+  .rp .stages-m li + li { border-top: 0; }
+  .rp .stages-m .crop { max-height: 220px; }
+  .rp .stages-m strong { margin-top: 4px; }
+  .rp .stages-m strong::before {
+    content: "Stage " counter(stage) " of 3"; display: block; margin-bottom: .2rem;
+    font-size: .8rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--teal);
+  }
+  .rp .stage-nav { display: flex; align-items: center; justify-content: space-between; gap: 12px; max-width: 440px; margin: 10px auto 2px; }
+  .rp .stage-step {
+    display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; flex: none;
+    border: 1px solid var(--line); border-radius: 50%; background: #fff; color: var(--navy); cursor: pointer;
+    transition: background-color .2s, border-color .2s, color .2s, opacity .2s;
+  }
+  .rp .stage-step[data-stage-next] { background: var(--coral-btn); border-color: var(--coral-btn); color: #fff; }
+  .rp .stage-step:disabled { opacity: .35; cursor: default; }
+  .rp .stage-step[data-stage-next]:disabled { background: #fff; border-color: var(--line); color: var(--navy); }
+  .rp .stage-step svg { width: 22px; height: 22px; }
+  .rp .stage-dots { display: flex; align-items: center; justify-content: center; gap: 2px; }
+  /* 44px tap areas around small dots */
+  .rp .stage-dot { position: relative; width: 36px; height: 44px; border: 0; background: none; cursor: pointer; }
+  .rp .stage-dot::before {
+    content: ""; position: absolute; top: 50%; left: 50%; width: 10px; height: 10px; margin: -5px 0 0 -5px;
+    border-radius: 999px; background: var(--cell); transition: width .25s, margin .25s, background-color .25s;
+  }
+  .rp .stage-dot[aria-current="step"]::before { width: 26px; margin-left: -13px; background: var(--navy); }
+}
+@media (min-width: 600px) and (max-width: 860px) { .rp .stages-m .crop { max-height: 260px; } }
+@media (max-width: 860px) and (prefers-reduced-motion: reduce) { .rp .stage-dot::before { transition: none; } }
+
 /* Sections: a tight rhythm, each heading with a teal label above it, as on the homepage */
 .rp .section { padding-block: 56px; }
 @media (min-width: 768px) { .rp .section { padding-block: 72px; } }
@@ -350,10 +390,14 @@
 .rp .ticks { grid-area: ticks; min-width: 0; list-style: none; display: flex; flex-direction: column; gap: 12px; }
 .rp .record { grid-area: record; }
 .rp .ticks li {
-  display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 14px; align-items: start; padding: 16px 18px;
+  display: grid; grid-template-columns: 48px minmax(0, 1fr); gap: 16px; align-items: start; padding: 16px 18px;
   background: rgba(255, 255, 255, .07); border: 1px solid rgba(255, 255, 255, .14); border-radius: 16px;
 }
-.rp .ticks svg { width: 40px; height: 40px; color: var(--teal-light); }
+/* Each benefit's icon, in a teal tile */
+.rp .ticks svg {
+  width: 48px; height: 48px; padding: 10px; border-radius: 14px; color: var(--teal-light);
+  background: rgba(26, 219, 195, .14); border: 1px solid rgba(26, 219, 195, .32);
+}
 .rp .ticks strong { display: block; font-family: var(--font-family-heading); font-size: 1.1rem; font-weight: 700; color: #fff; }
 .rp .ticks p { margin-top: .25rem; font-size: 1rem; line-height: 1.6; color: rgba(255, 255, 255, .85); }
 .rp .record { background: #fff; border-radius: 20px; overflow: hidden; box-shadow: 0 24px 48px -28px rgba(0, 0, 0, .55); }
