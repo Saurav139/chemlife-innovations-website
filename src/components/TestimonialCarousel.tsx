@@ -16,6 +16,7 @@ const testimonials = [
     name: "Akmal Reyaz",
     role: "Business Head – Dairy & Aqua",
     company: "Huvepharma Sea (Pune) Private Limited",
+    short: "Huvepharma",
     logo: Images.testimonials.huve,
   },
   {
@@ -23,6 +24,7 @@ const testimonials = [
     name: "Dr Manjunatha B P",
     role: "Chief Executive Officer",
     company: "GROEXL Vet Private Limited",
+    short: "GROEXL Vet",
     logo: Images.testimonials.groxel,
   },
   {
@@ -30,6 +32,7 @@ const testimonials = [
     name: "Lakshmikanth Yadav",
     role: "Managing Director",
     company: "Quadragen VetHealth Private Limited",
+    short: "Quadragen",
     logo: Images.testimonials.quadragen,
   },
 ];
@@ -76,7 +79,7 @@ export default function TestimonialCarousel() {
           </h2>
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-10 md:gap-12 lg:gap-16 items-start">
+        <div className="grid lg:grid-cols-3 gap-8 md:gap-10 lg:gap-16 items-start">
           {/* Large Quote Section */}
           <div className="lg:col-span-2">
             <div className="relative">
@@ -139,54 +142,64 @@ export default function TestimonialCarousel() {
             </div>
           </div>
 
-          {/* Person Switcher */}
-          <div className="lg:col-span-1">
-            {/* Below desktop the name and role are already under the quote, so the switcher is just a row of logos. */}
+          {/* Person Switcher. Phones and tablets: three labelled tabs above the quote, the chosen one filled white.
+              Desktop: a list beside the quote with each partner's name and role. */}
+          <div className="order-first lg:order-none lg:col-span-1">
             <h3 className={`hidden lg:block text-lg font-semibold mb-6 ${theme.testimonialsTitle}`}>
               Our Partners
             </h3>
 
-            <div className="flex gap-3 lg:block lg:space-y-3">
-              {testimonials.map((testimonial, i) => (
-                <button
-                  key={i}
-                  onClick={() => choose(i)}
-                  aria-label={`${testimonial.name}, ${testimonial.company}`}
-                  aria-pressed={i === current}
-                  className={`shrink-0 p-1 rounded-full lg:w-full lg:p-4 lg:rounded-xl text-left transition-all duration-200 border cursor-pointer ${i === current
-                    ? 'bg-teal-500/20 border-teal-400 shadow-md shadow-teal-500/10'
-                    : 'bg-teal-950/20 border-teal-500/10 hover:bg-teal-500/10 hover:border-teal-500/30'
+            <div className="grid grid-cols-3 gap-2 sm:gap-3 lg:block lg:space-y-3">
+              {testimonials.map((testimonial, i) => {
+                const active = i === current;
+                return (
+                  <button
+                    key={i}
+                    type="button"
+                    onClick={() => choose(i)}
+                    aria-label={`${testimonial.name}, ${testimonial.company}`}
+                    aria-pressed={active}
+                    className={`w-full rounded-xl border transition-all duration-200 cursor-pointer text-center lg:text-left px-2 py-3 lg:p-4 ${
+                      active
+                        ? "bg-white border-white shadow-lg lg:bg-teal-500/20 lg:border-teal-400 lg:shadow-md lg:shadow-teal-500/10"
+                        : "bg-white/5 border-white/20 hover:bg-white/10 lg:bg-teal-950/20 lg:border-teal-500/10 lg:hover:bg-teal-500/10 lg:hover:border-teal-500/30"
                     }`}
-                >
-                  <div className="flex items-center gap-3">
-                    <div className={`relative w-14 h-14 rounded-full border overflow-hidden shrink-0 bg-white ${i === current
-                      ? 'border-2 border-brand-orange'
-                      : 'border border-brand-orange/40'
+                  >
+                    <div className="flex flex-col lg:flex-row items-center gap-2 lg:gap-3">
+                      <div className={`relative w-11 h-11 lg:w-14 lg:h-14 rounded-full overflow-hidden shrink-0 bg-white ${
+                        active ? "border-2 border-brand-orange" : "border border-brand-orange/40"
                       }`}>
-                      <Image
-                        src={testimonial.logo}
-                        alt={`${testimonial.company} logo`}
-                        fill
-                        sizes="56px"
-                        className="object-contain p-1.5"
-                      />
-                    </div>
+                        <Image
+                          src={testimonial.logo}
+                          alt=""
+                          fill
+                          sizes="56px"
+                          className="object-contain p-1.5"
+                        />
+                      </div>
 
-                    <div className="hidden lg:block flex-1 min-w-0">
-                      <p className={`font-medium text-sm ${theme.testimonialsName}`}>
-                        {testimonial.name}
-                      </p>
-                      <p className={`text-xs ${theme.testimonialsRole} opacity-75`}>
-                        {testimonial.role}
-                      </p>
-                    </div>
+                      {/* Phones and tablets: the company name under the logo */}
+                      <span className={`lg:hidden text-xs font-semibold leading-tight ${active ? "text-brand-navy" : "text-white/85"}`}>
+                        {testimonial.short}
+                      </span>
 
-                    {i === current && (
-                      <div className="hidden lg:block w-2 h-2 rounded-full bg-teal-400"></div>
-                    )}
-                  </div>
-                </button>
-              ))}
+                      {/* Desktop: name and role */}
+                      <div className="hidden lg:block flex-1 min-w-0">
+                        <p className={`font-medium text-sm ${theme.testimonialsName}`}>
+                          {testimonial.name}
+                        </p>
+                        <p className={`text-xs ${theme.testimonialsRole} opacity-75`}>
+                          {testimonial.role}
+                        </p>
+                      </div>
+
+                      {active && (
+                        <div className="hidden lg:block w-2 h-2 rounded-full bg-teal-400"></div>
+                      )}
+                    </div>
+                  </button>
+                );
+              })}
             </div>
           </div>
         </div>
