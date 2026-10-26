@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import Image from "next/image";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -57,6 +57,20 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
   const [activeVideoId, setActiveVideoId] = useState<string | null>(null);
   const [activeArticle, setActiveArticle] = useState<InsightItem | null>(null);
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  // Grid animation. Cards already on screen never move: only the cards "Load more" adds fade in (from `revealFrom`
+  // on), a few at a time; a new filter or search fades the grid in as a whole. Nothing animates on first load.
+  const reduceMotion = useReducedMotion();
+  const [revealFrom, setRevealFrom] = useState(Infinity);
+  const [gridVersion, setGridVersion] = useState(0);
+  const loadMore = () => {
+    setRevealFrom(visibleCount);
+    setVisibleCount((count) => count + PAGE_SIZE);
+  };
+  const resetGrid = () => {
+    setVisibleCount(PAGE_SIZE);
+    setRevealFrom(Infinity);
+    setGridVersion((v) => v + 1);
+  };
 
   // Escape closes the video player or the article reader, and the page behind them doesn't scroll while one is open.
   const overlayOpen = !!activeVideoId || !!activeArticle;
@@ -471,7 +485,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                   <input
                     type="text"
                     value={searchQuery}
-                    onChange={(e) => { setSearchQuery(e.target.value); setVisibleCount(PAGE_SIZE); }}
+                    onChange={(e) => { setSearchQuery(e.target.value); resetGrid(); }}
                     placeholder="Search titles, topics, or authors..."
                     className="w-full bg-gray-50 border border-gray-250 rounded-full px-6 py-3 text-base md:text-sm text-brand-navy placeholder-gray-aa focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all duration-300 shadow-sm"
                   />
@@ -490,7 +504,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                   return (
                     <button
                       key={filter}
-                      onClick={() => { setSelectedFilter(filter); setVisibleCount(PAGE_SIZE); }}
+                      onClick={() => { setSelectedFilter(filter); resetGrid(); }}
                       className={`tap-target px-6 py-2 rounded-full text-sm font-semibold transition-all duration-300 border cursor-pointer ${
                         isActive
                           ? "bg-teal-aa border-teal-600 text-white shadow-sm"
@@ -521,21 +535,25 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
         <SectionWrapper className="pt-0 pb-24 bg-white">
           <div className="max-w-[1200px] mx-auto px-6">
             
-            <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 lg:gap-x-6">
-              <AnimatePresence mode="popLayout" initial={false}>
-                {visibleItems.map((item) => {
+            <motion.div
+              key={gridVersion}
+              initial={gridVersion === 0 || reduceMotion ? false : { opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.25, ease: "easeOut" }}
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 lg:gap-x-6"
+            >
+                {visibleItems.map((item, index) => {
                   const isBlog = item.type === "Blog";
+                  const isNew = index >= revealFrom;
                   return (
                     <motion.div
-                      layout
                       key={item.title}
                       id={featuredTitles.has(item.title) ? undefined : insightAnchor(item.title)}
                       data-analytics-item={item.title}
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.9 }}
-                      transition={{ duration: 0.4, ease: easeOut }}
-                      className="scroll-mt-28 bg-gray-55 border border-gray-200 rounded-2xl p-5 md:p-6 lg:p-5 xl:p-6 shadow-sm hover:shadow-md hover:border-teal-500/20 transition-all duration-300 group flex flex-col justify-between"
+                      initial={isNew ? (reduceMotion ? { opacity: 0 } : { opacity: 0, y: 12 }) : false}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.35, ease: easeOut, delay: isNew ? Math.min(index - revealFrom, 5) * 0.06 : 0 }}
+                      className="scroll-mt-28 bg-gray-55 border border-gray-200 rounded-2xl p-5 md:p-6 lg:p-5 xl:p-6 shadow-sm hover:shadow-md hover:border-teal-500/20 transition-[box-shadow,border-color] duration-300 group flex flex-col justify-between"
                     >
                       {/* Clickable Area of Card Content */}
                       <div
@@ -661,14 +679,13 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                     </motion.div>
                   );
                 })}
-              </AnimatePresence>
             </motion.div>
 
             {gridItems.length > visibleCount && (
               <div className="mt-10 flex justify-center">
                 <button
                   type="button"
-                  onClick={() => setVisibleCount((count) => count + PAGE_SIZE)}
+                  onClick={loadMore}
                   className="inline-flex items-center justify-center min-h-12 px-8 rounded-full border-2 border-teal-aa text-teal-aa hover:bg-teal-aa hover:text-white text-sm font-bold transition-colors cursor-pointer"
                 >
                   Load more ({gridItems.length - visibleCount} more)
