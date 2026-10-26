@@ -5,7 +5,6 @@ import Image from "next/image";
 import { useTheme } from "@/context/VariantContext";
 import { usePathname } from "next/navigation";
 import { Images } from "@/lib/assets";
-import { previewsAllowed } from "@/lib/previews";
 import { useHref, useLocale, useT } from "@/i18n/LocaleProvider";
 import { splitLocale } from "@/i18n/config";
 import LanguageSwitcher from "./LanguageSwitcher";
@@ -30,9 +29,6 @@ export default function Header() {
   // The page's address without its language prefix, to highlight the current page.
   const pathname = splitLocale(usePathname() ?? "/").path;
   const navLinks = NAV.map((link) => ({ label: t.nav[link.key], path: link.href, href: href(link.href) }));
-  // Staging only: a button to the design mock-ups awaiting approval.
-  const [showPreviews, setShowPreviews] = useState(false);
-  useEffect(() => setShowPreviews(previewsAllowed(location.host)), []);
 
   // While the phone menu is open it covers the page: the page underneath stops scrolling, and Escape or
   // widening the window to the desktop nav closes it.
@@ -78,7 +74,7 @@ export default function Header() {
             />
           </a>
 
-          <nav className={`hidden lg:flex items-center ${showPreviews ? "gap-3 xl:gap-7" : "gap-7 xl:gap-10"}`}>
+          <nav className="hidden lg:flex items-center gap-7 xl:gap-10">
             {navLinks.map((link) => {
               const isActive =
                 pathname === link.path || (pathname.startsWith(link.path) && link.path !== "/");
@@ -97,15 +93,6 @@ export default function Header() {
                 </a>
               );
             })}
-            {showPreviews && (
-              <a
-                href="/previews"
-                title="Design previews"
-                className="shrink-0 whitespace-nowrap rounded-full border-2 border-brand-orange px-3 py-1 text-[14px] font-semibold text-brand-orange-aa transition-colors hover:bg-brand-orange-aa hover:text-white"
-              >
-                Previews
-              </a>
-            )}
             <LanguageSwitcher />
           </nav>
 
@@ -152,11 +139,6 @@ export default function Header() {
                   </a>
                 );
               })}
-              {showPreviews && (
-                <a href="/previews" className="flex items-center min-h-11 text-base font-semibold text-brand-orange-aa" onClick={() => setMobileOpen(false)}>
-                  Design previews
-                </a>
-              )}
               <LanguageSwitcher inline />
             </div>
           </div>
