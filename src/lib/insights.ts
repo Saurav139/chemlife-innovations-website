@@ -28,7 +28,7 @@ const fallbackData: Insights = {
       meta: "5 min read",
       date: "July 15, 2026",
       imageUrl: Images.gallery.rotate21,
-      linkUrl: "https://www.linkedin.com/posts/chemlifeinnovations_feedbites-chemlifeinnovations-feedbites-activity-7243916601449336832-r_xQ",
+      linkUrl: "https://www.linkedin.com/company/chemlifeinnovations/",
       content: `In livestock farming, every feed choice determines your operational margins. Feed quality isn't just about weight; it is about gut performance and biochemical stability.
 
 With #FeedBites, we share actionable updates to help dairy and poultry manufacturers make smarter feed preservation decisions. In this post, we discuss:
@@ -46,7 +46,7 @@ Make smarter decisions for better outcomes.`
       meta: "6 min read",
       date: "July 12, 2026",
       imageUrl: Images.gallery.rotate32,
-      linkUrl: "https://www.linkedin.com/company/chemlifeinnovations/posts/?feedView=all",
+      linkUrl: "https://www.linkedin.com/company/chemlifeinnovations/",
       content: `We are proud to share a major milestone: ChemLife Innovations has entered into a strategic collaboration with the Technology Development Board (TDB), Department of Science & Technology, Government of India.
 
 This partnership is focused on the commercial scale-up and manufacturing of bio-trace minerals utilizing our patented Accelerated Natural Biotransformation (ANBioT) technology.
@@ -88,7 +88,7 @@ Here are six practical solutions to help strengthen poultry profitability:
       meta: "5 min read",
       date: "March 22, 2026",
       imageUrl: Images.process.researchImage,
-      linkUrl: "https://www.linkedin.com/company/chemlifeinnovations/posts/?feedView=all",
+      linkUrl: "https://www.linkedin.com/company/chemlifeinnovations/",
       content: `Bridging traditional plant-based wisdom with modern biotechnology is the core mission of ChemLife Innovations.
 
 Through our patented Accelerated Natural Bio-Transformation (ANBioT) platform, we recreate natural bio-chelation pathways. Instead of feeding crude metal oxides or sulfates (which have low absorption and cause toxic stress), we chelate trace minerals directly to hydroxy amino acids.
@@ -102,7 +102,7 @@ This organic chelation increases absorption efficiency, optimizes digestion, and
       meta: "4 min read",
       date: "January 10, 2026",
       imageUrl: Images.research.pellets,
-      linkUrl: "https://www.linkedin.com/company/chemlifeinnovations/posts/?feedView=all",
+      linkUrl: "https://www.linkedin.com/company/chemlifeinnovations/",
       content: `In poultry and cattle farming, feed accounts for up to 70% of production costs. If your feed is compromised by fungal mold or bacteria, your entire margin is at risk.
 
 Clean feed ensures that animals absorb maximum nutrients, which directly impacts the Feed Conversion Ratio (FCR). By preventing mold growth from the source, farmers avoid the clinical losses associated with secondary bacterial infections and high mortality rates.`
@@ -114,7 +114,7 @@ Clean feed ensures that animals absorb maximum nutrients, which directly impacts
       meta: "4 min read",
       date: "November 15, 2025",
       imageUrl: Images.gallery.rotate11,
-      linkUrl: "https://www.linkedin.com/company/chemlifeinnovations/posts/?feedView=all",
+      linkUrl: "https://www.linkedin.com/company/chemlifeinnovations/",
       content: `Maintaining poultry gut integrity is key to modern, sustainable farming. Intestinal health directly dictates how well broilers and layers absorb crucial nutrients.
 
 GroGenie provides a non-antibiotic approach to managing enteric pathogens. By suppressing harmful bacteria and supporting healthy microflora, it promotes consistent growth and feed safety without the risks of antibiotic resistance.`
@@ -433,7 +433,8 @@ export async function getInsights(): Promise<Insights> {
               meta: "3 min read",
               date: formattedDate,
               imageUrl: share.content?.contentEntities?.[0]?.thumbnails?.[0]?.resolvedUrl || Images.gallery.rotate21,
-              linkUrl: `https://www.linkedin.com/feed/update/urn:li:activity:${share.id}`,
+              // The post's own activity URN when LinkedIn sends it; the share id is a different number.
+              linkUrl: `https://www.linkedin.com/feed/update/${share.activity || `urn:li:share:${share.id}`}`,
               content: text,
             };
           });

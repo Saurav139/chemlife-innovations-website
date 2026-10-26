@@ -265,7 +265,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                       Read Article
                     </button>
                     <a
-                      href={featuredBlog.linkUrl || "https://www.linkedin.com/company/chemlifeinnovations/posts/?feedView=all"}
+                      href={featuredBlog.linkUrl || "https://www.linkedin.com/company/chemlifeinnovations/"}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex items-center justify-center min-h-11 text-center whitespace-nowrap px-2 sm:px-6 lg:px-2 py-2.5 rounded-full text-[13px] sm:text-sm lg:text-xs xl:text-sm leading-5 border border-gray-200 text-gray-600 hover:bg-gray-50 hover:text-teal-aa font-bold transition-all duration-300 cursor-pointer"
@@ -429,7 +429,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
           <div className="max-w-[1200px] mx-auto px-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <a
-                href="https://www.linkedin.com/company/chemlifeinnovations/posts/?feedView=all"
+                href="https://www.linkedin.com/company/chemlifeinnovations/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-4 p-4 bg-white rounded-2xl border border-gray-200 hover:border-blue-500 hover:shadow-xs transition-all duration-300"
@@ -638,7 +638,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                               Read Article
                             </button>
                             <a
-                              href={item.linkUrl || "https://www.linkedin.com/company/chemlifeinnovations/posts/?feedView=all"}
+                              href={item.linkUrl || "https://www.linkedin.com/company/chemlifeinnovations/"}
                               target="_blank"
                               rel="noopener noreferrer"
                               className="tap-target text-xs font-semibold text-gray-500 hover:text-teal-aa transition-colors cursor-pointer"
