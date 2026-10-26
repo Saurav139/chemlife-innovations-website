@@ -28,7 +28,7 @@ const fallbackData: Insights = {
       meta: "5 min read",
       date: "July 15, 2026",
       imageUrl: Images.gallery.rotate21,
-      linkUrl: "https://www.linkedin.com/company/chemlifeinnovations/",
+      linkUrl: "https://www.linkedin.com/posts/chemlifeinnovations_feedbites-chemlifeinnovations-animalnutrition-activity-7473607866512355328-G6mF",
       content: `In livestock farming, every feed choice determines your operational margins. Feed quality isn't just about weight; it is about gut performance and biochemical stability.
 
 With #FeedBites, we share actionable updates to help dairy and poultry manufacturers make smarter feed preservation decisions. In this post, we discuss:
@@ -102,7 +102,7 @@ This organic chelation increases absorption efficiency, optimizes digestion, and
       meta: "4 min read",
       date: "January 10, 2026",
       imageUrl: Images.research.pellets,
-      linkUrl: "https://www.linkedin.com/company/chemlifeinnovations/",
+      linkUrl: "https://www.linkedin.com/posts/chemlifeinnovations_feedhygiene-animalhealth-livestockmanagement-activity-7413944749906309123-6okc",
       content: `In poultry and cattle farming, feed accounts for up to 70% of production costs. If your feed is compromised by fungal mold or bacteria, your entire margin is at risk.
 
 Clean feed ensures that animals absorb maximum nutrients, which directly impacts the Feed Conversion Ratio (FCR). By preventing mold growth from the source, farmers avoid the clinical losses associated with secondary bacterial infections and high mortality rates.`
