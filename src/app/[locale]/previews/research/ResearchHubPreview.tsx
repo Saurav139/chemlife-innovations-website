@@ -14,6 +14,7 @@ import { RESEARCH_PAGES } from "./pages";
 // The same card image sizes as the Research page.
 const BANNER_SIZES = "(min-width: 1200px) 360px, (min-width: 1024px) 31vw, (min-width: 640px) 47vw, 92vw";
 
+
 /**
  * The Research page, duplicated for the design preview: the same hero, search, cards and closing panel, built from
  * the same data, except each card links to the platform's own page instead of opening in place.
@@ -119,7 +120,7 @@ export default function ResearchHubPreview() {
                         {topic.title}
                       </h3>
                       <p className="text-base text-slate-550 font-semibold italic leading-relaxed">{topic.tagline}</p>
-                      <p className="text-sm text-slate-600 leading-relaxed line-clamp-3">{topic.preview}</p>
+                      <p className="text-[15px] text-slate-600 leading-relaxed line-clamp-3">{topic.preview}</p>
                       <span className="mt-auto inline-flex items-center gap-1.5 text-brand-orange-aa text-sm font-bold pt-2">
                         {t.readMore}
                         <svg className="w-4 h-4 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
