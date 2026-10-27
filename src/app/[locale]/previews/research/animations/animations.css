@@ -1,0 +1,40 @@
+/* Research animations page (design preview): the page layout, four-stage figures, and the few motions these drawings
+   add to the research pages' set in ../research.css. Scoped to .rp like the rest. */
+.rp .r-hero:has(.anim-hero) { padding-bottom: 72px; }
+.rp .anim-hero { max-width: 760px; margin-top: 20px; }
+.rp .anim-hero .r-lede { margin-top: 1rem; }
+.rp .jump { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; margin-top: 1.5rem; }
+.rp .jump a {
+  display: inline-flex; align-items: center; min-height: 40px; padding: 0 1rem; border: 1px solid rgba(255, 255, 255, .3);
+  border-radius: 999px; font-family: var(--font-family-heading); font-size: .9rem; font-weight: 600; color: #fff; text-decoration: none;
+  transition: background-color .2s, border-color .2s;
+}
+.rp .jump a:hover { background: rgba(255, 255, 255, .1); border-color: var(--teal-light); }
+
+.rp .platform { padding-block: 56px; }
+.rp .platform:nth-of-type(odd) { background: var(--mist); }
+@media (min-width: 768px) { .rp .platform { padding-block: 72px; } }
+.rp .platform-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 8px 24px; margin-bottom: 24px; }
+.rp .platform-head h2 { font-size: clamp(1.75rem, 3.2vw, 2.25rem); line-height: 1.15; }
+.rp .platform-head p { margin-top: .25rem; color: var(--muted); }
+.rp .platform .plate { margin: 0; }
+.rp .platform .plate + .plate { margin-top: 28px; }
+
+/* Four stages instead of the research pages' three */
+.rp .fig-anim:has(.fig-steps.s4) { max-width: 1120px; }
+.rp .fig-steps.s4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.rp .fig-steps.s4 span { max-width: 24ch; }
+@media (max-width: 860px) { .rp .stages-m.s4 strong::before { content: "Stage " counter(stage) " of 4"; } }
+
+/* The pearl travelling the digestive tract (fig 3b): two dots on one path, coat and core */
+.rp .flowdot.pearl { stroke-width: 20; }
+.rp .flowdot.pearl-core { stroke-width: 9; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .rp .anim.live .flowdot.slow { animation-duration: 9s; animation-delay: 0s; }
+  .rp .anim.live .amb-repel { animation: rp-repel var(--rd, 3.2s) ease-in-out infinite; animation-delay: var(--rl, 0s); }
+  .rp .anim.live .amb-drip { animation: rp-drip 1.6s ease-in infinite; animation-delay: var(--dl, 0s); }
+}
+/* Comes close, then backs off: phytate against a shielded mineral, a bound mineral against the gut wall */
+@keyframes rp-repel { 0%, 100% { transform: none; } 45% { transform: translate(var(--rx), var(--ry)); } 60% { transform: translate(calc(var(--rx) * .7), calc(var(--ry) * .7)); } }
+@keyframes rp-drip { 0% { transform: none; opacity: 0; } 20% { opacity: 1; } 100% { transform: translateY(var(--dy, 22px)); opacity: 0; } }
