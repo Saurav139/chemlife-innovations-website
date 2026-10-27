@@ -162,7 +162,7 @@ export default function TestimonialCarousel() {
                     className={`w-full rounded-xl border transition-all duration-200 cursor-pointer text-center lg:text-left px-2 py-3 lg:p-4 ${
                       active
                         ? "bg-white dark:bg-night-800 border-white shadow-lg lg:bg-teal-500/20 lg:border-teal-400 lg:shadow-md lg:shadow-teal-500/10"
-                        : "bg-white/5 dark:bg-night-800/5 border-white/20 hover:bg-white/10 dark:hover:bg-night-800/10 lg:bg-teal-950/20 lg:border-teal-500/10 lg:hover:bg-teal-500/10 lg:hover:border-teal-500/30"
+                        : "bg-white/5 border-white/20 hover:bg-white/10 lg:bg-teal-950/20 lg:border-teal-500/10 lg:hover:bg-teal-500/10 lg:hover:border-teal-500/30"
                     }`}
                   >
                     <div className="flex flex-col lg:flex-row items-center gap-2 lg:gap-3">

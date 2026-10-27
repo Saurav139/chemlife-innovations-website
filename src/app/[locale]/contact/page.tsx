@@ -166,7 +166,7 @@ export default function ContactPage() {
 
       <main className="bg-white dark:bg-night-800 min-h-screen text-brand-navy dark:text-night-text">
         {/* Contact Hero Section */}
-        <SectionWrapper className="pt-26 md:pt-32 pb-10 md:pb-24 lg:pt-36 lg:pb-32 text-white relative overflow-hidden bg-brand-navy flex items-center">
+        <SectionWrapper className="pt-26 md:pt-32 pb-10 md:pb-24 lg:pt-36 lg:pb-32 text-white relative overflow-hidden bg-brand-navy dark:bg-night-band flex items-center">
           <div className="absolute inset-0 z-0">
             <Image
               src={Images.heroes.contact}
@@ -176,7 +176,7 @@ export default function ContactPage() {
               className="object-cover opacity-65"
               priority
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-brand-navy/95 via-brand-navy/60 to-brand-navy/35" />
+            <div className="absolute inset-0 bg-gradient-to-r from-brand-navy/95 dark:from-night-band/95 via-brand-navy/60 dark:via-night-band/60 to-brand-navy/35 dark:to-night-band/35" />
             <div className="absolute inset-0 bg-black/10" />
           </div>
 

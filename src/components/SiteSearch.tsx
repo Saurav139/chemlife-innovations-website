@@ -204,7 +204,7 @@ export default function SiteSearch({ hideButtonOnPhones = false }: { hideButtonO
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsOpen(false)}
-              className="fixed inset-0 bg-brand-navy/60 backdrop-blur-xs cursor-pointer"
+              className="fixed inset-0 bg-brand-navy/60 dark:bg-night-band/60 backdrop-blur-xs cursor-pointer"
             />
 
             {/* Modal Box */}

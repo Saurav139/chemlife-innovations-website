@@ -117,7 +117,7 @@ export default function Analytics() {
         <div
           role="region"
           aria-label={t.common.cookieRegion}
-          className="fixed inset-x-4 bottom-[max(1rem,env(safe-area-inset-bottom))] z-[60] mx-auto max-w-xl rounded-2xl border border-white/10 bg-brand-navy p-4 text-white shadow-2xl sm:p-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-5"
+          className="fixed inset-x-4 bottom-[max(1rem,env(safe-area-inset-bottom))] z-[60] mx-auto max-w-xl rounded-2xl border border-white/10 bg-brand-navy dark:bg-night-band p-4 text-white shadow-2xl sm:p-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-5"
         >
           <p className="text-xs leading-relaxed text-white/85 sm:text-sm">
             {t.common.cookieText}{" "}
@@ -129,7 +129,7 @@ export default function Analytics() {
             <button
               type="button"
               onClick={() => choose("denied")}
-              className="min-h-11 flex-1 cursor-pointer rounded-full border border-white/40 px-5 text-sm font-semibold transition-colors hover:bg-white/10 dark:hover:bg-night-800/10 sm:flex-none"
+              className="min-h-11 flex-1 cursor-pointer rounded-full border border-white/40 px-5 text-sm font-semibold transition-colors hover:bg-white/10 sm:flex-none"
             >
               {t.common.cookieDecline}
             </button>

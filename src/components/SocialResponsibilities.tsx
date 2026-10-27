@@ -91,7 +91,7 @@ export default function SocialResponsibilities() {
             </motion.div>
           )}
         </AnimatePresence>
-        <div className="absolute inset-0 bg-white/40 dark:bg-night-800/40" />
+        <div className="absolute inset-0 bg-white/40 dark:bg-night-900/60" />
       </div>
 
       <div className="relative z-10 max-w-[1200px] mx-auto px-6">
@@ -124,14 +124,14 @@ export default function SocialResponsibilities() {
                     }`}
                 >
                   {/* Front side - Logo/Emoji (Scaled emoji to text-6xl) */}
-                  <div className="absolute inset-0 w-full h-full bg-brand-navy rounded-xl flex items-center justify-center backface-hidden shadow-lg group-hover:shadow-xl transition-shadow duration-300">
+                  <div className="absolute inset-0 w-full h-full bg-brand-navy dark:bg-night-band rounded-xl flex items-center justify-center backface-hidden shadow-lg group-hover:shadow-xl transition-shadow duration-300">
                     <span className="text-6xl select-none" role="img" aria-label={item.title}>
                       {item.emoji}
                     </span>
                   </div>
 
                   {/* Back side - Description */}
-                  <div className="absolute inset-0 w-full h-full bg-brand-navy rounded-xl flex items-center justify-center backface-hidden rotate-y-180 p-4 border border-white/10">
+                  <div className="absolute inset-0 w-full h-full bg-brand-navy dark:bg-night-band rounded-xl flex items-center justify-center backface-hidden rotate-y-180 p-4 border border-white/10">
                     <span className="text-white text-sm font-semibold text-center leading-snug">
                       {item.desc}
                     </span>

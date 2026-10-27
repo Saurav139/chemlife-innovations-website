@@ -20,7 +20,7 @@ export default function HowWeDo() {
   const steps = t.steps.map((step, i) => ({ ...step, ...stepImages[i], step: i + 1 }));
 
   return (
-    <section className="relative py-16 md:py-24 lg:py-32 overflow-hidden bg-brand-navy">
+    <section className="relative py-16 md:py-24 lg:py-32 overflow-hidden bg-brand-navy dark:bg-night-band">
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0 select-none pointer-events-none">
         <Image
@@ -30,7 +30,7 @@ export default function HowWeDo() {
           className="object-cover opacity-35"
           priority
         />
-        <div className="absolute inset-0 bg-brand-navy/90 mix-blend-multiply" />
+        <div className="absolute inset-0 bg-brand-navy/90 dark:bg-night-band/90 mix-blend-multiply" />
       </div>
 
       <div className="relative z-10 max-w-[1200px] mx-auto px-6">
@@ -68,7 +68,7 @@ export default function HowWeDo() {
                     sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 550px"
                     className={`object-cover group-hover:scale-102 transition-transform duration-700 ${s.objectPosition || ""}`}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/15 to-transparent animate-fade-in" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/15 dark:from-night-band/15 to-transparent animate-fade-in" />
                 </div>
 
                 {/* Text Box */}

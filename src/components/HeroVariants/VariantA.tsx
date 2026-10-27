@@ -136,9 +136,9 @@ export default function HeroVariantA() {
 
   // min-h-svh: the screen height with the browser's toolbars showing, so on phones the stats aren't hidden under them.
   return (
-    <section className="relative min-h-svh flex items-center justify-center overflow-hidden bg-brand-navy">
+    <section className="relative min-h-svh flex items-center justify-center overflow-hidden bg-brand-navy dark:bg-night-band">
       {/* Deep Navy Backdrop Base */}
-      <div className="absolute inset-0 bg-brand-navy z-0" />
+      <div className="absolute inset-0 bg-brand-navy dark:bg-night-band z-0" />
 
       {/* Dynamic Background Image cross-fading */}
       <div className="absolute inset-0 z-10 opacity-100 transition-opacity duration-1000">
@@ -229,7 +229,7 @@ export default function HeroVariantA() {
                   className="py-[18px] px-1.5 flex items-center justify-center"
                   aria-label={`${t.home.goToSlide} ${i + 1}`}
                 >
-                  <span className={`h-2 rounded-full transition-all duration-300 ${i === slide ? "w-6 bg-teal-400" : "w-2 bg-white/40 dark:bg-night-800/40"}`} />
+                  <span className={`h-2 rounded-full transition-all duration-300 ${i === slide ? "w-6 bg-teal-400" : "w-2 bg-white/40"}`} />
                 </button>
               ))}
             </div>
@@ -275,7 +275,7 @@ export default function HeroVariantA() {
               <div className="w-full flex flex-col gap-2" style={{ width: "min(100%, calc((100dvh - 10rem) * 16 / 9))" }}>
                 <button
                   onClick={() => setStoryOpen(false)}
-                  className="self-end w-10 h-10 rounded-full bg-white/10 dark:bg-night-800/10 hover:bg-white/20 dark:hover:bg-night-800/20 text-white flex items-center justify-center transition-all cursor-pointer border border-white/20"
+                  className="self-end w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all cursor-pointer border border-white/20"
                   aria-label={t.home.closeVideo}
                   autoFocus
                 >

@@ -71,7 +71,7 @@ export default function ResearchPage() {
       <main className="bg-slate-50/50 dark:bg-night-900/50 min-h-screen text-brand-navy dark:text-night-text">
         {/* Hero and research list are plain sections: they're in the first screen, so they show without waiting for a fade-in.
             The hero image is the page's largest paint (LCP), so it loads first. */}
-        <section className="pt-26 md:pt-32 pb-10 md:pb-20 lg:pt-36 lg:pb-28 text-white relative overflow-hidden bg-brand-navy flex items-center">
+        <section className="pt-26 md:pt-32 pb-10 md:pb-20 lg:pt-36 lg:pb-28 text-white relative overflow-hidden bg-brand-navy dark:bg-night-band flex items-center">
           <div className="absolute inset-0 z-0">
             <Image
               src={Images.research.heroBanner}
@@ -82,7 +82,7 @@ export default function ResearchPage() {
               priority
               fetchPriority="high"
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-brand-navy/95 via-brand-navy/75 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-r from-brand-navy/95 dark:from-night-band/95 via-brand-navy/75 dark:via-night-band/75 to-transparent" />
             <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#1e3a8a_1px,transparent_1px)] [background-size:16px_16px]" />
           </div>
 
@@ -311,7 +311,7 @@ export default function ResearchPage() {
             )}
 
             {/* A next step after the topics */}
-            <div className="mt-14 md:mt-16 rounded-2xl md:rounded-3xl bg-brand-navy text-white p-6 md:p-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+            <div className="mt-14 md:mt-16 rounded-2xl md:rounded-3xl bg-brand-navy dark:bg-night-band text-white p-6 md:p-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
               <div>
                 <h2 className="font-heading text-2xl md:text-3xl font-bold text-white">{t.ctaTitle}</h2>
                 <p className="text-white/80 text-base mt-2 max-w-2xl leading-relaxed">{t.ctaText}</p>

@@ -107,7 +107,7 @@ export default function CareersPage() {
 
       <main className="bg-white dark:bg-night-800 min-h-screen text-brand-navy dark:text-night-text">
         {/* Careers Hero Section */}
-        <SectionWrapper className="pt-26 md:pt-32 pb-10 md:pb-24 lg:pt-36 lg:pb-32 text-white relative overflow-hidden bg-brand-navy flex items-center">
+        <SectionWrapper className="pt-26 md:pt-32 pb-10 md:pb-24 lg:pt-36 lg:pb-32 text-white relative overflow-hidden bg-brand-navy dark:bg-night-band flex items-center">
           <div className="absolute inset-0 z-0">
             <Image
               src={Images.heroes.careers}
@@ -117,7 +117,7 @@ export default function CareersPage() {
               className="object-cover opacity-50"
               priority
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-brand-navy/95 via-brand-navy/80 to-brand-navy/60" />
+            <div className="absolute inset-0 bg-gradient-to-r from-brand-navy/95 dark:from-night-band/95 via-brand-navy/80 dark:via-night-band/80 to-brand-navy/60 dark:to-night-band/60" />
             <div className="absolute inset-0 bg-black/10" />
           </div>
 
@@ -393,12 +393,12 @@ export default function CareersPage() {
                 className="bg-white dark:bg-night-800 rounded-3xl w-full max-w-xl shadow-2xl overflow-hidden relative border border-gray-200 dark:border-night-600 my-8"
               >
                 {/* Modal Header */}
-                <div className="bg-brand-navy text-white p-6 relative">
+                <div className="bg-brand-navy dark:bg-night-band text-white p-6 relative">
                   <button
                     type="button"
                     onClick={() => setActiveJob(null)}
                     aria-label="Close"
-                    className="absolute right-3 top-3 w-11 h-11 rounded-full flex items-center justify-center text-white/70 hover:text-white hover:bg-white/10 dark:hover:bg-night-800/10 transition-colors cursor-pointer"
+                    className="absolute right-3 top-3 w-11 h-11 rounded-full flex items-center justify-center text-white/70 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
                   >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />

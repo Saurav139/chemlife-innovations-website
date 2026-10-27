@@ -2,18 +2,25 @@
 
 import { useEffect, useState } from "react";
 import { useT } from "@/i18n/LocaleProvider";
-import { DARK_QUERY, THEME_EVENT, THEME_KEY, applyTheme, readChoice, saveChoice, type ThemeChoice } from "@/lib/theme";
+import { isLiveHost } from "@/lib/seo";
+import {
+  DARK_QUERY, PALETTES, PALETTE_KEY, THEME_EVENT, THEME_KEY, applyPalette, applyTheme, readChoice, readPalette, saveChoice, savePalette,
+  type PaletteId, type ThemeChoice,
+} from "@/lib/theme";
 
 /** Keeps the page in step with the device while the visitor hasn't picked a theme (dark mode switching on at sunset),
  *  and with picks made in another tab. Rendered once, in the layout. */
 export function ThemeWatcher() {
   useEffect(() => {
     const media = window.matchMedia(DARK_QUERY);
-    const follow = () => applyTheme(readChoice());
+    const follow = () => {
+      applyTheme(readChoice());
+      applyPalette(readPalette());
+    };
     // Error pages (the 404) are re-rendered from a fresh <html> once React loads, losing what THEME_SCRIPT set.
     follow();
     const onStorage = (e: StorageEvent) => {
-      if (e.key === THEME_KEY) {
+      if (e.key === THEME_KEY || e.key === PALETTE_KEY) {
         follow();
         window.dispatchEvent(new Event(THEME_EVENT));
       }
@@ -73,6 +80,51 @@ export default function ThemeToggle() {
           </svg>
         </button>
       ))}
+    </div>
+  );
+}
+
+/** Staging only, while a dark palette is being chosen: a swatch for each, next to the theme switch. Picking one also
+ *  switches the page to dark, so the palette shows. */
+export function PalettePicker() {
+  const [shown, setShown] = useState(false);
+  const [palette, setPalette] = useState<PaletteId | null>(null);
+  const [dark, setDark] = useState(false);
+
+  useEffect(() => {
+    setShown(!isLiveHost(location.host));
+    const sync = () => {
+      setPalette(readPalette());
+      setDark(document.documentElement.getAttribute("data-theme") === "dark");
+    };
+    sync();
+    window.addEventListener(THEME_EVENT, sync);
+    return () => window.removeEventListener(THEME_EVENT, sync);
+  }, []);
+
+  if (!shown) return null;
+  return (
+    <div role="group" aria-label="Dark palette (preview)" className="flex items-center gap-1 rounded-full border border-white/10 bg-white/5 p-1 pl-3">
+      <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-450">Dark palette</span>
+      {PALETTES.map((p) => {
+        const picked = dark && palette === p.id;
+        return (
+          <button
+            key={p.id}
+            type="button"
+            aria-pressed={picked}
+            aria-label={p.name}
+            title={p.name}
+            onClick={() => savePalette(p.id)}
+            className="flex h-11 w-11 md:h-9 md:w-9 items-center justify-center rounded-full cursor-pointer"
+          >
+            <span
+              className={`block h-5 w-5 rounded-full border-2 transition-shadow ${picked ? "border-teal-400 ring-2 ring-teal-400/40" : "border-white/40"}`}
+              style={{ background: p.swatch }}
+            />
+          </button>
+        );
+      })}
     </div>
   );
 }

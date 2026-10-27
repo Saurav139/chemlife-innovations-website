@@ -16,7 +16,7 @@ export default function Hero() {
       {theme.heroBg === "bg-brand-navy" && (
         <div className="absolute right-0 top-0 bottom-0 w-[45%] hidden lg:block">
           <Image src={Images.products.categoryRumi} alt="" fill className="object-cover" priority />
-          <div className="absolute inset-0 bg-gradient-to-l from-transparent via-transparent to-brand-navy" />
+          <div className="absolute inset-0 bg-gradient-to-l from-transparent via-transparent to-brand-navy dark:to-night-band" />
         </div>
       )}
 
@@ -97,7 +97,7 @@ export default function Hero() {
                 </div>
               ) : (
                 <div className="relative w-full max-w-md aspect-[4/3]">
-                  <div className="absolute inset-0 bg-white/10 dark:bg-night-800/10 rounded-[2rem] blur-3xl" />
+                  <div className="absolute inset-0 bg-white/10 rounded-[2rem] blur-3xl" />
                   <div className="relative z-10 w-full h-full rounded-2xl overflow-hidden border border-white/20 shadow-2xl">
                     <Image src={Images.products.categoryMono} alt="Poultry farming" fill className="object-cover" priority />
                   </div>

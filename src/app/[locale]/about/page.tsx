@@ -20,7 +20,7 @@ export default function AboutPage() {
     <VariantProvider>
       <Header />
 
-      <main className="bg-brand-navy min-h-screen pt-18 md:pt-20 lg:pt-24">
+      <main className="bg-brand-navy dark:bg-night-band min-h-screen pt-18 md:pt-20 lg:pt-24">
         {/* Intro Hero Section with Glass Plant Image BG */}
         <SectionWrapper className="py-12 md:py-24 lg:py-32 text-white relative overflow-hidden md:min-h-[500px] flex items-center">
           <div className="absolute inset-0 z-0">
@@ -32,7 +32,7 @@ export default function AboutPage() {
               className="object-cover opacity-80"
               priority
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-brand-navy/95 via-brand-navy/70 to-brand-navy/55" />
+            <div className="absolute inset-0 bg-gradient-to-r from-brand-navy/95 dark:from-night-band/95 via-brand-navy/70 dark:via-night-band/70 to-brand-navy/55 dark:to-night-band/55" />
             <div className="absolute inset-0 bg-black/20" />
           </div>
 
@@ -106,7 +106,7 @@ export default function AboutPage() {
         </SectionWrapper>
 
         {/* Core Values Section (Brand Navy BG with Honeycomb Hexagons) */}
-        <SectionWrapper className="py-16 md:py-24 lg:py-36 bg-brand-navy text-white">
+        <SectionWrapper className="py-16 md:py-24 lg:py-36 bg-brand-navy dark:bg-night-band text-white">
           <div className="max-w-[1200px] mx-auto px-6">
             <div className="text-center mb-10 md:mb-20">
               <span className="text-teal-aa-light text-sm font-semibold tracking-widest uppercase block mb-2">{t.valuesKicker}</span>

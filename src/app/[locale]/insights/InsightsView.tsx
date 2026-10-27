@@ -188,7 +188,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
       <main className="bg-white dark:bg-night-800 min-h-screen text-brand-navy dark:text-night-text">
         {/* Hero and Featured are plain sections: they're in the first screen, so they show without waiting for a fade-in.
             The hero image is the page's largest paint (LCP), so it loads first. */}
-        <section className="pt-26 md:pt-32 pb-10 md:pb-24 lg:pt-36 lg:pb-32 text-white relative overflow-hidden bg-brand-navy flex items-center">
+        <section className="pt-26 md:pt-32 pb-10 md:pb-24 lg:pt-36 lg:pb-32 text-white relative overflow-hidden bg-brand-navy dark:bg-night-band flex items-center">
           <div className="absolute inset-0 z-0">
             <Image
               src={Images.heroes.insights}
@@ -199,7 +199,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
               priority
               fetchPriority="high"
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-brand-navy/90 via-brand-navy/60 to-brand-navy/35" />
+            <div className="absolute inset-0 bg-gradient-to-r from-brand-navy/90 dark:from-night-band/90 via-brand-navy/60 dark:via-night-band/60 to-brand-navy/35 dark:to-night-band/35" />
             <div className="absolute inset-0 bg-black/10" />
           </div>
 
@@ -730,7 +730,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
               <div className="flex justify-end mb-3">
                 <button
                   onClick={() => setActiveVideoId(null)}
-                  className="w-11 h-11 rounded-full bg-white/10 dark:bg-night-800/10 hover:bg-white/20 dark:hover:bg-night-800/20 text-white flex items-center justify-center transition-colors cursor-pointer border border-white/15"
+                  className="w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors cursor-pointer border border-white/15"
                   aria-label="Close video player"
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">

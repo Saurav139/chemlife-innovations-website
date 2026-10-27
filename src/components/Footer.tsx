@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Images } from "@/lib/assets";
 import { OPEN_CONSENT_EVENT } from "@/lib/analytics";
 import { useAnalyticsEnabled } from "@/lib/useAnalyticsEnabled";
-import ThemeToggle from "@/components/ThemeToggle";
+import ThemeToggle, { PalettePicker } from "@/components/ThemeToggle";
 import { useHref, useLocale, useT } from "@/i18n/LocaleProvider";
 
 export default function Footer() {
@@ -16,7 +16,7 @@ export default function Footer() {
   const english = useLocale() === "en" ? "" : ` ${t.footer.englishOnly}`;
 
   return (
-    <footer id="footer" className="relative bg-[#15273F] text-white border-t-2 border-teal-500/20 overflow-hidden">
+    <footer id="footer" className="relative bg-[#15273F] dark:bg-night-950 text-white border-t-2 border-teal-500/20 overflow-hidden">
       {/* Absolute Decorative Glow */}
       <div className="absolute top-0 right-1/4 w-96 h-96 bg-teal-500/5 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-brand-orange/5 rounded-full blur-3xl pointer-events-none" />
@@ -47,7 +47,7 @@ export default function Footer() {
                 href="https://www.facebook.com/people/Chemlife-Innovations/100063821717542/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-11 h-11 md:w-10 md:h-10 bg-white/5 dark:bg-night-800/5 rounded-full flex items-center justify-center border border-white/10 hover:bg-brand-orange hover:border-brand-orange hover:scale-105 transition-all duration-350"
+                className="w-11 h-11 md:w-10 md:h-10 bg-white/5 rounded-full flex items-center justify-center border border-white/10 hover:bg-brand-orange hover:border-brand-orange hover:scale-105 transition-all duration-350"
                 aria-label="Facebook"
               >
                 <svg className="w-4 h-4 fill-current text-white" viewBox="0 0 24 24">
@@ -58,7 +58,7 @@ export default function Footer() {
                 href="https://www.linkedin.com/company/chemlifeinnovations"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-11 h-11 md:w-10 md:h-10 bg-white/5 dark:bg-night-800/5 rounded-full flex items-center justify-center border border-white/10 hover:bg-brand-orange hover:border-brand-orange hover:scale-105 transition-all duration-350"
+                className="w-11 h-11 md:w-10 md:h-10 bg-white/5 rounded-full flex items-center justify-center border border-white/10 hover:bg-brand-orange hover:border-brand-orange hover:scale-105 transition-all duration-350"
                 aria-label="LinkedIn"
               >
                 <svg className="w-4 h-4 fill-current text-white" viewBox="0 0 24 24">
@@ -69,7 +69,7 @@ export default function Footer() {
                 href="https://www.youtube.com/@chemlifeinnovations2739"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-11 h-11 md:w-10 md:h-10 bg-white/5 dark:bg-night-800/5 rounded-full flex items-center justify-center border border-white/10 hover:bg-brand-orange hover:border-brand-orange hover:scale-105 transition-all duration-350"
+                className="w-11 h-11 md:w-10 md:h-10 bg-white/5 rounded-full flex items-center justify-center border border-white/10 hover:bg-brand-orange hover:border-brand-orange hover:scale-105 transition-all duration-350"
                 aria-label="YouTube"
               >
                 <svg className="w-4 h-4 fill-current text-white" viewBox="0 0 24 24">
@@ -163,7 +163,7 @@ export default function Footer() {
       </div>
 
       {/* Copyright Bar */}
-      <div className="border-t border-white/5 bg-[#0F1C2E] relative z-10">
+      <div className="border-t border-white/5 bg-[#0F1C2E] dark:bg-black/25 relative z-10">
         {/* Phones: extra room at the bottom so the chat and search buttons don't cover the last line. */}
         <div className="max-w-[1200px] mx-auto px-6 pt-6 pb-24 md:pb-6 flex flex-col sm:flex-row justify-between items-center gap-4">
           <div className="flex items-center gap-3">
@@ -180,6 +180,7 @@ export default function Footer() {
           </div>
           <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
             <ThemeToggle />
+            <PalettePicker />
             <Link href="/privacy" className="tap-target text-slate-450 dark:text-night-muted text-xs hover:text-brand-orange transition-colors">{t.footer.privacy + english}</Link>
             <Link href="/terms" className="tap-target text-slate-450 dark:text-night-muted text-xs hover:text-brand-orange transition-colors">{t.footer.terms + english}</Link>
             {analyticsEnabled && (

@@ -22,7 +22,7 @@ export default function ChatOverlay() {
             className="mb-3 md:mb-4 w-[380px] max-w-[calc(100vw-2rem)] max-h-[calc(100dvh-7rem)] overflow-y-auto bg-white dark:bg-night-800 rounded-2xl shadow-2xl border border-slate-200/50 dark:border-night-600/50 overflow-hidden flex flex-col"
           >
             {/* Header with Brand Navy and Accent gradient */}
-            <div className="p-5 bg-linear-to-r from-brand-navy to-[#1e3452] text-white flex justify-between items-center relative">
+            <div className="p-5 bg-linear-to-r from-brand-navy dark:from-night-band to-[#1e3452] text-white flex justify-between items-center relative">
               <div className="flex items-center gap-3">
                 <div className="flex -space-x-3.5">
                   <div className="w-12 h-12 rounded-full border-2 border-white bg-white dark:bg-night-800 overflow-hidden shadow-lg flex items-center justify-center p-0.5">
@@ -51,7 +51,7 @@ export default function ChatOverlay() {
               </div>
               <button
                 onClick={() => setIsOpen(false)}
-                className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-white/10 dark:hover:bg-night-800/10 transition-colors text-white text-xl font-bold cursor-pointer"
+                className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors text-white text-xl font-bold cursor-pointer"
                 aria-label="Close panel"
               >
                 &times;
