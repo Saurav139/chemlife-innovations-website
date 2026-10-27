@@ -25,6 +25,12 @@ export const PREVIEWS = [
     description: "Farmers enter their feed, feed price and mould losses to see what prevention saves a year, based on the worked example in our Economics of Prevention article.",
   },
   {
+    slug: "research-animations",
+    file: "research-animations.html",
+    title: "Research animations, in depth",
+    description: "Ten new animations for the five research platforms: the science up close and the bigger picture for each, playable step by step.",
+  },
+  {
     slug: "research-pages",
     href: "/previews/research",
     title: "Research platform pages",
