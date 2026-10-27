@@ -185,7 +185,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
     <VariantProvider>
       <Header />
 
-      <main className="bg-white min-h-screen text-brand-navy">
+      <main className="bg-white dark:bg-night-800 min-h-screen text-brand-navy dark:text-night-text">
         {/* Hero and Featured are plain sections: they're in the first screen, so they show without waiting for a fade-in.
             The hero image is the page's largest paint (LCP), so it loads first. */}
         <section className="pt-26 md:pt-32 pb-10 md:pb-24 lg:pt-36 lg:pb-32 text-white relative overflow-hidden bg-brand-navy flex items-center">
@@ -217,10 +217,10 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
         </section>
 
         {/* Featured Section (Three Columns) */}
-        <section className="pt-10 md:pt-24 pb-8 bg-white">
+        <section className="pt-10 md:pt-24 pb-8 bg-white dark:bg-night-800">
           <div className="max-w-[1200px] mx-auto px-6">
             <div className="mb-6 md:mb-10">
-              <h2 className="font-heading text-3xl lg:text-4xl font-bold text-brand-navy">
+              <h2 className="font-heading text-3xl lg:text-4xl font-bold text-brand-navy dark:text-night-text">
                 Featured
               </h2>
             </div>
@@ -238,23 +238,23 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                   id={insightAnchor(featuredBlog.title)}
                   data-analytics-item={featuredBlog.title}
                   data-analytics-click="Read Article"
-                  className="scroll-mt-28 bg-gray-55 border border-gray-200 rounded-2xl md:rounded-3xl p-5 md:p-8 lg:p-5 xl:p-6 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between lg:grid lg:grid-rows-subgrid lg:row-span-4 lg:gap-y-0 group cursor-pointer"
+                  className="scroll-mt-28 bg-gray-55 dark:bg-night-900 border border-gray-200 dark:border-night-600 rounded-2xl md:rounded-3xl p-5 md:p-8 lg:p-5 xl:p-6 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between lg:grid lg:grid-rows-subgrid lg:row-span-4 lg:gap-y-0 group cursor-pointer"
                   onClick={() => setActiveArticle(featuredBlog)}
                 >
                   <div className="lg:contents">
                     <div className="flex items-center gap-2 mb-3">
-                      <span className="text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-teal-50 text-teal-700">
+                      <span className="text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-teal-50 dark:bg-teal-400/10 text-teal-700 dark:text-teal-aa-light">
                         Blog
                       </span>
-                      <span className="text-xs text-gray-aa font-medium">Featured • {featuredBlog.date} • {featuredBlog.meta}</span>
+                      <span className="text-xs text-gray-aa dark:text-night-muted font-medium">Featured • {featuredBlog.date} • {featuredBlog.meta}</span>
                     </div>
-                    <h3 className="font-heading text-lg md:text-xl lg:text-2xl font-bold text-brand-navy mb-4 md:mb-6 group-hover:text-teal-aa transition-colors duration-300 line-clamp-3">
+                    <h3 className="font-heading text-lg md:text-xl lg:text-2xl font-bold text-brand-navy dark:text-night-text mb-4 md:mb-6 group-hover:text-teal-aa dark:group-hover:text-teal-aa-light transition-colors duration-300 line-clamp-3">
                       {featuredBlog.title}
                     </h3>
                     
                     {/* Blog Image Preview */}
                     {featuredBlog.imageUrl && (
-                      <div className="relative w-full aspect-video rounded-xl md:rounded-2xl overflow-hidden bg-slate-100 border border-gray-200 select-none mb-4">
+                      <div className="relative w-full aspect-video rounded-xl md:rounded-2xl overflow-hidden bg-slate-100 dark:bg-night-700 border border-gray-200 dark:border-night-600 select-none mb-4">
                         <Image
                           src={featuredBlog.imageUrl}
                           alt={featuredBlog.title}
@@ -267,7 +267,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                     )}
                   </div>
 
-                  <div className="grid grid-cols-2 sm:grid-cols-[repeat(2,12rem)] lg:grid-cols-2 lg:row-start-4 items-center gap-2 sm:gap-4 lg:gap-2 pt-4 border-t border-gray-100">
+                  <div className="grid grid-cols-2 sm:grid-cols-[repeat(2,12rem)] lg:grid-cols-2 lg:row-start-4 items-center gap-2 sm:gap-4 lg:gap-2 pt-4 border-t border-gray-100 dark:border-night-600">
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
@@ -281,7 +281,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                       href={featuredBlog.linkUrl || "https://www.linkedin.com/company/chemlifeinnovations/"}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center min-h-11 text-center whitespace-nowrap px-2 sm:px-6 lg:px-2 py-2.5 rounded-full text-[13px] sm:text-sm lg:text-xs xl:text-sm leading-5 border border-gray-200 text-gray-600 hover:bg-gray-50 hover:text-teal-aa font-bold transition-all duration-300 cursor-pointer"
+                      className="inline-flex items-center justify-center min-h-11 text-center whitespace-nowrap px-2 sm:px-6 lg:px-2 py-2.5 rounded-full text-[13px] sm:text-sm lg:text-xs xl:text-sm leading-5 border border-gray-200 dark:border-night-600 text-gray-600 dark:text-night-soft hover:bg-gray-50 dark:hover:bg-night-900 hover:text-teal-aa dark:hover:text-teal-aa-light font-bold transition-all duration-300 cursor-pointer"
                       onClick={(e) => e.stopPropagation()}
                     >
                       <ButtonLabel full={originalLink(featuredBlog.linkUrl).full} short={originalLink(featuredBlog.linkUrl).short} />
@@ -295,16 +295,16 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                 <div
                   id={insightAnchor(featuredVideo.title)}
                   data-analytics-item={featuredVideo.title}
-                  className="scroll-mt-28 bg-gray-55 border border-gray-200 rounded-2xl md:rounded-3xl p-5 md:p-8 lg:p-5 xl:p-6 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between lg:grid lg:grid-rows-subgrid lg:row-span-4 lg:gap-y-0 group"
+                  className="scroll-mt-28 bg-gray-55 dark:bg-night-900 border border-gray-200 dark:border-night-600 rounded-2xl md:rounded-3xl p-5 md:p-8 lg:p-5 xl:p-6 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between lg:grid lg:grid-rows-subgrid lg:row-span-4 lg:gap-y-0 group"
                 >
                   <div className="lg:contents">
                     <div className="flex items-center gap-2 mb-3">
-                      <span className="text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-blue-50 text-blue-700">
+                      <span className="text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-blue-50 dark:bg-blue-400/10 text-blue-700 dark:text-blue-300">
                         Video
                       </span>
-                      <span className="text-xs text-gray-aa font-medium">Featured • {featuredVideo.date} • {featuredVideo.meta}</span>
+                      <span className="text-xs text-gray-aa dark:text-night-muted font-medium">Featured • {featuredVideo.date} • {featuredVideo.meta}</span>
                     </div>
-                    <h3 className="font-heading text-lg md:text-xl lg:text-2xl font-bold text-brand-navy mb-4 md:mb-6 group-hover:text-teal-aa transition-colors duration-300 line-clamp-3">
+                    <h3 className="font-heading text-lg md:text-xl lg:text-2xl font-bold text-brand-navy dark:text-night-text mb-4 md:mb-6 group-hover:text-teal-aa dark:group-hover:text-teal-aa-light transition-colors duration-300 line-clamp-3">
                       {featuredVideo.title}
                     </h3>
                     
@@ -317,7 +317,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                         onClick={(e) => playOnPage(e, () => setActiveVideoId(featuredVideo.youtubeId!))}
                         aria-label={featuredVideo.title}
                         data-analytics-click="Watch Now"
-                        className="block relative w-full aspect-video rounded-xl md:rounded-2xl overflow-hidden bg-slate-900 border border-slate-200/80 cursor-pointer shadow-sm group/video select-none mb-4"
+                        className="block relative w-full aspect-video rounded-xl md:rounded-2xl overflow-hidden bg-slate-900 border border-slate-200/80 dark:border-night-600/80 cursor-pointer shadow-sm group/video select-none mb-4"
                       >
                         <Image
                           src={`https://img.youtube.com/vi/${featuredVideo.youtubeId}/0.jpg`}
@@ -338,7 +338,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                     )}
                   </div>
 
-                  <div className="grid grid-cols-2 sm:grid-cols-[repeat(2,12rem)] lg:grid-cols-2 lg:row-start-4 items-center gap-2 sm:gap-4 lg:gap-2 pt-4 border-t border-gray-100">
+                  <div className="grid grid-cols-2 sm:grid-cols-[repeat(2,12rem)] lg:grid-cols-2 lg:row-start-4 items-center gap-2 sm:gap-4 lg:gap-2 pt-4 border-t border-gray-100 dark:border-night-600">
                     <a
                       href={youtubeWatchUrl(featuredVideo.youtubeId!)}
                       target="_blank"
@@ -352,7 +352,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                       href={`https://www.youtube.com/watch?v=${featuredVideo.youtubeId}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center min-h-11 text-center whitespace-nowrap px-2 sm:px-6 lg:px-2 py-2.5 rounded-full text-[13px] sm:text-sm lg:text-xs xl:text-sm leading-5 border border-gray-200 text-gray-600 hover:bg-gray-50 hover:text-teal-aa font-bold transition-all duration-300"
+                      className="inline-flex items-center justify-center min-h-11 text-center whitespace-nowrap px-2 sm:px-6 lg:px-2 py-2.5 rounded-full text-[13px] sm:text-sm lg:text-xs xl:text-sm leading-5 border border-gray-200 dark:border-night-600 text-gray-600 dark:text-night-soft hover:bg-gray-50 dark:hover:bg-night-900 hover:text-teal-aa dark:hover:text-teal-aa-light font-bold transition-all duration-300"
                     >
                       <ButtonLabel full="Watch on YouTube" short="YouTube" />
                     </a>
@@ -365,16 +365,16 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                 <div
                   id={insightAnchor(featuredPodcast.title)}
                   data-analytics-item={featuredPodcast.title}
-                  className="scroll-mt-28 bg-gray-55 border border-gray-200 rounded-2xl md:rounded-3xl p-5 md:p-8 lg:p-5 xl:p-6 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between lg:grid lg:grid-rows-subgrid lg:row-span-4 lg:gap-y-0 group"
+                  className="scroll-mt-28 bg-gray-55 dark:bg-night-900 border border-gray-200 dark:border-night-600 rounded-2xl md:rounded-3xl p-5 md:p-8 lg:p-5 xl:p-6 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between lg:grid lg:grid-rows-subgrid lg:row-span-4 lg:gap-y-0 group"
                 >
                   <div className="lg:contents">
                     <div className="flex items-center gap-2 mb-3">
-                      <span className="text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-red-50 text-red-700">
+                      <span className="text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-red-50 dark:bg-red-400/10 text-red-700 dark:text-red-400">
                         Podcast
                       </span>
-                      <span className="text-xs text-gray-aa font-medium">Featured • {featuredPodcast.date} • {featuredPodcast.meta}</span>
+                      <span className="text-xs text-gray-aa dark:text-night-muted font-medium">Featured • {featuredPodcast.date} • {featuredPodcast.meta}</span>
                     </div>
-                    <h3 className="font-heading text-lg md:text-xl lg:text-2xl font-bold text-brand-navy mb-4 md:mb-6 group-hover:text-teal-aa transition-colors duration-300 line-clamp-3">
+                    <h3 className="font-heading text-lg md:text-xl lg:text-2xl font-bold text-brand-navy dark:text-night-text mb-4 md:mb-6 group-hover:text-teal-aa dark:group-hover:text-teal-aa-light transition-colors duration-300 line-clamp-3">
                       {featuredPodcast.title}
                     </h3>
                     
@@ -387,7 +387,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                         onClick={(e) => playOnPage(e, () => setActiveVideoId(featuredPodcast.youtubeId!))}
                         aria-label={featuredPodcast.title}
                         data-analytics-click="Listen Now"
-                        className="block relative w-full aspect-video rounded-xl md:rounded-2xl overflow-hidden bg-slate-900 border border-slate-200/80 cursor-pointer shadow-sm group/video select-none mb-4"
+                        className="block relative w-full aspect-video rounded-xl md:rounded-2xl overflow-hidden bg-slate-900 border border-slate-200/80 dark:border-night-600/80 cursor-pointer shadow-sm group/video select-none mb-4"
                       >
                         <Image
                           src={`https://img.youtube.com/vi/${featuredPodcast.youtubeId}/0.jpg`}
@@ -408,7 +408,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                     )}
                   </div>
 
-                  <div className="grid grid-cols-2 sm:grid-cols-[repeat(2,12rem)] lg:grid-cols-2 lg:row-start-4 items-center gap-2 sm:gap-4 lg:gap-2 pt-4 border-t border-gray-100">
+                  <div className="grid grid-cols-2 sm:grid-cols-[repeat(2,12rem)] lg:grid-cols-2 lg:row-start-4 items-center gap-2 sm:gap-4 lg:gap-2 pt-4 border-t border-gray-100 dark:border-night-600">
                     <a
                       href={youtubeWatchUrl(featuredPodcast.youtubeId!)}
                       target="_blank"
@@ -422,7 +422,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                       href={`https://www.youtube.com/watch?v=${featuredPodcast.youtubeId}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center min-h-11 text-center whitespace-nowrap px-2 sm:px-6 lg:px-2 py-2.5 rounded-full text-[13px] sm:text-sm lg:text-xs xl:text-sm leading-5 border border-gray-200 text-gray-600 hover:bg-gray-50 hover:text-teal-aa font-bold transition-all duration-300"
+                      className="inline-flex items-center justify-center min-h-11 text-center whitespace-nowrap px-2 sm:px-6 lg:px-2 py-2.5 rounded-full text-[13px] sm:text-sm lg:text-xs xl:text-sm leading-5 border border-gray-200 dark:border-night-600 text-gray-600 dark:text-night-soft hover:bg-gray-50 dark:hover:bg-night-900 hover:text-teal-aa dark:hover:text-teal-aa-light font-bold transition-all duration-300"
                     >
                       <ButtonLabel full="Watch on YouTube" short="YouTube" />
                     </a>
@@ -436,14 +436,14 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
         </section>
 
         {/* Social Channel Connectors Banner */}
-        <SectionWrapper className="py-6 bg-slate-50 border-y border-gray-200/60">
+        <SectionWrapper className="py-6 bg-slate-50 dark:bg-night-900 border-y border-gray-200/60 dark:border-night-600/60">
           <div className="max-w-[1200px] mx-auto px-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <a
                 href="https://www.linkedin.com/company/chemlifeinnovations/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-4 p-4 bg-white rounded-2xl border border-gray-200 hover:border-blue-500 hover:shadow-xs transition-all duration-300"
+                className="flex items-center gap-4 p-4 bg-white dark:bg-night-800 rounded-2xl border border-gray-200 dark:border-night-600 hover:border-blue-500 hover:shadow-xs transition-all duration-300"
               >
                 <div className="w-12 h-12 bg-[#0a66c2]/10 text-[#0a66c2] rounded-xl flex items-center justify-center flex-shrink-0">
                   <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24">
@@ -451,24 +451,24 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                   </svg>
                 </div>
                 <div>
-                  <h4 className="font-bold text-brand-navy text-sm">Follow us on LinkedIn</h4>
-                  <p className="text-gray-aa text-xs mt-0.5">Smarter Decisions for Better Outcomes via #FeedBites</p>
+                  <h4 className="font-bold text-brand-navy dark:text-night-text text-sm">Follow us on LinkedIn</h4>
+                  <p className="text-gray-aa dark:text-night-muted text-xs mt-0.5">Smarter Decisions for Better Outcomes via #FeedBites</p>
                 </div>
               </a>
               <a
                 href="https://www.youtube.com/@chemlifeinnovations2739"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-4 p-4 bg-white rounded-2xl border border-gray-200 hover:border-red-500 hover:shadow-xs transition-all duration-300"
+                className="flex items-center gap-4 p-4 bg-white dark:bg-night-800 rounded-2xl border border-gray-200 dark:border-night-600 hover:border-red-500 hover:shadow-xs transition-all duration-300"
               >
-                <div className="w-12 h-12 bg-red-600/10 text-red-600 rounded-xl flex items-center justify-center flex-shrink-0">
+                <div className="w-12 h-12 bg-red-600/10 text-red-600 dark:text-red-400 rounded-xl flex items-center justify-center flex-shrink-0">
                   <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24">
                     <path d="M23.498 6.163a3.003 3.003 0 0 0-2.11-2.108C19.52 3.5 12 3.5 12 3.5s-7.52 0-9.388.555A3.003 3.003 0 0 0 .502 6.163C0 8.07 0 12 0 12s0 3.93.502 5.837a3.003 3.003 0 0 0 2.11 2.108C4.48 20.5 12 20.5 12 20.5s7.52 0 9.388-.555a3.003 3.003 0 0 0 2.11-2.108C24 15.93 24 12 24 12s0-3.93-.502-5.837zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
                   </svg>
                 </div>
                 <div>
-                  <h4 className="font-bold text-brand-navy text-sm">Subscribe on YouTube</h4>
-                  <p className="text-gray-aa text-xs mt-0.5">Watch expert talks, video insights, and podcast content</p>
+                  <h4 className="font-bold text-brand-navy dark:text-night-text text-sm">Subscribe on YouTube</h4>
+                  <p className="text-gray-aa dark:text-night-muted text-xs mt-0.5">Watch expert talks, video insights, and podcast content</p>
                 </div>
               </a>
             </div>
@@ -476,13 +476,13 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
         </SectionWrapper>
 
         {/* Filters and Search Row */}
-        <SectionWrapper className="pt-12 pb-8 bg-white">
+        <SectionWrapper className="pt-12 pb-8 bg-white dark:bg-night-800">
           <div className="max-w-[1200px] mx-auto px-6">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-8 border-b border-gray-100">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-8 border-b border-gray-100 dark:border-night-600">
               
               {/* Search Bar + Subtitle */}
               <div className="w-full md:max-w-md">
-                <span className="text-gray-aa text-xs font-semibold uppercase tracking-wider block mb-2">
+                <span className="text-gray-aa dark:text-night-muted text-xs font-semibold uppercase tracking-wider block mb-2">
                   Search Podcasts, Blogs and Videos
                 </span>
                 <div className="relative">
@@ -491,9 +491,9 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                     value={searchQuery}
                     onChange={(e) => { setSearchQuery(e.target.value); resetGrid(); }}
                     placeholder="Search titles, topics, or authors..."
-                    className="w-full bg-gray-50 border border-gray-250 rounded-full px-6 py-3 text-base md:text-sm text-brand-navy placeholder-gray-aa focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all duration-300 shadow-sm"
+                    className="w-full bg-gray-50 dark:bg-night-900 border border-gray-250 dark:border-night-600 rounded-full px-6 py-3 text-base md:text-sm text-brand-navy dark:text-night-text placeholder-gray-aa focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all duration-300 shadow-sm"
                   />
-                  <div className="absolute right-4 top-3.5 text-gray-aa">
+                  <div className="absolute right-4 top-3.5 text-gray-aa dark:text-night-muted">
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
@@ -512,7 +512,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                       className={`tap-target px-6 py-2 rounded-full text-sm font-semibold transition-all duration-300 border cursor-pointer ${
                         isActive
                           ? "bg-teal-aa border-teal-600 text-white shadow-sm"
-                          : "bg-gray-100 border-transparent text-gray-aa hover:bg-gray-200"
+                          : "bg-gray-100 dark:bg-night-700 border-transparent text-gray-aa dark:text-night-muted hover:bg-gray-200 dark:hover:bg-night-600"
                       }`}
                     >
                       {filter}
@@ -528,15 +528,15 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
         {/* Separator Section */}
         <div className="max-w-[1200px] mx-auto px-6 mb-8">
           <div className="flex items-center gap-4">
-            <span className="text-xs font-bold text-gray-aa uppercase tracking-wider whitespace-nowrap">
+            <span className="text-xs font-bold text-gray-aa dark:text-night-muted uppercase tracking-wider whitespace-nowrap">
               Explore All Insights ({gridItems.length})
             </span>
-            <div className="w-full h-[1px] bg-gray-150" />
+            <div className="w-full h-[1px] bg-gray-150 dark:bg-night-700" />
           </div>
         </div>
 
         {/* Combined Grid Section */}
-        <SectionWrapper className="pt-0 pb-24 bg-white">
+        <SectionWrapper className="pt-0 pb-24 bg-white dark:bg-night-800">
           <div className="max-w-[1200px] mx-auto px-6">
             
             <motion.div
@@ -557,7 +557,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                       initial={isNew ? (reduceMotion ? { opacity: 0 } : { opacity: 0, y: 12 }) : false}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.35, ease: easeOut, delay: isNew ? Math.min(index - revealFrom, 5) * 0.06 : 0 }}
-                      className="scroll-mt-28 bg-gray-55 border border-gray-200 rounded-2xl p-5 md:p-6 lg:p-5 xl:p-6 shadow-sm hover:shadow-md hover:border-teal-500/20 transition-[box-shadow,border-color] duration-300 group flex flex-col justify-between"
+                      className="scroll-mt-28 bg-gray-55 dark:bg-night-900 border border-gray-200 dark:border-night-600 rounded-2xl p-5 md:p-6 lg:p-5 xl:p-6 shadow-sm hover:shadow-md hover:border-teal-500/20 transition-[box-shadow,border-color] duration-300 group flex flex-col justify-between"
                     >
                       {/* Clickable Area of Card Content */}
                       <div
@@ -577,21 +577,21 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                         <div className="flex items-center gap-2 mb-3">
                           <span className={`text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md ${
                             item.type === "Blog"
-                              ? "bg-teal-50 text-teal-700"
+                              ? "bg-teal-50 dark:bg-teal-400/10 text-teal-700 dark:text-teal-aa-light"
                               : item.type === "Podcast"
-                              ? "bg-red-50 text-red-700"
-                              : "bg-blue-50 text-blue-700"
+                              ? "bg-red-50 dark:bg-red-400/10 text-red-700 dark:text-red-400"
+                              : "bg-blue-50 dark:bg-blue-400/10 text-blue-700 dark:text-blue-300"
                           }`}>
                             {item.type}
                           </span>
-                          <span className="text-xs text-gray-aa font-medium">
+                          <span className="text-xs text-gray-aa dark:text-night-muted font-medium">
                             {item.date} • {item.meta}
                           </span>
                         </div>
 
                         {/* Blog Image Preview (Only images for blogs, no videos) */}
                         {isBlog && item.imageUrl && (
-                          <div className="relative w-full aspect-video rounded-xl overflow-hidden mb-4 bg-slate-100 border border-gray-200 select-none">
+                          <div className="relative w-full aspect-video rounded-xl overflow-hidden mb-4 bg-slate-100 dark:bg-night-700 border border-gray-200 dark:border-night-600 select-none">
                             <Image
                               src={item.imageUrl}
                               alt={item.title}
@@ -612,7 +612,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                             onClick={(e) => playOnPage(e, () => setActiveVideoId(item.youtubeId!))}
                             aria-label={item.title}
                             data-analytics-click={item.type === "Podcast" ? "Listen Now" : "Watch Now"}
-                            className="block relative w-full aspect-video rounded-xl overflow-hidden mb-4 bg-slate-900 border border-slate-200/80 cursor-pointer shadow-sm group/video select-none"
+                            className="block relative w-full aspect-video rounded-xl overflow-hidden mb-4 bg-slate-900 border border-slate-200/80 dark:border-night-600/80 cursor-pointer shadow-sm group/video select-none"
                           >
                             <Image
                               src={`https://img.youtube.com/vi/${item.youtubeId}/hqdefault.jpg`}
@@ -633,18 +633,18 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                           </a>
                         )}
 
-                        <h4 className="font-heading text-lg font-bold text-brand-navy mb-4 group-hover:text-teal-aa transition-colors duration-300 line-clamp-3">
+                        <h4 className="font-heading text-lg font-bold text-brand-navy dark:text-night-text mb-4 group-hover:text-teal-aa dark:group-hover:text-teal-aa-light transition-colors duration-300 line-clamp-3">
                           {item.title}
                         </h4>
                       </div>
 
                       {/* Card Action Buttons (Direct + View on LinkedIn) - isolated outside clicking div */}
-                      <div className="flex items-center gap-3 pt-3 border-t border-gray-100 mt-2">
+                      <div className="flex items-center gap-3 pt-3 border-t border-gray-100 dark:border-night-600 mt-2">
                         {isBlog ? (
                           <div className="flex items-center gap-2 w-full justify-between">
                             <button
                               onClick={() => setActiveArticle(item)}
-                              className="tap-target text-xs font-bold text-teal-aa hover:text-teal-700 transition-colors flex items-center gap-1 cursor-pointer"
+                              className="tap-target text-xs font-bold text-teal-aa dark:text-teal-aa-light hover:text-teal-700 dark:hover:text-teal-aa-light transition-colors flex items-center gap-1 cursor-pointer"
                             >
                               Read Article
                             </button>
@@ -652,7 +652,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                               href={item.linkUrl || "https://www.linkedin.com/company/chemlifeinnovations/"}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="tap-target text-xs font-semibold text-gray-500 hover:text-teal-aa transition-colors cursor-pointer"
+                              className="tap-target text-xs font-semibold text-gray-500 dark:text-night-muted hover:text-teal-aa dark:hover:text-teal-aa-light transition-colors cursor-pointer"
                               onClick={(e) => e.stopPropagation()}
                             >
                               {originalLink(item.linkUrl).full}
@@ -665,7 +665,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                               target="_blank"
                               rel="noopener noreferrer"
                               onClick={(e) => playOnPage(e, () => setActiveVideoId(item.youtubeId!))}
-                              className="tap-target text-xs font-bold text-teal-aa hover:text-teal-700 transition-colors flex items-center gap-1"
+                              className="tap-target text-xs font-bold text-teal-aa dark:text-teal-aa-light hover:text-teal-700 dark:hover:text-teal-aa-light transition-colors flex items-center gap-1"
                             >
                               {item.type === "Podcast" ? "Listen Now" : "Watch Now"}
                             </a>
@@ -673,7 +673,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                               href={`https://www.youtube.com/watch?v=${item.youtubeId}`}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="tap-target text-xs font-semibold text-gray-500 hover:text-teal-aa transition-colors"
+                              className="tap-target text-xs font-semibold text-gray-500 dark:text-night-muted hover:text-teal-aa dark:hover:text-teal-aa-light transition-colors"
                               onClick={(e) => e.stopPropagation()}
                             >
                               Watch on YouTube
@@ -691,7 +691,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                 <button
                   type="button"
                   onClick={loadMore}
-                  className="inline-flex items-center justify-center min-h-12 px-8 rounded-full border-2 border-teal-aa text-teal-aa hover:bg-teal-aa hover:text-white text-sm font-bold transition-colors cursor-pointer"
+                  className="inline-flex items-center justify-center min-h-12 px-8 rounded-full border-2 border-teal-aa text-teal-aa dark:text-teal-aa-light hover:bg-teal-aa hover:text-white text-sm font-bold transition-colors cursor-pointer"
                 >
                   Load more ({gridItems.length - visibleCount} more)
                 </button>
@@ -699,8 +699,8 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
             )}
 
             {gridItems.length === 0 && (
-              <div className="text-center py-20 bg-gray-50 rounded-2xl border border-dashed border-gray-200">
-                <span className="text-gray-aa text-sm">No insights found matching your search query.</span>
+              <div className="text-center py-20 bg-gray-50 dark:bg-night-900 rounded-2xl border border-dashed border-gray-200 dark:border-night-600">
+                <span className="text-gray-aa dark:text-night-muted text-sm">No insights found matching your search query.</span>
               </div>
             )}
 
@@ -730,7 +730,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
               <div className="flex justify-end mb-3">
                 <button
                   onClick={() => setActiveVideoId(null)}
-                  className="w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors cursor-pointer border border-white/15"
+                  className="w-11 h-11 rounded-full bg-white/10 dark:bg-night-800/10 hover:bg-white/20 dark:hover:bg-night-800/20 text-white flex items-center justify-center transition-colors cursor-pointer border border-white/15"
                   aria-label="Close video player"
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -769,22 +769,22 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.95, y: 20 }}
               transition={{ duration: 0.3 }}
-              className="relative w-full max-w-3xl bg-white rounded-3xl overflow-hidden shadow-2xl border border-gray-100 flex flex-col my-8 max-h-[85vh]"
+              className="relative w-full max-w-3xl bg-white dark:bg-night-800 rounded-3xl overflow-hidden shadow-2xl border border-gray-100 dark:border-night-600 flex flex-col my-8 max-h-[85vh]"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Top Sticky Header */}
-              <div className="sticky top-0 bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between z-10">
+              <div className="sticky top-0 bg-white dark:bg-night-800 border-b border-gray-100 dark:border-night-600 px-6 py-4 flex items-center justify-between z-10">
                 <div className="flex items-center gap-2">
-                  <span className="text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-teal-50 text-teal-700">
+                  <span className="text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-teal-50 dark:bg-teal-400/10 text-teal-700 dark:text-teal-aa-light">
                     {activeArticle.type}
                   </span>
-                  <span className="text-xs text-gray-aa font-medium">
+                  <span className="text-xs text-gray-aa dark:text-night-muted font-medium">
                     {activeArticle.date}
                   </span>
                 </div>
                 <button
                   onClick={() => setActiveArticle(null)}
-                  className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-500 hover:text-brand-navy flex items-center justify-center transition-all cursor-pointer"
+                  className="w-8 h-8 rounded-full bg-gray-100 dark:bg-night-700 hover:bg-gray-200 dark:hover:bg-night-600 text-gray-500 dark:text-night-muted hover:text-brand-navy dark:hover:text-night-text flex items-center justify-center transition-all cursor-pointer"
                   aria-label="Close article reader"
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -795,12 +795,12 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
 
               {/* Scrollable Article Body */}
               <div className="overflow-y-auto p-6 md:p-8 space-y-6">
-                <h2 className="font-heading text-2xl md:text-3xl font-bold text-brand-navy leading-tight">
+                <h2 className="font-heading text-2xl md:text-3xl font-bold text-brand-navy dark:text-night-text leading-tight">
                   {activeArticle.title}
                 </h2>
 
                 {activeArticle.imageUrl && (
-                  <div className="relative w-full aspect-video rounded-2xl overflow-hidden bg-slate-100 border border-gray-250 select-none">
+                  <div className="relative w-full aspect-video rounded-2xl overflow-hidden bg-slate-100 dark:bg-night-700 border border-gray-250 dark:border-night-600 select-none">
                     <Image
                       src={activeArticle.imageUrl}
                       alt={activeArticle.title}
@@ -812,19 +812,19 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                   </div>
                 )}
 
-                <div className="text-gray-600 text-sm md:text-base leading-relaxed whitespace-pre-line space-y-4">
+                <div className="text-gray-600 dark:text-night-soft text-sm md:text-base leading-relaxed whitespace-pre-line space-y-4">
                   {activeArticle.content}
                 </div>
               </div>
 
               {/* Footer Action */}
-              <div className="border-t border-gray-100 px-6 py-4 flex justify-between bg-gray-50 items-center">
+              <div className="border-t border-gray-100 dark:border-night-600 px-6 py-4 flex justify-between bg-gray-50 dark:bg-night-900 items-center">
                 {activeArticle.linkUrl && (
                   <a
                     href={activeArticle.linkUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-xs font-semibold text-teal-aa hover:text-teal-700 transition-colors"
+                    className="text-xs font-semibold text-teal-aa dark:text-teal-aa-light hover:text-teal-700 dark:hover:text-teal-aa-light transition-colors"
                   >
                     {originalLink(activeArticle.linkUrl).reader}
                   </a>

@@ -129,7 +129,7 @@ export default function Analytics() {
             <button
               type="button"
               onClick={() => choose("denied")}
-              className="min-h-11 flex-1 cursor-pointer rounded-full border border-white/40 px-5 text-sm font-semibold transition-colors hover:bg-white/10 sm:flex-none"
+              className="min-h-11 flex-1 cursor-pointer rounded-full border border-white/40 px-5 text-sm font-semibold transition-colors hover:bg-white/10 dark:hover:bg-night-800/10 sm:flex-none"
             >
               {t.common.cookieDecline}
             </button>

@@ -164,7 +164,7 @@ export default function ContactPage() {
     <VariantProvider>
       <Header />
 
-      <main className="bg-white min-h-screen text-brand-navy">
+      <main className="bg-white dark:bg-night-800 min-h-screen text-brand-navy dark:text-night-text">
         {/* Contact Hero Section */}
         <SectionWrapper className="pt-26 md:pt-32 pb-10 md:pb-24 lg:pt-36 lg:pb-32 text-white relative overflow-hidden bg-brand-navy flex items-center">
           <div className="absolute inset-0 z-0">
@@ -194,13 +194,13 @@ export default function ContactPage() {
         </SectionWrapper>
 
         {/* Main Content: Form & Location Details */}
-        <SectionWrapper className="py-12 md:py-24 bg-white">
+        <SectionWrapper className="py-12 md:py-24 bg-white dark:bg-night-800">
           <div className="max-w-[1200px] mx-auto px-6">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
 
               {/* Left Column: Form Card */}
               <div className="lg:col-span-7">
-                <div className="bg-gray-55 border border-gray-250 rounded-3xl p-8 md:p-10 shadow-sm relative overflow-hidden">
+                <div className="bg-gray-55 dark:bg-night-900 border border-gray-250 dark:border-night-600 rounded-3xl p-8 md:p-10 shadow-sm relative overflow-hidden">
                   <AnimatePresence mode="wait">
                     {!isSubmitted ? (
                       <motion.div
@@ -209,10 +209,10 @@ export default function ContactPage() {
                         exit={{ opacity: 0, y: -20 }}
                         transition={{ duration: 0.3 }}
                       >
-                        <h2 className="font-heading text-2xl md:text-3xl font-bold text-brand-navy mb-2">
+                        <h2 className="font-heading text-2xl md:text-3xl font-bold text-brand-navy dark:text-night-text mb-2">
                           {t.formTitle}
                         </h2>
-                        <p className="text-gray-500 text-sm mb-8">
+                        <p className="text-gray-500 dark:text-night-muted text-sm mb-8">
                           {t.formText}
                         </p>
 
@@ -220,8 +220,8 @@ export default function ContactPage() {
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             {/* Full Name */}
                             <div>
-                              <label htmlFor="name" className="block text-xs font-bold text-brand-navy uppercase tracking-wider mb-2">
-                                {t.name} <span className="text-teal-aa">*</span>
+                              <label htmlFor="name" className="block text-xs font-bold text-brand-navy dark:text-night-text uppercase tracking-wider mb-2">
+                                {t.name} <span className="text-teal-aa dark:text-teal-aa-light">*</span>
                               </label>
                               <input
                                 type="text"
@@ -231,19 +231,19 @@ export default function ContactPage() {
                                 autoComplete="name"
                                 value={formData.name}
                                 onChange={handleInputChange}
-                                className={`w-full bg-white border ${errors.name ? "border-red-600" : "border-gray-250"
-                                  } rounded-xl px-4 py-3.5 text-base md:text-sm text-brand-navy focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all`}
+                                className={`w-full bg-white dark:bg-night-800 border ${errors.name ? "border-red-600" : "border-gray-250 dark:border-night-600"
+                                  } rounded-xl px-4 py-3.5 text-base md:text-sm text-brand-navy dark:text-night-text focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all`}
                                 placeholder={t.namePlaceholder}
                               />
                               {errors.name && (
-                                <p className="text-red-600 text-xs mt-1.5 font-medium">{errors.name}</p>
+                                <p className="text-red-600 dark:text-red-400 text-xs mt-1.5 font-medium">{errors.name}</p>
                               )}
                             </div>
 
                             {/* Email Address */}
                             <div>
-                              <label htmlFor="email" className="block text-xs font-bold text-brand-navy uppercase tracking-wider mb-2">
-                                {t.email} <span className="text-teal-aa">*</span>
+                              <label htmlFor="email" className="block text-xs font-bold text-brand-navy dark:text-night-text uppercase tracking-wider mb-2">
+                                {t.email} <span className="text-teal-aa dark:text-teal-aa-light">*</span>
                               </label>
                               <input
                                 type="email"
@@ -253,12 +253,12 @@ export default function ContactPage() {
                                 autoComplete="email"
                                 value={formData.email}
                                 onChange={handleInputChange}
-                                className={`w-full bg-white border ${errors.email ? "border-red-600" : "border-gray-250"
-                                  } rounded-xl px-4 py-3.5 text-base md:text-sm text-brand-navy focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all`}
+                                className={`w-full bg-white dark:bg-night-800 border ${errors.email ? "border-red-600" : "border-gray-250 dark:border-night-600"
+                                  } rounded-xl px-4 py-3.5 text-base md:text-sm text-brand-navy dark:text-night-text focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all`}
                                 placeholder={t.emailPlaceholder}
                               />
                               {errors.email && (
-                                <p className="text-red-600 text-xs mt-1.5 font-medium">{errors.email}</p>
+                                <p className="text-red-600 dark:text-red-400 text-xs mt-1.5 font-medium">{errors.email}</p>
                               )}
                             </div>
                           </div>
@@ -266,8 +266,8 @@ export default function ContactPage() {
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             {/* Phone Number */}
                             <div>
-                              <label htmlFor="phone" className="block text-xs font-bold text-brand-navy uppercase tracking-wider mb-2">
-                                {t.phone} <span className="text-gray-aa font-normal">{t.optional}</span>
+                              <label htmlFor="phone" className="block text-xs font-bold text-brand-navy dark:text-night-text uppercase tracking-wider mb-2">
+                                {t.phone} <span className="text-gray-aa dark:text-night-muted font-normal">{t.optional}</span>
                               </label>
                               <input
                                 type="tel"
@@ -277,14 +277,14 @@ export default function ContactPage() {
                                 autoComplete="tel"
                                 value={formData.phone}
                                 onChange={handleInputChange}
-                                className="w-full bg-white border border-gray-250 rounded-xl px-4 py-3.5 text-base md:text-sm text-brand-navy focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all"
+                                className="w-full bg-white dark:bg-night-800 border border-gray-250 dark:border-night-600 rounded-xl px-4 py-3.5 text-base md:text-sm text-brand-navy dark:text-night-text focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all"
                                 placeholder="+91 98765 43210"
                               />
                             </div>
 
                             {/* Inquiry Type */}
                             <div>
-                              <label htmlFor="inquiryType" className="block text-xs font-bold text-brand-navy uppercase tracking-wider mb-2">
+                              <label htmlFor="inquiryType" className="block text-xs font-bold text-brand-navy dark:text-night-text uppercase tracking-wider mb-2">
                                 {t.inquiryType}
                               </label>
                               <div className="relative">
@@ -293,7 +293,7 @@ export default function ContactPage() {
                                   name="inquiryType"
                                   value={formData.inquiryType}
                                   onChange={handleInputChange}
-                                  className="w-full bg-white border border-gray-250 rounded-xl px-4 py-3.5 text-base md:text-sm text-brand-navy focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all appearance-none cursor-pointer"
+                                  className="w-full bg-white dark:bg-night-800 border border-gray-250 dark:border-night-600 rounded-xl px-4 py-3.5 text-base md:text-sm text-brand-navy dark:text-night-text focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all appearance-none cursor-pointer"
                                 >
                                   {INQUIRY_TYPES.map((opt) => (
                                     <option key={opt} value={opt}>
@@ -301,7 +301,7 @@ export default function ContactPage() {
                                     </option>
                                   ))}
                                 </select>
-                                <div className="pointer-events-none absolute inset-y-0 right-4 flex items-center text-gray-aa">
+                                <div className="pointer-events-none absolute inset-y-0 right-4 flex items-center text-gray-aa dark:text-night-muted">
                                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
                                   </svg>
@@ -312,8 +312,8 @@ export default function ContactPage() {
 
                           {/* Subject */}
                           <div>
-                            <label htmlFor="subject" className="block text-xs font-bold text-brand-navy uppercase tracking-wider mb-2">
-                              {t.subject} <span className="text-teal-aa">*</span>
+                            <label htmlFor="subject" className="block text-xs font-bold text-brand-navy dark:text-night-text uppercase tracking-wider mb-2">
+                              {t.subject} <span className="text-teal-aa dark:text-teal-aa-light">*</span>
                             </label>
                             <input
                               type="text"
@@ -322,19 +322,19 @@ export default function ContactPage() {
                               maxLength={CONTACT_LIMITS.subject}
                               value={formData.subject}
                               onChange={handleInputChange}
-                              className={`w-full bg-white border ${errors.subject ? "border-red-600" : "border-gray-250"
-                                } rounded-xl px-4 py-3.5 text-base md:text-sm text-brand-navy focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all`}
+                              className={`w-full bg-white dark:bg-night-800 border ${errors.subject ? "border-red-600" : "border-gray-250 dark:border-night-600"
+                                } rounded-xl px-4 py-3.5 text-base md:text-sm text-brand-navy dark:text-night-text focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all`}
                               placeholder={t.subjectPlaceholder}
                             />
                             {errors.subject && (
-                              <p className="text-red-600 text-xs mt-1.5 font-medium">{errors.subject}</p>
+                              <p className="text-red-600 dark:text-red-400 text-xs mt-1.5 font-medium">{errors.subject}</p>
                             )}
                           </div>
 
                           {/* Message */}
                           <div>
-                            <label htmlFor="message" className="block text-xs font-bold text-brand-navy uppercase tracking-wider mb-2">
-                              {t.message} <span className="text-teal-aa">*</span>
+                            <label htmlFor="message" className="block text-xs font-bold text-brand-navy dark:text-night-text uppercase tracking-wider mb-2">
+                              {t.message} <span className="text-teal-aa dark:text-teal-aa-light">*</span>
                             </label>
                             <textarea
                               id="message"
@@ -343,12 +343,12 @@ export default function ContactPage() {
                               rows={5}
                               value={formData.message}
                               onChange={handleInputChange}
-                              className={`w-full bg-white border ${errors.message ? "border-red-600" : "border-gray-250"
-                                } rounded-xl px-4 py-3.5 text-base md:text-sm text-brand-navy focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all resize-none`}
+                              className={`w-full bg-white dark:bg-night-800 border ${errors.message ? "border-red-600" : "border-gray-250 dark:border-night-600"
+                                } rounded-xl px-4 py-3.5 text-base md:text-sm text-brand-navy dark:text-night-text focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all resize-none`}
                               placeholder={t.messagePlaceholder}
                             />
                             {errors.message && (
-                              <p className="text-red-600 text-xs mt-1.5 font-medium">{errors.message}</p>
+                              <p className="text-red-600 dark:text-red-400 text-xs mt-1.5 font-medium">{errors.message}</p>
                             )}
                           </div>
 
@@ -367,18 +367,18 @@ export default function ContactPage() {
                           </div>
 
                           {submitError && (
-                            <div role="alert" className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                            <div role="alert" className="rounded-xl border border-red-200 dark:border-night-600 bg-red-50 dark:bg-red-400/10 px-4 py-3 text-sm text-red-700 dark:text-red-400">
                               <p className="font-semibold">{SUBMIT_ERRORS[submitError]}</p>
                               <p className="mt-1">
                                 {fill(t.fallback, {
                                   email: (
-                                    <a href={fallbackEmail} className="underline font-semibold hover:text-red-800">
+                                    <a href={fallbackEmail} className="underline font-semibold hover:text-red-800 dark:hover:text-red-400">
                                       {t.fallbackEmail}
                                     </a>
                                   ),
                                   address: CONTACT_EMAIL,
                                   phone: (
-                                    <a href={`tel:${CONTACT_PHONE.replace(/\s/g, "")}`} className="underline whitespace-nowrap hover:text-red-800">
+                                    <a href={`tel:${CONTACT_PHONE.replace(/\s/g, "")}`} className="underline whitespace-nowrap hover:text-red-800 dark:hover:text-red-400">
                                       {CONTACT_PHONE}
                                     </a>
                                   ),
@@ -418,15 +418,15 @@ export default function ContactPage() {
                         className="py-12 text-center flex flex-col items-center"
                       >
                         {/* Animated Checkmark */}
-                        <div className="w-16 h-16 bg-teal-50 rounded-full flex items-center justify-center text-teal-aa mb-6 border border-teal-100">
+                        <div className="w-16 h-16 bg-teal-50 dark:bg-teal-400/10 rounded-full flex items-center justify-center text-teal-aa dark:text-teal-aa-light mb-6 border border-teal-100 dark:border-night-600">
                           <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                           </svg>
                         </div>
-                        <h2 className="font-heading text-2xl md:text-3xl font-bold text-brand-navy mb-4">
+                        <h2 className="font-heading text-2xl md:text-3xl font-bold text-brand-navy dark:text-night-text mb-4">
                           {t.sentTitle}
                         </h2>
-                        <p className="text-gray-500 text-sm max-w-md mx-auto leading-relaxed mb-8">
+                        <p className="text-gray-500 dark:text-night-muted text-sm max-w-md mx-auto leading-relaxed mb-8">
                           {t.sentText}
                         </p>
                         <button
@@ -434,7 +434,7 @@ export default function ContactPage() {
                             setFormData(EMPTY_FORM);
                             setIsSubmitted(false);
                           }}
-                          className="px-6 py-2.5 bg-gray-150 text-gray-700 hover:bg-gray-200 transition-colors font-bold text-xs rounded-full cursor-pointer"
+                          className="px-6 py-2.5 bg-gray-150 dark:bg-night-700 text-gray-700 dark:text-night-text hover:bg-gray-200 dark:hover:bg-night-600 transition-colors font-bold text-xs rounded-full cursor-pointer"
                         >
                           {t.sendAnother}
                         </button>
@@ -450,36 +450,36 @@ export default function ContactPage() {
                 {/* Office Info Card */}
                 <div className="space-y-6">
                   <div>
-                    <h3 className="font-heading text-xl font-bold text-brand-navy mb-3">
+                    <h3 className="font-heading text-xl font-bold text-brand-navy dark:text-night-text mb-3">
                       {t.officeTitle}
                     </h3>
-                    <p className="text-gray-500 text-sm leading-relaxed mb-4 max-w-prose">
+                    <p className="text-gray-500 dark:text-night-muted text-sm leading-relaxed mb-4 max-w-prose">
                       Plot no 18, KIADB Industrial Area, 3rd Phase, Obadenahalli, Doddaballapura, Greater Bengaluru - 561 203, Karnataka, India.
                     </p>
                     <div className="space-y-3 text-sm">
-                      <div className="flex items-center gap-3 text-gray-500">
-                        <svg className="w-4 h-4 text-teal-aa" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <div className="flex items-center gap-3 text-gray-500 dark:text-night-muted">
+                        <svg className="w-4 h-4 text-teal-aa dark:text-teal-aa-light" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.94.725l.548 2.2a1 1 0 01-.321.988l-1.305.98a10.582 10.582 0 004.872 4.872l.98-1.305a1 1 0 01.988-.321l2.2.548a1 1 0 01.725.94V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                         </svg>
-                        <a href="tel:+919535862570" className="inline-flex items-center min-h-11 -my-1.5 hover:text-teal-aa transition-colors">+91 95358 62570</a>
+                        <a href="tel:+919535862570" className="inline-flex items-center min-h-11 -my-1.5 hover:text-teal-aa dark:hover:text-teal-aa-light transition-colors">+91 95358 62570</a>
                       </div>
-                      <div className="flex items-center gap-3 text-gray-500">
-                        <svg className="w-4 h-4 text-teal-aa" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <div className="flex items-center gap-3 text-gray-500 dark:text-night-muted">
+                        <svg className="w-4 h-4 text-teal-aa dark:text-teal-aa-light" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                         </svg>
-                        <a href="mailto:innovate@chemlifeinnovations.com" className="inline-flex items-center min-h-11 -my-1.5 hover:text-teal-aa transition-colors break-all">innovate@chemlifeinnovations.com</a>
+                        <a href="mailto:innovate@chemlifeinnovations.com" className="inline-flex items-center min-h-11 -my-1.5 hover:text-teal-aa dark:hover:text-teal-aa-light transition-colors break-all">innovate@chemlifeinnovations.com</a>
                       </div>
                     </div>
                   </div>
 
-                  <hr className="border-gray-200" />
+                  <hr className="border-gray-200 dark:border-night-600" />
 
                   {/* Manufacturing & R&D Highlight */}
                   <div>
-                    <h3 className="font-heading text-lg font-bold text-brand-navy mb-2">
+                    <h3 className="font-heading text-lg font-bold text-brand-navy dark:text-night-text mb-2">
                       {t.plantTitle}
                     </h3>
-                    <p className="text-gray-500 text-sm leading-relaxed max-w-prose">
+                    <p className="text-gray-500 dark:text-night-muted text-sm leading-relaxed max-w-prose">
                       {t.plantText}
                     </p>
                   </div>
@@ -487,7 +487,7 @@ export default function ContactPage() {
 
                 {/* Google Maps Embed Container. The pin underneath shows while the map loads (it waits until it's near
                     the screen), so the box is never blank. */}
-                <div className="relative w-full aspect-[4/3] md:aspect-[16/9] lg:aspect-[4/3] rounded-3xl overflow-hidden border border-gray-200 shadow-sm bg-slate-100 select-none">
+                <div className="relative w-full aspect-[4/3] md:aspect-[16/9] lg:aspect-[4/3] rounded-3xl overflow-hidden border border-gray-200 dark:border-night-600 shadow-sm bg-slate-100 dark:bg-night-700 select-none">
                   <div className="absolute inset-0 flex items-center justify-center text-slate-300" aria-hidden="true">
                     <svg className="w-12 h-12" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z" />
@@ -509,7 +509,7 @@ export default function ContactPage() {
                   href="https://www.google.com/maps/search/?api=1&query=13.273301,77.576311"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="mt-3 inline-flex items-center gap-1.5 min-h-11 text-sm font-semibold text-teal-aa hover:text-teal-700 transition-colors"
+                  className="mt-3 inline-flex items-center gap-1.5 min-h-11 text-sm font-semibold text-teal-aa dark:text-teal-aa-light hover:text-teal-700 dark:hover:text-teal-aa-light transition-colors"
                 >
                   {t.openInMaps}
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24" aria-hidden="true">

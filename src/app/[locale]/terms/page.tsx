@@ -17,9 +17,9 @@ export const metadata: Metadata = pageMetadata({
 const LAST_UPDATED = "21 October 2026";
 const EMAIL = "innovate@chemlifeinnovations.com";
 
-const h2 = "font-heading text-2xl font-bold text-brand-navy mt-12 mb-4";
+const h2 = "font-heading text-2xl font-bold text-brand-navy dark:text-night-text mt-12 mb-4";
 const list = "list-disc pl-6 space-y-2";
-const link = "text-teal-aa underline hover:text-teal-700";
+const link = "text-teal-aa dark:text-teal-aa-light underline hover:text-teal-700 dark:hover:text-teal-aa-light";
 
 // English only for now.
 export default async function TermsPage({ params }: { params: Promise<{ locale: string }> }) {
@@ -28,7 +28,7 @@ export default async function TermsPage({ params }: { params: Promise<{ locale: 
     <VariantProvider>
       <Header />
 
-      <main className="bg-white min-h-screen text-brand-navy">
+      <main className="bg-white dark:bg-night-800 min-h-screen text-brand-navy dark:text-night-text">
         <section className="pt-26 md:pt-32 pb-10 md:pb-16 lg:pt-36 lg:pb-20 bg-brand-navy text-white">
           <div className="max-w-3xl mx-auto px-6">
             <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-white">Terms of Use</h1>
@@ -37,7 +37,7 @@ export default async function TermsPage({ params }: { params: Promise<{ locale: 
         </section>
 
         <section className="py-16">
-          <div className="max-w-3xl mx-auto px-6 text-slate-600 leading-relaxed">
+          <div className="max-w-3xl mx-auto px-6 text-slate-600 dark:text-night-soft leading-relaxed">
             <p>
               These terms apply to your use of chemlifeinnovations.com, including its product information, articles
               and AI chatbots. By using the website you agree to them. If you don&apos;t agree, please don&apos;t use

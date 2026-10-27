@@ -59,7 +59,7 @@ export default function AboutPage() {
         </SectionWrapper>
 
         {/* Founder & Mission Section (White BG) */}
-        <SectionWrapper className="py-12 md:py-24 bg-white text-brand-navy">
+        <SectionWrapper className="py-12 md:py-24 bg-white dark:bg-night-800 text-brand-navy dark:text-night-text">
           <div className="max-w-[1200px] mx-auto px-6 grid md:grid-cols-2 gap-12 lg:gap-20 items-center">
             {/* Founder/Team Image Section with Founders Tag */}
             <motion.div
@@ -70,7 +70,7 @@ export default function AboutPage() {
               className="flex flex-col items-center w-full"
             >
               <div
-                className="aspect-[1024/531] w-full border-4 border-orange-200 rounded-2xl relative overflow-hidden shadow-md group hover:border-brand-orange/60 transition-colors duration-300"
+                className="aspect-[1024/531] w-full border-4 border-orange-200 dark:border-night-600 rounded-2xl relative overflow-hidden shadow-md group hover:border-brand-orange/60 transition-colors duration-300"
                 style={{ backgroundColor: "#55c2fa" }}
               >
                 <Image
@@ -82,7 +82,7 @@ export default function AboutPage() {
                   priority
                 />
               </div>
-              <div className="mt-4 bg-teal-50 border border-teal-200 text-teal-aa text-xs md:text-sm font-bold uppercase tracking-wider px-5 py-1.5 rounded-full shadow-xs select-none">
+              <div className="mt-4 bg-teal-50 dark:bg-teal-400/10 border border-teal-200 dark:border-night-600 text-teal-aa dark:text-teal-aa-light text-xs md:text-sm font-bold uppercase tracking-wider px-5 py-1.5 rounded-full shadow-xs select-none">
                 {t.founders}
               </div>
             </motion.div>
@@ -94,11 +94,11 @@ export default function AboutPage() {
               viewport={{ once: true }}
               transition={{ duration: 0.6, ease: easeOut }}
             >
-              <span className="text-teal-aa text-sm font-semibold tracking-widest uppercase block mb-3">{t.missionKicker}</span>
-              <h2 className="font-heading text-3xl lg:text-4xl text-brand-navy mb-6 font-bold leading-tight">
+              <span className="text-teal-aa dark:text-teal-aa-light text-sm font-semibold tracking-widest uppercase block mb-3">{t.missionKicker}</span>
+              <h2 className="font-heading text-3xl lg:text-4xl text-brand-navy dark:text-night-text mb-6 font-bold leading-tight">
                 {t.missionTitle}
               </h2>
-              <p className="text-brand-navy/80 text-base lg:text-lg leading-relaxed">
+              <p className="text-brand-navy/80 dark:text-night-text/80 text-base lg:text-lg leading-relaxed">
                 {t.missionText}
               </p>
             </motion.div>
@@ -188,9 +188,9 @@ export default function AboutPage() {
                   <div className="h-10 px-4 rounded-full bg-[#e2e2e2] border-2 border-brand-orange flex items-center justify-center shadow-md mb-4 mx-auto relative z-10 w-fit">
                     <div className="flex gap-2.5 font-heading font-black text-base md:text-lg select-none tracking-wider">
                       <span className="text-brand-orange text-xl scale-110">G</span>
-                      <span className="text-brand-navy/30">I</span>
-                      <span className="text-brand-navy/30">F</span>
-                      <span className="text-brand-navy/30">T</span>
+                      <span className="text-brand-navy/30 dark:text-night-text/30">I</span>
+                      <span className="text-brand-navy/30 dark:text-night-text/30">F</span>
+                      <span className="text-brand-navy/30 dark:text-night-text/30">T</span>
                     </div>
                   </div>
                   <div className="bg-[#102a43] text-blue-200 font-heading text-xs font-bold px-4 py-1.5 rounded-md border border-blue-500/30 inline-block mb-3.5 shadow-md mx-auto relative z-10 uppercase tracking-wider">
@@ -238,9 +238,9 @@ export default function AboutPage() {
                 >
                   <div className="h-10 px-4 rounded-full bg-[#e2e2e2] border-2 border-brand-orange flex items-center justify-center shadow-md mb-4 mx-auto relative z-10 w-fit">
                     <div className="flex gap-2.5 font-heading font-black text-base md:text-lg select-none tracking-wider">
-                      <span className="text-brand-navy/30">G</span>
-                      <span className="text-brand-navy/30">I</span>
-                      <span className="text-brand-navy/30">F</span>
+                      <span className="text-brand-navy/30 dark:text-night-text/30">G</span>
+                      <span className="text-brand-navy/30 dark:text-night-text/30">I</span>
+                      <span className="text-brand-navy/30 dark:text-night-text/30">F</span>
                       <span className="text-brand-orange text-xl scale-110">T</span>
                     </div>
                   </div>
@@ -301,10 +301,10 @@ export default function AboutPage() {
                 >
                   <div className="h-10 px-4 rounded-full bg-[#e2e2e2] border-2 border-brand-orange flex items-center justify-center shadow-md mb-4 mx-auto relative z-10 w-fit">
                     <div className="flex gap-2.5 font-heading font-black text-base md:text-lg select-none tracking-wider">
-                      <span className="text-brand-navy/30">G</span>
+                      <span className="text-brand-navy/30 dark:text-night-text/30">G</span>
                       <span className="text-brand-orange text-xl scale-110">I</span>
-                      <span className="text-brand-navy/30">F</span>
-                      <span className="text-brand-navy/30">T</span>
+                      <span className="text-brand-navy/30 dark:text-night-text/30">F</span>
+                      <span className="text-brand-navy/30 dark:text-night-text/30">T</span>
                     </div>
                   </div>
                   <div className="bg-[#102a43] text-blue-200 font-heading text-xs font-bold px-4 py-1.5 rounded-md border border-blue-500/30 inline-block mb-3.5 shadow-md mx-auto relative z-10 uppercase tracking-wider">
@@ -366,10 +366,10 @@ export default function AboutPage() {
                 >
                   <div className="h-10 px-4 rounded-full bg-[#e2e2e2] border-2 border-brand-orange flex items-center justify-center shadow-md mb-4 mx-auto relative z-10 w-fit">
                     <div className="flex gap-2.5 font-heading font-black text-base md:text-lg select-none tracking-wider">
-                      <span className="text-brand-navy/30">G</span>
-                      <span className="text-brand-navy/30">I</span>
+                      <span className="text-brand-navy/30 dark:text-night-text/30">G</span>
+                      <span className="text-brand-navy/30 dark:text-night-text/30">I</span>
                       <span className="text-brand-orange text-xl scale-110">F</span>
-                      <span className="text-brand-navy/30">T</span>
+                      <span className="text-brand-navy/30 dark:text-night-text/30">T</span>
                     </div>
                   </div>
                   <div className="bg-[#102a43] text-blue-200 font-heading text-xs font-bold px-4 py-1.5 rounded-md border border-blue-500/30 inline-block mb-3.5 shadow-md mx-auto relative z-10 uppercase tracking-wider">
@@ -419,11 +419,11 @@ export default function AboutPage() {
         </SectionWrapper>
 
         {/* Leadership Team Section (Solid White BG) */}
-        <SectionWrapper className="py-16 md:py-24 lg:py-32 bg-white text-brand-navy border-t border-gray-100">
+        <SectionWrapper className="py-16 md:py-24 lg:py-32 bg-white dark:bg-night-800 text-brand-navy dark:text-night-text border-t border-gray-100 dark:border-night-600">
           <div className="max-w-[1200px] mx-auto px-6">
             <div className="text-center mb-10 md:mb-20">
-              <span className="text-teal-aa text-sm font-semibold tracking-widest uppercase block mb-2">{t.leadersKicker}</span>
-              <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl text-brand-navy font-bold leading-tight">
+              <span className="text-teal-aa dark:text-teal-aa-light text-sm font-semibold tracking-widest uppercase block mb-2">{t.leadersKicker}</span>
+              <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl text-brand-navy dark:text-night-text font-bold leading-tight">
                 {t.leadersTitle}
               </h2>
             </div>
@@ -459,10 +459,10 @@ export default function AboutPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: i * 0.15, ease: easeOut }}
-                  className="bg-gray-50/50 rounded-2xl border border-gray-100 p-4 sm:p-6 flex flex-col items-center text-center shadow-sm hover:border-brand-orange/30 hover:shadow-md transition-[border-color,box-shadow,scale] duration-300 group hover:scale-[1.02]"
+                  className="bg-gray-50/50 dark:bg-night-900/50 rounded-2xl border border-gray-100 dark:border-night-600 p-4 sm:p-6 flex flex-col items-center text-center shadow-sm hover:border-brand-orange/30 hover:shadow-md transition-[border-color,box-shadow,scale] duration-300 group hover:scale-[1.02]"
                 >
                   {/* Headshot container */}
-                  <div className="w-20 h-20 sm:w-28 sm:h-28 md:w-32 md:h-32 rounded-full border-2 border-orange-100 group-hover:border-brand-orange flex items-center justify-center bg-gray-100 mb-4 sm:mb-6 shadow-sm relative overflow-hidden transition-all duration-300">
+                  <div className="w-20 h-20 sm:w-28 sm:h-28 md:w-32 md:h-32 rounded-full border-2 border-orange-100 dark:border-night-600 group-hover:border-brand-orange flex items-center justify-center bg-gray-100 dark:bg-night-700 mb-4 sm:mb-6 shadow-sm relative overflow-hidden transition-all duration-300">
                     <Image
                       src={leader.image}
                       alt={leader.name}
@@ -472,16 +472,16 @@ export default function AboutPage() {
                     />
                   </div>
 
-                  <h3 className="font-heading text-base md:text-lg font-bold text-brand-orange-aa mb-1">
+                  <h3 className="font-heading text-base md:text-lg font-bold text-brand-orange-aa dark:text-brand-orange mb-1">
                     {leader.name}
                   </h3>
-                  <p className="text-brand-navy font-bold text-xs uppercase tracking-wider mb-0.5">
+                  <p className="text-brand-navy dark:text-night-text font-bold text-xs uppercase tracking-wider mb-0.5">
                     {leader.role}
                   </p>
-                  <p className="text-brand-navy text-xs font-semibold mb-4">
+                  <p className="text-brand-navy dark:text-night-text text-xs font-semibold mb-4">
                     {leader.degree}
                   </p>
-                  <p className="text-teal-aa text-xs md:text-sm leading-relaxed max-w-[90%]">
+                  <p className="text-teal-aa dark:text-teal-aa-light text-xs md:text-sm leading-relaxed max-w-[90%]">
                     {leader.bio}
                   </p>
                 </motion.div>

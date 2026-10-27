@@ -30,9 +30,9 @@ const STORY_VIDEO_ID = "-amOgNcjYNg";
 
 // Larger on desktop, so the buttons hold their own under the big headline.
 const primaryCtaClass =
-  "inline-flex items-center justify-center gap-2 min-h-12 lg:min-h-14 px-7 lg:px-9 py-3 rounded-full text-sm lg:text-base font-semibold bg-brand-orange-aa border-2 border-brand-orange-aa text-white hover:bg-white hover:text-brand-orange-aa shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5";
+  "inline-flex items-center justify-center gap-2 min-h-12 lg:min-h-14 px-7 lg:px-9 py-3 rounded-full text-sm lg:text-base font-semibold bg-brand-orange-aa border-2 border-brand-orange-aa text-white hover:bg-white dark:hover:bg-night-800 hover:text-brand-orange-aa dark:hover:text-brand-orange shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5";
 const secondaryCtaClass =
-  "inline-flex items-center justify-center gap-2 min-h-12 lg:min-h-14 px-7 lg:px-9 py-3 rounded-full text-sm lg:text-base font-semibold border-2 border-white/80 text-white hover:bg-white hover:text-brand-navy transition-all duration-300 transform hover:-translate-y-0.5";
+  "inline-flex items-center justify-center gap-2 min-h-12 lg:min-h-14 px-7 lg:px-9 py-3 rounded-full text-sm lg:text-base font-semibold border-2 border-white/80 text-white hover:bg-white dark:hover:bg-night-800 hover:text-brand-navy dark:hover:text-night-text transition-all duration-300 transform hover:-translate-y-0.5";
 
 // Labels are in the language file (home.stats), in this order.
 const stats = [
@@ -229,7 +229,7 @@ export default function HeroVariantA() {
                   className="py-[18px] px-1.5 flex items-center justify-center"
                   aria-label={`${t.home.goToSlide} ${i + 1}`}
                 >
-                  <span className={`h-2 rounded-full transition-all duration-300 ${i === slide ? "w-6 bg-teal-400" : "w-2 bg-white/40"}`} />
+                  <span className={`h-2 rounded-full transition-all duration-300 ${i === slide ? "w-6 bg-teal-400" : "w-2 bg-white/40 dark:bg-night-800/40"}`} />
                 </button>
               ))}
             </div>
@@ -275,7 +275,7 @@ export default function HeroVariantA() {
               <div className="w-full flex flex-col gap-2" style={{ width: "min(100%, calc((100dvh - 10rem) * 16 / 9))" }}>
                 <button
                   onClick={() => setStoryOpen(false)}
-                  className="self-end w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all cursor-pointer border border-white/20"
+                  className="self-end w-10 h-10 rounded-full bg-white/10 dark:bg-night-800/10 hover:bg-white/20 dark:hover:bg-night-800/20 text-white flex items-center justify-center transition-all cursor-pointer border border-white/20"
                   aria-label={t.home.closeVideo}
                   autoFocus
                 >

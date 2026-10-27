@@ -36,13 +36,13 @@ const PAGES: Omit<SearchItem, "category">[] = [
 const SUGGESTIONS = ["MaxDmold", "ANBioT", "Mould", "Ruminants", "Internships", "Feed Bites"];
 
 const BADGE: Record<Category, string> = {
-  Page: "bg-blue-50 text-blue-600 border border-blue-100",
-  Product: "bg-teal-50 text-teal-aa border border-teal-100",
+  Page: "bg-blue-50 dark:bg-blue-400/10 text-blue-600 dark:text-blue-300 border border-blue-100 dark:border-night-600",
+  Product: "bg-teal-50 dark:bg-teal-400/10 text-teal-aa dark:text-teal-aa-light border border-teal-100 dark:border-night-600",
   Research: "bg-purple-50 text-purple-600 border border-purple-100",
-  Career: "bg-amber-50 text-amber-700 border border-amber-100",
-  Article: "bg-orange-50/50 text-brand-orange-aa border border-orange-100",
-  Video: "bg-orange-50/50 text-brand-orange-aa border border-orange-100",
-  Podcast: "bg-orange-50/50 text-brand-orange-aa border border-orange-100",
+  Career: "bg-amber-50 dark:bg-amber-400/10 text-amber-700 dark:text-amber-200 border border-amber-100 dark:border-night-600",
+  Article: "bg-orange-50/50 dark:bg-orange-400/10 text-brand-orange-aa dark:text-brand-orange border border-orange-100 dark:border-night-600",
+  Video: "bg-orange-50/50 dark:bg-orange-400/10 text-brand-orange-aa dark:text-brand-orange border border-orange-100 dark:border-night-600",
+  Podcast: "bg-orange-50/50 dark:bg-orange-400/10 text-brand-orange-aa dark:text-brand-orange border border-orange-100 dark:border-night-600",
 };
 
 // British and American spellings both match ("mould" finds "mold" and the other way round).
@@ -213,11 +213,11 @@ export default function SiteSearch({ hideButtonOnPhones = false }: { hideButtonO
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -20, scale: 0.95 }}
               transition={{ duration: 0.2, ease: "easeOut" }}
-              className="relative bg-white rounded-2xl shadow-2xl max-w-xl w-full border border-slate-100 overflow-hidden flex flex-col z-10"
+              className="relative bg-white dark:bg-night-800 rounded-2xl shadow-2xl max-w-xl w-full border border-slate-100 dark:border-night-600 overflow-hidden flex flex-col z-10"
             >
               {/* Search Input Bar */}
-              <div className="relative border-b border-slate-100 p-4">
-                <div className="absolute left-7 top-7 text-slate-aa">
+              <div className="relative border-b border-slate-100 dark:border-night-600 p-4">
+                <div className="absolute left-7 top-7 text-slate-aa dark:text-night-muted">
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                   </svg>
@@ -243,13 +243,13 @@ export default function SiteSearch({ hideButtonOnPhones = false }: { hideButtonO
                   aria-activedescendant={filteredResults[active] ? `search-result-${active}` : undefined}
                   aria-label="Search the ChemLife website"
                   placeholder="Search products, research, articles…"
-                  className="w-full text-base md:text-sm pl-11 pr-14 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-hidden focus:border-brand-navy focus:ring-1 focus:ring-brand-navy text-slate-800 placeholder-slate-aa focus:bg-white transition-all font-medium"
+                  className="w-full text-base md:text-sm pl-11 pr-14 py-3 bg-slate-50 dark:bg-night-900 border border-slate-200 dark:border-night-600 rounded-xl focus:outline-hidden focus:border-brand-navy dark:focus:border-night-soft focus:ring-1 focus:ring-brand-navy text-slate-800 dark:text-night-text placeholder-slate-aa focus:bg-white dark:focus:bg-night-800 transition-all font-medium"
                 />
                 <button
                   type="button"
                   onClick={() => setIsOpen(false)}
                   aria-label="Close search"
-                  className="absolute right-5 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full hover:bg-slate-100 flex items-center justify-center text-slate-aa hover:text-slate-700 transition-colors cursor-pointer"
+                  className="absolute right-5 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full hover:bg-slate-100 dark:hover:bg-night-700 flex items-center justify-center text-slate-aa dark:text-night-muted hover:text-slate-700 dark:hover:text-night-soft transition-colors cursor-pointer"
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
@@ -262,7 +262,7 @@ export default function SiteSearch({ hideButtonOnPhones = false }: { hideButtonO
                 {query.trim() === "" ? (
                   // Suggested Searches
                   <div className="py-2">
-                    <p className="text-xs font-bold text-slate-aa uppercase tracking-wider mb-3 px-2">
+                    <p className="text-xs font-bold text-slate-aa dark:text-night-muted uppercase tracking-wider mb-3 px-2">
                       Suggested Topics
                     </p>
                     <div className="flex flex-wrap gap-2 px-2">
@@ -270,7 +270,7 @@ export default function SiteSearch({ hideButtonOnPhones = false }: { hideButtonO
                         <button
                           key={term}
                           onClick={() => setQuery(term)}
-                          className="inline-flex items-center min-h-9 px-3.5 rounded-full bg-slate-50 hover:bg-slate-100 border border-slate-200 text-sm font-semibold text-slate-600 cursor-pointer transition-colors"
+                          className="inline-flex items-center min-h-9 px-3.5 rounded-full bg-slate-50 dark:bg-night-900 hover:bg-slate-100 dark:hover:bg-night-700 border border-slate-200 dark:border-night-600 text-sm font-semibold text-slate-600 dark:text-night-soft cursor-pointer transition-colors"
                         >
                           {term}
                         </button>
@@ -289,7 +289,7 @@ export default function SiteSearch({ hideButtonOnPhones = false }: { hideButtonO
                       tabIndex={-1}
                       onClick={() => handleResultClick(item.link)}
                       onMouseMove={() => setActive(i)}
-                      className={`w-full text-left p-3 border rounded-xl transition-colors flex items-start gap-4 group cursor-pointer ${i === active ? "bg-slate-50 border-slate-200" : "border-transparent"}`}
+                      className={`w-full text-left p-3 border rounded-xl transition-colors flex items-start gap-4 group cursor-pointer ${i === active ? "bg-slate-50 dark:bg-night-900 border-slate-200 dark:border-night-600" : "border-transparent"}`}
                     >
                       {/* Badge indicator */}
                       <span
@@ -298,10 +298,10 @@ export default function SiteSearch({ hideButtonOnPhones = false }: { hideButtonO
                         {item.category}
                       </span>
                       <div className="flex-1 min-w-0">
-                        <p className={`font-heading text-sm font-bold transition-colors ${i === active ? "text-brand-orange-aa" : "text-slate-800"}`}>
+                        <p className={`font-heading text-sm font-bold transition-colors ${i === active ? "text-brand-orange-aa dark:text-brand-orange" : "text-slate-800 dark:text-night-text"}`}>
                           {item.title}
                         </p>
-                        <p className="text-xs text-slate-500 leading-normal line-clamp-1 mt-0.5 font-normal">
+                        <p className="text-xs text-slate-500 dark:text-night-muted leading-normal line-clamp-1 mt-0.5 font-normal">
                           {item.description}
                         </p>
                       </div>
@@ -310,18 +310,18 @@ export default function SiteSearch({ hideButtonOnPhones = false }: { hideButtonO
                 ) : (
                   // No results state
                   <div className="text-center py-10 font-normal">
-                    <span className="text-slate-aa text-sm">
-                      No matching pages, products or articles found for &ldquo;<span className="font-semibold text-slate-600">{query}</span>&rdquo;.
+                    <span className="text-slate-aa dark:text-night-muted text-sm">
+                      No matching pages, products or articles found for &ldquo;<span className="font-semibold text-slate-600 dark:text-night-soft">{query}</span>&rdquo;.
                     </span>
                   </div>
                 )}
               </div>
 
               {/* Keyboard hints (desktop only: there's no keyboard to hint at on a phone) */}
-              <div className="hidden md:flex px-5 py-2.5 bg-slate-50 border-t border-slate-100 items-center gap-4 text-xs text-slate-aa">
-                <span><kbd className="font-sans font-semibold text-slate-600">↑ ↓</kbd> to move</span>
-                <span><kbd className="font-sans font-semibold text-slate-600">Enter</kbd> to open</span>
-                <span><kbd className="font-sans font-semibold text-slate-600">Esc</kbd> to close</span>
+              <div className="hidden md:flex px-5 py-2.5 bg-slate-50 dark:bg-night-900 border-t border-slate-100 dark:border-night-600 items-center gap-4 text-xs text-slate-aa dark:text-night-muted">
+                <span><kbd className="font-sans font-semibold text-slate-600 dark:text-night-soft">↑ ↓</kbd> to move</span>
+                <span><kbd className="font-sans font-semibold text-slate-600 dark:text-night-soft">Enter</kbd> to open</span>
+                <span><kbd className="font-sans font-semibold text-slate-600 dark:text-night-soft">Esc</kbd> to close</span>
               </div>
             </motion.div>
           </div>

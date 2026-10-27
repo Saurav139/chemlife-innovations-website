@@ -67,6 +67,10 @@ const hi: Messages = {
     terms: "उपयोग की शर्तें",
     cookies: "कुकी सेटिंग्स",
     englishOnly: "(अंग्रेज़ी में)",
+    theme: "थीम",
+    themeSystem: "डिवाइस के अनुसार",
+    themeLight: "लाइट",
+    themeDark: "डार्क",
   },
 
   common: {

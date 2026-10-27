@@ -13,7 +13,7 @@ const easeOut = [0.25, 0.1, 0, 1] as const;
 export default function ChatLandingPage() {
   return (
     <VariantProvider>
-      <div className="min-h-screen bg-slate-50/50 flex flex-col font-sans text-brand-navy">
+      <div className="min-h-screen bg-slate-50/50 dark:bg-night-900/50 flex flex-col font-sans text-brand-navy dark:text-night-text">
         {/* Global Navigation Header */}
         <Header />
 
@@ -25,20 +25,20 @@ export default function ChatLandingPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: easeOut }}
-            className="w-full max-w-[850px] bg-white border border-slate-200 rounded-3xl p-8 md:p-12 shadow-sm text-center relative overflow-hidden flex flex-col items-center"
+            className="w-full max-w-[850px] bg-white dark:bg-night-800 border border-slate-200 dark:border-night-600 rounded-3xl p-8 md:p-12 shadow-sm text-center relative overflow-hidden flex flex-col items-center"
           >
             {/* Beta Version Badge */}
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-50 border border-teal-200 text-teal-aa text-xs font-bold uppercase tracking-wider mb-3 select-none no-underline">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-50 dark:bg-teal-400/10 border border-teal-200 dark:border-night-600 text-teal-aa dark:text-teal-aa-light text-xs font-bold uppercase tracking-wider mb-3 select-none no-underline">
               Beta Version
             </div>
 
             {/* Active Specialist Title */}
-            <h1 className="font-heading text-3xl md:text-5xl font-black text-brand-navy leading-tight mb-4 max-w-xl">
+            <h1 className="font-heading text-3xl md:text-5xl font-black text-brand-navy dark:text-night-text leading-tight mb-4 max-w-xl">
               Meet Our AI Animal Nutrition Experts
             </h1>
             <div className="h-1.5 w-20 bg-teal-500 rounded-full mb-6" />
 
-            <p className="text-slate-650 text-base md:text-lg leading-relaxed max-w-2xl mb-10 font-light">
+            <p className="text-slate-650 dark:text-night-soft text-base md:text-lg leading-relaxed max-w-2xl mb-10 font-light">
               Select one of our specialized digital assistants below to start a conversation about feed hygiene, mycotoxins, gut health, or poultry and dairy nutrition.
             </p>
 
@@ -47,17 +47,17 @@ export default function ChatLandingPage() {
               {/* Dr. Kukku (Poultry) */}
               <Link
                 href="/chat/kukku"
-                className="group bg-slate-50/50 hover:bg-white border border-slate-100 hover:border-blue-200 rounded-2xl p-6 flex flex-col items-center text-center shadow-2xs hover:shadow-md transition-all duration-300 cursor-pointer"
+                className="group bg-slate-50/50 dark:bg-night-900/50 hover:bg-white dark:hover:bg-night-800 border border-slate-100 dark:border-night-600 hover:border-blue-200 dark:hover:border-night-600 rounded-2xl p-6 flex flex-col items-center text-center shadow-2xs hover:shadow-md transition-all duration-300 cursor-pointer"
               >
-                <div className="w-32 h-32 rounded-full bg-blue-50/50 border border-blue-100/50 p-3 flex items-center justify-center mb-4 shadow-sm group-hover:scale-105 transition-transform duration-300">
+                <div className="w-32 h-32 rounded-full bg-blue-50/50 dark:bg-blue-400/10 border border-blue-100/50 dark:border-night-600/50 p-3 flex items-center justify-center mb-4 shadow-sm group-hover:scale-105 transition-transform duration-300">
                   <img
                     src={Images.mascots.poultry}
                     alt="Dr. Kukku Mascot"
                     className="w-full h-full object-contain"
                   />
                 </div>
-                <h2 className="text-xl font-bold text-slate-800 mb-1 group-hover:text-blue-600 transition-colors">Dr. Kukku</h2>
-                <p className="text-xs text-blue-600 font-bold uppercase tracking-wider mb-4">
+                <h2 className="text-xl font-bold text-slate-800 dark:text-night-text mb-1 group-hover:text-blue-600 dark:group-hover:text-blue-300 transition-colors">Dr. Kukku</h2>
+                <p className="text-xs text-blue-600 dark:text-blue-300 font-bold uppercase tracking-wider mb-4">
                   Poultry Nutrition Expert
                 </p>
                 <span className="inline-flex items-center justify-center min-h-11 px-6 rounded-full text-sm font-bold text-white bg-blue-aa group-hover:bg-blue-600 shadow-sm transition-colors">
@@ -68,17 +68,17 @@ export default function ChatLandingPage() {
               {/* Dr. Mikku (Dairy) */}
               <Link
                 href="/chat/mikku"
-                className="group bg-slate-50/50 hover:bg-white border border-slate-100 hover:border-orange-200 rounded-2xl p-6 flex flex-col items-center text-center shadow-2xs hover:shadow-md transition-all duration-300 cursor-pointer"
+                className="group bg-slate-50/50 dark:bg-night-900/50 hover:bg-white dark:hover:bg-night-800 border border-slate-100 dark:border-night-600 hover:border-orange-200 dark:hover:border-night-600 rounded-2xl p-6 flex flex-col items-center text-center shadow-2xs hover:shadow-md transition-all duration-300 cursor-pointer"
               >
-                <div className="w-32 h-32 rounded-full bg-orange-50/50 border border-orange-100/50 p-3 flex items-center justify-center mb-4 shadow-sm group-hover:scale-105 transition-transform duration-300">
+                <div className="w-32 h-32 rounded-full bg-orange-50/50 dark:bg-orange-400/10 border border-orange-100/50 dark:border-night-600/50 p-3 flex items-center justify-center mb-4 shadow-sm group-hover:scale-105 transition-transform duration-300">
                   <img
                     src={Images.mascots.dairy}
                     alt="Dr. Mikku Mascot"
                     className="w-full h-full object-contain"
                   />
                 </div>
-                <h2 className="text-xl font-bold text-slate-800 mb-1 group-hover:text-brand-orange transition-colors">Dr. Mikku</h2>
-                <p className="text-xs text-brand-orange-aa font-bold uppercase tracking-wider mb-4">
+                <h2 className="text-xl font-bold text-slate-800 dark:text-night-text mb-1 group-hover:text-brand-orange transition-colors">Dr. Mikku</h2>
+                <p className="text-xs text-brand-orange-aa dark:text-brand-orange font-bold uppercase tracking-wider mb-4">
                   Dairy & Ruminant Specialist
                 </p>
                 <span className="inline-flex items-center justify-center min-h-11 px-6 rounded-full text-sm font-bold text-white bg-brand-orange-aa group-hover:bg-brand-orange-aa-hover shadow-sm transition-colors">
@@ -97,7 +97,7 @@ export default function ChatLandingPage() {
               </Link>
               <Link
                 href="/"
-                className="px-8 py-3.5 rounded-full border border-gray-300 text-gray-600 hover:bg-gray-50 font-bold text-sm transition-colors duration-300 text-center"
+                className="px-8 py-3.5 rounded-full border border-gray-300 dark:border-night-600 text-gray-600 dark:text-night-soft hover:bg-gray-50 dark:hover:bg-night-900 font-bold text-sm transition-colors duration-300 text-center"
               >
                 Back to Home
               </Link>

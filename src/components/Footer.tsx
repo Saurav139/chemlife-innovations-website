@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Images } from "@/lib/assets";
 import { OPEN_CONSENT_EVENT } from "@/lib/analytics";
 import { useAnalyticsEnabled } from "@/lib/useAnalyticsEnabled";
+import ThemeToggle from "@/components/ThemeToggle";
 import { useHref, useLocale, useT } from "@/i18n/LocaleProvider";
 
 export default function Footer() {
@@ -46,7 +47,7 @@ export default function Footer() {
                 href="https://www.facebook.com/people/Chemlife-Innovations/100063821717542/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-11 h-11 md:w-10 md:h-10 bg-white/5 rounded-full flex items-center justify-center border border-white/10 hover:bg-brand-orange hover:border-brand-orange hover:scale-105 transition-all duration-350"
+                className="w-11 h-11 md:w-10 md:h-10 bg-white/5 dark:bg-night-800/5 rounded-full flex items-center justify-center border border-white/10 hover:bg-brand-orange hover:border-brand-orange hover:scale-105 transition-all duration-350"
                 aria-label="Facebook"
               >
                 <svg className="w-4 h-4 fill-current text-white" viewBox="0 0 24 24">
@@ -57,7 +58,7 @@ export default function Footer() {
                 href="https://www.linkedin.com/company/chemlifeinnovations"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-11 h-11 md:w-10 md:h-10 bg-white/5 rounded-full flex items-center justify-center border border-white/10 hover:bg-brand-orange hover:border-brand-orange hover:scale-105 transition-all duration-350"
+                className="w-11 h-11 md:w-10 md:h-10 bg-white/5 dark:bg-night-800/5 rounded-full flex items-center justify-center border border-white/10 hover:bg-brand-orange hover:border-brand-orange hover:scale-105 transition-all duration-350"
                 aria-label="LinkedIn"
               >
                 <svg className="w-4 h-4 fill-current text-white" viewBox="0 0 24 24">
@@ -68,7 +69,7 @@ export default function Footer() {
                 href="https://www.youtube.com/@chemlifeinnovations2739"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-11 h-11 md:w-10 md:h-10 bg-white/5 rounded-full flex items-center justify-center border border-white/10 hover:bg-brand-orange hover:border-brand-orange hover:scale-105 transition-all duration-350"
+                className="w-11 h-11 md:w-10 md:h-10 bg-white/5 dark:bg-night-800/5 rounded-full flex items-center justify-center border border-white/10 hover:bg-brand-orange hover:border-brand-orange hover:scale-105 transition-all duration-350"
                 aria-label="YouTube"
               >
                 <svg className="w-4 h-4 fill-current text-white" viewBox="0 0 24 24">
@@ -173,18 +174,19 @@ export default function Footer() {
               height={33}
               className="h-7 w-auto rounded-sm object-contain"
             />
-            <p className="text-slate-450 text-xs text-center sm:text-left">
+            <p className="text-slate-450 dark:text-night-muted text-xs text-center sm:text-left">
               &copy; {new Date().getFullYear()} ChemLife Innovations Pvt Ltd. {t.footer.rights}
             </p>
           </div>
-          <div className="flex gap-6">
-            <Link href="/privacy" className="tap-target text-slate-450 text-xs hover:text-brand-orange transition-colors">{t.footer.privacy + english}</Link>
-            <Link href="/terms" className="tap-target text-slate-450 text-xs hover:text-brand-orange transition-colors">{t.footer.terms + english}</Link>
+          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
+            <ThemeToggle />
+            <Link href="/privacy" className="tap-target text-slate-450 dark:text-night-muted text-xs hover:text-brand-orange transition-colors">{t.footer.privacy + english}</Link>
+            <Link href="/terms" className="tap-target text-slate-450 dark:text-night-muted text-xs hover:text-brand-orange transition-colors">{t.footer.terms + english}</Link>
             {analyticsEnabled && (
               <button
                 type="button"
                 onClick={() => window.dispatchEvent(new Event(OPEN_CONSENT_EVENT))}
-                className="tap-target text-slate-450 text-xs hover:text-brand-orange transition-colors cursor-pointer"
+                className="tap-target text-slate-450 dark:text-night-muted text-xs hover:text-brand-orange transition-colors cursor-pointer"
               >
                 {t.footer.cookies}
               </button>

@@ -113,7 +113,7 @@ export default function LifeAtChemLife() {
         >
           <a
             href={href("/careers")}
-            className="inline-block border-2 border-brand-orange text-brand-orange-aa bg-white hover:bg-brand-orange-aa hover:text-white font-semibold px-8 py-3 rounded-full shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5"
+            className="inline-block border-2 border-brand-orange text-brand-orange-aa dark:text-brand-orange bg-white dark:bg-night-800 hover:bg-brand-orange-aa hover:text-white font-semibold px-8 py-3 rounded-full shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5"
           >
             {t.joinUs}
           </a>

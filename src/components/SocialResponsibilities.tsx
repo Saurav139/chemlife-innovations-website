@@ -52,7 +52,7 @@ export default function SocialResponsibilities() {
   const activeBg = items[activeBgIndex];
 
   return (
-    <SectionWrapper className="relative py-16 md:py-32 lg:py-40 bg-white overflow-hidden border-b border-gray-100">
+    <SectionWrapper className="relative py-16 md:py-32 lg:py-40 bg-white dark:bg-night-800 overflow-hidden border-b border-gray-100 dark:border-night-600">
       {/* Dynamic Background Media with cross-fade */}
       <div ref={bgRef} className="absolute inset-0 z-0 select-none pointer-events-none">
         <AnimatePresence initial={false}>
@@ -91,15 +91,15 @@ export default function SocialResponsibilities() {
             </motion.div>
           )}
         </AnimatePresence>
-        <div className="absolute inset-0 bg-white/40" />
+        <div className="absolute inset-0 bg-white/40 dark:bg-night-800/40" />
       </div>
 
       <div className="relative z-10 max-w-[1200px] mx-auto px-6">
         <div className="text-center mb-10 md:mb-16">
-          <span className="text-teal-aa text-sm lg:text-base font-semibold tracking-widest uppercase">
+          <span className="text-teal-aa dark:text-teal-aa-light text-sm lg:text-base font-semibold tracking-widest uppercase">
             {t.kicker}
           </span>
-          <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-brand-navy mt-3 leading-tight">
+          <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-brand-navy dark:text-night-text mt-3 leading-tight">
             {t.title}
           </h2>
         </div>
@@ -143,7 +143,7 @@ export default function SocialResponsibilities() {
                 className={`transition-transform duration-300 ${hoveredIndex === index ? 'transform translate-y-1 scale-105' : ''
                   }`}
               >
-                <h3 className="font-heading text-xl font-bold text-brand-navy mb-3 group-hover:text-teal-aa transition-colors duration-300">
+                <h3 className="font-heading text-xl font-bold text-brand-navy dark:text-night-text mb-3 group-hover:text-teal-aa dark:group-hover:text-teal-aa-light transition-colors duration-300">
                   {item.title}
                 </h3>
               </div>
