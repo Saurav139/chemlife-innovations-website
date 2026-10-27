@@ -174,6 +174,8 @@ export default function AboutPage() {
                 />
               </svg>
 
+              {/* The cards' CSS transition covers only what hovering changes (border, shadow, zoom). Transitioning
+                  everything also caught the fade-in's opacity and slide, so the slide lagged and Safari flickered. */}
               {/* Card G - Top Center */}
               <div className="order-1 lg:order-none lg:col-start-2 lg:row-start-1 flex justify-center">
                 <motion.div
@@ -181,7 +183,7 @@ export default function AboutPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: 0.1, ease: easeOut }}
-                  className="relative w-full max-w-[320px] bg-linear-to-b from-teal-900 to-teal-950 rounded-2xl pt-8 pb-14 px-6 text-center border border-white/10 shadow-xl hover:border-brand-orange/45 hover:scale-[1.02] transition-all duration-300 group overflow-hidden"
+                  className="relative w-full max-w-[320px] bg-linear-to-b from-teal-900 to-teal-950 rounded-2xl pt-8 pb-14 px-6 text-center border border-white/10 shadow-xl hover:border-brand-orange/45 hover:scale-[1.02] transition-[border-color,box-shadow,scale] duration-300 group overflow-hidden"
                 >
                   <div className="h-10 px-4 rounded-full bg-[#e2e2e2] border-2 border-brand-orange flex items-center justify-center shadow-md mb-4 mx-auto relative z-10 w-fit">
                     <div className="flex gap-2.5 font-heading font-black text-base md:text-lg select-none tracking-wider">
@@ -232,7 +234,7 @@ export default function AboutPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: 0.4, ease: easeOut }}
-                  className="relative w-full max-w-[320px] bg-linear-to-b from-teal-900 to-teal-950 rounded-2xl pt-8 pb-14 px-6 text-center border border-white/10 shadow-xl hover:border-brand-orange/45 hover:scale-[1.02] transition-all duration-300 group overflow-hidden"
+                  className="relative w-full max-w-[320px] bg-linear-to-b from-teal-900 to-teal-950 rounded-2xl pt-8 pb-14 px-6 text-center border border-white/10 shadow-xl hover:border-brand-orange/45 hover:scale-[1.02] transition-[border-color,box-shadow,scale] duration-300 group overflow-hidden"
                 >
                   <div className="h-10 px-4 rounded-full bg-[#e2e2e2] border-2 border-brand-orange flex items-center justify-center shadow-md mb-4 mx-auto relative z-10 w-fit">
                     <div className="flex gap-2.5 font-heading font-black text-base md:text-lg select-none tracking-wider">
@@ -295,7 +297,7 @@ export default function AboutPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: 0.2, ease: easeOut }}
-                  className="relative w-full max-w-[320px] bg-linear-to-b from-teal-900 to-teal-950 rounded-2xl pt-8 pb-14 px-6 text-center border border-white/10 shadow-xl hover:border-brand-orange/45 hover:scale-[1.02] transition-all duration-300 group overflow-hidden"
+                  className="relative w-full max-w-[320px] bg-linear-to-b from-teal-900 to-teal-950 rounded-2xl pt-8 pb-14 px-6 text-center border border-white/10 shadow-xl hover:border-brand-orange/45 hover:scale-[1.02] transition-[border-color,box-shadow,scale] duration-300 group overflow-hidden"
                 >
                   <div className="h-10 px-4 rounded-full bg-[#e2e2e2] border-2 border-brand-orange flex items-center justify-center shadow-md mb-4 mx-auto relative z-10 w-fit">
                     <div className="flex gap-2.5 font-heading font-black text-base md:text-lg select-none tracking-wider">
@@ -360,7 +362,7 @@ export default function AboutPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: 0.3, ease: easeOut }}
-                  className="relative w-full max-w-[320px] bg-linear-to-b from-teal-900 to-teal-950 rounded-2xl pt-8 pb-14 px-6 text-center border border-white/10 shadow-xl hover:border-brand-orange/45 hover:scale-[1.02] transition-all duration-300 group overflow-hidden"
+                  className="relative w-full max-w-[320px] bg-linear-to-b from-teal-900 to-teal-950 rounded-2xl pt-8 pb-14 px-6 text-center border border-white/10 shadow-xl hover:border-brand-orange/45 hover:scale-[1.02] transition-[border-color,box-shadow,scale] duration-300 group overflow-hidden"
                 >
                   <div className="h-10 px-4 rounded-full bg-[#e2e2e2] border-2 border-brand-orange flex items-center justify-center shadow-md mb-4 mx-auto relative z-10 w-fit">
                     <div className="flex gap-2.5 font-heading font-black text-base md:text-lg select-none tracking-wider">
@@ -457,7 +459,7 @@ export default function AboutPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: i * 0.15, ease: easeOut }}
-                  className="bg-gray-50/50 rounded-2xl border border-gray-100 p-4 sm:p-6 flex flex-col items-center text-center shadow-sm hover:border-brand-orange/30 hover:shadow-md transition-all duration-300 group hover:scale-[1.02]"
+                  className="bg-gray-50/50 rounded-2xl border border-gray-100 p-4 sm:p-6 flex flex-col items-center text-center shadow-sm hover:border-brand-orange/30 hover:shadow-md transition-[border-color,box-shadow,scale] duration-300 group hover:scale-[1.02]"
                 >
                   {/* Headshot container */}
                   <div className="w-20 h-20 sm:w-28 sm:h-28 md:w-32 md:h-32 rounded-full border-2 border-orange-100 group-hover:border-brand-orange flex items-center justify-center bg-gray-100 mb-4 sm:mb-6 shadow-sm relative overflow-hidden transition-all duration-300">
