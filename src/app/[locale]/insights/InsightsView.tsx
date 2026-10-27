@@ -44,6 +44,18 @@ function ButtonLabel({ full, short }: { full: string; short: string }) {
   );
 }
 
+/** The labels for a post's link to its original: WordPress, Instagram, LinkedIn (the default), or another site. */
+function originalLink(url?: string) {
+  let host = "";
+  try {
+    host = url ? new URL(url).hostname : "";
+  } catch {}
+  if (host.endsWith("wordpress.com")) return { full: "Read on WordPress", short: "WordPress", reader: "Read the full article on WordPress →" };
+  if (host.endsWith("instagram.com")) return { full: "View on Instagram", short: "Instagram", reader: "View post on Instagram →" };
+  if (!host || host.endsWith("linkedin.com")) return { full: "View on LinkedIn", short: "LinkedIn", reader: "View post on LinkedIn →" };
+  return { full: "Read the original", short: "Original", reader: "Read the original →" };
+}
+
 export default function InsightsView({ blogs, podcasts, videos }: Insights) {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedFilter, setSelectedFilter] = useState("All");
@@ -104,9 +116,10 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
   const sortedPodcasts = getSortedItems(podcasts);
   const sortedVideos = getSortedItems(videos);
 
-  const featuredBlog = sortedBlogs[0];
-  const featuredPodcast = sortedPodcasts[0];
-  const featuredVideo = sortedVideos[0];
+  // The post chosen as featured in the Insights inbox, else the newest.
+  const featuredBlog = sortedBlogs.find((item) => item.featured) ?? sortedBlogs[0];
+  const featuredPodcast = sortedPodcasts.find((item) => item.featured) ?? sortedPodcasts[0];
+  const featuredVideo = sortedVideos.find((item) => item.featured) ?? sortedVideos[0];
 
   const featuredTitles = new Set([featuredBlog, featuredVideo, featuredPodcast].filter(Boolean).map((item) => item.title));
 
@@ -271,9 +284,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                       className="inline-flex items-center justify-center min-h-11 text-center whitespace-nowrap px-2 sm:px-6 lg:px-2 py-2.5 rounded-full text-[13px] sm:text-sm lg:text-xs xl:text-sm leading-5 border border-gray-200 text-gray-600 hover:bg-gray-50 hover:text-teal-aa font-bold transition-all duration-300 cursor-pointer"
                       onClick={(e) => e.stopPropagation()}
                     >
-                      {featuredBlog.linkUrl?.includes("wordpress.com")
-                        ? <ButtonLabel full="Read on WordPress" short="WordPress" />
-                        : <ButtonLabel full="View on LinkedIn" short="LinkedIn" />}
+                      <ButtonLabel full={originalLink(featuredBlog.linkUrl).full} short={originalLink(featuredBlog.linkUrl).short} />
                     </a>
                   </div>
                 </div>
@@ -644,7 +655,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                               className="tap-target text-xs font-semibold text-gray-500 hover:text-teal-aa transition-colors cursor-pointer"
                               onClick={(e) => e.stopPropagation()}
                             >
-                              {item.linkUrl?.includes("wordpress.com") ? "Read on WordPress" : "View on LinkedIn"}
+                              {originalLink(item.linkUrl).full}
                             </a>
                           </div>
                         ) : (
@@ -815,7 +826,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                     rel="noopener noreferrer"
                     className="text-xs font-semibold text-teal-aa hover:text-teal-700 transition-colors"
                   >
-                    {activeArticle.linkUrl.includes("wordpress.com") ? "Read the full article on WordPress →" : "View post on LinkedIn →"}
+                    {originalLink(activeArticle.linkUrl).reader}
                   </a>
                 )}
                 <button

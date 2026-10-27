@@ -1,4 +1,7 @@
 import { Images } from "@/lib/assets";
+import { approvedInsights, storeConfigured } from "@/lib/insights-store/db";
+import { fetchYouTubeUploads } from "@/lib/insights-store/sources";
+import { displayDate } from "@/lib/insights-store/text";
 
 export interface InsightItem {
   type: "Blog" | "Podcast" | "Video";
@@ -10,6 +13,8 @@ export interface InsightItem {
   imageUrl?: string;
   youtubeId?: string;
   content?: string;
+  /** Chosen in the Insights inbox to be the featured post of its type (otherwise the newest is). */
+  featured?: boolean;
 }
 
 export interface Insights {
@@ -18,8 +23,9 @@ export interface Insights {
   videos: InsightItem[];
 }
 
-// Hardcoded fallback data in case API keys are not supplied or fail
-const fallbackData: Insights = {
+// The built-in list: shown until the Insights inbox is set up (DATABASE_URL), and copied into it as approved posts
+// when it starts. Also the fallback whenever the inbox's database can't be reached.
+export const FALLBACK_INSIGHTS: Insights = {
   blogs: [
     {
       type: "Blog" as const,
@@ -341,61 +347,27 @@ Prioritize advanced organic chelated minerals (like chelated copper hydroxy anal
   ]
 };
 
-function summarizeDescription(text: string): string {
-  if (!text) return "";
-
-  // Cut off long metadata headers, timestamps, social handles, or footers
-  const cutoffIndex = text.search(/(⏱️|TIMESTAMPS|\b\d{2}:\d{2}\b|🔗|🌐|📧|📞|🔔|👍|📲)/i);
-  let cleaned = cutoffIndex !== -1 ? text.substring(0, cutoffIndex) : text;
-
-  // Standardize line breaks to periods so they split cleanly into sentences
-  cleaned = cleaned
-    .replace(/\r?\n/g, ". ")
-    .replace(/\s*(?:--|—|–)\s*/g, " - ") // Normalize em-dashes and double dashes to single dash
-    .replace(/\s+/g, " ")                // Collapse consecutive spaces
-    .replace(/\.+/g, ".")                // Clean up duplicate periods
-    .trim();
-
-  // Remove emojis
-  cleaned = cleaned.replace(/[\u{1F300}-\u{1F9FF}]|[\u{2600}-\u{26FF}]/gu, "");
-
-  // Extract the first 2 sentences
-  const sentences = cleaned.split(/(?<=[.!?])\s+/);
-  let summary = "";
-  if (sentences.length > 0) {
-    summary = sentences[0] || "";
-    if (sentences[1]) {
-      summary += " " + sentences[1];
+// Server only. The approved posts from the Insights inbox (see src/lib/insights-store); without the inbox, the
+// built-in list with the latest YouTube uploads (and LinkedIn posts, if its keys are set) on top.
+export async function getInsights(): Promise<Insights> {
+  if (storeConfigured()) {
+    try {
+      const approved = await approvedInsights();
+      if (approved) return approved;
+    } catch (error) {
+      console.warn("Insights inbox unavailable, showing the built-in list", error);
     }
-  } else {
-    summary = cleaned;
   }
-
-  summary = summary.trim();
-
-  // Strip trailing period if duplicate, ensure clean structure
-  if (summary.endsWith(".") && summary.endsWith("..")) {
-    summary = summary.replace(/\.+$/, ".");
-  }
-
-  // Capped length safety limit
-  if (summary.length > 180) {
-    summary = summary.substring(0, 177) + "...";
-  }
-
-  return summary;
+  return builtInInsights();
 }
 
-// Server only: reads the LinkedIn and YouTube keys. Live items go on top of the fallback list.
-export async function getInsights(): Promise<Insights> {
+async function builtInInsights(): Promise<Insights> {
   const linkedinToken = process.env.LINKEDIN_ACCESS_TOKEN;
   const linkedinOrgId = process.env.LINKEDIN_ORGANIZATION_ID;
-  const youtubeKey = process.env.YOUTUBE_API_KEY;
-  const youtubePlaylistId = process.env.YOUTUBE_PLAYLIST_ID || "UUw9YQ4V85x2n_L3mC0uE7yA"; // Default uploads playlist id or channel uploads
 
-  let liveBlogs = [...fallbackData.blogs];
-  let livePodcasts = [...fallbackData.podcasts];
-  let liveVideos = [...fallbackData.videos];
+  let liveBlogs = [...FALLBACK_INSIGHTS.blogs];
+  let livePodcasts = [...FALLBACK_INSIGHTS.podcasts];
+  let liveVideos = [...FALLBACK_INSIGHTS.videos];
 
   // Try loading live LinkedIn posts if credentials are provided
   if (linkedinToken && linkedinOrgId) {
@@ -440,7 +412,7 @@ export async function getInsights(): Promise<Insights> {
           });
 
           // Merge live blogs on top of default values
-          liveBlogs = [...mappedBlogs, ...fallbackData.blogs];
+          liveBlogs = [...mappedBlogs, ...FALLBACK_INSIGHTS.blogs];
         }
       }
     } catch (e) {
@@ -448,116 +420,23 @@ export async function getInsights(): Promise<Insights> {
     }
   }
 
-  // Try loading live YouTube uploads if credential is provided
-  if (youtubeKey) {
-    try {
-      const response = await fetch(
-        `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet,contentDetails&playlistId=${youtubePlaylistId}&maxResults=25&key=${youtubeKey}`,
-        {
-          next: { revalidate: 3600 },
-        }
-      );
-
-      if (response.ok) {
-        const data = await response.json();
-        if (data.items && data.items.length > 0) {
-          const videoIds = data.items
-            .map((item: any) => item.contentDetails?.videoId || item.snippet?.resourceId?.videoId)
-            .filter(Boolean)
-            .join(",");
-
-          // Fetch detailed video data (e.g., duration and full metadata)
-          const detailsResponse = await fetch(
-            `https://www.googleapis.com/youtube/v3/videos?part=contentDetails,snippet&id=${videoIds}&key=${youtubeKey}`,
-            {
-              next: { revalidate: 3600 },
-            }
-          );
-
-          if (detailsResponse.ok) {
-            const detailsData = await detailsResponse.json();
-            if (detailsData.items && detailsData.items.length > 0) {
-              const mappedYouTubeItems = detailsData.items
-                .map((item: any) => {
-                  const snippet = item.snippet || {};
-                  const durationStr = item.contentDetails?.duration || "";
-
-                  // Calculate total seconds to filter out Shorts (< 60s)
-                  let durationInSeconds = 0;
-                  const match = durationStr.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);
-                  if (match) {
-                    const hours = parseInt(match[1] || "0", 10);
-                    const minutes = parseInt(match[2] || "0", 10);
-                    const seconds = parseInt(match[3] || "0", 10);
-                    durationInSeconds = hours * 3600 + minutes * 60 + seconds;
-                  }
-
-                  // Discard Shorts (duration < 120 seconds)
-                  if (durationInSeconds < 120) {
-                    return null;
-                  }
-
-                  // Parse duration in ISO 8601 format (e.g., PT36M20S)
-                  const titleLower = (snippet.title || "").toLowerCase();
-                  const descLower = (snippet.description || "").toLowerCase();
-                  const isPodcastKeyword =
-                    titleLower.includes("podcast") ||
-                    titleLower.includes("grand master") ||
-                    titleLower.includes("grandmaster") ||
-                    descLower.includes("podcast") ||
-                    descLower.includes("grand master") ||
-                    descLower.includes("grandmaster");
-
-                  // A video is long (Podcast) if it's >= 10 mins (600s)
-                  const isPodcast = isPodcastKeyword || (durationInSeconds >= 600);
-
-                  const dateObj = new Date(snippet.publishedAt || Date.now());
-                  const formattedDate = dateObj.toLocaleDateString("en-US", {
-                    month: "long",
-                    day: "numeric",
-                    year: "numeric",
-                  });
-
-                  let metaPlay = "Video Play";
-                  if (match) {
-                    const hours = parseInt(match[1] || "0", 10);
-                    const minutes = parseInt(match[2] || "0", 10);
-                    const seconds = parseInt(match[3] || "0", 10);
-                    if (hours > 0) {
-                      metaPlay = `${hours} hr ${minutes} min play`;
-                    } else if (minutes > 0) {
-                      metaPlay = `${minutes} min play`;
-                    } else {
-                      metaPlay = `${seconds} sec play`;
-                    }
-                  }
-
-                  const summary = summarizeDescription(snippet.description || "");
-
-                  return {
-                    type: (isPodcast ? "Podcast" : "Video") as "Podcast" | "Video",
-                    title: snippet.title || "YouTube Video",
-                    description: summary || "ChemLife Innovations YouTube upload details.",
-                    meta: metaPlay,
-                    date: formattedDate,
-                    youtubeId: item.id,
-                  };
-                })
-                .filter(Boolean);
-
-              // Filter out the live items by type
-              const liveFetchedPodcasts = mappedYouTubeItems.filter((item: any) => item.type === "Podcast");
-              const liveFetchedVideos = mappedYouTubeItems.filter((item: any) => item.type === "Video");
-
-              livePodcasts = [...liveFetchedPodcasts, ...fallbackData.podcasts];
-              liveVideos = [...liveFetchedVideos, ...fallbackData.videos];
-            }
-          }
-        }
-      }
-    } catch (e) {
-      console.warn("YouTube API integration error, utilizing fallback cache", e);
+  // The latest YouTube uploads, if the key is set
+  try {
+    const uploads = await fetchYouTubeUploads();
+    if (uploads && uploads.length > 0) {
+      const cards = uploads.map((video) => ({
+        type: video.kind,
+        title: video.title,
+        description: video.summary,
+        meta: video.meta,
+        date: displayDate(video.publishedAt),
+        youtubeId: video.youtubeId,
+      }));
+      livePodcasts = [...cards.filter((item) => item.type === "Podcast"), ...FALLBACK_INSIGHTS.podcasts];
+      liveVideos = [...cards.filter((item) => item.type === "Video"), ...FALLBACK_INSIGHTS.videos];
     }
+  } catch (e) {
+    console.warn("YouTube API integration error, utilizing fallback cache", e);
   }
 
   // Deduplicate entries by exact title matches
