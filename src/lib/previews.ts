@@ -31,6 +31,12 @@ export const PREVIEWS = [
     description: "Ten more figures for the five research platforms, drawn like the research pages' own: how each works up close, and the bigger picture.",
   },
   {
+    slug: "design-system",
+    href: "/previews/design-system",
+    title: "Redesign: design system",
+    description: "The redesign's colour roles, type, buttons, cards, forms and sections, each shown in the light and dark theme side by side.",
+  },
+  {
     slug: "research-pages",
     href: "/previews/research",
     title: "Research platform pages",
