@@ -21,11 +21,17 @@ interface Preview {
 
 const SOURCE_LABEL: Record<Source, string> = { youtube: "YouTube", wordpress: "Blog", instagram: "Instagram", linkedin: "LinkedIn", link: "Web link" };
 const CHANNELS: Source[] = ["youtube", "wordpress", "instagram", "linkedin"];
-const TABS: { status: Status; label: string; empty: string }[] = [
-  { status: "pending", label: "Waiting", empty: "Nothing is waiting. New posts appear here after each check." },
-  { status: "approved", label: "On the page", empty: "Nothing is on the Insights page yet." },
-  { status: "hidden", label: "Hidden", empty: "Nothing is hidden." },
+type Tab = Status | "featured";
+const TABS: { id: Tab; label: string; empty: string }[] = [
+  { id: "pending", label: "Waiting", empty: "Nothing is waiting. New posts appear here after each check." },
+  { id: "approved", label: "On the page", empty: "Nothing is on the Insights page yet." },
+  { id: "featured", label: "Featured", empty: "" },
+  { id: "hidden", label: "Hidden", empty: "Nothing is hidden." },
 ];
+const STATUS_LABEL: Record<Status, string> = { pending: "Waiting", approved: "On the page", hidden: "Hidden" };
+const KIND_ORDER: Kind[] = ["Blog", "Video", "Podcast"];
+/** How a post leads its type on the Insights page: picked in the inbox, or the newest when nothing is picked. */
+type FeaturedAs = "chosen" | "newest" | null;
 const AUTO_CHECK_AFTER = 10 * 60 * 1000;
 
 const BTN = "inline-flex items-center justify-center gap-1.5 min-h-10 px-4 rounded-full text-sm font-bold transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-default";
@@ -84,8 +90,9 @@ async function uploadPicture(file: File): Promise<number> {
 
 export default function InsightsInbox({ initial, demo = false }: { initial: Data; demo?: boolean }) {
   const [data, setData] = useState<Data>(initial);
-  const [tab, setTab] = useState<Status>("pending");
+  const [tab, setTab] = useState<Tab>("pending");
   const [source, setSource] = useState<Source | "all">("all");
+  const [kind, setKind] = useState<Kind | "all">("all");
   const [busy, setBusy] = useState<Set<number>>(new Set());
   const [checking, setChecking] = useState(false);
   const [toast, setToast] = useState<{ text: string; error?: boolean; undo?: () => void } | null>(null);
@@ -93,12 +100,39 @@ export default function InsightsInbox({ initial, demo = false }: { initial: Data
   const [highlight, setHighlight] = useState<number | null>(null);
   const toastTimer = useRef<number>(0);
 
-  const counts = useMemo(() => {
-    const c: Record<Status, number> = { pending: 0, approved: 0, hidden: 0 };
-    data.items.forEach((item) => c[item.status]++);
-    return c;
+  // The post leading each type on the Insights page, worked out as the page does: the one chosen here, else the
+  // newest (videos and podcasts need a YouTube video to show).
+  const featuredNow = useMemo(() => {
+    const now = {} as Record<Kind, { item: InboxItem; chosen: boolean } | null>;
+    for (const k of KIND_ORDER) {
+      const onPage = data.items
+        .filter((item) => item.status === "approved" && item.kind === k && (k === "Blog" || item.youtubeId))
+        .sort((a, b) => Date.parse(b.publishedAt) - Date.parse(a.publishedAt) || b.id - a.id);
+      const chosen = onPage.find((item) => item.featured);
+      now[k] = chosen ? { item: chosen, chosen: true } : onPage[0] ? { item: onPage[0], chosen: false } : null;
+    }
+    return now;
   }, [data.items]);
-  const shown = data.items.filter((item) => item.status === tab && (source === "all" || item.source === source));
+  const featuredAs = (item: InboxItem): FeaturedAs => {
+    const slot = featuredNow[item.kind];
+    return slot?.item.id === item.id ? (slot.chosen ? "chosen" : "newest") : null;
+  };
+
+  const counts = useMemo(() => {
+    const c: Record<Tab, number> = { pending: 0, approved: 0, hidden: 0, featured: 0 };
+    data.items.forEach((item) => c[item.status]++);
+    c.featured = KIND_ORDER.filter((k) => featuredNow[k]).length;
+    return c;
+  }, [data.items, featuredNow]);
+  const shown = data.items.filter(
+    (item) => item.status === tab && (source === "all" || item.source === source) && (kind === "all" || item.kind === kind)
+  );
+
+  function chooseAnother(k: Kind) {
+    setTab("approved");
+    setSource("all");
+    setKind(k);
+  }
 
   function say(text: string, options: { error?: boolean; undo?: () => void } = {}) {
     window.clearTimeout(toastTimer.current);
@@ -167,6 +201,7 @@ export default function InsightsInbox({ initial, demo = false }: { initial: Data
   function show(item: InboxItem) {
     setTab(item.status);
     setSource("all");
+    setKind("all");
     setHighlight(item.id);
     window.setTimeout(() => document.getElementById(`post-${item.id}`)?.scrollIntoView({ behavior: "smooth", block: "center" }), 50);
     window.setTimeout(() => setHighlight(null), 2500);
@@ -217,52 +252,74 @@ export default function InsightsInbox({ initial, demo = false }: { initial: Data
             <div role="tablist" aria-label="Posts by decision" className="flex gap-1 -mb-px overflow-x-auto">
               {TABS.map((t) => (
                 <button
-                  key={t.status}
+                  key={t.id}
                   role="tab"
                   type="button"
-                  aria-selected={tab === t.status}
-                  onClick={() => setTab(t.status)}
+                  aria-selected={tab === t.id}
+                  onClick={() => setTab(t.id)}
                   className={`min-h-11 px-3 sm:px-4 border-b-2 text-sm font-bold whitespace-nowrap cursor-pointer transition-colors ${
-                    tab === t.status ? "border-teal-aa text-teal-aa" : "border-transparent text-slate-500 hover:text-brand-navy"
+                    tab === t.id ? "border-teal-aa text-teal-aa" : "border-transparent text-slate-500 hover:text-brand-navy"
                   }`}
                 >
+                  {t.id === "featured" && <span aria-hidden="true" className="mr-1 text-amber-500">★</span>}
                   {t.label}
-                  <span className={`ml-2 inline-flex min-w-6 justify-center rounded-full px-1.5 py-0.5 text-xs ${t.status === "pending" && counts.pending ? "bg-brand-orange-aa text-white" : "bg-slate-100 text-slate-600"}`}>
-                    {counts[t.status]}
+                  <span className={`ml-2 inline-flex min-w-6 justify-center rounded-full px-1.5 py-0.5 text-xs ${t.id === "pending" && counts.pending ? "bg-brand-orange-aa text-white" : "bg-slate-100 text-slate-600"}`}>
+                    {counts[t.id]}
                   </span>
                 </button>
               ))}
             </div>
-            <label className="flex items-center gap-2 pb-3 sm:pb-0 text-sm text-slate-600">
-              <span className="sr-only sm:not-sr-only">Show</span>
-              <select value={source} onChange={(e) => setSource(e.target.value as Source | "all")} className="min-h-10 rounded-full border border-slate-300 bg-white px-3 text-sm font-semibold text-brand-navy cursor-pointer">
-                <option value="all">All channels</option>
-                {(Object.keys(SOURCE_LABEL) as Source[]).map((s) => <option key={s} value={s}>{SOURCE_LABEL[s]}</option>)}
-              </select>
-            </label>
+            {tab !== "featured" && (
+              <div className="flex items-center gap-2 pb-3 sm:pb-0 text-sm text-slate-600">
+                <span className="sr-only sm:not-sr-only">Show</span>
+                <select aria-label="Channel" value={source} onChange={(e) => setSource(e.target.value as Source | "all")} className="min-h-10 rounded-full border border-slate-300 bg-white px-3 text-sm font-semibold text-brand-navy cursor-pointer">
+                  <option value="all">All channels</option>
+                  {(Object.keys(SOURCE_LABEL) as Source[]).map((s) => <option key={s} value={s}>{SOURCE_LABEL[s]}</option>)}
+                </select>
+                <select aria-label="Type" value={kind} onChange={(e) => setKind(e.target.value as Kind | "all")} className="min-h-10 rounded-full border border-slate-300 bg-white px-3 text-sm font-semibold text-brand-navy cursor-pointer">
+                  <option value="all">All types</option>
+                  {KIND_ORDER.map((k) => <option key={k} value={k}>{k}s</option>)}
+                </select>
+              </div>
+            )}
           </div>
 
-          <div role="tabpanel" aria-label={TABS.find((t) => t.status === tab)!.label}>
-            {tab === "approved" && shown.length > 0 && (
-              <p className="px-4 sm:px-6 pt-4 text-sm text-slate-600">
-                <strong className="text-brand-navy">Feature</strong> picks the big card at the top of the page for its type (one blog, one video, one podcast). Without a choice, the newest is featured.
-              </p>
-            )}
-            {shown.length === 0 ? (
-              <p className="px-6 py-14 text-center text-slate-500">{source === "all" ? TABS.find((t) => t.status === tab)!.empty : `Nothing from ${SOURCE_LABEL[source]} here.`}</p>
+          <div role="tabpanel" aria-label={TABS.find((t) => t.id === tab)!.label}>
+            {tab === "featured" ? (
+              <FeaturedNow
+                featuredNow={featuredNow}
+                busy={busy}
+                onChooseAnother={chooseAnother}
+                onUseNewest={(item) => change(item, { featured: false }, `The newest ${item.kind.toLowerCase()} is featured again.`)}
+              />
             ) : (
-              <ul className="divide-y divide-slate-100">
-                {shown.map((item) => (
-                  <Post
-                    key={item.id}
-                    item={item}
-                    busy={busy.has(item.id)}
-                    highlight={highlight === item.id}
-                    onChange={(changes, done) => change(item, changes, done)}
-                    onEdit={() => setEditing(item)}
-                  />
-                ))}
-              </ul>
+              <>
+                {tab === "approved" && shown.length > 0 && (
+                  <p className="px-4 sm:px-6 pt-4 text-sm text-slate-600">
+                    <span className="text-amber-500" aria-hidden="true">★</span> marks the post featured at the top of the page for its type: the one you chose with{" "}
+                    <strong className="text-brand-navy">Feature</strong>, or else the newest. See all three under <strong className="text-brand-navy">Featured</strong>.
+                  </p>
+                )}
+                {shown.length === 0 ? (
+                  <p className="px-6 py-14 text-center text-slate-500">
+                    {source === "all" && kind === "all" ? TABS.find((t) => t.id === tab)!.empty : "Nothing here matches the channel and type chosen."}
+                  </p>
+                ) : (
+                  <ul className="divide-y divide-slate-100">
+                    {shown.map((item) => (
+                      <Post
+                        key={item.id}
+                        item={item}
+                        featuredAs={featuredAs(item)}
+                        busy={busy.has(item.id)}
+                        highlight={highlight === item.id}
+                        onChange={(changes, done) => change(item, changes, done)}
+                        onEdit={() => setEditing(item)}
+                      />
+                    ))}
+                  </ul>
+                )}
+              </>
             )}
           </div>
         </section>
@@ -336,8 +393,53 @@ function Channels({ data, checking, onCheck }: { data: Data; checking: boolean; 
   );
 }
 
-function Post({ item, busy, highlight, onChange, onEdit }: {
+function FeaturedNow({ featuredNow, busy, onChooseAnother, onUseNewest }: {
+  featuredNow: Record<Kind, { item: InboxItem; chosen: boolean } | null>;
+  busy: Set<number>;
+  onChooseAnother: (kind: Kind) => void;
+  onUseNewest: (item: InboxItem) => void;
+}) {
+  return (
+    <div className="p-4 sm:p-6">
+      <p className="text-sm text-slate-600 mb-4">These lead the Insights page, one for each type. Choose any post that&apos;s on the page instead; without a choice, the newest is featured.</p>
+      <ul className="grid gap-4 md:grid-cols-3">
+        {KIND_ORDER.map((k) => {
+          const slot = featuredNow[k];
+          return (
+            <li key={k} className="rounded-2xl border border-slate-200 bg-slate-50 p-4 flex flex-col">
+              <p className="text-xs font-bold uppercase tracking-wider text-slate-500">Featured {k.toLowerCase()}</p>
+              {slot ? (
+                <>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={thumbnail(picture(slot.item))} alt="" className="mt-3 w-full aspect-[16/10] rounded-xl object-cover bg-slate-200" />
+                  <p className="mt-3 text-xs font-semibold text-slate-500">{SOURCE_LABEL[slot.item.source]} · {day(slot.item.publishedAt)}</p>
+                  <h3 className="font-bold leading-snug mt-1">{slot.item.title}</h3>
+                  <p className={`mt-2 inline-flex self-start items-center gap-1 rounded-full px-2.5 py-1 text-xs font-bold ${slot.chosen ? "bg-amber-100 text-amber-900" : "bg-white border border-slate-200 text-slate-600"}`}>
+                    {slot.chosen ? "★ Chosen by you" : "Newest on the page, chosen automatically"}
+                  </p>
+                  <div className="mt-auto pt-4 flex flex-wrap gap-2">
+                    <button type="button" onClick={() => onChooseAnother(k)} className={BTN_SECONDARY}>Choose another</button>
+                    {slot.chosen && (
+                      <button type="button" disabled={busy.has(slot.item.id)} onClick={() => onUseNewest(slot.item)} className={`${BTN} text-slate-600 hover:bg-slate-100`}>
+                        Use the newest
+                      </button>
+                    )}
+                  </div>
+                </>
+              ) : (
+                <p className="mt-3 text-sm text-slate-500">No {k.toLowerCase()}s are on the page, so this section is left out.</p>
+              )}
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  );
+}
+
+function Post({ item, featuredAs, busy, highlight, onChange, onEdit }: {
   item: InboxItem;
+  featuredAs: FeaturedAs;
   busy: boolean;
   highlight: boolean;
   onChange: (changes: ItemChanges, done: string) => void;
@@ -354,7 +456,12 @@ function Post({ item, busy, highlight, onChange, onEdit }: {
             <span>{item.kind}</span>
             <span aria-hidden="true">·</span>
             <span>{day(item.publishedAt)}</span>
-            {item.featured && <span className="rounded-full bg-amber-100 text-amber-800 px-2 py-0.5">★ Featured</span>}
+            {featuredAs === "chosen" && <span className="rounded-full bg-amber-100 text-amber-800 px-2 py-0.5">★ Featured</span>}
+            {featuredAs === "newest" && (
+              <span className="rounded-full bg-amber-50 border border-amber-200 text-amber-800 px-2 py-0.5" title="Featured because it's the newest. Choose a post with Feature to change it.">
+                ★ Featured · newest
+              </span>
+            )}
           </p>
           <h3 className="font-bold text-[15px] sm:text-base leading-snug mt-1">{item.title}</h3>
           {item.summary && <p className="text-sm text-slate-600 mt-1 line-clamp-2">{item.summary}</p>}
@@ -378,10 +485,16 @@ function Post({ item, busy, highlight, onChange, onEdit }: {
               type="button"
               disabled={busy}
               aria-pressed={item.featured}
-              onClick={() => onChange({ featured: !item.featured }, item.featured ? "No longer featured." : `Featured at the top of the ${item.kind.toLowerCase()}s.`)}
+              title={featuredAs === "newest" ? "Featured now as the newest. This keeps it featured when newer posts arrive." : undefined}
+              onClick={() =>
+                onChange(
+                  { featured: !item.featured },
+                  item.featured ? "No longer featured. The newest is featured instead." : `Featured at the top of the ${item.kind.toLowerCase()}s.`
+                )
+              }
               className={item.featured ? `${BTN} bg-amber-100 text-amber-900 hover:bg-amber-200` : BTN_SECONDARY}
             >
-              {item.featured ? "★ Featured" : "☆ Feature"}
+              {item.featured ? "★ Featured" : featuredAs === "newest" ? "☆ Keep featured" : "☆ Feature"}
             </button>
             <button type="button" disabled={busy} onClick={onEdit} className={BTN_SECONDARY}>Edit</button>
             <button type="button" disabled={busy} onClick={() => onChange({ status: "hidden" }, "Taken off the Insights page.")} className={BTN_SECONDARY}>Take off page</button>
@@ -577,7 +690,7 @@ function AddPost({ onAdded, onShow, onError }: { onAdded: (item: InboxItem) => v
         <div className="mt-4 rounded-xl bg-slate-50 border border-slate-200 p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <p className="text-sm">
             <strong>Already in the inbox</strong>, under{" "}
-            {TABS.find((t) => t.status === preview.existing!.status)!.label}: {preview.existing.title}
+            {STATUS_LABEL[preview.existing.status]}: {preview.existing.title}
           </p>
           <button type="button" onClick={() => onShow(preview.existing!)} className={BTN_SECONDARY}>Show it</button>
         </div>
