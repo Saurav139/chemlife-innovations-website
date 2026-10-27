@@ -67,10 +67,6 @@ const kn: Messages = {
     terms: "ಬಳಕೆಯ ನಿಯಮಗಳು",
     cookies: "ಕುಕೀ ಸೆಟ್ಟಿಂಗ್‌ಗಳು",
     englishOnly: "(ಇಂಗ್ಲಿಷ್‌ನಲ್ಲಿ)",
-    theme: "ಥೀಮ್",
-    themeSystem: "ಸಾಧನದಂತೆ",
-    themeLight: "ಲೈಟ್",
-    themeDark: "ಡಾರ್ಕ್",
   },
 
   common: {

@@ -68,10 +68,10 @@ export default function ResearchPage() {
     <VariantProvider>
       <Header />
 
-      <main className="bg-slate-50/50 dark:bg-night-900/50 min-h-screen text-brand-navy dark:text-night-text">
+      <main className="bg-slate-50/50 min-h-screen text-brand-navy">
         {/* Hero and research list are plain sections: they're in the first screen, so they show without waiting for a fade-in.
             The hero image is the page's largest paint (LCP), so it loads first. */}
-        <section className="pt-26 md:pt-32 pb-10 md:pb-20 lg:pt-36 lg:pb-28 text-white relative overflow-hidden bg-brand-navy dark:bg-night-band flex items-center">
+        <section className="pt-26 md:pt-32 pb-10 md:pb-20 lg:pt-36 lg:pb-28 text-white relative overflow-hidden bg-brand-navy flex items-center">
           <div className="absolute inset-0 z-0">
             <Image
               src={Images.research.heroBanner}
@@ -82,7 +82,7 @@ export default function ResearchPage() {
               priority
               fetchPriority="high"
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-brand-navy/95 dark:from-night-band/95 via-brand-navy/75 dark:via-night-band/75 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-r from-brand-navy/95 via-brand-navy/75 to-transparent" />
             <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#1e3a8a_1px,transparent_1px)] [background-size:16px_16px]" />
           </div>
 
@@ -100,14 +100,14 @@ export default function ResearchPage() {
         </section>
 
         {/* Research List Section */}
-        <section className="pt-8 pb-16 md:py-16 bg-slate-50/30 dark:bg-night-900/30 relative overflow-hidden">
+        <section className="pt-8 pb-16 md:py-16 bg-slate-50/30 relative overflow-hidden">
           <div className="relative z-10 max-w-[1200px] mx-auto px-6">
 
             {/* Left-aligned search bar: 48px tall on phones, 46px on desktop; 16px text on phones so iOS doesn't zoom in */}
             <div className="flex flex-col md:flex-row items-center gap-4 mb-8 md:mb-10 w-full">
-              <div role="search" className="flex items-center bg-slate-50 dark:bg-night-900 border border-slate-200 dark:border-night-600 rounded-full shadow-xs w-full md:max-w-md focus-within:border-teal-500 focus-within:ring-teal-500 focus-within:ring-1 transition-all duration-300 relative">
+              <div role="search" className="flex items-center bg-slate-50 border border-slate-200 rounded-full shadow-xs w-full md:max-w-md focus-within:border-teal-500 focus-within:ring-teal-500 focus-within:ring-1 transition-all duration-300 relative">
                 {/* Search Icon */}
-                <div className="pl-4 text-teal-650 dark:text-teal-aa-light flex-shrink-0">
+                <div className="pl-4 text-teal-650 flex-shrink-0">
                   <svg className="w-[18px] h-[18px]" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                   </svg>
@@ -121,7 +121,7 @@ export default function ResearchPage() {
                   placeholder={t.search}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-transparent border-0 px-3 py-3 md:py-2.5 text-base md:text-[15px] text-brand-navy dark:text-night-text placeholder-slate-aa focus:outline-none focus:ring-0 [&::-webkit-search-cancel-button]:appearance-none"
+                  className="w-full bg-transparent border-0 px-3 py-3 md:py-2.5 text-base md:text-[15px] text-brand-navy placeholder-slate-aa focus:outline-none focus:ring-0 [&::-webkit-search-cancel-button]:appearance-none"
                 />
 
                 {/* Clear Search Button */}
@@ -129,7 +129,7 @@ export default function ResearchPage() {
                   <button
                     onClick={() => setSearchQuery("")}
                     aria-label={t.clearSearch}
-                    className="mr-4 text-slate-aa dark:text-night-muted hover:text-teal-aa dark:hover:text-teal-aa-light transition-colors duration-250 cursor-pointer"
+                    className="mr-4 text-slate-aa hover:text-teal-aa transition-colors duration-250 cursor-pointer"
                   >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" d="M6 18L18 6M6 6l12 12" />
@@ -158,7 +158,7 @@ export default function ResearchPage() {
                     data-analytics-item={topic.englishTitle}
                     layout
                     transition={{ duration: 0.4, ease: easeOut }}
-                    className="w-full sm:w-[calc(50%-1rem)] lg:w-[calc((100%-4rem)/3)] scroll-mt-28 border-2 border-slate-200 dark:border-night-600 rounded-2xl bg-slate-50/50 dark:bg-night-900/50 hover:bg-slate-50/85 dark:hover:bg-night-900/85 transition-colors duration-300 overflow-hidden shadow-xs hover:border-brand-orange/40 flex flex-col group"
+                    className="w-full sm:w-[calc(50%-1rem)] lg:w-[calc((100%-4rem)/3)] scroll-mt-28 border-2 border-slate-200 rounded-2xl bg-slate-50/50 hover:bg-slate-50/85 transition-colors duration-300 overflow-hidden shadow-xs hover:border-brand-orange/40 flex flex-col group"
                   >
                     {/* Card Header (Image/Banner + Title) */}
                     <div
@@ -168,7 +168,7 @@ export default function ResearchPage() {
                     >
                       {/* Card image: the same 16:10 frame on every card and screen. The whole illustration shows (some
                           have labels that cropping would cut), over a blurred copy of itself that fills the rest. */}
-                      <div className="w-full aspect-[16/10] relative overflow-hidden bg-slate-100 dark:bg-night-700 border-b border-slate-200 dark:border-night-600">
+                      <div className="w-full aspect-[16/10] relative overflow-hidden bg-slate-100 border-b border-slate-200">
                         <Image
                           src={topic.banner}
                           alt=""
@@ -188,17 +188,17 @@ export default function ResearchPage() {
 
                       {/* Content: Title */}
                       <div className="p-6 flex flex-col gap-3">
-                        <h3 className="font-heading text-xl sm:text-2xl font-black text-brand-navy dark:text-night-text group-hover:text-brand-orange transition-colors duration-300 leading-tight">
+                        <h3 className="font-heading text-xl sm:text-2xl font-black text-brand-navy group-hover:text-brand-orange transition-colors duration-300 leading-tight">
                           {topic.title}
                         </h3>
 
                         {topic.tagline && (
-                          <p className="text-base text-slate-550 dark:text-night-muted font-semibold italic leading-relaxed">
+                          <p className="text-base text-slate-550 font-semibold italic leading-relaxed">
                             {topic.tagline}
                           </p>
                         )}
 
-                        <div className="flex items-center gap-1.5 text-brand-orange-aa dark:text-brand-orange text-sm font-bold pt-2">
+                        <div className="flex items-center gap-1.5 text-brand-orange-aa text-sm font-bold pt-2">
                           <span>{isExpanded ? t.showLess : t.readMore}</span>
                           <motion.span
                             animate={{ rotate: isExpanded ? 180 : 0 }}
@@ -220,35 +220,35 @@ export default function ResearchPage() {
                           animate={{ height: "auto" }}
                           exit={{ height: 0 }}
                           transition={{ duration: 0.4, ease: easeOut }}
-                          className="overflow-hidden bg-white dark:bg-night-800 border-t-2 border-slate-200 dark:border-night-600"
+                          className="overflow-hidden bg-white border-t-2 border-slate-200"
                         >
                           <div className="p-6 space-y-5">
                             {/* Summary section */}
                             <div>
-                              <span className="text-xs font-bold uppercase text-teal-655 dark:text-teal-aa-light tracking-wider block mb-1.5">
+                              <span className="text-xs font-bold uppercase text-teal-655 tracking-wider block mb-1.5">
                                 {t.overview}
                               </span>
-                              <p className="text-slate-655 dark:text-night-soft text-sm lg:text-base leading-relaxed font-light">
+                              <p className="text-slate-655 text-sm lg:text-base leading-relaxed font-light">
                                 {topic.preview}
                               </p>
                             </div>
 
                             {/* Challenge section */}
                             <div>
-                              <span className="text-xs font-bold uppercase text-teal-655 dark:text-teal-aa-light tracking-wider block mb-1.5">
+                              <span className="text-xs font-bold uppercase text-teal-655 tracking-wider block mb-1.5">
                                 {t.challenge}
                               </span>
-                              <p className="text-slate-655 dark:text-night-soft text-sm lg:text-base leading-relaxed font-light">
+                              <p className="text-slate-655 text-sm lg:text-base leading-relaxed font-light">
                                 {topic.challenge}
                               </p>
                             </div>
 
                             {/* Efficacy & Advantage section */}
                             <div>
-                              <span className="text-xs font-bold uppercase text-teal-655 dark:text-teal-aa-light tracking-wider block mb-1.5">
+                              <span className="text-xs font-bold uppercase text-teal-655 tracking-wider block mb-1.5">
                                 {t.advantage}
                               </span>
-                              <p className="text-slate-655 dark:text-night-soft text-sm lg:text-base leading-relaxed font-light">
+                              <p className="text-slate-655 text-sm lg:text-base leading-relaxed font-light">
                                 {topic.advantage}
                               </p>
                             </div>
@@ -256,10 +256,10 @@ export default function ResearchPage() {
                             {/* Target Applications (if any) */}
                             {topic.applications && (
                               <div>
-                                <span className="text-xs font-bold uppercase text-teal-655 dark:text-teal-aa-light tracking-wider block mb-1.5">
+                                <span className="text-xs font-bold uppercase text-teal-655 tracking-wider block mb-1.5">
                                   {t.applications}
                                 </span>
-                                <p className="text-slate-655 dark:text-night-soft text-sm lg:text-base leading-relaxed font-light">
+                                <p className="text-slate-655 text-sm lg:text-base leading-relaxed font-light">
                                   {topic.applications}
                                 </p>
                               </div>
@@ -267,11 +267,11 @@ export default function ResearchPage() {
 
                             {/* Recognition & Support (if any) */}
                             {topic.recognition && (
-                              <div className="bg-teal-50/70 dark:bg-teal-400/10 border border-teal-150 dark:border-night-600 p-3.5 rounded-xl">
-                                <span className="text-xs font-bold uppercase text-teal-800 dark:text-teal-aa-light tracking-wider block mb-1">
+                              <div className="bg-teal-50/70 border border-teal-150 p-3.5 rounded-xl">
+                                <span className="text-xs font-bold uppercase text-teal-800 tracking-wider block mb-1">
                                   {t.recognition}
                                 </span>
-                                <p className="text-teal-700 dark:text-teal-aa-light text-sm lg:text-base leading-relaxed font-black">
+                                <p className="text-teal-700 text-sm lg:text-base leading-relaxed font-black">
                                   {topic.recognition}
                                 </p>
                               </div>
@@ -281,7 +281,7 @@ export default function ResearchPage() {
                             <div className="pt-1">
                               <a
                                 href={emailHref}
-                                className="w-full inline-flex items-center justify-center py-2.5 rounded-full border-2 border-teal-600 hover:border-teal-700 text-teal-650 dark:text-teal-aa-light hover:text-teal-750 dark:hover:text-teal-aa-light font-bold text-sm hover:bg-teal-50/50 dark:hover:bg-teal-400/10 transition-colors duration-300 text-center"
+                                className="w-full inline-flex items-center justify-center py-2.5 rounded-full border-2 border-teal-600 hover:border-teal-700 text-teal-650 hover:text-teal-750 font-bold text-sm hover:bg-teal-50/50 transition-colors duration-300 text-center"
                               >
                                 {t.enquire}
                               </a>
@@ -298,12 +298,12 @@ export default function ResearchPage() {
             </div>
 
             {filteredTopics.length === 0 && (
-              <div className="text-center py-16 bg-slate-50 dark:bg-night-900 border border-dashed border-slate-200 dark:border-night-600 rounded-2xl">
-                <p className="text-slate-600 dark:text-night-soft text-sm">{t.noResults}</p>
+              <div className="text-center py-16 bg-slate-50 border border-dashed border-slate-200 rounded-2xl">
+                <p className="text-slate-600 text-sm">{t.noResults}</p>
                 <button
                   type="button"
                   onClick={() => setSearchQuery("")}
-                  className="mt-4 inline-flex items-center min-h-11 px-6 rounded-full border-2 border-brand-navy/20 dark:border-night-soft/20 hover:border-brand-navy dark:hover:border-night-soft text-brand-navy dark:text-night-text text-sm font-semibold transition-colors cursor-pointer"
+                  className="mt-4 inline-flex items-center min-h-11 px-6 rounded-full border-2 border-brand-navy/20 hover:border-brand-navy text-brand-navy text-sm font-semibold transition-colors cursor-pointer"
                 >
                   {t.clearSearch}
                 </button>
@@ -311,7 +311,7 @@ export default function ResearchPage() {
             )}
 
             {/* A next step after the topics */}
-            <div className="mt-14 md:mt-16 rounded-2xl md:rounded-3xl bg-brand-navy dark:bg-night-band text-white p-6 md:p-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+            <div className="mt-14 md:mt-16 rounded-2xl md:rounded-3xl bg-brand-navy text-white p-6 md:p-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
               <div>
                 <h2 className="font-heading text-2xl md:text-3xl font-bold text-white">{t.ctaTitle}</h2>
                 <p className="text-white/80 text-base mt-2 max-w-2xl leading-relaxed">{t.ctaText}</p>

@@ -112,7 +112,7 @@ function SnowflakeCell({
         {/* Enlarged Inner Circular Card (100% visible image, zero overlap) */}
         <motion.div
           whileHover={{ scale: 1.05 }}
-          className="relative w-[98px] h-[98px] sm:w-[120px] sm:h-[120px] md:w-[165px] md:h-[165px] lg:w-[235px] lg:h-[235px] rounded-full overflow-hidden border-2 border-teal-500/25 group-hover:border-brand-orange transition-all duration-300 z-10 bg-gray-50 dark:bg-night-900 shadow-xl"
+          className="relative w-[98px] h-[98px] sm:w-[120px] sm:h-[120px] md:w-[165px] md:h-[165px] lg:w-[235px] lg:h-[235px] rounded-full overflow-hidden border-2 border-teal-500/25 group-hover:border-brand-orange transition-all duration-300 z-10 bg-gray-50 shadow-xl"
         >
           <AnimatePresence mode="popLayout">
             <motion.div
@@ -138,10 +138,10 @@ function SnowflakeCell({
 
       {/* Combined Typography Content (Clean alignment below the image) */}
       <div className="flex-1 md:flex-none md:mt-4 md:max-w-[270px] md:px-2 flex flex-col items-start md:items-center">
-        <h3 className="font-heading text-lg md:text-xl font-bold text-teal-aa dark:text-teal-aa-light mb-1 md:mb-2 leading-tight transition-colors duration-300 group-hover:text-brand-orange">
+        <h3 className="font-heading text-lg md:text-xl font-bold text-teal-aa mb-1 md:mb-2 leading-tight transition-colors duration-300 group-hover:text-brand-orange">
           {card.title}
         </h3>
-        <p className="text-slate-600 dark:text-night-soft text-sm leading-relaxed font-normal">
+        <p className="text-slate-600 text-sm leading-relaxed font-normal">
           {card.description}
         </p>
       </div>
@@ -165,14 +165,14 @@ export default function WhoWeAre() {
   }, []);
 
   return (
-    <section className="bg-white dark:bg-night-800 py-16 md:py-24 lg:py-32 overflow-hidden border-b border-gray-100 dark:border-night-600">
+    <section className="bg-white py-16 md:py-24 lg:py-32 overflow-hidden border-b border-gray-100">
       <div className="max-w-[1200px] mx-auto px-6">
         {/* Title Block */}
         <div className="text-center mb-12">
-          <span className="text-teal-aa dark:text-teal-aa-light text-sm lg:text-base font-semibold tracking-widest uppercase block mb-2">
+          <span className="text-teal-aa text-sm lg:text-base font-semibold tracking-widest uppercase block mb-2">
             {t.kicker}
           </span>
-          <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl text-brand-navy dark:text-night-text font-bold leading-tight">
+          <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl text-brand-navy font-bold leading-tight">
             {t.title}
           </h2>
         </div>

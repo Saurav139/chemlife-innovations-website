@@ -54,7 +54,7 @@ export default function RatingWidget() {
         title={t.common.hideRateUs}
         className="absolute -top-5 -left-5 z-10 w-11 h-11 flex items-center justify-center cursor-pointer group/hide"
       >
-        <span className="w-6 h-6 rounded-full bg-white dark:bg-night-800 text-brand-navy dark:text-night-text border border-slate-200 dark:border-night-600 shadow-md flex items-center justify-center group-hover/hide:bg-slate-100 transition-colors">
+        <span className="w-6 h-6 rounded-full bg-white text-brand-navy border border-slate-200 shadow-md flex items-center justify-center group-hover/hide:bg-slate-100 transition-colors">
           <svg className="w-3 h-3" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
             <path d="M3 3l6 6M9 3l-6 6" />
           </svg>
