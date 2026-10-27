@@ -1,5 +1,5 @@
-import { cookies } from "next/headers";
-import { ADMIN_COOKIE, adminConfigured, validSession } from "@/lib/admin-auth";
+import { cookies, headers } from "next/headers";
+import { ADMIN_COOKIE, adminConfigured, demoMode, validSession } from "@/lib/admin-auth";
 import { databaseProblem, listItems, storeConfigured } from "@/lib/insights-store/db";
 import { inboxStatus, startInbox } from "@/lib/insights-store/sync";
 import AdminLogin from "./AdminLogin";
@@ -8,18 +8,19 @@ import InsightsInbox from "./InsightsInbox";
 export const dynamic = "force-dynamic";
 
 export default async function InsightsInboxPage() {
+  const demo = demoMode((await headers()).get("host") ?? "");
   const missing = [
-    !adminConfigured() && { name: "ADMIN_PASSWORD", what: "The password the moderator signs in with." },
+    !adminConfigured() && !demo && { name: "ADMIN_PASSWORD", what: "The password the moderator signs in with." },
     !storeConfigured() && { name: "DATABASE_URL", what: "The MySQL database the inbox keeps its posts in, e.g. mysql://user:password@host:3306/database." },
   ].filter(Boolean) as { name: string; what: string }[];
   if (missing.length) return <SetupNeeded missing={missing} />;
 
-  if (!validSession((await cookies()).get(ADMIN_COOKIE)?.value)) return <AdminLogin />;
+  if (!demo && !validSession((await cookies()).get(ADMIN_COOKIE)?.value)) return <AdminLogin />;
 
   try {
     await startInbox();
     const [items, status] = await Promise.all([listItems(), inboxStatus()]);
-    return <InsightsInbox initial={{ items, ...status }} />;
+    return <InsightsInbox initial={{ items, ...status }} demo={demo} />;
   } catch (error) {
     console.error("Insights inbox: database error", error);
     const problem = databaseProblem(error);

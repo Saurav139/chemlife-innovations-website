@@ -1,4 +1,5 @@
 import { createHash, createHmac, timingSafeEqual } from "node:crypto";
+import { isLiveHost } from "@/lib/seo";
 
 // The Insights inbox's single moderator signs in with ADMIN_PASSWORD. Signing in sets a cookie holding an expiry
 // time signed with a key made from the password, so changing the password signs everyone out.
@@ -8,6 +9,12 @@ const SESSION_DAYS = 7;
 
 export function adminConfigured(): boolean {
   return Boolean(process.env.ADMIN_PASSWORD);
+}
+
+/** Demo mode: INSIGHTS_DEMO=true opens the inbox without signing in, for showing it on staging. Never on the live
+ *  site's address, and only when switched on, so the live site can't open up even when reached another way. */
+export function demoMode(host: string): boolean {
+  return process.env.INSIGHTS_DEMO === "true" && !isLiveHost(host);
 }
 
 function key(): Buffer {
@@ -49,6 +56,7 @@ function cookieFrom(request: Request): string | undefined {
  *  also come from this site's own pages (the Origin header), so another site can't make them. */
 export function requireAdmin(request: Request): Response | null {
   if (request.method !== "GET" && !sameOrigin(request)) return Response.json({ error: "Not allowed." }, { status: 403 });
+  if (demoMode(request.headers.get("host") ?? "")) return null;
   if (!validSession(cookieFrom(request))) return Response.json({ error: "Please sign in again." }, { status: 401 });
   return null;
 }
