@@ -20,7 +20,7 @@ export default function HowWeDo() {
   const steps = t.steps.map((step, i) => ({ ...step, ...stepImages[i], step: i + 1 }));
 
   return (
-    <section className="relative py-16 md:py-24 lg:py-32 overflow-hidden bg-brand-navy">
+    <section className="relative py-16 md:py-24 lg:py-32 overflow-hidden bg-brand-navy dark:bg-night-band">
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0 select-none pointer-events-none">
         <Image
@@ -30,7 +30,7 @@ export default function HowWeDo() {
           className="object-cover opacity-35"
           priority
         />
-        <div className="absolute inset-0 bg-brand-navy/90 mix-blend-multiply" />
+        <div className="absolute inset-0 bg-brand-navy/90 dark:bg-night-band/90 mix-blend-multiply" />
       </div>
 
       <div className="relative z-10 max-w-[1200px] mx-auto px-6">
@@ -50,7 +50,7 @@ export default function HowWeDo() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.7, ease: [0.25, 0.1, 0, 1] }}
-          className="rounded-3xl overflow-hidden shadow-2xl border border-white/10 max-w-[850px] lg:max-w-[1100px] mx-auto bg-white divide-y divide-slate-100"
+          className="rounded-3xl overflow-hidden shadow-2xl border border-white/10 max-w-[850px] lg:max-w-[1100px] mx-auto bg-white dark:bg-night-800 divide-y divide-slate-100 dark:divide-night-600"
         >
           {steps.map((s, i) => {
             const isEven = i % 2 === 0;
@@ -68,11 +68,11 @@ export default function HowWeDo() {
                     sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 550px"
                     className={`object-cover group-hover:scale-102 transition-transform duration-700 ${s.objectPosition || ""}`}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/15 to-transparent animate-fade-in" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/15 dark:from-night-band/15 to-transparent animate-fade-in" />
                 </div>
 
                 {/* Text Box */}
-                <div className={`w-full p-6 lg:p-10 flex flex-col justify-center bg-white order-2 ${isEven ? "md:order-2" : "md:order-1"} relative`}>
+                <div className={`w-full p-6 lg:p-10 flex flex-col justify-center bg-white dark:bg-night-800 order-2 ${isEven ? "md:order-2" : "md:order-1"} relative`}>
                   {/* Hover Left Side Accent Line */}
                   <div className="absolute top-0 bottom-0 left-0 w-1.5 bg-brand-orange scale-y-0 group-hover:scale-y-100 transition-transform duration-300 origin-top" />
 
@@ -84,10 +84,10 @@ export default function HowWeDo() {
 
                     {/* Step Description */}
                     <div className="flex-1">
-                      <h3 className="font-heading text-xl lg:text-2xl font-bold text-slate-800 mb-2 group-hover:text-brand-orange transition-colors duration-300">
+                      <h3 className="font-heading text-xl lg:text-2xl font-bold text-slate-800 dark:text-night-text mb-2 group-hover:text-brand-orange transition-colors duration-300">
                         {s.title}
                       </h3>
-                      <p className="text-slate-600 text-xs md:text-sm lg:text-base leading-relaxed font-normal">
+                      <p className="text-slate-600 dark:text-night-soft text-xs md:text-sm lg:text-base leading-relaxed font-normal">
                         {s.description}
                       </p>
                     </div>

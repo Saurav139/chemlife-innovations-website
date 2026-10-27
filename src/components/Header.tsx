@@ -60,13 +60,13 @@ export default function Header() {
 
   return (
     <header
-      className={`fixed top-0 left-0 w-full ${mobileOpen ? "z-[55]" : "z-50"} transition-all duration-300 bg-white ${
+      className={`fixed top-0 left-0 w-full ${mobileOpen ? "z-[55]" : "z-50"} transition-all duration-300 bg-white dark:bg-night-800 ${
         scrolled ? "shadow-lg shadow-black/10" : ""
       }`}
     >
       <div className="max-w-[1200px] mx-auto pr-6 pl-2">
         <div className="flex items-center justify-between gap-6 h-18 md:h-20 lg:h-24">
-          <a href={href("/")} className="flex-shrink-0">
+          <a href={href("/")} className="flex-shrink-0 dark:rounded-xl dark:bg-white dark:px-2 dark:py-1">
             <Image
               src={Images.branding.logoHorizontal}
               alt="ChemLife Innovations"
@@ -89,8 +89,8 @@ export default function Header() {
                   href={link.href}
                   className={`${locale === "en" ? "text-[17px] xl:text-[19px]" : "text-[16px] xl:text-[17px]"} whitespace-nowrap font-semibold transition-colors tracking-wide ${
                     isActive
-                      ? "text-brand-orange-aa"
-                      : "text-brand-navy hover:text-brand-orange-aa"
+                      ? "text-brand-orange-aa dark:text-brand-orange"
+                      : "text-brand-navy dark:text-night-text hover:text-brand-orange-aa dark:hover:text-brand-orange"
                   }`}
                 >
                   {link.label}
@@ -101,7 +101,7 @@ export default function Header() {
               <a
                 href="/previews"
                 title="Design previews"
-                className="shrink-0 whitespace-nowrap rounded-full border-2 border-brand-orange px-3 py-1 text-[14px] font-semibold text-brand-orange-aa transition-colors hover:bg-brand-orange-aa hover:text-white"
+                className="shrink-0 whitespace-nowrap rounded-full border-2 border-brand-orange px-3 py-1 text-[14px] font-semibold text-brand-orange-aa dark:text-brand-orange transition-colors hover:bg-brand-orange-aa hover:text-white"
               >
                 Previews
               </a>
@@ -117,13 +117,13 @@ export default function Header() {
             aria-label={t.nav.menu}
           >
             <span
-              className={`block w-6 h-0.5 transition-all bg-brand-navy ${mobileOpen ? "rotate-45 translate-y-2" : ""}`}
+              className={`block w-6 h-0.5 transition-all bg-brand-navy dark:bg-night-text ${mobileOpen ? "rotate-45 translate-y-2" : ""}`}
             />
             <span
-              className={`block w-6 h-0.5 transition-all bg-brand-navy ${mobileOpen ? "opacity-0" : ""}`}
+              className={`block w-6 h-0.5 transition-all bg-brand-navy dark:bg-night-text ${mobileOpen ? "opacity-0" : ""}`}
             />
             <span
-              className={`block w-6 h-0.5 transition-all bg-brand-navy ${mobileOpen ? "-rotate-45 -translate-y-2" : ""}`}
+              className={`block w-6 h-0.5 transition-all bg-brand-navy dark:bg-night-text ${mobileOpen ? "-rotate-45 -translate-y-2" : ""}`}
             />
           </button>
         </div>
@@ -131,7 +131,7 @@ export default function Header() {
 
        {mobileOpen && (
           // Fills the screen below the header (above the chat and search buttons), and scrolls itself if it's taller.
-          <div id="mobile-menu" className="lg:hidden bg-white border-t border-brand-navy/10 h-[calc(100dvh-4.5rem)] md:h-[calc(100dvh-5rem)] overflow-y-auto overscroll-contain">
+          <div id="mobile-menu" className="lg:hidden bg-white dark:bg-night-800 border-t border-brand-navy/10 dark:border-night-soft/10 h-[calc(100dvh-4.5rem)] md:h-[calc(100dvh-5rem)] overflow-y-auto overscroll-contain">
             <div className="px-6 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
               {navLinks.map((link) => {
                 const isActive =
@@ -143,8 +143,8 @@ export default function Header() {
                     href={link.href}
                     className={`flex items-center min-h-11 text-base font-medium ${
                       isActive
-                        ? "text-brand-orange-aa"
-                        : "text-brand-navy hover:text-brand-orange-aa"
+                        ? "text-brand-orange-aa dark:text-brand-orange"
+                        : "text-brand-navy dark:text-night-text hover:text-brand-orange-aa dark:hover:text-brand-orange"
                     }`}
                     onClick={() => setMobileOpen(false)}
                   >
@@ -153,7 +153,7 @@ export default function Header() {
                 );
               })}
               {showPreviews && (
-                <a href="/previews" className="flex items-center min-h-11 text-base font-semibold text-brand-orange-aa" onClick={() => setMobileOpen(false)}>
+                <a href="/previews" className="flex items-center min-h-11 text-base font-semibold text-brand-orange-aa dark:text-brand-orange" onClick={() => setMobileOpen(false)}>
                   Design previews
                 </a>
               )}

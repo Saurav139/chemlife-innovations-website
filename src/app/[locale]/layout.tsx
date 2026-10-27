@@ -1,18 +1,28 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { notFound } from "next/navigation";
 import { preload } from "react-dom";
 import "../fonts.css";
 import "../globals.css";
 import RatingWidget from "@/components/RatingWidget";
 import AnalyticsLoader from "@/components/AnalyticsLoader";
+import { ThemeWatcher } from "@/components/ThemeToggle";
 import { GA_ID } from "@/lib/analytics";
 import { SITE_URL, pageMetadata } from "@/lib/seo";
+import { THEME_SCRIPT } from "@/lib/theme";
 import { LOCALES, isLocale } from "@/i18n/config";
 import { getMessages } from "@/i18n/messages";
 import { LocaleProvider } from "@/i18n/LocaleProvider";
 
 
 export const dynamicParams = false;
+
+// The browser's own bars (on phones) match the page in either theme.
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#12213a" },
+  ],
+};
 
 export function generateStaticParams() {
   return LOCALES.map((locale) => ({ locale }));
@@ -44,8 +54,10 @@ export default async function RootLayout({
   preload("/fonts/google/maven-pro-v40-latin.woff2", { as: "font", type: "font/woff2", crossOrigin: "anonymous" });
 
   return (
-    <html lang={locale}>
+    // data-theme is set by THEME_SCRIPT before React loads, so the server's HTML can't match it.
+    <html lang={locale} suppressHydrationWarning>
       <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
         <style>{`
           nextjs-portal,
           #nextjs-portal,
@@ -66,6 +78,7 @@ export default async function RootLayout({
         <LocaleProvider locale={locale} messages={messages}>
           {children}
           <RatingWidget />
+          <ThemeWatcher />
           {/* Without a GA ID, the banner and GA code are neither rendered nor downloaded. */}
           {GA_ID && <AnalyticsLoader />}
         </LocaleProvider>

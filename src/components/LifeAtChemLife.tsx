@@ -34,7 +34,7 @@ export default function LifeAtChemLife() {
 
   return (
     <section ref={sectionRef} className="relative min-h-[600px] flex items-center overflow-hidden">
-      <div className="absolute inset-0 z-0 w-full h-full bg-brand-navy">
+      <div className="absolute inset-0 z-0 w-full h-full bg-brand-navy dark:bg-night-band">
         <AnimatePresence initial={false}>
           <motion.div
             key={videos[videoIndex].src}
@@ -54,7 +54,7 @@ export default function LifeAtChemLife() {
         </AnimatePresence>
       </div>
 
-      <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/90 via-black/60 to-brand-navy/80 z-10" />
+      <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/90 dark:from-night-band/90 via-black/60 to-brand-navy/80 dark:to-night-band/80 z-10" />
 
       <div className="relative z-20 w-full max-w-[1200px] mx-auto px-6 py-16 md:py-24 lg:py-32">
         <motion.div
@@ -78,7 +78,7 @@ export default function LifeAtChemLife() {
                   whileInView={{ scaleY: 1 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.8, delay: (i + 1) * 0.4, ease: easeOut }}
-                  className="absolute w-[3px] bg-brand-navy/40 origin-top"
+                  className="absolute w-[3px] bg-brand-navy/40 dark:bg-night-band/40 origin-top"
                   style={{ left: "10.5px", top: "12px", bottom: "-12px" }}
                 />
               )}
@@ -113,7 +113,7 @@ export default function LifeAtChemLife() {
         >
           <a
             href={href("/careers")}
-            className="inline-block border-2 border-brand-orange text-brand-orange-aa bg-white hover:bg-brand-orange-aa hover:text-white font-semibold px-8 py-3 rounded-full shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5"
+            className="inline-block border-2 border-brand-orange text-brand-orange-aa dark:text-brand-orange bg-white dark:bg-night-800 hover:bg-brand-orange-aa hover:text-white font-semibold px-8 py-3 rounded-full shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5"
           >
             {t.joinUs}
           </a>

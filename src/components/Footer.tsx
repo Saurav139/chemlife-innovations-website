@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Images } from "@/lib/assets";
 import { OPEN_CONSENT_EVENT } from "@/lib/analytics";
 import { useAnalyticsEnabled } from "@/lib/useAnalyticsEnabled";
+import ThemeToggle, { PalettePicker } from "@/components/ThemeToggle";
 import { useHref, useLocale, useT } from "@/i18n/LocaleProvider";
 
 export default function Footer() {
@@ -15,7 +16,7 @@ export default function Footer() {
   const english = useLocale() === "en" ? "" : ` ${t.footer.englishOnly}`;
 
   return (
-    <footer id="footer" className="relative bg-[#15273F] text-white border-t-2 border-teal-500/20 overflow-hidden">
+    <footer id="footer" className="relative bg-[#15273F] dark:bg-night-950 text-white border-t-2 border-teal-500/20 overflow-hidden">
       {/* Absolute Decorative Glow */}
       <div className="absolute top-0 right-1/4 w-96 h-96 bg-teal-500/5 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-brand-orange/5 rounded-full blur-3xl pointer-events-none" />
@@ -162,7 +163,7 @@ export default function Footer() {
       </div>
 
       {/* Copyright Bar */}
-      <div className="border-t border-white/5 bg-[#0F1C2E] relative z-10">
+      <div className="border-t border-white/5 bg-[#0F1C2E] dark:bg-black/25 relative z-10">
         {/* Phones: extra room at the bottom so the chat and search buttons don't cover the last line. */}
         <div className="max-w-[1200px] mx-auto px-6 pt-6 pb-24 md:pb-6 flex flex-col sm:flex-row justify-between items-center gap-4">
           <div className="flex items-center gap-3">
@@ -173,18 +174,20 @@ export default function Footer() {
               height={33}
               className="h-7 w-auto rounded-sm object-contain"
             />
-            <p className="text-slate-450 text-xs text-center sm:text-left">
+            <p className="text-slate-450 dark:text-night-muted text-xs text-center sm:text-left">
               &copy; {new Date().getFullYear()} ChemLife Innovations Pvt Ltd. {t.footer.rights}
             </p>
           </div>
-          <div className="flex gap-6">
-            <Link href="/privacy" className="tap-target text-slate-450 text-xs hover:text-brand-orange transition-colors">{t.footer.privacy + english}</Link>
-            <Link href="/terms" className="tap-target text-slate-450 text-xs hover:text-brand-orange transition-colors">{t.footer.terms + english}</Link>
+          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
+            <ThemeToggle />
+            <PalettePicker />
+            <Link href="/privacy" className="tap-target text-slate-450 dark:text-night-muted text-xs hover:text-brand-orange transition-colors">{t.footer.privacy + english}</Link>
+            <Link href="/terms" className="tap-target text-slate-450 dark:text-night-muted text-xs hover:text-brand-orange transition-colors">{t.footer.terms + english}</Link>
             {analyticsEnabled && (
               <button
                 type="button"
                 onClick={() => window.dispatchEvent(new Event(OPEN_CONSENT_EVENT))}
-                className="tap-target text-slate-450 text-xs hover:text-brand-orange transition-colors cursor-pointer"
+                className="tap-target text-slate-450 dark:text-night-muted text-xs hover:text-brand-orange transition-colors cursor-pointer"
               >
                 {t.footer.cookies}
               </button>

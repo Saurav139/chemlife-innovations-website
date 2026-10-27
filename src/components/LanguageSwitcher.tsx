@@ -57,8 +57,8 @@ export default function LanguageSwitcher({ inline = false }: { inline?: boolean 
       aria-current={l === locale ? "true" : undefined}
       className={
         inline
-          ? `tap-target rounded-full border px-3 py-1 text-sm font-semibold ${l === locale ? "border-brand-orange text-brand-orange-aa" : "border-brand-navy/20 text-brand-navy"}`
-          : `block whitespace-nowrap px-4 py-2 text-[15px] font-semibold hover:bg-slate-50 ${l === locale ? "text-brand-orange-aa" : "text-brand-navy"}`
+          ? `tap-target rounded-full border px-3 py-1 text-sm font-semibold ${l === locale ? "border-brand-orange text-brand-orange-aa dark:text-brand-orange" : "border-brand-navy/20 dark:border-night-soft/20 text-brand-navy dark:text-night-text"}`
+          : `block whitespace-nowrap px-4 py-2 text-[15px] font-semibold hover:bg-slate-50 dark:hover:bg-night-900 ${l === locale ? "text-brand-orange-aa dark:text-brand-orange" : "text-brand-navy dark:text-night-text"}`
       }
     >
       {LOCALE_NAMES[l]}
@@ -68,7 +68,7 @@ export default function LanguageSwitcher({ inline = false }: { inline?: boolean 
   if (inline) {
     return (
       <div className="flex items-center gap-2 pt-3 pb-1" role="group" aria-label={t.nav.language}>
-        <span className="text-brand-navy/60"><Globe /></span>
+        <span className="text-brand-navy/60 dark:text-night-text/60"><Globe /></span>
         {links}
       </div>
     );
@@ -81,14 +81,14 @@ export default function LanguageSwitcher({ inline = false }: { inline?: boolean 
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
         aria-label={`${t.nav.language}: ${LOCALE_NAMES[locale]}`}
-        className="flex items-center gap-1.5 rounded-full border-2 border-brand-navy/15 px-3 py-1.5 text-[15px] font-semibold text-brand-navy transition-colors hover:border-brand-orange hover:text-brand-orange-aa cursor-pointer"
+        className="flex items-center gap-1.5 rounded-full border-2 border-brand-navy/15 dark:border-night-soft/15 px-3 py-1.5 text-[15px] font-semibold text-brand-navy dark:text-night-text transition-colors hover:border-brand-orange hover:text-brand-orange-aa dark:hover:text-brand-orange cursor-pointer"
       >
         <Globe />
         <span className="whitespace-nowrap">{LOCALE_NAMES[locale]}</span>
         <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
       </button>
       {open && (
-        <div className="absolute right-0 top-full mt-2 min-w-36 overflow-hidden rounded-xl border border-slate-200 bg-white py-1 shadow-xl">
+        <div className="absolute right-0 top-full mt-2 min-w-36 overflow-hidden rounded-xl border border-slate-200 dark:border-night-600 bg-white dark:bg-night-800 py-1 shadow-xl">
           {links}
         </div>
       )}

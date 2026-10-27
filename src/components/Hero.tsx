@@ -16,11 +16,11 @@ export default function Hero() {
       {theme.heroBg === "bg-brand-navy" && (
         <div className="absolute right-0 top-0 bottom-0 w-[45%] hidden lg:block">
           <Image src={Images.products.categoryRumi} alt="" fill className="object-cover" priority />
-          <div className="absolute inset-0 bg-gradient-to-l from-transparent via-transparent to-brand-navy" />
+          <div className="absolute inset-0 bg-gradient-to-l from-transparent via-transparent to-brand-navy dark:to-night-band" />
         </div>
       )}
 
-      {theme.heroBg === "bg-warm-white" && (
+      {theme.heroBg === "bg-warm-white dark:bg-night-900" && (
         <>
           <div className="absolute top-0 right-0 w-96 h-96 bg-brand-orange/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
           <div className="absolute bottom-0 left-0 w-80 h-80 bg-brand-green/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
@@ -30,14 +30,14 @@ export default function Hero() {
       <div className="relative z-10 max-w-[1200px] mx-auto px-6 py-32 w-full">
         <div className={`grid gap-12 items-center ${
           theme.heroBg === "bg-brand-navy" ? "lg:grid-cols-2" :
-          theme.heroBg === "bg-warm-white" ? "lg:grid-cols-5" :
+          theme.heroBg === "bg-warm-white dark:bg-night-900" ? "lg:grid-cols-5" :
           "lg:grid-cols-2"
         }`}>
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.25, 0.1, 0, 1] }}
-            className={theme.heroBg === "bg-warm-white" ? "lg:col-span-3" : ""}
+            className={theme.heroBg === "bg-warm-white dark:bg-night-900" ? "lg:col-span-3" : ""}
           >
             {theme.heroBg === "bg-brand-navy" ? (
               <span className={`inline-flex items-center gap-2 bg-brand-orange/20 ${theme.heroTagline} text-xs font-semibold tracking-widest uppercase px-4 py-2 rounded-full mb-6`}>
@@ -81,9 +81,9 @@ export default function Hero() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.8, delay: 0.3, ease: [0.25, 0.1, 0, 1] }}
-              className={`hidden lg:flex justify-center ${theme.heroBg === "bg-warm-white" ? "lg:col-span-2" : ""}`}
+              className={`hidden lg:flex justify-center ${theme.heroBg === "bg-warm-white dark:bg-night-900" ? "lg:col-span-2" : ""}`}
             >
-              {theme.heroBg === "bg-warm-white" ? (
+              {theme.heroBg === "bg-warm-white dark:bg-night-900" ? (
                 <div className="relative">
                   <div className="absolute -top-4 -left-4 w-full h-full border-2 border-brand-orange/30 rounded-2xl" />
                   <div className="relative rounded-2xl overflow-hidden shadow-xl aspect-[4/5]">

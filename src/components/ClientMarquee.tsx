@@ -23,7 +23,7 @@ function FlipCard({ frontLogo, backLogo, index, flipped }: FlipCardProps) {
   const col = index % 3;
   // One card style for every logo, and each logo (trimmed of its empty margins) fitted inside the same box, 78% wide
   // and 58% tall, so wide wordmarks and square badges read at a similar size.
-  const face = "absolute inset-0 backface-hidden bg-white border border-slate-200 hover:border-brand-orange/40 rounded-xl sm:rounded-2xl flex items-center justify-center shadow-sm hover:shadow-md transition-all duration-300";
+  const face = "absolute inset-0 backface-hidden bg-white dark:bg-night-800 border border-slate-200 dark:border-night-600 hover:border-brand-orange/40 rounded-xl sm:rounded-2xl flex items-center justify-center shadow-sm hover:shadow-md transition-all duration-300";
 
   return (
     // Two across on phones (wide enough to read the logos), three from tablet up.
@@ -79,13 +79,13 @@ export default function ClientMarquee() {
   }, []);
 
   return (
-    <section className="bg-white py-16 md:py-24 lg:py-32 overflow-hidden">
+    <section className="bg-white dark:bg-night-800 py-16 md:py-24 lg:py-32 overflow-hidden">
       <div className="max-w-[1200px] mx-auto px-6 mb-10 md:mb-16">
         <div className="text-center">
-          <span className="text-teal-aa text-sm lg:text-base font-semibold tracking-widest uppercase">
+          <span className="text-teal-aa dark:text-teal-aa-light text-sm lg:text-base font-semibold tracking-widest uppercase">
             {t.kicker}
           </span>
-          <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-brand-navy mt-2 mb-4 leading-tight">
+          <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-brand-navy dark:text-night-text mt-2 mb-4 leading-tight">
             {t.title}
           </h2>
         </div>

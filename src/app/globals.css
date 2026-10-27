@@ -1,6 +1,24 @@
 @import "tailwindcss";
 
+/* Dark theme: <html data-theme="dark">, set before the page paints from the visitor's choice or, by default, their
+   device's setting (see ThemeScript). :where() keeps the attribute from adding specificity, so a dark: class beats its
+   light class by coming later, and hover and focus states still win over both. */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
 @theme {
+  /* Dark theme surfaces and text: deep navies around the brand navy, deepest for the page, lighter for cards.
+     Other palettes on trial override these below. */
+  --color-night-950: #08111f;
+  --color-night-900: #0c1729;
+  --color-night-800: #12213a;
+  --color-night-700: #1a2d4b;
+  --color-night-600: #2a4064;
+  --color-night-text: #e8eef7;
+  --color-night-soft: #c3cfdf;
+  --color-night-muted: #9aabc3;
+  /* The navy feature sections and page headers, in dark mode */
+  --color-night-band: #1d3558;
+
   /* Trying #E8614A as the site orange (the brand orange was #E65C38). */
   --color-brand-orange: #e8614a;
   /* Accessible versions of the original colours, for small text and for backgrounds under white text: the closest
@@ -135,6 +153,53 @@
   h6 {
     font-family: var(--font-family-heading);
     color: var(--color-near-black);
+  }
+
+  /* Form controls, scrollbars and the browser's own colours follow the theme too. */
+  [data-theme="dark"] {
+    color-scheme: dark;
+  }
+
+  /* Dark palettes on trial (staging): darker and richer takes on the default navy. Navy stays the default above. */
+  [data-theme="dark"][data-palette="ink"] {
+    --color-night-950: #040a14;
+    --color-night-900: #07101e;
+    --color-night-800: #0c182b;
+    --color-night-700: #13223a;
+    --color-night-600: #203452;
+    --color-night-text: #e6edf8;
+    --color-night-soft: #bfcbdd;
+    --color-night-muted: #93a4be;
+    --color-night-band: #142a4c;
+  }
+
+  [data-theme="dark"][data-palette="royal"] {
+    --color-night-950: #0a1530;
+    --color-night-900: #0d1a3a;
+    --color-night-800: #122249;
+    --color-night-700: #1a2e5c;
+    --color-night-600: #2b4377;
+    --color-night-text: #e8eefa;
+    --color-night-soft: #c3cfe6;
+    --color-night-muted: #9cabca;
+    --color-night-band: #23407a;
+  }
+
+  [data-theme="dark"] body {
+    color: var(--color-night-soft);
+    background-color: var(--color-night-900);
+  }
+
+  [data-theme="dark"] :is(h1, h2, h3, h4, h5, h6) {
+    color: var(--color-night-text);
+  }
+
+  [data-theme="dark"] ::selection {
+    color: var(--color-night-text);
+  }
+
+  [data-theme="dark"] ::placeholder {
+    color: var(--color-night-muted);
   }
 }
 

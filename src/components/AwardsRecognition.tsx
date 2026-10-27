@@ -48,13 +48,13 @@ export default function AwardsRecognition() {
   }, [activeStep]);
 
   return (
-    <section className="bg-white py-16 md:py-24 lg:py-32 overflow-hidden">
+    <section className="bg-white dark:bg-night-800 py-16 md:py-24 lg:py-32 overflow-hidden">
       <div className="max-w-[1200px] mx-auto px-6">
         <div className="text-center mb-10 md:mb-16">
-          <span className="text-teal-aa text-sm lg:text-base font-semibold tracking-widest uppercase">
+          <span className="text-teal-aa dark:text-teal-aa-light text-sm lg:text-base font-semibold tracking-widest uppercase">
             {t.kicker}
           </span>
-          <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-brand-navy mt-2 mb-4 leading-tight">
+          <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-brand-navy dark:text-night-text mt-2 mb-4 leading-tight">
             {t.title}
           </h2>
         </div>
@@ -66,7 +66,7 @@ export default function AwardsRecognition() {
           transition={{ duration: 0.4, ease: [0.25, 0.1, 0, 1] }}
         >
           <div className="bg-brand-orange rounded-2xl p-[3px] shadow-2xl">
-            <div className="bg-white rounded-xl p-6 lg:p-8 min-h-[320px] flex items-center">
+            <div className="bg-white dark:bg-night-800 rounded-xl p-6 lg:p-8 min-h-[320px] flex items-center">
               <AnimatePresence mode="wait">
                 {activeStep >= 0 && (
                   <motion.div
@@ -99,15 +99,15 @@ export default function AwardsRecognition() {
 
                     {/* Caption */}
                     <div className="flex-1 text-center sm:text-left">
-                      <span className="text-teal-aa text-sm font-semibold tracking-widest uppercase">
+                      <span className="text-teal-aa dark:text-teal-aa-light text-sm font-semibold tracking-widest uppercase">
                         {certificates[activeStep].organization} &bull; {certificates[activeStep].year}
                       </span>
                        {certificates[activeStep].title && (
-                         <h3 className="font-heading text-2xl lg:text-3xl font-bold text-brand-navy mt-2 mb-4 leading-tight">
+                         <h3 className="font-heading text-2xl lg:text-3xl font-bold text-brand-navy dark:text-night-text mt-2 mb-4 leading-tight">
                            {certificates[activeStep].title}
                          </h3>
                        )}
-                       <p className="text-brand-navy/85 text-base lg:text-lg leading-relaxed">
+                       <p className="text-brand-navy/85 dark:text-night-text/85 text-base lg:text-lg leading-relaxed">
                         {certificates[activeStep].description}
                       </p>
                     </div>
@@ -163,10 +163,10 @@ export default function AwardsRecognition() {
                     <div
                       className={`w-12 h-12 flex items-center justify-center rounded-md border-2 transition-all duration-500 ${
                          isActive
-                          ? 'bg-teal-aa-light border-teal-aa-light text-brand-navy scale-110 shadow-lg shadow-teal-400/30'
+                          ? 'bg-teal-aa-light border-teal-aa-light text-brand-navy dark:text-night-text scale-110 shadow-lg shadow-teal-400/30'
                           : isCompleted
-                          ? 'bg-teal-400/20 border-teal-400/40 text-teal-700'
-                          : 'bg-transparent border-teal-400/30 text-slate-aa'
+                          ? 'bg-teal-400/20 border-teal-400/40 text-teal-700 dark:text-teal-aa-light'
+                          : 'bg-transparent border-teal-400/30 text-slate-aa dark:text-night-muted'
                       }`}
                     >
                       <span className="text-sm font-bold">{`0${i + 1}`}</span>

@@ -67,9 +67,9 @@ const BOT_META = {
     subtitle: "Poultry Nutrition Expert",
     specialty: "Broilers, Layers & Poultry Feed",
     accentBg: "bg-blue-aa",
-    accentBgLight: "bg-blue-50",
-    accentBorder: "border-blue-200",
-    accentText: "text-blue-600",
+    accentBgLight: "bg-blue-50 dark:bg-blue-400/10",
+    accentBorder: "border-blue-200 dark:border-night-600",
+    accentText: "text-blue-600 dark:text-blue-300",
     userBubble: "bg-blue-aa",
     inputFocus: "focus:border-blue-400",
     greeting:
@@ -81,9 +81,9 @@ const BOT_META = {
     subtitle: "Dairy & Ruminant Expert",
     specialty: "Dairy Cattle, Buffalo & Rumen Health",
     accentBg: "bg-brand-orange-aa",
-    accentBgLight: "bg-orange-50",
-    accentBorder: "border-orange-200",
-    accentText: "text-brand-orange-aa",
+    accentBgLight: "bg-orange-50 dark:bg-orange-400/10",
+    accentBorder: "border-orange-200 dark:border-night-600",
+    accentText: "text-brand-orange-aa dark:text-brand-orange",
     userBubble: "bg-brand-orange-aa",
     inputFocus: "focus:border-orange-400",
     greeting:
@@ -101,11 +101,11 @@ function parseInline(str: string): React.ReactNode[] {
   const splitParts = str.split(tokenRegex);
   splitParts.forEach((part, i) => {
     if (part.startsWith("**") && part.endsWith("**") && part.length > 4) {
-      parts.push(<strong key={i} className="font-semibold text-slate-800">{part.slice(2, -2)}</strong>);
+      parts.push(<strong key={i} className="font-semibold text-slate-800 dark:text-night-text">{part.slice(2, -2)}</strong>);
     } else if (part.startsWith("*") && part.endsWith("*") && part.length > 2 && !part.startsWith("**")) {
-      parts.push(<em key={i} className="italic text-slate-600">{part.slice(1, -1)}</em>);
+      parts.push(<em key={i} className="italic text-slate-600 dark:text-night-soft">{part.slice(1, -1)}</em>);
     } else if (part.startsWith("`") && part.endsWith("`") && part.length > 2) {
-      parts.push(<code key={i} className="px-1.5 py-0.5 bg-slate-100 text-slate-700 rounded text-xs font-mono border border-slate-200">{part.slice(1, -1)}</code>);
+      parts.push(<code key={i} className="px-1.5 py-0.5 bg-slate-100 dark:bg-night-700 text-slate-700 dark:text-night-soft rounded text-xs font-mono border border-slate-200 dark:border-night-600">{part.slice(1, -1)}</code>);
     } else if (part.startsWith("[") && part.includes("](")) {
       const labelEnd = part.indexOf("](");
       const label = part.slice(1, labelEnd);
@@ -116,7 +116,7 @@ function parseInline(str: string): React.ReactNode[] {
           href={url}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-brand-orange-aa hover:text-brand-orange-aa-hover underline underline-offset-2 font-medium"
+          className="text-brand-orange-aa dark:text-brand-orange hover:text-brand-orange-aa-hover dark:hover:text-brand-orange underline underline-offset-2 font-medium"
         >
           {label}
         </a>
@@ -151,28 +151,28 @@ function parseMarkdownToJSX(text: string): React.ReactNode[] {
     const trimmed = line.trim();
     if (trimmed.startsWith("### ")) {
       flushList(`ul-${index}`);
-      elements.push(<h3 key={`h3-${index}`} className="text-[12px] font-bold text-slate-700 mt-3 mb-1.5 uppercase tracking-wider">{parseInline(trimmed.slice(4))}</h3>);
+      elements.push(<h3 key={`h3-${index}`} className="text-[12px] font-bold text-slate-700 dark:text-night-soft mt-3 mb-1.5 uppercase tracking-wider">{parseInline(trimmed.slice(4))}</h3>);
     } else if (trimmed.startsWith("## ")) {
       flushList(`ul-${index}`);
-      elements.push(<h2 key={`h2-${index}`} className="text-[14px] font-bold text-slate-800 mt-3 mb-2">{parseInline(trimmed.slice(3))}</h2>);
+      elements.push(<h2 key={`h2-${index}`} className="text-[14px] font-bold text-slate-800 dark:text-night-text mt-3 mb-2">{parseInline(trimmed.slice(3))}</h2>);
     } else if (trimmed.startsWith("> ")) {
       flushList(`ul-${index}`);
-      elements.push(<blockquote key={`bq-${index}`} className="border-l-2 border-slate-300 pl-3 my-2 text-sm text-slate-aa italic">{parseInline(trimmed.slice(2))}</blockquote>);
+      elements.push(<blockquote key={`bq-${index}`} className="border-l-2 border-slate-300 dark:border-night-600 pl-3 my-2 text-sm text-slate-aa dark:text-night-muted italic">{parseInline(trimmed.slice(2))}</blockquote>);
     } else if (trimmed.startsWith("- ") || trimmed.startsWith("\u2022 ")) {
       if (!inList || listType !== "ul") { flushList(`ul-${index}`); inList = true; listType = "ul"; listItems = []; }
-      listItems.push(<li key={`li-${index}`} className="text-sm text-slate-700 leading-relaxed">{parseInline(trimmed.slice(2))}</li>);
+      listItems.push(<li key={`li-${index}`} className="text-sm text-slate-700 dark:text-night-soft leading-relaxed">{parseInline(trimmed.slice(2))}</li>);
     } else if (/^\d+\.\s/.test(trimmed)) {
       if (!inList || listType !== "ol") { flushList(`ul-${index}`); inList = true; listType = "ol"; listItems = []; }
       const dotIndex = trimmed.indexOf(". ");
-      listItems.push(<li key={`li-${index}`} className="text-sm text-slate-700 leading-relaxed">{parseInline(trimmed.slice(dotIndex + 2))}</li>);
+      listItems.push(<li key={`li-${index}`} className="text-sm text-slate-700 dark:text-night-soft leading-relaxed">{parseInline(trimmed.slice(dotIndex + 2))}</li>);
     } else if (trimmed === "---" || trimmed === "***") {
       flushList(`ul-${index}`);
-      elements.push(<hr key={`hr-${index}`} className="my-3 border-slate-200" />);
+      elements.push(<hr key={`hr-${index}`} className="my-3 border-slate-200 dark:border-night-600" />);
     } else if (trimmed.length === 0) {
       flushList(`ul-${index}`);
     } else {
       flushList(`ul-${index}`);
-      elements.push(<p key={`p-${index}`} className="mb-2.5 text-sm leading-relaxed text-slate-700">{parseInline(line)}</p>);
+      elements.push(<p key={`p-${index}`} className="mb-2.5 text-sm leading-relaxed text-slate-700 dark:text-night-soft">{parseInline(line)}</p>);
     }
   });
 
@@ -217,21 +217,21 @@ function BotBubble({
 }) {
   return (
     <div className="flex items-start gap-3">
-      <div className="w-8 h-8 rounded-full border border-slate-200 overflow-hidden flex-shrink-0 flex items-center justify-center bg-white shadow-xs">
+      <div className="w-8 h-8 rounded-full border border-slate-200 dark:border-night-600 overflow-hidden flex-shrink-0 flex items-center justify-center bg-white dark:bg-night-800 shadow-xs">
         <img src={image} alt={name} className="w-full h-full object-contain" />
       </div>
       <div className="max-w-[85%] lg:max-w-[42rem] min-w-0">
         <div className={`rounded-2xl rounded-tl-none px-4 py-3 border shadow-xs ${
-          isError ? "bg-red-50 border-red-200" : `${accentBgLight} ${accentBorder}`
+          isError ? "bg-red-50 dark:bg-red-400/10 border-red-200 dark:border-night-600" : `${accentBgLight} ${accentBorder}`
         }`}>
           {isError ? (
             <>
-              <p role="alert" className="text-sm text-red-700 leading-relaxed [&_a]:text-red-800">⚠️ {parseInline(content)}</p>
+              <p role="alert" className="text-sm text-red-700 dark:text-red-400 leading-relaxed [&_a]:text-red-800 dark:[&_a]:text-red-300">⚠️ {parseInline(content)}</p>
               {onRetry && (
                 <button
                   type="button"
                   onClick={onRetry}
-                  className="mt-2 text-[12px] font-semibold text-red-700 hover:text-red-800 underline underline-offset-2 cursor-pointer"
+                  className="mt-2 text-[12px] font-semibold text-red-700 dark:text-red-400 hover:text-red-800 dark:hover:text-red-400 underline underline-offset-2 cursor-pointer"
                 >
                   Try again
                 </button>
@@ -245,18 +245,18 @@ function BotBubble({
           <div className="mt-2 flex flex-wrap gap-1.5">
             {sources.filter(s => !s.url.startsWith("/products")).map((s, i) => (
               <a key={i} href={s.url} target={s.url.startsWith("http") ? "_blank" : undefined} rel={s.url.startsWith("http") ? "noopener noreferrer" : undefined}
-                className="inline-flex items-center gap-1 text-xs bg-white border border-slate-200 hover:border-slate-300 text-slate-600 hover:text-slate-900 rounded-lg px-2.5 py-1 transition-all font-medium">
+                className="inline-flex items-center gap-1 text-xs bg-white dark:bg-night-800 border border-slate-200 dark:border-night-600 hover:border-slate-300 dark:hover:border-night-600 text-slate-600 dark:text-night-soft hover:text-slate-900 dark:hover:text-night-text rounded-lg px-2.5 py-1 transition-all font-medium">
                 <span className="opacity-60">📄</span> {s.title}
               </a>
             ))}
           </div>
         )}
         {!isError && !isGreeting && (!sources || sources.length === 0) && (
-          <div className="mt-2 flex flex-wrap items-center gap-1.5 text-xs text-slate-aa font-medium px-1">
+          <div className="mt-2 flex flex-wrap items-center gap-1.5 text-xs text-slate-aa dark:text-night-muted font-medium px-1">
             <span>Explore:</span>
-            <Link href="/research" className="text-brand-orange-aa hover:text-brand-orange-aa-hover underline underline-offset-2 font-semibold">Research Hub</Link>
+            <Link href="/research" className="text-brand-orange-aa dark:text-brand-orange hover:text-brand-orange-aa-hover dark:hover:text-brand-orange underline underline-offset-2 font-semibold">Research Hub</Link>
             <span>•</span>
-            <Link href="/insights" className="text-brand-orange-aa hover:text-brand-orange-aa-hover underline underline-offset-2 font-semibold">Insights & Blog</Link>
+            <Link href="/insights" className="text-brand-orange-aa dark:text-brand-orange hover:text-brand-orange-aa-hover dark:hover:text-brand-orange underline underline-offset-2 font-semibold">Insights & Blog</Link>
           </div>
         )}
       </div>
@@ -268,10 +268,10 @@ function BotBubble({
 
 function ChatLoadingState() {
   return (
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+    <div className="min-h-screen bg-slate-50 dark:bg-night-900 flex items-center justify-center">
       <div className="flex flex-col items-center gap-4">
-        <div className="w-12 h-12 border-[3px] border-brand-navy border-t-transparent rounded-full animate-spin" />
-        <p className="text-sm font-semibold text-slate-600">Loading specialist session…</p>
+        <div className="w-12 h-12 border-[3px] border-brand-navy dark:border-night-soft border-t-transparent rounded-full animate-spin" />
+        <p className="text-sm font-semibold text-slate-600 dark:text-night-soft">Loading specialist session…</p>
       </div>
     </div>
   );
@@ -424,7 +424,7 @@ function ChatSessionContent() {
   const otherBot = botKey === "kukku" ? "mikku" : "kukku";
 
   return (
-    <div className="min-h-screen bg-slate-50/60 flex flex-col font-sans text-brand-navy">
+    <div className="min-h-screen bg-slate-50/60 dark:bg-night-900/60 flex flex-col font-sans text-brand-navy dark:text-night-text">
       <Header />
 
       <div className="flex-1 pt-24 pb-10 max-w-[1200px] w-full mx-auto px-4 flex flex-col lg:flex-row gap-5">
@@ -433,28 +433,28 @@ function ChatSessionContent() {
         <main
           // A fixed height, so messages scroll inside the panel. 100dvh follows the visible height as a phone's browser
           // toolbar shows and hides; 100vh doesn't. flex-none below lg: in the stacked layout flex-1 would override it.
-          className="flex-none lg:flex-1 flex flex-col min-h-[520px] h-[calc(100dvh_-_136px)] bg-white border border-slate-200/80 rounded-2xl shadow-sm overflow-hidden"
+          className="flex-none lg:flex-1 flex flex-col min-h-[520px] h-[calc(100dvh_-_136px)] bg-white dark:bg-night-800 border border-slate-200/80 dark:border-night-600/80 rounded-2xl shadow-sm overflow-hidden"
         >
           {/* Bot header */}
-          <div className={`flex items-center justify-between gap-2 sm:gap-3 px-4 sm:px-5 py-3.5 border-b border-slate-100 ${meta.accentBgLight}`}>
+          <div className={`flex items-center justify-between gap-2 sm:gap-3 px-4 sm:px-5 py-3.5 border-b border-slate-100 dark:border-night-600 ${meta.accentBgLight}`}>
             <div className="flex items-center gap-3 min-w-0">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-white bg-white overflow-hidden flex-shrink-0 flex items-center justify-center shadow-md">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-white bg-white dark:bg-night-800 overflow-hidden flex-shrink-0 flex items-center justify-center shadow-md">
                 <img src={meta.image} alt={meta.name} className="w-full h-full object-contain" />
               </div>
               <div className="min-w-0">
                 <div className="flex items-center gap-2">
-                  <h1 className="font-heading font-bold text-slate-800 text-base whitespace-nowrap">{meta.name}</h1>
+                  <h1 className="font-heading font-bold text-slate-800 dark:text-night-text text-base whitespace-nowrap">{meta.name}</h1>
                   <span className={`w-2 h-2 rounded-full flex-shrink-0 ${offline ? "bg-slate-300" : "bg-emerald-500"}`} />
-                  <span className={`text-xs font-semibold uppercase tracking-wider hidden sm:block ${offline ? "text-slate-aa" : "text-emerald-aa"}`}>
+                  <span className={`text-xs font-semibold uppercase tracking-wider hidden sm:block ${offline ? "text-slate-aa dark:text-night-muted" : "text-emerald-aa dark:text-emerald-400"}`}>
                     {offline ? "Offline" : "Live"}
                   </span>
                 </div>
-                <p className="text-xs text-slate-aa font-medium truncate">{meta.specialty}</p>
+                <p className="text-xs text-slate-aa dark:text-night-muted font-medium truncate">{meta.specialty}</p>
               </div>
             </div>
             <div className="flex items-center gap-2 flex-shrink-0">
               {/* Hidden on the narrowest phones (under 360px), where it would squeeze out the bot's name. */}
-              <Link href="/chat" className="hidden min-[360px]:inline tap-target text-xs font-semibold text-slate-aa hover:text-brand-navy bg-white px-3 py-1.5 rounded-lg border border-slate-200 hover:border-slate-300 transition-all whitespace-nowrap">
+              <Link href="/chat" className="hidden min-[360px]:inline tap-target text-xs font-semibold text-slate-aa dark:text-night-muted hover:text-brand-navy dark:hover:text-night-text bg-white dark:bg-night-800 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-night-600 hover:border-slate-300 dark:hover:border-night-600 transition-all whitespace-nowrap">
                 ← Agents
               </Link>
               {/* Phones show just "Switch", leaving room for the bot's name. */}
@@ -481,7 +481,7 @@ function ChatSessionContent() {
             )}
             {loading && (
               <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-full border border-slate-200 overflow-hidden flex-shrink-0 flex items-center justify-center bg-white shadow-xs animate-pulse">
+                <div className="w-8 h-8 rounded-full border border-slate-200 dark:border-night-600 overflow-hidden flex-shrink-0 flex items-center justify-center bg-white dark:bg-night-800 shadow-xs animate-pulse">
                   <img src={meta.image} alt={meta.name} className="w-full h-full object-contain" />
                 </div>
                 <div className={`rounded-2xl rounded-tl-none px-4 py-3 border ${meta.accentBorder} ${meta.accentBgLight}`}>
@@ -492,7 +492,7 @@ function ChatSessionContent() {
           </div>
 
           {/* Input bar */}
-          <div className="px-4 py-3.5 border-t border-slate-100 bg-white">
+          <div className="px-4 py-3.5 border-t border-slate-100 dark:border-night-600 bg-white dark:bg-night-800">
             <form onSubmit={handleSubmit} className="flex gap-2 items-center">
               <input
                 ref={inputRef}
@@ -503,7 +503,7 @@ function ChatSessionContent() {
                 disabled={loading || offline}
                 maxLength={MAX_MESSAGE_CHARS}
                 autoComplete="off"
-                className={`flex-1 min-h-11 text-base md:text-sm px-4 py-2.5 border border-slate-200 rounded-xl bg-slate-50 focus:bg-white transition-all placeholder:text-slate-aa text-slate-800 outline-none disabled:opacity-60 ${meta.inputFocus}`}
+                className={`flex-1 min-h-11 text-base md:text-sm px-4 py-2.5 border border-slate-200 dark:border-night-600 rounded-xl bg-slate-50 dark:bg-night-900 focus:bg-white dark:focus:bg-night-800 transition-all placeholder:text-slate-aa dark:placeholder:text-night-muted text-slate-800 dark:text-night-text outline-none disabled:opacity-60 ${meta.inputFocus}`}
               />
               <button
                 type="submit"
@@ -527,13 +527,13 @@ function ChatSessionContent() {
         <aside className="w-full lg:w-60 flex flex-col gap-4 lg:self-start lg:sticky lg:top-28">
 
           {/* Suggested questions */}
-          <div className="bg-white border border-slate-200/80 rounded-2xl shadow-sm overflow-hidden">
-            <div className={`px-4 py-3 border-b border-slate-100 ${meta.accentBgLight} flex items-center justify-between`}>
-              <h2 className="text-xs font-bold text-slate-700 uppercase tracking-wider">Suggested</h2>
+          <div className="bg-white dark:bg-night-800 border border-slate-200/80 dark:border-night-600/80 rounded-2xl shadow-sm overflow-hidden">
+            <div className={`px-4 py-3 border-b border-slate-100 dark:border-night-600 ${meta.accentBgLight} flex items-center justify-between`}>
+              <h2 className="text-xs font-bold text-slate-700 dark:text-night-soft uppercase tracking-wider">Suggested</h2>
               <button
                 onClick={handleRefreshFaqs}
                 disabled={faqsLoading}
-                className="tap-target text-xs text-slate-aa hover:text-slate-600 transition-colors font-semibold tabular-nums flex items-center gap-1 cursor-pointer disabled:opacity-50"
+                className="tap-target text-xs text-slate-aa dark:text-night-muted hover:text-slate-600 dark:hover:text-night-soft transition-colors font-semibold tabular-nums flex items-center gap-1 cursor-pointer disabled:opacity-50"
                 title="Click to refresh questions"
               >
                 ↻ {countdown}s
@@ -542,14 +542,14 @@ function ChatSessionContent() {
             <div className="p-3 space-y-2">
               {faqsLoading && faqs.length === 0 ? (
                 Array.from({ length: 4 }).map((_, i) => (
-                  <div key={i} className="h-12 rounded-xl bg-slate-50 border border-slate-100 animate-pulse" />
+                  <div key={i} className="h-12 rounded-xl bg-slate-50 dark:bg-night-900 border border-slate-100 dark:border-night-600 animate-pulse" />
                 ))
               ) : faqs.length === 0 ? (
-                <p className="text-xs text-slate-aa italic text-center py-5">No suggestions yet.</p>
+                <p className="text-xs text-slate-aa dark:text-night-muted italic text-center py-5">No suggestions yet.</p>
               ) : (
                 faqs.map((faq, i) => (
                   <button key={i} onClick={() => handleSelectFaq(faq)} disabled={loading || offline}
-                    className={`w-full min-h-11 text-left text-[13px] px-3 py-2.5 rounded-xl border border-slate-100 hover:border-slate-200 hover:bg-slate-50/80 transition-all text-slate-700 leading-relaxed cursor-pointer disabled:cursor-not-allowed disabled:opacity-60`}>
+                    className={`w-full min-h-11 text-left text-[13px] px-3 py-2.5 rounded-xl border border-slate-100 dark:border-night-600 hover:border-slate-200 dark:hover:border-night-600 hover:bg-slate-50/80 dark:hover:bg-night-900/80 transition-all text-slate-700 dark:text-night-soft leading-relaxed cursor-pointer disabled:cursor-not-allowed disabled:opacity-60`}>
                     {faq}
                   </button>
                 ))
@@ -558,25 +558,25 @@ function ChatSessionContent() {
           </div>
 
           {/* Switch bot card */}
-          <div className="bg-white border border-slate-200/80 rounded-2xl shadow-sm p-4">
-            <p className="text-xs text-slate-aa font-medium mb-2.5">Wrong specialist?</p>
+          <div className="bg-white dark:bg-night-800 border border-slate-200/80 dark:border-night-600/80 rounded-2xl shadow-sm p-4">
+            <p className="text-xs text-slate-aa dark:text-night-muted font-medium mb-2.5">Wrong specialist?</p>
             <Link href={`/chat/${otherBot}`}
               className={`flex items-center gap-3 p-2.5 rounded-xl border ${meta.accentBorder} ${meta.accentBgLight} hover:opacity-80 transition-all`}>
-              <div className="w-9 h-9 rounded-full bg-white border border-slate-200 flex items-center justify-center overflow-hidden shadow-xs flex-shrink-0">
+              <div className="w-9 h-9 rounded-full bg-white dark:bg-night-800 border border-slate-200 dark:border-night-600 flex items-center justify-center overflow-hidden shadow-xs flex-shrink-0">
                 <img src={BOT_META[otherBot].image} alt={BOT_META[otherBot].name} className="w-full h-full object-contain" />
               </div>
               <div className="min-w-0">
-                <p className="text-[12px] font-bold text-slate-800">{BOT_META[otherBot].name}</p>
-                <p className="text-xs text-slate-aa truncate">{BOT_META[otherBot].specialty}</p>
+                <p className="text-[12px] font-bold text-slate-800 dark:text-night-text">{BOT_META[otherBot].name}</p>
+                <p className="text-xs text-slate-aa dark:text-night-muted truncate">{BOT_META[otherBot].specialty}</p>
               </div>
               <span className={`ml-auto text-xs font-semibold flex-shrink-0 ${meta.accentText}`}>Switch</span>
             </Link>
           </div>
 
           {/* Disclaimer */}
-          <p className="text-xs text-slate-aa text-center px-2 leading-relaxed">
+          <p className="text-xs text-slate-aa dark:text-night-muted text-center px-2 leading-relaxed">
             AI responses are for general guidance only. For specific advice,{" "}
-            <a href="mailto:chemlifeinnovations@gmail.com" className="tap-target underline hover:text-slate-600 transition-colors">contact the Chemlife team</a>.
+            <a href="mailto:chemlifeinnovations@gmail.com" className="tap-target underline hover:text-slate-600 dark:hover:text-night-soft transition-colors">contact the Chemlife team</a>.
           </p>
         </aside>
       </div>

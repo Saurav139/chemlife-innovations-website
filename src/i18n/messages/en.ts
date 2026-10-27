@@ -66,6 +66,10 @@ const en = {
     terms: "Terms of Use",
     cookies: "Cookie settings",
     englishOnly: "(English)",
+    theme: "Theme",
+    themeSystem: "Match my device",
+    themeLight: "Light",
+    themeDark: "Dark",
   },
 
   common: {

@@ -30,9 +30,9 @@ const STORY_VIDEO_ID = "-amOgNcjYNg";
 
 // Larger on desktop, so the buttons hold their own under the big headline.
 const primaryCtaClass =
-  "inline-flex items-center justify-center gap-2 min-h-12 lg:min-h-14 px-7 lg:px-9 py-3 rounded-full text-sm lg:text-base font-semibold bg-brand-orange-aa border-2 border-brand-orange-aa text-white hover:bg-white hover:text-brand-orange-aa shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5";
+  "inline-flex items-center justify-center gap-2 min-h-12 lg:min-h-14 px-7 lg:px-9 py-3 rounded-full text-sm lg:text-base font-semibold bg-brand-orange-aa border-2 border-brand-orange-aa text-white hover:bg-white dark:hover:bg-night-800 hover:text-brand-orange-aa dark:hover:text-brand-orange shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5";
 const secondaryCtaClass =
-  "inline-flex items-center justify-center gap-2 min-h-12 lg:min-h-14 px-7 lg:px-9 py-3 rounded-full text-sm lg:text-base font-semibold border-2 border-white/80 text-white hover:bg-white hover:text-brand-navy transition-all duration-300 transform hover:-translate-y-0.5";
+  "inline-flex items-center justify-center gap-2 min-h-12 lg:min-h-14 px-7 lg:px-9 py-3 rounded-full text-sm lg:text-base font-semibold border-2 border-white/80 text-white hover:bg-white dark:hover:bg-night-800 hover:text-brand-navy dark:hover:text-night-text transition-all duration-300 transform hover:-translate-y-0.5";
 
 // Labels are in the language file (home.stats), in this order.
 const stats = [
@@ -136,9 +136,9 @@ export default function HeroVariantA() {
 
   // min-h-svh: the screen height with the browser's toolbars showing, so on phones the stats aren't hidden under them.
   return (
-    <section className="relative min-h-svh flex items-center justify-center overflow-hidden bg-brand-navy">
+    <section className="relative min-h-svh flex items-center justify-center overflow-hidden bg-brand-navy dark:bg-night-band">
       {/* Deep Navy Backdrop Base */}
-      <div className="absolute inset-0 bg-brand-navy z-0" />
+      <div className="absolute inset-0 bg-brand-navy dark:bg-night-band z-0" />
 
       {/* Dynamic Background Image cross-fading */}
       <div className="absolute inset-0 z-10 opacity-100 transition-opacity duration-1000">
