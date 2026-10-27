@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 import { ADMIN_COOKIE, adminConfigured, validSession } from "@/lib/admin-auth";
-import { listItems, storeConfigured } from "@/lib/insights-store/db";
+import { databaseProblem, listItems, storeConfigured } from "@/lib/insights-store/db";
 import { inboxStatus, startInbox } from "@/lib/insights-store/sync";
 import AdminLogin from "./AdminLogin";
 import InsightsInbox from "./InsightsInbox";
@@ -22,9 +22,17 @@ export default async function InsightsInboxPage() {
     return <InsightsInbox initial={{ items, ...status }} />;
   } catch (error) {
     console.error("Insights inbox: database error", error);
+    const problem = databaseProblem(error);
     return (
       <Notice title="The inbox can't reach its database">
-        <p>Check that DATABASE_URL points at the right MySQL database and that the database is running, then reload this page.</p>
+        <p>{problem.hint}</p>
+        {problem.detail && (
+          <p className="mt-4 rounded-xl bg-slate-50 border border-slate-200 p-3 text-sm text-slate-600 break-words">
+            <span className="font-semibold text-brand-navy">The database said: </span>
+            <code>{problem.detail}</code>
+          </p>
+        )}
+        <p className="mt-4 text-sm text-slate-600">After changing DATABASE_URL in hPanel, redeploy the site, then reload this page.</p>
       </Notice>
     );
   }

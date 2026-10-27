@@ -12,6 +12,32 @@ export function storeConfigured(): boolean {
   return Boolean(process.env.DATABASE_URL);
 }
 
+/** Why the database couldn't be used, in plain words, with the database's own error for reference. For the signed-in
+ *  moderator only: it can name the database user and this server's address, never the password. */
+export function databaseProblem(error: unknown): { hint: string; detail: string } {
+  const e = (error ?? {}) as { code?: string; message?: string };
+  const code = e.code ?? "";
+  const detail = [code, e.message].filter(Boolean).join(": ").slice(0, 300);
+  const hints: Record<string, string> = {
+    ENOTFOUND: "The host name in DATABASE_URL couldn't be found. Copy the host exactly as hPanel shows it under Databases → MySQL Databases.",
+    EAI_AGAIN: "The host name in DATABASE_URL couldn't be looked up. Copy the host exactly as hPanel shows it under Databases → MySQL Databases.",
+    ECONNREFUSED: "Nothing answered at that host and port. Check the host, and that the port is 3306. If the host is localhost, try the host name hPanel shows instead.",
+    ETIMEDOUT: "The database didn't answer in time. Allow this site to connect in hPanel → Databases → Remote MySQL, or check the host.",
+    ECONNRESET: "The database closed the connection. Allow this site to connect in hPanel → Databases → Remote MySQL, or check the host.",
+    ER_ACCESS_DENIED_ERROR: "The database refused the user name or password. Check both. Symbols in the password (@ # / ? % : and spaces) must be URL-encoded in DATABASE_URL, e.g. @ as %40.",
+    ER_BAD_DB_ERROR: "There's no database with that name. On Hostinger the name starts with your account number, e.g. u123456789_insights.",
+    ER_DBACCESS_DENIED_ERROR: "There's no database with that name, or that user isn't allowed to use it. On Hostinger both names start with your account number, e.g. u123456789_insights, and the user must belong to the database.",
+    ER_TABLEACCESS_DENIED_ERROR: "That user can't create or change tables in this database. Give it all privileges on the database in hPanel.",
+    ER_HOST_NOT_PRIVILEGED: "The database doesn't accept connections from this server. Add this server in hPanel → Databases → Remote MySQL.",
+    ER_HOST_IS_BLOCKED: "The database has blocked this server after failed connections. Flush hosts in hPanel, or contact Hostinger.",
+  };
+  if (hints[code]) return { hint: hints[code], detail };
+  if (error instanceof URIError || /invalid url|uri malformed/i.test(e.message ?? "")) {
+    return { hint: "DATABASE_URL isn't a valid address. It should look like mysql://user:password@host:3306/database, with symbols in the password URL-encoded.", detail: "" };
+  }
+  return { hint: "The database couldn't be used. The details below say why.", detail };
+}
+
 async function pool(): Promise<Pool> {
   const uri = process.env.DATABASE_URL;
   if (!uri) throw new Error("DATABASE_URL isn't set");
