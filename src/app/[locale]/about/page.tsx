@@ -188,9 +188,9 @@ export default function AboutPage() {
                   <div className="h-10 px-4 rounded-full bg-[#e2e2e2] border-2 border-brand-orange flex items-center justify-center shadow-md mb-4 mx-auto relative z-10 w-fit">
                     <div className="flex gap-2.5 font-heading font-black text-base md:text-lg select-none tracking-wider">
                       <span className="text-brand-orange text-xl scale-110">G</span>
-                      <span className="text-brand-navy/30 dark:text-night-text/30">I</span>
-                      <span className="text-brand-navy/30 dark:text-night-text/30">F</span>
-                      <span className="text-brand-navy/30 dark:text-night-text/30">T</span>
+                      <span className="text-brand-navy/30">I</span>
+                      <span className="text-brand-navy/30">F</span>
+                      <span className="text-brand-navy/30">T</span>
                     </div>
                   </div>
                   <div className="bg-[#102a43] text-blue-200 font-heading text-xs font-bold px-4 py-1.5 rounded-md border border-blue-500/30 inline-block mb-3.5 shadow-md mx-auto relative z-10 uppercase tracking-wider">
@@ -238,9 +238,9 @@ export default function AboutPage() {
                 >
                   <div className="h-10 px-4 rounded-full bg-[#e2e2e2] border-2 border-brand-orange flex items-center justify-center shadow-md mb-4 mx-auto relative z-10 w-fit">
                     <div className="flex gap-2.5 font-heading font-black text-base md:text-lg select-none tracking-wider">
-                      <span className="text-brand-navy/30 dark:text-night-text/30">G</span>
-                      <span className="text-brand-navy/30 dark:text-night-text/30">I</span>
-                      <span className="text-brand-navy/30 dark:text-night-text/30">F</span>
+                      <span className="text-brand-navy/30">G</span>
+                      <span className="text-brand-navy/30">I</span>
+                      <span className="text-brand-navy/30">F</span>
                       <span className="text-brand-orange text-xl scale-110">T</span>
                     </div>
                   </div>
@@ -301,10 +301,10 @@ export default function AboutPage() {
                 >
                   <div className="h-10 px-4 rounded-full bg-[#e2e2e2] border-2 border-brand-orange flex items-center justify-center shadow-md mb-4 mx-auto relative z-10 w-fit">
                     <div className="flex gap-2.5 font-heading font-black text-base md:text-lg select-none tracking-wider">
-                      <span className="text-brand-navy/30 dark:text-night-text/30">G</span>
+                      <span className="text-brand-navy/30">G</span>
                       <span className="text-brand-orange text-xl scale-110">I</span>
-                      <span className="text-brand-navy/30 dark:text-night-text/30">F</span>
-                      <span className="text-brand-navy/30 dark:text-night-text/30">T</span>
+                      <span className="text-brand-navy/30">F</span>
+                      <span className="text-brand-navy/30">T</span>
                     </div>
                   </div>
                   <div className="bg-[#102a43] text-blue-200 font-heading text-xs font-bold px-4 py-1.5 rounded-md border border-blue-500/30 inline-block mb-3.5 shadow-md mx-auto relative z-10 uppercase tracking-wider">
@@ -366,10 +366,10 @@ export default function AboutPage() {
                 >
                   <div className="h-10 px-4 rounded-full bg-[#e2e2e2] border-2 border-brand-orange flex items-center justify-center shadow-md mb-4 mx-auto relative z-10 w-fit">
                     <div className="flex gap-2.5 font-heading font-black text-base md:text-lg select-none tracking-wider">
-                      <span className="text-brand-navy/30 dark:text-night-text/30">G</span>
-                      <span className="text-brand-navy/30 dark:text-night-text/30">I</span>
+                      <span className="text-brand-navy/30">G</span>
+                      <span className="text-brand-navy/30">I</span>
                       <span className="text-brand-orange text-xl scale-110">F</span>
-                      <span className="text-brand-navy/30 dark:text-night-text/30">T</span>
+                      <span className="text-brand-navy/30">T</span>
                     </div>
                   </div>
                   <div className="bg-[#102a43] text-blue-200 font-heading text-xs font-bold px-4 py-1.5 rounded-md border border-blue-500/30 inline-block mb-3.5 shadow-md mx-auto relative z-10 uppercase tracking-wider">
