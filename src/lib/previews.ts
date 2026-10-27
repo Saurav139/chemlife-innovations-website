@@ -26,9 +26,9 @@ export const PREVIEWS = [
   },
   {
     slug: "research-animations",
-    file: "research-animations.html",
+    href: "/previews/research/animations",
     title: "Research animations, in depth",
-    description: "Ten new animations for the five research platforms: the science up close and the bigger picture for each, playable step by step.",
+    description: "Ten more figures for the five research platforms, drawn like the research pages' own: how each works up close, and the bigger picture.",
   },
   {
     slug: "research-pages",
