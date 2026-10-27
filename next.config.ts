@@ -58,6 +58,8 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       { source: "/:path*", headers: securityHeaders },
+      // The site's fonts (src/app/fonts.css). Each file's name includes its version, so browsers may keep it for good.
+      { source: "/fonts/google/:file", headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }] },
       // Staging design previews are standalone pages that embed their fonts as data: URLs.
       { source: "/previews/:slug", headers: [{ key: "Content-Security-Policy", value: contentSecurityPolicy.replace("font-src 'self'", "font-src 'self' data:") }] },
     ];
