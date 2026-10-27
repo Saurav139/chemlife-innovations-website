@@ -65,7 +65,10 @@ export function sameOrigin(request: Request): boolean {
   const origin = request.headers.get("origin");
   if (!origin) return false;
   try {
-    return new URL(origin).host === request.headers.get("host");
+    const host = new URL(origin).host;
+    // A proxy in front of the site may pass the visitor's address as X-Forwarded-Host instead of Host.
+    const forwarded = request.headers.get("x-forwarded-host")?.split(",")[0].trim();
+    return host === request.headers.get("host") || (Boolean(forwarded) && host === forwarded);
   } catch {
     return false;
   }
