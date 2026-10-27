@@ -35,6 +35,12 @@ function localeRouting(request: NextRequest) {
   if (pathname.startsWith("/api/") || pathname.startsWith("/opengraph-image") || pathname.startsWith("/_")) {
     return NextResponse.next();
   }
+  // The Insights inbox (src/app/admin): English only, and never in search results.
+  if (pathname === "/admin" || pathname.startsWith("/admin/")) {
+    const response = NextResponse.next();
+    response.headers.set("X-Robots-Tag", "noindex, nofollow");
+    return response;
+  }
   const first = pathname.split("/")[1] ?? "";
   if (first === DEFAULT_LOCALE) {
     const url = request.nextUrl.clone();
