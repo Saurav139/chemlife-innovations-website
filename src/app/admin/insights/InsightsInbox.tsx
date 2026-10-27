@@ -32,6 +32,16 @@ const STATUS_LABEL: Record<Status, string> = { pending: "Waiting", approved: "On
 const KIND_ORDER: Kind[] = ["Blog", "Video", "Podcast"];
 /** How a post leads its type on the Insights page: picked in the inbox, or the newest when nothing is picked. */
 type FeaturedAs = "chosen" | "newest" | null;
+type Slot = { item: InboxItem; chosen: boolean };
+
+/** Sorts newest first, as the Insights page does (same day: the later-added first). */
+function newer(a: InboxItem, b: InboxItem) {
+  return Date.parse(b.publishedAt) - Date.parse(a.publishedAt) || b.id - a.id;
+}
+
+function shorten(title: string) {
+  return title.length > 50 ? `${title.slice(0, 48).trimEnd()}…` : title;
+}
 const AUTO_CHECK_AFTER = 10 * 60 * 1000;
 
 const BTN = "inline-flex items-center justify-center gap-1.5 min-h-10 px-4 rounded-full text-sm font-bold transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-default";
@@ -100,23 +110,60 @@ export default function InsightsInbox({ initial, demo = false }: { initial: Data
   const [highlight, setHighlight] = useState<number | null>(null);
   const toastTimer = useRef<number>(0);
 
-  // The post leading each type on the Insights page, worked out as the page does: the one chosen here, else the
-  // newest (videos and podcasts need a YouTube video to show).
-  const featuredNow = useMemo(() => {
-    const now = {} as Record<Kind, { item: InboxItem; chosen: boolean } | null>;
+  // Each type's posts on the Insights page, newest first, as the page orders them (videos and podcasts need a
+  // YouTube video to show). The page features the one chosen here, else the newest.
+  const onPage = useMemo(() => {
+    const lists = {} as Record<Kind, InboxItem[]>;
     for (const k of KIND_ORDER) {
-      const onPage = data.items
+      lists[k] = data.items
         .filter((item) => item.status === "approved" && item.kind === k && (k === "Blog" || item.youtubeId))
-        .sort((a, b) => Date.parse(b.publishedAt) - Date.parse(a.publishedAt) || b.id - a.id);
-      const chosen = onPage.find((item) => item.featured);
-      now[k] = chosen ? { item: chosen, chosen: true } : onPage[0] ? { item: onPage[0], chosen: false } : null;
+        .sort((a, b) => newer(a, b));
+    }
+    return lists;
+  }, [data.items]);
+  const featuredNow = useMemo(() => {
+    const now = {} as Record<Kind, Slot | null>;
+    for (const k of KIND_ORDER) {
+      const chosen = onPage[k].find((item) => item.featured);
+      now[k] = chosen ? { item: chosen, chosen: true } : onPage[k][0] ? { item: onPage[k][0], chosen: false } : null;
     }
     return now;
-  }, [data.items]);
+  }, [onPage]);
   const featuredAs = (item: InboxItem): FeaturedAs => {
     const slot = featuredNow[item.kind];
     return slot?.item.id === item.id ? (slot.chosen ? "chosen" : "newest") : null;
   };
+  /** Whether adding this post to the page makes it featured: the first of its type, or newer than an automatic pick. */
+  const becomesFeatured = (item: InboxItem): boolean => {
+    if (item.status === "approved" || (item.kind !== "Blog" && !item.youtubeId)) return false;
+    const slot = featuredNow[item.kind];
+    return !slot || (!slot.chosen && newer(item, slot.item) < 0);
+  };
+
+  /** What a decision did, for the notification: including what's featured afterwards, when that changes. */
+  function describe(item: InboxItem, changes: ItemChanges): string {
+    const type = item.kind.toLowerCase();
+    if (changes.status === "approved") return becomesFeatured(item) ? `Added to the Insights page as the featured ${type}.` : "Added to the Insights page.";
+    if (changes.status === "hidden" && item.status === "approved") {
+      if (!featuredAs(item)) return "Taken off the Insights page.";
+      const rest = onPage[item.kind].filter((other) => other.id !== item.id);
+      const next = rest.find((other) => other.featured) ?? rest[0];
+      return next ? `Taken off the page. The featured ${type} is now “${shorten(next.title)}”.` : `Taken off the page. No ${type}s are left on it.`;
+    }
+    if (changes.status === "hidden") return "Hidden.";
+    if (changes.status === "pending") return "Moved to Waiting.";
+    if (changes.featured === true) {
+      return featuredAs(item) === "newest" ? `Kept as the featured ${type}, even when newer ones arrive.` : `“${shorten(item.title)}” is now the featured ${type}.`;
+    }
+    if (changes.featured === false) {
+      const newest = onPage[item.kind][0];
+      return !newest || newest.id === item.id
+        ? `Unpinned. It stays featured while it's the newest ${type}.`
+        : `Unpinned. The newest ${type}, “${shorten(newest.title)}”, is featured again.`;
+    }
+    return "Saved.";
+  }
+  const act = (item: InboxItem, changes: ItemChanges) => change(item, changes, describe(item, changes));
 
   const counts = useMemo(() => {
     const c: Record<Tab, number> = { pending: 0, approved: 0, hidden: 0, featured: 0 };
@@ -128,8 +175,8 @@ export default function InsightsInbox({ initial, demo = false }: { initial: Data
     (item) => item.status === tab && (source === "all" || item.source === source) && (kind === "all" || item.kind === kind)
   );
 
-  function chooseAnother(k: Kind) {
-    setTab("approved");
+  function showWaiting(k: Kind) {
+    setTab("pending");
     setSource("all");
     setKind(k);
   }
@@ -149,15 +196,18 @@ export default function InsightsInbox({ initial, demo = false }: { initial: Data
     }));
   }
 
-  async function change(item: InboxItem, changes: ItemChanges, done: string, undoable = true) {
+  /** Saves a decision; true when it was saved. */
+  async function change(item: InboxItem, changes: ItemChanges, done: string, undoable = true): Promise<boolean> {
     setBusy((b) => new Set(b).add(item.id));
     try {
       const { item: updated } = await api<{ item: InboxItem }>(`/api/admin/insights/${item.id}`, { method: "PATCH", body: JSON.stringify(changes) });
       replace(updated);
       const before: ItemChanges = { status: item.status, featured: item.featured };
-      say(done, undoable ? { undo: () => change(updated, before, "Undone.", false) } : {});
+      say(done, undoable ? { undo: () => void change(updated, before, "Undone.", false) } : {});
+      return true;
     } catch (error) {
       say((error as Error).message, { error: true });
+      return false;
     } finally {
       setBusy((b) => {
         const next = new Set(b);
@@ -288,9 +338,12 @@ export default function InsightsInbox({ initial, demo = false }: { initial: Data
             {tab === "featured" ? (
               <FeaturedNow
                 featuredNow={featuredNow}
+                onPage={onPage}
                 busy={busy}
-                onChooseAnother={chooseAnother}
-                onUseNewest={(item) => change(item, { featured: false }, `The newest ${item.kind.toLowerCase()} is featured again.`)}
+                onFeature={(item) => act(item, { featured: true })}
+                onUseNewest={(item) => act(item, { featured: false })}
+                onEdit={setEditing}
+                onShowWaiting={showWaiting}
               />
             ) : (
               <>
@@ -311,9 +364,10 @@ export default function InsightsInbox({ initial, demo = false }: { initial: Data
                         key={item.id}
                         item={item}
                         featuredAs={featuredAs(item)}
+                        wouldFeature={becomesFeatured(item)}
                         busy={busy.has(item.id)}
                         highlight={highlight === item.id}
-                        onChange={(changes, done) => change(item, changes, done)}
+                        onChange={(changes) => act(item, changes)}
                         onEdit={() => setEditing(item)}
                       />
                     ))}
@@ -339,7 +393,7 @@ export default function InsightsInbox({ initial, demo = false }: { initial: Data
 
       <div aria-live="polite" className="fixed bottom-4 inset-x-4 sm:inset-x-auto sm:right-6 sm:bottom-6 z-50 flex justify-center pointer-events-none">
         {toast && (
-          <div className={`pointer-events-auto flex items-center gap-4 rounded-xl px-4 py-3 shadow-lg text-sm font-semibold ${toast.error ? "bg-red-700 text-white" : "bg-brand-navy text-white"}`}>
+          <div className={`pointer-events-auto flex items-center gap-4 max-w-md rounded-xl px-4 py-3 shadow-lg text-sm font-semibold leading-snug ${toast.error ? "bg-red-700 text-white" : "bg-brand-navy text-white"}`}>
             <span>{toast.text}</span>
             {toast.undo && (
               <button type="button" onClick={() => { const undo = toast.undo!; setToast(null); undo(); }} className="underline underline-offset-2 text-teal-aa-light cursor-pointer">
@@ -393,21 +447,29 @@ function Channels({ data, checking, onCheck }: { data: Data; checking: boolean; 
   );
 }
 
-function FeaturedNow({ featuredNow, busy, onChooseAnother, onUseNewest }: {
-  featuredNow: Record<Kind, { item: InboxItem; chosen: boolean } | null>;
+function FeaturedNow({ featuredNow, onPage, busy, onFeature, onUseNewest, onEdit, onShowWaiting }: {
+  featuredNow: Record<Kind, Slot | null>;
+  onPage: Record<Kind, InboxItem[]>;
   busy: Set<number>;
-  onChooseAnother: (kind: Kind) => void;
+  onFeature: (item: InboxItem) => Promise<boolean>;
   onUseNewest: (item: InboxItem) => void;
+  onEdit: (item: InboxItem) => void;
+  onShowWaiting: (kind: Kind) => void;
 }) {
+  const [picking, setPicking] = useState<Kind | null>(null);
   return (
     <div className="p-4 sm:p-6">
-      <p className="text-sm text-slate-600 mb-4">These lead the Insights page, one for each type. Choose any post that&apos;s on the page instead; without a choice, the newest is featured.</p>
+      <p className="text-sm text-slate-600 mb-4">
+        These lead the Insights page, one for each type. Without a choice, the newest is featured.{" "}
+        <a href="/insights" target="_blank" rel="noopener" className="font-semibold text-teal-aa hover:underline whitespace-nowrap">View the page ↗</a>
+      </p>
       <ul className="grid gap-4 md:grid-cols-3">
         {KIND_ORDER.map((k) => {
           const slot = featuredNow[k];
+          const type = k.toLowerCase();
           return (
-            <li key={k} className="rounded-2xl border border-slate-200 bg-slate-50 p-4 flex flex-col">
-              <p className="text-xs font-bold uppercase tracking-wider text-slate-500">Featured {k.toLowerCase()}</p>
+            <li key={k} className={`rounded-2xl border p-4 flex flex-col transition-colors ${picking === k ? "border-teal-aa bg-teal-50/60" : "border-slate-200 bg-slate-50"}`}>
+              <p className="text-xs font-bold uppercase tracking-wider text-slate-500">Featured {type}</p>
               {slot ? (
                 <>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -415,10 +477,24 @@ function FeaturedNow({ featuredNow, busy, onChooseAnother, onUseNewest }: {
                   <p className="mt-3 text-xs font-semibold text-slate-500">{SOURCE_LABEL[slot.item.source]} · {day(slot.item.publishedAt)}</p>
                   <h3 className="font-bold leading-snug mt-1">{slot.item.title}</h3>
                   <p className={`mt-2 inline-flex self-start items-center gap-1 rounded-full px-2.5 py-1 text-xs font-bold ${slot.chosen ? "bg-amber-100 text-amber-900" : "bg-white border border-slate-200 text-slate-600"}`}>
-                    {slot.chosen ? "★ Chosen by you" : "Newest on the page, chosen automatically"}
+                    {slot.chosen ? "★ Chosen by you" : "Newest, chosen automatically"}
+                  </p>
+                  <p className="mt-1.5 text-xs text-slate-500">
+                    {slot.chosen ? "Stays featured until you change it." : `Changes by itself when a newer ${type} goes on the page.`}
                   </p>
                   <div className="mt-auto pt-4 flex flex-wrap gap-2">
-                    <button type="button" onClick={() => onChooseAnother(k)} className={BTN_SECONDARY}>Choose another</button>
+                    <button
+                      type="button"
+                      aria-expanded={picking === k}
+                      aria-controls="featured-picker"
+                      disabled={onPage[k].length < 2}
+                      title={onPage[k].length < 2 ? `It's the only ${type} on the page.` : undefined}
+                      onClick={() => setPicking(picking === k ? null : k)}
+                      className={BTN_SECONDARY}
+                    >
+                      Change
+                    </button>
+                    <button type="button" onClick={() => onEdit(slot.item)} className={`${BTN} text-slate-600 hover:bg-slate-100`}>Edit</button>
                     {slot.chosen && (
                       <button type="button" disabled={busy.has(slot.item.id)} onClick={() => onUseNewest(slot.item)} className={`${BTN} text-slate-600 hover:bg-slate-100`}>
                         Use the newest
@@ -427,22 +503,117 @@ function FeaturedNow({ featuredNow, busy, onChooseAnother, onUseNewest }: {
                   </div>
                 </>
               ) : (
-                <p className="mt-3 text-sm text-slate-500">No {k.toLowerCase()}s are on the page, so this section is left out.</p>
+                <>
+                  <p className="mt-3 text-sm text-slate-500">No {type}s are on the page yet, so the page leaves this out.</p>
+                  <div className="mt-auto pt-4">
+                    <button type="button" onClick={() => onShowWaiting(k)} className={BTN_SECONDARY}>See waiting {type}s</button>
+                  </div>
+                </>
               )}
             </li>
           );
         })}
       </ul>
+      {picking && featuredNow[picking] && (
+        <FeaturedPicker
+          key={picking}
+          kind={picking}
+          current={featuredNow[picking]!.item}
+          options={onPage[picking]}
+          busy={busy}
+          onPick={async (item) => {
+            if (await onFeature(item)) setPicking(null);
+          }}
+          onClose={() => setPicking(null)}
+        />
+      )}
     </div>
   );
 }
 
-function Post({ item, featuredAs, busy, highlight, onChange, onEdit }: {
+/** Choosing a type's featured post from the ones on the page, newest first, with a search. */
+function FeaturedPicker({ kind, current, options, busy, onPick, onClose }: {
+  kind: Kind;
+  current: InboxItem;
+  options: InboxItem[];
+  busy: Set<number>;
+  onPick: (item: InboxItem) => Promise<void>;
+  onClose: () => void;
+}) {
+  const [query, setQuery] = useState("");
+  const panel = useRef<HTMLDivElement>(null);
+  const type = kind.toLowerCase();
+  useEffect(() => {
+    panel.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    panel.current?.querySelector("input")?.focus({ preventScroll: true });
+  }, []);
+  const words = query.toLowerCase().split(/\s+/).filter(Boolean);
+  const matches = options.filter((item) => words.every((w) => `${item.title} ${item.summary}`.toLowerCase().includes(w)));
+  return (
+    <div
+      ref={panel}
+      id="featured-picker"
+      role="region"
+      aria-label={`Choose the featured ${type}`}
+      onKeyDown={(e) => e.key === "Escape" && onClose()}
+      className="mt-4 rounded-2xl border border-teal-aa bg-white shadow-sm scroll-mb-24"
+    >
+      <div className="flex items-center justify-between gap-3 px-4 pt-4">
+        <h3 className="font-heading font-bold">Choose the featured {type}</h3>
+        <button type="button" onClick={onClose} aria-label="Close" className="w-10 h-10 rounded-full hover:bg-slate-100 flex items-center justify-center cursor-pointer">
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2.2} viewBox="0 0 24 24" aria-hidden="true"><path strokeLinecap="round" d="M6 6l12 12M18 6L6 18" /></svg>
+        </button>
+      </div>
+      <div className="px-4 pt-2">
+        <label className="sr-only" htmlFor="featured-search">Search the {type}s on the page</label>
+        <input
+          id="featured-search"
+          type="search"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder={`Search ${options.length} ${type}s on the page`}
+          className="w-full min-h-11 rounded-full border border-slate-300 px-4 text-[15px] focus:outline-none focus:border-teal-aa focus:ring-2 focus:ring-teal-aa/25"
+        />
+        <p className="text-xs text-slate-500 mt-2">Only posts on the page can be featured. To feature one that&apos;s waiting, add it to the page first.</p>
+      </div>
+      {matches.length === 0 ? (
+        <p className="px-4 py-8 text-center text-sm text-slate-500">No {type}s on the page match “{query}”.</p>
+      ) : (
+        <ul className="mt-2 max-h-[26rem] overflow-y-auto divide-y divide-slate-100 border-t border-slate-100">
+          {matches.map((item) => {
+            const isCurrent = item.id === current.id;
+            return (
+              <li key={item.id} className={`flex items-center gap-3 px-4 py-3 ${isCurrent ? "bg-amber-50/70" : ""}`}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={thumbnail(picture(item))} alt="" loading="lazy" className="hidden sm:block w-20 h-12 rounded-lg object-cover bg-slate-100 shrink-0" />
+                <div className="min-w-0 flex-1">
+                  <p className="font-semibold text-sm leading-snug line-clamp-3 sm:line-clamp-2">{item.title}</p>
+                  <p className="text-xs text-slate-500 mt-0.5">{SOURCE_LABEL[item.source]} · {day(item.publishedAt)}</p>
+                </div>
+                {isCurrent ? (
+                  <span className="shrink-0 rounded-full bg-amber-100 text-amber-900 px-3 py-1.5 text-xs font-bold">★ Featured now</span>
+                ) : (
+                  <button type="button" disabled={busy.has(item.id)} onClick={() => onPick(item)} className={`${BTN_SECONDARY} shrink-0`}>
+                    Feature this
+                  </button>
+                )}
+              </li>
+            );
+          })}
+        </ul>
+      )}
+    </div>
+  );
+}
+
+function Post({ item, featuredAs, wouldFeature, busy, highlight, onChange, onEdit }: {
   item: InboxItem;
   featuredAs: FeaturedAs;
+  /** Not on the page, and would become the featured post of its type if added. */
+  wouldFeature: boolean;
   busy: boolean;
   highlight: boolean;
-  onChange: (changes: ItemChanges, done: string) => void;
+  onChange: (changes: ItemChanges) => void;
   onEdit: () => void;
 }) {
   return (
@@ -462,6 +633,11 @@ function Post({ item, featuredAs, busy, highlight, onChange, onEdit }: {
                 ★ Featured · newest
               </span>
             )}
+            {wouldFeature && (
+              <span className="rounded-full border border-dashed border-amber-300 text-amber-800 px-2 py-0.5" title={`Newer than the featured ${item.kind.toLowerCase()}, which was chosen automatically, so adding this one makes it the featured ${item.kind.toLowerCase()}.`}>
+                ★ Becomes featured if added
+              </span>
+            )}
           </p>
           <h3 className="font-bold text-[15px] sm:text-base leading-snug mt-1">{item.title}</h3>
           {item.summary && <p className="text-sm text-slate-600 mt-1 line-clamp-2">{item.summary}</p>}
@@ -475,8 +651,8 @@ function Post({ item, featuredAs, busy, highlight, onChange, onEdit }: {
       <div className="flex flex-wrap sm:flex-col sm:items-stretch gap-2 sm:w-44 shrink-0">
         {item.status === "pending" && (
           <>
-            <button type="button" disabled={busy} onClick={() => onChange({ status: "approved" }, "Added to the Insights page.")} className={BTN_PRIMARY}>Add to page</button>
-            <button type="button" disabled={busy} onClick={() => onChange({ status: "hidden" }, "Hidden.")} className={BTN_SECONDARY}>Hide</button>
+            <button type="button" disabled={busy} onClick={() => onChange({ status: "approved" })} className={BTN_PRIMARY}>Add to page</button>
+            <button type="button" disabled={busy} onClick={() => onChange({ status: "hidden" })} className={BTN_SECONDARY}>Hide</button>
           </>
         )}
         {item.status === "approved" && (
@@ -486,24 +662,19 @@ function Post({ item, featuredAs, busy, highlight, onChange, onEdit }: {
               disabled={busy}
               aria-pressed={item.featured}
               title={featuredAs === "newest" ? "Featured now as the newest. This keeps it featured when newer posts arrive." : undefined}
-              onClick={() =>
-                onChange(
-                  { featured: !item.featured },
-                  item.featured ? "No longer featured. The newest is featured instead." : `Featured at the top of the ${item.kind.toLowerCase()}s.`
-                )
-              }
+              onClick={() => onChange({ featured: !item.featured })}
               className={item.featured ? `${BTN} bg-amber-100 text-amber-900 hover:bg-amber-200` : BTN_SECONDARY}
             >
               {item.featured ? "★ Featured" : featuredAs === "newest" ? "☆ Keep featured" : "☆ Feature"}
             </button>
             <button type="button" disabled={busy} onClick={onEdit} className={BTN_SECONDARY}>Edit</button>
-            <button type="button" disabled={busy} onClick={() => onChange({ status: "hidden" }, "Taken off the Insights page.")} className={BTN_SECONDARY}>Take off page</button>
+            <button type="button" disabled={busy} onClick={() => onChange({ status: "hidden" })} className={BTN_SECONDARY}>Take off page</button>
           </>
         )}
         {item.status === "hidden" && (
           <>
-            <button type="button" disabled={busy} onClick={() => onChange({ status: "approved" }, "Added to the Insights page.")} className={BTN_PRIMARY}>Add to page</button>
-            <button type="button" disabled={busy} onClick={() => onChange({ status: "pending" }, "Moved to Waiting.")} className={BTN_SECONDARY}>Move to Waiting</button>
+            <button type="button" disabled={busy} onClick={() => onChange({ status: "approved" })} className={BTN_PRIMARY}>Add to page</button>
+            <button type="button" disabled={busy} onClick={() => onChange({ status: "pending" })} className={BTN_SECONDARY}>Move to Waiting</button>
           </>
         )}
         {item.status !== "approved" && (
