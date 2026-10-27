@@ -66,7 +66,7 @@ export default function Header() {
     >
       <div className="max-w-[1200px] mx-auto pr-6 pl-2">
         <div className="flex items-center justify-between gap-6 h-18 md:h-20 lg:h-24">
-          <a href={href("/")} className="flex-shrink-0 dark:rounded-xl dark:bg-white dark:px-2 dark:py-1">
+          <a href={href("/")} className="flex-shrink-0">
             <Image
               src={Images.branding.logoHorizontal}
               alt="ChemLife Innovations"
@@ -74,7 +74,17 @@ export default function Header() {
               height={240}
               sizes="174px"
               loading="eager"
-              className="h-12 md:h-14 xl:h-16 w-auto"
+              className="h-12 md:h-14 xl:h-16 w-auto dark:hidden"
+            />
+            {/* The dark theme's version of the logo, with light lettering */}
+            <Image
+              src={Images.branding.logoHorizontalDark}
+              alt="ChemLife Innovations"
+              width={653}
+              height={240}
+              sizes="174px"
+              loading="eager"
+              className="hidden h-12 md:h-14 xl:h-16 w-auto dark:block"
             />
           </a>
 
