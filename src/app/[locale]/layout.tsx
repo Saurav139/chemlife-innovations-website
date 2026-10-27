@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { Maven_Pro, Noto_Sans_Devanagari, Noto_Sans_Kannada } from "next/font/google";
+import { preload } from "react-dom";
+import "../fonts.css";
 import "../globals.css";
 import RatingWidget from "@/components/RatingWidget";
 import AnalyticsLoader from "@/components/AnalyticsLoader";
@@ -10,29 +11,6 @@ import { LOCALES, isLocale } from "@/i18n/config";
 import { getMessages } from "@/i18n/messages";
 import { LocaleProvider } from "@/i18n/LocaleProvider";
 
-const mavenPro = Maven_Pro({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  display: "swap",
-  variable: "--font-maven-pro",
-});
-
-// Maven Pro has no Hindi or Kannada letters, so the browser falls back to these for them (see globals.css).
-// Not preloaded: a browser downloads one only when a page actually shows those letters.
-const notoDevanagari = Noto_Sans_Devanagari({
-  subsets: ["devanagari"],
-  weight: ["400", "500", "600", "700"],
-  display: "swap",
-  preload: false,
-  variable: "--font-noto-devanagari",
-});
-const notoKannada = Noto_Sans_Kannada({
-  subsets: ["kannada"],
-  weight: ["400", "500", "600", "700"],
-  display: "swap",
-  preload: false,
-  variable: "--font-noto-kannada",
-});
 
 export const dynamicParams = false;
 
@@ -61,9 +39,12 @@ export default async function RootLayout({
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
   const messages = await getMessages(locale);
+  // The site font's Latin letters, needed on every page (see src/app/fonts.css). The Hindi and Kannada fonts load
+  // only when a page shows those letters.
+  preload("/fonts/google/maven-pro-v40-latin.woff2", { as: "font", type: "font/woff2", crossOrigin: "anonymous" });
 
   return (
-    <html lang={locale} className={`${mavenPro.variable} ${notoKannada.variable} ${notoDevanagari.variable}`}>
+    <html lang={locale}>
       <head>
         <style>{`
           nextjs-portal,
