@@ -82,7 +82,7 @@ async function uploadPicture(file: File): Promise<number> {
   return imageId;
 }
 
-export default function InsightsInbox({ initial }: { initial: Data }) {
+export default function InsightsInbox({ initial, demo = false }: { initial: Data; demo?: boolean }) {
   const [data, setData] = useState<Data>(initial);
   const [tab, setTab] = useState<Status>("pending");
   const [source, setSource] = useState<Source | "all">("all");
@@ -186,12 +186,19 @@ export default function InsightsInbox({ initial }: { initial: Data }) {
             <a href="/insights" target="_blank" rel="noopener" className="hidden sm:inline-flex items-center min-h-10 px-3 rounded-full text-sm font-semibold text-teal-aa hover:bg-teal-50">
               View the Insights page ↗
             </a>
-            <button type="button" onClick={signOut} className="min-h-10 px-3 rounded-full text-sm font-semibold text-slate-600 hover:bg-slate-100 cursor-pointer">
-              Sign out
-            </button>
+            {!demo && (
+              <button type="button" onClick={signOut} className="min-h-10 px-3 rounded-full text-sm font-semibold text-slate-600 hover:bg-slate-100 cursor-pointer">
+                Sign out
+              </button>
+            )}
           </div>
         </div>
       </header>
+      {demo && (
+        <p className="bg-amber-50 border-b border-amber-200 text-amber-900 text-sm text-center px-4 py-2">
+          <strong>Demo:</strong> no sign-in on this staging site, so anyone who can open it can use the inbox. The live site always asks for a password.
+        </p>
+      )}
 
       <main className="max-w-[1100px] mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-6">
         <Channels data={data} checking={checking} onCheck={() => check()} />

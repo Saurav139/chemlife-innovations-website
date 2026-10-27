@@ -26,6 +26,9 @@ The staging and live sites should each have their own database, so testing on st
 
 ### Optional
 
+- **Demo on staging without signing in:** set `INSIGHTS_DEMO` to `true` (then `ADMIN_PASSWORD` isn't needed). The
+  inbox shows a "Demo" notice, and anyone who can open the staging site can use it. It never applies on
+  chemlifeinnovations.com. Remove it after the demo.
 - **Instagram:** create a Meta app with the *Instagram API with Instagram Login* product, add ChemLife's Instagram
   business account, generate an access token and set it as `INSTAGRAM_ACCESS_TOKEN`. It lasts 60 days; the inbox
   renews it every week and keeps the renewed one in the database. Setting a new one in hPanel replaces it.
