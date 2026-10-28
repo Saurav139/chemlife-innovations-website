@@ -1,7 +1,7 @@
 import { requireAdmin } from "@/lib/admin-auth";
-import { addItems, findItem, listItems, storeConfigured } from "@/lib/insights-store/db";
+import { addItems, changeStatuses, findItem, getItems, listItems, storeConfigured } from "@/lib/insights-store/db";
 import { inboxStatus, refreshInsightsPage, startInbox } from "@/lib/insights-store/sync";
-import { parseNewItem } from "./validate";
+import { parseBulk, parseNewItem } from "./validate";
 
 export const dynamic = "force-dynamic";
 
@@ -32,4 +32,18 @@ export async function POST(request: Request) {
   await addItems([item], status);
   if (status === "approved") refreshInsightsPage();
   return Response.json({ item: await findItem(item.source, item.externalId) });
+}
+
+/** A decision for several posts at once: { ids, status }. Returns the posts as they are now. */
+export async function PATCH(request: Request) {
+  const denied = requireAdmin(request);
+  if (denied) return denied;
+  if (!storeConfigured()) return notSetUp();
+  const bulk = parseBulk((await request.json().catch(() => ({}))) as Record<string, unknown>);
+  if (typeof bulk === "string") return Response.json({ error: bulk }, { status: 400 });
+  const before = await getItems(bulk.ids);
+  if (before.length !== bulk.ids.length) return Response.json({ error: "Some of those posts aren't in the inbox any more. Reload the page." }, { status: 404 });
+  const items = await changeStatuses(bulk.ids, bulk.status);
+  if (bulk.status === "approved" || before.some((item) => item.status === "approved")) refreshInsightsPage();
+  return Response.json({ items });
 }

@@ -75,6 +75,46 @@ export function htmlToText(html: string): string {
     .trim();
 }
 
+/** At most `max` characters, cut at a word with "…" when it's longer. */
+export function clip(text: string, max: number): string {
+  if (text.length <= max) return text;
+  const cut = text.slice(0, max - 1);
+  const space = cut.lastIndexOf(" ");
+  return `${(space > max * 0.6 ? cut.slice(0, space) : cut).replace(/[\s,;:–—-]+$/, "")}…`;
+}
+
+const letters = (text: string) => text.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, "");
+
+/** Whether a summary was cut from the start of the article itself, like WordPress's automatic excerpts (which run
+ *  headings into the next sentence: "IntroductionAccess to…"), rather than written for it. */
+export function isFromArticle(summary: string, article: string): boolean {
+  const start = letters(summary.replace(/(…|\[…\]|\.\.\.)\s*$/, ""));
+  return start.length >= 20 && letters(article).startsWith(start);
+}
+
+/** A summary from an article's text (one paragraph per line, as htmlToText gives it): from its first paragraph,
+ *  without the headings above it or a leading "Introduction:" label, at most `max` characters. */
+export function articleSummary(text: string, max = 220): string {
+  const paragraphs = text.split(/\n+/).map((p) => p.replace(/^•\s*/, "").trim()).filter(Boolean);
+  // A heading is a short line that doesn't end like a sentence ("Introduction", "Why feed hygiene matters").
+  while (paragraphs.length > 1 && paragraphs[0].length <= 80 && !/[.!?…]["”’)]?$/.test(paragraphs[0])) paragraphs.shift();
+  const start = paragraphs.join(" ").replace(/^(introduction|overview|summary|abstract)\s*[:.–—-]\s*/i, "");
+  return clip(start.replace(/\s+/g, " ").trim(), max);
+}
+
+const CLOSING_QUOTE: Record<string, string> = { "“": "”", "„": "“", '"': '"', "‘": "’", "'": "'", "«": "»" };
+
+/** A title without quote marks around all of it, or around its first part before a colon: “Harmony in Nutrition”
+ *  becomes Harmony in Nutrition, and “Resilience Amidst Adversity”: Marking Doctor's Day loses its quotes too. */
+export function cleanTitle(title: string): string {
+  const t = title.trim();
+  const close = CLOSING_QUOTE[t[0]];
+  const end = close ? t.indexOf(close, 1) : -1;
+  if (end === t.length - 1) return t.slice(1, -1).trim();
+  if (end > 0 && t[end + 1] === ":") return `${t.slice(1, end)}${t.slice(end + 1)}`.trim();
+  return t;
+}
+
 /** "6 min read" for an article of this many words (about 200 words a minute). */
 export function readingTime(text: string): string {
   const words = text.split(/\s+/).filter(Boolean).length;

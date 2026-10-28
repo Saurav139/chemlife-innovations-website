@@ -1,6 +1,6 @@
 import mysql, { type Pool, type PoolConnection, type ResultSetHeader, type RowDataPacket } from "mysql2/promise";
-import type { InsightItem, Insights } from "@/lib/insights";
-import { displayDate } from "./text";
+import type { Insights } from "@/lib/insights";
+import { insightCard } from "./card";
 import type { InboxItem, ItemChanges, Kind, Source, SourceItem, Status } from "./types";
 
 // The inbox's MySQL tables. DATABASE_URL points at the database, e.g. mysql://user:password@host:3306/name (a
@@ -207,6 +207,26 @@ export async function listItems(): Promise<InboxItem[]> {
   return rows.map(toItem);
 }
 
+/** These posts, newest first. */
+export async function getItems(ids: number[]): Promise<InboxItem[]> {
+  if (ids.length === 0) return [];
+  const db = await pool();
+  const [rows] = await db.query<RowDataPacket[]>(`SELECT ${ITEM_COLUMNS} ${FROM_ITEMS} WHERE i.id IN (?) ORDER BY i.published_at DESC, i.id DESC`, [ids]);
+  return rows.map(toItem);
+}
+
+/** Moves several posts at once, as the inbox's bulk actions do. Posts that leave the page stop being featured. */
+export async function changeStatuses(ids: number[], status: Status): Promise<InboxItem[]> {
+  if (ids.length === 0) return [];
+  const db = await pool();
+  await db.query(
+    `UPDATE insight_items SET status = ?, decided_at = ?, featured = IF(? = 'approved', featured, 0)
+     WHERE id IN (?) AND status <> ?`,
+    [status, status === "pending" ? null : new Date(), status, ids, status]
+  );
+  return getItems(ids);
+}
+
 /** Applies the moderator's changes. Featuring a post un-features the other post of its kind; a post that leaves
  *  the page stops being featured. */
 export async function changeItem(id: number, changes: ItemChanges): Promise<InboxItem | null> {
@@ -261,21 +281,9 @@ export async function approvedInsights(): Promise<Insights | null> {
   const db = await pool();
   const [rows] = await db.query<RowDataPacket[]>(`SELECT ${ITEM_COLUMNS} ${FROM_ITEMS} WHERE i.status = 'approved' ORDER BY i.published_at DESC, i.id DESC`);
   const items = rows.map(toItem);
-  const card = (item: InboxItem): InsightItem => ({
-    type: item.kind,
-    title: item.title,
-    description: item.summary,
-    meta: item.meta,
-    date: displayDate(new Date(item.publishedAt)),
-    linkUrl: item.url || undefined,
-    imageUrl: item.image || undefined,
-    youtubeId: item.youtubeId || undefined,
-    content: item.content || undefined,
-    featured: item.featured || undefined,
-  });
   return {
-    blogs: items.filter((item) => item.kind === "Blog").map(card),
-    podcasts: items.filter((item) => item.kind === "Podcast" && item.youtubeId).map(card),
-    videos: items.filter((item) => item.kind === "Video" && item.youtubeId).map(card),
+    blogs: items.filter((item) => item.kind === "Blog").map(insightCard),
+    podcasts: items.filter((item) => item.kind === "Podcast" && item.youtubeId).map(insightCard),
+    videos: items.filter((item) => item.kind === "Video" && item.youtubeId).map(insightCard),
   };
 }

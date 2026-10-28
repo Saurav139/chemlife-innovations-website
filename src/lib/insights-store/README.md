@@ -6,9 +6,12 @@ The moderator decides which posts from ChemLife's channels appear on the Insight
   `INSTAGRAM_ACCESS_TOKEN` is set.
 - **LinkedIn** posts, and anything else, are added by pasting the post's link into "Add a post". The title, text,
   picture and date are filled in from the post where the site allows it.
-- New posts wait under **Waiting**. **Add to page** puts one on the Insights page straight away; **Hide** keeps it
-  off. **Feature** chooses the big card at the top for its type (blog, video, podcast); otherwise the newest is
-  featured. **Edit** changes how a post appears on the page, never the original.
+- New posts wait under **Waiting**, marked **New** if they arrived since your last visit (remembered per browser).
+  **Add to page** puts one on the Insights page straight away; **Hide** keeps it off. Tick several posts (or
+  **Select all**) to decide for all of them at once; every decision can be undone from the notification. The search
+  box looks through every tab. **Feature** chooses the big card at the top for its type (blog, video, podcast);
+  otherwise the newest is featured. **Edit** changes how a post appears on the page, never the original, and shows
+  the card as the page will.
 - The inbox checks for new posts when the moderator opens it (at most every 10 minutes), with **Check for new
   posts**, and from a scheduled job if one is set up.
 
@@ -40,7 +43,9 @@ The staging and live sites should each have their own database, so testing on st
 - `db.ts`: the MySQL tables (created on first use): posts, copied pictures, settings.
 - `sources.ts`: reading YouTube, WordPress and Instagram. `preview.ts`: filling in a pasted link.
 - `sync.ts`: checking for new posts, and starting the inbox from the built-in list (`FALLBACK_INSIGHTS` in
-  `src/lib/insights.ts`).
+  `src/lib/insights.ts`). Once per database it also brings blog posts imported before October 2026 up to today's
+  summaries and titles.
+- `card.ts`: how a post becomes an Insights card, for the page and for the inbox's preview (`src/components/InsightCard.tsx`).
 - `src/lib/insights.ts` `getInsights()`: the approved posts once the inbox has started; the built-in list if the
   database isn't set up or can't be reached.
 - Instagram and LinkedIn picture addresses expire, so their pictures are copied into the database and served from

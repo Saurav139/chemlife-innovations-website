@@ -1,11 +1,11 @@
 import { createHash } from "node:crypto";
 import { revalidatePath } from "next/cache";
 import { FALLBACK_INSIGHTS, type InsightItem } from "@/lib/insights";
-import { addItems, getSetting, knownIds, removeUnusedImages, setSetting } from "./db";
+import { addItems, changeItem, getSetting, knownIds, listItems, removeUnusedImages, setSetting } from "./db";
 import { copyImage } from "./preview";
 import { fetchInstagramPosts, fetchWordPressPosts, fetchYouTubeUploads, renewInstagramToken } from "./sources";
-import { linkedinActivityId, normalizeUrl } from "./text";
-import type { Source, SourceItem, SourceState, SyncResult } from "./types";
+import { articleSummary, cleanTitle, isFromArticle, linkedinActivityId, normalizeUrl } from "./text";
+import type { ItemChanges, Source, SourceItem, SourceState, SyncResult } from "./types";
 
 // Checking the channels for new posts. New posts wait in the inbox for the moderator, except on the very first
 // check, when what the Insights page already showed goes straight on: its built-in list, and YouTube's uploads.
@@ -67,11 +67,42 @@ async function importFrom(source: Source, fetchItems: () => Promise<SourceItem[]
 /** The first time: copies the page's built-in list in as approved posts, so nothing on the page changes. Returns
  *  whether it did. */
 export async function startInbox(): Promise<boolean> {
-  if (await getSetting("started")) return false;
-  const { blogs, podcasts, videos } = FALLBACK_INSIGHTS;
-  await addItems([...blogs, ...podcasts, ...videos].map(builtInItem), "approved");
+  if (await getSetting("started")) {
+    await repairBlogText();
+    return false;
+  }
+  await addItems(builtInItems(), "approved");
   await setSetting("started", new Date().toISOString());
+  // A new inbox imports blog posts with today's text already.
+  await setSetting(BLOG_TEXT_REPAIRED, new Date().toISOString());
   return true;
+}
+
+const builtInItems = () => {
+  const { blogs, podcasts, videos } = FALLBACK_INSIGHTS;
+  return [...blogs, ...podcasts, ...videos].map(builtInItem);
+};
+
+const BLOG_TEXT_REPAIRED = "repaired:blog-text";
+
+/** Once, for inboxes started before blog summaries were made from the article (October 2026): blog posts imported
+ *  then get the summary and title the importer makes now. A summary the moderator rewrote is left alone (it no
+ *  longer matches the start of the article), and so are the built-in list's own summaries. */
+async function repairBlogText(): Promise<void> {
+  if (await getSetting(BLOG_TEXT_REPAIRED)) return;
+  const builtIn = new Set(builtInItems().map((item) => `${item.source}:${item.externalId}`));
+  for (const item of await listItems()) {
+    if (item.source !== "wordpress" || builtIn.has(`wordpress:${item.externalId}`)) continue;
+    const changes: ItemChanges = {};
+    const title = cleanTitle(item.title);
+    if (title !== item.title) changes.title = title;
+    if (item.content && isFromArticle(item.summary, item.content)) {
+      const summary = articleSummary(item.content);
+      if (summary && summary !== item.summary) changes.summary = summary;
+    }
+    if (changes.title || changes.summary) await changeItem(item.id, changes);
+  }
+  await setSetting(BLOG_TEXT_REPAIRED, new Date().toISOString());
 }
 
 function builtInItem(item: InsightItem): SourceItem {
