@@ -427,7 +427,7 @@ function ChatSessionContent() {
     <div className="min-h-screen bg-slate-50/60 flex flex-col font-sans text-brand-navy">
       <Header />
 
-      <div className="flex-1 pt-24 pb-10 max-w-[1200px] w-full mx-auto px-4 flex flex-col lg:flex-row gap-5">
+      <div className="flex-1 pt-24 lg:pt-32 pb-10 max-w-[1200px] w-full mx-auto px-4 flex flex-col lg:flex-row gap-5">
 
         {/* Chat panel */}
         <main

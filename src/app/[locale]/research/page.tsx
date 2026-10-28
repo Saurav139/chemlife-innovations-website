@@ -71,7 +71,7 @@ export default function ResearchPage() {
       <main className="bg-slate-50/50 min-h-screen text-brand-navy">
         {/* Hero and research list are plain sections: they're in the first screen, so they show without waiting for a fade-in.
             The hero image is the page's largest paint (LCP), so it loads first. */}
-        <section className="pt-26 md:pt-32 pb-10 md:pb-20 lg:pt-36 lg:pb-28 text-white relative overflow-hidden bg-brand-navy flex items-center">
+        <section className="pt-28 md:pt-36 pb-10 md:pb-20 lg:pt-44 lg:pb-28 text-white relative overflow-hidden bg-brand-navy flex items-center">
           <div className="absolute inset-0 z-0">
             <Image
               src={Images.research.heroBanner}
@@ -158,7 +158,7 @@ export default function ResearchPage() {
                     data-analytics-item={topic.englishTitle}
                     layout
                     transition={{ duration: 0.4, ease: easeOut }}
-                    className="w-full sm:w-[calc(50%-1rem)] lg:w-[calc((100%-4rem)/3)] scroll-mt-28 border-2 border-slate-200 rounded-2xl bg-slate-50/50 hover:bg-slate-50/85 transition-colors duration-300 overflow-hidden shadow-xs hover:border-brand-orange/40 flex flex-col group"
+                    className="w-full sm:w-[calc(50%-1rem)] lg:w-[calc((100%-4rem)/3)] scroll-mt-28 lg:scroll-mt-40 border-2 border-slate-200 rounded-2xl bg-slate-50/50 hover:bg-slate-50/85 transition-colors duration-300 overflow-hidden shadow-xs hover:border-brand-orange/40 flex flex-col group"
                   >
                     {/* Card Header (Image/Banner + Title) */}
                     <div
