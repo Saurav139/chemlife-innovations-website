@@ -220,14 +220,15 @@ export default function HeroVariantA() {
             </a>
 
             {/* Slide dots, centred under the buttons at every width (they used to sit on the right edge on desktop,
-                crowding the Rate Us tab). A 44px-tall tap area around each dot, but narrow, so the row stays compact. */}
+                crowding the Rate Us tab). A 44px-tall tap area around each dot, at least 24px wide (WCAG 2.5.8), so the row stays compact. */}
             <div className="flex mt-3 lg:mt-4">
               {taglines.map((_, i) => (
                 <button
                   key={i}
                   onClick={() => setSlide(i)}
-                  className="py-[18px] px-1.5 flex items-center justify-center"
+                  className="py-[18px] px-2 flex items-center justify-center"
                   aria-label={`${t.home.goToSlide} ${i + 1}`}
+                  aria-current={i === slide ? "true" : undefined}
                 >
                   <span className={`h-2 rounded-full transition-all duration-300 ${i === slide ? "w-6 bg-teal-400" : "w-2 bg-white/40"}`} />
                 </button>

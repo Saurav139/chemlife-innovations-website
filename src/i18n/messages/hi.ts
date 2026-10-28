@@ -167,7 +167,6 @@ const hi: Messages = {
     awards: {
       kicker: "सम्मान",
       title: "पुरस्कार और मान्यता",
-      goTo: "प्रमाणपत्र पर जाएँ",
       items: [
         {
           title: "K-SAP BIO 50 समूह",

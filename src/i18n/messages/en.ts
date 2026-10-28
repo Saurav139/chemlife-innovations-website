@@ -166,7 +166,6 @@ const en = {
     awards: {
       kicker: "Honors",
       title: "Awards & Recognition",
-      goTo: "Go to certificate",
       items: [
         {
           title: "K-SAP BIO 50 Cohort",

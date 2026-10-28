@@ -154,7 +154,9 @@ export default function AwardsRecognition() {
                     onClick={() => setActiveStep(i)}
                     className="relative flex flex-col items-center justify-between h-full cursor-pointer"
                     style={{ width: `${100 / certificates.length}%` }}
-                    aria-label={`${t.goTo} ${i + 1}`}
+                    // Starts with the number on the button ("01"), so voice control users can say what they see
+                    aria-label={`0${i + 1}: ${certificates[i].title}`}
+                    aria-current={isActive ? "true" : undefined}
                   >
                      {/* Top cross-tie */}
                      <div className={`w-[2px] h-5 transition-colors duration-500 ${isCompleted ? 'bg-teal-400/70' : isActive ? 'bg-teal-400' : 'bg-teal-400/20'}`} />

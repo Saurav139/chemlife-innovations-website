@@ -167,7 +167,6 @@ const kn: Messages = {
     awards: {
       kicker: "ಗೌರವಗಳು",
       title: "ಪ್ರಶಸ್ತಿಗಳು ಮತ್ತು ಮನ್ನಣೆ",
-      goTo: "ಪ್ರಮಾಣಪತ್ರಕ್ಕೆ ಹೋಗಿ",
       items: [
         {
           title: "K-SAP BIO 50 ತಂಡ",
