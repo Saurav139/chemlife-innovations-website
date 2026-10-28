@@ -37,7 +37,7 @@ export default async function TermsPage({ params }: { params: Promise<{ locale: 
         </section>
 
         <section className="py-16">
-          <div className="max-w-3xl mx-auto px-6 text-slate-600 leading-relaxed">
+          <div className="max-w-3xl mx-auto px-6 text-slate-600 leading-relaxed [overflow-wrap:anywhere]">
             <p>
               These terms apply to your use of chemlifeinnovations.com, including its product information, articles
               and AI chatbots. By using the website you agree to them. If you don&apos;t agree, please don&apos;t use

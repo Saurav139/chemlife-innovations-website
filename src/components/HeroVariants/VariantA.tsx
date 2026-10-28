@@ -169,7 +169,7 @@ export default function HeroVariantA() {
       <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent z-20" />
       <div className="absolute inset-0 bg-black/10 z-20" />
 
-      <div className="relative z-30 max-w-[1200px] mx-auto px-6 pt-28 pb-16 md:py-32 w-full h-full flex flex-col justify-center">
+      <div className="relative z-30 max-w-[1200px] mx-auto px-6 pt-28 pb-28 md:py-32 w-full h-full flex flex-col justify-center">
         {/* w-full: without it, this box has no explicit width, so its auto side margins (for centering)
             stop it from stretching and it shrinks to fit whichever tagline is showing — moving and
             resizing the buttons below it from one slide to the next. */}

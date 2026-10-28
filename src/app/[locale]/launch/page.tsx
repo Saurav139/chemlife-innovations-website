@@ -696,7 +696,7 @@ export default function LaunchPage() {
                       </label>
 
                       {activeQuestion === 0 ? (
-                        <div className="flex gap-3">
+                        <div className="flex flex-col sm:flex-row gap-3">
                           <motion.input
                             type="text"
                             value={inputs[activeQuestion]}
@@ -716,7 +716,7 @@ export default function LaunchPage() {
                             transition={{ duration: 0.5 }}
                             placeholder="Type the decoded word..."
                             disabled={pouringFlask !== null}
-                            className={`flex-grow px-5 py-3 rounded-xl border bg-[#F5F2ED]/50 text-[#305280] focus:outline-none focus:ring-2 focus:ring-[#E65C38]/40 transition-all font-semibold ${
+                            className={`flex-grow min-w-0 px-5 py-3 rounded-xl border bg-[#F5F2ED]/50 text-[#305280] focus:outline-none focus:ring-2 focus:ring-[#E65C38]/40 transition-all font-semibold ${
                               wrongAttempt[activeQuestion]
                                 ? "border-red-500 bg-red-50"
                                 : "border-[#305280]/20 focus:border-[#E65C38]"

@@ -93,7 +93,7 @@ export default async function PrivacyPage({ params }: { params: Promise<{ locale
         </section>
 
         <section className="py-16">
-          <div className="max-w-3xl mx-auto px-6 text-slate-600 leading-relaxed">
+          <div className="max-w-3xl mx-auto px-6 text-slate-600 leading-relaxed [overflow-wrap:anywhere]">
             <p>
               This policy is our notice to you under India&apos;s Digital Personal Data Protection Act, 2023 (the
               &ldquo;DPDP Act&rdquo;) and the Digital Personal Data Protection Rules, 2025. It explains what personal
