@@ -66,15 +66,16 @@ export default function Header() {
     >
       <div className="max-w-[1200px] mx-auto pr-6 pl-2">
         <div className="flex items-center justify-between gap-6 h-18 md:h-20 lg:h-24">
+          {/* Demo: the original stacked logo (logo.jpg), for comparison against the horizontal one. */}
           <a href={href("/")} className="flex-shrink-0">
             <Image
-              src={Images.branding.logoHorizontal}
+              src={Images.branding.logo}
               alt="ChemLife Innovations"
-              width={653}
-              height={240}
-              sizes="174px"
+              width={1021}
+              height={1024}
+              sizes="80px"
               loading="eager"
-              className="h-12 md:h-14 xl:h-16 w-auto"
+              className="h-14 md:h-16 xl:h-20 w-auto py-1"
             />
           </a>
 
