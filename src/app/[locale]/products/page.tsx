@@ -167,7 +167,9 @@ export default function ProductsPage() {
 
             {/* Left-Aligned Search and Category Selector Container */}
             <div className="flex flex-col md:flex-row items-center gap-4 mb-10 w-full">
-              <div className={`flex items-center bg-slate-50 border border-slate-200 rounded-full shadow-xs text-sm w-full md:max-w-xl ${activeStyle.focus} focus-within:ring-1 transition-all duration-300 relative`}>
+              {/* Phones: the species filter gets its own row, so the search box has room for its placeholder */}
+              <div className={`flex flex-col sm:flex-row sm:items-center bg-slate-50 border border-slate-200 rounded-3xl sm:rounded-full shadow-xs text-sm w-full md:max-w-xl ${activeStyle.focus} focus-within:ring-1 transition-all duration-300 relative`}>
+                <div className="flex items-center flex-1 min-w-0">
                 {/* Search Icon */}
                 <div className={`pl-4 ${activeStyle.icon} flex-shrink-0 transition-colors duration-300`}>
                   <svg aria-hidden="true" className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -183,7 +185,7 @@ export default function ProductsPage() {
                   placeholder={t.search}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-transparent border-0 px-3 py-3 text-brand-navy placeholder-slate-aa focus:outline-none focus:ring-0 text-base md:text-sm [&::-webkit-search-cancel-button]:appearance-none"
+                  className="w-full min-w-0 bg-transparent border-0 px-3 py-3 text-brand-navy placeholder-slate-aa focus:outline-none focus:ring-0 text-base md:text-sm [&::-webkit-search-cancel-button]:appearance-none"
                 />
 
                 {/* Clear Search Button */}
@@ -199,16 +201,18 @@ export default function ProductsPage() {
                   </button>
                 )}
 
+                </div>
+
                 {/* Vertical Divider Line */}
-                <div className="h-6 w-[1px] bg-slate-200 flex-shrink-0" />
+                <div className="hidden sm:block h-6 w-[1px] bg-slate-200 flex-shrink-0" />
 
                 {/* Category Dropdown Selector inside Search Bar */}
-                <div className="relative flex-shrink-0">
+                <div className="relative flex-shrink-0 border-t border-slate-200 sm:border-t-0">
                   <select
                     aria-label={t.filterBySpecies}
                     value={selectedCategory}
                     onChange={(e) => setSelectedCategory(e.target.value)}
-                    className="appearance-none bg-transparent pl-4 pr-10 py-3.5 font-semibold text-base md:text-xs text-slate-600 focus:outline-none cursor-pointer"
+                    className="w-full sm:w-auto appearance-none bg-transparent pl-4 pr-10 py-3.5 font-semibold text-base md:text-xs text-slate-600 focus:outline-none cursor-pointer"
                   >
                     {categories.map((category) => (
                       <option key={category} value={category} className="text-brand-navy font-semibold">

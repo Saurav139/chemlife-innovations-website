@@ -216,7 +216,7 @@ function BotBubble({
   onRetry?: () => void;
 }) {
   return (
-    <div className="flex items-start gap-3">
+    <div className="flex items-start gap-2 sm:gap-3">
       <div className="w-8 h-8 rounded-full border border-slate-200 overflow-hidden flex-shrink-0 flex items-center justify-center bg-white shadow-xs">
         <img src={image} alt={name} className="w-full h-full object-contain" />
       </div>
@@ -427,7 +427,7 @@ function ChatSessionContent() {
     <div className="min-h-screen bg-slate-50/60 flex flex-col font-sans text-brand-navy">
       <Header />
 
-      <div className="flex-1 pt-24 pb-10 max-w-[1200px] w-full mx-auto px-4 flex flex-col lg:flex-row gap-5">
+      <div className="flex-1 pt-24 pb-10 max-w-[1200px] w-full mx-auto px-3 sm:px-4 flex flex-col lg:flex-row gap-5">
 
         {/* Chat panel */}
         <main
@@ -466,7 +466,7 @@ function ChatSessionContent() {
           </div>
 
           {/* Messages area */}
-          <div ref={messagesRef} className="flex-1 overflow-y-auto px-5 py-5 space-y-4 scroll-smooth">
+          <div ref={messagesRef} className="flex-1 overflow-y-auto px-3 sm:px-5 py-5 space-y-4 scroll-smooth">
             <BotBubble image={meta.image} name={meta.name} content={greetingMessage} accentBgLight={meta.accentBgLight} accentBorder={meta.accentBorder} isGreeting={true} />
             {messages.map((msg, i) =>
               msg.role === "user" ? (
@@ -480,7 +480,7 @@ function ChatSessionContent() {
               <BotBubble image={meta.image} name={meta.name} content={chatErrorMessage("not_configured", meta.name)} isError accentBgLight={meta.accentBgLight} accentBorder={meta.accentBorder} />
             )}
             {loading && (
-              <div className="flex items-start gap-3">
+              <div className="flex items-start gap-2 sm:gap-3">
                 <div className="w-8 h-8 rounded-full border border-slate-200 overflow-hidden flex-shrink-0 flex items-center justify-center bg-white shadow-xs animate-pulse">
                   <img src={meta.image} alt={meta.name} className="w-full h-full object-contain" />
                 </div>
