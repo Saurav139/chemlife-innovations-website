@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, MotionConfig } from "framer-motion";
 import Image from "next/image";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -118,7 +118,9 @@ export default function ProductsPage() {
     <VariantProvider>
       <Header />
 
-      <main className="bg-slate-50/50 min-h-screen text-brand-navy">
+      <main id="main" className="bg-slate-50/50 min-h-screen text-brand-navy">
+        {/* Card animations follow the visitor's "reduce motion" setting */}
+        <MotionConfig reducedMotion="user">
         {/* Hero and product list are plain sections: they're in the first screen, so they show without waiting for a fade-in.
             The hero image is the page's largest paint (LCP), so it loads first. */}
         <section className="pt-26 md:pt-32 pb-10 md:pb-20 lg:pt-36 lg:pb-28 text-white relative overflow-hidden bg-brand-navy flex items-center">
@@ -168,7 +170,7 @@ export default function ProductsPage() {
               <div className={`flex items-center bg-slate-50 border border-slate-200 rounded-full shadow-xs text-sm w-full md:max-w-xl ${activeStyle.focus} focus-within:ring-1 transition-all duration-300 relative`}>
                 {/* Search Icon */}
                 <div className={`pl-4 ${activeStyle.icon} flex-shrink-0 transition-colors duration-300`}>
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg aria-hidden="true" className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                   </svg>
                 </div>
@@ -191,7 +193,7 @@ export default function ProductsPage() {
                     aria-label={t.clearSearch}
                     className={`mr-2 text-slate-aa ${activeStyle.accent} transition-colors duration-250 cursor-pointer`}
                   >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg aria-hidden="true" className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                   </button>
@@ -216,7 +218,7 @@ export default function ProductsPage() {
                   </select>
                   {/* Dropdown Chevron Icon */}
                   <div className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-aa pointer-events-none">
-                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg aria-hidden="true" className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" />
                     </svg>
                   </div>
@@ -226,9 +228,15 @@ export default function ProductsPage() {
 
             {/* For screen readers: the product cards (h3) sit under this heading */}
             <h2 className="sr-only">{t.listHeading}</h2>
+            <p className="sr-only" role="status">
+              {searchQuery || selectedCategory !== "All"
+                ? t.resultsCount.replace("{count}", String(filteredProducts.length)).replace("{total}", String(productsData.length))
+                : ""}
+            </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
               {filteredProducts.map((product) => {
                 const isExpanded = expandedId === product.id;
+                const anchor = productAnchor(product.name);
                 const emailSubject = encodeURIComponent(`Product Inquiry: ${product.name}`);
                 const emailBody = encodeURIComponent(
                   `Hi ChemLife Innovations team,\n\nI am writing to inquire about ${product.name}. Please share technical datasheets, pricing, and packaging options.\n\nBest regards,\n[Your Name]\n[Your Company]`
@@ -238,7 +246,7 @@ export default function ProductsPage() {
                 return (
                   <motion.div
                     key={product.id}
-                    id={productAnchor(product.name)}
+                    id={anchor}
                     data-analytics-item={product.name}
                     layout
                     transition={{ duration: 0.4, ease: easeOut }}
@@ -280,7 +288,7 @@ export default function ProductsPage() {
                       {/* Content: Title & Category */}
                       <div className="p-5 flex flex-col gap-2">
                         <div className="flex items-start justify-between gap-3">
-                          <h3 className="font-heading text-lg font-black text-brand-navy group-hover:text-brand-orange-aa transition-colors duration-300 leading-tight">
+                          <h3 id={`${anchor}-name`} className="font-heading text-lg font-black text-brand-navy group-hover:text-brand-orange-aa transition-colors duration-300 leading-tight">
                             {product.name}
                           </h3>
 
@@ -300,17 +308,25 @@ export default function ProductsPage() {
                           </p>
                         )}
 
-                        <div className="flex items-center gap-1.5 text-brand-orange-aa text-sm font-bold mt-2">
+                        {/* A real button, so the card opens from the keyboard and screen readers hear "collapsed"/"expanded".
+                            Its click reaches the card header above, which does the opening. */}
+                        <button
+                          type="button"
+                          aria-expanded={isExpanded}
+                          aria-controls={`${anchor}-details`}
+                          aria-describedby={`${anchor}-name`}
+                          className="flex items-center gap-1.5 w-fit min-h-11 -mt-1 -mb-3 text-brand-orange-aa text-sm font-bold cursor-pointer rounded-md"
+                        >
                           <span>{isExpanded ? t.showLess : t.readMore}</span>
                           <motion.span
                             animate={{ rotate: isExpanded ? 180 : 0 }}
                             transition={{ duration: 0.3 }}
                           >
-                            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg aria-hidden="true" className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" />
                             </svg>
                           </motion.span>
-                        </div>
+                        </button>
                       </div>
                     </div>
 
@@ -318,6 +334,7 @@ export default function ProductsPage() {
                     <AnimatePresence initial={false}>
                       {isExpanded && (
                         <motion.div
+                          id={`${anchor}-details`}
                           initial={{ height: 0 }}
                           animate={{ height: "auto" }}
                           exit={{ height: 0 }}
@@ -327,9 +344,9 @@ export default function ProductsPage() {
                           <div className="p-5 space-y-5">
                             {/* About section */}
                             <div>
-                              <span className="text-xs font-black uppercase text-teal-aa tracking-wider block mb-1.5">
+                              <h4 className="text-xs font-black uppercase text-teal-aa tracking-wider block mb-1.5">
                                 {t.about}
-                              </span>
+                              </h4>
                               <p className="text-slate-600 text-sm leading-relaxed whitespace-pre-line">
                                 {product.about}
                               </p>
@@ -338,9 +355,9 @@ export default function ProductsPage() {
                             {/* Variants section */}
                             {product.variants && product.variants.length > 0 && (
                               <div>
-                                <span className="text-xs font-black uppercase text-teal-aa tracking-wider block mb-1.5">
+                                <h4 className="text-xs font-black uppercase text-teal-aa tracking-wider block mb-1.5">
                                   {t.variants}
-                                </span>
+                                </h4>
                                 <ul className="grid grid-cols-1 gap-1.5 text-slate-600 text-sm font-semibold">
                                   {product.variants.map((variant, index) => (
                                     <li key={index} className="flex items-center gap-2">
@@ -354,13 +371,13 @@ export default function ProductsPage() {
 
                             {/* Key Features section */}
                             <div>
-                              <span className="text-xs font-black uppercase text-teal-aa tracking-wider block mb-2">
+                              <h4 className="text-xs font-black uppercase text-teal-aa tracking-wider block mb-2">
                                 {t.features}
-                              </span>
+                              </h4>
                               <ul className="space-y-2">
                                 {product.features.map((feature, idx) => (
                                   <li key={idx} className="flex items-start gap-2 text-slate-600 text-sm">
-                                    <svg className="w-3.5 h-3.5 text-brand-orange mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <svg aria-hidden="true" className="w-3.5 h-3.5 text-brand-orange mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7" />
                                     </svg>
                                     <span className="leading-tight">{feature}</span>
@@ -371,15 +388,15 @@ export default function ProductsPage() {
 
                             {/* Usage & Presentation section */}
                             <div className="space-y-3">
-                              <span className="text-xs font-black uppercase text-teal-aa tracking-wider block">
+                              <h4 className="text-xs font-black uppercase text-teal-aa tracking-wider block">
                                 {t.usage}
-                              </span>
+                              </h4>
 
                               <div className="space-y-2.5">
                                 {/* Inclusion rate */}
                                 <div className="flex items-start gap-2.5 p-3 bg-slate-50 rounded-lg border border-slate-100">
                                   <div className="w-7 h-7 rounded-md bg-teal-50 text-teal-aa flex items-center justify-center flex-shrink-0 mt-0.5">
-                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <svg aria-hidden="true" className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
                                     </svg>
                                   </div>
@@ -394,7 +411,7 @@ export default function ProductsPage() {
                                 {/* Pack size */}
                                 <div className="flex items-start gap-2.5 p-3 bg-slate-50 rounded-lg border border-slate-100">
                                   <div className="w-7 h-7 rounded-md bg-teal-50 text-teal-aa flex items-center justify-center flex-shrink-0 mt-0.5">
-                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <svg aria-hidden="true" className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                                     </svg>
                                   </div>
@@ -413,7 +430,7 @@ export default function ProductsPage() {
                               href={emailHref}
                               className="w-full py-3 px-4 rounded-xl bg-brand-orange-aa hover:bg-brand-navy text-white text-sm font-semibold transition-all duration-300 shadow-sm hover:shadow flex items-center justify-center gap-2 group/btn cursor-pointer"
                             >
-                              <svg className="w-3.5 h-3.5 text-white group-hover/btn:translate-x-0.5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <svg aria-hidden="true" className="w-3.5 h-3.5 text-white group-hover/btn:translate-x-0.5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                               </svg>
                               {t.enquire} {product.name}
@@ -444,6 +461,7 @@ export default function ProductsPage() {
             </div>
           </div>
         </section>
+        </MotionConfig>
       </main>
 
       <Footer />

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, MotionConfig } from "framer-motion";
 import Image from "next/image";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -68,7 +68,9 @@ export default function ResearchPage() {
     <VariantProvider>
       <Header />
 
-      <main className="bg-slate-50/50 min-h-screen text-brand-navy">
+      <main id="main" className="bg-slate-50/50 min-h-screen text-brand-navy">
+        {/* Card animations follow the visitor's "reduce motion" setting */}
+        <MotionConfig reducedMotion="user">
         {/* Hero and research list are plain sections: they're in the first screen, so they show without waiting for a fade-in.
             The hero image is the page's largest paint (LCP), so it loads first. */}
         <section className="pt-26 md:pt-32 pb-10 md:pb-20 lg:pt-36 lg:pb-28 text-white relative overflow-hidden bg-brand-navy flex items-center">
@@ -131,7 +133,7 @@ export default function ResearchPage() {
                     aria-label={t.clearSearch}
                     className="mr-4 text-slate-aa hover:text-teal-aa transition-colors duration-250 cursor-pointer"
                   >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg aria-hidden="true" className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                   </button>
@@ -141,10 +143,16 @@ export default function ResearchPage() {
 
             {/* For screen readers: the topic cards (h3) sit under this heading */}
             <h2 className="sr-only">{t.listHeading}</h2>
+            <p className="sr-only" role="status">
+              {searchQuery
+                ? t.resultsCount.replace("{count}", String(filteredTopics.length)).replace("{total}", String(researchTopics.length))
+                : ""}
+            </p>
             {/* Research Grid: a wrapping row, so an incomplete last row is centred instead of leaving an empty slot */}
             <div className="flex flex-wrap justify-center gap-8 items-start">
               {filteredTopics.map((topic) => {
                 const isExpanded = expandedId === topic.id;
+                const anchor = researchAnchor(topic.englishTitle);
                 const emailSubject = encodeURIComponent(`Collaboration Inquiry: ${topic.englishTitle}`);
                 const emailBody = encodeURIComponent(
                   `Dear ChemLife Innovations R&D Team,\n\nI am interested in learning more about your research pipeline: "${topic.englishTitle}". Please share publication details, trial results, and potential partnership scopes.\n\nBest regards,\n[Your Name]\n[Your Institution/Company]`
@@ -154,7 +162,7 @@ export default function ResearchPage() {
                 return (
                   <motion.div
                     key={topic.id}
-                    id={researchAnchor(topic.englishTitle)}
+                    id={anchor}
                     data-analytics-item={topic.englishTitle}
                     layout
                     transition={{ duration: 0.4, ease: easeOut }}
@@ -188,7 +196,7 @@ export default function ResearchPage() {
 
                       {/* Content: Title */}
                       <div className="p-6 flex flex-col gap-3">
-                        <h3 className="font-heading text-xl sm:text-2xl font-black text-brand-navy group-hover:text-brand-orange transition-colors duration-300 leading-tight">
+                        <h3 id={`${anchor}-name`} className="font-heading text-xl sm:text-2xl font-black text-brand-navy group-hover:text-brand-orange transition-colors duration-300 leading-tight">
                           {topic.title}
                         </h3>
 
@@ -198,17 +206,25 @@ export default function ResearchPage() {
                           </p>
                         )}
 
-                        <div className="flex items-center gap-1.5 text-brand-orange-aa text-sm font-bold pt-2">
+                        {/* A real button, so the card opens from the keyboard and screen readers hear "collapsed"/"expanded".
+                            Its click reaches the card header above, which does the opening. */}
+                        <button
+                          type="button"
+                          aria-expanded={isExpanded}
+                          aria-controls={`${anchor}-details`}
+                          aria-describedby={`${anchor}-name`}
+                          className="flex items-center gap-1.5 w-fit min-h-11 -mt-1 -mb-3 text-brand-orange-aa text-sm font-bold cursor-pointer rounded-md"
+                        >
                           <span>{isExpanded ? t.showLess : t.readMore}</span>
                           <motion.span
                             animate={{ rotate: isExpanded ? 180 : 0 }}
                             transition={{ duration: 0.3 }}
                           >
-                            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg aria-hidden="true" className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" />
                             </svg>
                           </motion.span>
-                        </div>
+                        </button>
                       </div>
                     </div>
 
@@ -216,6 +232,7 @@ export default function ResearchPage() {
                     <AnimatePresence initial={false}>
                       {isExpanded && (
                         <motion.div
+                          id={`${anchor}-details`}
                           initial={{ height: 0 }}
                           animate={{ height: "auto" }}
                           exit={{ height: 0 }}
@@ -225,9 +242,9 @@ export default function ResearchPage() {
                           <div className="p-6 space-y-5">
                             {/* Summary section */}
                             <div>
-                              <span className="text-xs font-bold uppercase text-teal-655 tracking-wider block mb-1.5">
+                              <h4 className="text-xs font-bold uppercase text-teal-655 tracking-wider block mb-1.5">
                                 {t.overview}
-                              </span>
+                              </h4>
                               <p className="text-slate-655 text-sm lg:text-base leading-relaxed font-light">
                                 {topic.preview}
                               </p>
@@ -235,9 +252,9 @@ export default function ResearchPage() {
 
                             {/* Challenge section */}
                             <div>
-                              <span className="text-xs font-bold uppercase text-teal-655 tracking-wider block mb-1.5">
+                              <h4 className="text-xs font-bold uppercase text-teal-655 tracking-wider block mb-1.5">
                                 {t.challenge}
-                              </span>
+                              </h4>
                               <p className="text-slate-655 text-sm lg:text-base leading-relaxed font-light">
                                 {topic.challenge}
                               </p>
@@ -245,9 +262,9 @@ export default function ResearchPage() {
 
                             {/* Efficacy & Advantage section */}
                             <div>
-                              <span className="text-xs font-bold uppercase text-teal-655 tracking-wider block mb-1.5">
+                              <h4 className="text-xs font-bold uppercase text-teal-655 tracking-wider block mb-1.5">
                                 {t.advantage}
-                              </span>
+                              </h4>
                               <p className="text-slate-655 text-sm lg:text-base leading-relaxed font-light">
                                 {topic.advantage}
                               </p>
@@ -256,9 +273,9 @@ export default function ResearchPage() {
                             {/* Target Applications (if any) */}
                             {topic.applications && (
                               <div>
-                                <span className="text-xs font-bold uppercase text-teal-655 tracking-wider block mb-1.5">
+                                <h4 className="text-xs font-bold uppercase text-teal-655 tracking-wider block mb-1.5">
                                   {t.applications}
-                                </span>
+                                </h4>
                                 <p className="text-slate-655 text-sm lg:text-base leading-relaxed font-light">
                                   {topic.applications}
                                 </p>
@@ -268,9 +285,9 @@ export default function ResearchPage() {
                             {/* Recognition & Support (if any) */}
                             {topic.recognition && (
                               <div className="bg-teal-50/70 border border-teal-150 p-3.5 rounded-xl">
-                                <span className="text-xs font-bold uppercase text-teal-800 tracking-wider block mb-1">
+                                <h4 className="text-xs font-bold uppercase text-teal-800 tracking-wider block mb-1">
                                   {t.recognition}
-                                </span>
+                                </h4>
                                 <p className="text-teal-700 text-sm lg:text-base leading-relaxed font-black">
                                   {topic.recognition}
                                 </p>
@@ -329,6 +346,7 @@ export default function ResearchPage() {
 
           </div>
         </section>
+        </MotionConfig>
       </main>
 
       <Footer />
