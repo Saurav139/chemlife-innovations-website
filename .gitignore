@@ -53,3 +53,7 @@ __pycache__/
 /*.webp
 /*.avif
 /*.mp4
+
+# Python bytecode
+__pycache__/
+*.pyc

@@ -38,11 +38,7 @@ export const Images = {
   products: {
     heroBanner: "/images/products/products_hero_banner.png",
     heroBg: "/images/products/products-hero-bg.png",
-    packagesBg: "/images/products/products-packages-bg.png",
     customBg: "/images/products/products-custom-bg.jpg",
-    monoGastric: "/images/products/mono_gastric.png",
-    ruminants: "/images/products/ruminants.jpg",
-    chemdmold: "/images/products/chemdmold.jpg",
     /** Category overview images (used on home/what-we-do) */
     categoryMono: "/images/products/product-mono.png",
     categoryRumi: "/images/products/product-rumi.png",
@@ -97,7 +93,6 @@ export const Images = {
     foundersNew: "/images/people/founders_new.jpg",
     leaderRadhakrishna: "/images/people/leader_radhakrishna.jpg",
     leaderSharada: "/images/people/leader_sharada.jpg",
-    leaderSneha: "/images/people/leader_sneha.jpg",
     leaderSneehaCropped: "/images/people/leader_sneha_cropped.jpg",
     leaderShankar: "/images/people/leader_shankar.png",
   },
@@ -105,15 +100,11 @@ export const Images = {
   /** R&D / science imagery */
   research: {
     heroBanner: "/images/research/research_hero_banner.png",
-    anbiotBanner: "/images/research/research_anbiot_banner.png",
-    chelationBanner: "/images/research/research_chelation_banner.png",
     anbiot: "/images/research/anbiot.png",
-    anbiotJpg: "/images/research/anbiot.jpg",
     greenTechnology: "/images/research/green_technology.png",
     microencapsulation: "/images/research/microencapsulation.png",
     nanoTraceMineral: "/images/research/nano_trace_mineral.jpg",
     natureIdenticalBio: "/images/research/nature_identical_bio.png",
-    capsuleDelivery: "/images/research/capsule_delivery.png",
     pellets: "/images/research/pellets.webp",
     /** General research/lab photo used in process steps and blog thumbnails */
     researchImage: "/images/research/research_image.jpeg",
@@ -127,10 +118,6 @@ export const Images = {
     developmentImage: "/images/process/development_image.jpeg",
     manufacturingImage: "/images/process/manufacturing_image.jpeg",
     delivery: "/images/process/process-delivery.png",
-    deliveryCrop: "/images/process/process-delivery_crop.png",
-    processResearch: "/images/process/process-research.png",
-    processDevelopment: "/images/process/process-development.png",
-    processManufacturing: "/images/process/process-manufacturing.png",
   },
 
   /** Careers section role background images */
@@ -156,7 +143,6 @@ export const Images = {
   social: {
     image2: "/images/social/social2.jpeg",
     image3: "/images/social/social3.jpeg",
-    helpingPeople: "/images/social/helping-people.gif",
   },
 
   /** Chat bot mascot images */
@@ -224,11 +210,6 @@ export const Images = {
     animalHusbandry: "/images/awards/animal-husbandry.png",
     birac: "/images/awards/birac.png",
     naarm: "/images/awards/naarm.png",
-    award1: "/images/awards/1awaard.png",
-    award2: "/images/awards/2award.png",
-    award3: "/images/awards/3award.png",
-    award4: "/images/awards/4award.png",
-    award5: "/images/awards/5award.png",
   },
 
   /** Testimonial company logos */
@@ -244,8 +225,6 @@ export const Images = {
 // ---------------------------------------------------------------------------
 
 export const Videos = {
-  /** Full-page hero background video */
-  farmBg: "/videos/farm-bg.mp4",
   /** CSR / social responsibility video */
   social1: "/videos/social1.mp4",
   /** Company trip / life-at-chemlife videos */
