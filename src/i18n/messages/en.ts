@@ -69,6 +69,7 @@ const en = {
   },
 
   common: {
+    skipToContent: "Skip to main content",
     rateUs: "Rate Us",
     rateUsLabel: "Rate us on Google",
     hideRateUs: "Hide the Rate us button",
@@ -273,6 +274,7 @@ const en = {
     enquire: "Enquire about",
     readMore: "Learn More",
     showLess: "Show Less",
+    resultsCount: "Showing {count} of {total} products",
     noResults: "No products match your search query.",
     bannerAlt: "banner",
     iconAlt: "icon",
@@ -520,6 +522,7 @@ const en = {
     intro: "Science-backed studies and platforms formulated for superior bioavailability, green chelation, and stable animal nutrition.",
     search: "Search research pipeline...",
     clearSearch: "Clear search",
+    resultsCount: "Showing {count} of {total} research topics",
     noResults: "No research topics match your search.",
     overview: "Executive Summary",
     challenge: "Core Challenge",

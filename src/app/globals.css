@@ -111,6 +111,11 @@
     outline-offset: 2px;
   }
 
+  /* The skip link moves focus to <main> (tabindex -1) so Tab continues from there; no outline around the whole page. */
+  main[tabindex="-1"]:focus {
+    outline: none;
+  }
+
   ::selection {
     background-color: rgb(20 184 166 / 0.2);
     color: var(--color-brand-navy);

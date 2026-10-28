@@ -45,7 +45,7 @@ export default function RatingWidget() {
 
   return (
     // On every screen size it waits until the visitor scrolls. `invisible` while hidden also takes it out of the tab order.
-    <div className={`fixed right-0 top-1/2 -translate-y-1/2 z-50 flex items-start select-none font-sans transition-all duration-300 ${shown ? "opacity-100 translate-x-0 visible" : "opacity-0 translate-x-full invisible"}`}>
+    <aside aria-label={t.common.rateUsLabel} className={`fixed right-0 top-1/2 -translate-y-1/2 z-50 flex items-start select-none font-sans transition-all duration-300 ${shown ? "opacity-100 translate-x-0 visible" : "opacity-0 translate-x-full invisible"}`}>
       {/* Hide button: a small × badge on the tab's top-left corner, inside a 44px tap area. */}
       <button
         type="button"
@@ -69,13 +69,13 @@ export default function RatingWidget() {
         aria-label={t.common.rateUsLabel}
       >
         {/* Star Icon */}
-        <svg className="w-5 h-5 animate-pulse text-yellow-300 fill-current" viewBox="0 0 20 20">
+        <svg className="w-5 h-5 motion-safe:animate-pulse text-yellow-300 fill-current" viewBox="0 0 20 20" aria-hidden="true">
           <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
         </svg>
         <span className="text-[11px] font-black uppercase tracking-widest [writing-mode:vertical-lr] rotate-180">
           {t.common.rateUs}
         </span>
       </a>
-    </div>
+    </aside>
   );
 }

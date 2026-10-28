@@ -20,14 +20,16 @@ export default function Home() {
   return (
     <VariantProvider>
       <Header />
-      <HeroVariantA />
-      <WhoWeAre />
-      <HowWeDo />
-      <AwardsRecognition />
-      <LifeAtChemLife />
-      <ClientMarquee />
-      <TestimonialCarousel />
-      <SocialResponsibilities />
+      <main id="main">
+        <HeroVariantA />
+        <WhoWeAre />
+        <HowWeDo />
+        <AwardsRecognition />
+        <LifeAtChemLife />
+        <ClientMarquee />
+        <TestimonialCarousel />
+        <SocialResponsibilities />
+      </main>
       <Footer />
       <ChatOverlay />
       <SiteSearch />

@@ -70,6 +70,7 @@ const hi: Messages = {
   },
 
   common: {
+    skipToContent: "मुख्य सामग्री पर जाएँ",
     rateUs: "रेटिंग दें",
     rateUsLabel: "Google पर हमें रेटिंग दें",
     hideRateUs: "‘रेटिंग दें’ बटन छिपाएँ",
@@ -274,6 +275,7 @@ const hi: Messages = {
     enquire: "पूछताछ करें:",
     readMore: "और जानें",
     showLess: "कम दिखाएँ",
+    resultsCount: "{total} में से {count} उत्पाद दिखाए जा रहे हैं",
     noResults: "आपकी खोज से कोई उत्पाद मेल नहीं खाता।",
     bannerAlt: "बैनर",
     iconAlt: "आइकन",
@@ -521,6 +523,7 @@ const hi: Messages = {
     intro: "बेहतर जैव-उपलब्धता, हरित केलेशन और स्थिर पशु पोषण के लिए विज्ञान पर आधारित अध्ययन और प्लेटफ़ॉर्म।",
     search: "अनुसंधान खोजें...",
     clearSearch: "खोज साफ़ करें",
+    resultsCount: "{total} में से {count} शोध विषय दिखाए जा रहे हैं",
     noResults: "आपकी खोज से कोई शोध विषय मेल नहीं खाता।",
     overview: "सारांश",
     challenge: "मुख्य चुनौती",

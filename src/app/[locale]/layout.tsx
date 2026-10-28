@@ -4,6 +4,7 @@ import { preload } from "react-dom";
 import "../fonts.css";
 import "../globals.css";
 import RatingWidget from "@/components/RatingWidget";
+import SkipLink from "@/components/SkipLink";
 import AnalyticsLoader from "@/components/AnalyticsLoader";
 import { GA_ID } from "@/lib/analytics";
 import { SITE_URL, pageMetadata } from "@/lib/seo";
@@ -64,6 +65,7 @@ export default async function RootLayout({
       </head>
       <body>
         <LocaleProvider locale={locale} messages={messages}>
+          <SkipLink />
           {children}
           <RatingWidget />
           {/* Without a GA ID, the banner and GA code are neither rendered nor downloaded. */}
