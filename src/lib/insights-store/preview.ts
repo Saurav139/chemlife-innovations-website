@@ -2,7 +2,7 @@ import { lookup } from "node:dns/promises";
 import { isIP } from "node:net";
 import { IMAGE_TYPES, findItem, saveImage } from "./db";
 import { WORDPRESS_SITE, fetchWordPressPost, fetchYouTubeVideos } from "./sources";
-import { decodeEntities, linkedinActivityDate, linkedinActivityId, normalizeUrl, summarizeDescription, titleFromCaption } from "./text";
+import { cleanTitle, decodeEntities, linkedinActivityDate, linkedinActivityId, normalizeUrl, summarizeDescription, titleFromCaption } from "./text";
 import type { InboxItem, SourceItem } from "./types";
 
 // "Add a post": the moderator pastes a link and gets a filled-in card to check before adding it. Only the
@@ -63,7 +63,7 @@ async function youtubePreview(url: URL, notes: string[]): Promise<SourceItem> {
   if (!res.ok) throw new Error("YouTube doesn't know that video, or it isn't public.");
   const { title } = (await res.json()) as { title: string };
   notes.push("Add a short description, and check the date: YouTube's key isn't set, so only the title was filled in.");
-  return { source: "youtube", externalId: id, kind: "Video", title, summary: "", url: `https://www.youtube.com/watch?v=${id}`, youtubeId: id, meta: "Video", publishedAt: new Date() };
+  return { source: "youtube", externalId: id, kind: "Video", title: cleanTitle(title), summary: "", url: `https://www.youtube.com/watch?v=${id}`, youtubeId: id, meta: "Video", publishedAt: new Date() };
 }
 
 async function linkedinPreview(url: URL, notes: string[]): Promise<SourceItem> {
@@ -91,7 +91,7 @@ async function linkedinPreview(url: URL, notes: string[]): Promise<SourceItem> {
   // for a shared article.
   const parts = (meta["og:title"] ?? "").split(" | ");
   while (parts.length > 1 && /linkedin|posted on the topic|chemlife innovations/i.test(parts[parts.length - 1])) parts.pop();
-  const title = parts.join(" | ").trim();
+  const title = cleanTitle(parts.join(" | "));
   const text = htmlText(html.match(/<p[^>]*data-test-id="main-feed-activity-card__commentary"[^>]*>([\s\S]*?)<\/p>/)?.[1] ?? "") || meta["og:description"] || meta.description || "";
   const published = html.match(/"datePublished":"([^"]+)"/)?.[1];
   if (!title) notes.push("LinkedIn didn't give this post a title. Write a short one.");
@@ -135,7 +135,7 @@ async function pagePreview(url: URL, source: "instagram" | "link", notes: string
   if (!published) notes.push("Check the date: the page doesn't say when it was published, so it's set to today.");
   return {
     ...base,
-    title: source === "instagram" ? titleFromCaption(caption, "Instagram post") : (meta["og:title"] ?? html.match(/<title>([^<]*)<\/title>/i)?.[1] ?? "").trim(),
+    title: source === "instagram" ? titleFromCaption(caption, "Instagram post") : cleanTitle(meta["og:title"] ?? html.match(/<title>([^<]*)<\/title>/i)?.[1] ?? ""),
     summary: summarizeDescription(caption.replace(/#\S+/g, "")),
     content: caption,
     imageUrl: meta["og:image"],

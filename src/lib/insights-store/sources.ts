@@ -1,6 +1,6 @@
 import { Images } from "@/lib/assets";
 import type { Kind, SourceItem } from "./types";
-import { decodeEntities, htmlToText, normalizeUrl, readingTime, summarizeDescription, titleFromCaption } from "./text";
+import { articleSummary, cleanTitle, clip, decodeEntities, htmlToText, isFromArticle, normalizeUrl, readingTime, summarizeDescription, titleFromCaption } from "./text";
 
 // Reading posts from ChemLife's channels. Each function returns the latest posts, newest first, or null when the
 // channel isn't set up (no key in the environment).
@@ -69,7 +69,7 @@ function youtubeItem(video: YouTubeVideo): SourceItem | null {
     source: "youtube",
     externalId: video.id,
     kind: (isPodcast ? "Podcast" : "Video") as Kind,
-    title: snippet.title || "YouTube Video",
+    title: cleanTitle(snippet.title || "YouTube Video"),
     summary: summarizeDescription(snippet.description ?? "") || "ChemLife Innovations YouTube upload details.",
     content: snippet.description ?? "",
     url: `https://www.youtube.com/watch?v=${video.id}`,
@@ -114,6 +114,8 @@ export async function fetchWordPressPost(url: string): Promise<SourceItem | null
 function wordpressItem(post: WordPressPost): SourceItem {
   const content = htmlToText(post.content.rendered);
   const excerpt = htmlToText(post.excerpt.rendered).replace(/\s*\[(…|&hellip;|\.\.\.)\]\s*$/, "…");
+  // WordPress's automatic excerpt runs headings into the text after them, so make one from the article instead. An
+  // excerpt written for the post is kept.
   // The featured picture, else the article's first picture, else a stock farm photo.
   const firstPicture = post.content.rendered.match(/<img[^>]+src="([^"]+)"/i)?.[1];
   const picture = post.jetpack_featured_media_url || (firstPicture ? firstPicture.split("?")[0] : "");
@@ -121,8 +123,8 @@ function wordpressItem(post: WordPressPost): SourceItem {
     source: "wordpress",
     externalId: normalizeUrl(post.link),
     kind: "Blog",
-    title: decodeEntities(post.title.rendered.replace(/<[^>]+>/g, "")).replace(/\s+/g, " ").trim(),
-    summary: excerpt.length > 220 ? excerpt.slice(0, 217).trimEnd() + "…" : excerpt,
+    title: cleanTitle(decodeEntities(post.title.rendered.replace(/<[^>]+>/g, "")).replace(/\s+/g, " ")),
+    summary: !excerpt || isFromArticle(excerpt, content) ? articleSummary(content) : clip(excerpt, 220),
     content,
     url: post.link,
     imageUrl: picture || Images.gallery.rotate21,

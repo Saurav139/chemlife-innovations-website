@@ -73,3 +73,13 @@ export function parseNewItem(body: Record<string, unknown>): SourceItem | string
     publishedAt: Number.isNaN(publishedAt.getTime()) ? new Date() : publishedAt,
   };
 }
+
+/** A bulk decision: { ids: [1, 2, 3], status }. */
+export function parseBulk(body: Record<string, unknown>): { ids: number[]; status: Status } | string {
+  if (!STATUSES.includes(body.status as Status)) return "Unknown status.";
+  if (!Array.isArray(body.ids) || body.ids.length === 0) return "Choose at least one post.";
+  if (body.ids.length > 500) return "That's too many posts at once.";
+  const ids = [...new Set(body.ids.map(Number))];
+  if (!ids.every((id) => Number.isInteger(id) && id > 0)) return "Unknown post.";
+  return { ids, status: body.status as Status };
+}

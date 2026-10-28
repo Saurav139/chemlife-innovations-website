@@ -1,7 +1,9 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import InsightCardContent, { INSIGHT_CARD_CLASS } from "@/components/InsightCard";
 import { Images } from "@/lib/assets";
+import { insightCard } from "@/lib/insights-store/card";
 import type { InboxItem, ItemChanges, Kind, Source, SourceItem, SourceState, Status, SyncResult } from "@/lib/insights-store/types";
 
 // The Insights inbox: posts from ChemLife's channels wait under "Waiting" until the moderator adds them to the
@@ -19,16 +21,19 @@ interface Preview {
   notes: string[];
 }
 
-const SOURCE_LABEL: Record<Source, string> = { youtube: "YouTube", wordpress: "Blog", instagram: "Instagram", linkedin: "LinkedIn", link: "Web link" };
+const SOURCE_LABEL: Record<Source, string> = { youtube: "YouTube", wordpress: "WordPress", instagram: "Instagram", linkedin: "LinkedIn", link: "Web link" };
 const CHANNELS: Source[] = ["youtube", "wordpress", "instagram", "linkedin"];
 type Tab = Status | "featured";
-const TABS: { id: Tab; label: string; empty: string }[] = [
-  { id: "pending", label: "Waiting", empty: "Nothing is waiting. New posts appear here after each check." },
-  { id: "approved", label: "On the page", empty: "Nothing is on the Insights page yet." },
-  { id: "featured", label: "Featured", empty: "" },
-  { id: "hidden", label: "Hidden", empty: "Nothing is hidden." },
+/** `short` is the label on phones, where the four tabs share one row. */
+const TABS: { id: Tab; label: string; short: string; empty: string }[] = [
+  { id: "pending", label: "Waiting", short: "Waiting", empty: "Nothing is waiting. New posts appear here after each check." },
+  { id: "approved", label: "On the page", short: "On page", empty: "Nothing is on the Insights page yet." },
+  { id: "featured", label: "Featured", short: "Featured", empty: "" },
+  { id: "hidden", label: "Hidden", short: "Hidden", empty: "Nothing is hidden." },
 ];
 const STATUS_LABEL: Record<Status, string> = { pending: "Waiting", approved: "On the page", hidden: "Hidden" };
+/** A search's matches in another tab: "3 on the page". */
+const MATCHES_IN: Record<Status, string> = { pending: "waiting", approved: "on the page", hidden: "hidden" };
 const KIND_ORDER: Kind[] = ["Blog", "Video", "Podcast"];
 /** How a post leads its type on the Insights page: picked in the inbox, or the newest when nothing is picked. */
 type FeaturedAs = "chosen" | "newest" | null;
@@ -43,11 +48,17 @@ function shorten(title: string) {
   return title.length > 50 ? `${title.slice(0, 48).trimEnd()}…` : title;
 }
 const AUTO_CHECK_AFTER = 10 * 60 * 1000;
+/** Where this browser remembers the moderator's previous visit, for the New marks. */
+const VISIT_KEY = "insights-inbox-last-visit";
 
 const BTN = "inline-flex items-center justify-center gap-1.5 min-h-10 px-4 rounded-full text-sm font-bold transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-default";
 const BTN_PRIMARY = `${BTN} bg-teal-aa hover:bg-teal-700 text-white`;
 const BTN_SECONDARY = `${BTN} border border-slate-300 bg-white hover:border-brand-navy text-brand-navy`;
 const FIELD = "mt-1 w-full rounded-xl border border-slate-300 px-3 py-2.5 text-[15px] focus:outline-none focus:border-teal-aa focus:ring-2 focus:ring-teal-aa/25";
+const CHECKBOX = "h-5 w-5 accent-teal-aa cursor-pointer";
+
+/** Lower case without accents, so a search for "cafe" finds "café". */
+const fold = (text: string) => text.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLowerCase();
 
 function picture(item: { image?: string; imageId?: number | null; imageUrl?: string; youtubeId?: string }) {
   if (item.image) return item.image;
@@ -55,6 +66,13 @@ function picture(item: { image?: string; imageId?: number | null; imageUrl?: str
   if (item.imageUrl) return item.imageUrl;
   if (item.youtubeId) return `https://img.youtube.com/vi/${item.youtubeId}/hqdefault.jpg`;
   return Images.gallery.rotate21;
+}
+
+/** The picture a post's card shows on the Insights page: its own, if it has one (videos show YouTube's instead). */
+function cardPicture(item: { image?: string; imageId?: number | null; imageUrl?: string }) {
+  if (item.image) return item.image;
+  if (item.imageId) return `/api/insights/media/${item.imageId}.jpg`;
+  return item.imageUrl ?? "";
 }
 
 // A small copy from the site's image optimizer, for pictures it may resize (see next.config.ts and
@@ -103,11 +121,15 @@ export default function InsightsInbox({ initial, demo = false }: { initial: Data
   const [tab, setTab] = useState<Tab>("pending");
   const [source, setSource] = useState<Source | "all">("all");
   const [kind, setKind] = useState<Kind | "all">("all");
+  const [query, setQuery] = useState("");
+  const [selected, setSelected] = useState<Set<number>>(new Set());
   const [busy, setBusy] = useState<Set<number>>(new Set());
   const [checking, setChecking] = useState(false);
   const [toast, setToast] = useState<{ text: string; error?: boolean; undo?: () => void } | null>(null);
   const [editing, setEditing] = useState<InboxItem | null>(null);
   const [highlight, setHighlight] = useState<number | null>(null);
+  /** The moderator's previous visit in this browser: posts imported since then are marked New. */
+  const [lastVisit, setLastVisit] = useState<number | null>(null);
   const toastTimer = useRef<number>(0);
 
   // Each type's posts on the Insights page, newest first, as the page orders them (videos and podcasts need a
@@ -165,20 +187,76 @@ export default function InsightsInbox({ initial, demo = false }: { initial: Data
   }
   const act = (item: InboxItem, changes: ItemChanges) => change(item, changes, describe(item, changes));
 
-  const counts = useMemo(() => {
-    const c: Record<Tab, number> = { pending: 0, approved: 0, hidden: 0, featured: 0 };
-    data.items.forEach((item) => c[item.status]++);
-    c.featured = KIND_ORDER.filter((k) => featuredNow[k]).length;
-    return c;
-  }, [data.items, featuredNow]);
-  const shown = data.items.filter(
-    (item) => item.status === tab && (source === "all" || item.source === source) && (kind === "all" || item.kind === kind)
-  );
+  /** The same for a decision about several posts, all from one tab. */
+  function describeMany(items: InboxItem[], status: Status): string {
+    const posts = `${items.length} post${items.length === 1 ? "" : "s"}`;
+    if (status === "approved") {
+      const notes = KIND_ORDER.flatMap((k) => {
+        const lead = items.filter((item) => item.kind === k && becomesFeatured(item)).sort(newer)[0];
+        return lead ? [`“${shorten(lead.title)}” is now the featured ${k.toLowerCase()}.`] : [];
+      });
+      return [`Added ${posts} to the Insights page.`, ...notes].join(" ");
+    }
+    if (status === "hidden" && items[0].status === "approved") {
+      const leaving = new Set(items.map((item) => item.id));
+      const notes = KIND_ORDER.flatMap((k) => {
+        const slot = featuredNow[k];
+        if (!slot || !leaving.has(slot.item.id)) return [];
+        const rest = onPage[k].filter((other) => !leaving.has(other.id));
+        const next = rest.find((other) => other.featured) ?? rest[0];
+        return [next ? `The featured ${k.toLowerCase()} is now “${shorten(next.title)}”.` : `No ${k.toLowerCase()}s are left on the page.`];
+      });
+      return [`Took ${posts} off the Insights page.`, ...notes].join(" ");
+    }
+    if (status === "hidden") return `Hid ${posts}.`;
+    return `Moved ${posts} to Waiting.`;
+  }
+
+  // The search and the channel and type filters apply to every tab, and each tab's number counts what it would list.
+  const words = fold(query).split(/\s+/).filter(Boolean);
+  const filtering = words.length > 0 || source !== "all" || kind !== "all";
+  const matches = (item: InboxItem) =>
+    (source === "all" || item.source === source) &&
+    (kind === "all" || item.kind === kind) &&
+    words.every((word) => fold(`${item.title} ${item.summary} ${item.meta} ${SOURCE_LABEL[item.source]}`).includes(word));
+  const counts: Record<Tab, number> = { pending: 0, approved: 0, hidden: 0, featured: KIND_ORDER.filter((k) => featuredNow[k]).length };
+  for (const item of data.items) if (matches(item)) counts[item.status]++;
+  const shown = tab === "featured" ? [] : data.items.filter((item) => item.status === tab && matches(item));
+  const picked = shown.filter((item) => selected.has(item.id));
+  const allPicked = shown.length > 0 && picked.length === shown.length;
+  const isNew = (item: InboxItem) => lastVisit !== null && Date.parse(item.importedAt) > lastVisit;
+  const newCount = shown.filter(isNew).length;
+  const bulkActions: { label: string; status: Status; primary?: boolean }[] =
+    tab === "pending" ? [{ label: "Add to page", status: "approved", primary: true }, { label: "Hide", status: "hidden" }]
+    : tab === "approved" ? [{ label: "Take off page", status: "hidden" }]
+    : tab === "hidden" ? [{ label: "Add to page", status: "approved", primary: true }, { label: "Move to Waiting", status: "pending" }]
+    : [];
+
+  function openTab(t: Tab) {
+    setTab(t);
+    setSelected(new Set());
+  }
+
+  function clearFilters() {
+    setQuery("");
+    setSource("all");
+    setKind("all");
+    setSelected(new Set());
+  }
 
   function showWaiting(k: Kind) {
-    setTab("pending");
-    setSource("all");
+    openTab("pending");
+    clearFilters();
     setKind(k);
+  }
+
+  function toggle(item: InboxItem) {
+    setSelected((s) => {
+      const next = new Set(s);
+      if (next.has(item.id)) next.delete(item.id);
+      else next.add(item.id);
+      return next;
+    });
   }
 
   function say(text: string, options: { error?: boolean; undo?: () => void } = {}) {
@@ -217,6 +295,37 @@ export default function InsightsInbox({ initial, demo = false }: { initial: Data
     }
   }
 
+  /** Saves one decision for several posts at once; true when it was saved. */
+  async function changeMany(items: InboxItem[], status: Status, done: string, undoable = true): Promise<boolean> {
+    const ids = items.map((item) => item.id);
+    setBusy((b) => new Set([...b, ...ids]));
+    try {
+      const { items: updated } = await api<{ items: InboxItem[] }>("/api/admin/insights", { method: "PATCH", body: JSON.stringify({ ids, status }) });
+      const byId = new Map(updated.map((item) => [item.id, item]));
+      setData((d) => ({ ...d, items: d.items.map((item) => byId.get(item.id) ?? item) }));
+      setSelected(new Set());
+      say(done, undoable ? { undo: () => void undoMany(items) } : {});
+      return true;
+    } catch (error) {
+      say((error as Error).message, { error: true });
+      return false;
+    } finally {
+      setBusy((b) => {
+        const next = new Set(b);
+        ids.forEach((id) => next.delete(id));
+        return next;
+      });
+    }
+  }
+
+  /** Puts posts back as they were before a bulk decision, including the one featured by choice. */
+  async function undoMany(before: InboxItem[]) {
+    const byStatus = new Map<Status, InboxItem[]>();
+    for (const item of before) byStatus.set(item.status, [...(byStatus.get(item.status) ?? []), item]);
+    for (const [status, items] of byStatus) if (!(await changeMany(items, status, "Undone.", false))) return;
+    for (const item of before.filter((item) => item.featured)) await change(item, { featured: true }, "Undone.", false);
+  }
+
   async function check(quiet = false) {
     setChecking(true);
     try {
@@ -234,12 +343,18 @@ export default function InsightsInbox({ initial, demo = false }: { initial: Data
     }
   }
 
-  // Check for new posts when the inbox opens, unless that was done in the last 10 minutes.
+  // When the inbox opens: check for new posts, unless that was done in the last 10 minutes, and note the visit.
   const opened = useRef(false);
   useEffect(() => {
     if (opened.current) return;
     opened.current = true;
     if (!initial.lastSync || Date.now() - Date.parse(initial.lastSync.at) > AUTO_CHECK_AFTER) check(true);
+    try {
+      setLastVisit(Number(localStorage.getItem(VISIT_KEY)) || null);
+      localStorage.setItem(VISIT_KEY, String(Date.now()));
+    } catch {
+      // Private browsing can refuse storage: nothing is marked New then.
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -249,14 +364,14 @@ export default function InsightsInbox({ initial, demo = false }: { initial: Data
   }
 
   function show(item: InboxItem) {
-    setTab(item.status);
-    setSource("all");
-    setKind("all");
+    openTab(item.status);
+    clearFilters();
     setHighlight(item.id);
     window.setTimeout(() => document.getElementById(`post-${item.id}`)?.scrollIntoView({ behavior: "smooth", block: "center" }), 50);
     window.setTimeout(() => setHighlight(null), 2500);
   }
 
+  const searchText = query.trim();
   return (
     <div className="min-h-screen">
       <header className="bg-white border-b border-slate-200">
@@ -285,7 +400,8 @@ export default function InsightsInbox({ initial, demo = false }: { initial: Data
         </p>
       )}
 
-      <main className="max-w-[1100px] mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-6">
+      {/* Room at the bottom for the bar of selected posts, so it never covers the last one */}
+      <main className={`max-w-[1100px] mx-auto px-4 sm:px-6 pt-6 sm:pt-8 space-y-6 ${picked.length ? "pb-40 sm:pb-28" : "pb-6 sm:pb-8"}`}>
         <Channels data={data} checking={checking} onCheck={() => check()} />
         <AddPost
           onAdded={(item) => {
@@ -298,41 +414,81 @@ export default function InsightsInbox({ initial, demo = false }: { initial: Data
         />
 
         <section aria-label="Posts" className="rounded-2xl bg-white border border-slate-200 shadow-sm">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-4 sm:px-6 pt-4 border-b border-slate-200">
-            <div role="tablist" aria-label="Posts by decision" className="flex gap-1 -mb-px overflow-x-auto">
+          {/* The tabs stay at the top of the screen while the list scrolls. On phones the four share one row. */}
+          <div className="sticky top-0 z-20 rounded-t-2xl border-b border-slate-200 bg-white px-1 sm:px-6 sm:pt-4">
+            <div role="tablist" aria-label="Posts by decision" className="grid grid-cols-4 sm:flex sm:gap-1 -mb-px">
               {TABS.map((t) => (
                 <button
                   key={t.id}
                   role="tab"
                   type="button"
                   aria-selected={tab === t.id}
-                  onClick={() => setTab(t.id)}
-                  className={`min-h-11 px-3 sm:px-4 border-b-2 text-sm font-bold whitespace-nowrap cursor-pointer transition-colors ${
+                  onClick={() => openTab(t.id)}
+                  className={`min-h-15 sm:min-h-11 px-1 sm:px-4 border-b-2 flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-0 text-[13px] sm:text-sm font-bold whitespace-nowrap cursor-pointer transition-colors ${
                     tab === t.id ? "border-teal-aa text-teal-aa" : "border-transparent text-slate-500 hover:text-brand-navy"
                   }`}
                 >
-                  {t.id === "featured" && <span aria-hidden="true" className="mr-1 text-amber-500">★</span>}
-                  {t.label}
-                  <span className={`ml-2 inline-flex min-w-6 justify-center rounded-full px-1.5 py-0.5 text-xs ${t.id === "pending" && counts.pending ? "bg-brand-orange-aa text-white" : "bg-slate-100 text-slate-600"}`}>
+                  <span>
+                    {t.id === "featured" && <span aria-hidden="true" className="hidden sm:inline mr-1 text-amber-500">★</span>}
+                    <span className="sm:hidden">{t.short}</span>
+                    <span className="hidden sm:inline">{t.label}</span>
+                  </span>
+                  <span className={`sm:ml-2 inline-flex min-w-6 justify-center rounded-full px-1.5 py-0.5 text-xs ${t.id === "pending" && counts.pending ? "bg-brand-orange-aa text-white" : "bg-slate-100 text-slate-600"}`}>
                     {counts[t.id]}
                   </span>
                 </button>
               ))}
             </div>
-            {tab !== "featured" && (
-              <div className="flex items-center gap-2 pb-3 sm:pb-0 text-sm text-slate-600">
-                <span className="sr-only sm:not-sr-only">Show</span>
-                <select aria-label="Channel" value={source} onChange={(e) => setSource(e.target.value as Source | "all")} className="min-h-10 rounded-full border border-slate-300 bg-white px-3 text-sm font-semibold text-brand-navy cursor-pointer">
+          </div>
+
+          {tab !== "featured" && (
+            <div className="flex flex-col sm:flex-row gap-2 px-4 sm:px-6 pt-4">
+              <div className="relative flex-1">
+                <label htmlFor="post-search" className="sr-only">Search all posts</label>
+                <svg className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" fill="none" stroke="currentColor" strokeWidth={2.2} viewBox="0 0 24 24" aria-hidden="true">
+                  <circle cx="11" cy="11" r="7" />
+                  <path strokeLinecap="round" d="m20 20-3.5-3.5" />
+                </svg>
+                <input
+                  id="post-search"
+                  type="search"
+                  value={query}
+                  onChange={(e) => {
+                    setQuery(e.target.value);
+                    setSelected(new Set());
+                  }}
+                  placeholder="Search all posts"
+                  className="w-full min-h-10 rounded-full border border-slate-300 bg-white pl-10 pr-4 text-[15px] sm:text-sm focus:outline-none focus:border-teal-aa focus:ring-2 focus:ring-teal-aa/25"
+                />
+              </div>
+              <div className="flex gap-2">
+                <select
+                  aria-label="Channel"
+                  value={source}
+                  onChange={(e) => {
+                    setSource(e.target.value as Source | "all");
+                    setSelected(new Set());
+                  }}
+                  className="flex-1 sm:flex-none min-h-10 rounded-full border border-slate-300 bg-white px-3 text-sm font-semibold text-brand-navy cursor-pointer"
+                >
                   <option value="all">All channels</option>
                   {(Object.keys(SOURCE_LABEL) as Source[]).map((s) => <option key={s} value={s}>{SOURCE_LABEL[s]}</option>)}
                 </select>
-                <select aria-label="Type" value={kind} onChange={(e) => setKind(e.target.value as Kind | "all")} className="min-h-10 rounded-full border border-slate-300 bg-white px-3 text-sm font-semibold text-brand-navy cursor-pointer">
+                <select
+                  aria-label="Type"
+                  value={kind}
+                  onChange={(e) => {
+                    setKind(e.target.value as Kind | "all");
+                    setSelected(new Set());
+                  }}
+                  className="flex-1 sm:flex-none min-h-10 rounded-full border border-slate-300 bg-white px-3 text-sm font-semibold text-brand-navy cursor-pointer"
+                >
                   <option value="all">All types</option>
                   {KIND_ORDER.map((k) => <option key={k} value={k}>{k}s</option>)}
                 </select>
               </div>
-            )}
-          </div>
+            </div>
+          )}
 
           <div role="tabpanel" aria-label={TABS.find((t) => t.id === tab)!.label}>
             {tab === "featured" ? (
@@ -353,12 +509,49 @@ export default function InsightsInbox({ initial, demo = false }: { initial: Data
                     <strong className="text-brand-navy">Feature</strong>, or else the newest. See all three under <strong className="text-brand-navy">Featured</strong>.
                   </p>
                 )}
+                {shown.length > 0 && (
+                  <div className="flex flex-wrap items-center gap-x-5 gap-y-1 px-4 sm:px-6 pt-3">
+                    <label className="inline-flex items-center gap-3 min-h-10 text-sm font-semibold text-slate-700 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={allPicked}
+                        ref={(box) => {
+                          if (box) box.indeterminate = picked.length > 0 && !allPicked;
+                        }}
+                        onChange={() => setSelected(allPicked ? new Set() : new Set(shown.map((item) => item.id)))}
+                        className={CHECKBOX}
+                      />
+                      {allPicked ? "Clear selection" : `Select all ${shown.length}`}
+                    </label>
+                    {newCount > 0 && (
+                      <p className="text-sm text-slate-600">
+                        <span className="rounded-full bg-teal-aa px-2 py-0.5 text-xs font-bold text-white">New</span> {newCount} since your last visit
+                      </p>
+                    )}
+                  </div>
+                )}
                 {shown.length === 0 ? (
-                  <p className="px-6 py-14 text-center text-slate-500">
-                    {source === "all" && kind === "all" ? TABS.find((t) => t.id === tab)!.empty : "Nothing here matches the channel and type chosen."}
-                  </p>
+                  <div className="px-6 py-14 text-center text-slate-500">
+                    <p>
+                      {!filtering
+                        ? TABS.find((t) => t.id === tab)!.empty
+                        : searchText ? `Nothing here matches “${searchText}”.` : "Nothing here matches the channel and type chosen."}
+                    </p>
+                    {filtering && (
+                      <div className="mt-4 flex flex-wrap justify-center gap-2">
+                        {(["pending", "approved", "hidden"] as Status[])
+                          .filter((s) => s !== tab && counts[s] > 0)
+                          .map((s) => (
+                            <button key={s} type="button" onClick={() => openTab(s)} className={BTN_SECONDARY}>
+                              {counts[s]} {MATCHES_IN[s]}
+                            </button>
+                          ))}
+                        <button type="button" onClick={clearFilters} className={`${BTN} text-slate-600 hover:bg-slate-100`}>Show everything</button>
+                      </div>
+                    )}
+                  </div>
                 ) : (
-                  <ul className="divide-y divide-slate-100">
+                  <ul className="mt-2 divide-y divide-slate-100 border-t border-slate-100">
                     {shown.map((item) => (
                       <Post
                         key={item.id}
@@ -367,6 +560,9 @@ export default function InsightsInbox({ initial, demo = false }: { initial: Data
                         wouldFeature={becomesFeatured(item)}
                         busy={busy.has(item.id)}
                         highlight={highlight === item.id}
+                        selected={selected.has(item.id)}
+                        isNew={isNew(item)}
+                        onSelect={() => toggle(item)}
                         onChange={(changes) => act(item, changes)}
                         onEdit={() => setEditing(item)}
                       />
@@ -391,7 +587,30 @@ export default function InsightsInbox({ initial, demo = false }: { initial: Data
         />
       )}
 
-      <div aria-live="polite" className="fixed bottom-4 inset-x-4 sm:inset-x-auto sm:right-6 sm:bottom-6 z-50 flex justify-center pointer-events-none">
+      {/* Decisions for the selected posts, in a bar at the bottom of the screen */}
+      {picked.length > 0 && (
+        <div role="region" aria-label="Selected posts" className="fixed inset-x-3 bottom-3 sm:inset-x-auto sm:left-1/2 sm:-translate-x-1/2 sm:bottom-6 z-30 grid grid-cols-[1fr_auto] items-center gap-2 sm:flex rounded-2xl bg-brand-navy px-4 py-3 text-white shadow-xl">
+          <p className="text-sm font-bold sm:mr-1">{picked.length} selected</p>
+          <button type="button" onClick={() => setSelected(new Set())} className={`${BTN} sm:order-last text-white/80 hover:bg-white/10 hover:text-white`}>
+            Clear
+          </button>
+          <div className="col-span-2 grid grid-flow-col auto-cols-fr gap-2 sm:flex">
+            {bulkActions.map((action) => (
+              <button
+                key={action.label}
+                type="button"
+                disabled={picked.some((item) => busy.has(item.id))}
+                onClick={() => changeMany(picked, action.status, describeMany(picked, action.status))}
+                className={action.primary ? `${BTN} bg-teal-aa-light text-brand-navy hover:bg-white` : `${BTN} border border-white/40 text-white hover:bg-white/10`}
+              >
+                {action.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <div aria-live="polite" className={`fixed inset-x-4 sm:inset-x-auto sm:right-6 z-50 flex justify-center pointer-events-none ${picked.length ? "bottom-36 sm:bottom-24" : "bottom-4 sm:bottom-6"}`}>
         {toast && (
           <div className={`pointer-events-auto flex items-center gap-4 max-w-md rounded-xl px-4 py-3 shadow-lg text-sm font-semibold leading-snug ${toast.error ? "bg-red-700 text-white" : "bg-brand-navy text-white"}`}>
             <span>{toast.text}</span>
@@ -410,39 +629,59 @@ export default function InsightsInbox({ initial, demo = false }: { initial: Data
 function Channels({ data, checking, onCheck }: { data: Data; checking: boolean; onCheck: () => void }) {
   const dot: Record<SourceState["state"], string> = { connected: "bg-emerald-500", manual: "bg-slate-400", "not-set-up": "bg-amber-400", error: "bg-red-500" };
   const label: Record<SourceState["state"], string> = { connected: "Connected", manual: "Paste links", "not-set-up": "Not set up", error: "Problem" };
+  const problem = CHANNELS.some((s) => data.sources[s].state === "error");
   return (
-    <section aria-labelledby="channels-title" className="rounded-2xl bg-white border border-slate-200 shadow-sm p-4 sm:p-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div>
+    <section aria-labelledby="channels-title" className="rounded-2xl bg-white border border-slate-200 shadow-sm px-4 py-3 sm:px-6 sm:py-4">
+      <div className="flex items-start sm:items-center justify-between gap-3">
+        <div className="min-w-0">
           <h2 id="channels-title" className="font-heading text-lg font-bold">Channels</h2>
           <p className="text-sm text-slate-600">
             {checking ? "Checking for new posts…" : data.lastSync ? `Last checked ${ago(data.lastSync.at)}.` : "Not checked yet."}
           </p>
         </div>
-        <button type="button" onClick={onCheck} disabled={checking} className={BTN_SECONDARY}>
+        <button type="button" onClick={onCheck} disabled={checking} className={`${BTN_SECONDARY} shrink-0`}>
           <svg className={`w-4 h-4 ${checking ? "animate-spin motion-reduce:animate-none" : ""}`} fill="none" stroke="currentColor" strokeWidth={2.2} viewBox="0 0 24 24" aria-hidden="true">
             <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h5M20 20v-5h-5M5.6 15a7 7 0 0 0 12.3 2.3M18.4 9A7 7 0 0 0 6.1 6.7" />
           </svg>
-          {checking ? "Checking…" : "Check for new posts"}
+          {checking ? "Checking…" : (
+            <>
+              <span className="sm:hidden">Check now</span>
+              <span className="hidden sm:inline">Check for new posts</span>
+            </>
+          )}
         </button>
       </div>
-      <ul className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
-        {CHANNELS.map((s) => {
-          const state = data.sources[s];
-          return (
-            <li key={s} className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5">
-              <div className="flex items-center justify-between gap-2">
+      {/* Each channel's state in one line; what to do about it underneath, opened by itself when something's wrong. */}
+      <details open={problem || undefined} className="group mt-2">
+        <summary className="list-none [&::-webkit-details-marker]:hidden cursor-pointer rounded-lg py-1">
+          <span className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-sm">
+            {CHANNELS.map((s) => (
+              <span key={s} className="inline-flex items-center gap-1.5">
+                <span className={`w-2 h-2 rounded-full ${dot[data.sources[s].state]}`} aria-hidden="true" />
+                <span className="font-semibold">{SOURCE_LABEL[s]}</span>
+                <span className={data.sources[s].state === "error" ? "text-red-700" : "text-slate-500"}>{label[data.sources[s].state]}</span>
+              </span>
+            ))}
+            <span className="inline-flex items-center gap-1 font-semibold text-teal-aa">
+              Details
+              <svg className="w-3.5 h-3.5 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" d="m6 9 6 6 6-6" />
+              </svg>
+            </span>
+          </span>
+        </summary>
+        <ul className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+          {CHANNELS.map((s) => {
+            const state = data.sources[s];
+            return (
+              <li key={s} className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5">
                 <span className="font-bold text-sm">{SOURCE_LABEL[s]}</span>
-                <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600">
-                  <span className={`w-2 h-2 rounded-full ${dot[state.state]}`} aria-hidden="true" />
-                  {label[state.state]}
-                </span>
-              </div>
-              {state.detail && <p className={`text-xs mt-1 leading-snug ${state.state === "error" ? "text-red-700" : "text-slate-600"}`}>{state.detail}</p>}
-            </li>
-          );
-        })}
-      </ul>
+                {state.detail && <p className={`text-xs mt-1 leading-snug ${state.state === "error" ? "text-red-700" : "text-slate-600"}`}>{state.detail}</p>}
+              </li>
+            );
+          })}
+        </ul>
+      </details>
     </section>
   );
 }
@@ -606,23 +845,32 @@ function FeaturedPicker({ kind, current, options, busy, onPick, onClose }: {
   );
 }
 
-function Post({ item, featuredAs, wouldFeature, busy, highlight, onChange, onEdit }: {
+function Post({ item, featuredAs, wouldFeature, busy, highlight, selected, isNew, onSelect, onChange, onEdit }: {
   item: InboxItem;
   featuredAs: FeaturedAs;
   /** Not on the page, and would become the featured post of its type if added. */
   wouldFeature: boolean;
   busy: boolean;
   highlight: boolean;
+  selected: boolean;
+  /** Arrived since the moderator's previous visit. */
+  isNew: boolean;
+  onSelect: () => void;
   onChange: (changes: ItemChanges) => void;
   onEdit: () => void;
 }) {
   return (
-    <li id={`post-${item.id}`} className={`px-4 sm:px-6 py-4 flex flex-col sm:flex-row gap-4 transition-colors duration-700 ${highlight ? "bg-teal-50" : ""}`}>
-      <div className="flex gap-4 min-w-0 flex-1">
+    <li id={`post-${item.id}`} className={`px-4 sm:px-6 py-4 flex flex-col sm:flex-row gap-3 sm:gap-4 transition-colors duration-700 ${highlight ? "bg-teal-50" : selected ? "bg-teal-50/60" : ""}`}>
+      <div className="flex gap-3 sm:gap-4 min-w-0 flex-1">
+        <label className="shrink-0 self-start -m-2 p-2 cursor-pointer">
+          <span className="sr-only">Select “{item.title}”</span>
+          <input type="checkbox" checked={selected} onChange={onSelect} className={CHECKBOX} />
+        </label>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={thumbnail(picture(item))} alt="" loading="lazy" className="w-24 h-16 sm:w-32 sm:h-20 rounded-lg object-cover bg-slate-100 shrink-0" />
+        <img src={thumbnail(picture(item))} alt="" loading="lazy" className="w-16 h-11 sm:w-32 sm:h-20 rounded-lg object-cover bg-slate-100 shrink-0" />
         <div className="min-w-0">
           <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs font-semibold text-slate-500">
+            {isNew && <span className="rounded-full bg-teal-aa text-white px-2 py-0.5">New</span>}
             <span className="rounded-full bg-slate-100 px-2 py-0.5 text-slate-700">{SOURCE_LABEL[item.source]}</span>
             <span>{item.kind}</span>
             <span aria-hidden="true">·</span>
@@ -640,7 +888,8 @@ function Post({ item, featuredAs, wouldFeature, busy, highlight, onChange, onEdi
             )}
           </p>
           <h3 className="font-bold text-[15px] sm:text-base leading-snug mt-1">{item.title}</h3>
-          {item.summary && <p className="text-sm text-slate-600 mt-1 line-clamp-2">{item.summary}</p>}
+          {/* One line of summary on phones keeps the rows short */}
+          {item.summary && <p className="text-sm text-slate-600 mt-1 line-clamp-1 sm:line-clamp-2">{item.summary}</p>}
           {item.url && (
             <a href={item.url} target="_blank" rel="noopener noreferrer" className="inline-block mt-1 text-sm font-semibold text-teal-aa hover:underline">
               Open the original ↗
@@ -648,7 +897,8 @@ function Post({ item, featuredAs, wouldFeature, busy, highlight, onChange, onEdi
           )}
         </div>
       </div>
-      <div className="flex flex-wrap sm:flex-col sm:items-stretch gap-2 sm:w-44 shrink-0">
+      {/* Phones: the buttons line up with the picture, past the checkbox */}
+      <div className="flex flex-wrap sm:flex-col sm:items-stretch gap-2 pl-8 sm:pl-0 sm:w-44 shrink-0">
         {item.status === "pending" && (
           <>
             <button type="button" disabled={busy} onClick={() => onChange({ status: "approved" })} className={BTN_PRIMARY}>Add to page</button>
@@ -694,52 +944,43 @@ interface Draft {
   meta: string;
   date: string;
   imageId: number | null;
+  /** The picture the post's card shows, or "" for none. */
   image: string;
 }
 
-function DraftFields({ draft, set, canBeVideo, idPrefix }: { draft: Draft; set: (d: Partial<Draft>) => void; canBeVideo: boolean; idPrefix: string }) {
+/** What the card preview needs besides the draft: where the post links to, and its YouTube video. */
+interface CardBase {
+  url?: string;
+  youtubeId?: string;
+}
+
+const noop = () => {};
+
+function DraftFields({ draft, set, base, idPrefix }: { draft: Draft; set: (d: Partial<Draft>) => void; base: CardBase; idPrefix: string }) {
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState("");
   const file = useRef<HTMLInputElement>(null);
+  const card = insightCard({
+    kind: draft.kind,
+    title: draft.title,
+    summary: draft.summary,
+    meta: draft.meta,
+    publishedAt: draft.date ? `${draft.date}T12:00:00Z` : new Date().toISOString(),
+    url: base.url ?? "",
+    image: draft.image,
+    youtubeId: base.youtubeId ?? "",
+    content: draft.content,
+    featured: false,
+  });
   return (
-    <div className="grid gap-4 md:grid-cols-[180px_minmax(0,1fr)]">
-      <div>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={draft.image} alt="" className="w-full aspect-[16/10] rounded-xl object-cover bg-slate-100 border border-slate-200" />
-        <input
-          ref={file}
-          type="file"
-          accept="image/jpeg,image/png,image/webp,image/gif"
-          className="sr-only"
-          id={`${idPrefix}-picture`}
-          onChange={async (e) => {
-            const chosen = e.target.files?.[0];
-            e.target.value = "";
-            if (!chosen) return;
-            setUploading(true);
-            setUploadError("");
-            try {
-              const imageId = await uploadPicture(chosen);
-              set({ imageId, image: `/api/insights/media/${imageId}.jpg` });
-            } catch (error) {
-              setUploadError((error as Error).message);
-            } finally {
-              setUploading(false);
-            }
-          }}
-        />
-        <button type="button" onClick={() => file.current?.click()} disabled={uploading} className={`${BTN_SECONDARY} w-full mt-2`}>
-          {uploading ? "Uploading…" : "Replace picture"}
-        </button>
-        {uploadError && <p role="alert" className="text-xs text-red-600 mt-1">{uploadError}</p>}
-      </div>
+    <div className="grid gap-5 md:grid-cols-[minmax(0,1fr)_22rem] md:items-start">
       <div className="grid gap-3 min-w-0">
         <label className="block text-sm font-semibold">
           Title
           <input required value={draft.title} onChange={(e) => set({ title: e.target.value })} maxLength={300} className={FIELD} />
         </label>
         <label className="block text-sm font-semibold">
-          Summary <span className="font-normal text-slate-500">(shown on the card)</span>
+          Summary <span className="font-normal text-slate-500">(shown in search results)</span>
           <textarea value={draft.summary} onChange={(e) => set({ summary: e.target.value })} rows={3} maxLength={2000} className={FIELD} />
         </label>
         <div className="grid gap-3 sm:grid-cols-3">
@@ -747,8 +988,8 @@ function DraftFields({ draft, set, canBeVideo, idPrefix }: { draft: Draft; set: 
             Type
             <select value={draft.kind} onChange={(e) => set({ kind: e.target.value as Kind })} className={`${FIELD} bg-white`}>
               <option value="Blog">Blog / post</option>
-              {canBeVideo && <option value="Video">Video</option>}
-              {canBeVideo && <option value="Podcast">Podcast</option>}
+              {base.youtubeId && <option value="Video">Video</option>}
+              {base.youtubeId && <option value="Podcast">Podcast</option>}
             </select>
           </label>
           <label className="block text-sm font-semibold">
@@ -765,6 +1006,46 @@ function DraftFields({ draft, set, canBeVideo, idPrefix }: { draft: Draft; set: 
           <textarea value={draft.content} onChange={(e) => set({ content: e.target.value })} rows={8} className={FIELD} aria-label="Full text for the reader" />
         </details>
       </div>
+
+      {/* The card as the Insights page will show it, changing as the fields do. Look only: its links don't work here. */}
+      <div className="min-w-0 md:sticky md:top-20">
+        <p className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">On the Insights page</p>
+        <div inert className={INSIGHT_CARD_CLASS}>
+          <InsightCardContent item={card} onRead={noop} onPlay={noop} />
+        </div>
+        {draft.kind === "Blog" ? (
+          <>
+            <input
+              ref={file}
+              type="file"
+              accept="image/jpeg,image/png,image/webp,image/gif"
+              className="sr-only"
+              id={`${idPrefix}-picture`}
+              onChange={async (e) => {
+                const chosen = e.target.files?.[0];
+                e.target.value = "";
+                if (!chosen) return;
+                setUploading(true);
+                setUploadError("");
+                try {
+                  const imageId = await uploadPicture(chosen);
+                  set({ imageId, image: `/api/insights/media/${imageId}.jpg` });
+                } catch (error) {
+                  setUploadError((error as Error).message);
+                } finally {
+                  setUploading(false);
+                }
+              }}
+            />
+            <button type="button" onClick={() => file.current?.click()} disabled={uploading} className={`${BTN_SECONDARY} w-full mt-3`}>
+              {uploading ? "Uploading…" : draft.image ? "Replace picture" : "Add a picture"}
+            </button>
+            {uploadError && <p role="alert" className="text-xs text-red-600 mt-1">{uploadError}</p>}
+          </>
+        ) : (
+          <p className="text-xs text-slate-500 mt-2">Videos and podcasts show YouTube&apos;s own thumbnail.</p>
+        )}
+      </div>
     </div>
   );
 }
@@ -777,14 +1058,13 @@ function AddPost({ onAdded, onShow, onError }: { onAdded: (item: InboxItem) => v
   const [draft, setDraft] = useState<Draft | null>(null);
   const [saving, setSaving] = useState(false);
 
-  async function load(event: React.FormEvent) {
-    event.preventDefault();
+  async function load(link: string) {
     setLoading(true);
     setError("");
     setPreview(null);
     setDraft(null);
     try {
-      const p = await api<Preview>("/api/admin/insights/preview", { method: "POST", body: JSON.stringify({ url }) });
+      const p = await api<Preview>("/api/admin/insights/preview", { method: "POST", body: JSON.stringify({ url: link }) });
       setPreview(p);
       if (!p.existing) {
         setDraft({
@@ -795,7 +1075,7 @@ function AddPost({ onAdded, onShow, onError }: { onAdded: (item: InboxItem) => v
           meta: p.item.meta,
           date: p.item.publishedAt.slice(0, 10),
           imageId: p.item.imageId ?? null,
-          image: picture(p.item),
+          image: cardPicture(p.item),
         });
       }
     } catch (e) {
@@ -840,8 +1120,14 @@ function AddPost({ onAdded, onShow, onError }: { onAdded: (item: InboxItem) => v
   return (
     <section aria-labelledby="add-title" className="rounded-2xl bg-white border border-slate-200 shadow-sm p-4 sm:p-6">
       <h2 id="add-title" className="font-heading text-lg font-bold">Add a post</h2>
-      <p className="text-sm text-slate-600">Paste a link to a LinkedIn, Instagram, YouTube or blog post. You can check and change everything before adding it.</p>
-      <form onSubmit={load} className="mt-3 flex flex-col sm:flex-row gap-2">
+      <p className="text-sm text-slate-600">Paste a link to a LinkedIn, Instagram, YouTube or blog post to see it as a card. You can change everything before adding it.</p>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          void load(url);
+        }}
+        className="mt-3 flex flex-col sm:flex-row gap-2"
+      >
         <label htmlFor="post-link" className="sr-only">Post link</label>
         <input
           id="post-link"
@@ -851,6 +1137,14 @@ function AddPost({ onAdded, onShow, onError }: { onAdded: (item: InboxItem) => v
           placeholder="https://www.linkedin.com/posts/…"
           value={url}
           onChange={(e) => setUrl(e.target.value)}
+          onPaste={(e) => {
+            // A pasted link opens its preview straight away; a typed one waits for the button.
+            const pasted = e.clipboardData.getData("text").trim();
+            if (loading || !/^https?:\/\/\S+$/i.test(pasted)) return;
+            e.preventDefault();
+            setUrl(pasted);
+            void load(pasted);
+          }}
           className="flex-1 min-h-11 rounded-full border border-slate-300 px-4 text-[15px] focus:outline-none focus:border-teal-aa focus:ring-2 focus:ring-teal-aa/25"
         />
         <button type="submit" disabled={loading} className={BTN_PRIMARY}>{loading ? "Reading the post…" : "Get preview"}</button>
@@ -875,7 +1169,7 @@ function AddPost({ onAdded, onShow, onError }: { onAdded: (item: InboxItem) => v
               {preview.notes.map((note) => <li key={note} className="text-sm rounded-lg bg-amber-50 border border-amber-200 text-amber-900 px-3 py-2">{note}</li>)}
             </ul>
           )}
-          <DraftFields draft={draft} set={(d) => setDraft({ ...draft, ...d })} canBeVideo={Boolean(preview.item.youtubeId)} idPrefix="add" />
+          <DraftFields draft={draft} set={(d) => setDraft({ ...draft, ...d })} base={{ url: preview.item.url, youtubeId: preview.item.youtubeId }} idPrefix="add" />
           <div className="mt-4 flex flex-wrap gap-2 justify-end">
             <button type="button" onClick={() => { setPreview(null); setDraft(null); }} className={`${BTN} text-slate-600 hover:bg-slate-100`}>Cancel</button>
             <button type="button" disabled={saving} onClick={() => add("pending")} className={BTN_SECONDARY}>Add to Waiting</button>
@@ -896,7 +1190,7 @@ function EditPost({ item, onClose, onSaved }: { item: InboxItem; onClose: () => 
     meta: item.meta,
     date: item.publishedAt.slice(0, 10),
     imageId: item.imageId,
-    image: picture(item),
+    image: cardPicture(item),
   });
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
@@ -949,7 +1243,7 @@ function EditPost({ item, onClose, onSaved }: { item: InboxItem; onClose: () => 
         aria-modal="true"
         aria-labelledby="edit-title"
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-3xl max-h-[92vh] overflow-y-auto rounded-t-2xl sm:rounded-2xl bg-white shadow-xl"
+        className="w-full max-w-5xl max-h-[92vh] overflow-y-auto rounded-t-2xl sm:rounded-2xl bg-white shadow-xl"
       >
         <form onSubmit={save}>
           <div className="flex items-center justify-between gap-4 px-5 sm:px-6 py-4 border-b border-slate-200 sticky top-0 bg-white z-10">
@@ -959,7 +1253,7 @@ function EditPost({ item, onClose, onSaved }: { item: InboxItem; onClose: () => 
             </button>
           </div>
           <div className="px-5 sm:px-6 py-5">
-            <DraftFields draft={draft} set={(d) => setDraft((x) => ({ ...x, ...d }))} canBeVideo={Boolean(item.youtubeId)} idPrefix="edit" />
+            <DraftFields draft={draft} set={(d) => setDraft((x) => ({ ...x, ...d }))} base={{ url: item.url, youtubeId: item.youtubeId }} idPrefix="edit" />
             <p className="text-xs text-slate-500 mt-3">Changes here only affect the Insights page, not the original post.</p>
             {error && <p role="alert" className="text-sm text-red-600 mt-2">{error}</p>}
           </div>
