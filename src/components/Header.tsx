@@ -65,17 +65,16 @@ export default function Header() {
       }`}
     >
       <div className="max-w-[1200px] mx-auto pr-6 pl-2">
-        <div className="flex items-center justify-between gap-6 h-20 md:h-24 lg:h-32">
+        <div className="flex items-center justify-between gap-6 h-18 md:h-20 lg:h-24">
           <a href={href("/")} className="flex-shrink-0">
-            {/* The stacked logo (flask above the name), tall enough to read at this size */}
             <Image
-              src={Images.branding.logo}
+              src={Images.branding.logoHorizontal}
               alt="ChemLife Innovations"
-              width={1021}
-              height={1024}
-              sizes="112px"
+              width={653}
+              height={240}
+              sizes="(min-width: 1280px) 174px, (min-width: 768px) 153px, 131px"
               loading="eager"
-              className="h-16 md:h-20 lg:h-28 w-auto"
+              className="h-12 md:h-14 xl:h-16 w-auto"
             />
           </a>
 
@@ -132,7 +131,7 @@ export default function Header() {
 
        {mobileOpen && (
           // Fills the screen below the header (above the chat and search buttons), and scrolls itself if it's taller.
-          <div id="mobile-menu" className="lg:hidden bg-white border-t border-brand-navy/10 h-[calc(100dvh-5rem)] md:h-[calc(100dvh-6rem)] overflow-y-auto overscroll-contain">
+          <div id="mobile-menu" className="lg:hidden bg-white border-t border-brand-navy/10 h-[calc(100dvh-4.5rem)] md:h-[calc(100dvh-5rem)] overflow-y-auto overscroll-contain">
             <div className="px-6 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
               {navLinks.map((link) => {
                 const isActive =

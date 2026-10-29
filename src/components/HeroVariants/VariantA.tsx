@@ -94,7 +94,7 @@ export default function HeroVariantA() {
   const href = useHref();
   const taglines = t.home.taglines;
   const tagline = taglines[slide];
-  const photoProps = (src: string, sizes: string) => getImageProps({ src, alt: t.home.heroAlt, fill: true, sizes, priority: true, className: "object-cover animate-ken-burns [@media(min-aspect-ratio:1/1)]:object-[50%_0%]" }).props;
+  const photoProps = (src: string, sizes: string) => getImageProps({ src, alt: t.home.heroAlt, fill: true, sizes, priority: true, className: "object-cover animate-ken-burns [@media(min-aspect-ratio:1/1)]:object-[50%_40%]" }).props;
   const landscape = photoProps(Images.heroes.awardsLandscape, LANDSCAPE_SIZES);
   const portrait = photoProps(Images.heroes.awardsPortrait, PORTRAIT_SIZES);
 

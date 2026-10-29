@@ -95,9 +95,9 @@ export const Images = {
   people: {
     founders: "/images/people/founders.jpg",
     foundersNew: "/images/people/founders_new.jpg",
-    leaderRadhakrishna: "/images/people/leader_radhakrishna.jpg",
-    leaderSharada: "/images/people/leader_sharada.jpg",
-    leaderSneehaCropped: "/images/people/leader_sneha_cropped.jpg",
+    leaderRadhakrishna: "/images/people/leader_radhakrishna_new.jpg",
+    leaderSharada: "/images/people/leader_sharada_new.jpg",
+    leaderSneehaCropped: "/images/people/leader_sneha_new.jpg",
     leaderShankar: "/images/people/leader_shankar.png",
   },
 

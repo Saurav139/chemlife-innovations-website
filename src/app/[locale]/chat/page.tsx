@@ -18,7 +18,7 @@ export default function ChatLandingPage() {
         <Header />
 
         {/* Main Container */}
-        <main className="pt-32 lg:pt-40 flex-1 max-w-[1200px] mx-auto px-6 py-16 flex flex-col items-center justify-center w-full">
+        <main className="pt-32 flex-1 max-w-[1200px] mx-auto px-6 py-16 flex flex-col items-center justify-center w-full">
           
           {/* Main Card Container */}
           <motion.div

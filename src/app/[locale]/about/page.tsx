@@ -20,7 +20,7 @@ export default function AboutPage() {
     <VariantProvider>
       <Header />
 
-      <main className="overflow-x-clip bg-brand-navy min-h-screen pt-20 md:pt-24 lg:pt-32">
+      <main className="overflow-x-clip bg-brand-navy min-h-screen pt-18 md:pt-20 lg:pt-24">
         {/* Intro Hero Section with Glass Plant Image BG */}
         <SectionWrapper className="py-12 md:py-24 lg:py-32 text-white relative overflow-hidden md:min-h-[500px] flex items-center">
           <div className="absolute inset-0 z-0">
@@ -41,7 +41,7 @@ export default function AboutPage() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease: easeOut }}
-              className="font-heading text-[34px] md:text-4xl lg:text-6xl font-bold leading-tight mb-6 md:mb-8"
+              className="font-heading text-3xl md:text-4xl lg:text-6xl font-bold leading-tight mb-3 md:mb-4"
             >
               <span className="text-teal-400">{t.titleLine1}</span><br />
               <span className="text-white">{t.titleLine2}</span>
@@ -51,16 +51,16 @@ export default function AboutPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2, ease: easeOut }}
-              className="text-white/85 text-base md:text-lg lg:text-2xl leading-relaxed max-w-3xl mx-auto font-light"
+              className="text-white/85 text-base md:text-lg lg:text-xl leading-relaxed max-w-3xl mx-auto font-light"
             >
               {t.intro}
             </motion.p>
           </div>
         </SectionWrapper>
 
-        {/* Founder & Mission Section (White BG) */}
-        <SectionWrapper className="py-12 md:py-24 bg-white text-brand-navy">
-          <div className="max-w-[1200px] mx-auto px-6 grid md:grid-cols-2 gap-12 lg:gap-20 items-center">
+        {/* Our Journey */}
+        <SectionWrapper id="our-journey" className="scroll-mt-18 md:scroll-mt-20 lg:scroll-mt-24 py-12 md:py-24 lg:py-32 bg-white text-brand-navy">
+          <div className="max-w-[1200px] mx-auto px-6 grid md:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-center">
             {/* Founder/Team Image Section with Founders Tag */}
             <motion.div
               initial={{ opacity: 0, x: -30 }}
@@ -87,28 +87,125 @@ export default function AboutPage() {
               </div>
             </motion.div>
 
-            {/* Mission Content */}
             <motion.div
               initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, ease: easeOut }}
             >
-              <span className="text-teal-aa text-sm font-semibold tracking-widest uppercase block mb-3">{t.missionKicker}</span>
-              <h2 className="font-heading text-3xl lg:text-4xl text-brand-navy mb-6 font-bold leading-tight">
-                {t.missionTitle}
+              <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl text-brand-navy mb-6 font-bold leading-tight">
+                {t.journeyTitle}
               </h2>
-              <p className="text-brand-navy/80 text-base lg:text-lg leading-relaxed">
-                {t.missionText}
-              </p>
+              <div className="space-y-4 text-brand-navy/85 text-base lg:text-lg leading-relaxed">
+                <p>{t.journeyText}</p>
+                <p>{t.journeyText2}</p>
+              </div>
             </motion.div>
           </div>
         </SectionWrapper>
 
-        {/* Core Values Section (Brand Navy BG with Honeycomb Hexagons) */}
-        <SectionWrapper className="py-16 md:py-24 lg:py-36 bg-brand-navy text-white">
+        {/* Dedicated Vision & Mission section. */}
+        <SectionWrapper id="vision-mission" className="scroll-mt-18 md:scroll-mt-20 lg:scroll-mt-24 py-12 md:py-24 lg:py-32 bg-[#F4F5F1] border-t border-gray-100">
+          <div className="max-w-[1200px] mx-auto px-6 grid md:grid-cols-2 gap-6 lg:gap-8">
+            {[
+              { title: t.visionKicker, text: t.visionText },
+              { title: t.missionKicker, text: t.missionText },
+            ].map((statement) => (
+              <article key={statement.title} className="bg-white rounded-2xl border border-[#13447c]/10 p-6 md:p-8">
+                <div aria-hidden="true" className="h-1 w-10 rounded-full bg-[#e65300] mb-5" />
+                <h2 className="font-heading text-2xl md:text-3xl text-[#13447c] mb-4 font-bold leading-tight">
+                  {statement.title}
+                </h2>
+                <p className="text-[#2b2b2b] text-base lg:text-lg leading-relaxed">
+                  {statement.text}
+                </p>
+              </article>
+            ))}
+          </div>
+        </SectionWrapper>
+
+        {/* Leadership Team Section */}
+        <SectionWrapper className="py-12 md:py-24 lg:py-32 bg-gray-50 text-brand-navy border-t border-teal-100">
           <div className="max-w-[1200px] mx-auto px-6">
-            <div className="text-center mb-10 md:mb-20">
+            <div className="text-center mb-8 md:mb-12">
+              <span className="text-teal-aa text-sm lg:text-base font-semibold tracking-widest uppercase block mb-2">{t.leadersKicker}</span>
+              <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl text-brand-navy font-bold leading-tight">
+                {t.leadersTitle}
+              </h2>
+              <div aria-hidden="true" className="flex justify-center gap-1.5 mt-5">
+                <span className="h-1 w-12 rounded-full bg-brand-orange" />
+                <span className="h-1 w-6 rounded-full bg-teal-500" />
+              </div>
+            </div>
+
+            {/* Two portraits per row on phones, four on desktop. */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 lg:gap-8 max-w-[1200px] mx-auto">
+              {[
+                {
+                  name: "Radhakrishna PM",
+                  degree: "Ph.D, PG-Dip in Mgmt",
+                  image: Images.people.leaderRadhakrishna
+                },
+                {
+                  name: "Sharada KC",
+                  degree: "Ph.D",
+                  image: Images.people.leaderSharada
+                },
+                {
+                  name: "Sneha R",
+                  degree: "M.Com",
+                  image: Images.people.leaderSneehaCropped
+                },
+                {
+                  name: "Shankar CV",
+                  degree: "BE, MBA",
+                  image: Images.people.leaderShankar
+                }
+                // Roles and bios are in the language file (about.leaders), in this order.
+              ].map((leader, i) => ({ ...leader, ...t.leaders[i] })).map((leader, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: i * 0.15, ease: easeOut }}
+                  className="bg-white rounded-2xl border border-teal-100 overflow-hidden flex flex-col shadow-sm hover:border-brand-orange/50 hover:shadow-md transition-[border-color,box-shadow] duration-300 group"
+                >
+                  {/* Portrait panel keeps the face and shoulders visible without a circular crop. */}
+                  <div className="relative aspect-[4/5] overflow-hidden bg-gray-50 m-2 sm:m-3 mb-0 sm:mb-0 rounded-xl border border-orange-100 group-hover:border-orange-200 transition-colors duration-300">
+                    <Image
+                      src={leader.image}
+                      alt={leader.name}
+                      fill
+                      sizes="(max-width: 1023px) 50vw, 280px"
+                      className="object-cover object-top"
+                    />
+                  </div>
+
+                  <div className="flex flex-1 flex-col items-start text-left p-4 sm:p-5 lg:p-6">
+                  <h3 className="font-heading text-lg md:text-xl font-bold text-brand-orange-aa leading-tight mb-2">
+                    {leader.name}
+                  </h3>
+                  <p className="text-teal-aa font-bold text-xs md:text-sm uppercase tracking-wider leading-relaxed mb-2">
+                    {leader.role}
+                  </p>
+                  <p className="text-brand-navy/70 text-xs md:text-sm font-medium leading-relaxed mb-4">
+                    {leader.degree}
+                  </p>
+                  <p className="text-brand-navy/85 text-sm lg:text-base leading-relaxed border-t border-teal-100 pt-3 w-full">
+                    {leader.bio}
+                  </p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </SectionWrapper>
+
+        {/* Core Values Section (Brand Navy BG with Honeycomb Hexagons) */}
+        <SectionWrapper id="core-values" className="scroll-mt-18 md:scroll-mt-20 lg:scroll-mt-24 py-12 md:py-24 lg:py-32 bg-brand-navy text-white">
+          <div className="max-w-[1200px] mx-auto px-6">
+            <div className="text-center mb-8 md:mb-12">
               <span className="text-teal-aa-light text-sm font-semibold tracking-widest uppercase block mb-2">{t.valuesKicker}</span>
               <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl text-white font-bold leading-tight">
                 {t.valuesTitle}
@@ -116,9 +213,8 @@ export default function AboutPage() {
             </div>
 
             {/* G.I.F.T. Core Values Diamond Grid */}
-            {/* Desktop: the four values in a diamond around a dashed ring. Tablets: a 2×2 grid; phones: one column, both in
-                G, I, F, T order so they spell the word. */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-8 md:gap-y-12 md:gap-x-12 max-w-5xl mx-auto pb-4 md:pb-12 relative mt-8 md:mt-16">
+            {/* Phones and tablets use compact GIFT cards in a grid; desktop keeps the diamond and connecting lines. */}
+            <div className="grid min-[380px]:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-y-12 md:gap-x-12 max-w-5xl mx-auto pb-4 md:pb-12 relative">
 
                {/* Connection Lines for Desktop - Positioned underneath the boxes (z-0) */}
               <svg className="absolute inset-0 w-full h-full pointer-events-none hidden lg:block z-0" viewBox="0 0 100 100" preserveAspectRatio="none">
@@ -183,25 +279,25 @@ export default function AboutPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: 0.1, ease: easeOut }}
-                  className="relative w-full max-w-[320px] bg-linear-to-b from-teal-900 to-teal-950 rounded-2xl pt-8 pb-14 px-6 text-center border border-white/10 shadow-xl hover:border-brand-orange/45 hover:scale-[1.02] transition-[border-color,box-shadow,scale] duration-300 group overflow-hidden"
+                  className="relative w-full max-w-[320px] bg-linear-to-b from-teal-900 to-teal-950 rounded-2xl pt-4 pb-9 px-3 md:pt-8 md:pb-14 md:px-6 text-center border border-white/10 shadow-xl hover:border-brand-orange/45 hover:scale-[1.02] transition-[border-color,box-shadow,scale] duration-300 group overflow-hidden"
                 >
-                  <div className="h-10 px-4 rounded-full bg-[#e2e2e2] border-2 border-brand-orange flex items-center justify-center shadow-md mb-4 mx-auto relative z-10 w-fit">
-                    <div className="flex gap-2.5 font-heading font-black text-base md:text-lg select-none tracking-wider">
-                      <span className="text-brand-orange text-xl scale-110">G</span>
+                  <div className="h-8 md:h-10 px-3 md:px-4 rounded-full bg-[#e2e2e2] border-2 border-brand-orange flex items-center justify-center shadow-md mb-3 md:mb-4 mx-auto relative z-10 w-fit">
+                    <div className="flex gap-1.5 md:gap-2.5 font-heading font-black text-sm md:text-lg select-none tracking-wider">
+                      <span className="text-brand-orange text-lg md:text-xl scale-110">G</span>
                       <span className="text-brand-navy/30">I</span>
                       <span className="text-brand-navy/30">F</span>
                       <span className="text-brand-navy/30">T</span>
                     </div>
                   </div>
-                  <div className="bg-[#102a43] text-blue-200 font-heading text-xs font-bold px-4 py-1.5 rounded-md border border-blue-500/30 inline-block mb-3.5 shadow-md mx-auto relative z-10 uppercase tracking-wider">
+                  <div className="bg-[#102a43] text-blue-200 font-heading text-xs font-bold px-2 md:px-4 py-1.5 rounded-md border border-blue-500/30 inline-block mb-2 md:mb-3.5 shadow-md mx-auto relative z-10 uppercase tracking-wider">
                     {t.values.green.name}
                   </div>
-                  <p className="text-white/90 text-sm md:text-[14px] leading-relaxed max-w-[75%] mx-auto relative z-10">
+                  <p className="text-white/90 text-sm leading-relaxed max-w-full md:max-w-[75%] mx-auto relative z-10">
                     {t.values.green.text}
                   </p>
 
                   {/* Sprout Icon sticking to bottom right */}
-                  <svg className="absolute -right-4 -bottom-4 w-24 h-24 opacity-80 pointer-events-none transition-transform duration-500 group-hover:scale-105 group-hover:-rotate-3" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <svg className="absolute -right-4 -bottom-4 w-14 h-14 md:w-24 md:h-24 opacity-80 pointer-events-none transition-transform duration-500 group-hover:scale-105 group-hover:-rotate-3" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <defs>
                       <linearGradient id="leafGradG" x1="0%" y1="0%" x2="100%" y2="100%">
                         <stop offset="0%" stopColor="#4ade80" />
@@ -234,25 +330,25 @@ export default function AboutPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: 0.4, ease: easeOut }}
-                  className="relative w-full max-w-[320px] bg-linear-to-b from-teal-900 to-teal-950 rounded-2xl pt-8 pb-14 px-6 text-center border border-white/10 shadow-xl hover:border-brand-orange/45 hover:scale-[1.02] transition-[border-color,box-shadow,scale] duration-300 group overflow-hidden"
+                  className="relative w-full max-w-[320px] bg-linear-to-b from-teal-900 to-teal-950 rounded-2xl pt-4 pb-9 px-3 md:pt-8 md:pb-14 md:px-6 text-center border border-white/10 shadow-xl hover:border-brand-orange/45 hover:scale-[1.02] transition-[border-color,box-shadow,scale] duration-300 group overflow-hidden"
                 >
-                  <div className="h-10 px-4 rounded-full bg-[#e2e2e2] border-2 border-brand-orange flex items-center justify-center shadow-md mb-4 mx-auto relative z-10 w-fit">
-                    <div className="flex gap-2.5 font-heading font-black text-base md:text-lg select-none tracking-wider">
+                  <div className="h-8 md:h-10 px-3 md:px-4 rounded-full bg-[#e2e2e2] border-2 border-brand-orange flex items-center justify-center shadow-md mb-3 md:mb-4 mx-auto relative z-10 w-fit">
+                    <div className="flex gap-1.5 md:gap-2.5 font-heading font-black text-sm md:text-lg select-none tracking-wider">
                       <span className="text-brand-navy/30">G</span>
                       <span className="text-brand-navy/30">I</span>
                       <span className="text-brand-navy/30">F</span>
-                      <span className="text-brand-orange text-xl scale-110">T</span>
+                      <span className="text-brand-orange text-lg md:text-xl scale-110">T</span>
                     </div>
                   </div>
-                  <div className="bg-[#102a43] text-blue-200 font-heading text-xs font-bold px-4 py-1.5 rounded-md border border-blue-500/30 inline-block mb-3.5 shadow-md mx-auto relative z-10 uppercase tracking-wider">
+                  <div className="bg-[#102a43] text-blue-200 font-heading text-xs font-bold px-2 md:px-4 py-1.5 rounded-md border border-blue-500/30 inline-block mb-2 md:mb-3.5 shadow-md mx-auto relative z-10 uppercase tracking-wider">
                     {t.values.trust.name}
                   </div>
-                  <p className="text-white/90 text-sm md:text-[14px] leading-relaxed max-w-[75%] mx-auto relative z-10">
+                  <p className="text-white/90 text-sm leading-relaxed max-w-full md:max-w-[75%] mx-auto relative z-10">
                     {t.values.trust.text}
                   </p>
 
                   {/* Handshake Icon sticking to bottom right */}
-                  <svg className="absolute -right-4 -bottom-4 w-28 h-28 opacity-80 pointer-events-none transition-transform duration-500 group-hover:scale-105 group-hover:rotate-3" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <svg className="absolute -right-4 -bottom-4 w-16 h-16 md:w-28 md:h-28 opacity-80 pointer-events-none transition-transform duration-500 group-hover:scale-105 group-hover:rotate-3" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <defs>
                       <linearGradient id="glowGradT" x1="0%" y1="0%" x2="100%" y2="100%">
                         <stop offset="0%" stopColor="#f97316" stopOpacity="0.2" />
@@ -297,25 +393,25 @@ export default function AboutPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: 0.2, ease: easeOut }}
-                  className="relative w-full max-w-[320px] bg-linear-to-b from-teal-900 to-teal-950 rounded-2xl pt-8 pb-14 px-6 text-center border border-white/10 shadow-xl hover:border-brand-orange/45 hover:scale-[1.02] transition-[border-color,box-shadow,scale] duration-300 group overflow-hidden"
+                  className="relative w-full max-w-[320px] bg-linear-to-b from-teal-900 to-teal-950 rounded-2xl pt-4 pb-9 px-3 md:pt-8 md:pb-14 md:px-6 text-center border border-white/10 shadow-xl hover:border-brand-orange/45 hover:scale-[1.02] transition-[border-color,box-shadow,scale] duration-300 group overflow-hidden"
                 >
-                  <div className="h-10 px-4 rounded-full bg-[#e2e2e2] border-2 border-brand-orange flex items-center justify-center shadow-md mb-4 mx-auto relative z-10 w-fit">
-                    <div className="flex gap-2.5 font-heading font-black text-base md:text-lg select-none tracking-wider">
+                  <div className="h-8 md:h-10 px-3 md:px-4 rounded-full bg-[#e2e2e2] border-2 border-brand-orange flex items-center justify-center shadow-md mb-3 md:mb-4 mx-auto relative z-10 w-fit">
+                    <div className="flex gap-1.5 md:gap-2.5 font-heading font-black text-sm md:text-lg select-none tracking-wider">
                       <span className="text-brand-navy/30">G</span>
-                      <span className="text-brand-orange text-xl scale-110">I</span>
+                      <span className="text-brand-orange text-lg md:text-xl scale-110">I</span>
                       <span className="text-brand-navy/30">F</span>
                       <span className="text-brand-navy/30">T</span>
                     </div>
                   </div>
-                  <div className="bg-[#102a43] text-blue-200 font-heading text-xs font-bold px-4 py-1.5 rounded-md border border-blue-500/30 inline-block mb-3.5 shadow-md mx-auto relative z-10 uppercase tracking-wider">
+                  <div className="bg-[#102a43] text-blue-200 font-heading text-xs font-bold px-2 md:px-4 py-1.5 rounded-md border border-blue-500/30 inline-block mb-2 md:mb-3.5 shadow-md mx-auto relative z-10 uppercase tracking-wider">
                     {t.values.innovation.name}
                   </div>
-                  <p className="text-white/90 text-sm md:text-[14px] leading-relaxed max-w-[75%] mx-auto relative z-10">
+                  <p className="text-white/90 text-sm leading-relaxed max-w-full md:max-w-[75%] mx-auto relative z-10">
                     {t.values.innovation.text}
                   </p>
 
                   {/* Bulb Icon sticking to bottom right */}
-                  <svg className="absolute -right-4 -bottom-4 w-24 h-24 opacity-80 pointer-events-none transition-transform duration-500 group-hover:scale-105 group-hover:rotate-6" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <svg className="absolute -right-4 -bottom-4 w-14 h-14 md:w-24 md:h-24 opacity-80 pointer-events-none transition-transform duration-500 group-hover:scale-105 group-hover:rotate-6" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <defs>
                       <linearGradient id="bulbGradI" x1="0%" y1="0%" x2="100%" y2="100%">
                         <stop offset="0%" stopColor="#fef08a" />
@@ -362,25 +458,25 @@ export default function AboutPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: 0.3, ease: easeOut }}
-                  className="relative w-full max-w-[320px] bg-linear-to-b from-teal-900 to-teal-950 rounded-2xl pt-8 pb-14 px-6 text-center border border-white/10 shadow-xl hover:border-brand-orange/45 hover:scale-[1.02] transition-[border-color,box-shadow,scale] duration-300 group overflow-hidden"
+                  className="relative w-full max-w-[320px] bg-linear-to-b from-teal-900 to-teal-950 rounded-2xl pt-4 pb-9 px-3 md:pt-8 md:pb-14 md:px-6 text-center border border-white/10 shadow-xl hover:border-brand-orange/45 hover:scale-[1.02] transition-[border-color,box-shadow,scale] duration-300 group overflow-hidden"
                 >
-                  <div className="h-10 px-4 rounded-full bg-[#e2e2e2] border-2 border-brand-orange flex items-center justify-center shadow-md mb-4 mx-auto relative z-10 w-fit">
-                    <div className="flex gap-2.5 font-heading font-black text-base md:text-lg select-none tracking-wider">
+                  <div className="h-8 md:h-10 px-3 md:px-4 rounded-full bg-[#e2e2e2] border-2 border-brand-orange flex items-center justify-center shadow-md mb-3 md:mb-4 mx-auto relative z-10 w-fit">
+                    <div className="flex gap-1.5 md:gap-2.5 font-heading font-black text-sm md:text-lg select-none tracking-wider">
                       <span className="text-brand-navy/30">G</span>
                       <span className="text-brand-navy/30">I</span>
-                      <span className="text-brand-orange text-xl scale-110">F</span>
+                      <span className="text-brand-orange text-lg md:text-xl scale-110">F</span>
                       <span className="text-brand-navy/30">T</span>
                     </div>
                   </div>
-                  <div className="bg-[#102a43] text-blue-200 font-heading text-xs font-bold px-4 py-1.5 rounded-md border border-blue-500/30 inline-block mb-3.5 shadow-md mx-auto relative z-10 uppercase tracking-wider">
+                  <div className="bg-[#102a43] text-blue-200 font-heading text-xs font-bold px-2 md:px-4 py-1.5 rounded-md border border-blue-500/30 inline-block mb-2 md:mb-3.5 shadow-md mx-auto relative z-10 uppercase tracking-wider">
                     {t.values.facts.name}
                   </div>
-                  <p className="text-white/90 text-sm md:text-[14px] leading-relaxed max-w-[75%] mx-auto relative z-10">
+                  <p className="text-white/90 text-sm leading-relaxed max-w-full md:max-w-[75%] mx-auto relative z-10">
                     {t.values.facts.text}
                   </p>
 
                   {/* Document Icon sticking to bottom right */}
-                  <svg className="absolute -right-4 -bottom-4 w-24 h-24 opacity-80 pointer-events-none transition-transform duration-500 group-hover:scale-105 group-hover:-rotate-3" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <svg className="absolute -right-4 -bottom-4 w-14 h-14 md:w-24 md:h-24 opacity-80 pointer-events-none transition-transform duration-500 group-hover:scale-105 group-hover:-rotate-3" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <defs>
                       <linearGradient id="docGradF" x1="0%" y1="0%" x2="100%" y2="100%">
                         <stop offset="0%" stopColor="#f8fafc" />
@@ -418,77 +514,6 @@ export default function AboutPage() {
           </div>
         </SectionWrapper>
 
-        {/* Leadership Team Section (Solid White BG) */}
-        <SectionWrapper className="py-16 md:py-24 lg:py-32 bg-white text-brand-navy border-t border-gray-100">
-          <div className="max-w-[1200px] mx-auto px-6">
-            <div className="text-center mb-10 md:mb-20">
-              <span className="text-teal-aa text-sm font-semibold tracking-widest uppercase block mb-2">{t.leadersKicker}</span>
-              <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl text-brand-navy font-bold leading-tight">
-                {t.leadersTitle}
-              </h2>
-            </div>
-
-            {/* Two per row on phones too, so the four leaders take half the scrolling */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 lg:gap-8 max-w-[1200px] mx-auto">
-              {[
-                {
-                  name: "Radhakrishna PM",
-                  degree: "Ph.D, PG-Dip in Mgmt",
-                  image: Images.people.leaderRadhakrishna
-                },
-                {
-                  name: "Sharada KC",
-                  degree: "Ph.D",
-                  image: Images.people.leaderSharada
-                },
-                {
-                  name: "Sneha R",
-                  degree: "M.Com",
-                  image: Images.people.leaderSneehaCropped
-                },
-                {
-                  name: "Shankar CV",
-                  degree: "BE, MBA",
-                  image: Images.people.leaderShankar
-                }
-                // Roles and bios are in the language file (about.leaders), in this order.
-              ].map((leader, i) => ({ ...leader, ...t.leaders[i] })).map((leader, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: i * 0.15, ease: easeOut }}
-                  className="bg-gray-50/50 rounded-2xl border border-gray-100 p-4 sm:p-6 flex flex-col items-center text-center shadow-sm hover:border-brand-orange/30 hover:shadow-md transition-[border-color,box-shadow,scale] duration-300 group hover:scale-[1.02]"
-                >
-                  {/* Headshot container */}
-                  <div className="w-20 h-20 sm:w-28 sm:h-28 md:w-32 md:h-32 rounded-full border-2 border-orange-100 group-hover:border-brand-orange flex items-center justify-center bg-gray-100 mb-4 sm:mb-6 shadow-sm relative overflow-hidden transition-all duration-300">
-                    <Image
-                      src={leader.image}
-                      alt={leader.name}
-                      fill
-                      sizes="(max-width: 639px) 80px, (max-width: 768px) 112px, 128px"
-                      className="object-cover object-center group-hover:scale-105 transition-transform duration-500"
-                    />
-                  </div>
-
-                  <h3 className="font-heading text-base md:text-lg font-bold text-brand-orange-aa mb-1">
-                    {leader.name}
-                  </h3>
-                  <p className="text-brand-navy font-bold text-xs uppercase tracking-wider mb-0.5">
-                    {leader.role}
-                  </p>
-                  <p className="text-brand-navy text-xs font-semibold mb-4">
-                    {leader.degree}
-                  </p>
-                  <p className="text-teal-aa text-xs md:text-sm leading-relaxed max-w-[90%]">
-                    {leader.bio}
-                  </p>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </SectionWrapper>
       </main>
 
       <Footer />

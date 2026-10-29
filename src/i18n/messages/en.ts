@@ -225,6 +225,11 @@ const en = {
       "To pioneer sustainable progress in Animal Feed Functional Additives & Nutraceuticals by championing Green Technologies, fostering Creativity through an Innovative Mindset, and building an unshakable foundation of Trust and Reliability.",
     foundersAlt: "ChemLife Founders and Leadership",
     founders: "Our Founders",
+    journeyTitle: "Our Journey",
+    journeyText: "ChemLife Innovations brings together Ayurvedic plant wisdom and modern biotechnology to develop nature-derived functional feed additives for poultry, dairy and livestock.",
+    journeyText2: "Our founders bring experience in animal nutraceuticals, research, technology and business management. Together, they guide our work in bioactives, green technologies and practical solutions for animal nutrition.",
+    visionKicker: "Our Vision",
+    visionText: "To pioneer sustainable progress in Animal Feed Functional Additives & Nutraceuticals by championing green technologies, fostering creativity through an innovative mindset, and building an unshakable foundation of trust and reliability.",
     missionKicker: "Our Mission",
     missionTitle: "To integrate eco-conscious solutions into every facet of progress.",
     missionText:
