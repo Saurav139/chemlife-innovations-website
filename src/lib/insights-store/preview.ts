@@ -209,6 +209,11 @@ async function fetchText(address: string): Promise<string> {
   return (await fetchPublic(address, "text/html,application/xhtml+xml", 3_000_000)).bytes.toString("utf8");
 }
 
+/** A feed's text, from a public address only. */
+export async function fetchFeedText(address: string): Promise<string> {
+  return (await fetchPublic(address, "application/rss+xml,application/atom+xml,application/feed+json,application/json,text/xml,*/*;q=0.5", 3_000_000)).bytes.toString("utf8");
+}
+
 /** Copies a picture from the web into the database, so it keeps working after the source's address expires. */
 export async function copyImage(address: string): Promise<number> {
   const res = await fetchPublic(address, "image/avif,image/webp,image/png,image/jpeg,image/*", 6_000_000);

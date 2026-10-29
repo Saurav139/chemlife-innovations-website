@@ -4,7 +4,8 @@ The moderator decides which posts from ChemLife's channels appear on the Insight
 
 - **YouTube** uploads and **blog** (WordPress) posts come in by themselves. So do **Instagram** posts once
   `INSTAGRAM_ACCESS_TOKEN` is set.
-- **LinkedIn** posts, and anything else, are added by pasting the post's link into "Add a post". The title, text,
+- **LinkedIn** posts come in by themselves when `LINKEDIN_FEED_URL` is set (see below); otherwise, like anything
+  else, they are added by pasting the post's link into "Add a post". The title, text,
   picture and date are filled in from the post where the site allows it.
 - New posts wait under **Waiting**, marked **New** if they arrived since your last visit (remembered per browser).
   **Add to page** puts one on the Insights page straight away; **Hide** keeps it off. Tick several posts (or
@@ -35,6 +36,10 @@ The staging and live sites should each have their own database, so testing on st
 - **Instagram:** create a Meta app with the *Instagram API with Instagram Login* product, add ChemLife's Instagram
   business account, generate an access token and set it as `INSTAGRAM_ACCESS_TOKEN`. It lasts 60 days; the inbox
   renews it every week and keeps the renewed one in the database. Setting a new one in hPanel replaces it.
+- **LinkedIn automatically:** LinkedIn only lets approved apps read a company page's posts, so use a feed service.
+  With RSS.app, make a feed from the public company page (its LinkedIn feed generator), and set `LINKEDIN_FEED_URL`
+  to the feed's address (RSS, Atom and JSON feeds all work). Each check reads the 20 newest posts; new ones wait
+  under **Waiting** with their text, picture and date. Treat the address as private: anyone with it can read the feed.
 - **Scheduled checks:** set `INSIGHTS_SYNC_KEY` to a long random string and add an hPanel cron job, e.g. hourly:
   `curl -fsS "https://chemlifeinnovations.com/api/admin/insights/sync?key=THE_KEY"`
 

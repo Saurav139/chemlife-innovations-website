@@ -2,7 +2,8 @@ import { createHash } from "node:crypto";
 import { revalidatePath } from "next/cache";
 import { FALLBACK_INSIGHTS, type InsightItem } from "@/lib/insights";
 import { addItems, changeItem, getSetting, knownIds, listItems, removeUnusedImages, setSetting } from "./db";
-import { copyImage } from "./preview";
+import { fetchLinkedInFeed } from "./feed";
+import { copyImage, fetchFeedText } from "./preview";
 import { fetchInstagramPosts, fetchWordPressPosts, fetchYouTubeUploads, renewInstagramToken } from "./sources";
 import { articleSummary, cleanTitle, isFromArticle, linkedinActivityId, normalizeUrl } from "./text";
 import type { ItemChanges, Source, SourceItem, SourceState, SyncResult } from "./types";
@@ -34,6 +35,10 @@ async function runSync(): Promise<SyncResult[]> {
       const token = await instagramToken();
       return token ? fetchInstagramPosts(token) : null;
     }),
+    await importFrom("linkedin", async () => {
+      const feed = process.env.LINKEDIN_FEED_URL;
+      return feed ? fetchLinkedInFeed(feed, fetchFeedText) : null;
+    }),
   ];
   await setSetting("last_sync", JSON.stringify({ at: new Date().toISOString(), results }));
   await removeUnusedImages().catch(() => undefined);
@@ -47,11 +52,15 @@ async function importFrom(source: Source, fetchItems: () => Promise<SourceItem[]
     if (items === null) return { source, added: 0, approved: false, skipped: "not set up" };
     const known = await knownIds(source, items.map((item) => item.externalId));
     const fresh = items.filter((item) => !known.has(item.externalId));
-    for (const item of fresh) {
-      if (!item.copyImage || !item.imageUrl) continue;
-      // The source's picture address expires, so keep a copy; without one the card shows a stock photo.
-      item.imageId = await copyImage(item.imageUrl).catch(() => undefined);
-      item.imageUrl = undefined;
+    // The source's picture address expires, so keep a copy; without one the card shows a stock photo. A few at a time.
+    const withPicture = fresh.filter((item) => item.copyImage && item.imageUrl);
+    for (let i = 0; i < withPicture.length; i += 4) {
+      await Promise.all(
+        withPicture.slice(i, i + 4).map(async (item) => {
+          item.imageId = await copyImage(item.imageUrl!).catch(() => undefined);
+          item.imageUrl = undefined;
+        })
+      );
     }
     const approveNow = firstTimeApproved ? !(await getSetting(firstTimeApproved)) : false;
     const added = await addItems(fresh, approveNow ? "approved" : "pending");
@@ -187,7 +196,9 @@ export async function inboxStatus(): Promise<InboxStatus> {
               : "New posts are checked automatically.",
           })
         : { state: "not-set-up", detail: "Set INSTAGRAM_ACCESS_TOKEN to bring in new posts. Until then, paste post links." },
-      linkedin: { state: "manual", detail: "Paste a post's link to add it." },
+      linkedin: process.env.LINKEDIN_FEED_URL
+        ? state("linkedin", { state: "connected", detail: "New company page posts come in through its feed. To add any other post, paste its link." })
+        : { state: "manual", detail: "Paste a post's link to add it. To bring posts in by themselves, set LINKEDIN_FEED_URL (see the README)." },
       link: { state: "manual", detail: "Paste any article's link to add it." },
     },
   };
