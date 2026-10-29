@@ -32,6 +32,8 @@ export const Images = {
     dairy: "/images/heroes/dairy-bg.jpg",
     slide76: "/images/heroes/76.jpg",
     slide87: "/images/heroes/87.jpg",
+    /** ChemLife's founders accepting an award on stage, cropped around the trophy */
+    awards: "/images/heroes/awards-hero.jpg",
   },
 
   /** Product icons, banners, and category images */
