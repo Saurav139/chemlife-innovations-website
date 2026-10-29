@@ -18,7 +18,7 @@ export default async function PreviewsPage({ params }: { params: Promise<{ local
   return (
     <VariantProvider>
       <Header />
-      <main className="min-h-screen bg-white pt-40 pb-24">
+      <main id="main" tabIndex={-1} className="min-h-screen bg-white pt-40 pb-24">
         <div className="max-w-[1000px] mx-auto px-6">
           <p className="text-sm font-semibold uppercase tracking-widest text-brand-orange">Staging only</p>
           <h1 className="font-heading text-4xl font-bold text-brand-navy mt-2">Design previews</h1>

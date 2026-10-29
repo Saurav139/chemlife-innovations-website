@@ -10,7 +10,7 @@ export default function SkipLink() {
     <a
       href="#main"
       onClick={(e) => {
-        const main = document.querySelector("main");
+        const main = document.getElementById("main") ?? document.querySelector("main");
         if (!main) return;
         e.preventDefault();
         main.setAttribute("tabindex", "-1");

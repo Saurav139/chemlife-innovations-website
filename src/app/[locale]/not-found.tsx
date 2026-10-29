@@ -19,7 +19,7 @@ export default function NotFound() {
   return (
     <VariantProvider>
       <Header />
-      <main className="min-h-[70vh] bg-white pt-32 md:pt-40 pb-20 md:pb-24 text-center px-6">
+      <main id="main" tabIndex={-1} className="min-h-[70vh] bg-white pt-32 md:pt-40 pb-20 md:pb-24 text-center px-6">
         <p className="font-heading text-7xl md:text-8xl font-bold text-brand-navy/10 leading-none select-none" aria-hidden="true">
           404
         </p>

@@ -431,6 +431,8 @@ function ChatSessionContent() {
 
         {/* Chat panel */}
         <main
+          id="main"
+          tabIndex={-1}
           // A fixed height, so messages scroll inside the panel. 100dvh follows the visible height as a phone's browser
           // toolbar shows and hides; 100vh doesn't. flex-none below lg: in the stacked layout flex-1 would override it.
           className="flex-none lg:flex-1 flex flex-col min-h-[520px] h-[calc(100dvh_-_136px)] bg-white border border-slate-200/80 rounded-2xl shadow-sm overflow-hidden"

@@ -21,7 +21,7 @@ export default function AboutPage() {
     <VariantProvider>
       <Header />
 
-      <main id="main" className="overflow-x-clip bg-brand-navy min-h-screen pt-18 md:pt-20 lg:pt-24">
+      <main id="main" tabIndex={-1} className="overflow-x-clip bg-brand-navy min-h-screen pt-18 md:pt-20 lg:pt-24">
         {/* Intro Hero Section with Glass Plant Image BG */}
         <SectionWrapper className="py-10 md:py-16 lg:py-20 text-white relative overflow-hidden flex items-center">
           <div className="absolute inset-0 z-0">

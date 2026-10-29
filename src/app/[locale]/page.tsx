@@ -20,7 +20,7 @@ export default function Home() {
   return (
     <VariantProvider>
       <Header />
-      <main id="main">
+      <main id="main" tabIndex={-1}>
         <HeroVariantA />
         <WhoWeAre />
         <HowWeDo />

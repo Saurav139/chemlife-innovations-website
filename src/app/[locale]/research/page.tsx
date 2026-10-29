@@ -68,7 +68,7 @@ export default function ResearchPage() {
     <VariantProvider>
       <Header />
 
-      <main id="main" className="bg-slate-50/50 min-h-screen text-brand-navy">
+      <main id="main" tabIndex={-1} className="bg-slate-50/50 min-h-screen text-brand-navy">
         {/* Card animations follow the visitor's "reduce motion" setting */}
         <MotionConfig reducedMotion="user">
         {/* Hero and research list are plain sections: they're in the first screen, so they show without waiting for a fade-in.

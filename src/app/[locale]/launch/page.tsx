@@ -287,7 +287,7 @@ export default function LaunchPage() {
         <Header />
 
         {/* Outer container aligned like standard website pages */}
-        <main className="flex-grow pt-36 pb-16 px-6 max-w-[1200px] mx-auto w-full flex flex-col items-center">
+        <main id="main" tabIndex={-1} className="flex-grow pt-36 pb-16 px-6 max-w-[1200px] mx-auto w-full flex flex-col items-center">
           
           {/* Main Titles */}
           <div className="text-center max-w-2xl mb-12">

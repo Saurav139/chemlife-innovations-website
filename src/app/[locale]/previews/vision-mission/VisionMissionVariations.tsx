@@ -41,7 +41,7 @@ export default function VisionMissionVariations({ statements }: { statements: St
   };
   const selected = options.find((option) => option.id === variant)!;
 
-  return <main id="main" className={styles.page}>
+  return <main id="main" tabIndex={-1} className={styles.page}>
     <div className={`${styles.wrap} ${styles.intro}`}>
       <Link className={styles.back} href="/previews">← Design previews</Link>
       <span className={styles.kicker}>About ChemLife / Design variations</span>

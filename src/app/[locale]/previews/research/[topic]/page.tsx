@@ -32,7 +32,7 @@ export default async function ResearchTopicPreview({ params }: { params: Params 
   return (
     <VariantProvider>
       <Header />
-      <main className="min-h-screen bg-white">
+      <main id="main" tabIndex={-1} className="min-h-screen bg-white">
         <ResearchArticle html={html} />
       </main>
       <Footer />

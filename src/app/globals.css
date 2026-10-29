@@ -111,6 +111,23 @@
     outline-offset: 2px;
   }
 
+  /* Leave room for the fixed header when the skip link scrolls to the content. */
+  main[id="main"] {
+    scroll-margin-top: 4.5rem;
+  }
+
+  @media (min-width: 768px) {
+    main[id="main"] {
+      scroll-margin-top: 5rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    main[id="main"] {
+      scroll-margin-top: 6rem;
+    }
+  }
+
   /* The skip link moves focus to <main> (tabindex -1) so Tab continues from there; no outline around the whole page. */
   main[tabindex="-1"]:focus {
     outline: none;
