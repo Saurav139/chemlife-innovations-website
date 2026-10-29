@@ -20,9 +20,9 @@ export default function AboutPage() {
     <VariantProvider>
       <Header />
 
-      <main className="overflow-x-clip bg-brand-navy min-h-screen pt-18 md:pt-20 lg:pt-24">
+      <main id="main" className="overflow-x-clip bg-brand-navy min-h-screen pt-18 md:pt-20 lg:pt-24">
         {/* Intro Hero Section with Glass Plant Image BG */}
-        <SectionWrapper className="py-12 md:py-24 lg:py-32 text-white relative overflow-hidden md:min-h-[500px] flex items-center">
+        <SectionWrapper className="py-10 md:py-16 lg:py-20 text-white relative overflow-hidden flex items-center">
           <div className="absolute inset-0 z-0">
             <Image
               src={Images.heroes.about}
@@ -59,8 +59,8 @@ export default function AboutPage() {
         </SectionWrapper>
 
         {/* Our Journey */}
-        <SectionWrapper id="our-journey" className="scroll-mt-18 md:scroll-mt-20 lg:scroll-mt-24 py-12 md:py-24 lg:py-32 bg-white text-brand-navy">
-          <div className="max-w-[1200px] mx-auto px-6 grid md:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-center">
+        <SectionWrapper id="our-journey" className="scroll-mt-18 md:scroll-mt-20 lg:scroll-mt-24 py-8 md:py-12 lg:py-16 bg-white text-brand-navy">
+          <div className="max-w-[1200px] mx-auto px-6 grid md:grid-cols-2 gap-6 md:gap-8 lg:gap-12 items-center">
             {/* Founder/Team Image Section with Founders Tag */}
             <motion.div
               initial={{ opacity: 0, x: -30 }}
@@ -79,10 +79,9 @@ export default function AboutPage() {
                   fill
                   sizes="(max-width: 768px) 100vw, 550px"
                   className="object-cover group-hover:scale-[1.02] transition-transform duration-500"
-                  priority
                 />
               </div>
-              <div className="mt-4 bg-teal-50 border border-teal-200 text-teal-aa text-xs md:text-sm font-bold uppercase tracking-wider px-5 py-1.5 rounded-full shadow-xs select-none">
+              <div className="mt-3 bg-teal-50 border border-teal-200 text-teal-aa text-xs md:text-sm font-bold uppercase tracking-wider px-5 py-1.5 rounded-full shadow-xs select-none">
                 {t.founders}
               </div>
             </motion.div>
@@ -93,10 +92,10 @@ export default function AboutPage() {
               viewport={{ once: true }}
               transition={{ duration: 0.6, ease: easeOut }}
             >
-              <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl text-brand-navy mb-6 font-bold leading-tight">
+              <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl text-brand-navy mb-4 font-bold leading-tight">
                 {t.journeyTitle}
               </h2>
-              <div className="space-y-4 text-brand-navy/85 text-base lg:text-lg leading-relaxed">
+              <div className="space-y-3 text-brand-navy/85 text-base lg:text-lg leading-relaxed">
                 <p>{t.journeyText}</p>
                 <p>{t.journeyText2}</p>
               </div>
@@ -105,15 +104,15 @@ export default function AboutPage() {
         </SectionWrapper>
 
         {/* Dedicated Vision & Mission section. */}
-        <SectionWrapper id="vision-mission" className="scroll-mt-18 md:scroll-mt-20 lg:scroll-mt-24 py-12 md:py-24 lg:py-32 bg-[#F4F5F1] border-t border-gray-100">
+        <SectionWrapper id="vision-mission" className="scroll-mt-18 md:scroll-mt-20 lg:scroll-mt-24 py-8 md:py-12 lg:py-16 bg-[#F4F5F1] border-t border-gray-100">
           <div className="max-w-[1200px] mx-auto px-6 grid md:grid-cols-2 gap-6 lg:gap-8">
             {[
               { title: t.visionKicker, text: t.visionText },
               { title: t.missionKicker, text: t.missionText },
             ].map((statement) => (
-              <article key={statement.title} className="bg-white rounded-2xl border border-[#13447c]/10 p-6 md:p-8">
-                <div aria-hidden="true" className="h-1 w-10 rounded-full bg-[#e65300] mb-5" />
-                <h2 className="font-heading text-2xl md:text-3xl text-[#13447c] mb-4 font-bold leading-tight">
+              <article key={statement.title} className="bg-white rounded-2xl border border-[#13447c]/10 p-5 md:p-6">
+                <div aria-hidden="true" className="h-1 w-10 rounded-full bg-[#e65300] mb-4" />
+                <h2 className="font-heading text-2xl md:text-3xl text-[#13447c] mb-3 font-bold leading-tight">
                   {statement.title}
                 </h2>
                 <p className="text-[#2b2b2b] text-base lg:text-lg leading-relaxed">
@@ -125,21 +124,21 @@ export default function AboutPage() {
         </SectionWrapper>
 
         {/* Leadership Team Section */}
-        <SectionWrapper className="py-12 md:py-24 lg:py-32 bg-gray-50 text-brand-navy border-t border-teal-100">
+        <SectionWrapper className="py-8 md:py-12 lg:py-16 bg-gray-50 text-brand-navy border-t border-teal-100">
           <div className="max-w-[1200px] mx-auto px-6">
-            <div className="text-center mb-8 md:mb-12">
+            <div className="text-center mb-6 md:mb-8">
               <span className="text-teal-aa text-sm lg:text-base font-semibold tracking-widest uppercase block mb-2">{t.leadersKicker}</span>
               <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl text-brand-navy font-bold leading-tight">
                 {t.leadersTitle}
               </h2>
-              <div aria-hidden="true" className="flex justify-center gap-1.5 mt-5">
+              <div aria-hidden="true" className="flex justify-center gap-1.5 mt-3">
                 <span className="h-1 w-12 rounded-full bg-brand-orange" />
                 <span className="h-1 w-6 rounded-full bg-teal-500" />
               </div>
             </div>
 
-            {/* Two portraits per row on phones, four on desktop. */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 lg:gap-8 max-w-[1200px] mx-auto">
+            {/* One readable profile on very narrow phones, two from 360px, four on desktop. */}
+            <div className="grid grid-cols-1 min-[360px]:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 lg:gap-8 max-w-[1200px] mx-auto">
               {[
                 {
                   name: "Radhakrishna PM",
@@ -172,7 +171,7 @@ export default function AboutPage() {
                   className="bg-white rounded-2xl border border-teal-100 overflow-hidden flex flex-col shadow-sm hover:border-brand-orange/50 hover:shadow-md transition-[border-color,box-shadow] duration-300 group"
                 >
                   {/* Portrait panel keeps the face and shoulders visible without a circular crop. */}
-                  <div className="relative aspect-[4/5] overflow-hidden bg-gray-50 m-2 sm:m-3 mb-0 sm:mb-0 rounded-xl border border-orange-100 group-hover:border-orange-200 transition-colors duration-300">
+                  <div className="relative aspect-[4/3] min-[360px]:aspect-[4/5] sm:aspect-[4/3] lg:aspect-[4/5] overflow-hidden bg-gray-50 m-2 sm:m-3 mb-0 sm:mb-0 rounded-xl border border-orange-100 group-hover:border-orange-200 transition-colors duration-300">
                     <Image
                       src={leader.image}
                       alt={leader.name}
@@ -182,14 +181,14 @@ export default function AboutPage() {
                     />
                   </div>
 
-                  <div className="flex flex-1 flex-col items-start text-left p-4 sm:p-5 lg:p-6">
+                  <div className="flex flex-1 flex-col items-start text-left p-4 md:p-5">
                   <h3 className="font-heading text-lg md:text-xl font-bold text-brand-orange-aa leading-tight mb-2">
                     {leader.name}
                   </h3>
                   <p className="text-teal-aa font-bold text-xs md:text-sm uppercase tracking-wider leading-relaxed mb-2">
                     {leader.role}
                   </p>
-                  <p className="text-brand-navy/70 text-xs md:text-sm font-medium leading-relaxed mb-4">
+                  <p className="text-brand-navy/70 text-xs md:text-sm font-medium leading-relaxed mb-3">
                     {leader.degree}
                   </p>
                   <p className="text-brand-navy/85 text-sm lg:text-base leading-relaxed border-t border-teal-100 pt-3 w-full">
@@ -203,9 +202,9 @@ export default function AboutPage() {
         </SectionWrapper>
 
         {/* Core Values Section (Brand Navy BG with Honeycomb Hexagons) */}
-        <SectionWrapper id="core-values" className="scroll-mt-18 md:scroll-mt-20 lg:scroll-mt-24 py-12 md:py-24 lg:py-32 bg-brand-navy text-white">
+        <SectionWrapper id="core-values" className="scroll-mt-18 md:scroll-mt-20 lg:scroll-mt-24 py-8 md:py-12 lg:py-16 bg-brand-navy text-white">
           <div className="max-w-[1200px] mx-auto px-6">
-            <div className="text-center mb-8 md:mb-12">
+            <div className="text-center mb-6 md:mb-8">
               <span className="text-teal-aa-light text-sm font-semibold tracking-widest uppercase block mb-2">{t.valuesKicker}</span>
               <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl text-white font-bold leading-tight">
                 {t.valuesTitle}
@@ -214,7 +213,7 @@ export default function AboutPage() {
 
             {/* G.I.F.T. Core Values Diamond Grid */}
             {/* Phones and tablets use compact GIFT cards in a grid; desktop keeps the diamond and connecting lines. */}
-            <div className="grid min-[380px]:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-y-12 md:gap-x-12 max-w-5xl mx-auto pb-4 md:pb-12 relative">
+            <div className="grid min-[380px]:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-y-8 md:gap-x-8 max-w-5xl mx-auto pb-2 md:pb-4 relative">
 
                {/* Connection Lines for Desktop - Positioned underneath the boxes (z-0) */}
               <svg className="absolute inset-0 w-full h-full pointer-events-none hidden lg:block z-0" viewBox="0 0 100 100" preserveAspectRatio="none">
@@ -279,9 +278,9 @@ export default function AboutPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: 0.1, ease: easeOut }}
-                  className="relative w-full max-w-[320px] bg-linear-to-b from-teal-900 to-teal-950 rounded-2xl pt-4 pb-9 px-3 md:pt-8 md:pb-14 md:px-6 text-center border border-white/10 shadow-xl hover:border-brand-orange/45 hover:scale-[1.02] transition-[border-color,box-shadow,scale] duration-300 group overflow-hidden"
+                  className="relative w-full max-w-[320px] bg-linear-to-b from-teal-900 to-teal-950 rounded-2xl pt-4 pb-9 px-3 md:pt-6 md:pb-12 md:px-5 text-center border border-white/10 shadow-xl hover:border-brand-orange/45 hover:scale-[1.02] transition-[border-color,box-shadow,scale] duration-300 group overflow-hidden"
                 >
-                  <div className="h-8 md:h-10 px-3 md:px-4 rounded-full bg-[#e2e2e2] border-2 border-brand-orange flex items-center justify-center shadow-md mb-3 md:mb-4 mx-auto relative z-10 w-fit">
+                  <div aria-hidden="true" className="h-8 md:h-10 px-3 md:px-4 rounded-full bg-[#e2e2e2] border-2 border-brand-orange flex items-center justify-center shadow-md mb-3 md:mb-4 mx-auto relative z-10 w-fit">
                     <div className="flex gap-1.5 md:gap-2.5 font-heading font-black text-sm md:text-lg select-none tracking-wider">
                       <span className="text-brand-orange text-lg md:text-xl scale-110">G</span>
                       <span className="text-brand-navy/30">I</span>
@@ -289,15 +288,15 @@ export default function AboutPage() {
                       <span className="text-brand-navy/30">T</span>
                     </div>
                   </div>
-                  <div className="bg-[#102a43] text-blue-200 font-heading text-xs font-bold px-2 md:px-4 py-1.5 rounded-md border border-blue-500/30 inline-block mb-2 md:mb-3.5 shadow-md mx-auto relative z-10 uppercase tracking-wider">
+                  <h3 className="bg-[#102a43] text-blue-200 font-heading text-xs font-bold px-2 md:px-4 py-1.5 rounded-md border border-blue-500/30 inline-block mb-2 md:mb-3.5 shadow-md mx-auto relative z-10 uppercase tracking-wider">
                     {t.values.green.name}
-                  </div>
-                  <p className="text-white/90 text-sm leading-relaxed max-w-full md:max-w-[75%] mx-auto relative z-10">
+                  </h3>
+                  <p className="text-white/90 text-sm leading-relaxed max-w-full md:max-w-[85%] mx-auto relative z-10">
                     {t.values.green.text}
                   </p>
 
                   {/* Sprout Icon sticking to bottom right */}
-                  <svg className="absolute -right-4 -bottom-4 w-14 h-14 md:w-24 md:h-24 opacity-80 pointer-events-none transition-transform duration-500 group-hover:scale-105 group-hover:-rotate-3" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <svg aria-hidden="true" className="absolute -right-4 -bottom-4 w-14 h-14 md:w-24 md:h-24 opacity-80 pointer-events-none transition-transform duration-500 group-hover:scale-105 group-hover:-rotate-3" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <defs>
                       <linearGradient id="leafGradG" x1="0%" y1="0%" x2="100%" y2="100%">
                         <stop offset="0%" stopColor="#4ade80" />
@@ -330,9 +329,9 @@ export default function AboutPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: 0.4, ease: easeOut }}
-                  className="relative w-full max-w-[320px] bg-linear-to-b from-teal-900 to-teal-950 rounded-2xl pt-4 pb-9 px-3 md:pt-8 md:pb-14 md:px-6 text-center border border-white/10 shadow-xl hover:border-brand-orange/45 hover:scale-[1.02] transition-[border-color,box-shadow,scale] duration-300 group overflow-hidden"
+                  className="relative w-full max-w-[320px] bg-linear-to-b from-teal-900 to-teal-950 rounded-2xl pt-4 pb-9 px-3 md:pt-6 md:pb-12 md:px-5 text-center border border-white/10 shadow-xl hover:border-brand-orange/45 hover:scale-[1.02] transition-[border-color,box-shadow,scale] duration-300 group overflow-hidden"
                 >
-                  <div className="h-8 md:h-10 px-3 md:px-4 rounded-full bg-[#e2e2e2] border-2 border-brand-orange flex items-center justify-center shadow-md mb-3 md:mb-4 mx-auto relative z-10 w-fit">
+                  <div aria-hidden="true" className="h-8 md:h-10 px-3 md:px-4 rounded-full bg-[#e2e2e2] border-2 border-brand-orange flex items-center justify-center shadow-md mb-3 md:mb-4 mx-auto relative z-10 w-fit">
                     <div className="flex gap-1.5 md:gap-2.5 font-heading font-black text-sm md:text-lg select-none tracking-wider">
                       <span className="text-brand-navy/30">G</span>
                       <span className="text-brand-navy/30">I</span>
@@ -340,15 +339,15 @@ export default function AboutPage() {
                       <span className="text-brand-orange text-lg md:text-xl scale-110">T</span>
                     </div>
                   </div>
-                  <div className="bg-[#102a43] text-blue-200 font-heading text-xs font-bold px-2 md:px-4 py-1.5 rounded-md border border-blue-500/30 inline-block mb-2 md:mb-3.5 shadow-md mx-auto relative z-10 uppercase tracking-wider">
+                  <h3 className="bg-[#102a43] text-blue-200 font-heading text-xs font-bold px-2 md:px-4 py-1.5 rounded-md border border-blue-500/30 inline-block mb-2 md:mb-3.5 shadow-md mx-auto relative z-10 uppercase tracking-wider">
                     {t.values.trust.name}
-                  </div>
-                  <p className="text-white/90 text-sm leading-relaxed max-w-full md:max-w-[75%] mx-auto relative z-10">
+                  </h3>
+                  <p className="text-white/90 text-sm leading-relaxed max-w-full md:max-w-[85%] mx-auto relative z-10">
                     {t.values.trust.text}
                   </p>
 
                   {/* Handshake Icon sticking to bottom right */}
-                  <svg className="absolute -right-4 -bottom-4 w-16 h-16 md:w-28 md:h-28 opacity-80 pointer-events-none transition-transform duration-500 group-hover:scale-105 group-hover:rotate-3" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <svg aria-hidden="true" className="absolute -right-4 -bottom-4 w-16 h-16 md:w-28 md:h-28 opacity-80 pointer-events-none transition-transform duration-500 group-hover:scale-105 group-hover:rotate-3" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <defs>
                       <linearGradient id="glowGradT" x1="0%" y1="0%" x2="100%" y2="100%">
                         <stop offset="0%" stopColor="#f97316" stopOpacity="0.2" />
@@ -393,9 +392,9 @@ export default function AboutPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: 0.2, ease: easeOut }}
-                  className="relative w-full max-w-[320px] bg-linear-to-b from-teal-900 to-teal-950 rounded-2xl pt-4 pb-9 px-3 md:pt-8 md:pb-14 md:px-6 text-center border border-white/10 shadow-xl hover:border-brand-orange/45 hover:scale-[1.02] transition-[border-color,box-shadow,scale] duration-300 group overflow-hidden"
+                  className="relative w-full max-w-[320px] bg-linear-to-b from-teal-900 to-teal-950 rounded-2xl pt-4 pb-9 px-3 md:pt-6 md:pb-12 md:px-5 text-center border border-white/10 shadow-xl hover:border-brand-orange/45 hover:scale-[1.02] transition-[border-color,box-shadow,scale] duration-300 group overflow-hidden"
                 >
-                  <div className="h-8 md:h-10 px-3 md:px-4 rounded-full bg-[#e2e2e2] border-2 border-brand-orange flex items-center justify-center shadow-md mb-3 md:mb-4 mx-auto relative z-10 w-fit">
+                  <div aria-hidden="true" className="h-8 md:h-10 px-3 md:px-4 rounded-full bg-[#e2e2e2] border-2 border-brand-orange flex items-center justify-center shadow-md mb-3 md:mb-4 mx-auto relative z-10 w-fit">
                     <div className="flex gap-1.5 md:gap-2.5 font-heading font-black text-sm md:text-lg select-none tracking-wider">
                       <span className="text-brand-navy/30">G</span>
                       <span className="text-brand-orange text-lg md:text-xl scale-110">I</span>
@@ -403,15 +402,15 @@ export default function AboutPage() {
                       <span className="text-brand-navy/30">T</span>
                     </div>
                   </div>
-                  <div className="bg-[#102a43] text-blue-200 font-heading text-xs font-bold px-2 md:px-4 py-1.5 rounded-md border border-blue-500/30 inline-block mb-2 md:mb-3.5 shadow-md mx-auto relative z-10 uppercase tracking-wider">
+                  <h3 className="bg-[#102a43] text-blue-200 font-heading text-xs font-bold px-2 md:px-4 py-1.5 rounded-md border border-blue-500/30 inline-block mb-2 md:mb-3.5 shadow-md mx-auto relative z-10 uppercase tracking-wider">
                     {t.values.innovation.name}
-                  </div>
-                  <p className="text-white/90 text-sm leading-relaxed max-w-full md:max-w-[75%] mx-auto relative z-10">
+                  </h3>
+                  <p className="text-white/90 text-sm leading-relaxed max-w-full md:max-w-[85%] mx-auto relative z-10">
                     {t.values.innovation.text}
                   </p>
 
                   {/* Bulb Icon sticking to bottom right */}
-                  <svg className="absolute -right-4 -bottom-4 w-14 h-14 md:w-24 md:h-24 opacity-80 pointer-events-none transition-transform duration-500 group-hover:scale-105 group-hover:rotate-6" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <svg aria-hidden="true" className="absolute -right-4 -bottom-4 w-14 h-14 md:w-24 md:h-24 opacity-80 pointer-events-none transition-transform duration-500 group-hover:scale-105 group-hover:rotate-6" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <defs>
                       <linearGradient id="bulbGradI" x1="0%" y1="0%" x2="100%" y2="100%">
                         <stop offset="0%" stopColor="#fef08a" />
@@ -458,9 +457,9 @@ export default function AboutPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: 0.3, ease: easeOut }}
-                  className="relative w-full max-w-[320px] bg-linear-to-b from-teal-900 to-teal-950 rounded-2xl pt-4 pb-9 px-3 md:pt-8 md:pb-14 md:px-6 text-center border border-white/10 shadow-xl hover:border-brand-orange/45 hover:scale-[1.02] transition-[border-color,box-shadow,scale] duration-300 group overflow-hidden"
+                  className="relative w-full max-w-[320px] bg-linear-to-b from-teal-900 to-teal-950 rounded-2xl pt-4 pb-9 px-3 md:pt-6 md:pb-12 md:px-5 text-center border border-white/10 shadow-xl hover:border-brand-orange/45 hover:scale-[1.02] transition-[border-color,box-shadow,scale] duration-300 group overflow-hidden"
                 >
-                  <div className="h-8 md:h-10 px-3 md:px-4 rounded-full bg-[#e2e2e2] border-2 border-brand-orange flex items-center justify-center shadow-md mb-3 md:mb-4 mx-auto relative z-10 w-fit">
+                  <div aria-hidden="true" className="h-8 md:h-10 px-3 md:px-4 rounded-full bg-[#e2e2e2] border-2 border-brand-orange flex items-center justify-center shadow-md mb-3 md:mb-4 mx-auto relative z-10 w-fit">
                     <div className="flex gap-1.5 md:gap-2.5 font-heading font-black text-sm md:text-lg select-none tracking-wider">
                       <span className="text-brand-navy/30">G</span>
                       <span className="text-brand-navy/30">I</span>
@@ -468,15 +467,15 @@ export default function AboutPage() {
                       <span className="text-brand-navy/30">T</span>
                     </div>
                   </div>
-                  <div className="bg-[#102a43] text-blue-200 font-heading text-xs font-bold px-2 md:px-4 py-1.5 rounded-md border border-blue-500/30 inline-block mb-2 md:mb-3.5 shadow-md mx-auto relative z-10 uppercase tracking-wider">
+                  <h3 className="bg-[#102a43] text-blue-200 font-heading text-xs font-bold px-2 md:px-4 py-1.5 rounded-md border border-blue-500/30 inline-block mb-2 md:mb-3.5 shadow-md mx-auto relative z-10 uppercase tracking-wider">
                     {t.values.facts.name}
-                  </div>
-                  <p className="text-white/90 text-sm leading-relaxed max-w-full md:max-w-[75%] mx-auto relative z-10">
+                  </h3>
+                  <p className="text-white/90 text-sm leading-relaxed max-w-full md:max-w-[85%] mx-auto relative z-10">
                     {t.values.facts.text}
                   </p>
 
                   {/* Document Icon sticking to bottom right */}
-                  <svg className="absolute -right-4 -bottom-4 w-14 h-14 md:w-24 md:h-24 opacity-80 pointer-events-none transition-transform duration-500 group-hover:scale-105 group-hover:-rotate-3" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <svg aria-hidden="true" className="absolute -right-4 -bottom-4 w-14 h-14 md:w-24 md:h-24 opacity-80 pointer-events-none transition-transform duration-500 group-hover:scale-105 group-hover:-rotate-3" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <defs>
                       <linearGradient id="docGradF" x1="0%" y1="0%" x2="100%" y2="100%">
                         <stop offset="0%" stopColor="#f8fafc" />
