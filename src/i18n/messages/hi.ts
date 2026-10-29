@@ -110,6 +110,13 @@ const hi: Messages = {
     goToSlide: "स्लाइड पर जाएँ",
     stats: ["वर्षों का अनुसंधान", "उत्पाद", "ग्राहकों को सेवा", "पुरस्कार जीते"],
 
+    // The photo of the founders accepting an award, under the hero
+    recognition: {
+      kicker: "सम्मान",
+      title: "2026 में मंच पर",
+      alt: "मंच पर पुरस्कार ग्रहण करते केमलाइफ़ के संस्थापक",
+      caption: "हमारे संस्थापक डॉ. राधाकृष्ण पी एम, डॉ. शारदम्मा के सी और स्नेहा राधाकृष्ण अपना पुरस्कार ग्रहण करते हुए।",
+    },
     whoWeAre: {
       kicker: "जानिए",
       title: "हम कौन हैं?",
