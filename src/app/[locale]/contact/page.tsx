@@ -166,7 +166,7 @@ export default function ContactPage() {
 
       <main className="bg-white min-h-screen text-brand-navy">
         {/* Contact Hero Section */}
-        <SectionWrapper className="pt-26 md:pt-32 pb-10 md:pb-24 lg:pt-36 lg:pb-32 text-white relative overflow-hidden bg-brand-navy flex items-center">
+        <SectionWrapper className="pt-28 md:pt-36 pb-10 md:pb-24 lg:pt-44 lg:pb-32 text-white relative overflow-hidden bg-brand-navy flex items-center">
           <div className="absolute inset-0 z-0">
             <Image
               src={Images.heroes.contact}

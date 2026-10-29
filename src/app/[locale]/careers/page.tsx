@@ -107,7 +107,7 @@ export default function CareersPage() {
 
       <main className="bg-white min-h-screen text-brand-navy">
         {/* Careers Hero Section */}
-        <SectionWrapper className="pt-26 md:pt-32 pb-10 md:pb-24 lg:pt-36 lg:pb-32 text-white relative overflow-hidden bg-brand-navy flex items-center">
+        <SectionWrapper className="pt-28 md:pt-36 pb-10 md:pb-24 lg:pt-44 lg:pb-32 text-white relative overflow-hidden bg-brand-navy flex items-center">
           <div className="absolute inset-0 z-0">
             <Image
               src={Images.heroes.careers}
@@ -300,7 +300,7 @@ export default function CareersPage() {
               id="role-panel"
               role="tabpanel"
               aria-labelledby={`role-tab-${selectedRole.id}`}
-              className="scroll-mt-28 bg-gray-55 border border-gray-200 rounded-3xl overflow-hidden shadow-sm"
+              className="scroll-mt-28 lg:scroll-mt-40 bg-gray-55 border border-gray-200 rounded-3xl overflow-hidden shadow-sm"
             >
               <div className="flex flex-col lg:flex-row min-h-[550px]">
 
