@@ -20,7 +20,7 @@ export default function AboutPage() {
     <VariantProvider>
       <Header />
 
-      <main className="bg-brand-navy min-h-screen pt-18 md:pt-20 lg:pt-24">
+      <main className="overflow-x-clip bg-brand-navy min-h-screen pt-20 md:pt-24 lg:pt-32">
         {/* Intro Hero Section with Glass Plant Image BG */}
         <SectionWrapper className="py-12 md:py-24 lg:py-32 text-white relative overflow-hidden md:min-h-[500px] flex items-center">
           <div className="absolute inset-0 z-0">
