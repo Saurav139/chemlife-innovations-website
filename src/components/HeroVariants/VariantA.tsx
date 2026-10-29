@@ -9,21 +9,16 @@ import { Images } from "@/lib/assets";
 import { useHref, useT } from "@/i18n/LocaleProvider";
 import { playOnPage, youtubeWatchUrl } from "@/lib/youtube";
 
-// The headlines (home.taglines in the language files) and the photos rotate separately: five headlines, four photos.
+// The award photo uses separate landscape and portrait crops to keep faces clear.
+const LANDSCAPE_SHAPE = "(min-aspect-ratio: 1/1)";
+const LANDSCAPE_SIZES = "(min-aspect-ratio: 3/2) 100vw, 150vh";
+const PORTRAIT_SIZES = "(min-aspect-ratio: 11/20) 100vw, 55vh";
 
-// The slides cover the hero, so on screens taller than the image they're drawn wider than the screen:
-// 1.5× the screen height for 3:2 photos, 2× for 2:1. `sizes` tells the browser which file is sharp enough.
-// Phones only show the middle of a 3:2 photo, so they get a half-width file: about 150 KB instead of 1 MB.
-const sizesFor = (aspect: "3/2" | "2/1") =>
-  aspect === "3/2"
-    ? "(min-aspect-ratio: 3/2) 100vw, (max-width: 767px) 75vh, 150vh"
-    : "(min-aspect-ratio: 2/1) 100vw, 200vh";
-
-const bgImages = [
-  { id: "poultry", src: Images.heroes.chicken, sizes: sizesFor("3/2") },
-  { id: "dairy", src: Images.heroes.dairy, sizes: sizesFor("3/2") },
-  { id: "img76", src: Images.heroes.slide76, sizes: sizesFor("2/1") },
-  { id: "img87", src: Images.heroes.slide87, sizes: sizesFor("2/1") },
+const otherPhotos = [
+  { src: Images.heroes.chicken, alt: "Poultry farming", sizes: "(min-aspect-ratio: 3/2) 100vw, 150vh" },
+  { src: Images.heroes.dairy, alt: "Dairy farming", sizes: "(min-aspect-ratio: 3/2) 100vw, 150vh" },
+  { src: Images.heroes.slide76, alt: "ChemLife animal nutrition", sizes: "(min-aspect-ratio: 2/1) 100vw, 200vh" },
+  { src: Images.heroes.slide87, alt: "ChemLife innovation", sizes: "(min-aspect-ratio: 2/1) 100vw, 200vh" },
 ];
 
 const STORY_VIDEO_ID = "-amOgNcjYNg";
@@ -90,7 +85,7 @@ function AnimatedCounter({ value, suffix }: { value: number; suffix: string }) {
 }
 
 export default function HeroVariantA() {
-  // `slide` is the headline (and its dot); `photo` is the background, on its own timer.
+  // Headlines and photos rotate independently so every photo is shown in every language.
   const [slide, setSlide] = useState(0);
   const [photo, setPhoto] = useState(0);
   const [storyOpen, setStoryOpen] = useState(false);
@@ -99,6 +94,9 @@ export default function HeroVariantA() {
   const href = useHref();
   const taglines = t.home.taglines;
   const tagline = taglines[slide];
+  const photoProps = (src: string, sizes: string) => getImageProps({ src, alt: t.home.heroAlt, fill: true, sizes, priority: true, className: "object-cover animate-ken-burns [@media(min-aspect-ratio:1/1)]:object-[50%_0%]" }).props;
+  const landscape = photoProps(Images.heroes.awardsLandscape, LANDSCAPE_SIZES);
+  const portrait = photoProps(Images.heroes.awardsPortrait, PORTRAIT_SIZES);
 
   useEffect(() => {
     if (!storyOpen) return;
@@ -107,32 +105,16 @@ export default function HeroVariantA() {
     return () => window.removeEventListener("keydown", onKey);
   }, [storyOpen]);
 
+  useEffect(() => {
+    const timer = setInterval(() => setPhoto((p) => (p + 1) % (otherPhotos.length + 1)), 6000);
+    return () => clearInterval(timer);
+  }, []);
+
   // Restarts on every change, so a headline picked from the dots also stays up for the full 6 s.
   useEffect(() => {
     const timer = setTimeout(() => setSlide((p) => (p + 1) % taglines.length), 6000);
     return () => clearTimeout(timer);
   }, [slide, taglines.length]);
-
-  useEffect(() => {
-    const timer = setInterval(() => setPhoto((p) => (p + 1) % bgImages.length), 6000);
-    return () => clearInterval(timer);
-  }, []);
-
-  // Fetch the next slide while this one is showing, so on slow connections it doesn't fade in blank.
-  // The browser picks the same size from srcset as the slide itself will, so it's reused from the cache.
-  // It waits 2.5 s so the first slide, the page's largest paint, has the connection to itself.
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      const next = bgImages[(photo + 1) % bgImages.length];
-      const { props } = getImageProps({ src: next.src, alt: "", fill: true, sizes: next.sizes });
-      const img = document.createElement("img");
-      img.fetchPriority = "low";
-      img.sizes = props.sizes ?? "";
-      img.srcset = props.srcSet ?? "";
-      img.src = props.src;
-    }, 2500);
-    return () => clearTimeout(timer);
-  }, [photo]);
 
   // min-h-svh: the screen height with the browser's toolbars showing, so on phones the stats aren't hidden under them.
   return (
@@ -140,42 +122,36 @@ export default function HeroVariantA() {
       {/* Deep Navy Backdrop Base */}
       <div className="absolute inset-0 bg-brand-navy z-0" />
 
-      {/* Dynamic Background Image cross-fading */}
-      <div className="absolute inset-0 z-10 opacity-100 transition-opacity duration-1000">
-        {/* initial={false}: the first slide and tagline are in the server HTML already visible,
-            so they paint without waiting for JavaScript. Later ones still animate in. */}
-        <AnimatePresence mode="wait" initial={false}>
-          <motion.div
-            key={photo}
-            initial={{ opacity: 0, scale: 1.05 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 1.5, ease: "easeInOut" }}
-            className="absolute inset-0 w-full h-full"
-          >
-            <Image
-              src={bgImages[photo].src}
-              alt={t.home.slideAlts[photo]}
-              fill
-              sizes={bgImages[photo].sizes}
-              className="object-cover animate-ken-burns"
-              priority={photo === 0}
-            />
-          </motion.div>
-        </AnimatePresence>
+      {/* The photo. Preloaded for the screen's shape, since it's the page's largest paint. */}
+      <link rel="preload" as="image" imageSrcSet={landscape.srcSet} imageSizes={landscape.sizes} media={LANDSCAPE_SHAPE} fetchPriority="high" />
+      <link rel="preload" as="image" imageSrcSet={portrait.srcSet} imageSizes={portrait.sizes} media="not all and (min-aspect-ratio: 1/1)" fetchPriority="high" />
+      <div className="absolute inset-0 z-10">
+        <div className={`absolute inset-0 transition-opacity duration-1000 motion-reduce:transition-none ${photo === 0 ? "opacity-100" : "opacity-0"}`} aria-hidden={photo !== 0}>
+        <picture>
+          <source media={LANDSCAPE_SHAPE} srcSet={landscape.srcSet} sizes={landscape.sizes} />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img {...portrait} alt={t.home.heroAlt} />
+        </picture>
+        </div>
+        {otherPhotos.map((image, index) => (
+          <div key={image.src} className={`absolute inset-0 transition-opacity duration-1000 motion-reduce:transition-none ${photo === index + 1 ? "opacity-100" : "opacity-0"}`} aria-hidden={photo !== index + 1}>
+            <Image src={image.src} alt={image.alt} fill sizes={image.sizes} loading="eager" className="object-cover animate-ken-burns" />
+          </div>
+        ))}
       </div>
 
       {/* Subtle Dark Overlay for text readability (keeps original image colors) */}
-      <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent z-20" />
+      <div className="absolute inset-x-0 top-0 h-[58%] bg-gradient-to-b from-black/60 via-black/30 to-transparent z-20" />
+      <div className="absolute inset-x-0 bottom-0 h-[42%] bg-gradient-to-t from-black/65 via-black/15 to-transparent z-20" />
       <div className="absolute inset-0 bg-black/10 z-20" />
 
-      <div className="relative z-30 max-w-[1200px] mx-auto px-6 pt-28 pb-28 md:py-32 lg:pt-40 w-full h-full flex flex-col justify-center">
+      <div className="relative z-30 max-w-[1200px] mx-auto px-6 pt-24 pb-28 md:pt-28 md:pb-32 lg:pt-36 w-full min-h-svh flex flex-col justify-center">
         {/* w-full: without it, this box has no explicit width, so its auto side margins (for centering)
             stop it from stretching and it shrinks to fit whichever tagline is showing — moving and
             resizing the buttons below it from one slide to the next. */}
-        <div className="w-full max-w-4xl flex-1 flex flex-col justify-center mx-auto text-center items-center">
-          <div className="min-h-[300px] md:min-h-[340px] flex flex-col justify-center items-center text-center w-full">
-            {/* initial={false}: see the background slides above */}
+        <div className="w-full max-w-4xl flex-1 flex flex-col justify-start mx-auto text-center items-center">
+          <div className="flex flex-col justify-start items-center text-center w-full">
+            {/* Keep the initial headline visible during hydration. */}
             <AnimatePresence mode="wait" initial={false}>
               {/* On phones the size follows the screen width so every tagline fits on its three lines, which keeps
                   the buttons below in the same place on every slide. */}
@@ -185,7 +161,7 @@ export default function HeroVariantA() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.6, ease: [0.25, 0.1, 0, 1] }}
-                className="font-heading text-[length:clamp(24px,8.8vw_-_4.5px,34px)] sm:text-5xl md:text-6xl lg:text-7xl leading-[1.1] mb-8 sm:mb-16 text-white font-bold text-center"
+                className="font-heading text-[length:clamp(24px,8.8vw_-_4.5px,34px)] sm:text-5xl md:text-6xl 2xl:text-7xl leading-[1.1] mb-5 sm:mb-8 text-white font-bold text-center"
               >
                 {tagline[0]}<br />
                 <span className="text-teal-400">{tagline[1]}</span><br />
@@ -211,7 +187,7 @@ export default function HeroVariantA() {
               target="_blank"
               rel="noopener noreferrer"
               onClick={(e) => playOnPage(e, () => setStoryOpen(true))}
-              className="tap-target mt-5 lg:mt-6 inline-flex items-center gap-2 text-sm lg:text-base font-semibold text-white/85 hover:text-white underline-offset-4 hover:underline transition-colors cursor-pointer"
+              className="tap-target mt-4 lg:mt-5 inline-flex items-center gap-2 text-sm lg:text-base font-semibold text-white/85 hover:text-white underline-offset-4 hover:underline transition-colors cursor-pointer"
             >
               <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current">
                 <path d="M8 5v14l11-7z" />

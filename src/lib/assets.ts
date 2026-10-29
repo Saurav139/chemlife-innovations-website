@@ -32,8 +32,10 @@ export const Images = {
     dairy: "/images/heroes/dairy-bg.jpg",
     slide76: "/images/heroes/76.jpg",
     slide87: "/images/heroes/87.jpg",
-    /** ChemLife's founders accepting an award on stage, cropped around the trophy */
-    awards: "/images/heroes/awards-hero.jpg",
+    /** ChemLife's founders accepting an award on stage, centred on the trophy, with dark headroom above them for the
+     *  headline. Landscape for screens at least as wide as tall, portrait for the rest. */
+    awardsLandscape: "/images/heroes/awards-hero-landscape.jpg",
+    awardsPortrait: "/images/heroes/awards-hero-portrait.jpg",
   },
 
   /** Product icons, banners, and category images */

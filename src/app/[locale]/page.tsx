@@ -5,7 +5,6 @@ import { VariantProvider } from "@/context/VariantContext";
 import Header from "@/components/Header";
 import HeroVariantA from "@/components/HeroVariants/VariantA";
 import WhoWeAre from "@/components/WhoWeAre";
-import AwardsPhoto from "@/components/AwardsPhoto";
 
 import HowWeDo from "@/components/HowWeDo";
 import LifeAtChemLife from "@/components/LifeAtChemLife";
@@ -23,7 +22,6 @@ export default function Home() {
       <Header />
       <main id="main">
         <HeroVariantA />
-        <AwardsPhoto />
         <WhoWeAre />
         <HowWeDo />
         <AwardsRecognition />

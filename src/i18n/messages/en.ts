@@ -95,12 +95,7 @@ const en = {
       ["Protected Bio-Actives", "Bioavailable at the Site", "of Absorption"],
       ["Green Trace Mineral", "Chelation & Nano", "Technologies"],
     ],
-    slideAlts: [
-      "Free range chicken farm",
-      "Dairy cattle farm",
-      "Cow with her calf in a green pasture",
-      "Chick drinking from a poultry drinker",
-    ],
+    heroAlt: "ChemLife's founders accepting an award on stage",
     findProduct: "Find the right product",
     talkToNutritionist: "Talk to a nutritionist",
     watchStory: "Watch our story",
@@ -109,13 +104,6 @@ const en = {
     goToSlide: "Go to slide",
     stats: ["Years of Research", "Products", "Customers Served", "Awards Won"],
 
-    // The photo of the founders accepting an award, under the hero
-    recognition: {
-      kicker: "Recognition",
-      title: "On stage in 2026",
-      alt: "ChemLife's founders accepting an award on stage",
-      caption: "Dr. Radhakrishna P M, Dr. Sharadamma K C and Sneha Radhakrishna, our founders, receiving their award.",
-    },
     whoWeAre: {
       kicker: "Get to know",
       title: "Who We Are?",
