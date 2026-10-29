@@ -1,6 +1,7 @@
 import mysql, { type Pool, type PoolConnection, type ResultSetHeader, type RowDataPacket } from "mysql2/promise";
 import type { Insights } from "@/lib/insights";
 import { insightCard } from "./card";
+import { importedStatus, isSocialSource, SOCIAL_AUTO_PUBLISH_SETTING } from "./social-publishing";
 import type { InboxItem, ItemChanges, Kind, Source, SourceItem, Status } from "./types";
 
 // The inbox's MySQL tables. DATABASE_URL points at the database, e.g. mysql://user:password@host:3306/name (a
@@ -130,6 +131,38 @@ export async function setSetting(name: string, value: string): Promise<void> {
   await db.execute("INSERT INTO insight_settings (name, value) VALUES (?, ?) ON DUPLICATE KEY UPDATE value = VALUES(value)", [name, value]);
 }
 
+export async function socialAutoPublishEnabled(): Promise<boolean> {
+  return (await getSetting(SOCIAL_AUTO_PUBLISH_SETTING)) === "true";
+}
+
+/** Saves the preference and approves existing waiting social posts atomically. Hidden posts are untouched. */
+export async function setSocialAutoPublish(enabled: boolean): Promise<number> {
+  const conn = await (await pool()).getConnection();
+  try {
+    await conn.beginTransaction();
+    // The same setting row is locked by automated imports, so an in-flight import cannot miss this decision.
+    await conn.execute(
+      "INSERT INTO insight_settings (name, value) VALUES (?, ?) ON DUPLICATE KEY UPDATE value = VALUES(value)",
+      [SOCIAL_AUTO_PUBLISH_SETTING, String(enabled)]
+    );
+    let approved = 0;
+    if (enabled) {
+      const [result] = await conn.execute<ResultSetHeader>(
+        "UPDATE insight_items SET status = 'approved', decided_at = ? WHERE status = 'pending' AND source IN (?, ?)",
+        [new Date(), "linkedin", "instagram"]
+      );
+      approved = result.affectedRows;
+    }
+    await conn.commit();
+    return approved;
+  } catch (error) {
+    await conn.rollback();
+    throw error;
+  } finally {
+    conn.release();
+  }
+}
+
 // ---------- Posts ----------
 
 const ITEM_COLUMNS = `i.id, i.source, i.external_id, i.kind, i.status, i.featured, i.title, i.summary, i.content, i.url,
@@ -170,6 +203,30 @@ export async function knownIds(source: Source, externalIds: string[]): Promise<S
 export async function addItems(items: SourceItem[], status: Status): Promise<number> {
   if (items.length === 0) return 0;
   const db = await pool();
+  return insertItems(db, items, status);
+}
+
+/** Automated social imports share a lock with preference changes, across servers as well as requests. */
+export async function addImportedItems(source: Source, items: SourceItem[], status: Status): Promise<{ added: number; approved: boolean }> {
+  if (!isSocialSource(source) || items.length === 0) return { added: await addItems(items, status), approved: status === "approved" };
+  const conn = await (await pool()).getConnection();
+  try {
+    await conn.beginTransaction();
+    await conn.execute("INSERT INTO insight_settings (name, value) VALUES (?, 'false') ON DUPLICATE KEY UPDATE name = VALUES(name)", [SOCIAL_AUTO_PUBLISH_SETTING]);
+    const [rows] = await conn.execute<RowDataPacket[]>("SELECT value FROM insight_settings WHERE name = ? FOR UPDATE", [SOCIAL_AUTO_PUBLISH_SETTING]);
+    const decision = importedStatus(source, status, rows[0]?.value === "true");
+    const added = await insertItems(conn, items, decision);
+    await conn.commit();
+    return { added, approved: decision === "approved" };
+  } catch (error) {
+    await conn.rollback();
+    throw error;
+  } finally {
+    conn.release();
+  }
+}
+
+async function insertItems(db: Pool | PoolConnection, items: SourceItem[], status: Status): Promise<number> {
   const now = new Date();
   let added = 0;
   for (const item of items) {

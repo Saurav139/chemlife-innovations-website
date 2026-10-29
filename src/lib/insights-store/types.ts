@@ -75,7 +75,7 @@ export type SourceState =
 export interface SyncResult {
   source: Source;
   added: number;
-  /** Added straight onto the page (the first import of what the page already showed). */
+  /** Added straight onto the page, by the initial import or the saved social-post preference. */
   approved: boolean;
   error?: string;
   skipped?: string;

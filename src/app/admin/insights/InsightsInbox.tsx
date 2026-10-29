@@ -10,6 +10,7 @@ import type { InboxItem, ItemChanges, Kind, Source, SourceItem, SourceState, Sta
 // Insights page or hides them. The page updates as soon as a decision is made.
 
 interface Data {
+  autoPublishSocial: boolean;
   items: InboxItem[];
   lastSync: { at: string; results: SyncResult[] } | null;
   sources: Record<Source, SourceState>;
@@ -125,6 +126,7 @@ export default function InsightsInbox({ initial, demo = false }: { initial: Data
   const [selected, setSelected] = useState<Set<number>>(new Set());
   const [busy, setBusy] = useState<Set<number>>(new Set());
   const [checking, setChecking] = useState(false);
+  const [savingAutomatic, setSavingAutomatic] = useState(false);
   const [toast, setToast] = useState<{ text: string; error?: boolean; undo?: () => void } | null>(null);
   const [editing, setEditing] = useState<InboxItem | null>(null);
   const [highlight, setHighlight] = useState<number | null>(null);
@@ -332,14 +334,37 @@ export default function InsightsInbox({ initial, demo = false }: { initial: Data
       const fresh = await api<Data>("/api/admin/insights/sync", { method: "POST" });
       const before = new Set(data.items.map((item) => item.id));
       const added = fresh.items.filter((item) => !before.has(item.id) && item.status === "pending").length;
+      const published = fresh.items.filter((item) => !before.has(item.id) && item.status === "approved").length;
       setData(fresh);
       const failed = fresh.lastSync?.results.filter((r) => r.error) ?? [];
       if (failed.length) say(`Couldn't check ${failed.map((r) => SOURCE_LABEL[r.source]).join(" and ")}. See the channel for details.`, { error: true });
-      else if (!quiet || added) say(added ? `${added} new post${added === 1 ? " is" : "s are"} waiting.` : "No new posts.");
+      else if (!quiet || added || published) {
+        const notes = [published ? `${published} new post${published === 1 ? " was" : "s were"} added to the Insights page.` : "", added ? `${added} new post${added === 1 ? " is" : "s are"} waiting.` : ""].filter(Boolean);
+        say(notes.join(" ") || "No new posts.");
+      }
     } catch (error) {
       say((error as Error).message, { error: true });
     } finally {
       setChecking(false);
+    }
+  }
+
+  async function saveAutomatic(enabled: boolean) {
+    setSavingAutomatic(true);
+    try {
+      const fresh = await api<Data & { approvedCount: number }>("/api/admin/insights/settings", {
+        method: "PUT", body: JSON.stringify({ autoPublishSocial: enabled }),
+      });
+      setData(fresh);
+      setSelected(new Set());
+      say(enabled
+        ? `Automatic adding is on.${fresh.approvedCount ? ` Added ${fresh.approvedCount} waiting post${fresh.approvedCount === 1 ? "" : "s"} to the Insights page.` : ""}`
+        : "Automatic adding is off. Future social imports will wait for review.");
+      if (enabled) await check(true);
+    } catch (error) {
+      say((error as Error).message, { error: true });
+    } finally {
+      setSavingAutomatic(false);
     }
   }
 
@@ -402,7 +427,19 @@ export default function InsightsInbox({ initial, demo = false }: { initial: Data
 
       {/* Room at the bottom for the bar of selected posts, so it never covers the last one */}
       <main className={`max-w-[1100px] mx-auto px-4 sm:px-6 pt-6 sm:pt-8 space-y-6 ${picked.length ? "pb-40 sm:pb-28" : "pb-6 sm:pb-8"}`}>
-        <Channels data={data} checking={checking} onCheck={() => check()} />
+        <Channels data={data} checking={checking || savingAutomatic} onCheck={() => check()} />
+        <section aria-label="Automatic social posts" className="rounded-2xl bg-white border border-slate-200 shadow-sm px-4 py-4 sm:px-6" aria-busy={savingAutomatic}>
+          <label className="flex min-h-11 items-start gap-3 cursor-pointer py-1">
+            <input type="checkbox" checked={data.autoPublishSocial} disabled={savingAutomatic || checking}
+              onChange={(event) => void saveAutomatic(event.target.checked)}
+              aria-describedby="automatic-social-help" className={`${CHECKBOX} mt-0.5 shrink-0 disabled:opacity-50 disabled:cursor-wait`} />
+            <span className="text-sm sm:text-base font-semibold">Automatically add LinkedIn and Instagram posts to Insights</span>
+          </label>
+          <p id="automatic-social-help" className="mt-1 ml-8 text-sm text-slate-600 leading-relaxed">
+            Adds all waiting LinkedIn and Instagram posts and publishes future imports from connected channels without review. Hidden posts stay hidden. Turning this off keeps posts already on the page.
+          </p>
+          {savingAutomatic && <p role="status" className="mt-2 ml-8 text-sm font-semibold text-teal-aa">Saving preference…</p>}
+        </section>
         <AddPost
           onAdded={(item) => {
             setData((d) => ({ ...d, items: [item, ...d.items].sort((a, b) => Date.parse(b.publishedAt) - Date.parse(a.publishedAt)) }));

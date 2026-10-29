@@ -94,7 +94,7 @@ export const Images = {
   /** Team / leadership / founders */
   people: {
     founders: "/images/people/founders.jpg",
-    foundersNew: "/images/people/founders_new.jpg",
+    foundersNew: "/images/people/founders-leadership-group.jpg",
     leaderRadhakrishna: "/images/people/leader_radhakrishna_new.jpg",
     leaderSharada: "/images/people/leader_sharada_new.jpg",
     leaderSneehaCropped: "/images/people/leader_sneha_new.jpg",

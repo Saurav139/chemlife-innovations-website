@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto";
 import { revalidatePath } from "next/cache";
 import { FALLBACK_INSIGHTS, type InsightItem } from "@/lib/insights";
-import { addItems, changeItem, getSetting, knownIds, listItems, removeUnusedImages, setSetting } from "./db";
+import { addImportedItems, addItems, changeItem, getSetting, knownIds, listItems, removeUnusedImages, setSetting, socialAutoPublishEnabled } from "./db";
 import { fetchLinkedInFeed } from "./feed";
 import { copyImage, fetchFeedText } from "./preview";
 import { fetchInstagramPosts, fetchWordPressPosts, fetchYouTubeUploads, renewInstagramToken } from "./sources";
@@ -10,6 +10,7 @@ import type { ItemChanges, Source, SourceItem, SourceState, SyncResult } from ".
 
 // Checking the channels for new posts. New posts wait in the inbox for the moderator, except on the very first
 // check, when what the Insights page already showed goes straight on: its built-in list, and YouTube's uploads.
+// A saved preference can also approve new LinkedIn and Instagram imports automatically.
 
 const g = globalThis as unknown as { insightsSync?: Promise<SyncResult[]> };
 
@@ -63,9 +64,9 @@ async function importFrom(source: Source, fetchItems: () => Promise<SourceItem[]
       );
     }
     const approveNow = firstTimeApproved ? !(await getSetting(firstTimeApproved)) : false;
-    const added = await addItems(fresh, approveNow ? "approved" : "pending");
+    const imported = await addImportedItems(source, fresh, approveNow ? "approved" : "pending");
     if (approveNow) await setSetting(firstTimeApproved!, new Date().toISOString());
-    return { source, added, approved: approveNow };
+    return { source, ...imported };
   } catch (error) {
     return { source, added: 0, approved: false, error: error instanceof Error ? error.message : String(error) };
   }
@@ -169,6 +170,7 @@ async function instagramToken(): Promise<string | null> {
 // ---------- For the dashboard ----------
 
 export interface InboxStatus {
+  autoPublishSocial: boolean;
   lastSync: { at: string; results: SyncResult[] } | null;
   sources: Record<Source, SourceState>;
 }
@@ -182,6 +184,7 @@ export async function inboxStatus(): Promise<InboxStatus> {
     return error ? { state: "error", detail: error } : ok;
   };
   return {
+    autoPublishSocial: await socialAutoPublishEnabled(),
     lastSync,
     sources: {
       youtube: process.env.YOUTUBE_API_KEY

@@ -5,6 +5,12 @@ import { isLiveHost } from "@/lib/seo";
 // the site instead. Never shown on the live site.
 export const PREVIEWS = [
   {
+    slug: "vision-mission",
+    href: "/previews/vision-mission",
+    title: "Vision & Mission: six variations",
+    description: "Six About page layouts to compare, from open columns and editorial rows to contrasting panels, a connected path and a photo-led section.",
+  },
+  {
     slug: "landscape-homepage",
     file: "landscape-homepage.html",
     title: "Homepage: living landscape",

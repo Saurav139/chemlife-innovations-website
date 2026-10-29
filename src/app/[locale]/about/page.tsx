@@ -9,6 +9,7 @@ import { VariantProvider } from "@/context/VariantContext";
 import SiteSearch from "@/components/SiteSearch";
 import { Images } from "@/lib/assets";
 import { useT } from "@/i18n/LocaleProvider";
+import visionStyles from "./vision-mission.module.css";
 
 const easeOut = [0.25, 0.1, 0, 1] as const;
 
@@ -70,15 +71,16 @@ export default function AboutPage() {
               className="flex flex-col items-center w-full"
             >
               <div
-                className="aspect-[1024/531] w-full border-4 border-orange-200 rounded-2xl relative overflow-hidden shadow-md group hover:border-brand-orange/60 transition-colors duration-300"
-                style={{ backgroundColor: "#55c2fa" }}
+                className="aspect-[357/440] w-full max-w-[360px] md:max-w-[340px] border border-orange-100 rounded-2xl relative overflow-hidden shadow-sm"
               >
                 <Image
                   src={Images.people.foundersNew}
                   alt={t.foundersAlt}
-                  fill
-                  sizes="(max-width: 768px) 100vw, 550px"
-                  className="object-cover group-hover:scale-[1.02] transition-transform duration-500"
+                  width={1600}
+                  height={721}
+                  sizes="1600px"
+                  className="absolute max-w-none"
+                  style={{ width: "448.1793%", height: "auto", left: "-148.4594%", top: "-50%" }}
                 />
               </div>
               <div className="mt-3 bg-teal-50 border border-teal-200 text-teal-aa text-xs md:text-sm font-bold uppercase tracking-wider px-5 py-1.5 rounded-full shadow-xs select-none">
@@ -104,22 +106,37 @@ export default function AboutPage() {
         </SectionWrapper>
 
         {/* Dedicated Vision & Mission section. */}
-        <SectionWrapper id="vision-mission" className="scroll-mt-18 md:scroll-mt-20 lg:scroll-mt-24 py-8 md:py-12 lg:py-16 bg-[#F4F5F1] border-t border-gray-100">
-          <div className="max-w-[1200px] mx-auto px-6 grid md:grid-cols-2 gap-6 lg:gap-8">
+        <SectionWrapper id="vision-mission" className="scroll-mt-18 md:scroll-mt-20 lg:scroll-mt-24 py-12 md:py-16 lg:py-20 bg-slate-50 border-t border-brand-navy/10">
+          <div className={`max-w-[1200px] mx-auto px-6 ${visionStyles.layout}`}>
+            <figure className={visionStyles.photo}>
+              <Image
+                src={Images.research.researchImage}
+                alt={t.visionPhotoAlt}
+                fill
+                sizes="(min-width: 900px) 420px, calc(100vw - 48px)"
+                className={visionStyles.image}
+              />
+              <figcaption>
+                <span>{t.visionPhotoLabel}</span>
+                <strong>{t.titleLine1}<br />{t.titleLine2}</strong>
+              </figcaption>
+            </figure>
+            <div className={visionStyles.statements}>
             {[
               { title: t.visionKicker, text: t.visionText },
               { title: t.missionKicker, text: t.missionText },
-            ].map((statement) => (
-              <article key={statement.title} className="bg-white rounded-2xl border border-[#13447c]/10 p-5 md:p-6">
-                <div aria-hidden="true" className="h-1 w-10 rounded-full bg-[#e65300] mb-4" />
-                <h2 className="font-heading text-2xl md:text-3xl text-[#13447c] mb-3 font-bold leading-tight">
-                  {statement.title}
-                </h2>
-                <p className="text-[#2b2b2b] text-base lg:text-lg leading-relaxed">
+            ].map((statement, i) => (
+              <article key={statement.title}>
+                <div className={visionStyles.title}>
+                  <span aria-hidden="true">0{i + 1}</span>
+                  <h2>{statement.title}</h2>
+                </div>
+                <p>
                   {statement.text}
                 </p>
               </article>
             ))}
+            </div>
           </div>
         </SectionWrapper>
 
