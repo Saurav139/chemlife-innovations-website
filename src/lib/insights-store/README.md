@@ -15,10 +15,12 @@ The moderator decides which posts from ChemLife's channels appear on the Insight
   the card as the page will.
 - The inbox checks for new posts when the moderator opens it (at most every 10 minutes), with **Check for new
   posts**, and from a scheduled job if one is set up.
-- **Automatically add LinkedIn and Instagram posts to Insights** saves a database preference, off by default.
-  Enabling it adds every waiting LinkedIn/Instagram post to the public Insights page and checks connected channels
-  immediately. Future imports from those channels are approved during normal dashboard or scheduled checks.
-  Hidden posts and featured selections are preserved. Turning it off only changes future imports; existing
+- **Automatically add LinkedIn posts to Insights** and **Automatically add Instagram posts to Insights** save
+  independent database preferences, off by default. Enabling one adds that channel's waiting posts to the public
+  Insights page and checks connected channels immediately. Future imports from that channel are approved during
+  normal dashboard or scheduled checks; the other channel keeps its own setting. Sites with the previous combined
+  preference inherit it for each channel until that channel gets its own choice.
+  Hidden posts and featured selections are preserved. Turning a channel off only changes its future imports; existing
   approved posts stay on the page. Manually pasted posts still use the decision chosen in the Add a post form.
   This preference does not connect accounts or bypass the source's available history: LinkedIn's configured feed
   supplies its newest 20 entries, and Instagram's existing importer reads its latest 30 posts per check.

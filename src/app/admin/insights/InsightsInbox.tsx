@@ -4,13 +4,14 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import InsightCardContent, { INSIGHT_CARD_CLASS } from "@/components/InsightCard";
 import { Images } from "@/lib/assets";
 import { insightCard } from "@/lib/insights-store/card";
+import { SOCIAL_SOURCES, type SocialAutoPublish, type SocialSource } from "@/lib/insights-store/social-publishing";
 import type { InboxItem, ItemChanges, Kind, Source, SourceItem, SourceState, Status, SyncResult } from "@/lib/insights-store/types";
 
 // The Insights inbox: posts from ChemLife's channels wait under "Waiting" until the moderator adds them to the
 // Insights page or hides them. The page updates as soon as a decision is made.
 
 interface Data {
-  autoPublishSocial: boolean;
+  autoPublishSocial: SocialAutoPublish;
   items: InboxItem[];
   lastSync: { at: string; results: SyncResult[] } | null;
   sources: Record<Source, SourceState>;
@@ -126,7 +127,7 @@ export default function InsightsInbox({ initial, demo = false }: { initial: Data
   const [selected, setSelected] = useState<Set<number>>(new Set());
   const [busy, setBusy] = useState<Set<number>>(new Set());
   const [checking, setChecking] = useState(false);
-  const [savingAutomatic, setSavingAutomatic] = useState(false);
+  const [savingAutomatic, setSavingAutomatic] = useState<SocialSource | null>(null);
   const [toast, setToast] = useState<{ text: string; error?: boolean; undo?: () => void } | null>(null);
   const [editing, setEditing] = useState<InboxItem | null>(null);
   const [highlight, setHighlight] = useState<number | null>(null);
@@ -349,22 +350,22 @@ export default function InsightsInbox({ initial, demo = false }: { initial: Data
     }
   }
 
-  async function saveAutomatic(enabled: boolean) {
-    setSavingAutomatic(true);
+  async function saveAutomatic(source: SocialSource, enabled: boolean) {
+    setSavingAutomatic(source);
     try {
       const fresh = await api<Data & { approvedCount: number }>("/api/admin/insights/settings", {
-        method: "PUT", body: JSON.stringify({ autoPublishSocial: enabled }),
+        method: "PUT", body: JSON.stringify({ source, enabled }),
       });
       setData(fresh);
       setSelected(new Set());
       say(enabled
-        ? `Automatic adding is on.${fresh.approvedCount ? ` Added ${fresh.approvedCount} waiting post${fresh.approvedCount === 1 ? "" : "s"} to the Insights page.` : ""}`
-        : "Automatic adding is off. Future social imports will wait for review.");
+        ? `${SOURCE_LABEL[source]} automatic adding is on.${fresh.approvedCount ? ` Added ${fresh.approvedCount} waiting ${SOURCE_LABEL[source]} post${fresh.approvedCount === 1 ? "" : "s"} to the Insights page.` : ""}`
+        : `${SOURCE_LABEL[source]} automatic adding is off. Future ${SOURCE_LABEL[source]} imports will wait for review.`);
       if (enabled) await check(true);
     } catch (error) {
       say((error as Error).message, { error: true });
     } finally {
-      setSavingAutomatic(false);
+      setSavingAutomatic(null);
     }
   }
 
@@ -427,18 +428,23 @@ export default function InsightsInbox({ initial, demo = false }: { initial: Data
 
       {/* Room at the bottom for the bar of selected posts, so it never covers the last one */}
       <main className={`max-w-[1100px] mx-auto px-4 sm:px-6 pt-6 sm:pt-8 space-y-6 ${picked.length ? "pb-40 sm:pb-28" : "pb-6 sm:pb-8"}`}>
-        <Channels data={data} checking={checking || savingAutomatic} onCheck={() => check()} />
-        <section aria-label="Automatic social posts" className="rounded-2xl bg-white border border-slate-200 shadow-sm px-4 py-4 sm:px-6" aria-busy={savingAutomatic}>
-          <label className="flex min-h-11 items-start gap-3 cursor-pointer py-1">
-            <input type="checkbox" checked={data.autoPublishSocial} disabled={savingAutomatic || checking}
-              onChange={(event) => void saveAutomatic(event.target.checked)}
-              aria-describedby="automatic-social-help" className={`${CHECKBOX} mt-0.5 shrink-0 disabled:opacity-50 disabled:cursor-wait`} />
-            <span className="text-sm sm:text-base font-semibold">Automatically add LinkedIn and Instagram posts to Insights</span>
-          </label>
-          <p id="automatic-social-help" className="mt-1 ml-8 text-sm text-slate-600 leading-relaxed">
-            Adds all waiting LinkedIn and Instagram posts and publishes future imports from connected channels without review. Hidden posts stay hidden. Turning this off keeps posts already on the page.
+        <Channels data={data} checking={checking || Boolean(savingAutomatic)} onCheck={() => check()} />
+        <section aria-label="Automatic social posts" className="rounded-2xl bg-white border border-slate-200 shadow-sm px-4 py-4 sm:px-6" aria-busy={Boolean(savingAutomatic)}>
+          <h2 className="font-heading text-base font-bold mb-2">Automatic social posts</h2>
+          <div className="grid gap-1 sm:grid-cols-2 sm:gap-6">
+            {SOCIAL_SOURCES.map((source) => (
+              <label key={source} className="flex min-h-11 items-start gap-3 cursor-pointer py-1">
+                <input type="checkbox" checked={data.autoPublishSocial[source]} disabled={Boolean(savingAutomatic) || checking}
+                  onChange={(event) => void saveAutomatic(source, event.target.checked)}
+                  aria-describedby="automatic-social-help" className={`${CHECKBOX} mt-0.5 shrink-0 disabled:opacity-50 disabled:cursor-wait`} />
+                <span className="text-sm sm:text-base font-semibold">Automatically add {SOURCE_LABEL[source]} posts to Insights</span>
+              </label>
+            ))}
+          </div>
+          <p id="automatic-social-help" className="mt-2 text-sm text-slate-600 leading-relaxed">
+            For each selected channel, adds all waiting posts and publishes future imports from connected channels without review. Hidden posts stay hidden. Turning a channel off keeps its posts already on the page.
           </p>
-          {savingAutomatic && <p role="status" className="mt-2 ml-8 text-sm font-semibold text-teal-aa">Saving preference…</p>}
+          {savingAutomatic && <p role="status" className="mt-2 text-sm font-semibold text-teal-aa">Saving {SOURCE_LABEL[savingAutomatic]} preference…</p>}
         </section>
         <AddPost
           onAdded={(item) => {

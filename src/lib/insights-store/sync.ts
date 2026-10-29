@@ -1,7 +1,8 @@
 import { createHash } from "node:crypto";
 import { revalidatePath } from "next/cache";
 import { FALLBACK_INSIGHTS, type InsightItem } from "@/lib/insights";
-import { addImportedItems, addItems, changeItem, getSetting, knownIds, listItems, removeUnusedImages, setSetting, socialAutoPublishEnabled } from "./db";
+import { addImportedItems, addItems, changeItem, getSetting, knownIds, listItems, removeUnusedImages, setSetting, socialAutoPublishSettings } from "./db";
+import type { SocialAutoPublish } from "./social-publishing";
 import { fetchLinkedInFeed } from "./feed";
 import { copyImage, fetchFeedText } from "./preview";
 import { fetchInstagramPosts, fetchWordPressPosts, fetchYouTubeUploads, renewInstagramToken } from "./sources";
@@ -170,7 +171,7 @@ async function instagramToken(): Promise<string | null> {
 // ---------- For the dashboard ----------
 
 export interface InboxStatus {
-  autoPublishSocial: boolean;
+  autoPublishSocial: SocialAutoPublish;
   lastSync: { at: string; results: SyncResult[] } | null;
   sources: Record<Source, SourceState>;
 }
@@ -184,7 +185,7 @@ export async function inboxStatus(): Promise<InboxStatus> {
     return error ? { state: "error", detail: error } : ok;
   };
   return {
-    autoPublishSocial: await socialAutoPublishEnabled(),
+    autoPublishSocial: await socialAutoPublishSettings(),
     lastSync,
     sources: {
       youtube: process.env.YOUTUBE_API_KEY

@@ -1,7 +1,7 @@
 import mysql, { type Pool, type PoolConnection, type ResultSetHeader, type RowDataPacket } from "mysql2/promise";
 import type { Insights } from "@/lib/insights";
 import { insightCard } from "./card";
-import { importedStatus, isSocialSource, SOCIAL_AUTO_PUBLISH_SETTING } from "./social-publishing";
+import { importedStatus, isSocialSource, LEGACY_SOCIAL_AUTO_PUBLISH_SETTING, SOCIAL_AUTO_PUBLISH_SETTINGS, type SocialAutoPublish, type SocialSource } from "./social-publishing";
 import type { InboxItem, ItemChanges, Kind, Source, SourceItem, Status } from "./types";
 
 // The inbox's MySQL tables. DATABASE_URL points at the database, e.g. mysql://user:password@host:3306/name (a
@@ -131,25 +131,32 @@ export async function setSetting(name: string, value: string): Promise<void> {
   await db.execute("INSERT INTO insight_settings (name, value) VALUES (?, ?) ON DUPLICATE KEY UPDATE value = VALUES(value)", [name, value]);
 }
 
-export async function socialAutoPublishEnabled(): Promise<boolean> {
-  return (await getSetting(SOCIAL_AUTO_PUBLISH_SETTING)) === "true";
+export async function socialAutoPublishEnabled(source: SocialSource): Promise<boolean> {
+  // Keep the old combined preference until this channel gets its own explicit choice.
+  const saved = await getSetting(SOCIAL_AUTO_PUBLISH_SETTINGS[source]);
+  return (saved ?? await getSetting(LEGACY_SOCIAL_AUTO_PUBLISH_SETTING)) === "true";
 }
 
-/** Saves the preference and approves existing waiting social posts atomically. Hidden posts are untouched. */
-export async function setSocialAutoPublish(enabled: boolean): Promise<number> {
+export async function socialAutoPublishSettings(): Promise<SocialAutoPublish> {
+  const [linkedin, instagram] = await Promise.all([socialAutoPublishEnabled("linkedin"), socialAutoPublishEnabled("instagram")]);
+  return { linkedin, instagram };
+}
+
+/** Saves one channel's preference and approves its waiting posts atomically. Hidden posts are untouched. */
+export async function setSocialAutoPublish(source: SocialSource, enabled: boolean): Promise<number> {
   const conn = await (await pool()).getConnection();
   try {
     await conn.beginTransaction();
     // The same setting row is locked by automated imports, so an in-flight import cannot miss this decision.
     await conn.execute(
       "INSERT INTO insight_settings (name, value) VALUES (?, ?) ON DUPLICATE KEY UPDATE value = VALUES(value)",
-      [SOCIAL_AUTO_PUBLISH_SETTING, String(enabled)]
+      [SOCIAL_AUTO_PUBLISH_SETTINGS[source], String(enabled)]
     );
     let approved = 0;
     if (enabled) {
       const [result] = await conn.execute<ResultSetHeader>(
-        "UPDATE insight_items SET status = 'approved', decided_at = ? WHERE status = 'pending' AND source IN (?, ?)",
-        [new Date(), "linkedin", "instagram"]
+        "UPDATE insight_items SET status = 'approved', decided_at = ? WHERE status = 'pending' AND source = ?",
+        [new Date(), source]
       );
       approved = result.affectedRows;
     }
@@ -212,8 +219,10 @@ export async function addImportedItems(source: Source, items: SourceItem[], stat
   const conn = await (await pool()).getConnection();
   try {
     await conn.beginTransaction();
-    await conn.execute("INSERT INTO insight_settings (name, value) VALUES (?, 'false') ON DUPLICATE KEY UPDATE name = VALUES(name)", [SOCIAL_AUTO_PUBLISH_SETTING]);
-    const [rows] = await conn.execute<RowDataPacket[]>("SELECT value FROM insight_settings WHERE name = ? FOR UPDATE", [SOCIAL_AUTO_PUBLISH_SETTING]);
+    const setting = SOCIAL_AUTO_PUBLISH_SETTINGS[source];
+    const [legacy] = await conn.execute<RowDataPacket[]>("SELECT value FROM insight_settings WHERE name = ?", [LEGACY_SOCIAL_AUTO_PUBLISH_SETTING]);
+    await conn.execute("INSERT INTO insight_settings (name, value) VALUES (?, ?) ON DUPLICATE KEY UPDATE name = VALUES(name)", [setting, legacy[0]?.value === "true" ? "true" : "false"]);
+    const [rows] = await conn.execute<RowDataPacket[]>("SELECT value FROM insight_settings WHERE name = ? FOR UPDATE", [setting]);
     const decision = importedStatus(source, status, rows[0]?.value === "true");
     const added = await insertItems(conn, items, decision);
     await conn.commit();
