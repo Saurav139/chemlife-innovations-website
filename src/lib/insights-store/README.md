@@ -3,7 +3,7 @@
 The moderator decides which posts from ChemLife's channels appear on the Insights page, at `/admin/insights`.
 
 - **YouTube** uploads and **blog** (WordPress) posts come in by themselves. So do **Instagram** posts once
-  `INSTAGRAM_ACCESS_TOKEN` is set.
+  `INSTAGRAM_FEED_URL` or `INSTAGRAM_ACCESS_TOKEN` is set.
 - **LinkedIn** posts come in by themselves when `LINKEDIN_FEED_URL` is set (see below); otherwise, like anything
   else, they are added by pasting the post's link into "Add a post". The title, text,
   picture and date are filled in from the post where the site allows it.
@@ -23,7 +23,8 @@ The moderator decides which posts from ChemLife's channels appear on the Insight
   Hidden posts and featured selections are preserved. Turning a channel off only changes its future imports; existing
   approved posts stay on the page. Manually pasted posts still use the decision chosen in the Add a post form.
   This preference does not connect accounts or bypass the source's available history: LinkedIn's configured feed
-  supplies its newest 20 entries, and Instagram's existing importer reads its latest 30 posts per check.
+  supplies its newest 20 entries, and Instagram reads up to 30 posts per check. A feed provider may supply fewer
+  entries or update less frequently depending on its plan and Instagram's public availability.
 
 ## Setting it up on Hostinger
 
@@ -42,7 +43,15 @@ The staging and live sites should each have their own database, so testing on st
 - **Demo on staging without signing in:** set `INSIGHTS_DEMO` to `true` (then `ADMIN_PASSWORD` isn't needed). The
   inbox shows a "Demo" notice, and anyone who can open the staging site can use it. It never applies on
   chemlifeinnovations.com. Remove it after the demo.
-- **Instagram:** create a Meta app with the *Instagram API with Instagram Login* product, add ChemLife's Instagram
+- **Instagram through RSS (no Meta app or token):** generate a feed from ChemLife's public Instagram profile
+  using a provider such as [RSS.app](https://help.rss.app/en/articles/11036382-how-to-create-rss-feeds-from-instagram).
+  The profile must be viewable without signing in. Set `INSTAGRAM_FEED_URL` to the generated HTTPS feed address
+  (RSS, Atom and JSON work), apply the environment change and restart the app. Then use **Check for new posts**.
+  Posts use the same Waiting queue and Instagram automatic publishing checkbox. Treat the feed address as private.
+  The feed takes priority if both Instagram variables are set; a failing feed is reported rather than silently
+  switching to the API. Existing API and manually added posts are matched by their Instagram post address,
+  including hidden posts, so changing import methods doesn't bring them back.
+- **Instagram through the API (alternative):** create a Meta app with the *Instagram API with Instagram Login* product, add ChemLife's Instagram
   business account, generate an access token and set it as `INSTAGRAM_ACCESS_TOKEN`. It lasts 60 days; the inbox
   renews it every week and keeps the renewed one in the database. Setting a new one in hPanel replaces it.
 - **LinkedIn automatically:** LinkedIn only lets approved apps read a company page's posts, so use a feed service.
@@ -56,6 +65,7 @@ The staging and live sites should each have their own database, so testing on st
 
 - `db.ts`: the MySQL tables (created on first use): posts, copied pictures, settings.
 - `sources.ts`: reading YouTube, WordPress and Instagram. `preview.ts`: filling in a pasted link.
+- `feed.ts`: reading LinkedIn and Instagram feeds through the same public-address checks as pasted links.
 - `sync.ts`: checking for new posts, and starting the inbox from the built-in list (`FALLBACK_INSIGHTS` in
   `src/lib/insights.ts`). Once per database it also brings blog posts imported before October 2026 up to today's
   summaries and titles.

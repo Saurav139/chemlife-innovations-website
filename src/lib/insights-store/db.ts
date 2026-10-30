@@ -206,6 +206,13 @@ export async function knownIds(source: Source, externalIds: string[]): Promise<S
   return new Set(rows.map((row) => row.external_id as string));
 }
 
+/** Includes hidden posts, so changing import methods never brings a reviewed post back. */
+export async function knownUrls(source: Source): Promise<string[]> {
+  const db = await pool();
+  const [rows] = await db.query<RowDataPacket[]>("SELECT url FROM insight_items WHERE source = ? AND url IS NOT NULL", [source]);
+  return rows.map((row) => row.url as string);
+}
+
 /** Adds the posts that aren't in the inbox yet, with this status. Returns how many were added. */
 export async function addItems(items: SourceItem[], status: Status): Promise<number> {
   if (items.length === 0) return 0;

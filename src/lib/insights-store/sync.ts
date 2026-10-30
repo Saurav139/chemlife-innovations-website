@@ -1,12 +1,12 @@
 import { createHash } from "node:crypto";
 import { revalidatePath } from "next/cache";
 import { FALLBACK_INSIGHTS, type InsightItem } from "@/lib/insights";
-import { addImportedItems, addItems, changeItem, getSetting, knownIds, listItems, removeUnusedImages, setSetting, socialAutoPublishSettings } from "./db";
+import { addImportedItems, addItems, changeItem, getSetting, knownIds, knownUrls, listItems, removeUnusedImages, setSetting, socialAutoPublishSettings } from "./db";
 import type { SocialAutoPublish } from "./social-publishing";
-import { fetchLinkedInFeed } from "./feed";
+import { fetchInstagramFeed, fetchLinkedInFeed } from "./feed";
 import { copyImage, fetchFeedText } from "./preview";
 import { fetchInstagramPosts, fetchWordPressPosts, fetchYouTubeUploads, renewInstagramToken } from "./sources";
-import { articleSummary, cleanTitle, isFromArticle, linkedinActivityId, normalizeUrl } from "./text";
+import { articleSummary, cleanTitle, instagramPostId, isFromArticle, linkedinActivityId, normalizeUrl } from "./text";
 import type { ItemChanges, Source, SourceItem, SourceState, SyncResult } from "./types";
 
 // Checking the channels for new posts. New posts wait in the inbox for the moderator, except on the very first
@@ -34,6 +34,8 @@ async function runSync(): Promise<SyncResult[]> {
     await importFrom("youtube", () => fetchYouTubeUploads({ fresh: true }), "approved-first:youtube"),
     await importFrom("wordpress", () => fetchWordPressPosts({ fresh: true })),
     await importFrom("instagram", async () => {
+      const feed = process.env.INSTAGRAM_FEED_URL;
+      if (feed) return fetchInstagramFeed(feed, fetchFeedText);
       const token = await instagramToken();
       return token ? fetchInstagramPosts(token) : null;
     }),
@@ -53,7 +55,16 @@ async function importFrom(source: Source, fetchItems: () => Promise<SourceItem[]
     const items = await fetchItems();
     if (items === null) return { source, added: 0, approved: false, skipped: "not set up" };
     const known = await knownIds(source, items.map((item) => item.externalId));
-    const fresh = items.filter((item) => !known.has(item.externalId));
+    // The API uses numeric media IDs, while feeds and pasted links use URLs. Match the post's shortcode too.
+    const seenPosts = new Set(source === "instagram" ? (await knownUrls(source)).map(instagramPostId).filter((id) => id !== null) : []);
+    const fresh = items.filter((item) => {
+      if (known.has(item.externalId)) return false;
+      known.add(item.externalId);
+      const post = source === "instagram" && item.url ? instagramPostId(item.url) : null;
+      if (post && seenPosts.has(post)) return false;
+      if (post) seenPosts.add(post);
+      return true;
+    });
     // The source's picture address expires, so keep a copy; without one the card shows a stock photo. A few at a time.
     const withPicture = fresh.filter((item) => item.copyImage && item.imageUrl);
     for (let i = 0; i < withPicture.length; i += 4) {
@@ -192,14 +203,16 @@ export async function inboxStatus(): Promise<InboxStatus> {
         ? state("youtube", { state: "connected", detail: "New uploads are checked automatically." })
         : { state: "not-set-up", detail: "Set YOUTUBE_API_KEY to bring in new uploads. Until then, paste video links." },
       wordpress: state("wordpress", { state: "connected", detail: "New blog posts are checked automatically." }),
-      instagram: process.env.INSTAGRAM_ACCESS_TOKEN
+      instagram: process.env.INSTAGRAM_FEED_URL
+        ? state("instagram", { state: "connected", detail: "New Instagram posts come in through its feed. No Instagram access token is needed." })
+        : process.env.INSTAGRAM_ACCESS_TOKEN
         ? state("instagram", {
             state: "connected",
             detail: instagram?.expiresAt
               ? `Renews itself every week. Current access lasts until ${new Date(instagram.expiresAt).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}.`
               : "New posts are checked automatically.",
           })
-        : { state: "not-set-up", detail: "Set INSTAGRAM_ACCESS_TOKEN to bring in new posts. Until then, paste post links." },
+        : { state: "not-set-up", detail: "Set INSTAGRAM_FEED_URL (or INSTAGRAM_ACCESS_TOKEN) to bring in new posts. Until then, paste post links." },
       linkedin: process.env.LINKEDIN_FEED_URL
         ? state("linkedin", { state: "connected", detail: "New company page posts come in through its feed. To add any other post, paste its link." })
         : { state: "manual", detail: "Paste a post's link to add it. To bring posts in by themselves, set LINKEDIN_FEED_URL (see the README)." },

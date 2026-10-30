@@ -149,6 +149,17 @@ export function normalizeUrl(url: string): string {
   }
 }
 
+/** Instagram's shortcode stays the same across API, feed and manually pasted post addresses. */
+export function instagramPostId(address: string): string | null {
+  try {
+    const url = new URL(address);
+    if (!/^https?:$/.test(url.protocol) || !/^(?:www\.)?instagram\.com$/i.test(url.hostname)) return null;
+    return url.pathname.match(/^\/(?:p|reel|tv)\/([\w-]+)\/?$/)?.[1] ?? null;
+  } catch {
+    return null;
+  }
+}
+
 /** A LinkedIn post's activity number, from a /posts/… or /feed/update/urn:li:activity:… address. */
 export function linkedinActivityId(url: string): string | null {
   return url.match(/activity[-:](\d{19})/)?.[1] ?? null;
