@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import NaturalInsightImage from "@/components/NaturalInsightImage";
 import type { InsightItem } from "@/lib/insights";
 import { playOnPage, youtubeWatchUrl } from "@/lib/youtube";
 
@@ -33,12 +34,14 @@ export function originalLink(url?: string) {
 }
 
 /** What goes inside the card's frame: the label line, picture or video, title, and the two links. */
-export default function InsightCardContent({ item, onRead, onPlay }: {
+export default function InsightCardContent({ item, onRead, onPlay, imageLayout = "cropped" }: {
   item: InsightItem;
   /** Opens the article reader. */
   onRead: (item: InsightItem) => void;
   /** Opens the video player. */
   onPlay: (youtubeId: string) => void;
+  /** Design preview only; existing cards keep their 16:9 crop. */
+  imageLayout?: "cropped" | "natural";
 }) {
   const isBlog = item.type === "Blog";
   return (
@@ -75,6 +78,9 @@ export default function InsightCardContent({ item, onRead, onPlay }: {
 
         {/* Blog Image Preview (Only images for blogs, no videos) */}
         {isBlog && item.imageUrl && (
+          imageLayout === "natural" ? <div className="mb-4">
+            <NaturalInsightImage src={item.imageUrl} alt={item.title} sizes={CARD_IMAGE_SIZES} />
+          </div> :
           <div className="relative w-full aspect-video rounded-xl overflow-hidden mb-4 bg-slate-100 border border-gray-200 select-none">
             <Image
               src={item.imageUrl}

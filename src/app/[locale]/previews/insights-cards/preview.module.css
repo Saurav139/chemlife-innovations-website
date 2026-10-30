@@ -1,0 +1,37 @@
+.page { min-height: 100vh; padding-block: 100px 72px; background: #fff; color: #13447c; }
+.wrap { max-width: 1200px; margin-inline: auto; padding-inline: 24px; }
+.intro { padding-block: 12px 32px; }
+.back { display: inline-flex; align-items: center; min-height: 44px; margin-bottom: 18px; font-size: .875rem; text-decoration: underline; text-underline-offset: 4px; }
+.eyebrow { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; font-size: .75rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+.eyebrow::before { content: ""; width: 24px; height: 3px; background: #e65300; }
+.intro h1 { font-family: var(--font-family-heading); font-size: clamp(2.25rem, 5vw, 3.75rem); line-height: 1.1; font-weight: 700; letter-spacing: -.025em; }
+.description { max-width: 640px; margin-top: 18px; font-size: 1.0625rem; line-height: 1.7; color: #526170; }
+.controls { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 20px; padding-block: 20px; border-block: 1px solid #e0e6eb; }
+.channels, .layout { display: flex; gap: 6px; flex-wrap: wrap; }
+.controls button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 10px 16px; border-radius: 999px; font-size: .875rem; font-weight: 600; cursor: pointer; }
+.channels button { border: 1px solid #d6e0e9; background: #fff; }
+.channels button[aria-pressed="true"] { color: #fff; background: #13447c; border-color: #13447c; }
+.channels button span { font-size: .75rem; opacity: .75; }
+.layout { padding: 4px; border-radius: 999px; background: #f0f3f6; }
+.layout button[aria-pressed="true"] { background: #fff; box-shadow: 0 1px 5px #13447c15; }
+.controls button:hover { box-shadow: inset 0 0 0 1px #13447c; }
+.page button:focus-visible, .page a:focus-visible { outline: 3px solid #13447c; outline-offset: 4px; }
+.caption { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 20px; padding-block: 20px 28px; color: #526170; font-size: .8125rem; line-height: 1.5; }
+.cards { columns: 1; column-gap: 24px; }
+.card { display: inline-flex; width: 100%; margin-bottom: 24px; break-inside: avoid; vertical-align: top; }
+.empty { padding: 48px 24px; border: 1px dashed #c5d2de; border-radius: 20px; text-align: center; }
+.empty h2 { font-family: var(--font-family-heading); font-size: 1.4rem; font-weight: 700; }
+.empty p { margin: 12px auto 0; max-width: 500px; line-height: 1.7; color: #526170; }
+.more { display: block; min-height: 48px; margin: 16px auto 0; padding: 12px 24px; border: 1px solid #13447c; border-radius: 999px; font-weight: 600; cursor: pointer; }
+.more:hover { background: #edf3f9; }
+.reader { width: min(780px, calc(100% - 32px)); max-height: 88dvh; margin: auto; padding: 0; border: 1px solid #d6e0e9; border-radius: 24px; color: #13447c; background: white; }
+.reader::backdrop { background: #071d37bf; backdrop-filter: blur(5px); }
+.readerBar { position: sticky; top: 0; z-index: 1; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 12px 24px; border-bottom: 1px solid #e0e6eb; background: #fff; font-size: .8125rem; }
+.readerBar button { min-height: 44px; padding: 8px 12px; white-space: nowrap; font-weight: 600; cursor: pointer; }
+.readerBody { padding: 24px; }
+.readerBody h2 { font-family: var(--font-family-heading); font-size: clamp(1.4rem, 3vw, 2rem); font-weight: 700; line-height: 1.3; margin-bottom: 24px; }
+.readerBody p { margin-block: 24px; line-height: 1.8; color: #425466; white-space: pre-line; overflow-wrap: anywhere; }
+.readerBody a { display: inline-flex; align-items: center; min-height: 44px; font-weight: 600; text-decoration: underline; text-underline-offset: 4px; }
+@media (min-width: 640px) { .cards { columns: 2; } }
+@media (min-width: 1024px) { .page { padding-top: 120px; } .cards { columns: 3; } }
+@media (max-width: 400px) { .wrap { padding-inline: 18px; } .controls { gap: 12px; } .controls button { padding-inline: 12px; } .caption { padding-bottom: 20px; } .readerBar, .readerBody { padding-inline: 18px; } }
