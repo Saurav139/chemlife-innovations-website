@@ -105,8 +105,27 @@ const en = {
     stats: ["Years of Research", "Products", "Customers Served", "Awards Won"],
 
     whoWeAre: {
-      kicker: "Get to know",
-      title: "Who We Are?",
+      kicker: "Who we are",
+      title: "Nature-driven science. Proof in every kilo.",
+      intro: "ChemLife Innovations is a Bengaluru-based animal-nutrition biotechnology company. We pair Ayurvedic plant wisdom with technologies we developed ourselves, to make feed cleaner, animals healthier and farms more profitable, across poultry, swine and dairy.",
+      pillars: [
+        { title: "We start with clean feed.", text: "Mould and mycotoxins quietly drain growth, milk and margin. Our feed-hygiene range, led by MaxDmold, protects feed from storage to stomach." },
+        { title: "We own the science.", text: "ANBioT bio-transformation, green chelation and microencapsulation, built in our own labs, patent-backed and supported by the Government of India’s Technology Development Board." },
+        { title: "We make what we promise.", text: "Formulated, manufactured and quality-controlled at our own plant in Doddaballapura, Bengaluru, to FAMI-QS feed-safety standards." },
+      ],
+      motto: "Pehle dekho, phir bharosa.",
+      mottoTranslation: "See it first. Then trust.",
+      seeScience: "See our science",
+      requestDossier: "Request a technical dossier",
+      // {products} is the number of products in src/lib/catalog.ts.
+      stats: [
+        { value: "106 years", label: "combined leadership experience in animal nutrition, R&D and commercial delivery" },
+        { value: "{products}", label: "science-led products across poultry, swine and dairy" },
+        { value: "3", label: "technology platforms: feed hygiene, bio-trace minerals, targeted delivery" },
+        { value: "FAMI-QS", label: "feed-additive quality and safety certification" },
+      ],
+      statsCaption: "Led by four directors with 30 years in animal nutraceuticals, 23 years in feed-additive R&D, 38 years in commercial delivery and 15 in finance and HR.",
+      serveTitle: "What we serve",
       cards: [
         {
           title: "Mono-Gastric",
@@ -715,6 +734,7 @@ const en = {
     subjectPlaceholder: "What is this regarding?",
     nutritionistSubject: "I'd like to talk to a nutritionist",
     researchSubject: "Research collaboration",
+    dossierSubject: "Technical dossier request",
     message: "Message",
     messagePlaceholder: "Tell us details about your request...",
     errors: {

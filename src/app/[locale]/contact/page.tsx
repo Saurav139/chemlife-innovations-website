@@ -76,6 +76,13 @@ export default function ContactPage() {
         inquiryType: "Talk to a Nutritionist",
         subject: prev.subject || t.nutritionistSubject,
       }));
+    } else if (type === "dossier") {
+      // From the homepage's "Request a technical dossier"
+      setFormData((prev) => ({
+        ...prev,
+        inquiryType: "Technical & R&D Partnership",
+        subject: prev.subject || t.dossierSubject,
+      }));
     } else if (type === "research") {
       // From the Research page's closing panel
       setFormData((prev) => ({
