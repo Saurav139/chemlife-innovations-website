@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { VariantProvider } from "@/context/VariantContext";
 import Header from "@/components/Header";
-import HeroVariantA from "@/components/HeroVariants/VariantA";
+import HeroOpenSplit from "@/components/HeroOpenSplit";
 import WhoWeAre from "@/components/WhoWeAre";
 
 import HowWeDo from "@/components/HowWeDo";
@@ -21,7 +21,7 @@ export default function Home() {
     <VariantProvider>
       <Header />
       <main id="main" tabIndex={-1}>
-        <HeroVariantA />
+        <HeroOpenSplit />
         <WhoWeAre />
         <HowWeDo />
         <AwardsRecognition />
