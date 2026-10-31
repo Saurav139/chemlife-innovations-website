@@ -30,6 +30,32 @@
   --color-light-orange: #ffffff;
   --color-process-bg: #305280;
 
+  /* The page system every public page is built from: one ink, one tone step for surfaces, two colour fields, and
+     the orange kept for the main action. */
+  --color-ink: #305280;
+  --color-ink-soft: #4d5e78; /* 6.6:1 on white, 5.9:1 on the surface */
+  --color-surface: #eef2f7;
+  --color-deep: #15273f;
+  --color-accent: #cf4128;
+  --color-accent-hover: #b23822;
+
+  /* Five type sizes, from phone to desktop: display (page titles), title (section headings), lead (standfirsts and
+     item headings), body and small. */
+  --text-display: clamp(2.375rem, 1.1rem + 4.6vw, 5rem);
+  --text-display--line-height: 1.02;
+  --text-display--letter-spacing: -0.03em;
+  --text-display--font-weight: 700;
+  --text-title: clamp(2rem, 1.25rem + 2.6vw, 3.5rem);
+  --text-title--line-height: 1.06;
+  --text-title--letter-spacing: -0.025em;
+  --text-title--font-weight: 700;
+  --text-lead: clamp(1.25rem, 1.1rem + 0.5vw, 1.5rem);
+  --text-lead--line-height: 1.4;
+  --text-body: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+  --text-body--line-height: 1.6;
+  --text-small: 0.875rem;
+  --text-small--line-height: 1.45;
+
   /* Maven Pro first; the Noto fonts supply the Kannada and Hindi letters it doesn't have. */
   /* `font-sans` (used by the chat pages and pop-up) is the site font too, not the browser's default. */
   --font-sans:
@@ -43,28 +69,106 @@
     var(--font-noto-devanagari), Calibri, system-ui, sans-serif;
 }
 
-@font-face {
-  font-family: "Galaxy";
-  src: url("/fonts/LTGalaxyRegular.woff") format("woff");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
+/* The page frame: 1200px of content between equal 24px margins. Inside it a 12-column grid whose sixth column is
+   the axis that standfirsts, leads and running text hang from. */
+@utility frame {
+  width: 100%;
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: 1.5rem;
 }
 
-@font-face {
-  font-family: "Galaxy";
-  src: url("/fonts/LTGalaxyMedium.woff") format("woff");
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
+/* The space above and below every section. */
+@utility section-y {
+  padding-block: 5rem;
+  @media (min-width: 768px) {
+    padding-block: 7rem;
+  }
+  @media (min-width: 1024px) {
+    padding-block: 9rem;
+  }
 }
 
-@font-face {
-  font-family: "Galaxy";
-  src: url("/fonts/LTGalaxyBold.woff") format("woff");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
+/* Whole sections in one flat colour, the way a two-colour print job uses its second ink. */
+@utility field-ink {
+  background-color: var(--color-ink);
+  color: #fff;
+  --focus-ring: #fff;
+}
+
+@utility field-deep {
+  background-color: var(--color-deep);
+  color: #fff;
+  --focus-ring: #fff;
+}
+
+/* One button shape for the whole site: a flat pill. The orange is for the page's main action. */
+@utility btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 3rem;
+  padding-inline: 1.75rem;
+  border-radius: 9999px;
+  font-size: var(--text-body);
+  font-weight: 600;
+  line-height: 1.25;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s, transform 0.15s;
+  &:active {
+    transform: scale(0.97);
+  }
+  &:disabled {
+    cursor: default;
+    opacity: 0.6;
+  }
+}
+
+@utility btn-primary {
+  background-color: var(--color-accent);
+  color: #fff;
+  &:hover {
+    background-color: var(--color-accent-hover);
+  }
+}
+
+@utility btn-ink {
+  background-color: var(--color-ink);
+  color: #fff;
+  &:hover {
+    background-color: var(--color-deep);
+  }
+}
+
+@utility btn-paper {
+  background-color: #fff;
+  color: var(--color-ink);
+  &:hover {
+    background-color: var(--color-surface);
+  }
+}
+
+@utility btn-quiet {
+  background-color: var(--color-surface);
+  color: var(--color-ink);
+  &:hover {
+    background-color: #dfe6ef;
+  }
+}
+
+/* A text link that reads as one: underlined, in the colour of the text around it. */
+@utility link {
+  font-weight: 600;
+  text-decoration-line: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.3em;
+  text-decoration-color: color-mix(in srgb, currentColor 35%, transparent);
+  transition: text-decoration-color 0.2s;
+  &:hover {
+    text-decoration-color: currentColor;
+  }
 }
 
 /* A 44×44px touch area around a small link or button, without changing how it looks. Only for things with room
@@ -107,8 +211,8 @@
   /* A clear outline for keyboard users only (mouse and touch clicks don't show it). Fields that style their own
      focus keep theirs. */
   :focus-visible {
-    outline: 2px solid var(--color-teal-aa);
-    outline-offset: 2px;
+    outline: 2px solid var(--focus-ring, var(--color-ink));
+    outline-offset: 3px;
   }
 
   /* Leave room for the fixed header when the skip link scrolls to the content. */
@@ -144,9 +248,10 @@
 
   body {
     font-family: var(--font-family-body);
-    color: var(--color-muted);
+    font-size: var(--text-body);
+    color: var(--color-ink);
     background-color: var(--color-warm-white);
-    line-height: 1.75;
+    line-height: 1.6;
   }
 
   h1,
@@ -157,6 +262,41 @@
   h6 {
     font-family: var(--font-family-heading);
     color: var(--color-near-black);
+  }
+
+  /* Headings on a colour field take the field's white. */
+  :is(.field-ink, .field-deep) :is(h1, h2, h3, h4, h5, h6) {
+    color: inherit;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0.4;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* A slow drift on the masthead photographs, so the first screen of every page has one moving picture. */
+@keyframes masthead-drift {
+  from {
+    transform: scale(1.06) translate(1%, 0);
+  }
+  to {
+    transform: scale(1.06) translate(-1%, -1%);
+  }
+}
+
+.animate-masthead {
+  animation: masthead-drift 18s ease-in-out infinite alternate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-masthead,
+  .animate-ken-burns {
+    animation: none;
   }
 }
 

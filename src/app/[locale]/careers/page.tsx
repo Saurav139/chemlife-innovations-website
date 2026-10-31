@@ -5,10 +5,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import SectionWrapper from "@/components/SectionWrapper";
+import PageHero from "@/components/PageHero";
+import Reveal from "@/components/Reveal";
+import SectionHead from "@/components/SectionHead";
 import { VariantProvider } from "@/context/VariantContext";
 import SiteSearch from "@/components/SiteSearch";
-import { Images } from "@/lib/assets";
+import { VideoPosters } from "@/lib/assets";
 import { INTERNSHIP_ROLES, roleAnchor } from "@/lib/catalog";
 import { revealElement, useHashTarget } from "@/lib/deepLink";
 import { useLocale, useT } from "@/i18n/LocaleProvider";
@@ -29,7 +31,9 @@ interface InternshipPosition {
 // file (careers.roles), in the same order.
 
 export default function CareersPage() {
-  const t = useT().careers;
+  const all = useT();
+  const t = all.careers;
+  const lifeTitle = all.home.life.title;
   const locale = useLocale();
   const internshipRoles = INTERNSHIP_ROLES.map((role, i) => ({ ...role, ...t.roles[i] }));
   const [selectedRoleId, setSelectedRoleId] = useState("research-intern");
@@ -105,151 +109,65 @@ export default function CareersPage() {
     <VariantProvider>
       <Header />
 
-      <main id="main" tabIndex={-1} className="bg-white min-h-screen text-brand-navy">
-        {/* Careers Hero Section */}
-        <SectionWrapper className="pt-26 md:pt-32 pb-10 md:pb-24 lg:pt-36 lg:pb-32 text-white relative overflow-hidden bg-brand-navy flex items-center">
-          <div className="absolute inset-0 z-0">
-            <Image
-              src={Images.heroes.careers}
-              alt={t.heroAlt}
-              fill
-              sizes="100vw"
-              className="object-cover opacity-50"
-              priority
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-brand-navy/95 via-brand-navy/80 to-brand-navy/60" />
-            <div className="absolute inset-0 bg-black/10" />
-          </div>
+      <main id="main" tabIndex={-1}>
+        <PageHero
+          title={`${t.titleStart} ${t.titleAccent} ${t.titleEnd}`}
+          intro={t.intro}
+          image={VideoPosters.trip1}
+          imageAlt={lifeTitle}
+          imagePosition="50% 40%"
+        >
+          <a href="#role-panel" className="btn btn-primary">{t.openTitle}</a>
+        </PageHero>
 
-          <div className="relative z-10 max-w-[1200px] mx-auto px-6 w-full text-center lg:text-left">
-            <span className="text-teal-aa-light text-sm font-semibold tracking-widest uppercase block mb-3">
-              {t.kicker}
-            </span>
-            <h1 className="font-heading text-3xl md:text-4xl lg:text-6xl font-bold leading-tight mb-3 md:mb-4 text-white max-w-4xl">
-              {t.titleStart} <span className="text-teal-400">{t.titleAccent}</span> {t.titleEnd}
-            </h1>
-            <p className="text-white/85 text-base md:text-lg lg:text-xl leading-relaxed max-w-3xl font-light">
-              {t.intro}
-            </p>
-          </div>
-        </SectionWrapper>
-
-        {/* About & Internship Considerations Section */}
-        <SectionWrapper className="py-12 md:py-20 bg-gray-50 border-b border-gray-150">
-          <div className="max-w-[1200px] mx-auto px-6">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-
-              {/* Program Overview */}
-              <div>
-                <h2 className="font-heading text-3xl font-bold text-brand-navy mb-6">
-                  {t.aboutTitle}
-                </h2>
-                <p className="text-gray-600 text-base leading-relaxed mb-6">
-                  {t.aboutText}
-                </p>
-                <div className="space-y-6">
-                  <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-xl bg-teal-50 text-teal-700 flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <svg className="w-5 h-5 text-teal-650" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                        <line x1="16" y1="2" x2="16" y2="6"></line>
-                        <line x1="8" y1="2" x2="8" y2="6"></line>
-                        <line x1="3" y1="10" x2="21" y2="10"></line>
-                      </svg>
+        {/* The programme: what it gives on the left, what to plan for on the axis */}
+        <section className="section-y">
+          <div className="frame">
+            <SectionHead title={t.aboutTitle} lead={t.aboutText} />
+            <div className="grid lg:grid-cols-12 gap-x-8 gap-y-12">
+              <Reveal className="lg:col-span-4">
+                <dl className="space-y-6">
+                  {[
+                    [t.duration, t.durationText],
+                    [t.stipend, t.stipendText],
+                    [t.lunch, t.lunchText],
+                  ].map(([term, text]) => (
+                    <div key={term}>
+                      <dt className="font-bold">{term}</dt>
+                      <dd className="mt-1">{text}</dd>
                     </div>
-                    <div>
-                      <h3 className="font-bold text-brand-navy text-base">{t.duration}</h3>
-                      <p className="text-gray-500 text-sm mt-0.5">{t.durationText}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-xl bg-teal-50 text-teal-700 flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <svg className="w-5 h-5 text-teal-650" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                        <line x1="12" y1="1" x2="12" y2="23"></line>
-                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
-                      </svg>
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-brand-navy text-base">{t.stipend}</h3>
-                      <p className="text-gray-500 text-sm mt-0.5">{t.stipendText}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-xl bg-teal-50 text-teal-700 flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <svg className="w-5 h-5 text-teal-650" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                        <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
-                        <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
-                        <line x1="6" y1="1" x2="6" y2="4"></line>
-                        <line x1="10" y1="1" x2="10" y2="4"></line>
-                        <line x1="14" y1="1" x2="14" y2="4"></line>
-                      </svg>
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-brand-navy text-base">{t.lunch}</h3>
-                      <p className="text-gray-500 text-sm mt-0.5">{t.lunchText}</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Considerations & Requirements Card */}
-              <div className="bg-white border border-gray-255 rounded-3xl p-5 sm:p-8 lg:p-10 shadow-sm">
-                <h3 className="font-heading text-2xl font-bold text-brand-navy mb-6 flex items-center gap-3">
-                  <svg className="w-6 h-6 text-teal-aa flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                    <path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A5.5 5.5 0 0 0 12.5 2.5a5.5 5.5 0 0 0-5.5 5.5c0 1.3.5 2.6 1.5 3.5.8.8 1.3 1.5 1.5 2.5"></path>
-                    <line x1="9" y1="18" x2="15" y2="18"></line>
-                    <line x1="10" y1="22" x2="14" y2="22"></line>
-                  </svg>
-                  <span>{t.considerations}</span>
-                </h3>
-                <ul className="space-y-5 text-base text-gray-650">
-                  <li className="flex gap-3 items-start">
-                    <svg className="w-5 h-5 text-brand-orange mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                      <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                    </svg>
-                    <span><strong>{t.accommodation}</strong> {t.accommodationText}</span>
-                  </li>
-                  <li className="flex gap-3 items-start">
-                    <svg className="w-5 h-5 text-brand-orange mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                      <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"></path>
-                      <circle cx="7" cy="17" r="2"></circle>
-                      <path d="M9 17h6"></path>
-                      <circle cx="17" cy="17" r="2"></circle>
-                    </svg>
-                    <span><strong>{t.travel}</strong> {t.travelText}</span>
-                  </li>
-                  <li className="flex gap-3 items-start">
-                    <svg className="w-5 h-5 text-brand-orange mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                      <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
-                      <path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"></path>
-                    </svg>
-                    <span><strong>{t.opportunity}</strong> {t.opportunityText}</span>
-                  </li>
+                  ))}
+                </dl>
+              </Reveal>
+              <Reveal order={1} className="lg:col-start-6 lg:col-span-7 bg-surface p-6 md:p-10">
+                <h3 className="text-lead font-bold">{t.considerations}</h3>
+                <ul className="mt-6 space-y-5">
+                  <li><strong>{t.accommodation}</strong> {t.accommodationText}</li>
+                  <li><strong>{t.travel}</strong> {t.travelText}</li>
+                  <li><strong>{t.opportunity}</strong> {t.opportunityText}</li>
                 </ul>
-              </div>
-
+              </Reveal>
             </div>
+            {/* The team away from the lab: stills from the annual trips, butted together */}
+            <Reveal order={2} className="grid grid-cols-3 mt-16 md:mt-24">
+              {[VideoPosters.trip1, VideoPosters.trip2, VideoPosters.trip3].map((poster) => (
+                <div key={poster} className="relative aspect-[4/3] overflow-hidden bg-surface">
+                  <Image src={poster} alt={lifeTitle} fill sizes="(min-width: 1200px) 384px, 33vw" className="object-cover" />
+                </div>
+              ))}
+            </Reveal>
           </div>
-        </SectionWrapper>
+        </section>
 
         {/* Internship Dropdown and Details Container */}
-        <SectionWrapper className="py-16 md:py-24 bg-white">
-          <div className="max-w-[1200px] mx-auto px-6">
-
-            <div className="text-center mb-8 md:mb-12">
-              <h2 className="font-heading text-3xl lg:text-4xl font-bold text-brand-navy">
-                {t.openTitle}
-              </h2>
-              <p className="text-gray-500 text-base mt-2 max-w-xl mx-auto">
-                {t.openText}
-              </p>
-            </div>
+        <section className="section-y bg-surface">
+          <div className="frame">
+            <SectionHead title={t.openTitle} lead={t.openText} />
 
             {/* Every position as a tab, so visitors see all the openings at a glance (a drop-down hid all but one).
                 Arrow keys move between tabs, as screen readers expect. */}
-            <div className="max-w-4xl mx-auto mb-8 md:mb-12">
-              <p id="positions-label" className="text-xs font-bold text-gray-aa uppercase tracking-wider mb-3 text-center">
+            <div className="mb-8 md:mb-12">
+              <p id="positions-label" className="text-small text-ink-soft mb-3">
                 {t.selectPosition}
               </p>
               <div
@@ -283,12 +201,12 @@ export default function CareersPage() {
                       aria-controls="role-panel"
                       tabIndex={active ? 0 : -1}
                       onClick={() => setSelectedRoleId(role.id)}
-                      className={`text-left rounded-2xl border-2 px-5 py-4 transition-colors cursor-pointer ${
-                        active ? "border-teal-aa bg-teal-50" : "border-gray-200 bg-white hover:border-teal-aa/50"
+                      className={`text-left px-5 py-4 transition-colors cursor-pointer active:scale-[0.99] ${
+                        active ? "bg-ink text-white" : "bg-white hover:bg-white/70"
                       }`}
                     >
-                      <span className="block text-xs font-bold uppercase tracking-wider text-teal-aa">{role.department}</span>
-                      <span className="block mt-1 font-heading font-bold text-brand-navy leading-snug">{role.title}</span>
+                      <span className="block text-small">{role.department}</span>
+                      <span className="block mt-1 font-bold leading-snug">{role.title}</span>
                     </button>
                   );
                 })}
@@ -300,33 +218,33 @@ export default function CareersPage() {
               id="role-panel"
               role="tabpanel"
               aria-labelledby={`role-tab-${selectedRole.id}`}
-              className="scroll-mt-28 bg-gray-55 border border-gray-200 rounded-3xl overflow-hidden shadow-sm"
+              className="scroll-mt-28 bg-white overflow-hidden"
             >
               <div className="flex flex-col lg:flex-row min-h-[550px]">
 
                 {/* Left Side: Text Details */}
                 <div className="lg:w-7/12 p-5 sm:p-8 lg:p-12 flex flex-col justify-between flex-grow">
                   <div>
-                    <span className="text-teal-aa text-sm font-bold uppercase tracking-wider block mb-2">
-                      {selectedRole.department}
-                    </span>
-                    <h3 className="font-heading text-3xl font-bold text-brand-navy mb-6">
+                    <h3 className="text-title">
                       {selectedRole.title}
                     </h3>
+                    <p className="text-small text-ink-soft mt-2 mb-6">
+                      {selectedRole.department}
+                    </p>
 
-                    <p className="text-gray-650 text-base leading-relaxed mb-8">
+                    <p className="mb-8">
                       {selectedRole.roleScope}
                     </p>
 
                     {/* Point-wise Required Qualifications */}
                     <div className="mb-8">
-                      <h4 className="text-xs font-bold uppercase tracking-wider text-brand-navy/78 block mb-3">
+                      <h4 className="font-bold mb-3">
                         {t.qualifications}
                       </h4>
                       <ul className="space-y-2">
                         {selectedRole.qualifications.map((qual, idx) => (
-                          <li key={idx} className="text-gray-600 text-sm flex items-start gap-2">
-                            <span className="text-brand-orange text-xs mt-1.5">•</span>
+                          <li key={idx} className="flex items-start gap-2">
+                            <span aria-hidden="true">•</span>
                             <span>{qual}</span>
                           </li>
                         ))}
@@ -334,14 +252,14 @@ export default function CareersPage() {
                     </div>
 
                     {/* Eligible Fields */}
-                    <div className="border-t border-gray-200/60 pt-6 mb-8">
-                      <h4 className="text-xs font-bold uppercase tracking-wider text-brand-navy/78 block mb-3">
+                    <div className="mb-8">
+                      <h4 className="font-bold mb-3">
                         {t.eligible}
                       </h4>
                       <ul className="space-y-2">
                         {selectedRole.requirements.map((req, idx) => (
-                          <li key={idx} className="text-gray-600 text-sm flex items-center gap-2">
-                            <span className="text-brand-orange text-xs">•</span>
+                          <li key={idx} className="flex items-start gap-2">
+                            <span aria-hidden="true">•</span>
                             {req}
                           </li>
                         ))}
@@ -351,7 +269,7 @@ export default function CareersPage() {
 
                   <button
                     onClick={() => setActiveJob(selectedRole)}
-                    className="w-full py-4 rounded-full bg-brand-orange-aa hover:bg-brand-orange-aa-hover text-white font-bold text-base shadow transition-all duration-300 cursor-pointer text-center lg:max-w-xs"
+                    className="btn btn-primary w-full lg:w-auto lg:self-start"
                   >
                     {t.apply}
                   </button>
@@ -366,15 +284,13 @@ export default function CareersPage() {
                     sizes="(min-width: 1024px) 42vw, 100vw"
                     className="object-cover"
                   />
-                  {/* Subtle fade overlay just on the bottom/edges to frame nicely */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent lg:bg-gradient-to-l lg:from-black/10" />
                 </div>
 
               </div>
             </div>
 
           </div>
-        </SectionWrapper>
+        </section>
 
         {/* Application Modal Overlay */}
         <AnimatePresence>
@@ -404,13 +320,13 @@ export default function CareersPage() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                   </button>
-                  <span className="text-teal-aa-light text-xs font-bold uppercase tracking-wider block mb-1">
+                  <span className="text-small block mb-1">
                     {t.modalTitle}
                   </span>
-                  <h3 className="font-heading text-xl lg:text-2xl font-bold text-white pr-10">
+                  <h3 className="text-lead font-bold text-white pr-10">
                     {activeJob.title}
                   </h3>
-                  <p className="text-white/70 text-sm mt-1">
+                  <p className="text-small mt-1">
                     {activeJob.department} • {t.location}
                   </p>
                 </div>
@@ -419,7 +335,7 @@ export default function CareersPage() {
                 <form onSubmit={handleApplySubmit} className="p-6 space-y-5">
                   {/* Name field */}
                   <div>
-                    <label htmlFor="apply-name" className="block text-sm font-bold text-gray-550 uppercase tracking-wider mb-2">
+                    <label htmlFor="apply-name" className="block font-semibold mb-2">
                       {t.fullName}
                     </label>
                     <input
@@ -429,13 +345,13 @@ export default function CareersPage() {
                       value={applicantName}
                       onChange={(e) => setApplicantName(e.target.value)}
                       placeholder={t.namePlaceholder}
-                      className="w-full bg-gray-55 border border-gray-200 rounded-xl px-4 py-3 text-base text-brand-navy focus:outline-none focus:border-teal-500 transition-colors"
+                      className="w-full bg-white border border-gray-300 rounded-xl px-4 py-3 text-base text-brand-navy focus:outline-none focus:border-ink transition-colors"
                     />
                   </div>
 
                   {/* Email field */}
                   <div>
-                    <label htmlFor="apply-email" className="block text-sm font-bold text-gray-555 uppercase tracking-wider mb-2">
+                    <label htmlFor="apply-email" className="block font-semibold mb-2">
                       {t.email}
                     </label>
                     <input
@@ -445,7 +361,7 @@ export default function CareersPage() {
                       value={applicantEmail}
                       onChange={(e) => setApplicantEmail(e.target.value)}
                       placeholder={t.emailPlaceholder}
-                      className="w-full bg-gray-55 border border-gray-200 rounded-xl px-4 py-3 text-base text-brand-navy focus:outline-none focus:border-teal-500 transition-colors"
+                      className="w-full bg-white border border-gray-300 rounded-xl px-4 py-3 text-base text-brand-navy focus:outline-none focus:border-ink transition-colors"
                     />
                   </div>
 
@@ -453,7 +369,7 @@ export default function CareersPage() {
 
                   {/* Editable Email Subject preview */}
                   <div>
-                    <label htmlFor="apply-subject" className="block text-sm font-bold text-gray-555 uppercase tracking-wider mb-2">
+                    <label htmlFor="apply-subject" className="block font-semibold mb-2">
                       {t.emailSubject}
                     </label>
                     <input
@@ -462,30 +378,30 @@ export default function CareersPage() {
                       id="apply-subject"
                       value={emailSubject}
                       onChange={(e) => setEmailSubject(e.target.value)}
-                      className="w-full bg-gray-55 border border-gray-200 rounded-xl px-4 py-3 text-base text-brand-navy focus:outline-none focus:border-teal-500 transition-colors"
+                      className="w-full bg-white border border-gray-300 rounded-xl px-4 py-3 text-base text-brand-navy focus:outline-none focus:border-ink transition-colors"
                     />
                   </div>
 
                   {/* Editable Email Body preview */}
                   <div>
-                    <label htmlFor="apply-body" className="block text-sm font-bold text-gray-555 uppercase tracking-wider mb-2">
+                    <label htmlFor="apply-body" className="block font-semibold mb-2">
                       {t.emailBody}
                     </label>
-                    {locale !== "en" && <p className="text-xs text-gray-500 -mt-1 mb-2">{t.emailNote}</p>}
+                    {locale !== "en" && <p className="text-small text-ink-soft -mt-1 mb-2">{t.emailNote}</p>}
                     <textarea
                       required
                       rows={5}
                       id="apply-body"
                       value={emailBody}
                       onChange={(e) => setEmailBody(e.target.value)}
-                      className="w-full bg-gray-55 border border-gray-200 rounded-xl p-4 text-base md:text-sm leading-relaxed text-brand-navy focus:outline-none focus:border-teal-500 transition-colors"
+                      className="w-full bg-white border border-gray-300 rounded-xl p-4 text-base leading-relaxed text-brand-navy focus:outline-none focus:border-ink transition-colors"
                     />
                   </div>
 
                   <div className="pt-2">
                     <button
                       type="submit"
-                      className="w-full py-3.5 rounded-full bg-brand-orange-aa hover:bg-brand-orange-aa-hover text-white font-bold text-base shadow-sm transition-colors duration-300 cursor-pointer text-center"
+                      className="btn btn-primary w-full"
                     >
                       {t.draft}
                     </button>
@@ -511,15 +427,15 @@ export default function CareersPage() {
                 exit={{ scale: 0.95, y: 20 }}
                 className="bg-white rounded-3xl w-full max-w-md shadow-2xl p-8 border border-gray-200 text-center"
               >
-                <div className="w-14 h-14 rounded-full bg-brand-orange/10 flex items-center justify-center text-brand-orange mx-auto mb-4">
-                  <svg className="w-6 h-6 text-brand-orange" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <div className="w-14 h-14 rounded-full bg-surface flex items-center justify-center text-ink mx-auto mb-4">
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                     <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path>
                   </svg>
                 </div>
-                <h3 className="font-heading text-xl font-bold text-brand-navy mb-2">
+                <h3 className="text-lead font-bold mb-2">
                   {t.reminderTitle}
                 </h3>
-                <p className="text-gray-500 text-sm leading-relaxed mb-6">
+                <p className="mb-6">
                   {t.reminderStart} <strong>{t.reminderStrong}</strong> {t.reminderEnd}
                 </p>
                 <button
@@ -527,7 +443,7 @@ export default function CareersPage() {
                     setShowAttachReminder(false);
                     setActiveJob(null);
                   }}
-                  className="w-full py-3 rounded-full bg-brand-navy hover:bg-teal-aa text-white text-sm font-bold transition-all duration-300 cursor-pointer"
+                  className="btn btn-ink w-full"
                 >
                   {t.gotIt}
                 </button>

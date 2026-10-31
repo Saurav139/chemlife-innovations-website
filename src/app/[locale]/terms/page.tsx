@@ -3,6 +3,7 @@ import { englishOnly } from "@/i18n/server";
 import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import PageHero from "@/components/PageHero";
 import { VariantProvider } from "@/context/VariantContext";
 import { pageMetadata } from "@/lib/seo";
 
@@ -17,9 +18,9 @@ export const metadata: Metadata = pageMetadata({
 const LAST_UPDATED = "21 October 2026";
 const EMAIL = "innovate@chemlifeinnovations.com";
 
-const h2 = "font-heading text-2xl font-bold text-brand-navy mt-12 mb-4";
+const h2 = "text-lead font-bold mt-14 mb-4 scroll-mt-28";
 const list = "list-disc pl-6 space-y-2";
-const link = "text-teal-aa underline hover:text-teal-700";
+const link = "link";
 
 // English only for now.
 export default async function TermsPage({ params }: { params: Promise<{ locale: string }> }) {
@@ -28,16 +29,16 @@ export default async function TermsPage({ params }: { params: Promise<{ locale: 
     <VariantProvider>
       <Header />
 
-      <main id="main" tabIndex={-1} className="bg-white min-h-screen text-brand-navy">
-        <section className="pt-26 md:pt-32 pb-10 md:pb-16 lg:pt-36 lg:pb-20 bg-brand-navy text-white">
-          <div className="max-w-3xl mx-auto px-6">
-            <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-white">Terms of Use</h1>
-            <p className="mt-4 text-white/75">Last updated {LAST_UPDATED}</p>
-          </div>
-        </section>
+      <main id="main" tabIndex={-1}>
+        <PageHero
+          title="Terms of Use"
+          intro="The terms that apply when you use the ChemLife Innovations website, its product information and AI chatbots."
+          note={`Last updated ${LAST_UPDATED}`}
+        />
 
-        <section className="py-16">
-          <div className="max-w-3xl mx-auto px-6 text-slate-600 leading-relaxed [overflow-wrap:anywhere]">
+        <section className="pt-12 md:pt-16 pb-20 md:pb-28 lg:pb-36">
+          <div className="frame grid lg:grid-cols-12 gap-x-8">
+            <div className="lg:col-start-6 lg:col-span-7 [overflow-wrap:anywhere]">
             <p>
               These terms apply to your use of chemlifeinnovations.com, including its product information, articles
               and AI chatbots. By using the website you agree to them. If you don&apos;t agree, please don&apos;t use
@@ -180,6 +181,7 @@ export default async function TermsPage({ params }: { params: Promise<{ locale: 
             <p>
               Questions about these terms? Email <a href={`mailto:${EMAIL}`} className={link}>{EMAIL}</a>.
             </p>
+            </div>
           </div>
         </section>
       </main>

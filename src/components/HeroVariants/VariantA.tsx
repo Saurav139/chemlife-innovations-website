@@ -4,7 +4,6 @@ import { useState, useEffect, useRef } from "react";
 import Image, { getImageProps } from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { useTheme } from "@/context/VariantContext";
 import { Images } from "@/lib/assets";
 import { useHref, useT } from "@/i18n/LocaleProvider";
 import { playOnPage, youtubeWatchUrl } from "@/lib/youtube";
@@ -24,10 +23,13 @@ const otherPhotos = [
 const STORY_VIDEO_ID = "-amOgNcjYNg";
 
 // Larger on desktop, so the buttons hold their own under the big headline.
-const primaryCtaClass =
-  "inline-flex items-center justify-center gap-2 min-h-12 lg:min-h-14 px-7 lg:px-9 py-3 rounded-full text-sm lg:text-base font-semibold bg-brand-orange-aa border-2 border-brand-orange-aa text-white hover:bg-white hover:text-brand-orange-aa shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5";
-const secondaryCtaClass =
-  "inline-flex items-center justify-center gap-2 min-h-12 lg:min-h-14 px-7 lg:px-9 py-3 rounded-full text-sm lg:text-base font-semibold border-2 border-white/80 text-white hover:bg-white hover:text-brand-navy transition-all duration-300 transform hover:-translate-y-0.5";
+const primaryCtaClass = "btn btn-primary lg:min-h-14 lg:px-9";
+const secondaryCtaClass = "btn btn-paper lg:min-h-14 lg:px-9";
+
+// Neutral scrims under the white text, darkest where the text sits.
+const TOP_SCRIM = "bg-[linear-gradient(to_bottom,rgb(0_0_0/0.62),rgb(0_0_0/0.3)_50%,rgb(0_0_0/0))]";
+const BOTTOM_SCRIM = "bg-[linear-gradient(to_top,rgb(0_0_0/0.68),rgb(0_0_0/0.15)_50%,rgb(0_0_0/0))]";
+const SIDE_SCRIM = "bg-[linear-gradient(to_right,rgb(0_0_0/0.7),rgb(0_0_0/0.4)_50%,rgb(0_0_0/0))]";
 
 // Labels are in the language file (home.stats), in this order.
 const stats = [
@@ -78,7 +80,7 @@ function AnimatedCounter({ value, suffix }: { value: number; suffix: string }) {
   }, [value]);
 
   return (
-    <span ref={ref} className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold text-teal-400">
+    <span ref={ref} className="text-title text-white tabular-nums">
       {count}{suffix}
     </span>
   );
@@ -89,7 +91,6 @@ export default function HeroVariantA() {
   const [slide, setSlide] = useState(0);
   const [photo, setPhoto] = useState(0);
   const [storyOpen, setStoryOpen] = useState(false);
-  const { theme } = useTheme();
   const t = useT();
   const href = useHref();
   const taglines = t.home.taglines;
@@ -143,37 +144,32 @@ export default function HeroVariantA() {
       </div>
 
       {/* Subtle Dark Overlay for text readability (keeps original image colors) */}
-      <div className={`absolute inset-x-0 top-0 h-[58%] bg-gradient-to-b from-black/60 via-black/30 to-transparent z-20 transition-opacity duration-1000 motion-reduce:transition-none ${awardLayout ? "opacity-100" : "opacity-0"}`} />
-      <div className={`absolute inset-x-0 bottom-0 h-[42%] bg-gradient-to-t from-black/65 via-black/15 to-transparent z-20 transition-opacity duration-1000 motion-reduce:transition-none ${awardLayout ? "opacity-100" : "opacity-0"}`} />
-      <div className={`absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent z-20 transition-opacity duration-1000 motion-reduce:transition-none ${awardLayout ? "opacity-0" : "opacity-100"}`} />
+      <div className={`absolute inset-x-0 top-0 h-[58%] ${TOP_SCRIM} z-20 transition-opacity duration-1000 motion-reduce:transition-none ${awardLayout ? "opacity-100" : "opacity-0"}`} />
+      <div className={`absolute inset-x-0 bottom-0 h-[42%] ${BOTTOM_SCRIM} z-20 transition-opacity duration-1000 motion-reduce:transition-none ${awardLayout ? "opacity-100" : "opacity-0"}`} />
+      <div className={`absolute inset-0 ${SIDE_SCRIM} z-20 transition-opacity duration-1000 motion-reduce:transition-none ${awardLayout ? "opacity-0" : "opacity-100"}`} />
       <div className="absolute inset-0 bg-black/10 z-20" />
 
-      <div className={`relative z-30 max-w-[1200px] mx-auto px-6 w-full min-h-svh flex flex-col justify-center ${awardLayout ? "pt-24 pb-28 md:pt-28 md:pb-32 lg:pt-36" : "pt-28 pb-28 md:py-32 lg:pt-40"}`}>
-        {/* w-full: without it, this box has no explicit width, so its auto side margins (for centering)
-            stop it from stretching and it shrinks to fit whichever tagline is showing — moving and
-            resizing the buttons below it from one slide to the next. */}
-        <div className={`w-full max-w-4xl flex-1 flex flex-col mx-auto text-center items-center ${awardLayout ? "justify-start" : "justify-center"}`}>
-          <div className={`flex flex-col items-center text-center w-full ${awardLayout ? "justify-start" : "min-h-[300px] md:min-h-[340px] justify-center"}`}>
+      <div className={`relative z-30 frame min-h-svh flex flex-col justify-center ${awardLayout ? "pt-24 pb-28 md:pt-28 md:pb-32 lg:pt-36" : "pt-28 pb-28 md:py-32 lg:pt-40"}`}>
+        <div className={`w-full flex-1 flex flex-col text-left items-start ${awardLayout ? "justify-start" : "justify-center"}`}>
+          <div className={`flex flex-col items-start w-full ${awardLayout ? "justify-start" : "min-h-[300px] md:min-h-[340px] justify-center"}`}>
             {/* Keep the initial headline visible during hydration. */}
             <AnimatePresence mode="wait" initial={false}>
-              {/* On phones the size follows the screen width so every tagline fits on its three lines, which keeps
-                  the buttons below in the same place on every slide. */}
+              {/* One line of words in one colour, wrapping on its own: two lines on tablets and desktop, where it
+                  runs across the frame; the longer taglines take three on phones. */}
               <motion.h1
                 key={slide}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.6, ease: [0.25, 0.1, 0, 1] }}
-                className={`font-heading text-[length:clamp(24px,8.8vw_-_4.5px,34px)] sm:text-5xl md:text-6xl leading-[1.1] text-white font-bold text-center ${awardLayout ? "2xl:text-7xl mb-5 sm:mb-8" : "lg:text-7xl mb-8 sm:mb-16"}`}
+                className={`text-[length:clamp(1.75rem,0.8rem+3.2vw,3.5rem)] leading-[1.06] tracking-[-0.025em] font-bold text-white ${awardLayout ? "mb-6 sm:mb-8" : "mb-8 sm:mb-12"}`}
               >
-                {tagline[0]}<br />
-                <span className="text-teal-400">{tagline[1]}</span><br />
-                {tagline[2]}
+                {tagline.join(" ")}
               </motion.h1>
             </AnimatePresence>
 
-            {/* Phones: stacked, centred, both as wide as the longer label. Wider screens: side by side. */}
-            <div className="grid justify-center gap-3 sm:flex sm:flex-row sm:flex-wrap sm:items-center sm:gap-4 w-full mt-2">
+            {/* Phones: stacked, both as wide as the longer label. Wider screens: side by side. */}
+            <div className="grid gap-3 sm:flex sm:flex-row sm:flex-wrap sm:items-center sm:gap-4 mt-2">
               <Link href={href("/products")} className={primaryCtaClass}>
                 {t.home.findProduct}
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -190,7 +186,7 @@ export default function HeroVariantA() {
               target="_blank"
               rel="noopener noreferrer"
               onClick={(e) => playOnPage(e, () => setStoryOpen(true))}
-              className={`tap-target inline-flex items-center gap-2 text-sm lg:text-base font-semibold text-white/85 hover:text-white underline-offset-4 hover:underline transition-colors cursor-pointer ${awardLayout ? "mt-4 lg:mt-5" : "mt-5 lg:mt-6"}`}
+              className={`tap-target link inline-flex items-center gap-2 text-white cursor-pointer ${awardLayout ? "mt-4 lg:mt-5" : "mt-5 lg:mt-6"}`}
             >
               <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current">
                 <path d="M8 5v14l11-7z" />
@@ -209,25 +205,23 @@ export default function HeroVariantA() {
                   aria-label={`${t.home.goToSlide} ${i + 1}`}
                   aria-current={i === slide ? "true" : undefined}
                 >
-                  <span className={`h-2 rounded-full transition-all duration-300 ${i === slide ? "w-6 bg-teal-400" : "w-2 bg-white/40"}`} />
+                  <span className={`h-2 rounded-full transition-all duration-300 ${i === slide ? "w-6 bg-white" : "w-2 bg-white/40"}`} />
                 </button>
               ))}
             </div>
           </div>
         </div>
 
-        {/* Serial Embedded Company Stats */}
+        {/* The company in four figures */}
         <div className="w-full mt-12 md:mt-24 md:pt-12 grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-8 md:gap-8">
           {stats.map((stat, idx) => (
-            <div key={idx} className="flex flex-col items-center justify-center text-center">
+            <div key={idx} className="flex flex-col items-start">
               <AnimatedCounter value={stat.value} suffix={stat.suffix} />
-              <span className="text-white/70 text-xs md:text-sm font-semibold uppercase tracking-wider md:tracking-widest mt-2 md:mt-3">{t.home.stats[idx]}</span>
+              <span className="text-small text-white mt-1 md:mt-2">{t.home.stats[idx]}</span>
             </div>
           ))}
         </div>
       </div>
-
-      <div className={`absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t ${theme.heroBottomGradient} to-transparent`} />
 
       {/* Story video plays on the page, with the hero actions underneath */}
       <AnimatePresence>

@@ -5,6 +5,7 @@ import { motion, AnimatePresence, MotionConfig } from "framer-motion";
 import Image from "next/image";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import PageHero from "@/components/PageHero";
 import { VariantProvider } from "@/context/VariantContext";
 import SiteSearch from "@/components/SiteSearch";
 import { Images } from "@/lib/assets";
@@ -118,57 +119,27 @@ export default function ProductsPage() {
     <VariantProvider>
       <Header />
 
-      <main id="main" tabIndex={-1} className="bg-slate-50/50 min-h-screen text-brand-navy">
+      <main id="main" tabIndex={-1}>
         {/* Card animations follow the visitor's "reduce motion" setting */}
         <MotionConfig reducedMotion="user">
         {/* Hero and product list are plain sections: they're in the first screen, so they show without waiting for a fade-in.
             The hero image is the page's largest paint (LCP), so it loads first. */}
-        <section className="pt-26 md:pt-32 pb-10 md:pb-20 lg:pt-36 lg:pb-28 text-white relative overflow-hidden bg-brand-navy flex items-center">
-          <div className="absolute inset-0 z-0">
-            <Image
-              src={Images.products.heroBanner}
-              alt={t.heroAlt}
-              fill
-              sizes="100vw"
-              className="object-cover opacity-60"
-              priority
-              fetchPriority="high"
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-brand-navy/95 via-brand-navy/75 to-transparent" />
-            <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#1e3a8a_1px,transparent_1px)] [background-size:16px_16px]" />
-          </div>
-
-          <div className="relative z-10 max-w-[1200px] mx-auto px-6 w-full text-center md:text-left">
-            <span className="text-teal-aa-light text-sm font-semibold tracking-widest uppercase block mb-3">{t.kicker}</span>
-            <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold leading-tight mb-3 md:mb-4 text-white">
-              {t.titleStart} <span className="text-teal-400">{t.titleAccent}</span>
-            </h1>
-            <p className="text-white/85 text-base lg:text-lg leading-relaxed max-w-3xl font-light">
-              {t.intro}
-            </p>
-          </div>
-        </section>
+        <PageHero
+          title={`${t.titleStart} ${t.titleAccent}`}
+          intro={t.intro}
+          image={Images.process.delivery}
+          imageAlt={t.heroAlt}
+          imagePosition="50% 40%"
+        />
 
         {/* Products List Section */}
-        <section className="pt-8 pb-16 md:py-16 bg-slate-50/30 relative overflow-hidden">
-          {/* Subtle Product-based Background Image. At 4% opacity a small file looks the same as the 3840px original,
-              and it's decorative, so its empty alt makes screen readers skip it. */}
-          <div className="absolute inset-0 z-0 pointer-events-none select-none opacity-[0.04]">
-            <Image
-              src={Images.products.customBg}
-              alt=""
-              fill
-              sizes="640px"
-              className="object-cover object-center"
-            />
-          </div>
-
-          <div className="relative z-10 max-w-[1200px] mx-auto px-6">
+        <section className="pt-4 pb-20 md:pb-28 lg:pb-36">
+          <div className="frame">
 
             {/* Left-Aligned Search and Category Selector Container */}
             <div className="flex flex-col md:flex-row items-center gap-4 mb-10 w-full">
               {/* Phones: the species filter gets its own row, so the search box has room for its placeholder */}
-              <div className={`flex flex-col sm:flex-row sm:items-center bg-slate-50 border border-slate-200 rounded-3xl sm:rounded-full shadow-xs text-sm w-full md:max-w-xl ${activeStyle.focus} focus-within:ring-1 transition-all duration-300 relative`}>
+              <div className={`flex flex-col sm:flex-row sm:items-center bg-surface rounded-3xl sm:rounded-full w-full md:max-w-xl ${activeStyle.focus} focus-within:ring-2 transition-shadow duration-300 relative`}>
                 <div className="flex items-center flex-1 min-w-0">
                 {/* Search Icon */}
                 <div className={`pl-4 ${activeStyle.icon} flex-shrink-0 transition-colors duration-300`}>
@@ -185,7 +156,7 @@ export default function ProductsPage() {
                   placeholder={t.search}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full min-w-0 bg-transparent border-0 px-3 py-3 text-brand-navy placeholder-slate-aa focus:outline-none focus:ring-0 text-base md:text-sm [&::-webkit-search-cancel-button]:appearance-none"
+                  className="w-full min-w-0 bg-transparent border-0 px-3 py-3 text-ink placeholder-slate-aa focus:outline-none focus:ring-0 text-base [&::-webkit-search-cancel-button]:appearance-none"
                 />
 
                 {/* Clear Search Button */}
@@ -203,16 +174,13 @@ export default function ProductsPage() {
 
                 </div>
 
-                {/* Vertical Divider Line */}
-                <div className="hidden sm:block h-6 w-[1px] bg-slate-200 flex-shrink-0" />
-
                 {/* Category Dropdown Selector inside Search Bar */}
-                <div className="relative flex-shrink-0 border-t border-slate-200 sm:border-t-0">
+                <div className="relative flex-shrink-0">
                   <select
                     aria-label={t.filterBySpecies}
                     value={selectedCategory}
                     onChange={(e) => setSelectedCategory(e.target.value)}
-                    className="w-full sm:w-auto appearance-none bg-transparent pl-4 pr-10 py-3.5 font-semibold text-base md:text-xs text-slate-600 focus:outline-none cursor-pointer"
+                    className="w-full sm:w-auto appearance-none bg-transparent pl-4 pr-10 py-3.5 font-semibold text-base text-ink focus:outline-none cursor-pointer"
                   >
                     {categories.map((category) => (
                       <option key={category} value={category} className="text-brand-navy font-semibold">
@@ -254,7 +222,7 @@ export default function ProductsPage() {
                     data-analytics-item={product.name}
                     layout
                     transition={{ duration: 0.4, ease: easeOut }}
-                    className="scroll-mt-28 border border-slate-200 rounded-2xl bg-slate-50/50 hover:bg-slate-50/85 transition-colors duration-300 overflow-hidden shadow-xs hover:border-brand-orange/30 flex flex-col h-fit group"
+                    className="scroll-mt-28 bg-surface overflow-hidden flex flex-col h-fit group"
                   >
                     {/* Card Header (Image/Icon + Title & Category) */}
                     <div
@@ -264,7 +232,7 @@ export default function ProductsPage() {
                     >
                       {/* Top: Product Image or Icon Container */}
                       {product.banner ? (
-                        <div className="w-full aspect-video relative overflow-hidden bg-slate-100 border-b border-slate-200/60">
+                        <div className="w-full aspect-video relative overflow-hidden bg-surface">
                           <Image
                             src={product.banner}
                             alt={`${product.name} ${t.bannerAlt}`}
@@ -274,14 +242,14 @@ export default function ProductsPage() {
                           />
                         </div>
                       ) : (
-                        <div className="w-full aspect-video bg-white border-b border-slate-200/60 flex items-center justify-center p-6 relative">
-                          <div className="w-16 h-16 rounded-xl bg-white border border-slate-150 shadow-sm flex items-center justify-center p-2.5">
+                        <div className="w-full aspect-video bg-white flex items-center justify-center p-6 relative">
+                          <div className="w-20 h-20 flex items-center justify-center p-2.5">
                             <div className="relative w-full h-full">
                               <Image
                                 src={product.icon}
                                 alt={`${product.name} ${t.iconAlt}`}
                                 fill
-                                sizes="42px"
+                                sizes="60px"
                                 className="object-contain"
                               />
                             </div>
@@ -292,22 +260,17 @@ export default function ProductsPage() {
                       {/* Content: Title & Category */}
                       <div className="p-5 flex flex-col gap-2">
                         <div className="flex items-start justify-between gap-3">
-                          <h3 id={`${anchor}-name`} className="font-heading text-lg font-black text-brand-navy group-hover:text-brand-orange-aa transition-colors duration-300 leading-tight">
+                          <h3 id={`${anchor}-name`} className="text-lead font-bold leading-tight">
                             {product.name}
                           </h3>
 
-                          <span className={`px-2.5 py-0.5 rounded-md text-[11px] font-bold uppercase tracking-wider border whitespace-nowrap ${product.category === "Mono-gastric"
-                            ? "bg-orange-50/50 border-orange-150 text-brand-orange-aa"
-                            : product.category === "Ruminants"
-                              ? "bg-blue-50 border-blue-150 text-blue-700"
-                              : "bg-emerald-50 border-emerald-150 text-emerald-700"
-                            }`}>
+                          <span className="text-small text-ink-soft whitespace-nowrap pt-1">
                             {t.categories[product.category as keyof typeof t.categories]}
                           </span>
                         </div>
 
                         {product.tagline && (
-                          <p className="text-sm text-slate-550 italic leading-relaxed">
+                          <p>
                             {product.tagline}
                           </p>
                         )}
@@ -319,7 +282,7 @@ export default function ProductsPage() {
                           aria-expanded={isExpanded}
                           aria-controls={`${anchor}-details`}
                           aria-describedby={`${anchor}-name`}
-                          className="flex items-center gap-1.5 w-fit min-h-11 -mt-1 -mb-3 text-brand-orange-aa text-sm font-bold cursor-pointer rounded-md"
+                          className="flex items-center gap-1.5 w-fit min-h-11 -mt-1 -mb-3 text-accent font-bold cursor-pointer rounded-md"
                         >
                           <span>{isExpanded ? t.showLess : t.readMore}</span>
                           <motion.span
@@ -343,15 +306,15 @@ export default function ProductsPage() {
                           animate={{ height: "auto" }}
                           exit={{ height: 0 }}
                           transition={{ duration: 0.4, ease: easeOut }}
-                          className="overflow-hidden border-t border-slate-100 bg-white"
+                          className="overflow-hidden bg-white"
                         >
                           <div className="p-5 space-y-5">
                             {/* About section */}
                             <div>
-                              <h4 className="text-xs font-black uppercase text-teal-aa tracking-wider block mb-1.5">
+                              <h4 className="font-bold mb-1.5">
                                 {t.about}
                               </h4>
-                              <p className="text-slate-600 text-sm leading-relaxed whitespace-pre-line">
+                              <p className="whitespace-pre-line">
                                 {product.about}
                               </p>
                             </div>
@@ -359,13 +322,13 @@ export default function ProductsPage() {
                             {/* Variants section */}
                             {product.variants && product.variants.length > 0 && (
                               <div>
-                                <h4 className="text-xs font-black uppercase text-teal-aa tracking-wider block mb-1.5">
+                                <h4 className="font-bold mb-1.5">
                                   {t.variants}
                                 </h4>
-                                <ul className="grid grid-cols-1 gap-1.5 text-slate-600 text-sm font-semibold">
+                                <ul className="grid grid-cols-1 gap-1.5 font-semibold">
                                   {product.variants.map((variant, index) => (
                                     <li key={index} className="flex items-center gap-2">
-                                      <span className="w-1.5 h-1.5 rounded-full bg-teal-500 flex-shrink-0" />
+                                      <span className="w-1.5 h-1.5 rounded-full bg-ink flex-shrink-0" />
                                       {variant}
                                     </li>
                                   ))}
@@ -375,13 +338,13 @@ export default function ProductsPage() {
 
                             {/* Key Features section */}
                             <div>
-                              <h4 className="text-xs font-black uppercase text-teal-aa tracking-wider block mb-2">
+                              <h4 className="font-bold mb-2">
                                 {t.features}
                               </h4>
                               <ul className="space-y-2">
                                 {product.features.map((feature, idx) => (
-                                  <li key={idx} className="flex items-start gap-2 text-slate-600 text-sm">
-                                    <svg aria-hidden="true" className="w-3.5 h-3.5 text-brand-orange mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <li key={idx} className="flex items-start gap-2">
+                                    <svg aria-hidden="true" className="w-4 h-4 text-ink mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7" />
                                     </svg>
                                     <span className="leading-tight">{feature}</span>
@@ -392,36 +355,26 @@ export default function ProductsPage() {
 
                             {/* Usage & Presentation section */}
                             <div className="space-y-3">
-                              <h4 className="text-xs font-black uppercase text-teal-aa tracking-wider block">
+                              <h4 className="font-bold">
                                 {t.usage}
                               </h4>
 
                               <div className="space-y-2.5">
                                 {/* Inclusion rate */}
-                                <div className="flex items-start gap-2.5 p-3 bg-slate-50 rounded-lg border border-slate-100">
-                                  <div className="w-7 h-7 rounded-md bg-teal-50 text-teal-aa flex items-center justify-center flex-shrink-0 mt-0.5">
-                                    <svg aria-hidden="true" className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
-                                    </svg>
-                                  </div>
+                                <div className="p-4 bg-surface">
                                   <div>
-                                    <span className="text-xs text-slate-aa font-bold uppercase tracking-wider block">{t.inclusionRate}</span>
-                                    <span className="text-sm text-brand-navy font-semibold leading-relaxed mt-0.5 block whitespace-pre-line">
+                                    <span className="text-small text-ink-soft block">{t.inclusionRate}</span>
+                                    <span className="font-semibold mt-0.5 block whitespace-pre-line">
                                       {product.inclusionRate}
                                     </span>
                                   </div>
                                 </div>
 
                                 {/* Pack size */}
-                                <div className="flex items-start gap-2.5 p-3 bg-slate-50 rounded-lg border border-slate-100">
-                                  <div className="w-7 h-7 rounded-md bg-teal-50 text-teal-aa flex items-center justify-center flex-shrink-0 mt-0.5">
-                                    <svg aria-hidden="true" className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                                    </svg>
-                                  </div>
+                                <div className="p-4 bg-surface">
                                   <div>
-                                    <span className="text-xs text-slate-aa font-bold uppercase tracking-wider block">{t.packSize}</span>
-                                    <span className="text-sm text-brand-navy font-semibold leading-relaxed mt-0.5 block whitespace-pre-line">
+                                    <span className="text-small text-ink-soft block">{t.packSize}</span>
+                                    <span className="font-semibold mt-0.5 block whitespace-pre-line">
                                       {product.packSize}
                                     </span>
                                   </div>
@@ -432,7 +385,7 @@ export default function ProductsPage() {
                             {/* Enquire button */}
                             <a
                               href={emailHref}
-                              className="w-full py-3 px-4 rounded-xl bg-brand-orange-aa hover:bg-brand-navy text-white text-sm font-semibold transition-all duration-300 shadow-sm hover:shadow flex items-center justify-center gap-2 group/btn cursor-pointer"
+                              className="btn btn-primary w-full group/btn"
                             >
                               <svg aria-hidden="true" className="w-3.5 h-3.5 text-white group-hover/btn:translate-x-0.5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
@@ -448,15 +401,15 @@ export default function ProductsPage() {
               })}
 
               {filteredProducts.length === 0 && (
-                <div className="text-center py-16 bg-slate-50 border border-dashed border-slate-200 rounded-2xl col-span-full">
-                  <p className="text-slate-600 text-sm">{t.noResults}</p>
+                <div className="text-center py-16 bg-surface col-span-full">
+                  <p>{t.noResults}</p>
                   <button
                     type="button"
                     onClick={() => {
                       setSearchQuery("");
                       setSelectedCategory("All");
                     }}
-                    className="mt-4 inline-flex items-center min-h-11 px-6 rounded-full border-2 border-brand-navy/20 hover:border-brand-navy text-brand-navy text-sm font-semibold transition-colors cursor-pointer"
+                    className="btn btn-ink mt-4"
                   >
                     {t.clearSearch}
                   </button>

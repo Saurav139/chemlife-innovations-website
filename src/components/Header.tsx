@@ -87,7 +87,7 @@ export default function Header() {
                 <a
                   key={link.path}
                   href={link.href}
-                  className={`${locale === "en" ? "text-[17px] xl:text-[19px]" : "text-[16px] xl:text-[17px]"} whitespace-nowrap font-semibold transition-colors tracking-wide ${
+                  className={`${locale === "en" ? "text-body" : "text-[16px] xl:text-[17px]"} whitespace-nowrap font-semibold transition-colors ${
                     isActive
                       ? "text-brand-orange-aa"
                       : "text-brand-navy hover:text-brand-orange-aa"
@@ -131,8 +131,8 @@ export default function Header() {
 
        {mobileOpen && (
           // Fills the screen below the header (above the chat and search buttons), and scrolls itself if it's taller.
-          <div id="mobile-menu" className="lg:hidden bg-white border-t border-brand-navy/10 h-[calc(100dvh-4.5rem)] md:h-[calc(100dvh-5rem)] overflow-y-auto overscroll-contain">
-            <div className="px-6 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+          <div id="mobile-menu" className="lg:hidden bg-white h-[calc(100dvh-4.5rem)] md:h-[calc(100dvh-5rem)] overflow-y-auto overscroll-contain">
+            <div className="frame py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
               {navLinks.map((link) => {
                 const isActive =
                   pathname === link.path || (pathname.startsWith(link.path) && link.path !== "/");
@@ -141,7 +141,7 @@ export default function Header() {
                   <a
                     key={link.path}
                     href={link.href}
-                    className={`flex items-center min-h-11 text-base font-medium ${
+                    className={`flex items-center min-h-12 text-lead font-semibold ${
                       isActive
                         ? "text-brand-orange-aa"
                         : "text-brand-navy hover:text-brand-orange-aa"

@@ -5,7 +5,8 @@ import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import Image from "next/image";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import SectionWrapper from "@/components/SectionWrapper";
+import PageHero from "@/components/PageHero";
+import Reveal from "@/components/Reveal";
 import { VariantProvider } from "@/context/VariantContext";
 import SiteSearch from "@/components/SiteSearch";
 import InsightCardContent, { INSIGHT_CARD_CLASS, isOptimizable, originalLink } from "@/components/InsightCard";
@@ -167,45 +168,21 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
     <VariantProvider>
       <Header />
 
-      <main id="main" tabIndex={-1} className="bg-white min-h-screen text-brand-navy">
+      <main id="main" tabIndex={-1}>
         {/* Hero and Featured are plain sections: they're in the first screen, so they show without waiting for a fade-in.
             The hero image is the page's largest paint (LCP), so it loads first. */}
-        <section className="pt-26 md:pt-32 pb-10 md:pb-24 lg:pt-36 lg:pb-32 text-white relative overflow-hidden bg-brand-navy flex items-center">
-          <div className="absolute inset-0 z-0">
-            <Image
-              src={Images.heroes.insights}
-              alt="Biotechnology research papers and books backdrop"
-              fill
-              sizes="100vw"
-              className="object-cover opacity-60"
-              priority
-              fetchPriority="high"
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-brand-navy/90 via-brand-navy/60 to-brand-navy/35" />
-            <div className="absolute inset-0 bg-black/10" />
-          </div>
-
-          <div className="relative z-10 max-w-[1200px] mx-auto px-6 w-full">
-            <span className="text-teal-aa-light text-sm font-semibold tracking-widest uppercase block mb-3">
-              Insights
-            </span>
-            <h1 className="font-heading text-3xl md:text-4xl lg:text-6xl font-bold leading-tight mb-3 md:mb-4 text-white max-w-4xl">
-              <span className="text-teal-400">Knowledge</span> & Perspectives
-            </h1>
-            <p className="text-white/85 text-base md:text-lg lg:text-xl leading-relaxed max-w-3xl font-light">
-              Stay updated with the latest industry trends, veterinary research, and biotechnology advancements.
-            </p>
-          </div>
-        </section>
+        <PageHero
+          title="Knowledge & Perspectives"
+          intro="Stay updated with the latest industry trends, veterinary research, and biotechnology advancements."
+          image={Images.process.developmentImage}
+          imageAlt="The ChemLife stand at a science and innovation exhibition"
+          imagePosition="50% 35%"
+        />
 
         {/* Featured Section (Three Columns) */}
-        <section className="pt-10 md:pt-16 lg:pt-24 pb-8 bg-white">
-          <div className="max-w-[1200px] mx-auto px-6">
-            <div className="mb-6 md:mb-10">
-              <h2 className="font-heading text-3xl lg:text-4xl font-bold text-brand-navy">
-                Featured
-              </h2>
-            </div>
+        <section className="pt-16 md:pt-24 pb-16 md:pb-24">
+          <div className="frame">
+            <Reveal><h2 className="text-title mb-10 md:mb-14">Featured</h2></Reveal>
             
             {/* Tablets and landscape phones (640-1023px): each card is a row, its picture beside the label, title and
                 buttons, so Featured takes about one screen instead of three. Phones stack the cards.
@@ -218,27 +195,26 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
               
               {/* Featured Blog */}
               {featuredBlog && (
+                <Reveal order={0} className="lg:grid lg:grid-rows-subgrid lg:row-span-4">
                 <div
                   id={insightAnchor(featuredBlog.title)}
                   data-analytics-item={featuredBlog.title}
                   data-analytics-click="Read Article"
-                  className="scroll-mt-28 bg-gray-55 border border-gray-200 rounded-2xl md:rounded-3xl p-5 md:p-6 lg:p-5 xl:p-6 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between sm:max-lg:grid sm:max-lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] sm:max-lg:grid-rows-[auto_1fr_auto] sm:max-lg:gap-x-6 lg:grid lg:grid-rows-subgrid lg:row-span-4 lg:gap-y-0 group cursor-pointer"
+                  className="scroll-mt-28 bg-surface p-5 md:p-6 lg:p-5 xl:p-6 flex flex-col justify-between sm:max-lg:grid sm:max-lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] sm:max-lg:grid-rows-[auto_1fr_auto] sm:max-lg:gap-x-6 lg:grid lg:grid-rows-subgrid lg:row-span-4 lg:gap-y-0 group cursor-pointer"
                   onClick={() => setActiveArticle(featuredBlog)}
                 >
                   <div className="sm:contents">
                     <div className="flex items-center gap-2 mb-3 sm:max-lg:col-start-2 sm:max-lg:row-start-1">
-                      <span className="text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-teal-50 text-teal-700">
-                        Blog
-                      </span>
-                      <span className="text-xs text-gray-aa font-medium">Featured • {featuredBlog.date} • {featuredBlog.meta}</span>
+                      <span className="text-small font-bold">Blog</span>
+                      <span className="text-small text-ink-soft">Featured • {featuredBlog.date} • {featuredBlog.meta}</span>
                     </div>
-                    <h3 className="font-heading text-lg md:text-xl lg:text-2xl font-bold text-brand-navy mb-4 lg:mb-6 group-hover:text-teal-aa transition-colors duration-300 line-clamp-3 sm:max-lg:col-start-2 sm:max-lg:row-start-2">
+                    <h3 className="text-lead font-bold mb-4 lg:mb-6 line-clamp-3 sm:max-lg:col-start-2 sm:max-lg:row-start-2">
                       {featuredBlog.title}
                     </h3>
                     
                     {/* Blog Image Preview */}
                     {featuredBlog.imageUrl && (
-                      <div className="relative w-full aspect-video rounded-xl md:rounded-2xl overflow-hidden bg-slate-100 border border-gray-200 select-none mb-4 sm:max-lg:col-start-1 sm:max-lg:row-start-1 sm:max-lg:row-span-3 sm:max-lg:aspect-auto sm:max-lg:self-stretch sm:max-lg:min-h-36 sm:max-lg:mb-0">
+                      <div className="relative w-full aspect-video overflow-hidden bg-white select-none mb-4 sm:max-lg:col-start-1 sm:max-lg:row-start-1 sm:max-lg:row-span-3 sm:max-lg:aspect-auto sm:max-lg:self-stretch sm:max-lg:min-h-36 sm:max-lg:mb-0">
                         <Image
                           src={featuredBlog.imageUrl}
                           alt={featuredBlog.title}
@@ -251,13 +227,13 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                     )}
                   </div>
 
-                  <div className="grid grid-cols-2 sm:grid-cols-[repeat(2,minmax(0,12rem))] lg:grid-cols-2 lg:row-start-4 items-center gap-2 sm:gap-4 lg:gap-2 pt-4 border-t border-gray-100 sm:max-lg:col-start-2 sm:max-lg:row-start-3 sm:max-lg:self-end">
+                  <div className="grid grid-cols-2 sm:grid-cols-[repeat(2,minmax(0,12rem))] lg:grid-cols-2 lg:row-start-4 items-center gap-2 sm:gap-4 lg:gap-2 pt-4 sm:max-lg:col-start-2 sm:max-lg:row-start-3 sm:max-lg:self-end">
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
                         setActiveArticle(featuredBlog);
                       }}
-                      className="inline-flex items-center justify-center min-h-11 text-center whitespace-nowrap px-2 py-2.5 rounded-full text-[13px] sm:text-sm lg:text-xs xl:text-sm leading-5 bg-teal-aa hover:bg-teal-700 text-white font-bold shadow-sm hover:shadow transition-all duration-300 cursor-pointer"
+                      className="inline-flex items-center justify-center min-h-11 text-center whitespace-nowrap btn btn-ink min-h-11 px-2 text-small lg:text-[13px] xl:text-small cursor-pointer"
                     >
                       Read Article
                     </button>
@@ -265,30 +241,30 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                       href={featuredBlog.linkUrl || "https://www.linkedin.com/company/chemlifeinnovations/"}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center min-h-11 text-center whitespace-nowrap px-2 py-2.5 rounded-full text-[13px] sm:text-sm lg:text-xs xl:text-sm leading-5 border border-gray-200 text-gray-600 hover:bg-gray-50 hover:text-teal-aa font-bold transition-all duration-300 cursor-pointer"
+                      className="inline-flex items-center justify-center min-h-11 text-center whitespace-nowrap btn btn-paper min-h-11 px-2 text-small lg:text-[13px] xl:text-small cursor-pointer"
                       onClick={(e) => e.stopPropagation()}
                     >
                       <ButtonLabel full={originalLink(featuredBlog.linkUrl).full} short={originalLink(featuredBlog.linkUrl).short} />
                     </a>
                   </div>
                 </div>
+                </Reveal>
               )}
 
               {/* Featured Video */}
               {featuredVideo && (
+                <Reveal order={1} className="lg:grid lg:grid-rows-subgrid lg:row-span-4">
                 <div
                   id={insightAnchor(featuredVideo.title)}
                   data-analytics-item={featuredVideo.title}
-                  className="scroll-mt-28 bg-gray-55 border border-gray-200 rounded-2xl md:rounded-3xl p-5 md:p-6 lg:p-5 xl:p-6 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between sm:max-lg:grid sm:max-lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] sm:max-lg:grid-rows-[auto_1fr_auto] sm:max-lg:gap-x-6 lg:grid lg:grid-rows-subgrid lg:row-span-4 lg:gap-y-0 group"
+                  className="scroll-mt-28 bg-surface p-5 md:p-6 lg:p-5 xl:p-6 flex flex-col justify-between sm:max-lg:grid sm:max-lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] sm:max-lg:grid-rows-[auto_1fr_auto] sm:max-lg:gap-x-6 lg:grid lg:grid-rows-subgrid lg:row-span-4 lg:gap-y-0 group"
                 >
                   <div className="sm:contents">
                     <div className="flex items-center gap-2 mb-3 sm:max-lg:col-start-2 sm:max-lg:row-start-1">
-                      <span className="text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-blue-50 text-blue-700">
-                        Video
-                      </span>
-                      <span className="text-xs text-gray-aa font-medium">Featured • {featuredVideo.date} • {featuredVideo.meta}</span>
+                      <span className="text-small font-bold">Video</span>
+                      <span className="text-small text-ink-soft">Featured • {featuredVideo.date} • {featuredVideo.meta}</span>
                     </div>
-                    <h3 className="font-heading text-lg md:text-xl lg:text-2xl font-bold text-brand-navy mb-4 lg:mb-6 group-hover:text-teal-aa transition-colors duration-300 line-clamp-3 sm:max-lg:col-start-2 sm:max-lg:row-start-2">
+                    <h3 className="text-lead font-bold mb-4 lg:mb-6 line-clamp-3 sm:max-lg:col-start-2 sm:max-lg:row-start-2">
                       {featuredVideo.title}
                     </h3>
                     
@@ -301,7 +277,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                         onClick={(e) => playOnPage(e, () => setActiveVideoId(featuredVideo.youtubeId!))}
                         aria-label={featuredVideo.title}
                         data-analytics-click="Watch Now"
-                        className="block relative w-full aspect-video rounded-xl md:rounded-2xl overflow-hidden bg-slate-900 border border-slate-200/80 cursor-pointer shadow-sm group/video select-none mb-4 sm:max-lg:col-start-1 sm:max-lg:row-start-1 sm:max-lg:row-span-3 sm:max-lg:aspect-auto sm:max-lg:self-stretch sm:max-lg:min-h-36 sm:max-lg:mb-0"
+                        className="block relative w-full aspect-video overflow-hidden bg-deep cursor-pointer group/video select-none mb-4 sm:max-lg:col-start-1 sm:max-lg:row-start-1 sm:max-lg:row-span-3 sm:max-lg:aspect-auto sm:max-lg:self-stretch sm:max-lg:min-h-36 sm:max-lg:mb-0"
                       >
                         <Image
                           src={`https://img.youtube.com/vi/${featuredVideo.youtubeId}/0.jpg`}
@@ -312,7 +288,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                         />
                         <div className="absolute inset-0 bg-black/10 group-hover/video:bg-black/20 transition-colors" />
                         <div className="absolute inset-0 flex items-center justify-center">
-                          <div className="w-14 h-10 rounded-xl bg-red-600 group-hover/video:bg-red-700 flex items-center justify-center text-white transition-all shadow-md group-hover/video:scale-110">
+                          <div className="w-14 h-10 rounded-xl bg-red-600 group-hover/video:bg-red-700 flex items-center justify-center text-white transition-all group-hover/video:scale-110">
                             <svg className="w-5 h-5 fill-current ml-0.5" viewBox="0 0 24 24">
                               <path d="M8 5v14l11-7z" />
                             </svg>
@@ -322,13 +298,13 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                     )}
                   </div>
 
-                  <div className="grid grid-cols-2 sm:grid-cols-[repeat(2,minmax(0,12rem))] lg:grid-cols-2 lg:row-start-4 items-center gap-2 sm:gap-4 lg:gap-2 pt-4 border-t border-gray-100 sm:max-lg:col-start-2 sm:max-lg:row-start-3 sm:max-lg:self-end">
+                  <div className="grid grid-cols-2 sm:grid-cols-[repeat(2,minmax(0,12rem))] lg:grid-cols-2 lg:row-start-4 items-center gap-2 sm:gap-4 lg:gap-2 pt-4 sm:max-lg:col-start-2 sm:max-lg:row-start-3 sm:max-lg:self-end">
                     <a
                       href={youtubeWatchUrl(featuredVideo.youtubeId!)}
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={(e) => playOnPage(e, () => setActiveVideoId(featuredVideo.youtubeId!))}
-                      className="inline-flex items-center justify-center min-h-11 text-center whitespace-nowrap px-2 py-2.5 rounded-full text-[13px] sm:text-sm lg:text-xs xl:text-sm leading-5 bg-teal-aa hover:bg-teal-700 text-white font-bold shadow-sm hover:shadow transition-all duration-300 cursor-pointer"
+                      className="inline-flex items-center justify-center min-h-11 text-center whitespace-nowrap btn btn-ink min-h-11 px-2 text-small lg:text-[13px] xl:text-small cursor-pointer"
                     >
                       Watch Now
                     </a>
@@ -336,29 +312,29 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                       href={`https://www.youtube.com/watch?v=${featuredVideo.youtubeId}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center min-h-11 text-center whitespace-nowrap px-2 py-2.5 rounded-full text-[13px] sm:text-sm lg:text-xs xl:text-sm leading-5 border border-gray-200 text-gray-600 hover:bg-gray-50 hover:text-teal-aa font-bold transition-all duration-300"
+                      className="inline-flex items-center justify-center min-h-11 text-center whitespace-nowrap btn btn-paper min-h-11 px-2 text-small lg:text-[13px] xl:text-small"
                     >
                       <ButtonLabel full="Watch on YouTube" short="YouTube" />
                     </a>
                   </div>
                 </div>
+                </Reveal>
               )}
 
               {/* Featured Podcast */}
               {featuredPodcast && (
+                <Reveal order={2} className="lg:grid lg:grid-rows-subgrid lg:row-span-4">
                 <div
                   id={insightAnchor(featuredPodcast.title)}
                   data-analytics-item={featuredPodcast.title}
-                  className="scroll-mt-28 bg-gray-55 border border-gray-200 rounded-2xl md:rounded-3xl p-5 md:p-6 lg:p-5 xl:p-6 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between sm:max-lg:grid sm:max-lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] sm:max-lg:grid-rows-[auto_1fr_auto] sm:max-lg:gap-x-6 lg:grid lg:grid-rows-subgrid lg:row-span-4 lg:gap-y-0 group"
+                  className="scroll-mt-28 bg-surface p-5 md:p-6 lg:p-5 xl:p-6 flex flex-col justify-between sm:max-lg:grid sm:max-lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] sm:max-lg:grid-rows-[auto_1fr_auto] sm:max-lg:gap-x-6 lg:grid lg:grid-rows-subgrid lg:row-span-4 lg:gap-y-0 group"
                 >
                   <div className="sm:contents">
                     <div className="flex items-center gap-2 mb-3 sm:max-lg:col-start-2 sm:max-lg:row-start-1">
-                      <span className="text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-red-50 text-red-700">
-                        Podcast
-                      </span>
-                      <span className="text-xs text-gray-aa font-medium">Featured • {featuredPodcast.date} • {featuredPodcast.meta}</span>
+                      <span className="text-small font-bold">Podcast</span>
+                      <span className="text-small text-ink-soft">Featured • {featuredPodcast.date} • {featuredPodcast.meta}</span>
                     </div>
-                    <h3 className="font-heading text-lg md:text-xl lg:text-2xl font-bold text-brand-navy mb-4 lg:mb-6 group-hover:text-teal-aa transition-colors duration-300 line-clamp-3 sm:max-lg:col-start-2 sm:max-lg:row-start-2">
+                    <h3 className="text-lead font-bold mb-4 lg:mb-6 line-clamp-3 sm:max-lg:col-start-2 sm:max-lg:row-start-2">
                       {featuredPodcast.title}
                     </h3>
                     
@@ -371,7 +347,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                         onClick={(e) => playOnPage(e, () => setActiveVideoId(featuredPodcast.youtubeId!))}
                         aria-label={featuredPodcast.title}
                         data-analytics-click="Listen Now"
-                        className="block relative w-full aspect-video rounded-xl md:rounded-2xl overflow-hidden bg-slate-900 border border-slate-200/80 cursor-pointer shadow-sm group/video select-none mb-4 sm:max-lg:col-start-1 sm:max-lg:row-start-1 sm:max-lg:row-span-3 sm:max-lg:aspect-auto sm:max-lg:self-stretch sm:max-lg:min-h-36 sm:max-lg:mb-0"
+                        className="block relative w-full aspect-video overflow-hidden bg-deep cursor-pointer group/video select-none mb-4 sm:max-lg:col-start-1 sm:max-lg:row-start-1 sm:max-lg:row-span-3 sm:max-lg:aspect-auto sm:max-lg:self-stretch sm:max-lg:min-h-36 sm:max-lg:mb-0"
                       >
                         <Image
                           src={`https://img.youtube.com/vi/${featuredPodcast.youtubeId}/0.jpg`}
@@ -382,7 +358,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                         />
                         <div className="absolute inset-0 bg-black/10 group-hover/video:bg-black/20 transition-colors" />
                         <div className="absolute inset-0 flex items-center justify-center">
-                          <div className="w-14 h-10 rounded-xl bg-red-600 group-hover/video:bg-red-700 flex items-center justify-center text-white transition-all shadow-md group-hover/video:scale-110">
+                          <div className="w-14 h-10 rounded-xl bg-red-600 group-hover/video:bg-red-700 flex items-center justify-center text-white transition-all group-hover/video:scale-110">
                             <svg className="w-5 h-5 fill-current ml-0.5" viewBox="0 0 24 24">
                               <path d="M8 5v14l11-7z" />
                             </svg>
@@ -392,13 +368,13 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                     )}
                   </div>
 
-                  <div className="grid grid-cols-2 sm:grid-cols-[repeat(2,minmax(0,12rem))] lg:grid-cols-2 lg:row-start-4 items-center gap-2 sm:gap-4 lg:gap-2 pt-4 border-t border-gray-100 sm:max-lg:col-start-2 sm:max-lg:row-start-3 sm:max-lg:self-end">
+                  <div className="grid grid-cols-2 sm:grid-cols-[repeat(2,minmax(0,12rem))] lg:grid-cols-2 lg:row-start-4 items-center gap-2 sm:gap-4 lg:gap-2 pt-4 sm:max-lg:col-start-2 sm:max-lg:row-start-3 sm:max-lg:self-end">
                     <a
                       href={youtubeWatchUrl(featuredPodcast.youtubeId!)}
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={(e) => playOnPage(e, () => setActiveVideoId(featuredPodcast.youtubeId!))}
-                      className="inline-flex items-center justify-center min-h-11 text-center whitespace-nowrap px-2 py-2.5 rounded-full text-[13px] sm:text-sm lg:text-xs xl:text-sm leading-5 bg-teal-aa hover:bg-teal-700 text-white font-bold shadow-sm hover:shadow transition-all duration-300 cursor-pointer"
+                      className="inline-flex items-center justify-center min-h-11 text-center whitespace-nowrap btn btn-ink min-h-11 px-2 text-small lg:text-[13px] xl:text-small cursor-pointer"
                     >
                       Listen Now
                     </a>
@@ -406,12 +382,13 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                       href={`https://www.youtube.com/watch?v=${featuredPodcast.youtubeId}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center min-h-11 text-center whitespace-nowrap px-2 py-2.5 rounded-full text-[13px] sm:text-sm lg:text-xs xl:text-sm leading-5 border border-gray-200 text-gray-600 hover:bg-gray-50 hover:text-teal-aa font-bold transition-all duration-300"
+                      className="inline-flex items-center justify-center min-h-11 text-center whitespace-nowrap btn btn-paper min-h-11 px-2 text-small lg:text-[13px] xl:text-small"
                     >
                       <ButtonLabel full="Watch on YouTube" short="YouTube" />
                     </a>
                   </div>
                 </div>
+                </Reveal>
               )}
 
             </div>
@@ -420,64 +397,66 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
         </section>
 
         {/* Social Channel Connectors Banner */}
-        <SectionWrapper className="py-6 bg-slate-50 border-y border-gray-200/60">
-          <div className="max-w-[1200px] mx-auto px-6">
+        <Reveal className="field-ink py-10 md:py-14">
+          <div className="frame">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <a
                 href="https://www.linkedin.com/company/chemlifeinnovations/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-4 p-4 bg-white rounded-2xl border border-gray-200 hover:border-blue-500 hover:shadow-xs transition-all duration-300"
+                className="flex items-center gap-4 p-4 bg-white/10 hover:bg-white/15 transition-colors"
               >
-                <div className="w-12 h-12 bg-[#0a66c2]/10 text-[#0a66c2] rounded-xl flex items-center justify-center flex-shrink-0">
+                <div className="w-12 h-12 bg-white text-[#0a66c2] rounded-full flex items-center justify-center flex-shrink-0">
                   <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24">
                     <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.779-1.75-1.75s.784-1.75 1.75-1.75 1.75.779 1.75 1.75-.784 1.75-1.75 1.75zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
                   </svg>
                 </div>
                 <div>
-                  <h4 className="font-bold text-brand-navy text-sm">Follow us on LinkedIn</h4>
-                  <p className="text-gray-aa text-xs mt-0.5">Smarter Decisions for Better Outcomes via #FeedBites</p>
+                  <h3 className="font-bold text-white">Follow us on LinkedIn</h3>
+                  <p className="text-small mt-0.5">Smarter Decisions for Better Outcomes via #FeedBites</p>
                 </div>
               </a>
               <a
                 href="https://www.youtube.com/@chemlifeinnovations2739"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-4 p-4 bg-white rounded-2xl border border-gray-200 hover:border-red-500 hover:shadow-xs transition-all duration-300"
+                className="flex items-center gap-4 p-4 bg-white/10 hover:bg-white/15 transition-colors"
               >
-                <div className="w-12 h-12 bg-red-600/10 text-red-600 rounded-xl flex items-center justify-center flex-shrink-0">
+                <div className="w-12 h-12 bg-white text-red-600 rounded-full flex items-center justify-center flex-shrink-0">
                   <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24">
                     <path d="M23.498 6.163a3.003 3.003 0 0 0-2.11-2.108C19.52 3.5 12 3.5 12 3.5s-7.52 0-9.388.555A3.003 3.003 0 0 0 .502 6.163C0 8.07 0 12 0 12s0 3.93.502 5.837a3.003 3.003 0 0 0 2.11 2.108C4.48 20.5 12 20.5 12 20.5s7.52 0 9.388-.555a3.003 3.003 0 0 0 2.11-2.108C24 15.93 24 12 24 12s0-3.93-.502-5.837zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
                   </svg>
                 </div>
                 <div>
-                  <h4 className="font-bold text-brand-navy text-sm">Subscribe on YouTube</h4>
-                  <p className="text-gray-aa text-xs mt-0.5">Watch expert talks, video insights, and podcast content</p>
+                  <h3 className="font-bold text-white">Subscribe on YouTube</h3>
+                  <p className="text-small mt-0.5">Watch expert talks, video insights, and podcast content</p>
                 </div>
               </a>
             </div>
           </div>
-        </SectionWrapper>
+        </Reveal>
 
         {/* Filters and Search Row */}
-        <SectionWrapper className="pt-12 pb-8 bg-white">
-          <div className="max-w-[1200px] mx-auto px-6">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-8 border-b border-gray-100">
+        <section className="pt-16 md:pt-24 pb-8">
+          <div className="frame">
+            <Reveal><h2 className="text-title mb-10 md:mb-14">Explore all insights</h2></Reveal>
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
               
               {/* Search Bar + Subtitle */}
               <div className="w-full md:max-w-md">
-                <span className="text-gray-aa text-xs font-semibold uppercase tracking-wider block mb-2">
-                  Search Podcasts, Blogs and Videos
-                </span>
+                <label htmlFor="insights-search" className="text-small font-semibold block mb-2">
+                  Search podcasts, blogs and videos
+                </label>
                 <div className="relative">
                   <input
-                    type="text"
+                    id="insights-search"
+                    type="search"
                     value={searchQuery}
                     onChange={(e) => { setSearchQuery(e.target.value); resetGrid(); }}
                     placeholder="Search titles, topics, or authors..."
-                    className="w-full bg-gray-50 border border-gray-250 rounded-full px-6 py-3 text-base md:text-sm text-brand-navy placeholder-gray-aa focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all duration-300 shadow-sm"
+                    className="w-full bg-surface rounded-full px-6 py-3 pr-12 text-base text-ink placeholder-slate-aa focus:outline-none focus:ring-2 focus:ring-ink transition-shadow duration-300 [&::-webkit-search-cancel-button]:appearance-none"
                   />
-                  <div className="absolute right-4 top-3.5 text-gray-aa">
+                  <div className="absolute right-4 top-3.5 text-ink pointer-events-none" aria-hidden="true">
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
@@ -493,11 +472,8 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                     <button
                       key={filter}
                       onClick={() => { setSelectedFilter(filter); resetGrid(); }}
-                      className={`tap-target px-6 py-2 rounded-full text-sm font-semibold transition-all duration-300 border cursor-pointer ${
-                        isActive
-                          ? "bg-teal-aa border-teal-600 text-white shadow-sm"
-                          : "bg-gray-100 border-transparent text-gray-aa hover:bg-gray-200"
-                      }`}
+                      aria-pressed={isActive}
+                      className={`btn min-h-11 px-6 ${isActive ? "btn-ink" : "btn-quiet"}`}
                     >
                       {filter}
                     </button>
@@ -506,22 +482,13 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
               </div>
 
             </div>
+            <p className="text-small text-ink-soft mt-6" role="status">{gridItems.length} items</p>
           </div>
-        </SectionWrapper>
-
-        {/* Separator Section */}
-        <div className="max-w-[1200px] mx-auto px-6 mb-8">
-          <div className="flex items-center gap-4">
-            <span className="text-xs font-bold text-gray-aa uppercase tracking-wider whitespace-nowrap">
-              Explore All Insights ({gridItems.length})
-            </span>
-            <div className="w-full h-[1px] bg-gray-150" />
-          </div>
-        </div>
+        </section>
 
         {/* Combined Grid Section */}
-        <SectionWrapper className="pt-0 pb-24 bg-white">
-          <div className="max-w-[1200px] mx-auto px-6">
+        <section className="pt-0 pb-20 md:pb-28 lg:pb-36">
+          <div className="frame">
             
             <motion.div
               key={gridVersion}
@@ -553,7 +520,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                 <button
                   type="button"
                   onClick={loadMore}
-                  className="inline-flex items-center justify-center min-h-12 px-8 rounded-full border-2 border-teal-aa text-teal-aa hover:bg-teal-aa hover:text-white text-sm font-bold transition-colors cursor-pointer"
+                  className="btn btn-ink"
                 >
                   Load more ({gridItems.length - visibleCount} more)
                 </button>
@@ -561,13 +528,13 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
             )}
 
             {gridItems.length === 0 && (
-              <div className="text-center py-20 bg-gray-50 rounded-2xl border border-dashed border-gray-200">
-                <span className="text-gray-aa text-sm">No insights found matching your search query.</span>
+              <div className="text-center py-20 bg-surface">
+                <span>No insights found matching your search query.</span>
               </div>
             )}
 
           </div>
-        </SectionWrapper>
+        </section>
       </main>
 
       {/* YouTube Video Modal Overlay */}
@@ -623,7 +590,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[70] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 overflow-y-auto"
+            className="fixed inset-0 z-[70] flex items-center justify-center bg-black/80 p-4 overflow-y-auto"
             onClick={() => setActiveArticle(null)}
           >
             <motion.div
@@ -637,10 +604,8 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
               {/* Top Sticky Header */}
               <div className="sticky top-0 bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between z-10">
                 <div className="flex items-center gap-2">
-                  <span className="text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-teal-50 text-teal-700">
-                    {activeArticle.type}
-                  </span>
-                  <span className="text-xs text-gray-aa font-medium">
+                  <span className="text-small font-bold">{activeArticle.type}</span>
+                  <span className="text-small text-ink-soft">
                     {activeArticle.date}
                   </span>
                 </div>
@@ -657,12 +622,12 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
 
               {/* Scrollable Article Body */}
               <div className="overflow-y-auto p-6 md:p-8 space-y-6">
-                <h2 className="font-heading text-2xl md:text-3xl font-bold text-brand-navy leading-tight">
+                <h2 className="text-title">
                   {activeArticle.title}
                 </h2>
 
                 {activeArticle.imageUrl && (
-                  <div className="relative w-full aspect-video rounded-2xl overflow-hidden bg-slate-100 border border-gray-250 select-none">
+                  <div className="relative w-full aspect-video overflow-hidden bg-surface select-none">
                     <Image
                       src={activeArticle.imageUrl}
                       alt={activeArticle.title}
@@ -674,7 +639,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                   </div>
                 )}
 
-                <div className="text-gray-600 text-sm md:text-base leading-relaxed whitespace-pre-line space-y-4">
+                <div className="whitespace-pre-line space-y-4">
                   {activeArticle.content}
                 </div>
               </div>
@@ -686,14 +651,14 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                     href={activeArticle.linkUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-xs font-semibold text-teal-aa hover:text-teal-700 transition-colors"
+                    className="link text-small"
                   >
                     {originalLink(activeArticle.linkUrl).reader}
                   </a>
                 )}
                 <button
                   onClick={() => setActiveArticle(null)}
-                  className="whitespace-nowrap px-6 py-2.5 rounded-full bg-brand-navy text-white font-bold text-sm hover:bg-teal-aa transition-colors cursor-pointer"
+                  className="btn btn-ink whitespace-nowrap"
                 >
                   Close Reader
                 </button>

@@ -13,7 +13,7 @@ const CARD_IMAGE_SIZES = "(min-width: 1024px) 312px, (min-width: 768px) calc(50v
 
 /** The card's frame. The Insights page adds its anchor and animation around it. */
 export const INSIGHT_CARD_CLASS =
-  "bg-gray-55 border border-gray-200 rounded-2xl p-5 md:p-6 lg:p-5 xl:p-6 shadow-sm hover:shadow-md hover:border-teal-500/20 transition-[box-shadow,border-color] duration-300 group flex flex-col justify-between";
+  "bg-surface p-5 md:p-6 lg:p-5 xl:p-6 group flex flex-col justify-between";
 
 // Hosts next.config.ts lets the image optimizer fetch from. Anything else (LinkedIn) is shown as is.
 export const isOptimizable = (src: string) =>
@@ -65,16 +65,10 @@ export default function InsightCardContent({ item, onRead, onPlay, imageLayout =
       >
         {/* Meta Category & Date Info */}
         <div className={`flex items-center gap-2 mb-3 ${textOnly ? "flex-wrap justify-center" : ""}`}>
-          <span className={`text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md ${
-            item.type === "Blog"
-              ? "bg-teal-50 text-teal-700"
-              : item.type === "Podcast"
-              ? "bg-red-50 text-red-700"
-              : "bg-blue-50 text-blue-700"
-          }`}>
+          <span className="text-small font-bold">
             {item.type}
           </span>
-          <span className="text-xs text-gray-aa font-medium">
+          <span className="text-small text-ink-soft">
             {item.date} • {item.meta}
           </span>
         </div>
@@ -84,7 +78,7 @@ export default function InsightCardContent({ item, onRead, onPlay, imageLayout =
           imageLayout === "natural" ? <div className="mb-4">
             <NaturalInsightImage src={item.imageUrl} alt={item.title} sizes={CARD_IMAGE_SIZES} />
           </div> :
-          <div className="relative w-full aspect-video rounded-xl overflow-hidden mb-4 bg-slate-100 border border-gray-200 select-none">
+          <div className="relative w-full aspect-video overflow-hidden mb-4 bg-white select-none">
             <Image
               src={item.imageUrl}
               alt={item.title}
@@ -105,7 +99,7 @@ export default function InsightCardContent({ item, onRead, onPlay, imageLayout =
             onClick={(e) => playOnPage(e, () => onPlay(item.youtubeId!))}
             aria-label={item.title}
             data-analytics-click={item.type === "Podcast" ? "Listen Now" : "Watch Now"}
-            className="block relative w-full aspect-video rounded-xl overflow-hidden mb-4 bg-slate-900 border border-slate-200/80 cursor-pointer shadow-sm group/video select-none"
+            className="block relative w-full aspect-video overflow-hidden mb-4 bg-deep cursor-pointer group/video select-none"
           >
             <Image
               src={`https://img.youtube.com/vi/${item.youtubeId}/hqdefault.jpg`}
@@ -117,7 +111,7 @@ export default function InsightCardContent({ item, onRead, onPlay, imageLayout =
             <div className="absolute inset-0 bg-black/20 group-hover/video:bg-black/30 transition-colors" />
             {/* YouTube Red Play Button */}
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-12 h-8 rounded-lg bg-red-600 group-hover/video:bg-red-700 flex items-center justify-center text-white transition-all shadow-md group-hover/video:scale-110">
+              <div className="w-12 h-8 rounded-lg bg-red-600 group-hover/video:bg-red-700 flex items-center justify-center text-white transition-all group-hover/video:scale-110">
                 <svg className="w-4 h-4 fill-current ml-0.5" viewBox="0 0 24 24">
                   <path d="M8 5v14l11-7z" />
                 </svg>
@@ -126,19 +120,19 @@ export default function InsightCardContent({ item, onRead, onPlay, imageLayout =
           </a>
         )}
 
-        <h4 className={`font-heading text-lg font-bold text-brand-navy mb-4 group-hover:text-teal-aa transition-colors duration-300 ${textOnly ? "max-w-prose" : "line-clamp-3"}`}>
+        <h4 className={`text-lead font-bold mb-4 ${textOnly ? "max-w-prose" : "line-clamp-3"}`}>
           {item.title}
         </h4>
-        {textOnly && item.description && <p className="max-w-prose text-sm leading-relaxed text-gray-600">{item.description}</p>}
+        {textOnly && item.description && <p className="max-w-prose">{item.description}</p>}
       </div>
 
       {/* Card Action Buttons (Direct + View on LinkedIn) - isolated outside clicking div */}
-      <div className="flex items-center gap-3 pt-3 border-t border-gray-100 mt-2">
+      <div className="flex items-center gap-3 pt-3 mt-2">
         {isBlog ? (
           <div className="flex items-center gap-2 w-full justify-between">
             <button
               onClick={() => onRead(item)}
-              className="tap-target text-xs font-bold text-teal-aa hover:text-teal-700 transition-colors flex items-center gap-1 cursor-pointer"
+              className="tap-target link text-small flex items-center gap-1 cursor-pointer"
             >
               Read Article
             </button>
@@ -146,7 +140,7 @@ export default function InsightCardContent({ item, onRead, onPlay, imageLayout =
               href={item.linkUrl || "https://www.linkedin.com/company/chemlifeinnovations/"}
               target="_blank"
               rel="noopener noreferrer"
-              className="tap-target text-xs font-semibold text-gray-500 hover:text-teal-aa transition-colors cursor-pointer"
+              className="tap-target text-small text-ink-soft hover:text-ink transition-colors cursor-pointer"
               onClick={(e) => e.stopPropagation()}
             >
               {originalLink(item.linkUrl).full}
@@ -159,7 +153,7 @@ export default function InsightCardContent({ item, onRead, onPlay, imageLayout =
               target="_blank"
               rel="noopener noreferrer"
               onClick={(e) => playOnPage(e, () => onPlay(item.youtubeId!))}
-              className="tap-target text-xs font-bold text-teal-aa hover:text-teal-700 transition-colors flex items-center gap-1"
+              className="tap-target link text-small flex items-center gap-1"
             >
               {item.type === "Podcast" ? "Listen Now" : "Watch Now"}
             </a>
@@ -167,7 +161,7 @@ export default function InsightCardContent({ item, onRead, onPlay, imageLayout =
               href={`https://www.youtube.com/watch?v=${item.youtubeId}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="tap-target text-xs font-semibold text-gray-500 hover:text-teal-aa transition-colors"
+              className="tap-target text-small text-ink-soft hover:text-ink transition-colors"
               onClick={(e) => e.stopPropagation()}
             >
               Watch on YouTube

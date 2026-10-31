@@ -5,6 +5,7 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { Images } from "@/lib/assets";
 import { useT } from "@/i18n/LocaleProvider";
+import Reveal from "./Reveal";
 
 const frontLogos = [...Images.partnerLogos.frontRow];
 const backLogos = [...Images.partnerLogos.backRow];
@@ -21,13 +22,12 @@ function FlipCard({ frontLogo, backLogo, index, flipped }: FlipCardProps) {
   // The flip runs row by row, left to right.
   const row = Math.floor(index / 3);
   const col = index % 3;
-  // One card style for every logo, and each logo (trimmed of its empty margins) fitted inside the same box, 78% wide
-  // and 58% tall, so wide wordmarks and square badges read at a similar size.
-  const face = "absolute inset-0 backface-hidden bg-white border border-slate-200 hover:border-brand-orange/40 rounded-xl sm:rounded-2xl flex items-center justify-center shadow-sm hover:shadow-md transition-all duration-300";
+  // One tile for every logo, a tone step off the page, and each logo (trimmed of its empty margins) fitted inside the
+  // same box, 78% wide and 58% tall, so wide wordmarks and square badges read at a similar size.
+  const face = "absolute inset-0 backface-hidden bg-surface flex items-center justify-center";
 
   return (
-    // Two across on phones (wide enough to read the logos), three from tablet up.
-    <div className="perspective-1000 w-[calc(50%-0.375rem)] sm:w-[calc((100%-3rem)/3)] md:w-[calc((100%-4rem)/3)] aspect-[3/2]">
+    <div className="perspective-1000 aspect-[3/2]">
       <motion.div
         className="w-full h-full relative transform-style-preserve-3d"
         animate={{ rotateY: flipped ? 180 : 0 }}
@@ -45,7 +45,7 @@ function FlipCard({ frontLogo, backLogo, index, flipped }: FlipCardProps) {
               alt={`${Images.partnerLogos.names[frontLogo] ?? "Partner"} ${t.logo}`}
               fill
               className="object-contain transition-all duration-300"
-              sizes="(max-width: 639px) 45vw, (max-width: 896px) 30vw, 260px"
+              sizes="(min-width: 1024px) 220px, 31vw"
             />
           </div>
         </div>
@@ -58,7 +58,7 @@ function FlipCard({ frontLogo, backLogo, index, flipped }: FlipCardProps) {
               alt={`${Images.partnerLogos.names[backLogo] ?? "Partner"} ${t.logo}`}
               fill
               className="object-contain transition-all duration-300"
-              sizes="(max-width: 639px) 45vw, (max-width: 896px) 30vw, 260px"
+              sizes="(min-width: 1024px) 220px, 31vw"
             />
           </div>
         </div>
@@ -78,22 +78,14 @@ export default function ClientMarquee() {
     return () => clearInterval(interval);
   }, []);
 
+  // The heading in the left column, the logos hanging from the axis beside it.
   return (
-    <section className="bg-white py-16 md:py-24 lg:py-32 overflow-hidden">
-      <div className="max-w-[1200px] mx-auto px-6 mb-10 md:mb-16">
-        <div className="text-center">
-          <span className="text-teal-aa text-sm lg:text-base font-semibold tracking-widest uppercase">
-            {t.kicker}
-          </span>
-          <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-brand-navy mt-2 mb-4 leading-tight">
-            {t.title}
-          </h2>
-        </div>
-      </div>
-
-      <div className="max-w-[1200px] mx-auto px-6">
-        {/* A wrapping row, so the ninth logo on a phone (two across) sits centred rather than alone on the left. */}
-        <div className="flex flex-wrap justify-center gap-3 sm:gap-6 md:gap-8 max-w-4xl mx-auto">
+    <section className="section-y bg-white overflow-hidden">
+      <div className="frame grid lg:grid-cols-12 gap-x-8">
+        <Reveal className="lg:col-span-4">
+          <h2 className="text-title mb-12 md:mb-16 [overflow-wrap:anywhere]">{t.title}</h2>
+        </Reveal>
+        <Reveal order={1} className="lg:col-start-6 lg:col-span-7 grid grid-cols-3 gap-1.5">
           {frontLogos.map((logo, i) => (
             <FlipCard
               key={`flip-${i}`}
@@ -103,7 +95,7 @@ export default function ClientMarquee() {
               flipped={flipped}
             />
           ))}
-        </div>
+        </Reveal>
       </div>
     </section>
   );
