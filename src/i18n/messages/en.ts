@@ -95,6 +95,12 @@ const en = {
       ["Protected Bio-Actives", "Bioavailable at the Site", "of Absorption"],
       ["Green Trace Mineral", "Chelation & Nano", "Technologies"],
     ],
+    // The homepage hero ("Open split tall").
+    heroKicker: "Innovations in bioactives",
+    heroLine1: "Nature Driven.",
+    heroLine2: "Functional Feed Additives.",
+    heroSummary: "Novel accelerated bio-transformation technology delivering protected bio-actives en route to the site of absorption.",
+    heroCaption: "The people behind ChemLife Innovations",
     heroAlt: "ChemLife's founders accepting an award on stage",
     findProduct: "Find the right product",
     talkToNutritionist: "Talk to a nutritionist",
