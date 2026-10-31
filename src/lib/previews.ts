@@ -5,10 +5,34 @@ import { isLiveHost } from "@/lib/seo";
 // the site instead. Never shown on the live site.
 export const PREVIEWS = [
   {
+    slug: "research-taste",
+    href: "/previews/research-taste",
+    title: "Research platforms: Taste Skill copy",
+    description: "A separate design of all five dedicated research pages: a scientific study board, interactive figures, clearer process explanations and product connections. The original research previews are preserved.",
+  },
+  {
+    slug: "about-taste",
+    file: "about-taste.html",
+    title: "About Chemlife: editorial design",
+    description: "A Taste Skill About page preview using Chemlife's real people, research and manufacturing photography, with an interactive G.I.F.T. values section.",
+  },
+  {
+    slug: "homepage-heroes",
+    href: "/previews/homepage-heroes",
+    title: "Homepage: nine design directions",
+    description: "Six existing layouts plus three complete concepts inspired by the brand-bubbles reference: Brand bubbles, Field journal and Living science. Includes product discovery, illustrated research and the full homepage.",
+  },
+  {
     slug: "insights-cards",
     href: "/previews/insights-cards",
     title: "Insights: full-image social cards",
     description: "Instagram and LinkedIn cards that grow with each image. Compare original proportions with the current crop using approved Insights posts.",
+  },
+  {
+    slug: "social-responsibility",
+    href: "/previews/social-responsibility",
+    title: "Social responsibility: five designs",
+    description: "Five homepage directions: photo stories, a blue feature, a community journal, an interactive showcase and open commitments. Built around ChemLife’s existing initiatives and brand guide.",
   },
   {
     slug: "vision-mission",

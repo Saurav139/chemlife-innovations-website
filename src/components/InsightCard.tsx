@@ -34,7 +34,7 @@ export function originalLink(url?: string) {
 }
 
 /** What goes inside the card's frame: the label line, picture or video, title, and the two links. */
-export default function InsightCardContent({ item, onRead, onPlay, imageLayout = "cropped" }: {
+export default function InsightCardContent({ item, onRead, onPlay, imageLayout = "cropped", centerTextWithoutImage = false }: {
   item: InsightItem;
   /** Opens the article reader. */
   onRead: (item: InsightItem) => void;
@@ -42,13 +42,16 @@ export default function InsightCardContent({ item, onRead, onPlay, imageLayout =
   onPlay: (youtubeId: string) => void;
   /** Design preview only; existing cards keep their 16:9 crop. */
   imageLayout?: "cropped" | "natural";
+  /** Preview treatment for LinkedIn posts whose feed has no picture. */
+  centerTextWithoutImage?: boolean;
 }) {
   const isBlog = item.type === "Blog";
+  const textOnly = centerTextWithoutImage && isBlog && !item.imageUrl && originalLink(item.linkUrl).short === "LinkedIn";
   return (
     <>
       {/* Clickable Area of Card Content */}
       <div
-        className={isBlog ? "cursor-pointer" : ""}
+        className={`${isBlog ? "cursor-pointer" : ""} ${textOnly ? "flex flex-1 flex-col items-center justify-center py-6 text-center sm:py-8" : ""}`}
         data-analytics-click={isBlog ? "Read Article" : undefined}
         onClick={() => {
           if (isBlog) {
@@ -61,7 +64,7 @@ export default function InsightCardContent({ item, onRead, onPlay, imageLayout =
         }}
       >
         {/* Meta Category & Date Info */}
-        <div className="flex items-center gap-2 mb-3">
+        <div className={`flex items-center gap-2 mb-3 ${textOnly ? "flex-wrap justify-center" : ""}`}>
           <span className={`text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md ${
             item.type === "Blog"
               ? "bg-teal-50 text-teal-700"
@@ -123,9 +126,10 @@ export default function InsightCardContent({ item, onRead, onPlay, imageLayout =
           </a>
         )}
 
-        <h4 className="font-heading text-lg font-bold text-brand-navy mb-4 group-hover:text-teal-aa transition-colors duration-300 line-clamp-3">
+        <h4 className={`font-heading text-lg font-bold text-brand-navy mb-4 group-hover:text-teal-aa transition-colors duration-300 ${textOnly ? "max-w-prose" : "line-clamp-3"}`}>
           {item.title}
         </h4>
+        {textOnly && item.description && <p className="max-w-prose text-sm leading-relaxed text-gray-600">{item.description}</p>}
       </div>
 
       {/* Card Action Buttons (Direct + View on LinkedIn) - isolated outside clicking div */}

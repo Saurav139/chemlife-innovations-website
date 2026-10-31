@@ -19,7 +19,7 @@ export default async function InsightsCardsPreview({ params }: { params: Promise
   if (!previewsAllowed((await headers()).get("host") ?? "")) notFound();
   const { blogs } = await getInsights();
   const posts = blogs.filter((post) => {
-    if (!post.imageUrl || !post.linkUrl) return false;
+    if (!post.linkUrl) return false;
     try {
       return /^(?:www\.)?(?:instagram|linkedin)\.com$/i.test(new URL(post.linkUrl).hostname);
     } catch { return false; }

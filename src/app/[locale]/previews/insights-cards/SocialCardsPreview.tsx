@@ -61,7 +61,7 @@ export default function SocialCardsPreview({ posts }: { posts: InsightItem[] }) 
 
       <section aria-label="Social post cards" className={styles.cards}>
         {filtered.slice(0, limit).map(post => <article key={`${post.linkUrl}:${post.title}`} aria-label={post.title} className={`${INSIGHT_CARD_CLASS} ${styles.card}`}>
-          <InsightCardContent item={post} imageLayout={layout} onRead={setActive} onPlay={() => {}} />
+          <InsightCardContent item={post} imageLayout={layout} centerTextWithoutImage onRead={setActive} onPlay={() => {}} />
         </article>)}
       </section>
       {filtered.length === 0 && <div className={styles.empty}>

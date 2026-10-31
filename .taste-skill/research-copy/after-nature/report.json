@@ -1,0 +1,2083 @@
+{
+ "url": "http://localhost:3001/previews/research-taste/nature-identical-molecules",
+ "at": "2026-10-30T20:45:08.527Z",
+ "allow": [],
+ "viewports": [
+  {
+   "width": 1440,
+   "height": 900,
+   "load": "load",
+   "screens": 5,
+   "filled": [
+    0.8,
+    0.59,
+    0.67,
+    0.64,
+    0.67
+   ],
+   "motion": {
+    "elements": 30,
+    "css": 30,
+    "transitions": 0,
+    "scripted": 0,
+    "videos": 0,
+    "playingVideos": 0
+   },
+   "metrics": {
+    "viewport": {
+     "w": 1440,
+     "h": 900
+    },
+    "page": {
+     "height": 3693,
+     "screens": 4.1,
+     "words": 400,
+     "img": 5,
+     "video": 0,
+     "canvas": 0,
+     "svg": 8,
+     "sections": 5,
+     "horizontalOverflow": 0,
+     "overflowCulprits": [],
+     "uiFragments": 0,
+     "uiAbuse": false,
+     "realPictures": 4,
+     "videoCount": 0,
+     "uiPictures": 0,
+     "pictureSamples": [
+      "nature_identical_bio.png",
+      "research_image.jpeg",
+      "development_image.jpeg",
+      "manufacturing_image.jpeg"
+     ],
+     "blendText": 0,
+     "sideScrollers": 0,
+     "brokenImages": [],
+     "emoji": [],
+     "videosNoPoster": 0
+    },
+    "hero": {
+     "text": "Nature-identical molecules",
+     "words": 2,
+     "chars": 26,
+     "lines": 2,
+     "size": 88,
+     "vw": 6.1,
+     "font": "Maven Pro",
+     "weight": 600,
+     "tracking": -0.04,
+     "leading": 1.08,
+     "upper": false,
+     "italic": false,
+     "mono": false,
+     "align": "left",
+     "position": "left",
+     "widthRatio": 0.57,
+     "top": 207,
+     "tag": "h1",
+     "kind": "heading"
+    },
+    "h1": {
+     "text": "Nature-identical molecules",
+     "words": 2,
+     "lines": 2,
+     "size": 88,
+     "font": "Maven Pro"
+    },
+    "headings": [
+     {
+      "text": "Nature-identical molecules",
+      "words": 2,
+      "chars": 26,
+      "lines": 2,
+      "size": 88,
+      "vw": 6.1,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.04,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.57,
+      "top": 207,
+      "tag": "h1",
+      "kind": "heading"
+     },
+     {
+      "text": "How it works",
+      "words": 3,
+      "chars": 12,
+      "lines": 1,
+      "size": 48,
+      "vw": 3.3,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.04,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.37,
+      "top": 1175,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "At a glance",
+      "words": 3,
+      "chars": 11,
+      "lines": 1,
+      "size": 48,
+      "vw": 3.3,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.04,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.33,
+      "top": 1680,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "Why it matters",
+      "words": 3,
+      "chars": 14,
+      "lines": 1,
+      "size": 48,
+      "vw": 3.3,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.04,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "right",
+      "widthRatio": 0.49,
+      "top": 1680,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "From platform to formulation",
+      "words": 4,
+      "chars": 28,
+      "lines": 2,
+      "size": 48,
+      "vw": 3.3,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.04,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.33,
+      "top": 2211,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "Take the science further",
+      "words": 4,
+      "chars": 24,
+      "lines": 2,
+      "size": 48,
+      "vw": 3.3,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.04,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.33,
+      "top": 2869,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "Chemlife",
+      "words": 1,
+      "chars": 8,
+      "lines": 1,
+      "size": 223.2,
+      "vw": 15.5,
+      "font": "Maven Pro",
+      "weight": 400,
+      "tracking": -0.065,
+      "leading": 1.2,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.96,
+      "top": 3355,
+      "tag": "p",
+      "kind": "statement"
+     }
+    ],
+    "headingSummary": {
+     "count": 7,
+     "maxLines": 2,
+     "over2Lines": 0,
+     "statements": 1,
+     "centered": 0,
+     "medianWords": 3,
+     "mixedFontHeadings": 0
+    },
+    "type": {
+     "families": [
+      {
+       "family": "Maven Pro",
+       "share": 1,
+       "mono": false
+      }
+     ],
+     "familyCount": 1,
+     "sizes": [
+      15,
+      18,
+      24,
+      48,
+      88,
+      223
+     ],
+     "sizeCount": 6,
+     "notLoaded": [],
+     "body": {
+      "font": "Maven Pro",
+      "size": 18,
+      "leading": 1.6,
+      "weight": 400,
+      "tracking": 0,
+      "contrast": 7.9
+     },
+     "measureChars": 53,
+     "max": {
+      "size": 223.2,
+      "vw": 15.5,
+      "font": "Maven Pro",
+      "text": "Chemlife"
+     },
+     "monoShare": 0,
+     "monoProseShare": 0,
+     "monoFamilies": [],
+     "monoSamples": [],
+     "microLabels": 0,
+     "microLabelShare": 0,
+     "microSamples": [],
+     "upperShare": 0,
+     "centerShare": 0,
+     "smallText": 0
+    },
+    "eyebrows": [],
+    "numbered": [],
+    "color": {
+     "bodyBg": "#ffffff",
+     "bodyBgHsl": {
+      "h": 0,
+      "s": 0,
+      "l": 1
+     },
+     "dark": false,
+     "sectionBgs": [],
+     "textColors": [
+      {
+       "color": "#305280",
+       "share": 0.58
+      },
+      {
+       "color": "#ffffff",
+       "share": 0.42
+      }
+     ],
+     "button": {
+      "bg": "#305280",
+      "hsl": {
+       "h": 214,
+       "s": 0.45,
+       "l": 0.35
+      },
+      "fg": "#ffffff"
+     },
+     "lowContrast": []
+    },
+    "buttons": {
+     "count": 5,
+     "inHero": 3,
+     "radius": 0,
+     "height": 44,
+     "withShadow": 0,
+     "withGradient": 0,
+     "mono": 0,
+     "upper": 0,
+     "heroLabels": [
+      "Skip to content",
+      "Nature-identical molecules",
+      "Request technical dossier ↗"
+     ]
+    },
+    "surfaces": {
+     "shadowStatic": 0,
+     "shadowOverlay": 0,
+     "shadowSamples": [],
+     "gradients": 0,
+     "scrims": 0,
+     "gradientSamples": [],
+     "gradientText": 0,
+     "hairlines": 0,
+     "hairlineSamples": [],
+     "outlinedBoxes": 0,
+     "dashed": 0,
+     "blurred": 0,
+     "roundedBoxes": 0,
+     "boxRadius": 0,
+     "squareMedia": 4,
+     "roundedMedia": 0,
+     "mediaRadius": 0,
+     "textShadow": 0,
+     "cardRows": [
+      {
+       "count": 3,
+       "iconTopped": false,
+       "rounded": false,
+       "top": 1262
+      }
+     ]
+    },
+    "heroMedia": [
+     {
+      "type": "img",
+      "ratio": 0.14
+     },
+     {
+      "type": "svg",
+      "ratio": 0.11
+     }
+    ],
+    "nav": {
+     "links": 6,
+     "fixed": false,
+     "height": 88,
+     "floatingPill": false,
+     "blur": false
+    },
+    "fontsLoaded": [
+     "maven pro"
+    ]
+   },
+   "layout": {
+    "viewport": {
+     "w": 1440,
+     "h": 900
+    },
+    "pageH": 3693,
+    "margins": {
+     "left": 32,
+     "right": 32
+    },
+    "sections": [
+     {
+      "sel": "section.board",
+      "tag": "section",
+      "top": 164,
+      "height": 888,
+      "words": 98,
+      "media": 2,
+      "middle": 0,
+      "heading": {
+       "text": "Nature-identical molecules",
+       "size": 88,
+       "tag": "h1"
+      },
+      "left": 75,
+      "right": 32,
+      "textLeft": 75,
+      "textRight": 48,
+      "fullBleed": false,
+      "footer": false,
+      "hero": true,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "section#how.section",
+      "tag": "section",
+      "top": 1052,
+      "height": 462,
+      "words": 87,
+      "media": 0,
+      "middle": 108,
+      "heading": {
+       "text": "How it works",
+       "size": 48,
+       "tag": "h2"
+      },
+      "left": 75,
+      "right": 83,
+      "textLeft": 75,
+      "textRight": 83,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "section.section",
+      "tag": "section",
+      "top": 1514,
+      "height": 531,
+      "words": 78,
+      "media": 0,
+      "middle": 106,
+      "heading": {
+       "text": "At a glance",
+       "size": 48,
+       "tag": "h2"
+      },
+      "left": 75,
+      "right": 76,
+      "textLeft": 75,
+      "textRight": 76,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "section#applications.section",
+      "tag": "section",
+      "top": 2045,
+      "height": 436,
+      "words": 38,
+      "media": 0,
+      "middle": 152,
+      "heading": {
+       "text": "From platform",
+       "size": 48,
+       "tag": "h2"
+      },
+      "left": 75,
+      "right": 205,
+      "textLeft": 75,
+      "textRight": 205,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "section.section",
+      "tag": "section",
+      "top": 2481,
+      "height": 623,
+      "words": 42,
+      "media": 3,
+      "middle": 12,
+      "heading": {
+       "text": "Take the science",
+       "size": 48,
+       "tag": "h2"
+      },
+      "left": 32,
+      "right": 32,
+      "textLeft": 75,
+      "textRight": 495,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "footer.site-footer.frame",
+      "tag": "footer",
+      "top": 3223,
+      "height": 470,
+      "words": 19,
+      "media": 0,
+      "middle": 286,
+      "heading": {
+       "text": "Chemlife",
+       "size": 223,
+       "tag": "p"
+      },
+      "left": 32,
+      "right": 32,
+      "textLeft": 32,
+      "textRight": 32,
+      "fullBleed": false,
+      "footer": true,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     }
+    ],
+    "gaps": [],
+    "h1s": [
+     {
+      "text": "Nature-identical molecules",
+      "size": 88,
+      "top": 207,
+      "firstScreen": true
+     }
+    ],
+    "edgeText": [],
+    "edges": [
+     {
+      "x": 75,
+      "n": 12
+     },
+     {
+      "x": 538,
+      "n": 2
+     },
+     {
+      "x": 636,
+      "n": 2
+     },
+     {
+      "x": 655,
+      "n": 2
+     },
+     {
+      "x": 1001,
+      "n": 2
+     },
+     {
+      "x": 619,
+      "n": 1
+     }
+    ],
+    "leftBlocks": 21,
+    "bodySize": 18,
+    "stage": false,
+    "explains": true,
+    "slivers": [],
+    "voidShare": 0.07,
+    "voidBox": {
+     "x": 420,
+     "y": 420,
+     "w": 480,
+     "h": 180
+    }
+   },
+   "app": null,
+   "consoleErrors": []
+  },
+  {
+   "width": 768,
+   "height": 1024,
+   "load": "load",
+   "screens": 4,
+   "filled": [
+    0.9,
+    0.74,
+    0.79,
+    0.66
+   ],
+   "motion": {
+    "elements": 30,
+    "css": 30,
+    "transitions": 0,
+    "scripted": 0,
+    "videos": 0,
+    "playingVideos": 0
+   },
+   "metrics": {
+    "viewport": {
+     "w": 768,
+     "h": 1024
+    },
+    "page": {
+     "height": 3810,
+     "screens": 3.7,
+     "words": 397,
+     "img": 5,
+     "video": 0,
+     "canvas": 0,
+     "svg": 8,
+     "sections": 5,
+     "horizontalOverflow": 0,
+     "overflowCulprits": [],
+     "uiFragments": 0,
+     "uiAbuse": false,
+     "realPictures": 4,
+     "videoCount": 0,
+     "uiPictures": 0,
+     "pictureSamples": [
+      "nature_identical_bio.png",
+      "research_image.jpeg",
+      "development_image.jpeg",
+      "manufacturing_image.jpeg"
+     ],
+     "blendText": 0,
+     "sideScrollers": 0,
+     "brokenImages": [],
+     "emoji": [],
+     "videosNoPoster": 0
+    },
+    "hero": {
+     "text": "Nature-identical molecules",
+     "words": 2,
+     "chars": 26,
+     "lines": 2,
+     "size": 47.6,
+     "vw": 6.2,
+     "font": "Maven Pro",
+     "weight": 600,
+     "tracking": -0.04,
+     "leading": 1.08,
+     "upper": false,
+     "italic": false,
+     "mono": false,
+     "align": "left",
+     "position": "left",
+     "widthRatio": 0.57,
+     "top": 237,
+     "tag": "h1",
+     "kind": "heading"
+    },
+    "h1": {
+     "text": "Nature-identical molecules",
+     "words": 2,
+     "lines": 2,
+     "size": 47.6,
+     "font": "Maven Pro"
+    },
+    "headings": [
+     {
+      "text": "Nature-identical molecules",
+      "words": 2,
+      "chars": 26,
+      "lines": 2,
+      "size": 47.6,
+      "vw": 6.2,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.04,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.57,
+      "top": 237,
+      "tag": "h1",
+      "kind": "heading"
+     },
+     {
+      "text": "How it works",
+      "words": 3,
+      "chars": 12,
+      "lines": 1,
+      "size": 32,
+      "vw": 4.2,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.04,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.37,
+      "top": 1270,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "At a glance",
+      "words": 3,
+      "chars": 11,
+      "lines": 1,
+      "size": 32,
+      "vw": 4.2,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.04,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.41,
+      "top": 1995,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "Why it matters",
+      "words": 3,
+      "chars": 14,
+      "lines": 1,
+      "size": 32,
+      "vw": 4.2,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.04,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "right",
+      "widthRatio": 0.41,
+      "top": 1995,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "From platform to formulation",
+      "words": 4,
+      "chars": 28,
+      "lines": 2,
+      "size": 32,
+      "vw": 4.2,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.04,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.41,
+      "top": 2573,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "Take the science further",
+      "words": 4,
+      "chars": 24,
+      "lines": 2,
+      "size": 32,
+      "vw": 4.2,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.04,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.41,
+      "top": 3108,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "Chemlife",
+      "words": 1,
+      "chars": 8,
+      "lines": 1,
+      "size": 119,
+      "vw": 15.5,
+      "font": "Maven Pro",
+      "weight": 400,
+      "tracking": -0.065,
+      "leading": 1.2,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.95,
+      "top": 3597,
+      "tag": "p",
+      "kind": "statement"
+     }
+    ],
+    "headingSummary": {
+     "count": 7,
+     "maxLines": 2,
+     "over2Lines": 0,
+     "statements": 1,
+     "centered": 0,
+     "medianWords": 3,
+     "mixedFontHeadings": 0
+    },
+    "type": {
+     "families": [
+      {
+       "family": "Maven Pro",
+       "share": 1,
+       "mono": false
+      }
+     ],
+     "familyCount": 1,
+     "sizes": [
+      15,
+      18,
+      24,
+      32,
+      48,
+      119
+     ],
+     "sizeCount": 6,
+     "notLoaded": [],
+     "body": {
+      "font": "Maven Pro",
+      "size": 18,
+      "leading": 1.6,
+      "weight": 400,
+      "tracking": 0,
+      "contrast": 7.9
+     },
+     "measureChars": 42,
+     "max": {
+      "size": 119,
+      "vw": 15.5,
+      "font": "Maven Pro",
+      "text": "Chemlife"
+     },
+     "monoShare": 0,
+     "monoProseShare": 0,
+     "monoFamilies": [],
+     "monoSamples": [],
+     "microLabels": 0,
+     "microLabelShare": 0,
+     "microSamples": [],
+     "upperShare": 0,
+     "centerShare": 0,
+     "smallText": 0
+    },
+    "eyebrows": [],
+    "numbered": [],
+    "color": {
+     "bodyBg": "#ffffff",
+     "bodyBgHsl": {
+      "h": 0,
+      "s": 0,
+      "l": 1
+     },
+     "dark": false,
+     "sectionBgs": [
+      {
+       "color": "#edf2f6",
+       "top": 730,
+       "hsl": {
+        "h": 207,
+        "s": 0.33,
+        "l": 0.95
+       }
+      }
+     ],
+     "textColors": [
+      {
+       "color": "#305280",
+       "share": 0.58
+      },
+      {
+       "color": "#ffffff",
+       "share": 0.42
+      }
+     ],
+     "button": {
+      "bg": "#305280",
+      "hsl": {
+       "h": 214,
+       "s": 0.45,
+       "l": 0.35
+      },
+      "fg": "#ffffff"
+     },
+     "lowContrast": []
+    },
+    "buttons": {
+     "count": 5,
+     "inHero": 3,
+     "radius": 0,
+     "height": 44,
+     "withShadow": 0,
+     "withGradient": 0,
+     "mono": 0,
+     "upper": 0,
+     "heroLabels": [
+      "Skip to content",
+      "Nature-identical molecules",
+      "Request technical dossier ↗"
+     ]
+    },
+    "surfaces": {
+     "shadowStatic": 0,
+     "shadowOverlay": 0,
+     "shadowSamples": [],
+     "gradients": 0,
+     "scrims": 0,
+     "gradientSamples": [],
+     "gradientText": 0,
+     "hairlines": 0,
+     "hairlineSamples": [],
+     "outlinedBoxes": 0,
+     "dashed": 0,
+     "blurred": 0,
+     "roundedBoxes": 0,
+     "boxRadius": 0,
+     "squareMedia": 4,
+     "roundedMedia": 0,
+     "mediaRadius": 0,
+     "textShadow": 0,
+     "cardRows": []
+    },
+    "heroMedia": [
+     {
+      "type": "svg",
+      "ratio": 0.15
+     },
+     {
+      "type": "img",
+      "ratio": 0.08
+     }
+    ],
+    "nav": {
+     "links": 5,
+     "fixed": false,
+     "height": 88,
+     "floatingPill": false,
+     "blur": false
+    },
+    "fontsLoaded": [
+     "maven pro"
+    ]
+   },
+   "layout": {
+    "viewport": {
+     "w": 768,
+     "h": 1024
+    },
+    "pageH": 3810,
+    "margins": {
+     "left": 18,
+     "right": 18
+    },
+    "sections": [
+     {
+      "sel": "section.board",
+      "tag": "section",
+      "top": 214,
+      "height": 970,
+      "words": 98,
+      "media": 2,
+      "middle": 0,
+      "heading": {
+       "text": "Nature-identical molecules",
+       "size": 48,
+       "tag": "h1"
+      },
+      "left": 41,
+      "right": 18,
+      "textLeft": 41,
+      "textRight": 34,
+      "fullBleed": false,
+      "footer": false,
+      "hero": true,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "section#how.section",
+      "tag": "section",
+      "top": 1184,
+      "height": 702,
+      "words": 87,
+      "media": 0,
+      "middle": 0,
+      "heading": {
+       "text": "How it works",
+       "size": 32,
+       "tag": "h2"
+      },
+      "left": 41,
+      "right": 45,
+      "textLeft": 41,
+      "textRight": 45,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "section.section",
+      "tag": "section",
+      "top": 1886,
+      "height": 577,
+      "words": 78,
+      "media": 0,
+      "middle": 72,
+      "heading": {
+       "text": "At a glance",
+       "size": 32,
+       "tag": "h2"
+      },
+      "left": 41,
+      "right": 45,
+      "textLeft": 41,
+      "textRight": 45,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "section#applications.section",
+      "tag": "section",
+      "top": 2464,
+      "height": 354,
+      "words": 38,
+      "media": 0,
+      "middle": 64,
+      "heading": {
+       "text": "From platform",
+       "size": 32,
+       "tag": "h2"
+      },
+      "left": 41,
+      "right": 52,
+      "textLeft": 41,
+      "textRight": 52,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "section.section",
+      "tag": "section",
+      "top": 2817,
+      "height": 529,
+      "words": 42,
+      "media": 3,
+      "middle": 0,
+      "heading": {
+       "text": "Take the science",
+       "size": 32,
+       "tag": "h2"
+      },
+      "left": 18,
+      "right": 18,
+      "textLeft": 41,
+      "textRight": 65,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "footer.site-footer.frame",
+      "tag": "footer",
+      "top": 3465,
+      "height": 345,
+      "words": 19,
+      "media": 0,
+      "middle": 24,
+      "heading": {
+       "text": "Chemlife",
+       "size": 119,
+       "tag": "p"
+      },
+      "left": 18,
+      "right": 18,
+      "textLeft": 18,
+      "textRight": 18,
+      "fullBleed": false,
+      "footer": true,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     }
+    ],
+    "gaps": [],
+    "h1s": [
+     {
+      "text": "Nature-identical molecules",
+      "size": 48,
+      "top": 237,
+      "firstScreen": true
+     }
+    ],
+    "edgeText": [],
+    "edges": [
+     {
+      "x": 41,
+      "n": 18
+     },
+     {
+      "x": 413,
+      "n": 2
+     },
+     {
+      "x": 334,
+      "n": 1
+     }
+    ],
+    "leftBlocks": 21,
+    "bodySize": 18,
+    "stage": false,
+    "explains": true,
+    "slivers": [],
+    "voidShare": 0,
+    "voidBox": null
+   },
+   "app": null,
+   "consoleErrors": []
+  },
+  {
+   "width": 390,
+   "height": 844,
+   "load": "load",
+   "screens": 7,
+   "filled": [
+    0.87,
+    0.9,
+    0.83,
+    0.86,
+    0.79,
+    0.79,
+    0.65
+   ],
+   "motion": {
+    "elements": 28,
+    "css": 28,
+    "transitions": 0,
+    "scripted": 0,
+    "videos": 0,
+    "playingVideos": 0
+   },
+   "metrics": {
+    "viewport": {
+     "w": 390,
+     "h": 844
+    },
+    "page": {
+     "height": 5866,
+     "screens": 7,
+     "words": 413,
+     "img": 5,
+     "video": 0,
+     "canvas": 0,
+     "svg": 8,
+     "sections": 5,
+     "horizontalOverflow": 0,
+     "overflowCulprits": [],
+     "uiFragments": 0,
+     "uiAbuse": false,
+     "realPictures": 4,
+     "videoCount": 0,
+     "uiPictures": 0,
+     "pictureSamples": [
+      "nature_identical_bio.png",
+      "research_image.jpeg",
+      "development_image.jpeg",
+      "manufacturing_image.jpeg"
+     ],
+     "blendText": 0,
+     "sideScrollers": 1,
+     "brokenImages": [],
+     "emoji": [],
+     "videosNoPoster": 0
+    },
+    "hero": {
+     "text": "Nature-identical molecules",
+     "words": 2,
+     "chars": 26,
+     "lines": 2,
+     "size": 36,
+     "vw": 9.2,
+     "font": "Maven Pro",
+     "weight": 600,
+     "tracking": -0.04,
+     "leading": 1.08,
+     "upper": false,
+     "italic": false,
+     "mono": false,
+     "align": "left",
+     "position": "center",
+     "widthRatio": 0.78,
+     "top": 268,
+     "tag": "h1",
+     "kind": "heading"
+    },
+    "h1": {
+     "text": "Nature-identical molecules",
+     "words": 2,
+     "lines": 2,
+     "size": 36,
+     "font": "Maven Pro"
+    },
+    "headings": [
+     {
+      "text": "Nature-identical molecules",
+      "words": 2,
+      "chars": 26,
+      "lines": 2,
+      "size": 36,
+      "vw": 9.2,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.04,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.78,
+      "top": 268,
+      "tag": "h1",
+      "kind": "heading"
+     },
+     {
+      "text": "See the mechanism",
+      "words": 3,
+      "chars": 17,
+      "lines": 1,
+      "size": 24,
+      "vw": 6.2,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.025,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.82,
+      "top": 1161,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "How it works",
+      "words": 3,
+      "chars": 12,
+      "lines": 1,
+      "size": 32,
+      "vw": 8.2,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.04,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.88,
+      "top": 1796,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "Find the active +",
+      "words": 4,
+      "chars": 17,
+      "lines": 1,
+      "size": 24,
+      "vw": 6.2,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.04,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.77,
+      "top": 1989,
+      "tag": "h3",
+      "kind": "heading"
+     },
+     {
+      "text": "Make it greener +",
+      "words": 4,
+      "chars": 17,
+      "lines": 1,
+      "size": 24,
+      "vw": 6.2,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.04,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.77,
+      "top": 2201,
+      "tag": "h3",
+      "kind": "heading"
+     },
+     {
+      "text": "Match and standardise +",
+      "words": 4,
+      "chars": 23,
+      "lines": 1,
+      "size": 24,
+      "vw": 6.2,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.04,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.77,
+      "top": 2471,
+      "tag": "h3",
+      "kind": "heading"
+     },
+     {
+      "text": "At a glance",
+      "words": 3,
+      "chars": 11,
+      "lines": 1,
+      "size": 32,
+      "vw": 8.2,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.04,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.78,
+      "top": 2738,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "Why it matters",
+      "words": 3,
+      "chars": 14,
+      "lines": 1,
+      "size": 32,
+      "vw": 8.2,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.04,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.78,
+      "top": 3236,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "The same molecule as nature Chemically identical to the compound the plant makes.",
+      "words": 13,
+      "chars": 81,
+      "lines": 4,
+      "size": 24,
+      "vw": 6.2,
+      "font": "Maven Pro",
+      "weight": 500,
+      "tracking": -0.025,
+      "leading": 1.2,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.78,
+      "top": 3298,
+      "tag": "li",
+      "kind": "statement"
+     },
+     {
+      "text": "Predictable results A fixed dose of the active in every batch, not whatever the harvest delivered.",
+      "words": 16,
+      "chars": 98,
+      "lines": 4,
+      "size": 24,
+      "vw": 6.2,
+      "font": "Maven Pro",
+      "weight": 500,
+      "tracking": -0.025,
+      "leading": 1.2,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.78,
+      "top": 3453,
+      "tag": "li",
+      "kind": "statement"
+     },
+     {
+      "text": "Scales without the farm Supply no longer depends on growing and harvesting large amounts of the herb.",
+      "words": 17,
+      "chars": 101,
+      "lines": 4,
+      "size": 24,
+      "vw": 6.2,
+      "font": "Maven Pro",
+      "weight": 500,
+      "tracking": -0.025,
+      "leading": 1.2,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.78,
+      "top": 3608,
+      "tag": "li",
+      "kind": "statement"
+     },
+     {
+      "text": "From platform to formulation",
+      "words": 4,
+      "chars": 28,
+      "lines": 2,
+      "size": 32,
+      "vw": 8.2,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.04,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.78,
+      "top": 3848,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "Ask us how standardised herbal actives could fit your formulation.",
+      "words": 10,
+      "chars": 66,
+      "lines": 3,
+      "size": 24,
+      "vw": 6.2,
+      "font": "Maven Pro",
+      "weight": 400,
+      "tracking": 0,
+      "leading": 1.4,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.78,
+      "top": 4176,
+      "tag": "p",
+      "kind": "statement"
+     },
+     {
+      "text": "Take the science further",
+      "words": 4,
+      "chars": 24,
+      "lines": 2,
+      "size": 32,
+      "vw": 8.2,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.04,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.78,
+      "top": 4799,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "Nano trace minerals",
+      "words": 3,
+      "chars": 19,
+      "lines": 1,
+      "size": 24,
+      "vw": 6.2,
+      "font": "Maven Pro",
+      "weight": 500,
+      "tracking": 0,
+      "leading": 1.2,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.58,
+      "top": 5360,
+      "tag": "strong",
+      "kind": "heading"
+     },
+     {
+      "text": "All research platforms",
+      "words": 3,
+      "chars": 22,
+      "lines": 1,
+      "size": 24,
+      "vw": 6.2,
+      "font": "Maven Pro",
+      "weight": 500,
+      "tracking": 0,
+      "leading": 1.2,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.63,
+      "top": 5471,
+      "tag": "strong",
+      "kind": "heading"
+     },
+     {
+      "text": "Chemlife",
+      "words": 1,
+      "chars": 8,
+      "lines": 1,
+      "size": 58.5,
+      "vw": 15,
+      "font": "Maven Pro",
+      "weight": 400,
+      "tracking": -0.065,
+      "leading": 1.2,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.91,
+      "top": 5690,
+      "tag": "p",
+      "kind": "statement"
+     }
+    ],
+    "headingSummary": {
+     "count": 17,
+     "maxLines": 4,
+     "over2Lines": 0,
+     "statements": 5,
+     "centered": 0,
+     "medianWords": 4,
+     "mixedFontHeadings": 0
+    },
+    "type": {
+     "families": [
+      {
+       "family": "Maven Pro",
+       "share": 1,
+       "mono": false
+      }
+     ],
+     "familyCount": 1,
+     "sizes": [
+      15,
+      18,
+      24,
+      32,
+      36,
+      59
+     ],
+     "sizeCount": 6,
+     "notLoaded": [],
+     "body": {
+      "font": "Maven Pro",
+      "size": 18,
+      "leading": 1.6,
+      "weight": 400,
+      "tracking": 0,
+      "contrast": 7.9
+     },
+     "measureChars": 34,
+     "max": {
+      "size": 58.5,
+      "vw": 15,
+      "font": "Maven Pro",
+      "text": "Chemlife"
+     },
+     "monoShare": 0,
+     "monoProseShare": 0,
+     "monoFamilies": [],
+     "monoSamples": [],
+     "microLabels": 0,
+     "microLabelShare": 0,
+     "microSamples": [],
+     "upperShare": 0,
+     "centerShare": 0,
+     "smallText": 0
+    },
+    "eyebrows": [],
+    "numbered": [],
+    "color": {
+     "bodyBg": "#ffffff",
+     "bodyBgHsl": {
+      "h": 0,
+      "s": 0,
+      "l": 1
+     },
+     "dark": false,
+     "sectionBgs": [
+      {
+       "color": "#305280",
+       "top": 750,
+       "hsl": {
+        "h": 214,
+        "s": 0.45,
+        "l": 0.35
+       }
+      },
+      {
+       "color": "#edf2f6",
+       "top": 1137,
+       "hsl": {
+        "h": 207,
+        "s": 0.33,
+        "l": 0.95
+       }
+      }
+     ],
+     "textColors": [
+      {
+       "color": "#305280",
+       "share": 0.57
+      },
+      {
+       "color": "#ffffff",
+       "share": 0.43
+      }
+     ],
+     "button": {
+      "bg": "#305280",
+      "hsl": {
+       "h": 214,
+       "s": 0.45,
+       "l": 0.35
+      },
+      "fg": "#ffffff"
+     },
+     "lowContrast": []
+    },
+    "buttons": {
+     "count": 6,
+     "inHero": 4,
+     "radius": 0,
+     "height": 44,
+     "withShadow": 0,
+     "withGradient": 0,
+     "mono": 0,
+     "upper": 0,
+     "heroLabels": [
+      "Skip to content",
+      "Menu",
+      "Nature-identical molecules",
+      "Request technical dossier ↗"
+     ]
+    },
+    "surfaces": {
+     "shadowStatic": 0,
+     "shadowOverlay": 0,
+     "shadowSamples": [],
+     "gradients": 0,
+     "scrims": 0,
+     "gradientSamples": [],
+     "gradientText": 0,
+     "hairlines": 0,
+     "hairlineSamples": [],
+     "outlinedBoxes": 0,
+     "dashed": 0,
+     "blurred": 0,
+     "roundedBoxes": 0,
+     "boxRadius": 0,
+     "squareMedia": 2,
+     "roundedMedia": 0,
+     "mediaRadius": 0,
+     "textShadow": 0,
+     "cardRows": []
+    },
+    "heroMedia": [
+     {
+      "type": "img",
+      "ratio": 0.24
+     }
+    ],
+    "nav": {
+     "links": 1,
+     "fixed": false,
+     "height": 78,
+     "floatingPill": false,
+     "blur": false
+    },
+    "fontsLoaded": [
+     "maven pro"
+    ]
+   },
+   "layout": {
+    "viewport": {
+     "w": 390,
+     "h": 844
+    },
+    "pageH": 5866,
+    "margins": {
+     "left": 18,
+     "right": 18
+    },
+    "sections": [
+     {
+      "sel": "nav.research-nav",
+      "tag": "nav",
+      "top": 78,
+      "height": 156,
+      "words": 9,
+      "media": 0,
+      "middle": 0,
+      "heading": null,
+      "left": 37,
+      "right": 58,
+      "textLeft": 37,
+      "textRight": 58,
+      "fullBleed": false,
+      "footer": false,
+      "hero": true,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "div.title-tile",
+      "tag": "div",
+      "top": 242,
+      "height": 272,
+      "words": 10,
+      "media": 0,
+      "middle": 0,
+      "heading": {
+       "text": "Nature-identical molecules",
+       "size": 36,
+       "tag": "h1"
+      },
+      "left": 42,
+      "right": 83,
+      "textLeft": 42,
+      "textRight": 83,
+      "fullBleed": false,
+      "footer": false,
+      "hero": true,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "figure.hero-art",
+      "tag": "figure",
+      "top": 522,
+      "height": 220,
+      "words": 2,
+      "media": 1,
+      "middle": 0,
+      "heading": null,
+      "left": 18,
+      "right": 18,
+      "textLeft": 221,
+      "textRight": 34,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "div.summary-tile",
+      "tag": "div",
+      "top": 750,
+      "height": 380,
+      "words": 44,
+      "media": 0,
+      "middle": 0,
+      "heading": null,
+      "left": 42,
+      "right": 55,
+      "textLeft": 42,
+      "textRight": 55,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "div.science-tile",
+      "tag": "div",
+      "top": 1137,
+      "height": 573,
+      "words": 25,
+      "media": 3,
+      "middle": 282,
+      "heading": {
+       "text": "See the mechanism",
+       "size": 24,
+       "tag": "h2"
+      },
+      "left": 36,
+      "right": 0,
+      "textLeft": 36,
+      "textRight": 37,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "section#how.section",
+      "tag": "section",
+      "top": 1710,
+      "height": 918,
+      "words": 87,
+      "media": 0,
+      "middle": 0,
+      "heading": {
+       "text": "How it works",
+       "size": 32,
+       "tag": "h2"
+      },
+      "left": 24,
+      "right": 30,
+      "textLeft": 24,
+      "textRight": 30,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "section.section",
+      "tag": "section",
+      "top": 2628,
+      "height": 1110,
+      "words": 78,
+      "media": 0,
+      "middle": 0,
+      "heading": {
+       "text": "At a glance",
+       "size": 32,
+       "tag": "h2"
+      },
+      "left": 42,
+      "right": 45,
+      "textLeft": 42,
+      "textRight": 45,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "section#applications.section",
+      "tag": "section",
+      "top": 3738,
+      "height": 585,
+      "words": 38,
+      "media": 0,
+      "middle": 0,
+      "heading": {
+       "text": "From platform",
+       "size": 32,
+       "tag": "h2"
+      },
+      "left": 42,
+      "right": 45,
+      "textLeft": 42,
+      "textRight": 45,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "section.section",
+      "tag": "section",
+      "top": 4323,
+      "height": 978,
+      "words": 42,
+      "media": 3,
+      "middle": 0,
+      "heading": {
+       "text": "Take the science",
+       "size": 32,
+       "tag": "h2"
+      },
+      "left": 18,
+      "right": 18,
+      "textLeft": 42,
+      "textRight": 52,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "nav.platform-pager",
+      "tag": "nav",
+      "top": 5308,
+      "height": 214,
+      "words": 9,
+      "media": 0,
+      "middle": 0,
+      "heading": null,
+      "left": 42,
+      "right": 104,
+      "textLeft": 42,
+      "textRight": 104,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "footer.site-footer.frame",
+      "tag": "footer",
+      "top": 5522,
+      "height": 344,
+      "words": 19,
+      "media": 0,
+      "middle": 0,
+      "heading": {
+       "text": "Chemlife",
+       "size": 59,
+       "tag": "p"
+      },
+      "left": 18,
+      "right": 59,
+      "textLeft": 18,
+      "textRight": 59,
+      "fullBleed": false,
+      "footer": true,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     }
+    ],
+    "gaps": [],
+    "h1s": [
+     {
+      "text": "Nature-identical molecules",
+      "size": 36,
+      "top": 268,
+      "firstScreen": true
+     }
+    ],
+    "edgeText": [],
+    "edges": [
+     {
+      "x": 36,
+      "n": 19
+     },
+     {
+      "x": 24,
+      "n": 2
+     }
+    ],
+    "leftBlocks": 21,
+    "bodySize": 18,
+    "stage": false,
+    "explains": true,
+    "slivers": [],
+    "voidShare": 0,
+    "voidBox": null
+   },
+   "app": null,
+   "consoleErrors": []
+  }
+ ],
+ "findings": [
+  {
+   "level": "WARN",
+   "id": "no-footage",
+   "width": 1440,
+   "message": "No video anywhere on the page.",
+   "fix": "Look for one honest clip with scripts/assets.mjs --video (the place, the material, the process) and use it as a muted loop with a poster frame. Defend its absence only if no clip fits the subject."
+  },
+  {
+   "level": "WARN",
+   "id": "side-scroll",
+   "width": 390,
+   "message": "1 row(s) scroll sideways with content past their edge.",
+   "fix": "Jurors and most visitors read a row cut at the edge as clipped, not as scrollable. Wrap it onto more lines, or end it inside the grid."
+  }
+ ],
+ "images": [
+  {
+   "viewport": "desktop",
+   "width": 1440,
+   "fold": "/Users/atulsingh/Desktop/Chemlife/chemlife-innovations-website/.taste-skill/research-copy/after-nature/desktop-fold.jpg",
+   "pages": [
+    "/Users/atulsingh/Desktop/Chemlife/chemlife-innovations-website/.taste-skill/research-copy/after-nature/desktop-page-01.jpg",
+    "/Users/atulsingh/Desktop/Chemlife/chemlife-innovations-website/.taste-skill/research-copy/after-nature/desktop-page-02.jpg"
+   ],
+   "film": []
+  },
+  {
+   "viewport": "tablet",
+   "width": 768,
+   "fold": "/Users/atulsingh/Desktop/Chemlife/chemlife-innovations-website/.taste-skill/research-copy/after-nature/tablet-fold.jpg",
+   "pages": [
+    "/Users/atulsingh/Desktop/Chemlife/chemlife-innovations-website/.taste-skill/research-copy/after-nature/tablet-page-01.jpg"
+   ],
+   "film": []
+  },
+  {
+   "viewport": "mobile",
+   "width": 390,
+   "fold": "/Users/atulsingh/Desktop/Chemlife/chemlife-innovations-website/.taste-skill/research-copy/after-nature/mobile-fold.jpg",
+   "pages": [
+    "/Users/atulsingh/Desktop/Chemlife/chemlife-innovations-website/.taste-skill/research-copy/after-nature/mobile-page-01.jpg"
+   ],
+   "film": []
+  }
+ ]
+}

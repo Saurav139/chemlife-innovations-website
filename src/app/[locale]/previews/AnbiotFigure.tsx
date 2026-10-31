@@ -8,7 +8,7 @@ const at = (d: string, t?: string) => ({ "--d": d, ...(t ? { "--t": t } : {}) })
 const draw = s.draw;
 
 /** "How ANBioT works" figure from the landscape homepage design, shown on the staging Design previews page. */
-export default function AnbiotFigure() {
+export default function AnbiotFigure({ embedded = false }: { embedded?: boolean }) {
   const ref = useRef<HTMLDivElement>(null);
   const [phase, setPhase] = useState<"idle" | "in" | "alive">("idle");
   const timer = useRef<number | undefined>(undefined);
@@ -43,7 +43,7 @@ export default function AnbiotFigure() {
 
   return (
     <div ref={ref} className={state}>
-      <div className="flex items-end justify-between gap-4 mb-4">
+      {!embedded && <div className="flex items-end justify-between gap-4 mb-4">
         <div>
           <h2 className="font-heading text-2xl font-bold text-brand-navy">How ANBioT works</h2>
           <p className="text-brand-navy/70 mt-1 text-[15px]">The animated figure from the landscape homepage design.</p>
@@ -55,7 +55,7 @@ export default function AnbiotFigure() {
         >
           Replay
         </button>
-      </div>
+      </div>}
 
       <figure className={s.figure}>
         <svg className={s.fig} viewBox="0 0 1200 290" role="img" aria-label="A plant leaf becomes a bioactive molecule, which becomes a multi-layer encapsulated feed additive">

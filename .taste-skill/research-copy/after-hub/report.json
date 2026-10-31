@@ -1,0 +1,1763 @@
+{
+ "url": "http://localhost:3001/previews/research-taste",
+ "at": "2026-10-30T20:46:32.336Z",
+ "allow": [],
+ "viewports": [
+  {
+   "width": 1440,
+   "height": 900,
+   "load": "load",
+   "screens": 5,
+   "filled": [
+    0.65,
+    0.92,
+    0.92,
+    0.6,
+    0.61
+   ],
+   "motion": {
+    "elements": 19,
+    "css": 19,
+    "transitions": 0,
+    "scripted": 0,
+    "videos": 0,
+    "playingVideos": 0
+   },
+   "metrics": {
+    "viewport": {
+     "w": 1440,
+     "h": 900
+    },
+    "page": {
+     "height": 3856,
+     "screens": 4.3,
+     "words": 263,
+     "img": 10,
+     "video": 0,
+     "canvas": 0,
+     "svg": 0,
+     "sections": 3,
+     "horizontalOverflow": 0,
+     "overflowCulprits": [],
+     "uiFragments": 0,
+     "uiAbuse": false,
+     "realPictures": 9,
+     "videoCount": 0,
+     "uiPictures": 0,
+     "pictureSamples": [
+      "research_image.jpeg",
+      "anbiot.png",
+      "green_technology.png",
+      "microencapsulation.png",
+      "nano_trace_mineral.jpg",
+      "nature_identical_bio.png",
+      "research_image.jpeg",
+      "development_image.jpeg"
+     ],
+     "blendText": 0,
+     "sideScrollers": 0,
+     "brokenImages": [],
+     "emoji": [],
+     "videosNoPoster": 0
+    },
+    "hero": {
+     "text": "Inside our research",
+     "words": 3,
+     "chars": 19,
+     "lines": 2,
+     "size": 88,
+     "vw": 6.1,
+     "font": "Maven Pro",
+     "weight": 600,
+     "tracking": -0.04,
+     "leading": 1.08,
+     "upper": false,
+     "italic": false,
+     "mono": false,
+     "align": "left",
+     "position": "left",
+     "widthRatio": 0.57,
+     "top": 131,
+     "tag": "h1",
+     "kind": "heading"
+    },
+    "h1": {
+     "text": "Inside our research",
+     "words": 3,
+     "lines": 2,
+     "size": 88,
+     "font": "Maven Pro"
+    },
+    "headings": [
+     {
+      "text": "Inside our research",
+      "words": 3,
+      "chars": 19,
+      "lines": 2,
+      "size": 88,
+      "vw": 6.1,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.04,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.57,
+      "top": 131,
+      "tag": "h1",
+      "kind": "heading"
+     },
+     {
+      "text": "Explore the science",
+      "words": 3,
+      "chars": 19,
+      "lines": 1,
+      "size": 48,
+      "vw": 3.3,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.04,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.37,
+      "top": 758,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "ANBioT",
+      "words": 1,
+      "chars": 6,
+      "lines": 1,
+      "size": 42,
+      "vw": 2.9,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.04,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.28,
+      "top": 884,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "Green chelation",
+      "words": 2,
+      "chars": 15,
+      "lines": 1,
+      "size": 42,
+      "vw": 2.9,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.04,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.28,
+      "top": 1370,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "Microencapsulation",
+      "words": 1,
+      "chars": 18,
+      "lines": 1,
+      "size": 42,
+      "vw": 2.9,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.04,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.28,
+      "top": 1754,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "Nano trace minerals",
+      "words": 3,
+      "chars": 19,
+      "lines": 1,
+      "size": 42,
+      "vw": 2.9,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.04,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.28,
+      "top": 2217,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "Nature-identical molecules",
+      "words": 2,
+      "chars": 26,
+      "lines": 2,
+      "size": 42,
+      "vw": 2.9,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.04,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.28,
+      "top": 2597,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "Bring us your research question",
+      "words": 5,
+      "chars": 31,
+      "lines": 2,
+      "size": 48,
+      "vw": 3.3,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.04,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.33,
+      "top": 3158,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "Chemlife",
+      "words": 1,
+      "chars": 8,
+      "lines": 1,
+      "size": 223.2,
+      "vw": 15.5,
+      "font": "Maven Pro",
+      "weight": 400,
+      "tracking": -0.065,
+      "leading": 1.2,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.96,
+      "top": 3518,
+      "tag": "p",
+      "kind": "statement"
+     }
+    ],
+    "headingSummary": {
+     "count": 9,
+     "maxLines": 2,
+     "over2Lines": 0,
+     "statements": 1,
+     "centered": 0,
+     "medianWords": 2,
+     "mixedFontHeadings": 0
+    },
+    "type": {
+     "families": [
+      {
+       "family": "Maven Pro",
+       "share": 1,
+       "mono": false
+      }
+     ],
+     "familyCount": 1,
+     "sizes": [
+      15,
+      18,
+      42,
+      48,
+      88,
+      223
+     ],
+     "sizeCount": 6,
+     "notLoaded": [],
+     "body": {
+      "font": "Maven Pro",
+      "size": 18,
+      "leading": 1.6,
+      "weight": 400,
+      "tracking": 0,
+      "contrast": 7.9
+     },
+     "measureChars": 45,
+     "max": {
+      "size": 223.2,
+      "vw": 15.5,
+      "font": "Maven Pro",
+      "text": "Chemlife"
+     },
+     "monoShare": 0,
+     "monoProseShare": 0,
+     "monoFamilies": [],
+     "monoSamples": [],
+     "microLabels": 0,
+     "microLabelShare": 0,
+     "microSamples": [],
+     "upperShare": 0,
+     "centerShare": 0,
+     "smallText": 0
+    },
+    "eyebrows": [],
+    "numbered": [],
+    "color": {
+     "bodyBg": "#ffffff",
+     "bodyBgHsl": {
+      "h": 0,
+      "s": 0,
+      "l": 1
+     },
+     "dark": false,
+     "sectionBgs": [
+      {
+       "color": "#305280",
+       "top": 88,
+       "hsl": {
+        "h": 214,
+        "s": 0.45,
+        "l": 0.35
+       }
+      },
+      {
+       "color": "#edf2f6",
+       "top": 839,
+       "hsl": {
+        "h": 207,
+        "s": 0.33,
+        "l": 0.95
+       }
+      }
+     ],
+     "textColors": [
+      {
+       "color": "#305280",
+       "share": 0.83
+      },
+      {
+       "color": "#ffffff",
+       "share": 0.17
+      }
+     ],
+     "button": {
+      "bg": "#305280",
+      "hsl": {
+       "h": 214,
+       "s": 0.45,
+       "l": 0.35
+      },
+      "fg": "#ffffff"
+     },
+     "lowContrast": []
+    },
+    "buttons": {
+     "count": 4,
+     "inHero": 3,
+     "radius": 0,
+     "height": 52,
+     "withShadow": 0,
+     "withGradient": 0,
+     "mono": 0,
+     "upper": 0,
+     "heroLabels": [
+      "Skip to content",
+      "Explore the platforms ↓",
+      "Clear"
+     ]
+    },
+    "surfaces": {
+     "shadowStatic": 0,
+     "shadowOverlay": 0,
+     "shadowSamples": [],
+     "gradients": 0,
+     "scrims": 0,
+     "gradientSamples": [],
+     "gradientText": 0,
+     "hairlines": 0,
+     "hairlineSamples": [],
+     "outlinedBoxes": 0,
+     "dashed": 0,
+     "blurred": 0,
+     "roundedBoxes": 0,
+     "boxRadius": 0,
+     "squareMedia": 9,
+     "roundedMedia": 0,
+     "mediaRadius": 0,
+     "textShadow": 0,
+     "cardRows": []
+    },
+    "heroMedia": [
+     {
+      "type": "img",
+      "ratio": 0.16
+     }
+    ],
+    "nav": {
+     "links": 6,
+     "fixed": false,
+     "height": 88,
+     "floatingPill": false,
+     "blur": false
+    },
+    "fontsLoaded": [
+     "maven pro"
+    ]
+   },
+   "layout": {
+    "viewport": {
+     "w": 1440,
+     "h": 900
+    },
+    "pageH": 3856,
+    "margins": {
+     "left": 32,
+     "right": 32
+    },
+    "sections": [
+     {
+      "sel": "section.hub-heading",
+      "tag": "section",
+      "top": 88,
+      "height": 440,
+      "words": 22,
+      "media": 1,
+      "middle": 362,
+      "heading": {
+       "text": "Inside our",
+       "size": 88,
+       "tag": "h1"
+      },
+      "left": 75,
+      "right": 30,
+      "textLeft": 75,
+      "textRight": 851,
+      "fullBleed": false,
+      "footer": false,
+      "hero": true,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "section#platforms.section",
+      "tag": "section",
+      "top": 657,
+      "height": 2135,
+      "words": 189,
+      "media": 4,
+      "middle": 63,
+      "heading": {
+       "text": "Explore the science",
+       "size": 48,
+       "tag": "h2"
+      },
+      "left": 32,
+      "right": 75,
+      "textLeft": 75,
+      "textRight": 75,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "section.section",
+      "tag": "section",
+      "top": 2792,
+      "height": 594,
+      "words": 29,
+      "media": 3,
+      "middle": 12,
+      "heading": {
+       "text": "Bring us your",
+       "size": 48,
+       "tag": "h2"
+      },
+      "left": 32,
+      "right": 32,
+      "textLeft": 75,
+      "textRight": 525,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "footer.site-footer.frame",
+      "tag": "footer",
+      "top": 3386,
+      "height": 470,
+      "words": 19,
+      "media": 0,
+      "middle": 286,
+      "heading": {
+       "text": "Chemlife",
+       "size": 223,
+       "tag": "p"
+      },
+      "left": 32,
+      "right": 32,
+      "textLeft": 32,
+      "textRight": 32,
+      "fullBleed": false,
+      "footer": true,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     }
+    ],
+    "gaps": [],
+    "h1s": [
+     {
+      "text": "Inside our research",
+      "size": 88,
+      "top": 131,
+      "firstScreen": true
+     }
+    ],
+    "edgeText": [],
+    "edges": [
+     {
+      "x": 75,
+      "n": 7
+     },
+     {
+      "x": 534,
+      "n": 5
+     },
+     {
+      "x": 964,
+      "n": 5
+     }
+    ],
+    "leftBlocks": 17,
+    "bodySize": 18,
+    "stage": false,
+    "explains": true,
+    "slivers": [],
+    "voidShare": 0.1,
+    "voidBox": {
+     "x": 600,
+     "y": 120,
+     "w": 300,
+     "h": 420
+    }
+   },
+   "app": null,
+   "consoleErrors": []
+  },
+  {
+   "width": 768,
+   "height": 1024,
+   "load": "load",
+   "screens": 3,
+   "filled": [
+    0.78,
+    0.92,
+    0.6
+   ],
+   "motion": {
+    "elements": 19,
+    "css": 19,
+    "transitions": 0,
+    "scripted": 0,
+    "videos": 0,
+    "playingVideos": 0
+   },
+   "metrics": {
+    "viewport": {
+     "w": 768,
+     "h": 1024
+    },
+    "page": {
+     "height": 2851,
+     "screens": 2.8,
+     "words": 260,
+     "img": 10,
+     "video": 0,
+     "canvas": 0,
+     "svg": 0,
+     "sections": 3,
+     "horizontalOverflow": 0,
+     "overflowCulprits": [],
+     "uiFragments": 0,
+     "uiAbuse": false,
+     "realPictures": 9,
+     "videoCount": 0,
+     "uiPictures": 0,
+     "pictureSamples": [
+      "research_image.jpeg",
+      "anbiot.png",
+      "green_technology.png",
+      "microencapsulation.png",
+      "nano_trace_mineral.jpg",
+      "nature_identical_bio.png",
+      "research_image.jpeg",
+      "development_image.jpeg"
+     ],
+     "blendText": 0,
+     "sideScrollers": 0,
+     "brokenImages": [],
+     "emoji": [],
+     "videosNoPoster": 0
+    },
+    "hero": {
+     "text": "Inside our research",
+     "words": 3,
+     "chars": 19,
+     "lines": 2,
+     "size": 47.6,
+     "vw": 6.2,
+     "font": "Maven Pro",
+     "weight": 600,
+     "tracking": -0.04,
+     "leading": 1.08,
+     "upper": false,
+     "italic": false,
+     "mono": false,
+     "align": "left",
+     "position": "left",
+     "widthRatio": 0.57,
+     "top": 111,
+     "tag": "h1",
+     "kind": "heading"
+    },
+    "h1": {
+     "text": "Inside our research",
+     "words": 3,
+     "lines": 2,
+     "size": 47.6,
+     "font": "Maven Pro"
+    },
+    "headings": [
+     {
+      "text": "Inside our research",
+      "words": 3,
+      "chars": 19,
+      "lines": 2,
+      "size": 47.6,
+      "vw": 6.2,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.04,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.57,
+      "top": 111,
+      "tag": "h1",
+      "kind": "heading"
+     },
+     {
+      "text": "Explore the science",
+      "words": 3,
+      "chars": 19,
+      "lines": 1,
+      "size": 32,
+      "vw": 4.2,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.04,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.37,
+      "top": 622,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "ANBioT",
+      "words": 1,
+      "chars": 6,
+      "lines": 1,
+      "size": 32,
+      "vw": 4.2,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.04,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "right",
+      "widthRatio": 0.58,
+      "top": 710,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "Green chelation",
+      "words": 2,
+      "chars": 15,
+      "lines": 1,
+      "size": 32,
+      "vw": 4.2,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.04,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "right",
+      "widthRatio": 0.58,
+      "top": 982,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "Microencapsulation",
+      "words": 1,
+      "chars": 18,
+      "lines": 1,
+      "size": 32,
+      "vw": 4.2,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.04,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "right",
+      "widthRatio": 0.58,
+      "top": 1276,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "Nano trace minerals",
+      "words": 3,
+      "chars": 19,
+      "lines": 1,
+      "size": 32,
+      "vw": 4.2,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.04,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "right",
+      "widthRatio": 0.58,
+      "top": 1548,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "Nature-identical molecules",
+      "words": 2,
+      "chars": 26,
+      "lines": 1,
+      "size": 32,
+      "vw": 4.2,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.04,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "right",
+      "widthRatio": 0.58,
+      "top": 1820,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "Bring us your research question",
+      "words": 5,
+      "chars": 31,
+      "lines": 2,
+      "size": 32,
+      "vw": 4.2,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.04,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.41,
+      "top": 2304,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "Chemlife",
+      "words": 1,
+      "chars": 8,
+      "lines": 1,
+      "size": 119,
+      "vw": 15.5,
+      "font": "Maven Pro",
+      "weight": 400,
+      "tracking": -0.065,
+      "leading": 1.2,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.95,
+      "top": 2638,
+      "tag": "p",
+      "kind": "statement"
+     }
+    ],
+    "headingSummary": {
+     "count": 9,
+     "maxLines": 2,
+     "over2Lines": 0,
+     "statements": 1,
+     "centered": 0,
+     "medianWords": 2,
+     "mixedFontHeadings": 0
+    },
+    "type": {
+     "families": [
+      {
+       "family": "Maven Pro",
+       "share": 1,
+       "mono": false
+      }
+     ],
+     "familyCount": 1,
+     "sizes": [
+      15,
+      18,
+      32,
+      48,
+      119
+     ],
+     "sizeCount": 5,
+     "notLoaded": [],
+     "body": {
+      "font": "Maven Pro",
+      "size": 18,
+      "leading": 1.6,
+      "weight": 400,
+      "tracking": 0,
+      "contrast": 7.9
+     },
+     "measureChars": 49,
+     "max": {
+      "size": 119,
+      "vw": 15.5,
+      "font": "Maven Pro",
+      "text": "Chemlife"
+     },
+     "monoShare": 0,
+     "monoProseShare": 0,
+     "monoFamilies": [],
+     "monoSamples": [],
+     "microLabels": 0,
+     "microLabelShare": 0,
+     "microSamples": [],
+     "upperShare": 0,
+     "centerShare": 0,
+     "smallText": 0
+    },
+    "eyebrows": [],
+    "numbered": [],
+    "color": {
+     "bodyBg": "#ffffff",
+     "bodyBgHsl": {
+      "h": 0,
+      "s": 0,
+      "l": 1
+     },
+     "dark": false,
+     "sectionBgs": [],
+     "textColors": [
+      {
+       "color": "#305280",
+       "share": 0.83
+      },
+      {
+       "color": "#ffffff",
+       "share": 0.17
+      }
+     ],
+     "button": {
+      "bg": "#305280",
+      "hsl": {
+       "h": 214,
+       "s": 0.45,
+       "l": 0.35
+      },
+      "fg": "#ffffff"
+     },
+     "lowContrast": []
+    },
+    "buttons": {
+     "count": 4,
+     "inHero": 3,
+     "radius": 0,
+     "height": 52,
+     "withShadow": 0,
+     "withGradient": 0,
+     "mono": 0,
+     "upper": 0,
+     "heroLabels": [
+      "Skip to content",
+      "Explore the platforms ↓",
+      "Clear"
+     ]
+    },
+    "surfaces": {
+     "shadowStatic": 0,
+     "shadowOverlay": 0,
+     "shadowSamples": [],
+     "gradients": 0,
+     "scrims": 0,
+     "gradientSamples": [],
+     "gradientText": 0,
+     "hairlines": 0,
+     "hairlineSamples": [],
+     "outlinedBoxes": 0,
+     "dashed": 0,
+     "blurred": 0,
+     "roundedBoxes": 0,
+     "boxRadius": 0,
+     "squareMedia": 9,
+     "roundedMedia": 0,
+     "mediaRadius": 0,
+     "textShadow": 0,
+     "cardRows": []
+    },
+    "heroMedia": [
+     {
+      "type": "img",
+      "ratio": 0.11
+     },
+     {
+      "type": "img",
+      "ratio": 0.08
+     }
+    ],
+    "nav": {
+     "links": 5,
+     "fixed": false,
+     "height": 88,
+     "floatingPill": false,
+     "blur": false
+    },
+    "fontsLoaded": [
+     "maven pro"
+    ]
+   },
+   "layout": {
+    "viewport": {
+     "w": 768,
+     "h": 1024
+    },
+    "pageH": 2851,
+    "margins": {
+     "left": 18,
+     "right": 18
+    },
+    "sections": [
+     {
+      "sel": "section.hub-heading",
+      "tag": "section",
+      "top": 88,
+      "height": 341,
+      "words": 22,
+      "media": 1,
+      "middle": 76,
+      "heading": {
+       "text": "Inside our",
+       "size": 48,
+       "tag": "h1"
+      },
+      "left": 41,
+      "right": 17,
+      "textLeft": 41,
+      "textRight": 334,
+      "fullBleed": false,
+      "footer": false,
+      "hero": true,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "section#platforms.section",
+      "tag": "section",
+      "top": 558,
+      "height": 1477,
+      "words": 189,
+      "media": 4,
+      "middle": 0,
+      "heading": {
+       "text": "Explore the science",
+       "size": 32,
+       "tag": "h2"
+      },
+      "left": 18,
+      "right": 44,
+      "textLeft": 41,
+      "textRight": 44,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "section.section",
+      "tag": "section",
+      "top": 2035,
+      "height": 472,
+      "words": 29,
+      "media": 3,
+      "middle": 0,
+      "heading": {
+       "text": "Bring us your",
+       "size": 32,
+       "tag": "h2"
+      },
+      "left": 18,
+      "right": 18,
+      "textLeft": 41,
+      "textRight": 95,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "footer.site-footer.frame",
+      "tag": "footer",
+      "top": 2506,
+      "height": 345,
+      "words": 19,
+      "media": 0,
+      "middle": 24,
+      "heading": {
+       "text": "Chemlife",
+       "size": 119,
+       "tag": "p"
+      },
+      "left": 18,
+      "right": 18,
+      "textLeft": 18,
+      "textRight": 18,
+      "fullBleed": false,
+      "footer": true,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     }
+    ],
+    "gaps": [],
+    "h1s": [
+     {
+      "text": "Inside our research",
+      "size": 48,
+      "top": 111,
+      "firstScreen": true
+     }
+    ],
+    "edgeText": [],
+    "edges": [
+     {
+      "x": 285,
+      "n": 10
+     },
+     {
+      "x": 41,
+      "n": 7
+     }
+    ],
+    "leftBlocks": 17,
+    "bodySize": 18,
+    "stage": false,
+    "explains": true,
+    "slivers": [],
+    "voidShare": 0,
+    "voidBox": null
+   },
+   "app": null,
+   "consoleErrors": []
+  },
+  {
+   "width": 390,
+   "height": 844,
+   "load": "load",
+   "screens": 6,
+   "filled": [
+    0.76,
+    0.84,
+    0.92,
+    0.86,
+    0.86,
+    0.65
+   ],
+   "motion": {
+    "elements": 19,
+    "css": 19,
+    "transitions": 0,
+    "scripted": 0,
+    "videos": 0,
+    "playingVideos": 0
+   },
+   "metrics": {
+    "viewport": {
+     "w": 390,
+     "h": 844
+    },
+    "page": {
+     "height": 4753,
+     "screens": 5.6,
+     "words": 255,
+     "img": 10,
+     "video": 0,
+     "canvas": 0,
+     "svg": 0,
+     "sections": 3,
+     "horizontalOverflow": 0,
+     "overflowCulprits": [],
+     "uiFragments": 0,
+     "uiAbuse": false,
+     "realPictures": 9,
+     "videoCount": 0,
+     "uiPictures": 0,
+     "pictureSamples": [
+      "research_image.jpeg",
+      "anbiot.png",
+      "green_technology.png",
+      "microencapsulation.png",
+      "nano_trace_mineral.jpg",
+      "nature_identical_bio.png",
+      "research_image.jpeg",
+      "development_image.jpeg"
+     ],
+     "blendText": 0,
+     "sideScrollers": 0,
+     "brokenImages": [],
+     "emoji": [],
+     "videosNoPoster": 0
+    },
+    "hero": {
+     "text": "Inside our research",
+     "words": 3,
+     "chars": 19,
+     "lines": 2,
+     "size": 48,
+     "vw": 12.3,
+     "font": "Maven Pro",
+     "weight": 600,
+     "tracking": -0.04,
+     "leading": 1.08,
+     "upper": false,
+     "italic": false,
+     "mono": false,
+     "align": "left",
+     "position": "center",
+     "widthRatio": 0.78,
+     "top": 102,
+     "tag": "h1",
+     "kind": "heading"
+    },
+    "h1": {
+     "text": "Inside our research",
+     "words": 3,
+     "lines": 2,
+     "size": 48,
+     "font": "Maven Pro"
+    },
+    "headings": [
+     {
+      "text": "Inside our research",
+      "words": 3,
+      "chars": 19,
+      "lines": 2,
+      "size": 48,
+      "vw": 12.3,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.04,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.78,
+      "top": 102,
+      "tag": "h1",
+      "kind": "heading"
+     },
+     {
+      "text": "Explore the science",
+      "words": 3,
+      "chars": 19,
+      "lines": 1,
+      "size": 32,
+      "vw": 8.2,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.04,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.88,
+      "top": 876,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "ANBioT",
+      "words": 1,
+      "chars": 6,
+      "lines": 1,
+      "size": 32,
+      "vw": 8.2,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.04,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.78,
+      "top": 1252,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "Green chelation",
+      "words": 2,
+      "chars": 15,
+      "lines": 1,
+      "size": 32,
+      "vw": 8.2,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.04,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.78,
+      "top": 1753,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "Microencapsulation",
+      "words": 1,
+      "chars": 18,
+      "lines": 1,
+      "size": 32,
+      "vw": 8.2,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.04,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.78,
+      "top": 2254,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "Nano trace minerals",
+      "words": 3,
+      "chars": 19,
+      "lines": 1,
+      "size": 32,
+      "vw": 8.2,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.04,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.78,
+      "top": 2785,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "Nature-identical molecules",
+      "words": 2,
+      "chars": 26,
+      "lines": 2,
+      "size": 32,
+      "vw": 8.2,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.04,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.78,
+      "top": 3286,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "Bring us your research question",
+      "words": 5,
+      "chars": 31,
+      "lines": 2,
+      "size": 32,
+      "vw": 8.2,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.04,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.78,
+      "top": 4031,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "Chemlife",
+      "words": 1,
+      "chars": 8,
+      "lines": 1,
+      "size": 58.5,
+      "vw": 15,
+      "font": "Maven Pro",
+      "weight": 400,
+      "tracking": -0.065,
+      "leading": 1.2,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.91,
+      "top": 4577,
+      "tag": "p",
+      "kind": "statement"
+     }
+    ],
+    "headingSummary": {
+     "count": 9,
+     "maxLines": 2,
+     "over2Lines": 0,
+     "statements": 1,
+     "centered": 0,
+     "medianWords": 2,
+     "mixedFontHeadings": 0
+    },
+    "type": {
+     "families": [
+      {
+       "family": "Maven Pro",
+       "share": 1,
+       "mono": false
+      }
+     ],
+     "familyCount": 1,
+     "sizes": [
+      15,
+      18,
+      32,
+      48,
+      59
+     ],
+     "sizeCount": 5,
+     "notLoaded": [],
+     "body": {
+      "font": "Maven Pro",
+      "size": 18,
+      "leading": 1.6,
+      "weight": 400,
+      "tracking": 0,
+      "contrast": 7.9
+     },
+     "measureChars": 34,
+     "max": {
+      "size": 58.5,
+      "vw": 15,
+      "font": "Maven Pro",
+      "text": "Chemlife"
+     },
+     "monoShare": 0,
+     "monoProseShare": 0,
+     "monoFamilies": [],
+     "monoSamples": [],
+     "microLabels": 0,
+     "microLabelShare": 0,
+     "microSamples": [],
+     "upperShare": 0,
+     "centerShare": 0.01,
+     "smallText": 0
+    },
+    "eyebrows": [],
+    "numbered": [],
+    "color": {
+     "bodyBg": "#ffffff",
+     "bodyBgHsl": {
+      "h": 0,
+      "s": 0,
+      "l": 1
+     },
+     "dark": false,
+     "sectionBgs": [
+      {
+       "color": "#305280",
+       "top": 78,
+       "hsl": {
+        "h": 214,
+        "s": 0.45,
+        "l": 0.35
+       }
+      },
+      {
+       "color": "#edf2f6",
+       "top": 986,
+       "hsl": {
+        "h": 207,
+        "s": 0.33,
+        "l": 0.95
+       }
+      }
+     ],
+     "textColors": [
+      {
+       "color": "#305280",
+       "share": 0.82
+      },
+      {
+       "color": "#ffffff",
+       "share": 0.18
+      }
+     ],
+     "button": {
+      "bg": "#305280",
+      "hsl": {
+       "h": 214,
+       "s": 0.45,
+       "l": 0.35
+      },
+      "fg": "#ffffff"
+     },
+     "lowContrast": []
+    },
+    "buttons": {
+     "count": 4,
+     "inHero": 3,
+     "radius": 0,
+     "height": 52,
+     "withShadow": 0,
+     "withGradient": 0,
+     "mono": 0,
+     "upper": 0,
+     "heroLabels": [
+      "Skip to content",
+      "Menu",
+      "Explore the platforms ↓"
+     ]
+    },
+    "surfaces": {
+     "shadowStatic": 0,
+     "shadowOverlay": 0,
+     "shadowSamples": [],
+     "gradients": 0,
+     "scrims": 0,
+     "gradientSamples": [],
+     "gradientText": 0,
+     "hairlines": 0,
+     "hairlineSamples": [],
+     "outlinedBoxes": 0,
+     "dashed": 0,
+     "blurred": 0,
+     "roundedBoxes": 0,
+     "boxRadius": 0,
+     "squareMedia": 7,
+     "roundedMedia": 0,
+     "mediaRadius": 0,
+     "textShadow": 0,
+     "cardRows": []
+    },
+    "heroMedia": [
+     {
+      "type": "img",
+      "ratio": 0.22
+     }
+    ],
+    "nav": {
+     "links": 1,
+     "fixed": false,
+     "height": 78,
+     "floatingPill": false,
+     "blur": false
+    },
+    "fontsLoaded": [
+     "maven pro"
+    ]
+   },
+   "layout": {
+    "viewport": {
+     "w": 390,
+     "h": 844
+    },
+    "pageH": 4753,
+    "margins": {
+     "left": 18,
+     "right": 18
+    },
+    "sections": [
+     {
+      "sel": "section.hub-heading",
+      "tag": "section",
+      "top": 78,
+      "height": 581,
+      "words": 22,
+      "media": 1,
+      "middle": 0,
+      "heading": {
+       "text": "Inside our",
+       "size": 48,
+       "tag": "h1"
+      },
+      "left": 16,
+      "right": 16,
+      "textLeft": 42,
+      "textRight": 72,
+      "fullBleed": false,
+      "footer": false,
+      "hero": true,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "div.search-row",
+      "tag": "div",
+      "top": 667,
+      "height": 138,
+      "words": 4,
+      "media": 0,
+      "middle": 12,
+      "heading": null,
+      "left": 38,
+      "right": 38,
+      "textLeft": 38,
+      "textRight": 50,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "section#platforms.section",
+      "tag": "section",
+      "top": 812,
+      "height": 2764,
+      "words": 189,
+      "media": 5,
+      "middle": 0,
+      "heading": {
+       "text": "Explore the science",
+       "size": 32,
+       "tag": "h2"
+      },
+      "left": 18,
+      "right": 18,
+      "textLeft": 24,
+      "textRight": 43,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "section.section",
+      "tag": "section",
+      "top": 3577,
+      "height": 832,
+      "words": 29,
+      "media": 3,
+      "middle": 0,
+      "heading": {
+       "text": "Bring us your",
+       "size": 32,
+       "tag": "h2"
+      },
+      "left": 18,
+      "right": 18,
+      "textLeft": 42,
+      "textRight": 51,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "footer.site-footer.frame",
+      "tag": "footer",
+      "top": 4409,
+      "height": 344,
+      "words": 19,
+      "media": 0,
+      "middle": 0,
+      "heading": {
+       "text": "Chemlife",
+       "size": 59,
+       "tag": "p"
+      },
+      "left": 18,
+      "right": 59,
+      "textLeft": 18,
+      "textRight": 59,
+      "fullBleed": false,
+      "footer": true,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     }
+    ],
+    "gaps": [],
+    "h1s": [
+     {
+      "text": "Inside our research",
+      "size": 48,
+      "top": 102,
+      "firstScreen": true
+     }
+    ],
+    "edgeText": [],
+    "edges": [
+     {
+      "x": 42,
+      "n": 16
+     },
+     {
+      "x": 24,
+      "n": 1
+     }
+    ],
+    "leftBlocks": 17,
+    "bodySize": 18,
+    "stage": false,
+    "explains": true,
+    "slivers": [],
+    "voidShare": 0,
+    "voidBox": null
+   },
+   "app": null,
+   "consoleErrors": []
+  }
+ ],
+ "findings": [
+  {
+   "level": "WARN",
+   "id": "no-footage",
+   "width": 1440,
+   "message": "No video anywhere on the page.",
+   "fix": "Look for one honest clip with scripts/assets.mjs --video (the place, the material, the process) and use it as a muted loop with a poster frame. Defend its absence only if no clip fits the subject."
+  }
+ ],
+ "images": [
+  {
+   "viewport": "desktop",
+   "width": 1440,
+   "fold": "/Users/atulsingh/Desktop/Chemlife/chemlife-innovations-website/.taste-skill/research-copy/after-hub/desktop-fold.jpg",
+   "pages": [
+    "/Users/atulsingh/Desktop/Chemlife/chemlife-innovations-website/.taste-skill/research-copy/after-hub/desktop-page-01.jpg",
+    "/Users/atulsingh/Desktop/Chemlife/chemlife-innovations-website/.taste-skill/research-copy/after-hub/desktop-page-02.jpg"
+   ],
+   "film": []
+  },
+  {
+   "viewport": "tablet",
+   "width": 768,
+   "fold": "/Users/atulsingh/Desktop/Chemlife/chemlife-innovations-website/.taste-skill/research-copy/after-hub/tablet-fold.jpg",
+   "pages": [
+    "/Users/atulsingh/Desktop/Chemlife/chemlife-innovations-website/.taste-skill/research-copy/after-hub/tablet-page-01.jpg"
+   ],
+   "film": []
+  },
+  {
+   "viewport": "mobile",
+   "width": 390,
+   "fold": "/Users/atulsingh/Desktop/Chemlife/chemlife-innovations-website/.taste-skill/research-copy/after-hub/mobile-fold.jpg",
+   "pages": [
+    "/Users/atulsingh/Desktop/Chemlife/chemlife-innovations-website/.taste-skill/research-copy/after-hub/mobile-page-01.jpg"
+   ],
+   "film": []
+  }
+ ]
+}

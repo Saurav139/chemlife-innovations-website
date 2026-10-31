@@ -105,9 +105,10 @@ export default function AboutPage() {
           </div>
         </SectionWrapper>
 
-        {/* Dedicated Vision & Mission section. */}
+        {/* Our purpose brings the Vision and Mission together. */}
         <SectionWrapper id="vision-mission" className="scroll-mt-18 md:scroll-mt-20 lg:scroll-mt-24 py-12 md:py-16 lg:py-20 bg-slate-50 border-t border-brand-navy/10">
           <div className={`max-w-[1200px] mx-auto px-6 ${visionStyles.layout}`}>
+            <h2 className={`${visionStyles.sectionHeading} font-heading text-3xl md:text-4xl lg:text-5xl text-brand-navy font-bold leading-tight`}>{t.purposeTitle}</h2>
             <figure className={visionStyles.photo}>
               <Image
                 src={Images.research.researchImage}
@@ -129,7 +130,7 @@ export default function AboutPage() {
               <article key={statement.title}>
                 <div className={visionStyles.title}>
                   <span aria-hidden="true">0{i + 1}</span>
-                  <h2>{statement.title}</h2>
+                  <h3>{statement.title}</h3>
                 </div>
                 <p>
                   {statement.text}

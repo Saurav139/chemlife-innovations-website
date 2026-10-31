@@ -1,0 +1,2137 @@
+{
+ "url": "http://localhost:3001/previews/research-taste/microencapsulation",
+ "at": "2026-10-30T20:45:08.661Z",
+ "allow": [],
+ "viewports": [
+  {
+   "width": 1440,
+   "height": 900,
+   "load": "load",
+   "screens": 5,
+   "filled": [
+    0.86,
+    0.63,
+    0.67,
+    0.68,
+    0.67
+   ],
+   "motion": {
+    "elements": 49,
+    "css": 49,
+    "transitions": 0,
+    "scripted": 0,
+    "videos": 0,
+    "playingVideos": 0
+   },
+   "metrics": {
+    "viewport": {
+     "w": 1440,
+     "h": 900
+    },
+    "page": {
+     "height": 3791,
+     "screens": 4.2,
+     "words": 440,
+     "img": 7,
+     "video": 0,
+     "canvas": 0,
+     "svg": 8,
+     "sections": 5,
+     "horizontalOverflow": 0,
+     "overflowCulprits": [],
+     "uiFragments": 0,
+     "uiAbuse": false,
+     "realPictures": 6,
+     "videoCount": 0,
+     "uiPictures": 0,
+     "pictureSamples": [
+      "microencapsulation.png",
+      "banner-methiowiz.jpg",
+      "banner-choliwiz.jpg",
+      "research_image.jpeg",
+      "development_image.jpeg",
+      "manufacturing_image.jpeg"
+     ],
+     "blendText": 0,
+     "sideScrollers": 0,
+     "brokenImages": [],
+     "emoji": [],
+     "videosNoPoster": 0
+    },
+    "hero": {
+     "text": "Microencapsulation",
+     "words": 1,
+     "chars": 18,
+     "lines": 1,
+     "size": 88,
+     "vw": 6.1,
+     "font": "Maven Pro",
+     "weight": 600,
+     "tracking": -0.04,
+     "leading": 1.08,
+     "upper": false,
+     "italic": false,
+     "mono": false,
+     "align": "left",
+     "position": "left",
+     "widthRatio": 0.57,
+     "top": 207,
+     "tag": "h1",
+     "kind": "heading"
+    },
+    "h1": {
+     "text": "Microencapsulation",
+     "words": 1,
+     "lines": 1,
+     "size": 88,
+     "font": "Maven Pro"
+    },
+    "headings": [
+     {
+      "text": "Microencapsulation",
+      "words": 1,
+      "chars": 18,
+      "lines": 1,
+      "size": 88,
+      "vw": 6.1,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.04,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.57,
+      "top": 207,
+      "tag": "h1",
+      "kind": "heading"
+     },
+     {
+      "text": "How it works",
+      "words": 3,
+      "chars": 12,
+      "lines": 1,
+      "size": 48,
+      "vw": 3.3,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.04,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.37,
+      "top": 1164,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "At a glance",
+      "words": 3,
+      "chars": 11,
+      "lines": 1,
+      "size": 48,
+      "vw": 3.3,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.04,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.33,
+      "top": 1698,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "Why it matters",
+      "words": 3,
+      "chars": 14,
+      "lines": 1,
+      "size": 48,
+      "vw": 3.3,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.04,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "right",
+      "widthRatio": 0.49,
+      "top": 1698,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "From platform to formulation",
+      "words": 4,
+      "chars": 28,
+      "lines": 2,
+      "size": 48,
+      "vw": 3.3,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.04,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.33,
+      "top": 2287,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "Take the science further",
+      "words": 4,
+      "chars": 24,
+      "lines": 2,
+      "size": 48,
+      "vw": 3.3,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.04,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.33,
+      "top": 2967,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "Chemlife",
+      "words": 1,
+      "chars": 8,
+      "lines": 1,
+      "size": 223.2,
+      "vw": 15.5,
+      "font": "Maven Pro",
+      "weight": 400,
+      "tracking": -0.065,
+      "leading": 1.2,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.96,
+      "top": 3453,
+      "tag": "p",
+      "kind": "statement"
+     }
+    ],
+    "headingSummary": {
+     "count": 7,
+     "maxLines": 2,
+     "over2Lines": 0,
+     "statements": 1,
+     "centered": 0,
+     "medianWords": 3,
+     "mixedFontHeadings": 0
+    },
+    "type": {
+     "families": [
+      {
+       "family": "Maven Pro",
+       "share": 1,
+       "mono": false
+      }
+     ],
+     "familyCount": 1,
+     "sizes": [
+      15,
+      18,
+      24,
+      48,
+      88,
+      223
+     ],
+     "sizeCount": 6,
+     "notLoaded": [],
+     "body": {
+      "font": "Maven Pro",
+      "size": 18,
+      "leading": 1.6,
+      "weight": 400,
+      "tracking": 0,
+      "contrast": 7.9
+     },
+     "measureChars": 53,
+     "max": {
+      "size": 223.2,
+      "vw": 15.5,
+      "font": "Maven Pro",
+      "text": "Chemlife"
+     },
+     "monoShare": 0,
+     "monoProseShare": 0,
+     "monoFamilies": [],
+     "monoSamples": [],
+     "microLabels": 0,
+     "microLabelShare": 0,
+     "microSamples": [],
+     "upperShare": 0,
+     "centerShare": 0.01,
+     "smallText": 0
+    },
+    "eyebrows": [],
+    "numbered": [],
+    "color": {
+     "bodyBg": "#ffffff",
+     "bodyBgHsl": {
+      "h": 0,
+      "s": 0,
+      "l": 1
+     },
+     "dark": false,
+     "sectionBgs": [
+      {
+       "color": "#edf2f6",
+       "top": 481,
+       "hsl": {
+        "h": 207,
+        "s": 0.33,
+        "l": 0.95
+       }
+      }
+     ],
+     "textColors": [
+      {
+       "color": "#305280",
+       "share": 0.66
+      },
+      {
+       "color": "#ffffff",
+       "share": 0.34
+      }
+     ],
+     "button": {
+      "bg": "#305280",
+      "hsl": {
+       "h": 214,
+       "s": 0.45,
+       "l": 0.35
+      },
+      "fg": "#ffffff"
+     },
+     "lowContrast": []
+    },
+    "buttons": {
+     "count": 6,
+     "inHero": 4,
+     "radius": 0,
+     "height": 44,
+     "withShadow": 0,
+     "withGradient": 0,
+     "mono": 0,
+     "upper": 0,
+     "heroLabels": [
+      "Skip to content",
+      "Microencapsulation",
+      "Request technical dossier ↗",
+      "Bypass"
+     ]
+    },
+    "surfaces": {
+     "shadowStatic": 0,
+     "shadowOverlay": 0,
+     "shadowSamples": [],
+     "gradients": 0,
+     "scrims": 0,
+     "gradientSamples": [],
+     "gradientText": 0,
+     "hairlines": 0,
+     "hairlineSamples": [],
+     "outlinedBoxes": 0,
+     "dashed": 0,
+     "blurred": 0,
+     "roundedBoxes": 0,
+     "boxRadius": 0,
+     "squareMedia": 4,
+     "roundedMedia": 0,
+     "mediaRadius": 0,
+     "textShadow": 0,
+     "cardRows": [
+      {
+       "count": 3,
+       "iconTopped": false,
+       "rounded": false,
+       "top": 1252
+      }
+     ]
+    },
+    "heroMedia": [
+     {
+      "type": "img",
+      "ratio": 0.11
+     },
+     {
+      "type": "svg",
+      "ratio": 0.11
+     }
+    ],
+    "nav": {
+     "links": 6,
+     "fixed": false,
+     "height": 88,
+     "floatingPill": false,
+     "blur": false
+    },
+    "fontsLoaded": [
+     "maven pro"
+    ]
+   },
+   "layout": {
+    "viewport": {
+     "w": 1440,
+     "h": 900
+    },
+    "pageH": 3791,
+    "margins": {
+     "left": 32,
+     "right": 32
+    },
+    "sections": [
+     {
+      "sel": "section.board",
+      "tag": "section",
+      "top": 164,
+      "height": 877,
+      "words": 117,
+      "media": 2,
+      "middle": 0,
+      "heading": {
+       "text": "Microencapsulation",
+       "size": 88,
+       "tag": "h1"
+      },
+      "left": 75,
+      "right": 32,
+      "textLeft": 75,
+      "textRight": 48,
+      "fullBleed": false,
+      "footer": false,
+      "hero": true,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "section#how.section",
+      "tag": "section",
+      "top": 1041,
+      "height": 491,
+      "words": 112,
+      "media": 0,
+      "middle": 103,
+      "heading": {
+       "text": "How it works",
+       "size": 48,
+       "tag": "h2"
+      },
+      "left": 75,
+      "right": 79,
+      "textLeft": 75,
+      "textRight": 79,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "section.section",
+      "tag": "section",
+      "top": 1532,
+      "height": 589,
+      "words": 87,
+      "media": 0,
+      "middle": 118,
+      "heading": {
+       "text": "At a glance",
+       "size": 48,
+       "tag": "h2"
+      },
+      "left": 75,
+      "right": 86,
+      "textLeft": 75,
+      "textRight": 86,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "section#applications.section",
+      "tag": "section",
+      "top": 2121,
+      "height": 458,
+      "words": 40,
+      "media": 1,
+      "middle": 108,
+      "heading": {
+       "text": "From platform",
+       "size": 48,
+       "tag": "h2"
+      },
+      "left": 75,
+      "right": 207,
+      "textLeft": 75,
+      "textRight": 207,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "section.section",
+      "tag": "section",
+      "top": 2579,
+      "height": 623,
+      "words": 40,
+      "media": 3,
+      "middle": 12,
+      "heading": {
+       "text": "Take the science",
+       "size": 48,
+       "tag": "h2"
+      },
+      "left": 32,
+      "right": 32,
+      "textLeft": 75,
+      "textRight": 495,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "footer.site-footer.frame",
+      "tag": "footer",
+      "top": 3321,
+      "height": 470,
+      "words": 19,
+      "media": 0,
+      "middle": 286,
+      "heading": {
+       "text": "Chemlife",
+       "size": 223,
+       "tag": "p"
+      },
+      "left": 32,
+      "right": 32,
+      "textLeft": 32,
+      "textRight": 32,
+      "fullBleed": false,
+      "footer": true,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     }
+    ],
+    "gaps": [],
+    "h1s": [
+     {
+      "text": "Microencapsulation",
+      "size": 88,
+      "top": 207,
+      "firstScreen": true
+     }
+    ],
+    "edgeText": [],
+    "edges": [
+     {
+      "x": 75,
+      "n": 12
+     },
+     {
+      "x": 538,
+      "n": 2
+     },
+     {
+      "x": 636,
+      "n": 2
+     },
+     {
+      "x": 818,
+      "n": 2
+     },
+     {
+      "x": 1001,
+      "n": 2
+     },
+     {
+      "x": 619,
+      "n": 1
+     },
+     {
+      "x": 655,
+      "n": 1
+     }
+    ],
+    "leftBlocks": 22,
+    "bodySize": 18,
+    "stage": false,
+    "explains": true,
+    "slivers": [],
+    "voidShare": 0.11,
+    "voidBox": {
+     "x": 0,
+     "y": 660,
+     "w": 600,
+     "h": 240
+    }
+   },
+   "app": null,
+   "consoleErrors": []
+  },
+  {
+   "width": 768,
+   "height": 1024,
+   "load": "load",
+   "screens": 5,
+   "filled": [
+    0.84,
+    0.72,
+    0.86,
+    0.86,
+    0.66
+   ],
+   "motion": {
+    "elements": 49,
+    "css": 49,
+    "transitions": 0,
+    "scripted": 0,
+    "videos": 0,
+    "playingVideos": 0
+   },
+   "metrics": {
+    "viewport": {
+     "w": 768,
+     "h": 1024
+    },
+    "page": {
+     "height": 4468,
+     "screens": 4.4,
+     "words": 437,
+     "img": 7,
+     "video": 0,
+     "canvas": 0,
+     "svg": 8,
+     "sections": 5,
+     "horizontalOverflow": 0,
+     "overflowCulprits": [],
+     "uiFragments": 0,
+     "uiAbuse": false,
+     "realPictures": 6,
+     "videoCount": 0,
+     "uiPictures": 0,
+     "pictureSamples": [
+      "microencapsulation.png",
+      "banner-methiowiz.jpg",
+      "banner-choliwiz.jpg",
+      "research_image.jpeg",
+      "development_image.jpeg",
+      "manufacturing_image.jpeg"
+     ],
+     "blendText": 0,
+     "sideScrollers": 0,
+     "brokenImages": [],
+     "emoji": [],
+     "videosNoPoster": 0
+    },
+    "hero": {
+     "text": "Microencapsulation",
+     "words": 1,
+     "chars": 18,
+     "lines": 1,
+     "size": 47.6,
+     "vw": 6.2,
+     "font": "Maven Pro",
+     "weight": 600,
+     "tracking": -0.04,
+     "leading": 1.08,
+     "upper": false,
+     "italic": false,
+     "mono": false,
+     "align": "left",
+     "position": "left",
+     "widthRatio": 0.57,
+     "top": 237,
+     "tag": "h1",
+     "kind": "heading"
+    },
+    "h1": {
+     "text": "Microencapsulation",
+     "words": 1,
+     "lines": 1,
+     "size": 47.6,
+     "font": "Maven Pro"
+    },
+    "headings": [
+     {
+      "text": "Microencapsulation",
+      "words": 1,
+      "chars": 18,
+      "lines": 1,
+      "size": 47.6,
+      "vw": 6.2,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.04,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.57,
+      "top": 237,
+      "tag": "h1",
+      "kind": "heading"
+     },
+     {
+      "text": "How it works",
+      "words": 3,
+      "chars": 12,
+      "lines": 1,
+      "size": 32,
+      "vw": 4.2,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.04,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.37,
+      "top": 1297,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "At a glance",
+      "words": 3,
+      "chars": 11,
+      "lines": 1,
+      "size": 32,
+      "vw": 4.2,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.04,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.41,
+      "top": 2051,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "Why it matters",
+      "words": 3,
+      "chars": 14,
+      "lines": 1,
+      "size": 32,
+      "vw": 4.2,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.04,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "right",
+      "widthRatio": 0.41,
+      "top": 2051,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "From platform to formulation",
+      "words": 4,
+      "chars": 28,
+      "lines": 2,
+      "size": 32,
+      "vw": 4.2,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.04,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.41,
+      "top": 2665,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "Take the science further",
+      "words": 4,
+      "chars": 24,
+      "lines": 2,
+      "size": 32,
+      "vw": 4.2,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.04,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.41,
+      "top": 3766,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "Chemlife",
+      "words": 1,
+      "chars": 8,
+      "lines": 1,
+      "size": 119,
+      "vw": 15.5,
+      "font": "Maven Pro",
+      "weight": 400,
+      "tracking": -0.065,
+      "leading": 1.2,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.95,
+      "top": 4255,
+      "tag": "p",
+      "kind": "statement"
+     }
+    ],
+    "headingSummary": {
+     "count": 7,
+     "maxLines": 2,
+     "over2Lines": 0,
+     "statements": 1,
+     "centered": 0,
+     "medianWords": 3,
+     "mixedFontHeadings": 0
+    },
+    "type": {
+     "families": [
+      {
+       "family": "Maven Pro",
+       "share": 1,
+       "mono": false
+      }
+     ],
+     "familyCount": 1,
+     "sizes": [
+      15,
+      18,
+      24,
+      32,
+      48,
+      119
+     ],
+     "sizeCount": 6,
+     "notLoaded": [],
+     "body": {
+      "font": "Maven Pro",
+      "size": 18,
+      "leading": 1.6,
+      "weight": 400,
+      "tracking": 0,
+      "contrast": 7.9
+     },
+     "measureChars": 42,
+     "max": {
+      "size": 119,
+      "vw": 15.5,
+      "font": "Maven Pro",
+      "text": "Chemlife"
+     },
+     "monoShare": 0,
+     "monoProseShare": 0,
+     "monoFamilies": [],
+     "monoSamples": [],
+     "microLabels": 0,
+     "microLabelShare": 0,
+     "microSamples": [],
+     "upperShare": 0,
+     "centerShare": 0.01,
+     "smallText": 0
+    },
+    "eyebrows": [],
+    "numbered": [],
+    "color": {
+     "bodyBg": "#ffffff",
+     "bodyBgHsl": {
+      "h": 0,
+      "s": 0,
+      "l": 1
+     },
+     "dark": false,
+     "sectionBgs": [
+      {
+       "color": "#edf2f6",
+       "top": 650,
+       "hsl": {
+        "h": 207,
+        "s": 0.33,
+        "l": 0.95
+       }
+      }
+     ],
+     "textColors": [
+      {
+       "color": "#305280",
+       "share": 0.66
+      },
+      {
+       "color": "#ffffff",
+       "share": 0.34
+      }
+     ],
+     "button": {
+      "bg": "#305280",
+      "hsl": {
+       "h": 214,
+       "s": 0.45,
+       "l": 0.35
+      },
+      "fg": "#ffffff"
+     },
+     "lowContrast": []
+    },
+    "buttons": {
+     "count": 6,
+     "inHero": 4,
+     "radius": 0,
+     "height": 44,
+     "withShadow": 0,
+     "withGradient": 0,
+     "mono": 0,
+     "upper": 0,
+     "heroLabels": [
+      "Skip to content",
+      "Microencapsulation",
+      "Request technical dossier ↗",
+      "Bypass"
+     ]
+    },
+    "surfaces": {
+     "shadowStatic": 0,
+     "shadowOverlay": 0,
+     "shadowSamples": [],
+     "gradients": 0,
+     "scrims": 0,
+     "gradientSamples": [],
+     "gradientText": 0,
+     "hairlines": 0,
+     "hairlineSamples": [],
+     "outlinedBoxes": 0,
+     "dashed": 0,
+     "blurred": 0,
+     "roundedBoxes": 0,
+     "boxRadius": 0,
+     "squareMedia": 6,
+     "roundedMedia": 0,
+     "mediaRadius": 0,
+     "textShadow": 0,
+     "cardRows": []
+    },
+    "heroMedia": [
+     {
+      "type": "svg",
+      "ratio": 0.15
+     }
+    ],
+    "nav": {
+     "links": 5,
+     "fixed": false,
+     "height": 88,
+     "floatingPill": false,
+     "blur": false
+    },
+    "fontsLoaded": [
+     "maven pro"
+    ]
+   },
+   "layout": {
+    "viewport": {
+     "w": 768,
+     "h": 1024
+    },
+    "pageH": 4468,
+    "margins": {
+     "left": 18,
+     "right": 18
+    },
+    "sections": [
+     {
+      "sel": "section.board",
+      "tag": "section",
+      "top": 214,
+      "height": 997,
+      "words": 117,
+      "media": 2,
+      "middle": 0,
+      "heading": {
+       "text": "Microencapsulation",
+       "size": 48,
+       "tag": "h1"
+      },
+      "left": 41,
+      "right": 18,
+      "textLeft": 41,
+      "textRight": 34,
+      "fullBleed": false,
+      "footer": false,
+      "hero": true,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "section#how.section",
+      "tag": "section",
+      "top": 1211,
+      "height": 731,
+      "words": 112,
+      "media": 0,
+      "middle": 0,
+      "heading": {
+       "text": "How it works",
+       "size": 32,
+       "tag": "h2"
+      },
+      "left": 41,
+      "right": 61,
+      "textLeft": 41,
+      "textRight": 61,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "section.section",
+      "tag": "section",
+      "top": 1942,
+      "height": 614,
+      "words": 87,
+      "media": 0,
+      "middle": 62,
+      "heading": {
+       "text": "At a glance",
+       "size": 32,
+       "tag": "h2"
+      },
+      "left": 41,
+      "right": 50,
+      "textLeft": 41,
+      "textRight": 50,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "section#applications.section",
+      "tag": "section",
+      "top": 2556,
+      "height": 919,
+      "words": 40,
+      "media": 2,
+      "middle": 41,
+      "heading": {
+       "text": "From platform",
+       "size": 32,
+       "tag": "h2"
+      },
+      "left": 41,
+      "right": 18,
+      "textLeft": 41,
+      "textRight": 78,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "section.section",
+      "tag": "section",
+      "top": 3475,
+      "height": 529,
+      "words": 40,
+      "media": 3,
+      "middle": 0,
+      "heading": {
+       "text": "Take the science",
+       "size": 32,
+       "tag": "h2"
+      },
+      "left": 18,
+      "right": 18,
+      "textLeft": 41,
+      "textRight": 65,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "footer.site-footer.frame",
+      "tag": "footer",
+      "top": 4123,
+      "height": 345,
+      "words": 19,
+      "media": 0,
+      "middle": 24,
+      "heading": {
+       "text": "Chemlife",
+       "size": 119,
+       "tag": "p"
+      },
+      "left": 18,
+      "right": 18,
+      "textLeft": 18,
+      "textRight": 18,
+      "fullBleed": false,
+      "footer": true,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     }
+    ],
+    "gaps": [],
+    "h1s": [
+     {
+      "text": "Microencapsulation",
+      "size": 48,
+      "top": 237,
+      "firstScreen": true
+     }
+    ],
+    "edgeText": [],
+    "edges": [
+     {
+      "x": 41,
+      "n": 18
+     },
+     {
+      "x": 413,
+      "n": 3
+     },
+     {
+      "x": 334,
+      "n": 1
+     }
+    ],
+    "leftBlocks": 22,
+    "bodySize": 18,
+    "stage": false,
+    "explains": true,
+    "slivers": [],
+    "voidShare": 0,
+    "voidBox": null
+   },
+   "app": null,
+   "consoleErrors": []
+  },
+  {
+   "width": 390,
+   "height": 844,
+   "load": "load",
+   "screens": 8,
+   "filled": [
+    0.78,
+    0.87,
+    0.71,
+    0.86,
+    0.79,
+    0.79,
+    0.86,
+    0.63
+   ],
+   "motion": {
+    "elements": 47,
+    "css": 47,
+    "transitions": 0,
+    "scripted": 0,
+    "videos": 0,
+    "playingVideos": 0
+   },
+   "metrics": {
+    "viewport": {
+     "w": 390,
+     "h": 844
+    },
+    "page": {
+     "height": 6259,
+     "screens": 7.4,
+     "words": 441,
+     "img": 7,
+     "video": 0,
+     "canvas": 0,
+     "svg": 8,
+     "sections": 5,
+     "horizontalOverflow": 0,
+     "overflowCulprits": [],
+     "uiFragments": 0,
+     "uiAbuse": false,
+     "realPictures": 6,
+     "videoCount": 0,
+     "uiPictures": 0,
+     "pictureSamples": [
+      "microencapsulation.png",
+      "banner-methiowiz.jpg",
+      "banner-choliwiz.jpg",
+      "research_image.jpeg",
+      "development_image.jpeg",
+      "manufacturing_image.jpeg"
+     ],
+     "blendText": 0,
+     "sideScrollers": 1,
+     "brokenImages": [],
+     "emoji": [],
+     "videosNoPoster": 0
+    },
+    "hero": {
+     "text": "Microencapsulation",
+     "words": 1,
+     "chars": 18,
+     "lines": 1,
+     "size": 36,
+     "vw": 9.2,
+     "font": "Maven Pro",
+     "weight": 600,
+     "tracking": -0.04,
+     "leading": 1.08,
+     "upper": false,
+     "italic": false,
+     "mono": false,
+     "align": "left",
+     "position": "center",
+     "widthRatio": 0.78,
+     "top": 268,
+     "tag": "h1",
+     "kind": "heading"
+    },
+    "h1": {
+     "text": "Microencapsulation",
+     "words": 1,
+     "lines": 1,
+     "size": 36,
+     "font": "Maven Pro"
+    },
+    "headings": [
+     {
+      "text": "Microencapsulation",
+      "words": 1,
+      "chars": 18,
+      "lines": 1,
+      "size": 36,
+      "vw": 9.2,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.04,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.78,
+      "top": 268,
+      "tag": "h1",
+      "kind": "heading"
+     },
+     {
+      "text": "See the mechanism",
+      "words": 3,
+      "chars": 17,
+      "lines": 1,
+      "size": 24,
+      "vw": 6.2,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.025,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.82,
+      "top": 1122,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "How it works",
+      "words": 3,
+      "chars": 12,
+      "lines": 1,
+      "size": 32,
+      "vw": 8.2,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.04,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.88,
+      "top": 1898,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "Build the pearl +",
+      "words": 4,
+      "chars": 17,
+      "lines": 1,
+      "size": 24,
+      "vw": 6.2,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.04,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.77,
+      "top": 2091,
+      "tag": "h3",
+      "kind": "heading"
+     },
+     {
+      "text": "Choose the release +",
+      "words": 4,
+      "chars": 20,
+      "lines": 1,
+      "size": 24,
+      "vw": 6.2,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.04,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.77,
+      "top": 2332,
+      "tag": "h3",
+      "kind": "heading"
+     },
+     {
+      "text": "Release on target +",
+      "words": 4,
+      "chars": 19,
+      "lines": 1,
+      "size": 24,
+      "vw": 6.2,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.04,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.77,
+      "top": 2660,
+      "tag": "h3",
+      "kind": "heading"
+     },
+     {
+      "text": "At a glance",
+      "words": 3,
+      "chars": 11,
+      "lines": 1,
+      "size": 32,
+      "vw": 8.2,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.04,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.78,
+      "top": 2955,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "Why it matters",
+      "words": 3,
+      "chars": 14,
+      "lines": 1,
+      "size": 32,
+      "vw": 8.2,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.04,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.78,
+      "top": 3510,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "More reaches the cow Protection from rumen breakdown means less of the nutrient is lost before it can be absorbed.",
+      "words": 20,
+      "chars": 114,
+      "lines": 4,
+      "size": 24,
+      "vw": 6.2,
+      "font": "Maven Pro",
+      "weight": 500,
+      "tracking": -0.025,
+      "leading": 1.2,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.78,
+      "top": 3573,
+      "tag": "li",
+      "kind": "statement"
+     },
+     {
+      "text": "A steady supply Sustained release avoids peaks and troughs in what the rumen receives.",
+      "words": 14,
+      "chars": 86,
+      "lines": 3,
+      "size": 24,
+      "vw": 6.2,
+      "font": "Maven Pro",
+      "weight": 500,
+      "tracking": -0.025,
+      "leading": 1.2,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.78,
+      "top": 3728,
+      "tag": "li",
+      "kind": "statement"
+     },
+     {
+      "text": "Stable in the bag The coating also protects the active through storage and feed processing.",
+      "words": 15,
+      "chars": 91,
+      "lines": 3,
+      "size": 24,
+      "vw": 6.2,
+      "font": "Maven Pro",
+      "weight": 500,
+      "tracking": -0.025,
+      "leading": 1.2,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.78,
+      "top": 3855,
+      "tag": "li",
+      "kind": "statement"
+     },
+     {
+      "text": "From platform to formulation",
+      "words": 4,
+      "chars": 28,
+      "lines": 2,
+      "size": 32,
+      "vw": 8.2,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.04,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.78,
+      "top": 4065,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "MethioWiz",
+      "words": 1,
+      "chars": 9,
+      "lines": 1,
+      "size": 24,
+      "vw": 6.2,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.04,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "right",
+      "widthRatio": 0.5,
+      "top": 4389,
+      "tag": "h3",
+      "kind": "heading"
+     },
+     {
+      "text": "CholiWiz",
+      "words": 1,
+      "chars": 8,
+      "lines": 1,
+      "size": 24,
+      "vw": 6.2,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.04,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "right",
+      "widthRatio": 0.5,
+      "top": 4577,
+      "tag": "h3",
+      "kind": "heading"
+     },
+     {
+      "text": "Take the science further",
+      "words": 4,
+      "chars": 24,
+      "lines": 2,
+      "size": 32,
+      "vw": 8.2,
+      "font": "Maven Pro",
+      "weight": 600,
+      "tracking": -0.04,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.78,
+      "top": 5191,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "Green chelation",
+      "words": 2,
+      "chars": 15,
+      "lines": 1,
+      "size": 24,
+      "vw": 6.2,
+      "font": "Maven Pro",
+      "weight": 500,
+      "tracking": 0,
+      "leading": 1.2,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.45,
+      "top": 5753,
+      "tag": "strong",
+      "kind": "heading"
+     },
+     {
+      "text": "Nano trace minerals",
+      "words": 3,
+      "chars": 19,
+      "lines": 1,
+      "size": 24,
+      "vw": 6.2,
+      "font": "Maven Pro",
+      "weight": 500,
+      "tracking": 0,
+      "leading": 1.2,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.58,
+      "top": 5864,
+      "tag": "strong",
+      "kind": "heading"
+     },
+     {
+      "text": "Chemlife",
+      "words": 1,
+      "chars": 8,
+      "lines": 1,
+      "size": 58.5,
+      "vw": 15,
+      "font": "Maven Pro",
+      "weight": 400,
+      "tracking": -0.065,
+      "leading": 1.2,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.91,
+      "top": 6082,
+      "tag": "p",
+      "kind": "statement"
+     }
+    ],
+    "headingSummary": {
+     "count": 18,
+     "maxLines": 4,
+     "over2Lines": 0,
+     "statements": 4,
+     "centered": 0,
+     "medianWords": 3,
+     "mixedFontHeadings": 0
+    },
+    "type": {
+     "families": [
+      {
+       "family": "Maven Pro",
+       "share": 1,
+       "mono": false
+      }
+     ],
+     "familyCount": 1,
+     "sizes": [
+      15,
+      18,
+      24,
+      32,
+      36,
+      59
+     ],
+     "sizeCount": 6,
+     "notLoaded": [],
+     "body": {
+      "font": "Maven Pro",
+      "size": 18,
+      "leading": 1.6,
+      "weight": 400,
+      "tracking": 0,
+      "contrast": 7.9
+     },
+     "measureChars": 34,
+     "max": {
+      "size": 58.5,
+      "vw": 15,
+      "font": "Maven Pro",
+      "text": "Chemlife"
+     },
+     "monoShare": 0,
+     "monoProseShare": 0,
+     "monoFamilies": [],
+     "monoSamples": [],
+     "microLabels": 0,
+     "microLabelShare": 0,
+     "microSamples": [],
+     "upperShare": 0,
+     "centerShare": 0.01,
+     "smallText": 0
+    },
+    "eyebrows": [],
+    "numbered": [],
+    "color": {
+     "bodyBg": "#ffffff",
+     "bodyBgHsl": {
+      "h": 0,
+      "s": 0,
+      "l": 1
+     },
+     "dark": false,
+     "sectionBgs": [
+      {
+       "color": "#305280",
+       "top": 711,
+       "hsl": {
+        "h": 214,
+        "s": 0.45,
+        "l": 0.35
+       }
+      },
+      {
+       "color": "#edf2f6",
+       "top": 1098,
+       "hsl": {
+        "h": 207,
+        "s": 0.33,
+        "l": 0.95
+       }
+      },
+      {
+       "color": "#dfe9f2",
+       "top": 2306,
+       "hsl": {
+        "h": 208,
+        "s": 0.42,
+        "l": 0.91
+       }
+      }
+     ],
+     "textColors": [
+      {
+       "color": "#305280",
+       "share": 0.65
+      },
+      {
+       "color": "#ffffff",
+       "share": 0.35
+      }
+     ],
+     "button": {
+      "bg": "#305280",
+      "hsl": {
+       "h": 214,
+       "s": 0.45,
+       "l": 0.35
+      },
+      "fg": "#ffffff"
+     },
+     "lowContrast": []
+    },
+    "buttons": {
+     "count": 7,
+     "inHero": 4,
+     "radius": 0,
+     "height": 44,
+     "withShadow": 0,
+     "withGradient": 0,
+     "mono": 0,
+     "upper": 0,
+     "heroLabels": [
+      "Skip to content",
+      "Menu",
+      "Microencapsulation",
+      "Request technical dossier ↗"
+     ]
+    },
+    "surfaces": {
+     "shadowStatic": 0,
+     "shadowOverlay": 0,
+     "shadowSamples": [],
+     "gradients": 0,
+     "scrims": 0,
+     "gradientSamples": [],
+     "gradientText": 0,
+     "hairlines": 0,
+     "hairlineSamples": [],
+     "outlinedBoxes": 0,
+     "dashed": 0,
+     "blurred": 0,
+     "roundedBoxes": 0,
+     "boxRadius": 0,
+     "squareMedia": 2,
+     "roundedMedia": 0,
+     "mediaRadius": 0,
+     "textShadow": 0,
+     "cardRows": []
+    },
+    "heroMedia": [
+     {
+      "type": "img",
+      "ratio": 0.24
+     }
+    ],
+    "nav": {
+     "links": 1,
+     "fixed": false,
+     "height": 78,
+     "floatingPill": false,
+     "blur": false
+    },
+    "fontsLoaded": [
+     "maven pro"
+    ]
+   },
+   "layout": {
+    "viewport": {
+     "w": 390,
+     "h": 844
+    },
+    "pageH": 6259,
+    "margins": {
+     "left": 18,
+     "right": 18
+    },
+    "sections": [
+     {
+      "sel": "nav.research-nav",
+      "tag": "nav",
+      "top": 78,
+      "height": 156,
+      "words": 9,
+      "media": 0,
+      "middle": 0,
+      "heading": null,
+      "left": 37,
+      "right": 58,
+      "textLeft": 37,
+      "textRight": 58,
+      "fullBleed": false,
+      "footer": false,
+      "hero": true,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "div.title-tile",
+      "tag": "div",
+      "top": 242,
+      "height": 233,
+      "words": 11,
+      "media": 0,
+      "middle": 0,
+      "heading": {
+       "text": "Microencapsulation",
+       "size": 36,
+       "tag": "h1"
+      },
+      "left": 42,
+      "right": 45,
+      "textLeft": 42,
+      "textRight": 45,
+      "fullBleed": false,
+      "footer": false,
+      "hero": true,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "figure.hero-art",
+      "tag": "figure",
+      "top": 483,
+      "height": 220,
+      "words": 2,
+      "media": 1,
+      "middle": 0,
+      "heading": null,
+      "left": 18,
+      "right": 18,
+      "textLeft": 221,
+      "textRight": 34,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "div.summary-tile",
+      "tag": "div",
+      "top": 711,
+      "height": 380,
+      "words": 44,
+      "media": 0,
+      "middle": 0,
+      "heading": null,
+      "left": 42,
+      "right": 46,
+      "textLeft": 42,
+      "textRight": 46,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "div.science-tile",
+      "tag": "div",
+      "top": 1098,
+      "height": 714,
+      "words": 41,
+      "media": 3,
+      "middle": 282,
+      "heading": {
+       "text": "See the mechanism",
+       "size": 24,
+       "tag": "h2"
+      },
+      "left": 36,
+      "right": 0,
+      "textLeft": 36,
+      "textRight": 46,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "section#how.section",
+      "tag": "section",
+      "top": 1812,
+      "height": 1033,
+      "words": 112,
+      "media": 0,
+      "middle": 0,
+      "heading": {
+       "text": "How it works",
+       "size": 32,
+       "tag": "h2"
+      },
+      "left": 24,
+      "right": 25,
+      "textLeft": 24,
+      "textRight": 25,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "section.section",
+      "tag": "section",
+      "top": 2845,
+      "height": 1110,
+      "words": 87,
+      "media": 0,
+      "middle": 0,
+      "heading": {
+       "text": "At a glance",
+       "size": 32,
+       "tag": "h2"
+      },
+      "left": 42,
+      "right": 43,
+      "textLeft": 42,
+      "textRight": 43,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "section#applications.section",
+      "tag": "section",
+      "top": 3955,
+      "height": 760,
+      "words": 40,
+      "media": 1,
+      "middle": 0,
+      "heading": {
+       "text": "From platform",
+       "size": 32,
+       "tag": "h2"
+      },
+      "left": 18,
+      "right": 49,
+      "textLeft": 42,
+      "textRight": 49,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "section.section",
+      "tag": "section",
+      "top": 4715,
+      "height": 978,
+      "words": 40,
+      "media": 3,
+      "middle": 0,
+      "heading": {
+       "text": "Take the science",
+       "size": 32,
+       "tag": "h2"
+      },
+      "left": 18,
+      "right": 18,
+      "textLeft": 42,
+      "textRight": 51,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "nav.platform-pager",
+      "tag": "nav",
+      "top": 5701,
+      "height": 214,
+      "words": 9,
+      "media": 0,
+      "middle": 0,
+      "heading": null,
+      "left": 42,
+      "right": 123,
+      "textLeft": 42,
+      "textRight": 123,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "footer.site-footer.frame",
+      "tag": "footer",
+      "top": 5914,
+      "height": 344,
+      "words": 19,
+      "media": 0,
+      "middle": 0,
+      "heading": {
+       "text": "Chemlife",
+       "size": 59,
+       "tag": "p"
+      },
+      "left": 18,
+      "right": 59,
+      "textLeft": 18,
+      "textRight": 59,
+      "fullBleed": false,
+      "footer": true,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     }
+    ],
+    "gaps": [],
+    "h1s": [
+     {
+      "text": "Microencapsulation",
+      "size": 36,
+      "top": 268,
+      "firstScreen": true
+     }
+    ],
+    "edgeText": [],
+    "edges": [
+     {
+      "x": 36,
+      "n": 18
+     },
+     {
+      "x": 24,
+      "n": 2
+     },
+     {
+      "x": 158,
+      "n": 2
+     }
+    ],
+    "leftBlocks": 22,
+    "bodySize": 18,
+    "stage": false,
+    "explains": true,
+    "slivers": [],
+    "voidShare": 0,
+    "voidBox": null
+   },
+   "app": null,
+   "consoleErrors": []
+  }
+ ],
+ "findings": [
+  {
+   "level": "WARN",
+   "id": "no-footage",
+   "width": 1440,
+   "message": "No video anywhere on the page.",
+   "fix": "Look for one honest clip with scripts/assets.mjs --video (the place, the material, the process) and use it as a muted loop with a poster frame. Defend its absence only if no clip fits the subject."
+  },
+  {
+   "level": "WARN",
+   "id": "side-scroll",
+   "width": 390,
+   "message": "1 row(s) scroll sideways with content past their edge.",
+   "fix": "Jurors and most visitors read a row cut at the edge as clipped, not as scrollable. Wrap it onto more lines, or end it inside the grid."
+  }
+ ],
+ "images": [
+  {
+   "viewport": "desktop",
+   "width": 1440,
+   "fold": "/Users/atulsingh/Desktop/Chemlife/chemlife-innovations-website/.taste-skill/research-copy/after-micro/desktop-fold.jpg",
+   "pages": [
+    "/Users/atulsingh/Desktop/Chemlife/chemlife-innovations-website/.taste-skill/research-copy/after-micro/desktop-page-01.jpg",
+    "/Users/atulsingh/Desktop/Chemlife/chemlife-innovations-website/.taste-skill/research-copy/after-micro/desktop-page-02.jpg"
+   ],
+   "film": []
+  },
+  {
+   "viewport": "tablet",
+   "width": 768,
+   "fold": "/Users/atulsingh/Desktop/Chemlife/chemlife-innovations-website/.taste-skill/research-copy/after-micro/tablet-fold.jpg",
+   "pages": [
+    "/Users/atulsingh/Desktop/Chemlife/chemlife-innovations-website/.taste-skill/research-copy/after-micro/tablet-page-01.jpg"
+   ],
+   "film": []
+  },
+  {
+   "viewport": "mobile",
+   "width": 390,
+   "fold": "/Users/atulsingh/Desktop/Chemlife/chemlife-innovations-website/.taste-skill/research-copy/after-micro/mobile-fold.jpg",
+   "pages": [
+    "/Users/atulsingh/Desktop/Chemlife/chemlife-innovations-website/.taste-skill/research-copy/after-micro/mobile-page-01.jpg"
+   ],
+   "film": []
+  }
+ ]
+}

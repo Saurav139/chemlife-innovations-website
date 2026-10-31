@@ -94,7 +94,9 @@ export default function HeroVariantA() {
   const href = useHref();
   const taglines = t.home.taglines;
   const tagline = taglines[slide];
-  const photoProps = (src: string, sizes: string) => getImageProps({ src, alt: t.home.heroAlt, fill: true, sizes, priority: true, className: "object-cover animate-ken-burns [@media(min-aspect-ratio:1/1)]:object-[50%_40%]" }).props;
+  // Only the award photo needs the compact top layout to leave the people unobstructed.
+  const awardLayout = photo === 0;
+  const photoProps = (src: string, sizes: string) => getImageProps({ src, alt: t.home.heroAlt, fill: true, sizes, priority: true, className: "object-cover animate-ken-burns object-[75%_50%] [@media(min-aspect-ratio:1/1)]:object-[75%_40%]" }).props;
   const landscape = photoProps(Images.heroes.awardsLandscape, LANDSCAPE_SIZES);
   const portrait = photoProps(Images.heroes.awardsPortrait, PORTRAIT_SIZES);
 
@@ -141,16 +143,17 @@ export default function HeroVariantA() {
       </div>
 
       {/* Subtle Dark Overlay for text readability (keeps original image colors) */}
-      <div className="absolute inset-x-0 top-0 h-[58%] bg-gradient-to-b from-black/60 via-black/30 to-transparent z-20" />
-      <div className="absolute inset-x-0 bottom-0 h-[42%] bg-gradient-to-t from-black/65 via-black/15 to-transparent z-20" />
+      <div className={`absolute inset-x-0 top-0 h-[58%] bg-gradient-to-b from-black/60 via-black/30 to-transparent z-20 transition-opacity duration-1000 motion-reduce:transition-none ${awardLayout ? "opacity-100" : "opacity-0"}`} />
+      <div className={`absolute inset-x-0 bottom-0 h-[42%] bg-gradient-to-t from-black/65 via-black/15 to-transparent z-20 transition-opacity duration-1000 motion-reduce:transition-none ${awardLayout ? "opacity-100" : "opacity-0"}`} />
+      <div className={`absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent z-20 transition-opacity duration-1000 motion-reduce:transition-none ${awardLayout ? "opacity-0" : "opacity-100"}`} />
       <div className="absolute inset-0 bg-black/10 z-20" />
 
-      <div className="relative z-30 max-w-[1200px] mx-auto px-6 pt-24 pb-28 md:pt-28 md:pb-32 lg:pt-36 w-full min-h-svh flex flex-col justify-center">
+      <div className={`relative z-30 max-w-[1200px] mx-auto px-6 w-full min-h-svh flex flex-col justify-center ${awardLayout ? "pt-24 pb-28 md:pt-28 md:pb-32 lg:pt-36" : "pt-28 pb-28 md:py-32 lg:pt-40"}`}>
         {/* w-full: without it, this box has no explicit width, so its auto side margins (for centering)
             stop it from stretching and it shrinks to fit whichever tagline is showing — moving and
             resizing the buttons below it from one slide to the next. */}
-        <div className="w-full max-w-4xl flex-1 flex flex-col justify-start mx-auto text-center items-center">
-          <div className="flex flex-col justify-start items-center text-center w-full">
+        <div className={`w-full max-w-4xl flex-1 flex flex-col mx-auto text-center items-center ${awardLayout ? "justify-start" : "justify-center"}`}>
+          <div className={`flex flex-col items-center text-center w-full ${awardLayout ? "justify-start" : "min-h-[300px] md:min-h-[340px] justify-center"}`}>
             {/* Keep the initial headline visible during hydration. */}
             <AnimatePresence mode="wait" initial={false}>
               {/* On phones the size follows the screen width so every tagline fits on its three lines, which keeps
@@ -161,7 +164,7 @@ export default function HeroVariantA() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.6, ease: [0.25, 0.1, 0, 1] }}
-                className="font-heading text-[length:clamp(24px,8.8vw_-_4.5px,34px)] sm:text-5xl md:text-6xl 2xl:text-7xl leading-[1.1] mb-5 sm:mb-8 text-white font-bold text-center"
+                className={`font-heading text-[length:clamp(24px,8.8vw_-_4.5px,34px)] sm:text-5xl md:text-6xl leading-[1.1] text-white font-bold text-center ${awardLayout ? "2xl:text-7xl mb-5 sm:mb-8" : "lg:text-7xl mb-8 sm:mb-16"}`}
               >
                 {tagline[0]}<br />
                 <span className="text-teal-400">{tagline[1]}</span><br />
@@ -187,7 +190,7 @@ export default function HeroVariantA() {
               target="_blank"
               rel="noopener noreferrer"
               onClick={(e) => playOnPage(e, () => setStoryOpen(true))}
-              className="tap-target mt-4 lg:mt-5 inline-flex items-center gap-2 text-sm lg:text-base font-semibold text-white/85 hover:text-white underline-offset-4 hover:underline transition-colors cursor-pointer"
+              className={`tap-target inline-flex items-center gap-2 text-sm lg:text-base font-semibold text-white/85 hover:text-white underline-offset-4 hover:underline transition-colors cursor-pointer ${awardLayout ? "mt-4 lg:mt-5" : "mt-5 lg:mt-6"}`}
             >
               <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current">
                 <path d="M8 5v14l11-7z" />
