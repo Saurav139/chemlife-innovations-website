@@ -288,6 +288,10 @@ const kn: Messages = {
     showLess: "ಕಡಿಮೆ ತೋರಿಸಿ",
     resultsCount: "{total} ರಲ್ಲಿ {count} ಉತ್ಪನ್ನಗಳನ್ನು ತೋರಿಸಲಾಗುತ್ತಿದೆ",
     noResults: "ನಿಮ್ಮ ಹುಡುಕಾಟಕ್ಕೆ ಯಾವುದೇ ಉತ್ಪನ್ನ ಹೊಂದಿಕೆಯಾಗಲಿಲ್ಲ.",
+    related: "ಇದೇ ಪ್ರಾಣಿಗಳಿಗೆ ಇನ್ನಷ್ಟು",
+    viewProduct: "ಉತ್ಪನ್ನ ನೋಡಿ",
+    allProducts: "ಎಲ್ಲಾ ಉತ್ಪನ್ನಗಳು",
+    askAbout: "ಈ ಉತ್ಪನ್ನದ ಬಗ್ಗೆ ಕೇಳಿ",
     bannerAlt: "ಬ್ಯಾನರ್",
     iconAlt: "ಐಕಾನ್",
     items: [

@@ -288,6 +288,10 @@ const hi: Messages = {
     showLess: "कम दिखाएँ",
     resultsCount: "{total} में से {count} उत्पाद दिखाए जा रहे हैं",
     noResults: "आपकी खोज से कोई उत्पाद मेल नहीं खाता।",
+    related: "इन्हीं पशुओं के लिए और उत्पाद",
+    viewProduct: "उत्पाद देखें",
+    allProducts: "सभी उत्पाद",
+    askAbout: "इस उत्पाद के बारे में पूछें",
     bannerAlt: "बैनर",
     iconAlt: "आइकन",
     items: [
