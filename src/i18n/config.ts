@@ -17,6 +17,11 @@ export const OG_LOCALES: Record<Locale, string> = { en: "en_IN", kn: "kn_IN", hi
 /** Pages that exist in every language. The rest (Insights, Privacy, Terms, chat) are English only for now. */
 export const TRANSLATED_PATHS = ["/", "/about", "/products", "/research", "/careers", "/contact"];
 
+/** Whether a page exists in every language: the pages above, and each product's own page (/products/maxdmold). */
+export function isTranslatedPath(path: string): boolean {
+  return TRANSLATED_PATHS.includes(path) || /^\/products\/[a-z0-9-]+$/.test(path);
+}
+
 export function isLocale(value: string): value is Locale {
   return (LOCALES as readonly string[]).includes(value);
 }
@@ -36,7 +41,7 @@ export function splitLocale(pathname: string): { locale: Locale; path: string } 
 export function localizePath(href: string, locale: Locale): string {
   if (locale === DEFAULT_LOCALE || !href.startsWith("/")) return href;
   const path = href.split(/[?#]/)[0];
-  if (!TRANSLATED_PATHS.includes(path)) return href;
+  if (!isTranslatedPath(path)) return href;
   return `/${locale}${path === "/" ? href.slice(1) : href}`;
 }
 

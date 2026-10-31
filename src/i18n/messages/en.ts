@@ -287,6 +287,10 @@ const en = {
     showLess: "Show Less",
     resultsCount: "Showing {count} of {total} products",
     noResults: "No products match your search query.",
+    related: "More for the same animals",
+    viewProduct: "View product",
+    allProducts: "All products",
+    askAbout: "Ask about this product",
     bannerAlt: "banner",
     iconAlt: "icon",
     items: [

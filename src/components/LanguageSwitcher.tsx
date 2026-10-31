@@ -2,13 +2,13 @@
 
 import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
-import { LOCALES, LOCALE_COOKIE, LOCALE_NAMES, TRANSLATED_PATHS, localizePath, splitLocale, type Locale } from "@/i18n/config";
+import { LOCALES, LOCALE_COOKIE, LOCALE_NAMES, isTranslatedPath, localizePath, splitLocale, type Locale } from "@/i18n/config";
 import { useLocale, useT } from "@/i18n/LocaleProvider";
 
 /** The same page in another language, or that language's homepage when the page is English only. */
 function addressIn(target: Locale, pathname: string) {
   const { path } = splitLocale(pathname);
-  if (TRANSLATED_PATHS.includes(path) || target === "en") return localizePath(path, target);
+  if (isTranslatedPath(path) || target === "en") return localizePath(path, target);
   return localizePath("/", target);
 }
 

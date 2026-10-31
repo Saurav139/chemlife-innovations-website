@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { DEFAULT_LOCALE, LOCALES, OG_LOCALES, TRANSLATED_PATHS, localizePath, type Locale } from "@/i18n/config";
+import { DEFAULT_LOCALE, LOCALES, OG_LOCALES, isTranslatedPath, localizePath, type Locale } from "@/i18n/config";
 
 export const SITE_URL = "https://chemlifeinnovations.com";
 export const SITE_NAME = "ChemLife Innovations";
@@ -54,7 +54,7 @@ export function pageMetadata({ title, description, path, noIndex, locale = DEFAU
     : `${SITE_NAME} | ${siteTitle ?? "Natural Functional Feed Additives"}`;
   const url = localizePath(path, locale);
   // hreflang: tells search engines which address to show for each language. English is also the default.
-  const languages = TRANSLATED_PATHS.includes(path)
+  const languages = isTranslatedPath(path)
     ? { ...Object.fromEntries(LOCALES.map((l) => [l, localizePath(path, l)])), "x-default": path }
     : undefined;
 

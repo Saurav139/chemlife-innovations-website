@@ -187,48 +187,48 @@ export function GET() {
 const ROUTER_PROMPT = `You are a query classifier. Classify the following query as either 'kukku' (poultry-related: chickens, broilers, layers, eggs, hens, feed, poultry diseases, chicks, swine, pigs) or 'mikku' (dairy-related: cows, buffaloes, milk, rumen, dairy, calves, lactation, fertility in cattle, silages). Return ONLY the single word 'kukku' or 'mikku' with no punctuation or explanation.`;
 
 const PRODUCT_URLS: Record<string, string> = {
-  "maxdmold plus": "/products?expand=MaxDmold+Plus",
-  "maxdmold-plus": "/products?expand=MaxDmold+Plus",
-  "maxdmold": "/products?expand=MaxDmold",
-  "feedgenie forte": "/products?expand=FeedGenie+Forte",
-  "feedgenie-forte": "/products?expand=FeedGenie+Forte",
-  "chemdmold": "/products?expand=FeedGenie+Forte",
-  "feedgenie prime": "/products?expand=FeedGenie+Prime",
-  "feedgenie-prime": "/products?expand=FeedGenie+Prime",
-  "feedgenie": "/products?expand=FeedGenie+Prime",
-  "growgenie-phyto": "/products?expand=GroGenie",
-  "growgenie": "/products?expand=GroGenie",
-  "grobiozen": "/products?expand=GroGenie",
-  "grogenie": "/products?expand=GroGenie",
-  "egggenie": "/products?expand=EggGenie",
-  "livprogenie": "/products?expand=LivproGenie",
-  "gutprogenie": "/products?expand=GutproGenie",
-  "syndmold": "/products?expand=SynDmold",
-  "methiowiz": "/products?expand=MethioWiz",
-  "mbiowiz plus": "/products?expand=MBioWiz+Plus",
-  "mbiowiz-plus": "/products?expand=MBioWiz+Plus",
-  "mbiowiz ts": "/products?expand=MBioWiz+TS",
-  "mbiowiz-ts": "/products?expand=MBioWiz+TS",
-  "choliwiz": "/products?expand=CholiWiz",
-  "rumiwiz": "/products?expand=RumiWiz",
-  "aflamlock": "/products?expand=AflaMlock",
-  "smart fertility enhancer": "/products?expand=MBioWiz+Plus",
-  "fertility enhancer": "/products?expand=MBioWiz+Plus",
-  "rumen ecosystem enhancer": "/products?expand=MBioWiz+Plus",
-  "ecosystem enhancer": "/products?expand=MBioWiz+Plus",
-  "ultimate aflatoxin binder": "/products?expand=AflaMlock",
-  "aflatoxin binder": "/products?expand=AflaMlock",
-  "milk yield enhancer": "/products?expand=CholiWiz",
-  "milk yield": "/products?expand=CholiWiz",
-  "rumen bypass choline": "/products?expand=CholiWiz",
-  "bypass choline": "/products?expand=CholiWiz",
-  "chelated trace minerals": "/products?expand=MinBioZen",
-  "trace minerals": "/products?expand=MinBioZen",
-  "maxdmold spray": "/products?expand=MaxDmold+Spray",
-  "maxdmold-spray": "/products?expand=MaxDmold+Spray",
-  "minbiozen": "/products?expand=MinBioZen",
-  "ddgs-dtox": "/products?expand=DDGS-Dtox",
-  "ddgs dtox": "/products?expand=DDGS-Dtox",
+  "maxdmold plus": "/products/maxdmold-plus",
+  "maxdmold-plus": "/products/maxdmold-plus",
+  "maxdmold": "/products/maxdmold",
+  "feedgenie forte": "/products/feedgenie-forte",
+  "feedgenie-forte": "/products/feedgenie-forte",
+  "chemdmold": "/products/feedgenie-forte",
+  "feedgenie prime": "/products/feedgenie-prime",
+  "feedgenie-prime": "/products/feedgenie-prime",
+  "feedgenie": "/products/feedgenie-prime",
+  "growgenie-phyto": "/products/grogenie-12-60",
+  "growgenie": "/products/grogenie-12-60",
+  "grobiozen": "/products/grogenie-12-60",
+  "grogenie": "/products/grogenie-12-60",
+  "egggenie": "/products/egggenie",
+  "livprogenie": "/products/livprogenie",
+  "gutprogenie": "/products/gutprogenie",
+  "syndmold": "/products/syndmold",
+  "methiowiz": "/products/methiowiz",
+  "mbiowiz plus": "/products/mbiowiz-plus",
+  "mbiowiz-plus": "/products/mbiowiz-plus",
+  "mbiowiz ts": "/products/mbiowiz-ts",
+  "mbiowiz-ts": "/products/mbiowiz-ts",
+  "choliwiz": "/products/choliwiz",
+  "rumiwiz": "/products/rumiwiz",
+  "aflamlock": "/products/aflamlock",
+  "smart fertility enhancer": "/products/mbiowiz-plus",
+  "fertility enhancer": "/products/mbiowiz-plus",
+  "rumen ecosystem enhancer": "/products/mbiowiz-plus",
+  "ecosystem enhancer": "/products/mbiowiz-plus",
+  "ultimate aflatoxin binder": "/products/aflamlock",
+  "aflatoxin binder": "/products/aflamlock",
+  "milk yield enhancer": "/products/choliwiz",
+  "milk yield": "/products/choliwiz",
+  "rumen bypass choline": "/products/choliwiz",
+  "bypass choline": "/products/choliwiz",
+  "chelated trace minerals": "/products/minbiozen",
+  "trace minerals": "/products/minbiozen",
+  "maxdmold spray": "/products/maxdmold-spray",
+  "maxdmold-spray": "/products/maxdmold-spray",
+  "minbiozen": "/products/minbiozen",
+  "ddgs-dtox": "/products/ddgs-dtox",
+  "ddgs dtox": "/products/ddgs-dtox",
 };
 
 /** Which bot should answer, or null if the classifier fails or is unsure, so the visitor stays where they are. */
@@ -270,29 +270,29 @@ function normalizeUrl(url: string): string {
   const urlLower = url.toLowerCase();
   if (urlLower.includes("chemlifeinnovations.com")) {
     if (urlLower.includes("chemdmold")) {
-      return "/products?expand=FeedGenie+Forte";
+      return "/products/feedgenie-forte";
     } else if (urlLower.includes("maxdmol")) {
-      return "/products?expand=MaxDmold";
+      return "/products/maxdmold";
     } else if (urlLower.includes("grobiozen")) {
-      return "/products?expand=GroGenie";
+      return "/products/grogenie-12-60";
     } else if (urlLower.includes("feedgenie")) {
-      return "/products?expand=FeedGenie+Prime";
+      return "/products/feedgenie-prime";
     } else if (urlLower.includes("product_model2")) {
-      return "/products?expand=EggGenie";
+      return "/products/egggenie";
     } else if (urlLower.includes("minbiozen")) {
-      return "/products?expand=MinBioZen";
+      return "/products/minbiozen";
     } else if (urlLower.includes("ruminantss.php")) {
       const match = urlLower.match(/id=(\d+)/);
       if (match) {
         const idx = match[1];
         if (idx === "1" || idx === "2") {
-          return "/products?expand=MBioWiz+Plus";
+          return "/products/mbiowiz-plus";
         } else if (idx === "3") {
-          return "/products?expand=AflaMlock";
+          return "/products/aflamlock";
         } else if (idx === "4" || idx === "5") {
-          return "/products?expand=CholiWiz";
+          return "/products/choliwiz";
         } else if (idx === "6") {
-          return "/products?expand=MinBioZen";
+          return "/products/minbiozen";
         }
       }
     }

@@ -1,7 +1,7 @@
 import { timingSafeEqual } from "node:crypto";
 import { NextResponse, type NextRequest } from "next/server";
 import { isStagingHost } from "@/lib/seo";
-import { DEFAULT_LOCALE, LOCALE_COOKIE, TRANSLATED_PATHS, isLocale, localizePath, preferredLocale } from "@/i18n/config";
+import { DEFAULT_LOCALE, LOCALE_COOKIE, isTranslatedPath, isLocale, localizePath, preferredLocale } from "@/i18n/config";
 
 // Every page lives under src/app/[locale]. English keeps its plain addresses: /products is served from
 // /en/products behind the scenes, and /en/products redirects to /products. /kn/... and /hi/... pass through.
@@ -49,7 +49,7 @@ function localeRouting(request: NextRequest) {
   }
   if (isLocale(first)) return NextResponse.next();
   const wanted = languageFor(request);
-  if (wanted !== DEFAULT_LOCALE && TRANSLATED_PATHS.includes(pathname)) {
+  if (wanted !== DEFAULT_LOCALE && isTranslatedPath(pathname)) {
     const url = request.nextUrl.clone();
     url.pathname = localizePath(pathname, wanted);
     const response = NextResponse.redirect(url, 307);

@@ -4,7 +4,7 @@ import { useState, useEffect, useMemo, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { useHref, useT } from "@/i18n/LocaleProvider";
-import { INTERNSHIP_ROLES, PRODUCTS, RESEARCH_TOPICS, insightAnchor, productAnchor, researchAnchor, roleAnchor } from "@/lib/catalog";
+import { INTERNSHIP_ROLES, PRODUCTS, RESEARCH_TOPICS, insightAnchor, productPath, researchAnchor, roleAnchor } from "@/lib/catalog";
 import { goToResult } from "@/lib/deepLink";
 import type { Insights } from "@/lib/insights";
 
@@ -124,7 +124,7 @@ export default function SiteSearch({ hideButtonOnPhones = false }: { hideButtonO
         title: product.name,
         category: "Product" as const,
         description: text.tagline ?? text.about,
-        link: href(`/products#${productAnchor(product.name)}`),
+        link: href(productPath(product.name)),
         keywords: [product.category, text.about, ...text.features].join(" "),
       };
     });
