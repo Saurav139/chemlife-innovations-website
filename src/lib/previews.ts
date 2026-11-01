@@ -5,6 +5,12 @@ import { isLiveHost } from "@/lib/seo";
 // the site instead. Never shown on the live site.
 export const PREVIEWS = [
   {
+    slug: "homepage-five",
+    href: "/previews/homepage-five",
+    title: "Homepage: five redesigns",
+    description: "The whole homepage in five styles, with the site's own fonts and content: Clarity (clean corporate), Immersive (photo-led), Bento (tiles), Product finder (products first) and Science (technology first).",
+  },
+  {
     slug: "who-we-are-scroll",
     href: "/previews/who-we-are-scroll",
     title: "Who We Are: scrollytelling",
