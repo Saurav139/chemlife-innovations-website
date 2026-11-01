@@ -132,6 +132,28 @@ const en = {
       seeResearch: "See our research",
       meetLeadership: "Meet the leadership",
       requestDossier: "Request a technical dossier",
+      serveTitle: "What we serve",
+      cards: [
+        {
+          title: "Mono-Gastric",
+          description: "Eco-friendly concepts promoting health and productivity in poultry and swine through nature-derived feed additives.",
+          alts: ["Broiler chickens on a poultry farm", "A pig standing on a farm", "Turkeys on a grassy farm"],
+        },
+        {
+          title: "Ruminants",
+          description: "Innovative bio-active feed additives focusing on cattle health, increasing milk yield and quality.",
+          alts: ["A Holstein cow with her calf in a pasture", "A buffalo with her calf on a farm", "Goats on a goat farm"],
+        },
+        {
+          title: "Value Addition",
+          description: "Feed additives for multiple species designed for better growth and conversion ratios.",
+          alts: [
+            "Bowls of feed pellets and powdered feed ingredients",
+            "Hands holding freshly chopped green fodder",
+            "Yellow feed granules pouring from a container",
+          ],
+        },
+      ],
     },
 
     howWeDo: {
