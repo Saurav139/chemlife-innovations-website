@@ -6,8 +6,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Images } from "@/lib/assets";
 import { useHref, useT } from "@/i18n/LocaleProvider";
 import BackgroundVideo, { useNearViewport } from "@/components/BackgroundVideo";
-import { AWARDS, Arrow, Check, Counter, FLAGSHIPS, LIFE_VIDEOS, PARTNERS, Play, SERVE_CATEGORIES, SERVE_IMAGES, SOCIAL_IMAGES, STATS, STEP_IMAGES, StoryPlayer, TESTIMONIALS,
-  easeOut, kicker, useActions, useProducts, useRotate } from "./kit";
+import { AWARDS, Arrow, Counter, FLAGSHIPS, LIFE_VIDEOS, PARTNERS, Play, RotatingImages, SERVE_CATEGORIES, SOCIAL_IMAGES, STATS, STEP_IMAGES, StoryPlayer, TESTIMONIALS,
+  easeOut, kicker, useActions, useProducts, useRotate, useWhoActions } from "./kit";
 
 const tile = "rounded-3xl bg-white border border-slate-200/70 overflow-hidden";
 
@@ -18,10 +18,10 @@ export default function Bento() {
   const w = home.whoWeAre;
   const href = useHref();
   const a = useActions();
+  const whoActions = useWhoActions();
   const products = useProducts();
   const flagships = FLAGSHIPS.slice(0, 4).map((name) => products.find((p) => p.name === name)!);
   const [slide] = useRotate(home.taglines.length, 5000);
-  const [shown] = useRotate(3, 4000);
   const [quote, setQuote] = useState(0);
   const [faq, setFaq] = useState(0);
   const [story, setStory] = useState(false);
@@ -59,39 +59,60 @@ export default function Bento() {
         </div>)}
       </div>
 
-      {/* Who we are */}
+      {/* Who we are: title and introduction, the founders, ten fact tiles, the questions and the four buttons */}
       <div className="grid lg:grid-cols-3 gap-4">
         <div className={`${tile} lg:col-span-2 p-8 md:p-10`}>
           <span className={`${kicker} text-teal-aa`}>{w.kicker}</span>
-          <h2 className="font-heading text-3xl md:text-4xl font-bold mt-3">{w.tagline}</h2>
-          <p className="text-slate-600 text-lg leading-relaxed mt-4">{w.intro}</p>
+          <h2 className="font-heading text-3xl md:text-4xl font-bold leading-tight mt-3">{w.title}</h2>
+          <p className="font-heading text-xl md:text-2xl font-semibold text-brand-orange-aa mt-3">{w.tagline}</p>
+          <p className="text-slate-600 text-lg leading-relaxed mt-5">{w.intro}</p>
         </div>
-        <div className={`${tile} relative min-h-[260px]`}>
+        <div className={`${tile} relative min-h-[360px]`}>
           <Image src={Images.people.foundersNew} alt={t.about.foundersAlt} fill sizes="(min-width: 1024px) 400px, 100vw" className="object-cover" />
-          <a href={a.leadership.href} className="absolute inset-x-4 bottom-4 flex items-center justify-between rounded-2xl bg-white/95 px-5 py-3 font-semibold hover:bg-white">{a.leadership.label}<Arrow /></a>
+          <div className="absolute inset-x-3 bottom-3 rounded-2xl bg-white/95 p-5">
+            <p className="text-sm text-slate-700 leading-relaxed">{w.leadershipCaption}</p>
+          </div>
         </div>
       </div>
-      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {[w.facts[0], w.facts[2], w.facts[5], w.facts[8]].map((f) => <div key={f.label} className={`${tile} p-6`}>
-          <span className="grid place-items-center w-10 h-10 rounded-xl bg-orange-50 text-brand-orange-aa"><Check /></span>
-          <p className="text-xs font-bold uppercase tracking-wider text-teal-aa mt-5">{f.label}</p>
-          <p className="mt-1.5 leading-relaxed">{f.value}</p>
+      <dl className="grid sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        {w.facts.map((f, i) => <div key={f.label} className={`${tile} p-5 ${i % 3 === 1 ? "bg-orange-50!" : i % 3 === 2 ? "bg-teal-50!" : ""}`}>
+          <dt className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-teal-aa"><span className="grid place-items-center w-6 h-6 rounded-full bg-white text-brand-navy text-[11px]">{i + 1}</span>{f.label}</dt>
+          <dd className="mt-2.5 leading-relaxed text-[15px]">{f.value}</dd>
         </div>)}
+      </dl>
+      <div className="grid lg:grid-cols-3 gap-4">
+        <div className={`${tile} lg:col-span-2 p-6 md:p-8`}>
+          <ul className="divide-y divide-slate-200">
+            {w.faq.map((item, i) => <li key={item.q}>
+              <h3><button type="button" onClick={() => setFaq(faq === i ? -1 : i)} aria-expanded={faq === i} className="w-full flex items-center justify-between gap-4 py-4 text-left font-heading text-lg font-bold cursor-pointer">
+                {item.q}<span aria-hidden="true" className={`grid place-items-center w-9 h-9 rounded-full bg-slate-100 text-xl text-brand-orange-aa shrink-0 transition-transform ${faq === i ? "rotate-45" : ""}`}>+</span>
+              </button></h3>
+              {faq === i && <p className="pb-5 text-slate-600 leading-relaxed">{item.a}</p>}
+            </li>)}
+          </ul>
+        </div>
+        <div className={`${tile} bg-brand-navy! border-0 p-6 md:p-8 flex flex-col justify-center gap-3`}>
+          {whoActions.map((act, i) => <a key={act.href} href={act.href} data-analytics-click={act.label}
+            className={`flex items-center justify-between gap-3 min-h-12 px-5 rounded-full font-semibold transition-colors ${i === 0 ? "bg-brand-orange-aa hover:bg-brand-orange-aa-hover text-white" : "bg-white/10 hover:bg-white/20 text-white"}`}>{act.label}<Arrow /></a>)}
+        </div>
       </div>
 
-      {/* What we serve and flagship products */}
+      {/* What we serve: a heading tile, then a tile for each group, each cycling its three photos */}
+      <div className={`${tile} px-8 py-6 flex flex-wrap items-center justify-between gap-4`}>
+        <h2 className="font-heading text-3xl font-bold">{w.serveTitle}</h2>
+        <a href={a.findProduct.href} className="inline-flex items-center gap-2 font-semibold text-brand-orange-aa hover:underline">{t.products.allProducts}<Arrow /></a>
+      </div>
       <div className="grid lg:grid-cols-3 gap-4">
         {w.cards.map((card, i) => <a key={card.title} href={href(`/products?q=${encodeURIComponent(SERVE_CATEGORIES[i])}`)} className={`${tile} group block`}>
-          <div className="relative aspect-[16/11]">
-            {SERVE_IMAGES[i].map((src, j) => <Image key={src} src={src} alt={card.alts[j]} fill sizes="(min-width: 1024px) 400px, 100vw" aria-hidden={j !== shown}
-              className={`object-cover transition-opacity duration-1000 ${j === shown ? "opacity-100" : "opacity-0"}`} />)}
-          </div>
+          <div className="relative aspect-[16/11]"><RotatingImages group={i} offset={i} sizes="(min-width: 1024px) 400px, 100vw" /></div>
           <div className="p-6 flex items-start justify-between gap-4">
             <div><h3 className="font-heading text-2xl font-bold">{card.title}</h3><p className="text-slate-600 mt-1.5 leading-relaxed">{card.description}</p></div>
             <span className="grid place-items-center w-10 h-10 rounded-full bg-slate-100 group-hover:bg-brand-orange-aa group-hover:text-white shrink-0 transition-colors"><Arrow /></span>
           </div>
         </a>)}
       </div>
+
+      {/* Flagship products */}
       <div className={`${tile} p-6 md:p-8`}>
         <div className="flex flex-wrap items-end justify-between gap-4">
           <h2 className="font-heading text-3xl font-bold">{t.products.titleStart} <span className="text-brand-orange-aa">{t.products.titleAccent}</span></h2>
@@ -169,22 +190,12 @@ export default function Bento() {
           </div>
         </div>
       </div>
-      <div className="grid lg:grid-cols-3 gap-4">
-        <div className={`${tile} lg:col-span-2 p-8`}>
-          <ul className="divide-y divide-slate-200">
-            {w.faq.map((item, i) => <li key={item.q}>
-              <button type="button" onClick={() => setFaq(i)} aria-expanded={faq === i} className="w-full flex items-center justify-between gap-4 py-4 text-left font-heading text-lg font-bold cursor-pointer">
-                {item.q}<span aria-hidden="true" className={`text-2xl text-brand-orange-aa transition-transform ${faq === i ? "rotate-45" : ""}`}>+</span>
-              </button>
-              {faq === i && <p className="pb-5 text-slate-600 leading-relaxed">{item.a}</p>}
-            </li>)}
-          </ul>
-        </div>
-        <div className={`${tile} bg-brand-orange-aa! border-0 p-8 flex flex-col justify-between text-white`}>
-          <h2 className="font-heading text-3xl font-bold text-white">{t.contact.titleStart} {t.contact.titleAccent} {t.contact.titleEnd}</h2>
-          <div className="space-y-3 mt-8">
-            <a href={a.nutritionist.href} className="flex items-center justify-between min-h-12 px-5 rounded-full bg-white text-brand-orange-aa font-semibold">{a.nutritionist.label}<Arrow /></a>
-            <a href={a.dossier.href} className="flex items-center justify-between min-h-12 px-5 rounded-full border-2 border-white/70 font-semibold">{a.dossier.label}<Arrow /></a>
+      <div className="grid gap-4">
+        <div className={`${tile} bg-brand-orange-aa! border-0 p-8 md:p-10 flex flex-col md:flex-row md:items-center justify-between gap-6 text-white`}>
+          <div><h2 className="font-heading text-3xl font-bold text-white">{t.contact.titleStart} {t.contact.titleAccent} {t.contact.titleEnd}</h2><p className="text-white mt-2 max-w-xl">{t.contact.intro}</p></div>
+          <div className="flex flex-wrap gap-3">
+            <a href={a.nutritionist.href} className="flex items-center justify-between gap-3 min-h-12 px-5 rounded-full bg-white text-brand-orange-aa font-semibold">{a.nutritionist.label}<Arrow /></a>
+            <a href={a.dossier.href} className="flex items-center justify-between gap-3 min-h-12 px-5 rounded-full border-2 border-white/70 font-semibold">{a.dossier.label}<Arrow /></a>
           </div>
         </div>
       </div>

@@ -5,8 +5,9 @@ import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { useHref, useT } from "@/i18n/LocaleProvider";
 import BackgroundVideo, { useNearViewport } from "@/components/BackgroundVideo";
-import { AWARDS, Arrow, Check, Counter, LIFE_VIDEOS, PARTNERS, Reveal, SERVE_CATEGORIES, SERVE_IMAGES, SOCIAL_IMAGES, STATS, STEP_IMAGES, TESTIMONIALS,
-  btnOutline, btnPrimary, easeOut, h2, kicker, useActions, useProducts } from "./kit";
+import { Images } from "@/lib/assets";
+import { AWARDS, Arrow, Check, Counter, LIFE_VIDEOS, PARTNERS, Reveal, RotatingImages, SERVE_CATEGORIES, SOCIAL_IMAGES, STATS, STEP_IMAGES, TESTIMONIALS,
+  btnOutline, btnPrimary, easeOut, h2, kicker, useActions, useProducts, useWhoActions } from "./kit";
 
 /** D: Product finder. The homepage starts by helping a visitor reach the right product for their animals. */
 export default function Finder() {
@@ -20,7 +21,7 @@ export default function Finder() {
   const [query, setQuery] = useState("");
   const [lifeRef, near] = useNearViewport<HTMLDivElement>();
   const shelf = products.filter((p) => p.category === SERVE_CATEGORIES[species]);
-  const why = [w.facts[2], w.facts[5], w.facts[4], w.facts[7]];
+  const whoActions = useWhoActions();
 
   return <div className="bg-white text-brand-navy">
     {/* Hero: pick your animals, see the products for them */}
@@ -38,10 +39,11 @@ export default function Finder() {
           </form>
         </div>
 
-        <div role="tablist" aria-label={t.products.filterBySpecies} className="grid grid-cols-3 gap-3 max-w-3xl mx-auto mt-12">
+        <h2 className="text-center font-heading text-2xl md:text-3xl font-bold mt-14">{w.serveTitle}</h2>
+        <div role="tablist" aria-label={w.serveTitle} className="grid grid-cols-3 gap-3 max-w-3xl mx-auto mt-6">
           {w.cards.map((card, i) => <button key={card.title} type="button" role="tab" aria-selected={species === i} onClick={() => setSpecies(i)}
             className={`group relative rounded-2xl overflow-hidden aspect-[4/3] sm:aspect-[16/10] text-left cursor-pointer ring-offset-2 transition-all ${species === i ? "ring-4 ring-brand-orange" : "opacity-80 hover:opacity-100"}`}>
-            <Image src={SERVE_IMAGES[i][0]} alt="" fill sizes="(min-width: 640px) 260px, 33vw" className="object-cover" />
+            <span aria-hidden="true"><RotatingImages group={i} offset={i} sizes="(min-width: 640px) 260px, 33vw" /></span>
             <span className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
             <span className="absolute left-3 bottom-2.5 sm:left-4 sm:bottom-3 font-heading font-bold text-white text-sm sm:text-xl">{card.title}</span>
           </button>)}
@@ -85,20 +87,42 @@ export default function Finder() {
       </div>
     </section>
 
-    {/* Why ChemLife */}
-    <section className="py-20 md:py-28">
-      <div className="max-w-[1200px] mx-auto px-6 grid lg:grid-cols-12 gap-12 items-center">
-        <Reveal className="lg:col-span-5">
-          <span className={`${kicker} text-teal-aa`}>{w.kicker}</span>
-          <h2 className={`${h2} mt-3`}>{w.tagline}</h2>
-          <p className="text-lg text-slate-600 leading-relaxed mt-5">{w.intro}</p>
-        </Reveal>
-        <div className="lg:col-span-7 grid sm:grid-cols-2 gap-4">
-          {why.map((f, i) => <Reveal key={f.label} delay={i * 0.06} className="rounded-2xl bg-slate-50 p-6">
-            <span className="grid place-items-center w-11 h-11 rounded-xl bg-brand-navy text-white"><Check /></span>
-            <h3 className="font-heading font-bold text-lg mt-4">{f.label}</h3>
-            <p className="text-slate-600 mt-1 leading-relaxed">{f.value}</p>
-          </Reveal>)}
+    {/* Who we are: the profile beside a fact sheet, then the questions and the four buttons */}
+    <section aria-labelledby="fi-who" className="py-20 md:py-28">
+      <div className="max-w-[1200px] mx-auto px-6 grid lg:grid-cols-12 gap-12">
+        <div className="lg:col-span-5">
+          <div className="lg:sticky lg:top-32">
+            <Reveal>
+              <span className={`${kicker} text-teal-aa`}>{w.kicker}</span>
+              <h2 id="fi-who" className="font-heading text-3xl md:text-4xl font-bold leading-tight mt-3">{w.title}</h2>
+              <p className="font-heading text-xl font-semibold text-brand-orange-aa mt-4">{w.tagline}</p>
+              <p className="text-lg text-slate-600 leading-relaxed mt-5">{w.intro}</p>
+              <div className="flex items-center gap-4 mt-7 rounded-2xl bg-slate-50 p-4">
+                <span className="relative w-24 h-20 rounded-xl overflow-hidden shrink-0"><Image src={Images.people.foundersNew} alt={t.about.foundersAlt} fill sizes="96px" className="object-cover" /></span>
+                <p className="text-sm text-slate-700 leading-relaxed">{w.leadershipCaption}</p>
+              </div>
+              <div className="flex flex-wrap gap-3 mt-7">
+                {whoActions.map((act, i) => <a key={act.href} href={act.href} data-analytics-click={act.label} className={i === 0 ? btnPrimary : btnOutline}>{act.label}{i === 0 && <Arrow />}</a>)}
+              </div>
+            </Reveal>
+          </div>
+        </div>
+        <div className="lg:col-span-7">
+          <Reveal>
+            <dl className="rounded-3xl border border-slate-200 overflow-hidden">
+              {w.facts.map((f, i) => <div key={f.label} className="grid grid-cols-[2.5rem_1fr] sm:grid-cols-[2.5rem_11rem_1fr] gap-x-4 gap-y-1 px-5 py-4 border-b border-slate-100 last:border-0 odd:bg-white even:bg-slate-50">
+                <span aria-hidden="true" className="grid place-items-center w-8 h-8 rounded-lg bg-brand-navy text-white text-sm font-bold row-span-2 sm:row-span-1">{i + 1}</span>
+                <dt className="font-semibold text-brand-navy">{f.label}</dt>
+                <dd className="text-slate-600 leading-relaxed col-start-2 sm:col-start-3">{f.value}</dd>
+              </div>)}
+            </dl>
+          </Reveal>
+          <div className="grid sm:grid-cols-2 gap-4 mt-6">
+            {w.faq.map((item, i) => <Reveal key={item.q} delay={(i % 2) * 0.06} className="rounded-2xl border border-slate-200 p-6">
+              <h3 className="font-heading text-lg font-bold">{item.q}</h3>
+              <p className="text-slate-600 text-[15px] leading-relaxed mt-2">{item.a}</p>
+            </Reveal>)}
+          </div>
         </div>
       </div>
     </section>
@@ -162,19 +186,13 @@ export default function Finder() {
       </div>
     </section>
 
-    {/* Questions and the next step */}
+    {/* The next step */}
     <section className="py-20 md:py-28">
-      <div className="max-w-[1200px] mx-auto px-6 grid lg:grid-cols-2 gap-12">
-        <div className="space-y-6">
-          {w.faq.map((item) => <details key={item.q} className="group rounded-2xl border border-slate-200 p-5 open:bg-slate-50">
-            <summary className="flex justify-between gap-4 font-heading font-bold text-lg cursor-pointer list-none [&::-webkit-details-marker]:hidden">{item.q}<span aria-hidden="true" className="text-brand-orange-aa text-2xl leading-none group-open:rotate-45 transition-transform">+</span></summary>
-            <p className="text-slate-600 leading-relaxed mt-3">{item.a}</p>
-          </details>)}
-        </div>
-        <div className="rounded-3xl bg-brand-navy text-white p-10 flex flex-col justify-center">
+      <div className="max-w-[1200px] mx-auto px-6">
+        <div className="rounded-3xl bg-brand-navy text-white p-10 md:p-14 text-center flex flex-col items-center">
           <h2 className={`${h2} text-white`}>{a.nutritionist.label}</h2>
-          <p className="text-white/85 text-lg mt-4">{t.contact.intro}</p>
-          <div className="flex flex-wrap gap-3 mt-8">
+          <p className="text-white/85 text-lg mt-4 max-w-2xl">{t.contact.intro}</p>
+          <div className="flex flex-wrap justify-center gap-3 mt-8">
             <a href={a.nutritionist.href} className={btnPrimary}>{t.contact.formTitle}<Arrow /></a>
             <a href={a.dossier.href} className="inline-flex items-center min-h-12 px-7 rounded-full border-2 border-white/60 font-semibold hover:bg-white hover:text-brand-navy">{a.dossier.label}</a>
           </div>

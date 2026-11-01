@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
+import Image from "next/image";
 import { motion, useInView, useReducedMotion } from "framer-motion";
 import { Images, Videos, VideoPosters } from "@/lib/assets";
 import { PRODUCTS, productPath } from "@/lib/catalog";
@@ -152,4 +153,27 @@ export function Play({ className = "w-4 h-4" }: { className?: string }) {
 
 export function Check({ className = "w-5 h-5" }: { className?: string }) {
   return <svg className={className} fill="none" stroke="currentColor" strokeWidth={2.2} viewBox="0 0 24 24" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" d="M5 12.5l4.5 4.5L19 7.5" /></svg>;
+}
+
+/** Who We Are's four buttons, in order: products, research, leadership, technical dossier. */
+export function useWhoActions() {
+  const w = useT().home.whoWeAre;
+  const href = useHref();
+  return [
+    { label: w.exploreProducts, href: href("/products") },
+    { label: w.seeResearch, href: href("/research") },
+    { label: w.meetLeadership, href: href("/about") },
+    { label: w.requestDossier, href: href("/contact?type=dossier") },
+  ];
+}
+
+/** A species group's three photos, crossfading in turn. `offset` staggers neighbouring cards. */
+export function RotatingImages({ group, sizes, offset = 0, className = "" }: { group: number; sizes: string; offset?: number; className?: string }) {
+  const alts = useT().home.whoWeAre.cards[group].alts;
+  const [tick] = useRotate(3, 4000);
+  const shown = (tick + offset) % 3;
+  return <>
+    {SERVE_IMAGES[group].map((src, j) => <Image key={src} src={src} alt={alts[j]} fill sizes={sizes} aria-hidden={j !== shown}
+      className={`object-cover transition-opacity duration-1000 motion-reduce:transition-none ${j === shown ? "opacity-100" : "opacity-0"} ${className}`} />)}
+  </>;
 }
