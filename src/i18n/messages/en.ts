@@ -106,25 +106,32 @@ const en = {
 
     whoWeAre: {
       kicker: "Who we are",
-      title: "Nature-driven science. Proof in every kilo.",
-      intro: "ChemLife Innovations is a Bengaluru-based animal-nutrition biotechnology company. We pair Ayurvedic plant wisdom with technologies we developed ourselves, to make feed cleaner, animals healthier and farms more profitable, across poultry, swine and dairy.",
-      pillars: [
-        { title: "We start with clean feed.", text: "Mould and mycotoxins quietly drain growth, milk and margin. Our feed-hygiene range, led by MaxDmold, protects feed from storage to stomach." },
-        { title: "We own the science.", text: "ANBioT bio-transformation, green chelation and microencapsulation, built in our own labs, patent-backed and supported by the Government of India’s Technology Development Board." },
-        { title: "We make what we promise.", text: "Formulated, manufactured and quality-controlled at our own plant in Doddaballapura, Bengaluru, to FAMI-QS feed-safety standards." },
+      title: "ChemLife Innovations: functional feed-additive biotechnology from Bengaluru",
+      tagline: "Nature-driven science. Proof in every kilo.",
+      intro: "ChemLife Innovations is a Bengaluru-based manufacturer of functional feed additives and nutraceuticals for poultry, dairy cattle and swine. Its products pair Ayurvedic plant wisdom with proprietary technologies: ANBioT bio-transformation, green synthesis and microencapsulation. The work is supported by the Technology Development Board, Government of India.",
+      facts: [
+        { label: "What we make", value: "Feed hygiene (mould and mycotoxin control), natural growth promoters, bio-trace minerals, rumen-bypass and targeted-delivery actives" },
+        { label: "Species", value: "Poultry, dairy cattle and swine" },
+        { label: "Core technologies", value: "ANBioT, green synthesis, microencapsulation" },
+        { label: "Flagship ranges", value: "MaxDmold and FeedGenie (feed hygiene), MinBioZen (bio-trace minerals), MethioWiz and CholiWiz (rumen-bypass)" },
+        { label: "Government support", value: "Technology Development Board, Department of Science and Technology, bio-trace minerals project, 2023" },
+        { label: "Quality", value: "FAMI-QS feed-additive quality and safety certification" },
+        { label: "Recognition", value: "C-CAMP K-SAP BIO 50 cohort, 2020-21" },
+        { label: "Industry partners", value: "Huvepharma, in collaboration since 2018; EW Nutrition since 2020" },
+        { label: "Manufacturing", value: "Doddaballapura, Bengaluru Rural District, Karnataka, India" },
+        { label: "Leadership", value: "Dr Radhakrishna PM (Chairman and MD), Dr Sharada KC (Director, Technical), Sneha R (Director, HR and Finance), Shankar CV (Director, Business and Development)" },
       ],
-      motto: "Pehle dekho, phir bharosa.",
-      mottoTranslation: "See it first. Then trust.",
-      seeScience: "See our science",
+      faq: [
+        { q: "What does ChemLife Innovations make?", a: "ChemLife makes functional feed additives on three platforms: feed-hygiene products such as MaxDmold and FeedGenie that control mould and mycotoxins, bio-trace minerals such as MinBioZen, and rumen-bypass and targeted-delivery actives such as MethioWiz and CholiWiz for dairy." },
+        { q: "What is ANBioT & other technologies?", a: "ANBioT, or Accelerated Natural Bio Transformation, is ChemLife's proprietary process for turning natural inputs into functional feed additives. In its bio-trace minerals, a proprietary nutrient medium lets minerals chelate under milder conditions, using proteins from silkworm pupae, a silk-industry by-product (Technology Development Board, 2023)." },
+        { q: "How does ChemLife protect feed from mould and mycotoxins?", a: "Through its feed-hygiene range. MaxDmold is a dual-action mould shield built on bio-copper, and FeedGenie Prime gives multi-mode, multi-mycotoxin defence. Together they protect feed from storage to stomach, so quality holds in the silo and performance holds on the farm." },
+        { q: "Where is ChemLife based and how does it deliver?", a: "ChemLife is based in Doddaballapura, Bengaluru Rural District, Karnataka, India. Its integrated supply chain moves feed additives from the Bengaluru facility through warehouses and varied transport networks to final delivery, either directly or through distributor channels, serving poultry, swine and dairy producers." },
+      ],
+      leadershipCaption: "Led by four directors with 30 years in animal-nutraceutical innovation, 23 in feed-additive R&D, 38 in commercial project management and 15 in supply-chain accounting and HR.",
+      exploreProducts: "Explore our products",
+      seeResearch: "See our research",
+      meetLeadership: "Meet the leadership",
       requestDossier: "Request a technical dossier",
-      // {products} is the number of products in src/lib/catalog.ts.
-      stats: [
-        { value: "106 years", label: "combined leadership experience in animal nutrition, R&D and commercial delivery" },
-        { value: "{products}", label: "science-led products across poultry, swine and dairy" },
-        { value: "3", label: "technology platforms: feed hygiene, bio-trace minerals, targeted delivery" },
-        { value: "FAMI-QS", label: "feed-additive quality and safety certification" },
-      ],
-      statsCaption: "Led by four directors with 30 years in animal nutraceuticals, 23 years in feed-additive R&D, 38 years in commercial delivery and 15 in finance and HR.",
     },
 
     howWeDo: {
