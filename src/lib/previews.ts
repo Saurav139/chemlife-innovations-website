@@ -5,6 +5,12 @@ import { isLiveHost } from "@/lib/seo";
 // the site instead. Never shown on the live site.
 export const PREVIEWS = [
   {
+    slug: "homepage-taste",
+    href: "/previews/homepage-taste",
+    title: "Homepage: Taste Skill version",
+    description: "The homepage built with the design-taste-frontend skill: ChemLife's own photographs hung at uneven sizes, the full Who We Are section, and a dose reckoner that works out how much of a product a feed needs.",
+  },
+  {
     slug: "homepage-five",
     href: "/previews/homepage-five",
     title: "Homepage: five redesigns",
