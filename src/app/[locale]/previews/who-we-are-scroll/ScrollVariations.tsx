@@ -7,6 +7,9 @@ import SidewaysJourney from "./SidewaysJourney";
 import FeedJourney from "./FeedJourney";
 import ZoomFacts from "./ZoomFacts";
 import ReadAlong from "./ReadAlong";
+import RichPinned from "./rich/RichPinned";
+import RichSideways from "./rich/RichSideways";
+import { LEVELS, type Level } from "./rich/blocks";
 
 const options = [
   { id: "chapters", label: "Pinned chapters", type: "Classic scrollytelling", note: "A photo stays pinned while six chapters scroll past it; each chapter brings in its own photo and the counter moves on." },
@@ -16,23 +19,33 @@ const options = [
   { id: "read", label: "Read along", type: "Text-led", note: "Large type that fills in word by word as you read, with each question pinned beside its answer." },
 ] as const;
 type Variant = (typeof options)[number]["id"];
+// Pinned chapters and the sideways journey also come in fuller versions; "original" is the first design.
+type Version = "original" | Level;
+const VERSIONS: { id: Version; label: string; note: string }[] = [{ id: "original", label: "Original", note: "" }, ...LEVELS];
+const hasVersions = (v: Variant) => v === "chapters" || v === "sideways";
 
 export default function ScrollVariations() {
   const [variant, setVariant] = useState<Variant>("chapters");
+  const [version, setVersion] = useState<Version>("original");
   const tabs = useRef<(HTMLButtonElement | null)[]>([]);
   useEffect(() => {
+    // #chapters, or #chapters-all for one of its versions.
     const sync = () => {
-      const value = window.location.hash.slice(1);
-      if (options.some((option) => option.id === value)) setVariant(value as Variant);
+      const [value, level] = window.location.hash.slice(1).split("-");
+      if (!options.some((option) => option.id === value)) return;
+      setVariant(value as Variant);
+      setVersion(VERSIONS.some((v) => v.id === level) ? (level as Version) : "original");
     };
     sync();
     window.addEventListener("hashchange", sync);
     return () => window.removeEventListener("hashchange", sync);
   }, []);
-  const select = (id: Variant) => {
+  const select = (id: Variant, next: Version = "original") => {
     setVariant(id);
-    window.history.replaceState(null, "", `#${id}`);
+    setVersion(next);
+    window.history.replaceState(null, "", `#${id}${next === "original" ? "" : `-${next}`}`);
   };
+  const selectedVersion = VERSIONS.find((v) => v.id === version)!;
   const selected = options.find((option) => option.id === variant)!;
 
   return <main id="main" tabIndex={-1} className="min-h-screen bg-white pt-28 md:pt-32 pb-24">
@@ -56,13 +69,18 @@ export default function ScrollVariations() {
           <span aria-hidden="true" className="text-xs opacity-70">{String.fromCharCode(65 + index)}</span>{option.label}
         </button>)}
       </div>
-      <p className="mt-5 text-brand-navy"><strong>{selected.type}.</strong> <span className="text-slate-600">{selected.note}</span></p>
+      {hasVersions(variant) && <div role="group" aria-label={`${selected.label} versions`} className="flex flex-wrap items-center gap-2 mt-4 pl-1">
+        <span className="text-sm font-semibold text-slate-500 mr-1">Version:</span>
+        {VERSIONS.map((v) => <button key={v.id} type="button" aria-pressed={version === v.id} onClick={() => select(variant, v.id)}
+          className={`min-h-9 px-3.5 rounded-full text-sm font-semibold transition-colors ${version === v.id ? "bg-brand-orange-aa text-white" : "bg-slate-100 text-brand-navy hover:bg-slate-200"}`}>{v.label}</button>)}
+      </div>}
+      <p className="mt-5 text-brand-navy"><strong>{selected.type}.</strong> <span className="text-slate-600">{hasVersions(variant) && version !== "original" ? selectedVersion.note : selected.note}</span></p>
     </div>
 
     {/* No overflow clipping here: it would stop the pinned panels from sticking. */}
     <div id="design-preview" role="tabpanel" aria-labelledby={`tab-${variant}`} className="mt-10 border-y border-dashed border-slate-300">
-      {variant === "chapters" && <PinnedChapters />}
-      {variant === "sideways" && <SidewaysJourney />}
+      {variant === "chapters" && (version === "original" ? <PinnedChapters /> : <RichPinned key={version} level={version} />)}
+      {variant === "sideways" && (version === "original" ? <SidewaysJourney /> : <RichSideways key={version} level={version} />)}
       {variant === "journey" && <FeedJourney />}
       {variant === "zoom" && <ZoomFacts />}
       {variant === "read" && <ReadAlong />}
