@@ -5,6 +5,12 @@ import { isLiveHost } from "@/lib/seo";
 // the site instead. Never shown on the live site.
 export const PREVIEWS = [
   {
+    slug: "who-we-are-scroll",
+    href: "/previews/who-we-are-scroll",
+    title: "Who We Are: scrollytelling",
+    description: "Five scroll-driven versions of Who We Are: pinned chapters, a sideways journey, a feed pellet's path from nature to the farm, a photo zoom with a fact deck, and read-along text.",
+  },
+  {
     slug: "who-we-are",
     href: "/previews/who-we-are",
     title: "Who We Are: seven variations",
