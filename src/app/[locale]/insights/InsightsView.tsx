@@ -5,11 +5,11 @@ import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import Image from "next/image";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import SectionWrapper from "@/components/SectionWrapper";
 import { VariantProvider } from "@/context/VariantContext";
 import SiteSearch from "@/components/SiteSearch";
 import InsightCardContent, { INSIGHT_CARD_CLASS, isOptimizable, originalLink } from "@/components/InsightCard";
-import { Images } from "@/lib/assets";
+import Icon from "@/components/site/Icon";
+import { PageHero } from "@/components/site/ui";
 import type { Insights, InsightItem } from "@/lib/insights";
 import { playOnPage, youtubeWatchUrl } from "@/lib/youtube";
 import { insightAnchor } from "@/lib/catalog";
@@ -18,7 +18,7 @@ import { revealElement, useHashTarget } from "@/lib/deepLink";
 const easeOut = [0.25, 0.1, 0, 1] as const;
 
 // Featured card image widths for the browser to pick a file size from. They follow the grid and padding below.
-const FEATURED_IMAGE_SIZES = "(min-width: 1024px) 282px, (min-width: 640px) 40vw, calc(100vw - 114px)";
+const FEATURED_IMAGE_SIZES = "(min-width: 1024px) 380px, (min-width: 640px) 50vw, 100vw";
 
 // The grid shows this many cards at first, and this many more each time "Load more" is pressed.
 const PAGE_SIZE = 6;
@@ -163,540 +163,162 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
   });
   const visibleItems = gridItems.slice(0, visibleCount);
 
+  // The three featured posts, each with its picture or video, title and two buttons.
+  const featured = [
+    featuredBlog && { item: featuredBlog, label: "Blog", primary: "Read Article", secondary: originalLink(featuredBlog.linkUrl), video: false },
+    featuredVideo && { item: featuredVideo, label: "Video", primary: "Watch Now", secondary: { full: "Watch on YouTube", short: "YouTube" }, video: true },
+    featuredPodcast && { item: featuredPodcast, label: "Podcast", primary: "Listen Now", secondary: { full: "Watch on YouTube", short: "YouTube" }, video: true },
+  ].filter((entry): entry is NonNullable<typeof entry> => !!entry);
+  const BADGE: Record<string, string> = { Blog: "bg-mint/15 text-mint", Video: "bg-[#305280]/10 text-[#305280]", Podcast: "bg-flame/10 text-flame" };
+
   return (
     <VariantProvider>
       <Header />
 
-      <main id="main" tabIndex={-1} className="bg-white min-h-screen text-brand-navy">
-        {/* Hero and Featured are plain sections: they're in the first screen, so they show without waiting for a fade-in.
-            The hero image is the page's largest paint (LCP), so it loads first. */}
-        <section className="pt-26 md:pt-32 pb-10 md:pb-24 lg:pt-36 lg:pb-32 text-white relative overflow-hidden bg-brand-navy flex items-center">
-          <div className="absolute inset-0 z-0">
-            <Image
-              src={Images.heroes.insights}
-              alt="Biotechnology research papers and books backdrop"
-              fill
-              sizes="100vw"
-              className="object-cover opacity-60"
-              priority
-              fetchPriority="high"
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-brand-navy/90 via-brand-navy/60 to-brand-navy/35" />
-            <div className="absolute inset-0 bg-black/10" />
-          </div>
+      <main id="main" tabIndex={-1} className="site-ui bg-page min-h-screen">
+        <PageHero trail="Insights" title="*Knowledge* & Perspectives" lead="Stay updated with the latest industry trends, veterinary research, and biotechnology advancements." />
 
-          <div className="relative z-10 max-w-[1200px] mx-auto px-6 w-full">
-            <span className="text-teal-aa-light text-sm font-semibold tracking-widest uppercase block mb-3">
-              Insights
-            </span>
-            <h1 className="font-heading text-3xl md:text-4xl lg:text-6xl font-bold leading-tight mb-3 md:mb-4 text-white max-w-4xl">
-              <span className="text-teal-400">Knowledge</span> & Perspectives
-            </h1>
-            <p className="text-white/85 text-base md:text-lg lg:text-xl leading-relaxed max-w-3xl font-light">
-              Stay updated with the latest industry trends, veterinary research, and biotechnology advancements.
-            </p>
+        {/* Featured: the newest (or chosen) post of each kind */}
+        <section aria-labelledby="featured-title" className="paper relative bg-page pb-20 md:pb-28">
+          <div className="container-site">
+            <h2 id="featured-title" className="label-mono text-copy-dim flex items-center gap-3 pb-6 mb-10 border-b border-ink"><span className="text-flame">(01)</span><span className="h-px w-8 bg-current opacity-50" />Featured</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+              {featured.map(({ item, label, primary, secondary, video }) => {
+                const open = () => (video ? setActiveVideoId(item.youtubeId!) : setActiveArticle(item));
+                return <article key={item.title} id={insightAnchor(item.title)} data-analytics-item={item.title}
+                  className="scroll-mt-28 group flex flex-col">
+                  <div className="relative aspect-video rounded-[1.75rem] overflow-hidden bg-card-hi">
+                    {video && item.youtubeId
+                      ? <a href={youtubeWatchUrl(item.youtubeId)} target="_blank" rel="noopener noreferrer" onClick={(e) => playOnPage(e, () => setActiveVideoId(item.youtubeId!))}
+                        aria-label={item.title} data-analytics-click={primary} className="absolute inset-0 block">
+                        <Image src={`https://img.youtube.com/vi/${item.youtubeId}/0.jpg`} alt={item.title} fill sizes={FEATURED_IMAGE_SIZES} className="object-cover group-hover:scale-[1.03] transition-transform duration-500" />
+                        <span className="absolute inset-0 grid place-items-center bg-black/20"><span className="grid place-items-center w-14 h-14 rounded-full bg-brand-orange-aa text-white shadow-xl"><Icon name="play" className="w-6 h-6 ml-0.5" /></span></span>
+                      </a>
+                      : item.imageUrl && <button type="button" onClick={open} aria-label={item.title} data-analytics-click="Read Article" className="absolute inset-0 cursor-pointer">
+                        <Image src={item.imageUrl} alt={item.title} fill sizes={FEATURED_IMAGE_SIZES} className="object-cover group-hover:scale-[1.03] transition-transform duration-500" unoptimized={!isOptimizable(item.imageUrl)} />
+                      </button>}
+                  </div>
+                  <div className="pt-6 flex flex-col flex-1">
+                    <p className="flex flex-wrap items-center gap-2 label-mono text-[11px] text-copy-dim">
+                      <span className={`px-2.5 py-1 rounded-full ${BADGE[label]}`}>{label}</span>Featured · {item.date} · {item.meta}
+                    </p>
+                    <h3 className="font-display text-2xl text-ink mt-4 leading-snug line-clamp-3 group-hover:text-flame transition-colors">{item.title}</h3>
+                    <div className="grid grid-cols-2 gap-2 mt-auto pt-6">
+                      {video && item.youtubeId
+                        ? <a href={youtubeWatchUrl(item.youtubeId)} target="_blank" rel="noopener noreferrer" onClick={(e) => playOnPage(e, () => setActiveVideoId(item.youtubeId!))}
+                          className="inline-flex items-center justify-center min-h-11 rounded-full bg-brand-orange-aa hover:bg-brand-orange-aa-hover text-white text-sm font-semibold transition-colors">{primary}</a>
+                        : <button type="button" onClick={open} data-analytics-click="Read Article"
+                          className="inline-flex items-center justify-center min-h-11 rounded-full bg-brand-orange-aa hover:bg-brand-orange-aa-hover text-white text-sm font-semibold transition-colors cursor-pointer">{primary}</button>}
+                      <a href={video ? `https://www.youtube.com/watch?v=${item.youtubeId}` : item.linkUrl || "https://www.linkedin.com/company/chemlifeinnovations/"} target="_blank" rel="noopener noreferrer"
+                        className="inline-flex items-center justify-center min-h-11 rounded-full border border-ink/30 text-ink hover:bg-ink hover:text-page text-sm font-semibold transition-colors">
+                        <ButtonLabel full={secondary.full} short={secondary.short} />
+                      </a>
+                    </div>
+                  </div>
+                </article>;
+              })}
+            </div>
+
+            {/* Where else to follow along */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
+              {[
+                { href: "https://www.linkedin.com/company/chemlifeinnovations/", title: "Follow us on LinkedIn", text: "Smarter Decisions for Better Outcomes via #FeedBites", color: "text-white bg-[#0a66c2]", d: "M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.779-1.75-1.75s.784-1.75 1.75-1.75 1.75.779 1.75 1.75-.784 1.75-1.75 1.75zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" },
+                { href: "https://www.youtube.com/@chemlifeinnovations2739", title: "Subscribe on YouTube", text: "Watch expert talks, video insights, and podcast content", color: "text-white bg-[#cc0000]", d: "M23.498 6.163a3.003 3.003 0 0 0-2.11-2.108C19.52 3.5 12 3.5 12 3.5s-7.52 0-9.388.555A3.003 3.003 0 0 0 .502 6.163C0 8.07 0 12 0 12s0 3.93.502 5.837a3.003 3.003 0 0 0 2.11 2.108C4.48 20.5 12 20.5 12 20.5s7.52 0 9.388-.555a3.003 3.003 0 0 0 2.11-2.108C24 15.93 24 12 24 12s0-3.93-.502-5.837zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" },
+              ].map((channel) => <a key={channel.title} href={channel.href} target="_blank" rel="noopener noreferrer"
+                className="group flex items-center gap-4 p-5 rounded-[1.5rem] border border-line bg-card hover:border-ink/40 transition-colors">
+                <span className={`grid place-items-center w-12 h-12 rounded-xl shrink-0 ${channel.color}`}><svg className="w-6 h-6 fill-current" viewBox="0 0 24 24" aria-hidden="true"><path d={channel.d} /></svg></span>
+                <span><span className="block font-display text-xl text-ink">{channel.title}</span><span className="block text-sm text-copy mt-0.5">{channel.text}</span></span>
+                <Icon name="arrowUpRight" className="w-5 h-5 text-copy-dim ml-auto shrink-0" />
+              </a>)}
+            </div>
           </div>
         </section>
 
-        {/* Featured Section (Three Columns) */}
-        <section className="pt-10 md:pt-16 lg:pt-24 pb-8 bg-white">
-          <div className="max-w-[1200px] mx-auto px-6">
-            <div className="mb-6 md:mb-10">
-              <h2 className="font-heading text-3xl lg:text-4xl font-bold text-brand-navy">
-                Featured
-              </h2>
-            </div>
-            
-            {/* Tablets and landscape phones (640-1023px): each card is a row, its picture beside the label, title and
-                buttons, so Featured takes about one screen instead of three. Phones stack the cards.
-                Desktop: each card spans the same four rows (label line, title, image, buttons) through subgrid, so the
-                titles, images and buttons line up across the three cards whatever their text length.
-                The two buttons in each card are always the same width: half the card on phones and desktop, 192px
-                on tablets. On 1024–1279px screens, where the cards are narrowest, their text is 12px so the longest
-                label ("Read on WordPress") still fits. */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 md:gap-8 lg:gap-x-6 lg:gap-y-0">
-              
-              {/* Featured Blog */}
-              {featuredBlog && (
-                <div
-                  id={insightAnchor(featuredBlog.title)}
-                  data-analytics-item={featuredBlog.title}
-                  data-analytics-click="Read Article"
-                  className="scroll-mt-28 bg-gray-55 border border-gray-200 rounded-2xl md:rounded-3xl p-5 md:p-6 lg:p-5 xl:p-6 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between sm:max-lg:grid sm:max-lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] sm:max-lg:grid-rows-[auto_1fr_auto] sm:max-lg:gap-x-6 lg:grid lg:grid-rows-subgrid lg:row-span-4 lg:gap-y-0 group cursor-pointer"
-                  onClick={() => setActiveArticle(featuredBlog)}
-                >
-                  <div className="sm:contents">
-                    <div className="flex items-center gap-2 mb-3 sm:max-lg:col-start-2 sm:max-lg:row-start-1">
-                      <span className="text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-teal-50 text-teal-700">
-                        Blog
-                      </span>
-                      <span className="text-xs text-gray-aa font-medium">Featured • {featuredBlog.date} • {featuredBlog.meta}</span>
-                    </div>
-                    <h3 className="font-heading text-lg md:text-xl lg:text-2xl font-bold text-brand-navy mb-4 lg:mb-6 group-hover:text-teal-aa transition-colors duration-300 line-clamp-3 sm:max-lg:col-start-2 sm:max-lg:row-start-2">
-                      {featuredBlog.title}
-                    </h3>
-                    
-                    {/* Blog Image Preview */}
-                    {featuredBlog.imageUrl && (
-                      <div className="relative w-full aspect-video rounded-xl md:rounded-2xl overflow-hidden bg-slate-100 border border-gray-200 select-none mb-4 sm:max-lg:col-start-1 sm:max-lg:row-start-1 sm:max-lg:row-span-3 sm:max-lg:aspect-auto sm:max-lg:self-stretch sm:max-lg:min-h-36 sm:max-lg:mb-0">
-                        <Image
-                          src={featuredBlog.imageUrl}
-                          alt={featuredBlog.title}
-                          fill
-                          sizes={FEATURED_IMAGE_SIZES}
-                          className="object-cover group-hover:scale-102 transition-transform duration-500"
-                          unoptimized={!isOptimizable(featuredBlog.imageUrl)}
-                        />
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="grid grid-cols-2 sm:grid-cols-[repeat(2,minmax(0,12rem))] lg:grid-cols-2 lg:row-start-4 items-center gap-2 sm:gap-4 lg:gap-2 pt-4 border-t border-gray-100 sm:max-lg:col-start-2 sm:max-lg:row-start-3 sm:max-lg:self-end">
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setActiveArticle(featuredBlog);
-                      }}
-                      className="inline-flex items-center justify-center min-h-11 text-center whitespace-nowrap px-2 py-2.5 rounded-full text-[13px] sm:text-sm lg:text-xs xl:text-sm leading-5 bg-teal-aa hover:bg-teal-700 text-white font-bold shadow-sm hover:shadow transition-all duration-300 cursor-pointer"
-                    >
-                      Read Article
-                    </button>
-                    <a
-                      href={featuredBlog.linkUrl || "https://www.linkedin.com/company/chemlifeinnovations/"}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center min-h-11 text-center whitespace-nowrap px-2 py-2.5 rounded-full text-[13px] sm:text-sm lg:text-xs xl:text-sm leading-5 border border-gray-200 text-gray-600 hover:bg-gray-50 hover:text-teal-aa font-bold transition-all duration-300 cursor-pointer"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <ButtonLabel full={originalLink(featuredBlog.linkUrl).full} short={originalLink(featuredBlog.linkUrl).short} />
-                    </a>
-                  </div>
-                </div>
-              )}
-
-              {/* Featured Video */}
-              {featuredVideo && (
-                <div
-                  id={insightAnchor(featuredVideo.title)}
-                  data-analytics-item={featuredVideo.title}
-                  className="scroll-mt-28 bg-gray-55 border border-gray-200 rounded-2xl md:rounded-3xl p-5 md:p-6 lg:p-5 xl:p-6 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between sm:max-lg:grid sm:max-lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] sm:max-lg:grid-rows-[auto_1fr_auto] sm:max-lg:gap-x-6 lg:grid lg:grid-rows-subgrid lg:row-span-4 lg:gap-y-0 group"
-                >
-                  <div className="sm:contents">
-                    <div className="flex items-center gap-2 mb-3 sm:max-lg:col-start-2 sm:max-lg:row-start-1">
-                      <span className="text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-blue-50 text-blue-700">
-                        Video
-                      </span>
-                      <span className="text-xs text-gray-aa font-medium">Featured • {featuredVideo.date} • {featuredVideo.meta}</span>
-                    </div>
-                    <h3 className="font-heading text-lg md:text-xl lg:text-2xl font-bold text-brand-navy mb-4 lg:mb-6 group-hover:text-teal-aa transition-colors duration-300 line-clamp-3 sm:max-lg:col-start-2 sm:max-lg:row-start-2">
-                      {featuredVideo.title}
-                    </h3>
-                    
-                    {/* YouTube Preview Thumbnail */}
-                    {featuredVideo.youtubeId && (
-                      <a
-                        href={youtubeWatchUrl(featuredVideo.youtubeId!)}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={(e) => playOnPage(e, () => setActiveVideoId(featuredVideo.youtubeId!))}
-                        aria-label={featuredVideo.title}
-                        data-analytics-click="Watch Now"
-                        className="block relative w-full aspect-video rounded-xl md:rounded-2xl overflow-hidden bg-slate-900 border border-slate-200/80 cursor-pointer shadow-sm group/video select-none mb-4 sm:max-lg:col-start-1 sm:max-lg:row-start-1 sm:max-lg:row-span-3 sm:max-lg:aspect-auto sm:max-lg:self-stretch sm:max-lg:min-h-36 sm:max-lg:mb-0"
-                      >
-                        <Image
-                          src={`https://img.youtube.com/vi/${featuredVideo.youtubeId}/0.jpg`}
-                          alt={featuredVideo.title}
-                          fill
-                          sizes={FEATURED_IMAGE_SIZES}
-                          className="object-cover group-hover/video:scale-103 transition-transform duration-500 opacity-90"
-                        />
-                        <div className="absolute inset-0 bg-black/10 group-hover/video:bg-black/20 transition-colors" />
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <div className="w-14 h-10 rounded-xl bg-red-600 group-hover/video:bg-red-700 flex items-center justify-center text-white transition-all shadow-md group-hover/video:scale-110">
-                            <svg className="w-5 h-5 fill-current ml-0.5" viewBox="0 0 24 24">
-                              <path d="M8 5v14l11-7z" />
-                            </svg>
-                          </div>
-                        </div>
-                      </a>
-                    )}
-                  </div>
-
-                  <div className="grid grid-cols-2 sm:grid-cols-[repeat(2,minmax(0,12rem))] lg:grid-cols-2 lg:row-start-4 items-center gap-2 sm:gap-4 lg:gap-2 pt-4 border-t border-gray-100 sm:max-lg:col-start-2 sm:max-lg:row-start-3 sm:max-lg:self-end">
-                    <a
-                      href={youtubeWatchUrl(featuredVideo.youtubeId!)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={(e) => playOnPage(e, () => setActiveVideoId(featuredVideo.youtubeId!))}
-                      className="inline-flex items-center justify-center min-h-11 text-center whitespace-nowrap px-2 py-2.5 rounded-full text-[13px] sm:text-sm lg:text-xs xl:text-sm leading-5 bg-teal-aa hover:bg-teal-700 text-white font-bold shadow-sm hover:shadow transition-all duration-300 cursor-pointer"
-                    >
-                      Watch Now
-                    </a>
-                    <a
-                      href={`https://www.youtube.com/watch?v=${featuredVideo.youtubeId}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center min-h-11 text-center whitespace-nowrap px-2 py-2.5 rounded-full text-[13px] sm:text-sm lg:text-xs xl:text-sm leading-5 border border-gray-200 text-gray-600 hover:bg-gray-50 hover:text-teal-aa font-bold transition-all duration-300"
-                    >
-                      <ButtonLabel full="Watch on YouTube" short="YouTube" />
-                    </a>
-                  </div>
-                </div>
-              )}
-
-              {/* Featured Podcast */}
-              {featuredPodcast && (
-                <div
-                  id={insightAnchor(featuredPodcast.title)}
-                  data-analytics-item={featuredPodcast.title}
-                  className="scroll-mt-28 bg-gray-55 border border-gray-200 rounded-2xl md:rounded-3xl p-5 md:p-6 lg:p-5 xl:p-6 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between sm:max-lg:grid sm:max-lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] sm:max-lg:grid-rows-[auto_1fr_auto] sm:max-lg:gap-x-6 lg:grid lg:grid-rows-subgrid lg:row-span-4 lg:gap-y-0 group"
-                >
-                  <div className="sm:contents">
-                    <div className="flex items-center gap-2 mb-3 sm:max-lg:col-start-2 sm:max-lg:row-start-1">
-                      <span className="text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-red-50 text-red-700">
-                        Podcast
-                      </span>
-                      <span className="text-xs text-gray-aa font-medium">Featured • {featuredPodcast.date} • {featuredPodcast.meta}</span>
-                    </div>
-                    <h3 className="font-heading text-lg md:text-xl lg:text-2xl font-bold text-brand-navy mb-4 lg:mb-6 group-hover:text-teal-aa transition-colors duration-300 line-clamp-3 sm:max-lg:col-start-2 sm:max-lg:row-start-2">
-                      {featuredPodcast.title}
-                    </h3>
-                    
-                    {/* YouTube Preview Thumbnail */}
-                    {featuredPodcast.youtubeId && (
-                      <a
-                        href={youtubeWatchUrl(featuredPodcast.youtubeId!)}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={(e) => playOnPage(e, () => setActiveVideoId(featuredPodcast.youtubeId!))}
-                        aria-label={featuredPodcast.title}
-                        data-analytics-click="Listen Now"
-                        className="block relative w-full aspect-video rounded-xl md:rounded-2xl overflow-hidden bg-slate-900 border border-slate-200/80 cursor-pointer shadow-sm group/video select-none mb-4 sm:max-lg:col-start-1 sm:max-lg:row-start-1 sm:max-lg:row-span-3 sm:max-lg:aspect-auto sm:max-lg:self-stretch sm:max-lg:min-h-36 sm:max-lg:mb-0"
-                      >
-                        <Image
-                          src={`https://img.youtube.com/vi/${featuredPodcast.youtubeId}/0.jpg`}
-                          alt={featuredPodcast.title}
-                          fill
-                          sizes={FEATURED_IMAGE_SIZES}
-                          className="object-cover group-hover/video:scale-103 transition-transform duration-500 opacity-90"
-                        />
-                        <div className="absolute inset-0 bg-black/10 group-hover/video:bg-black/20 transition-colors" />
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <div className="w-14 h-10 rounded-xl bg-red-600 group-hover/video:bg-red-700 flex items-center justify-center text-white transition-all shadow-md group-hover/video:scale-110">
-                            <svg className="w-5 h-5 fill-current ml-0.5" viewBox="0 0 24 24">
-                              <path d="M8 5v14l11-7z" />
-                            </svg>
-                          </div>
-                        </div>
-                      </a>
-                    )}
-                  </div>
-
-                  <div className="grid grid-cols-2 sm:grid-cols-[repeat(2,minmax(0,12rem))] lg:grid-cols-2 lg:row-start-4 items-center gap-2 sm:gap-4 lg:gap-2 pt-4 border-t border-gray-100 sm:max-lg:col-start-2 sm:max-lg:row-start-3 sm:max-lg:self-end">
-                    <a
-                      href={youtubeWatchUrl(featuredPodcast.youtubeId!)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={(e) => playOnPage(e, () => setActiveVideoId(featuredPodcast.youtubeId!))}
-                      className="inline-flex items-center justify-center min-h-11 text-center whitespace-nowrap px-2 py-2.5 rounded-full text-[13px] sm:text-sm lg:text-xs xl:text-sm leading-5 bg-teal-aa hover:bg-teal-700 text-white font-bold shadow-sm hover:shadow transition-all duration-300 cursor-pointer"
-                    >
-                      Listen Now
-                    </a>
-                    <a
-                      href={`https://www.youtube.com/watch?v=${featuredPodcast.youtubeId}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center min-h-11 text-center whitespace-nowrap px-2 py-2.5 rounded-full text-[13px] sm:text-sm lg:text-xs xl:text-sm leading-5 border border-gray-200 text-gray-600 hover:bg-gray-50 hover:text-teal-aa font-bold transition-all duration-300"
-                    >
-                      <ButtonLabel full="Watch on YouTube" short="YouTube" />
-                    </a>
-                  </div>
-                </div>
-              )}
-
-            </div>
-
-          </div>
-        </section>
-
-        {/* Social Channel Connectors Banner */}
-        <SectionWrapper className="py-6 bg-slate-50 border-y border-gray-200/60">
-          <div className="max-w-[1200px] mx-auto px-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <a
-                href="https://www.linkedin.com/company/chemlifeinnovations/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-4 p-4 bg-white rounded-2xl border border-gray-200 hover:border-blue-500 hover:shadow-xs transition-all duration-300"
-              >
-                <div className="w-12 h-12 bg-[#0a66c2]/10 text-[#0a66c2] rounded-xl flex items-center justify-center flex-shrink-0">
-                  <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24">
-                    <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.779-1.75-1.75s.784-1.75 1.75-1.75 1.75.779 1.75 1.75-.784 1.75-1.75 1.75zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
-                  </svg>
-                </div>
-                <div>
-                  <h4 className="font-bold text-brand-navy text-sm">Follow us on LinkedIn</h4>
-                  <p className="text-gray-aa text-xs mt-0.5">Smarter Decisions for Better Outcomes via #FeedBites</p>
-                </div>
-              </a>
-              <a
-                href="https://www.youtube.com/@chemlifeinnovations2739"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-4 p-4 bg-white rounded-2xl border border-gray-200 hover:border-red-500 hover:shadow-xs transition-all duration-300"
-              >
-                <div className="w-12 h-12 bg-red-600/10 text-red-600 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24">
-                    <path d="M23.498 6.163a3.003 3.003 0 0 0-2.11-2.108C19.52 3.5 12 3.5 12 3.5s-7.52 0-9.388.555A3.003 3.003 0 0 0 .502 6.163C0 8.07 0 12 0 12s0 3.93.502 5.837a3.003 3.003 0 0 0 2.11 2.108C4.48 20.5 12 20.5 12 20.5s7.52 0 9.388-.555a3.003 3.003 0 0 0 2.11-2.108C24 15.93 24 12 24 12s0-3.93-.502-5.837zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
-                  </svg>
-                </div>
-                <div>
-                  <h4 className="font-bold text-brand-navy text-sm">Subscribe on YouTube</h4>
-                  <p className="text-gray-aa text-xs mt-0.5">Watch expert talks, video insights, and podcast content</p>
-                </div>
-              </a>
-            </div>
-          </div>
-        </SectionWrapper>
-
-        {/* Filters and Search Row */}
-        <SectionWrapper className="pt-12 pb-8 bg-white">
-          <div className="max-w-[1200px] mx-auto px-6">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-8 border-b border-gray-100">
-              
-              {/* Search Bar + Subtitle */}
-              <div className="w-full md:max-w-md">
-                <span className="text-gray-aa text-xs font-semibold uppercase tracking-wider block mb-2">
-                  Search Podcasts, Blogs and Videos
-                </span>
-                <div className="relative">
-                  <input
-                    type="text"
-                    value={searchQuery}
-                    onChange={(e) => { setSearchQuery(e.target.value); resetGrid(); }}
-                    placeholder="Search titles, topics, or authors..."
-                    className="w-full bg-gray-50 border border-gray-250 rounded-full px-6 py-3 text-base md:text-sm text-brand-navy placeholder-gray-aa focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all duration-300 shadow-sm"
-                  />
-                  <div className="absolute right-4 top-3.5 text-gray-aa">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                  </div>
+        {/* Everything: search, filters and the grid */}
+        <section aria-labelledby="all-title" className="paper relative bg-page-alt py-20 md:py-28">
+          <div className="container-site">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-8 border-b border-ink">
+              <div>
+                <h2 id="all-title" className="font-display text-4xl md:text-6xl tracking-[-0.02em] text-ink">Explore <em className="italic text-flame">all insights</em> <span className="label-mono text-copy-dim align-middle">({gridItems.length})</span></h2>
+                <div className="flex flex-wrap gap-2 mt-5">
+                  {filters.map((filter) => {
+                    const isActive = selectedFilter === filter;
+                    return <button key={filter} aria-pressed={isActive} onClick={() => { setSelectedFilter(filter); resetGrid(); }}
+                      className={`min-h-11 px-5 rounded-full text-sm font-semibold border transition-colors cursor-pointer ${isActive ? "bg-ink border-ink text-page" : "border-line text-ink hover:border-ink"}`}>{filter}</button>;
+                  })}
                 </div>
               </div>
-
-              {/* Oval Filter Pills */}
-              <div className="flex flex-wrap gap-3">
-                {filters.map((filter) => {
-                  const isActive = selectedFilter === filter;
-                  return (
-                    <button
-                      key={filter}
-                      onClick={() => { setSelectedFilter(filter); resetGrid(); }}
-                      className={`tap-target px-6 py-2 rounded-full text-sm font-semibold transition-all duration-300 border cursor-pointer ${
-                        isActive
-                          ? "bg-teal-aa border-teal-600 text-white shadow-sm"
-                          : "bg-gray-100 border-transparent text-gray-aa hover:bg-gray-200"
-                      }`}
-                    >
-                      {filter}
-                    </button>
-                  );
-                })}
-              </div>
-
+              <label className="flex items-center rounded-full border border-line bg-card focus-within:border-flame/60 transition-colors w-full md:max-w-sm">
+                <span className="sr-only">Search Podcasts, Blogs and Videos</span>
+                <Icon name="search" className="w-5 h-5 ml-4 text-copy-dim shrink-0" />
+                <input type="text" value={searchQuery} onChange={(e) => { setSearchQuery(e.target.value); resetGrid(); }} placeholder="Search titles, topics, or authors..."
+                  className="w-full bg-transparent border-0 px-3 py-3 text-base text-ink placeholder:text-copy-dim focus:outline-none" />
+              </label>
             </div>
-          </div>
-        </SectionWrapper>
 
-        {/* Separator Section */}
-        <div className="max-w-[1200px] mx-auto px-6 mb-8">
-          <div className="flex items-center gap-4">
-            <span className="text-xs font-bold text-gray-aa uppercase tracking-wider whitespace-nowrap">
-              Explore All Insights ({gridItems.length})
-            </span>
-            <div className="w-full h-[1px] bg-gray-150" />
-          </div>
-        </div>
-
-        {/* Combined Grid Section */}
-        <SectionWrapper className="pt-0 pb-24 bg-white">
-          <div className="max-w-[1200px] mx-auto px-6">
-            
-            <motion.div
-              key={gridVersion}
-              initial={gridVersion === 0 || reduceMotion ? false : { opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.25, ease: "easeOut" }}
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 lg:gap-x-6"
-            >
-                {visibleItems.map((item, index) => {
-                  const isNew = index >= revealFrom;
-                  return (
-                    <motion.div
-                      key={item.title}
-                      id={featuredTitles.has(item.title) ? undefined : insightAnchor(item.title)}
-                      data-analytics-item={item.title}
-                      initial={isNew ? (reduceMotion ? { opacity: 0 } : { opacity: 0, y: 12 }) : false}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.35, ease: easeOut, delay: isNew ? Math.min(index - revealFrom, 5) * 0.06 : 0 }}
-                      className={`scroll-mt-28 ${INSIGHT_CARD_CLASS}`}
-                    >
-                      <InsightCardContent item={item} onRead={setActiveArticle} onPlay={setActiveVideoId} />
-                    </motion.div>
-                  );
-                })}
+            <motion.div key={gridVersion} initial={gridVersion === 0 || reduceMotion ? false : { opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.25, ease: "easeOut" }}
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mt-10">
+              {visibleItems.map((item, index) => {
+                const isNew = index >= revealFrom;
+                return <motion.div key={item.title} id={featuredTitles.has(item.title) ? undefined : insightAnchor(item.title)} data-analytics-item={item.title}
+                  initial={isNew ? (reduceMotion ? { opacity: 0 } : { opacity: 0, y: 12 }) : false} animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.35, ease: easeOut, delay: isNew ? Math.min(index - revealFrom, 5) * 0.06 : 0 }} className={`scroll-mt-28 ${INSIGHT_CARD_CLASS}`}>
+                  <InsightCardContent item={item} onRead={setActiveArticle} onPlay={setActiveVideoId} />
+                </motion.div>;
+              })}
             </motion.div>
 
-            {gridItems.length > visibleCount && (
-              <div className="mt-10 flex justify-center">
-                <button
-                  type="button"
-                  onClick={loadMore}
-                  className="inline-flex items-center justify-center min-h-12 px-8 rounded-full border-2 border-teal-aa text-teal-aa hover:bg-teal-aa hover:text-white text-sm font-bold transition-colors cursor-pointer"
-                >
-                  Load more ({gridItems.length - visibleCount} more)
-                </button>
-              </div>
-            )}
+            {gridItems.length > visibleCount && <div className="mt-10 flex justify-center">
+              <button type="button" onClick={loadMore} className="inline-flex items-center justify-center min-h-12 px-8 rounded-full border border-ink/30 text-ink hover:bg-ink hover:text-page font-semibold transition-colors cursor-pointer">
+                Load more ({gridItems.length - visibleCount} more)
+              </button>
+            </div>}
 
-            {gridItems.length === 0 && (
-              <div className="text-center py-20 bg-gray-50 rounded-2xl border border-dashed border-gray-200">
-                <span className="text-gray-aa text-sm">No insights found matching your search query.</span>
-              </div>
-            )}
-
+            {gridItems.length === 0 && <div className="text-center py-20 mt-10 rounded-2xl border border-dashed border-line"><span className="text-copy">No insights found matching your search query.</span></div>}
           </div>
-        </SectionWrapper>
+        </section>
       </main>
 
-      {/* YouTube Video Modal Overlay */}
+      {/* YouTube video player */}
       <AnimatePresence>
         {activeVideoId && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[70] flex items-center justify-center bg-black/95 p-4"
-            onClick={() => setActiveVideoId(null)}
-          >
-            <motion.div
-              initial={{ scale: 0.95, y: 20 }}
-              animate={{ scale: 1, y: 0 }}
-              exit={{ scale: 0.95, y: 20 }}
-              transition={{ duration: 0.3 }}
-              className="relative w-full max-w-4xl"
-              onClick={(e) => e.stopPropagation()}
-            >
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="theme-dark fixed inset-0 z-[70] flex items-center justify-center bg-[#0b1626]/95 p-4" onClick={() => setActiveVideoId(null)}>
+            <motion.div initial={{ scale: 0.95, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.95, y: 20 }} transition={{ duration: 0.3 }} className="relative w-full max-w-4xl" onClick={(e) => e.stopPropagation()}>
               {/* Close button above the player, so it doesn't cover YouTube's own controls */}
               <div className="flex justify-end mb-3">
-                <button
-                  onClick={() => setActiveVideoId(null)}
-                  className="w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors cursor-pointer border border-white/15"
-                  aria-label="Close video player"
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
+                <button onClick={() => setActiveVideoId(null)} className="w-11 h-11 rounded-full bg-ink/10 hover:bg-ink/20 text-ink grid place-items-center cursor-pointer border border-ink/15" aria-label="Close video player"><Icon name="close" className="w-5 h-5" /></button>
               </div>
-              <div className="aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl border border-white/10">
-              {/* YouTube Iframe Embed */}
-              <iframe
-                src={`https://www.youtube-nocookie.com/embed/${activeVideoId}?autoplay=1&rel=0`}
-                title="YouTube video player"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; compute-pressure; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowFullScreen
-                className="w-full h-full"
-              />
+              <div className="aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl border border-ink/10">
+                <iframe src={`https://www.youtube-nocookie.com/embed/${activeVideoId}?autoplay=1&rel=0`} title="YouTube video player" frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; compute-pressure; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen className="w-full h-full" />
               </div>
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Blog Article Reader Modal Overlay */}
+      {/* Article reader */}
       <AnimatePresence>
         {activeArticle && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[70] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 overflow-y-auto"
-            onClick={() => setActiveArticle(null)}
-          >
-            <motion.div
-              initial={{ scale: 0.95, y: 20 }}
-              animate={{ scale: 1, y: 0 }}
-              exit={{ scale: 0.95, y: 20 }}
-              transition={{ duration: 0.3 }}
-              className="relative w-full max-w-3xl bg-white rounded-3xl overflow-hidden shadow-2xl border border-gray-100 flex flex-col my-8 max-h-[85vh]"
-              onClick={(e) => e.stopPropagation()}
-            >
-              {/* Top Sticky Header */}
-              <div className="sticky top-0 bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between z-10">
-                <div className="flex items-center gap-2">
-                  <span className="text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-teal-50 text-teal-700">
-                    {activeArticle.type}
-                  </span>
-                  <span className="text-xs text-gray-aa font-medium">
-                    {activeArticle.date}
-                  </span>
-                </div>
-                <button
-                  onClick={() => setActiveArticle(null)}
-                  className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-500 hover:text-brand-navy flex items-center justify-center transition-all cursor-pointer"
-                  aria-label="Close article reader"
-                >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[70] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 overflow-y-auto" onClick={() => setActiveArticle(null)}>
+            <motion.div role="dialog" aria-modal="true" aria-labelledby="reader-title" initial={{ scale: 0.95, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.95, y: 20 }} transition={{ duration: 0.3 }}
+              className="site-ui relative w-full max-w-3xl bg-page rounded-[2rem] overflow-hidden shadow-2xl flex flex-col my-8 max-h-[85vh]" onClick={(e) => e.stopPropagation()}>
+              <div className="sticky top-0 bg-page border-b border-line px-6 py-4 flex items-center justify-between z-10">
+                <p className="flex items-center gap-2 label-mono text-[11px] text-copy-dim">
+                  <span className={`px-2.5 py-1 rounded-full ${BADGE[activeArticle.type] ?? BADGE.Blog}`}>{activeArticle.type}</span>{activeArticle.date}
+                </p>
+                <button onClick={() => setActiveArticle(null)} className="w-9 h-9 rounded-full bg-ink/5 hover:bg-ink/10 text-copy hover:text-ink grid place-items-center cursor-pointer" aria-label="Close article reader"><Icon name="close" className="w-4 h-4" /></button>
               </div>
-
-              {/* Scrollable Article Body */}
               <div className="overflow-y-auto p-6 md:p-8 space-y-6">
-                <h2 className="font-heading text-2xl md:text-3xl font-bold text-brand-navy leading-tight">
-                  {activeArticle.title}
-                </h2>
-
-                {activeArticle.imageUrl && (
-                  <div className="relative w-full aspect-video rounded-2xl overflow-hidden bg-slate-100 border border-gray-250 select-none">
-                    <Image
-                      src={activeArticle.imageUrl}
-                      alt={activeArticle.title}
-                      fill
-                      sizes={READER_IMAGE_SIZES}
-                      className="object-cover"
-                      unoptimized={!isOptimizable(activeArticle.imageUrl)}
-                    />
-                  </div>
-                )}
-
-                <div className="text-gray-600 text-sm md:text-base leading-relaxed whitespace-pre-line space-y-4">
-                  {activeArticle.content}
-                </div>
+                <h2 id="reader-title" className="font-display text-3xl md:text-4xl text-ink leading-tight tracking-[-0.01em]">{activeArticle.title}</h2>
+                {activeArticle.imageUrl && <div className="relative w-full aspect-video rounded-2xl overflow-hidden bg-card-hi border border-line select-none">
+                  <Image src={activeArticle.imageUrl} alt={activeArticle.title} fill sizes={READER_IMAGE_SIZES} className="object-cover" unoptimized={!isOptimizable(activeArticle.imageUrl)} />
+                </div>}
+                <div className="text-copy leading-relaxed whitespace-pre-line space-y-4">{activeArticle.content}</div>
               </div>
-
-              {/* Footer Action */}
-              <div className="border-t border-gray-100 px-6 py-4 flex justify-between bg-gray-50 items-center">
-                {activeArticle.linkUrl && (
-                  <a
-                    href={activeArticle.linkUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-xs font-semibold text-teal-aa hover:text-teal-700 transition-colors"
-                  >
-                    {originalLink(activeArticle.linkUrl).reader}
-                  </a>
-                )}
-                <button
-                  onClick={() => setActiveArticle(null)}
-                  className="whitespace-nowrap px-6 py-2.5 rounded-full bg-brand-navy text-white font-bold text-sm hover:bg-teal-aa transition-colors cursor-pointer"
-                >
-                  Close Reader
-                </button>
+              <div className="border-t border-line px-6 py-4 flex justify-between items-center gap-4 bg-page-alt">
+                {activeArticle.linkUrl && <a href={activeArticle.linkUrl} target="_blank" rel="noopener noreferrer" className="text-sm font-semibold text-flame hover:text-ink">{originalLink(activeArticle.linkUrl).reader}</a>}
+                <button onClick={() => setActiveArticle(null)} className="whitespace-nowrap min-h-11 px-6 rounded-full bg-brand-orange-aa hover:bg-brand-orange-aa-hover text-white font-semibold cursor-pointer">Close Reader</button>
               </div>
             </motion.div>
           </motion.div>

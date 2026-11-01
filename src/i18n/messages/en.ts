@@ -80,6 +80,12 @@ const en = {
     cookieRegion: "Cookie consent",
   },
 
+  // Headings and links added with the site's redesign.
+  ui: {
+    faqTitle: "Questions, *answered*",
+    backToTop: "Back to top",
+  },
+
   notFound: {
     title: "Page not found",
     text: "The page you're looking for doesn't exist or has moved.",

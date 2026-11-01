@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import { VariantProvider } from "@/context/VariantContext";
 import { GA_ID } from "@/lib/analytics";
 import { pageMetadata } from "@/lib/seo";
+import { PageHero } from "@/components/site/ui";
 
 // Privacy notice written for India's Digital Personal Data Protection Act, 2023 and the DPDP Rules, 2025.
 // It describes what the site does today: GA only after consent, the contact form sent through Resend to our
@@ -21,11 +22,11 @@ const LAST_UPDATED = "25 October 2026";
 const EMAIL = "innovate@chemlifeinnovations.com";
 const PHONE = "+91 95358 62570";
 
-const h2 = "font-heading text-2xl font-bold text-brand-navy mt-12 mb-4 scroll-mt-28";
+const h2 = "font-display text-3xl text-ink tracking-[-0.01em] mt-14 mb-4 pt-8 border-t border-line scroll-mt-28";
 const list = "list-disc pl-6 space-y-2";
-const link = "text-teal-aa underline hover:text-teal-700";
-const th = "text-left p-3 border-b border-slate-200";
-const td = "p-3 border-b border-slate-200 align-top";
+const link = "text-flame underline underline-offset-2 hover:text-ink";
+const th = "text-left p-3 border-b border-line text-ink";
+const td = "p-3 border-b border-line align-top";
 
 const SECTIONS = [
   ["who-we-are", "Who we are"],
@@ -61,15 +62,15 @@ function Mail() {
 
 /** One processing activity: what we collect, why, on what basis, and for how long. */
 function Activity({ title, data, purpose, basis, kept }: { title: string; data: React.ReactNode; purpose: React.ReactNode; basis: React.ReactNode; kept: React.ReactNode }) {
-  const row = "grid gap-1 sm:grid-cols-[9rem_1fr] sm:gap-4 py-3 border-t border-slate-200 first:border-t-0";
+  const row = "grid gap-1 sm:grid-cols-[9rem_1fr] sm:gap-4 py-3 border-t border-line first:border-t-0";
   return (
-    <div className="mt-6 rounded-xl border border-slate-200 bg-slate-50/60 px-5 py-2">
-      <h3 className="font-heading text-lg font-bold text-brand-navy pt-3 pb-1">{title}</h3>
+    <div className="mt-6 rounded-xl border border-line bg-page-alt px-5 py-2">
+      <h3 className="font-display text-xl text-ink pt-3 pb-1">{title}</h3>
       <dl>
-        <div className={row}><dt className="font-semibold text-brand-navy">What we collect</dt><dd>{data}</dd></div>
-        <div className={row}><dt className="font-semibold text-brand-navy">Why</dt><dd>{purpose}</dd></div>
-        <div className={row}><dt className="font-semibold text-brand-navy">Basis</dt><dd>{basis}</dd></div>
-        <div className={row}><dt className="font-semibold text-brand-navy">How long</dt><dd>{kept}</dd></div>
+        <div className={row}><dt className="font-semibold text-ink">What we collect</dt><dd>{data}</dd></div>
+        <div className={row}><dt className="font-semibold text-ink">Why</dt><dd>{purpose}</dd></div>
+        <div className={row}><dt className="font-semibold text-ink">Basis</dt><dd>{basis}</dd></div>
+        <div className={row}><dt className="font-semibold text-ink">How long</dt><dd>{kept}</dd></div>
       </dl>
     </div>
   );
@@ -84,16 +85,11 @@ export default async function PrivacyPage({ params }: { params: Promise<{ locale
     <VariantProvider>
       <Header />
 
-      <main id="main" tabIndex={-1} className="bg-white min-h-screen text-brand-navy">
-        <section className="pt-26 md:pt-32 pb-10 md:pb-16 lg:pt-36 lg:pb-20 bg-brand-navy text-white">
-          <div className="max-w-3xl mx-auto px-6">
-            <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-white">Privacy Policy</h1>
-            <p className="mt-4 text-white/75">Last updated {LAST_UPDATED}</p>
-          </div>
-        </section>
+      <main id="main" tabIndex={-1} className="site-ui bg-page min-h-screen">
+        <PageHero trail="Legal" title="*Privacy* Policy" lead={`Last updated ${LAST_UPDATED}`} />
 
-        <section className="py-16">
-          <div className="max-w-3xl mx-auto px-6 text-slate-600 leading-relaxed [overflow-wrap:anywhere]">
+        <section className="paper relative bg-page pb-20 md:pb-28">
+          <div className="max-w-3xl mx-auto px-6 text-copy text-[17px] leading-relaxed [overflow-wrap:anywhere]">
             <p>
               This policy is our notice to you under India&apos;s Digital Personal Data Protection Act, 2023 (the
               &ldquo;DPDP Act&rdquo;) and the Digital Personal Data Protection Rules, 2025. It explains what personal
@@ -101,8 +97,8 @@ export default async function PrivacyPage({ params }: { params: Promise<{ locale
               share it with, and how you can exercise your rights or complain.
             </p>
 
-            <div className="mt-8 rounded-xl border-l-4 border-teal-500 bg-teal-50/60 p-5">
-              <p className="font-heading font-bold text-brand-navy mb-2">In short</p>
+            <div className="mt-8 rounded-[1.5rem] bg-page-alt p-6 md:p-8">
+              <p className="label-mono text-flame mb-3">In short</p>
               <ul className={list}>
                 <li>You can browse the whole website without giving us any personal data.</li>
                 <li>We only use analytics cookies if you click <strong>Accept</strong>, and you can withdraw that at any time.</li>
@@ -115,7 +111,7 @@ export default async function PrivacyPage({ params }: { params: Promise<{ locale
             </div>
 
             <nav aria-label="Contents" className="mt-10">
-              <p className="font-heading font-bold text-brand-navy mb-2">Contents</p>
+              <p className="label-mono text-flame mb-3">Contents</p>
               <ol className="list-decimal pl-6 columns-1 sm:columns-2 gap-8">
                 {SECTIONS.map(([id, title]) => (
                   <li key={id}><a href={`#${id}`} className={`${link} inline-block py-2.5`}>{title}</a></li>
@@ -237,8 +233,8 @@ export default async function PrivacyPage({ params }: { params: Promise<{ locale
               Cookies are small files a website stores in your browser. We use as few as possible:
             </p>
             <div className="overflow-x-auto">
-              <table className="w-full text-sm border border-slate-200">
-                <thead className="bg-slate-50 text-brand-navy">
+              <table className="w-full text-sm border border-line">
+                <thead className="bg-page-alt text-ink">
                   <tr>
                     <th className={th}>Name</th>
                     <th className={th}>Purpose</th>
@@ -386,8 +382,8 @@ export default async function PrivacyPage({ params }: { params: Promise<{ locale
             <p>
               To exercise any of your rights, or to raise a concern or complaint, contact our Grievance Officer:
             </p>
-            <address className="not-italic mt-3 rounded-xl border border-slate-200 p-5">
-              <strong className="text-brand-navy">Grievance Officer, ChemLife Innovations Pvt Ltd</strong>
+            <address className="not-italic mt-3 rounded-xl border border-line p-5">
+              <strong className="text-ink">Grievance Officer, ChemLife Innovations Pvt Ltd</strong>
               <br />
               Plot no 18, KIADB Industrial Area, 3rd Phase, Obadenahalli, Doddaballapura, Greater Bengaluru 561 203,
               Karnataka, India

@@ -5,15 +5,15 @@ import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import SectionWrapper from "@/components/SectionWrapper";
 import { VariantProvider } from "@/context/VariantContext";
 import SiteSearch from "@/components/SiteSearch";
-import { Images } from "@/lib/assets";
+import Icon from "@/components/site/Icon";
+import Life from "@/components/home/Life";
+import { Button, Kicker, PageHero, Reveal, SectionHead, accentLast, easeOut } from "@/components/site/ui";
 import { INTERNSHIP_ROLES, roleAnchor } from "@/lib/catalog";
 import { revealElement, useHashTarget } from "@/lib/deepLink";
 import { useLocale, useT } from "@/i18n/LocaleProvider";
 
-const easeOut = [0.25, 0.1, 0, 1] as const;
 
 interface InternshipPosition {
   id: string;
@@ -28,8 +28,12 @@ interface InternshipPosition {
 // The internships are listed in src/lib/catalog.ts; their titles, departments and descriptions are in the language
 // file (careers.roles), in the same order.
 
+const FIELD = "w-full bg-card border border-copy-dim/50 rounded-2xl px-4 py-3 text-base text-ink placeholder:text-copy-dim focus:outline-none focus:border-flame focus:ring-1 focus:ring-flame transition-colors";
+const LABEL = "block label-mono text-copy-dim mb-2";
+
 export default function CareersPage() {
-  const t = useT().careers;
+  const all = useT();
+  const t = all.careers;
   const locale = useLocale();
   const internshipRoles = INTERNSHIP_ROLES.map((role, i) => ({ ...role, ...t.roles[i] }));
   const [selectedRoleId, setSelectedRoleId] = useState("research-intern");
@@ -105,432 +109,151 @@ export default function CareersPage() {
     <VariantProvider>
       <Header />
 
-      <main id="main" tabIndex={-1} className="bg-white min-h-screen text-brand-navy">
-        {/* Careers Hero Section */}
-        <SectionWrapper className="pt-26 md:pt-32 pb-10 md:pb-24 lg:pt-36 lg:pb-32 text-white relative overflow-hidden bg-brand-navy flex items-center">
-          <div className="absolute inset-0 z-0">
-            <Image
-              src={Images.heroes.careers}
-              alt={t.heroAlt}
-              fill
-              sizes="100vw"
-              className="object-cover opacity-50"
-              priority
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-brand-navy/95 via-brand-navy/80 to-brand-navy/60" />
-            <div className="absolute inset-0 bg-black/10" />
-          </div>
+      <main id="main" tabIndex={-1} className="site-ui bg-page min-h-screen">
+        <PageHero trail={t.kicker} title={`${t.titleStart} *${t.titleAccent}* ${t.titleEnd}`} lead={t.intro}
+          actions={<Button href="#positions" arrow>{t.openTitle}</Button>} />
 
-          <div className="relative z-10 max-w-[1200px] mx-auto px-6 w-full text-center lg:text-left">
-            <span className="text-teal-aa-light text-sm font-semibold tracking-widest uppercase block mb-3">
-              {t.kicker}
-            </span>
-            <h1 className="font-heading text-3xl md:text-4xl lg:text-6xl font-bold leading-tight mb-3 md:mb-4 text-white max-w-4xl">
-              {t.titleStart} <span className="text-teal-400">{t.titleAccent}</span> {t.titleEnd}
-            </h1>
-            <p className="text-white/85 text-base md:text-lg lg:text-xl leading-relaxed max-w-3xl font-light">
-              {t.intro}
-            </p>
-          </div>
-        </SectionWrapper>
-
-        {/* About & Internship Considerations Section */}
-        <SectionWrapper className="py-12 md:py-20 bg-gray-50 border-b border-gray-150">
-          <div className="max-w-[1200px] mx-auto px-6">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-
-              {/* Program Overview */}
-              <div>
-                <h2 className="font-heading text-3xl font-bold text-brand-navy mb-6">
-                  {t.aboutTitle}
-                </h2>
-                <p className="text-gray-600 text-base leading-relaxed mb-6">
-                  {t.aboutText}
-                </p>
-                <div className="space-y-6">
-                  <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-xl bg-teal-50 text-teal-700 flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <svg className="w-5 h-5 text-teal-650" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                        <line x1="16" y1="2" x2="16" y2="6"></line>
-                        <line x1="8" y1="2" x2="8" y2="6"></line>
-                        <line x1="3" y1="10" x2="21" y2="10"></line>
-                      </svg>
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-brand-navy text-base">{t.duration}</h3>
-                      <p className="text-gray-500 text-sm mt-0.5">{t.durationText}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-xl bg-teal-50 text-teal-700 flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <svg className="w-5 h-5 text-teal-650" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                        <line x1="12" y1="1" x2="12" y2="23"></line>
-                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
-                      </svg>
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-brand-navy text-base">{t.stipend}</h3>
-                      <p className="text-gray-500 text-sm mt-0.5">{t.stipendText}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-xl bg-teal-50 text-teal-700 flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <svg className="w-5 h-5 text-teal-650" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                        <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
-                        <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
-                        <line x1="6" y1="1" x2="6" y2="4"></line>
-                        <line x1="10" y1="1" x2="10" y2="4"></line>
-                        <line x1="14" y1="1" x2="14" y2="4"></line>
-                      </svg>
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-brand-navy text-base">{t.lunch}</h3>
-                      <p className="text-gray-500 text-sm mt-0.5">{t.lunchText}</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Considerations & Requirements Card */}
-              <div className="bg-white border border-gray-255 rounded-3xl p-5 sm:p-8 lg:p-10 shadow-sm">
-                <h3 className="font-heading text-2xl font-bold text-brand-navy mb-6 flex items-center gap-3">
-                  <svg className="w-6 h-6 text-teal-aa flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                    <path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A5.5 5.5 0 0 0 12.5 2.5a5.5 5.5 0 0 0-5.5 5.5c0 1.3.5 2.6 1.5 3.5.8.8 1.3 1.5 1.5 2.5"></path>
-                    <line x1="9" y1="18" x2="15" y2="18"></line>
-                    <line x1="10" y1="22" x2="14" y2="22"></line>
-                  </svg>
-                  <span>{t.considerations}</span>
-                </h3>
-                <ul className="space-y-5 text-base text-gray-650">
-                  <li className="flex gap-3 items-start">
-                    <svg className="w-5 h-5 text-brand-orange mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                      <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                    </svg>
-                    <span><strong>{t.accommodation}</strong> {t.accommodationText}</span>
-                  </li>
-                  <li className="flex gap-3 items-start">
-                    <svg className="w-5 h-5 text-brand-orange mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                      <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"></path>
-                      <circle cx="7" cy="17" r="2"></circle>
-                      <path d="M9 17h6"></path>
-                      <circle cx="17" cy="17" r="2"></circle>
-                    </svg>
-                    <span><strong>{t.travel}</strong> {t.travelText}</span>
-                  </li>
-                  <li className="flex gap-3 items-start">
-                    <svg className="w-5 h-5 text-brand-orange mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                      <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
-                      <path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"></path>
-                    </svg>
-                    <span><strong>{t.opportunity}</strong> {t.opportunityText}</span>
-                  </li>
+        {/* The programme, and what to know before applying */}
+        <section aria-labelledby="program-title" className="paper relative bg-page pb-20 md:pb-28 lg:pb-36">
+          <div className="container-site grid lg:grid-cols-12 gap-12 lg:gap-12">
+            <Reveal className="lg:col-span-5">
+              <Kicker index="01">{t.kicker}</Kicker>
+              <h2 id="program-title" className="font-display text-4xl md:text-5xl tracking-[-0.02em] leading-[1.05] text-ink mt-8">{t.aboutTitle}</h2>
+              <p className="text-copy text-lg leading-relaxed mt-6">{t.aboutText}</p>
+            </Reveal>
+            <div className="lg:col-span-7">
+              <Reveal as="div" delay={0.05}>
+                <ul className="grid sm:grid-cols-3 border-t border-ink">
+                  {[{ icon: "briefcase" as const, title: t.duration, text: t.durationText }, { icon: "award" as const, title: t.stipend, text: t.stipendText }, { icon: "heart" as const, title: t.lunch, text: t.lunchText }].map((perk, i) =>
+                    <li key={perk.title} className={`py-7 sm:pr-5 border-b sm:border-b-0 border-line ${i ? "sm:pl-5 sm:border-l" : ""}`}>
+                      <Icon name={perk.icon} className="w-6 h-6 text-flame" />
+                      <h3 className="font-display text-2xl text-ink mt-5">{perk.title}</h3>
+                      <p className="text-copy leading-relaxed mt-2">{perk.text}</p>
+                    </li>)}
                 </ul>
-              </div>
-
+              </Reveal>
+              <Reveal delay={0.1} className="mt-10 rounded-[2rem] bg-page-alt p-7 md:p-9">
+                <h3 className="label-mono text-flame">{t.considerations}</h3>
+                <ul className="mt-5 space-y-5">
+                  {[{ icon: "warehouse" as const, strong: t.accommodation, text: t.accommodationText }, { icon: "truck" as const, strong: t.travel, text: t.travelText }, { icon: "target" as const, strong: t.opportunity, text: t.opportunityText }].map((item) =>
+                    <li key={item.strong} className="flex gap-4">
+                      <Icon name={item.icon} className="w-5 h-5 text-mint shrink-0 mt-1" />
+                      <p className="text-copy leading-relaxed"><strong className="text-ink">{item.strong}</strong> {item.text}</p>
+                    </li>)}
+                </ul>
+              </Reveal>
             </div>
           </div>
-        </SectionWrapper>
+        </section>
 
-        {/* Internship Dropdown and Details Container */}
-        <SectionWrapper className="py-16 md:py-24 bg-white">
-          <div className="max-w-[1200px] mx-auto px-6">
+        <Life index="02" join={false} />
 
-            <div className="text-center mb-8 md:mb-12">
-              <h2 className="font-heading text-3xl lg:text-4xl font-bold text-brand-navy">
-                {t.openTitle}
-              </h2>
-              <p className="text-gray-500 text-base mt-2 max-w-xl mx-auto">
-                {t.openText}
-              </p>
+        {/* Open positions: every internship as a tab, with its details below */}
+        <section id="positions" aria-labelledby="positions-title" className="paper relative bg-page py-20 md:py-28 lg:py-36 scroll-mt-16">
+          <div className="container-site">
+            <SectionHead id="positions-title" index="03" kicker={t.selectPosition} title={accentLast(t.openTitle)} lead={t.openText} />
+            <p id="positions-label" className="sr-only">{t.selectPosition}</p>
+            <div role="tablist" aria-labelledby="positions-label" className="grid sm:grid-cols-3 border-t border-ink"
+              onKeyDown={(e) => {
+                const ids = internshipRoles.map((role) => role.id);
+                const i = ids.indexOf(selectedRoleId);
+                const next =
+                  e.key === "ArrowRight" || e.key === "ArrowDown" ? ids[(i + 1) % ids.length]
+                  : e.key === "ArrowLeft" || e.key === "ArrowUp" ? ids[(i - 1 + ids.length) % ids.length]
+                  : e.key === "Home" ? ids[0]
+                  : e.key === "End" ? ids[ids.length - 1]
+                  : null;
+                if (!next) return;
+                e.preventDefault();
+                setSelectedRoleId(next);
+                document.getElementById(`role-tab-${next}`)?.focus();
+              }}>
+              {internshipRoles.map((role, i) => {
+                const active = role.id === selectedRoleId;
+                return <button key={role.id} id={`role-tab-${role.id}`} type="button" role="tab" aria-selected={active} aria-controls="role-panel" tabIndex={active ? 0 : -1}
+                  onClick={() => setSelectedRoleId(role.id)}
+                  className={`relative text-left py-6 sm:px-5 first:sm:pl-0 border-b border-line ${i ? "sm:border-l" : ""} transition-colors cursor-pointer group`}>
+                  <span className={`absolute left-0 right-0 -top-px h-[3px] origin-left transition-transform duration-500 bg-flame ${active ? "scale-x-100" : "scale-x-0"}`} />
+                  <span className="block label-mono text-copy-dim">{String(i + 1).padStart(2, "0")} — {role.department}</span>
+                  <span className={`block mt-2 font-display text-2xl leading-snug transition-colors ${active ? "text-flame" : "text-ink group-hover:text-flame"}`}>{role.title}</span>
+                </button>;
+              })}
             </div>
 
-            {/* Every position as a tab, so visitors see all the openings at a glance (a drop-down hid all but one).
-                Arrow keys move between tabs, as screen readers expect. */}
-            <div className="max-w-4xl mx-auto mb-8 md:mb-12">
-              <p id="positions-label" className="text-xs font-bold text-gray-aa uppercase tracking-wider mb-3 text-center">
-                {t.selectPosition}
-              </p>
-              <div
-                role="tablist"
-                aria-labelledby="positions-label"
-                className="grid gap-3 sm:grid-cols-3"
-                onKeyDown={(e) => {
-                  const ids = internshipRoles.map((role) => role.id);
-                  const i = ids.indexOf(selectedRoleId);
-                  const next =
-                    e.key === "ArrowRight" || e.key === "ArrowDown" ? ids[(i + 1) % ids.length]
-                    : e.key === "ArrowLeft" || e.key === "ArrowUp" ? ids[(i - 1 + ids.length) % ids.length]
-                    : e.key === "Home" ? ids[0]
-                    : e.key === "End" ? ids[ids.length - 1]
-                    : null;
-                  if (!next) return;
-                  e.preventDefault();
-                  setSelectedRoleId(next);
-                  document.getElementById(`role-tab-${next}`)?.focus();
-                }}
-              >
-                {internshipRoles.map((role) => {
-                  const active = role.id === selectedRoleId;
-                  return (
-                    <button
-                      key={role.id}
-                      id={`role-tab-${role.id}`}
-                      type="button"
-                      role="tab"
-                      aria-selected={active}
-                      aria-controls="role-panel"
-                      tabIndex={active ? 0 : -1}
-                      onClick={() => setSelectedRoleId(role.id)}
-                      className={`text-left rounded-2xl border-2 px-5 py-4 transition-colors cursor-pointer ${
-                        active ? "border-teal-aa bg-teal-50" : "border-gray-200 bg-white hover:border-teal-aa/50"
-                      }`}
-                    >
-                      <span className="block text-xs font-bold uppercase tracking-wider text-teal-aa">{role.department}</span>
-                      <span className="block mt-1 font-heading font-bold text-brand-navy leading-snug">{role.title}</span>
-                    </button>
-                  );
-                })}
+            <div id="role-panel" role="tabpanel" aria-labelledby={`role-tab-${selectedRole.id}`} className="scroll-mt-28 mt-12 grid lg:grid-cols-12 gap-10 lg:gap-12">
+              <div className="lg:col-span-5">
+                <div className="relative aspect-[4/5] rounded-t-full overflow-hidden bg-card-hi">
+                  <Image key={selectedRole.id} src={selectedRole.bgImage} alt={selectedRole.title} fill sizes="(min-width: 1024px) 40vw, 100vw" className="object-cover" />
+                </div>
+              </div>
+              <div className="lg:col-span-7">
+                <p className="label-mono text-mint">{selectedRole.department} · {t.location}</p>
+                <h3 className="font-display text-4xl md:text-5xl text-ink tracking-tight mt-4">{selectedRole.title}</h3>
+                <p className="text-copy text-lg leading-relaxed mt-6">{selectedRole.roleScope}</p>
+                <h4 className="label-mono text-flame mt-10">{t.qualifications}</h4>
+                <ul className="mt-4 border-t border-line">
+                  {selectedRole.qualifications.map((qual, idx) => <li key={idx} className="flex items-baseline gap-4 border-b border-line py-4 text-ink">
+                    <span className="label-mono text-copy-dim">{String(idx + 1).padStart(2, "0")}</span>{qual}
+                  </li>)}
+                </ul>
+                <h4 className="label-mono text-flame mt-10">{t.eligible}</h4>
+                <ul className="flex flex-wrap gap-2 mt-4">
+                  {selectedRole.requirements.map((req, idx) => <li key={idx} className="rounded-full border border-line bg-card px-4 py-2 text-sm text-ink">{req}</li>)}
+                </ul>
+                <Button onClick={() => setActiveJob(selectedRole)} arrow className="mt-10 w-full sm:w-auto">{t.apply}</Button>
               </div>
             </div>
-
-            {/* Split Details Container */}
-            <div
-              id="role-panel"
-              role="tabpanel"
-              aria-labelledby={`role-tab-${selectedRole.id}`}
-              className="scroll-mt-28 bg-gray-55 border border-gray-200 rounded-3xl overflow-hidden shadow-sm"
-            >
-              <div className="flex flex-col lg:flex-row min-h-[550px]">
-
-                {/* Left Side: Text Details */}
-                <div className="lg:w-7/12 p-5 sm:p-8 lg:p-12 flex flex-col justify-between flex-grow">
-                  <div>
-                    <span className="text-teal-aa text-sm font-bold uppercase tracking-wider block mb-2">
-                      {selectedRole.department}
-                    </span>
-                    <h3 className="font-heading text-3xl font-bold text-brand-navy mb-6">
-                      {selectedRole.title}
-                    </h3>
-
-                    <p className="text-gray-650 text-base leading-relaxed mb-8">
-                      {selectedRole.roleScope}
-                    </p>
-
-                    {/* Point-wise Required Qualifications */}
-                    <div className="mb-8">
-                      <h4 className="text-xs font-bold uppercase tracking-wider text-brand-navy/78 block mb-3">
-                        {t.qualifications}
-                      </h4>
-                      <ul className="space-y-2">
-                        {selectedRole.qualifications.map((qual, idx) => (
-                          <li key={idx} className="text-gray-600 text-sm flex items-start gap-2">
-                            <span className="text-brand-orange text-xs mt-1.5">•</span>
-                            <span>{qual}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-
-                    {/* Eligible Fields */}
-                    <div className="border-t border-gray-200/60 pt-6 mb-8">
-                      <h4 className="text-xs font-bold uppercase tracking-wider text-brand-navy/78 block mb-3">
-                        {t.eligible}
-                      </h4>
-                      <ul className="space-y-2">
-                        {selectedRole.requirements.map((req, idx) => (
-                          <li key={idx} className="text-gray-600 text-sm flex items-center gap-2">
-                            <span className="text-brand-orange text-xs">•</span>
-                            {req}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-
-                  <button
-                    onClick={() => setActiveJob(selectedRole)}
-                    className="w-full py-4 rounded-full bg-brand-orange-aa hover:bg-brand-orange-aa-hover text-white font-bold text-base shadow transition-all duration-300 cursor-pointer text-center lg:max-w-xs"
-                  >
-                    {t.apply}
-                  </button>
-                </div>
-
-                {/* Right Side: Clear Image Column */}
-                <div className="lg:w-5/12 relative min-h-[300px] lg:min-h-auto w-full">
-                  <Image
-                    src={selectedRole.bgImage}
-                    alt={selectedRole.title}
-                    fill
-                    sizes="(min-width: 1024px) 42vw, 100vw"
-                    className="object-cover"
-                  />
-                  {/* Subtle fade overlay just on the bottom/edges to frame nicely */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent lg:bg-gradient-to-l lg:from-black/10" />
-                </div>
-
-              </div>
-            </div>
-
           </div>
-        </SectionWrapper>
+        </section>
 
-        {/* Application Modal Overlay */}
+        {/* Application form */}
         <AnimatePresence>
           {activeJob && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 z-[70] flex items-center justify-center bg-black/60 p-4 overflow-y-auto"
-            >
-              <motion.div
-                initial={{ scale: 0.95, y: 20 }}
-                animate={{ scale: 1, y: 0 }}
-                exit={{ scale: 0.95, y: 20 }}
-                transition={{ duration: 0.3 }}
-                className="bg-white rounded-3xl w-full max-w-xl shadow-2xl overflow-hidden relative border border-gray-200 my-8"
-              >
-                {/* Modal Header */}
-                <div className="bg-brand-navy text-white p-6 relative">
-                  <button
-                    type="button"
-                    onClick={() => setActiveJob(null)}
-                    aria-label="Close"
-                    className="absolute right-3 top-3 w-11 h-11 rounded-full flex items-center justify-center text-white/70 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
-                  >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                  </button>
-                  <span className="text-teal-aa-light text-xs font-bold uppercase tracking-wider block mb-1">
-                    {t.modalTitle}
-                  </span>
-                  <h3 className="font-heading text-xl lg:text-2xl font-bold text-white pr-10">
-                    {activeJob.title}
-                  </h3>
-                  <p className="text-white/70 text-sm mt-1">
-                    {activeJob.department} • {t.location}
-                  </p>
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[70] flex items-center justify-center bg-[#0b1626]/70 backdrop-blur-sm p-4 overflow-y-auto">
+              <motion.div role="dialog" aria-modal="true" aria-labelledby="apply-title" initial={{ scale: 0.96, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.96, y: 20 }} transition={{ duration: 0.4, ease: easeOut }}
+                className="site-ui paper bg-page rounded-[2rem] w-full max-w-xl shadow-2xl overflow-hidden relative my-8">
+                <div className="border-b border-line p-6 md:p-8 relative">
+                  <button type="button" onClick={() => setActiveJob(null)} aria-label="Close"
+                    className="absolute right-4 top-4 w-11 h-11 rounded-full grid place-items-center border border-line text-ink hover:bg-ink hover:text-page cursor-pointer"><Icon name="close" className="w-5 h-5" /></button>
+                  <p className="label-mono text-mint">{t.modalTitle}</p>
+                  <h3 id="apply-title" className="font-display text-3xl text-ink pr-12 mt-2">{activeJob.title}</h3>
+                  <p className="text-copy text-sm mt-1">{activeJob.department} · {t.location}</p>
                 </div>
-
-                {/* Modal Body Form */}
-                <form onSubmit={handleApplySubmit} className="p-6 space-y-5">
-                  {/* Name field */}
+                <form onSubmit={handleApplySubmit} className="p-6 md:p-8 space-y-5">
                   <div>
-                    <label htmlFor="apply-name" className="block text-sm font-bold text-gray-550 uppercase tracking-wider mb-2">
-                      {t.fullName}
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      id="apply-name"
-                      value={applicantName}
-                      onChange={(e) => setApplicantName(e.target.value)}
-                      placeholder={t.namePlaceholder}
-                      className="w-full bg-gray-55 border border-gray-200 rounded-xl px-4 py-3 text-base text-brand-navy focus:outline-none focus:border-teal-500 transition-colors"
-                    />
+                    <label htmlFor="apply-name" className={LABEL}>{t.fullName}</label>
+                    <input type="text" required id="apply-name" value={applicantName} onChange={(e) => setApplicantName(e.target.value)} placeholder={t.namePlaceholder} className={FIELD} />
                   </div>
-
-                  {/* Email field */}
                   <div>
-                    <label htmlFor="apply-email" className="block text-sm font-bold text-gray-555 uppercase tracking-wider mb-2">
-                      {t.email}
-                    </label>
-                    <input
-                      type="email"
-                      required
-                      id="apply-email"
-                      value={applicantEmail}
-                      onChange={(e) => setApplicantEmail(e.target.value)}
-                      placeholder={t.emailPlaceholder}
-                      className="w-full bg-gray-55 border border-gray-200 rounded-xl px-4 py-3 text-base text-brand-navy focus:outline-none focus:border-teal-500 transition-colors"
-                    />
+                    <label htmlFor="apply-email" className={LABEL}>{t.email}</label>
+                    <input type="email" required id="apply-email" value={applicantEmail} onChange={(e) => setApplicantEmail(e.target.value)} placeholder={t.emailPlaceholder} className={FIELD} />
                   </div>
-
-
-
-                  {/* Editable Email Subject preview */}
                   <div>
-                    <label htmlFor="apply-subject" className="block text-sm font-bold text-gray-555 uppercase tracking-wider mb-2">
-                      {t.emailSubject}
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      id="apply-subject"
-                      value={emailSubject}
-                      onChange={(e) => setEmailSubject(e.target.value)}
-                      className="w-full bg-gray-55 border border-gray-200 rounded-xl px-4 py-3 text-base text-brand-navy focus:outline-none focus:border-teal-500 transition-colors"
-                    />
+                    <label htmlFor="apply-subject" className={LABEL}>{t.emailSubject}</label>
+                    <input type="text" required id="apply-subject" value={emailSubject} onChange={(e) => setEmailSubject(e.target.value)} className={FIELD} />
                   </div>
-
-                  {/* Editable Email Body preview */}
                   <div>
-                    <label htmlFor="apply-body" className="block text-sm font-bold text-gray-555 uppercase tracking-wider mb-2">
-                      {t.emailBody}
-                    </label>
-                    {locale !== "en" && <p className="text-xs text-gray-500 -mt-1 mb-2">{t.emailNote}</p>}
-                    <textarea
-                      required
-                      rows={5}
-                      id="apply-body"
-                      value={emailBody}
-                      onChange={(e) => setEmailBody(e.target.value)}
-                      className="w-full bg-gray-55 border border-gray-200 rounded-xl p-4 text-base md:text-sm leading-relaxed text-brand-navy focus:outline-none focus:border-teal-500 transition-colors"
-                    />
+                    <label htmlFor="apply-body" className={LABEL}>{t.emailBody}</label>
+                    {locale !== "en" && <p className="text-xs text-copy-dim -mt-1 mb-2">{t.emailNote}</p>}
+                    <textarea required rows={5} id="apply-body" value={emailBody} onChange={(e) => setEmailBody(e.target.value)} className={`${FIELD} leading-relaxed`} />
                   </div>
-
-                  <div className="pt-2">
-                    <button
-                      type="submit"
-                      className="w-full py-3.5 rounded-full bg-brand-orange-aa hover:bg-brand-orange-aa-hover text-white font-bold text-base shadow-sm transition-colors duration-300 cursor-pointer text-center"
-                    >
-                      {t.draft}
-                    </button>
-                  </div>
+                  <Button type="submit" className="w-full">{t.draft}</Button>
                 </form>
               </motion.div>
             </motion.div>
           )}
         </AnimatePresence>
 
-        {/* Attachment Reminder Popup Alert */}
+        {/* Reminder to attach the CV */}
         <AnimatePresence>
           {showAttachReminder && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 z-[70] flex items-center justify-center bg-black/60 p-4"
-            >
-              <motion.div
-                initial={{ scale: 0.95, y: 20 }}
-                animate={{ scale: 1, y: 0 }}
-                exit={{ scale: 0.95, y: 20 }}
-                className="bg-white rounded-3xl w-full max-w-md shadow-2xl p-8 border border-gray-200 text-center"
-              >
-                <div className="w-14 h-14 rounded-full bg-brand-orange/10 flex items-center justify-center text-brand-orange mx-auto mb-4">
-                  <svg className="w-6 h-6 text-brand-orange" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                    <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path>
-                  </svg>
-                </div>
-                <h3 className="font-heading text-xl font-bold text-brand-navy mb-2">
-                  {t.reminderTitle}
-                </h3>
-                <p className="text-gray-500 text-sm leading-relaxed mb-6">
-                  {t.reminderStart} <strong>{t.reminderStrong}</strong> {t.reminderEnd}
-                </p>
-                <button
-                  onClick={() => {
-                    setShowAttachReminder(false);
-                    setActiveJob(null);
-                  }}
-                  className="w-full py-3 rounded-full bg-brand-navy hover:bg-teal-aa text-white text-sm font-bold transition-all duration-300 cursor-pointer"
-                >
-                  {t.gotIt}
-                </button>
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[70] flex items-center justify-center bg-[#0b1626]/70 backdrop-blur-sm p-4">
+              <motion.div role="alertdialog" aria-modal="true" aria-labelledby="reminder-title" initial={{ scale: 0.96, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.96, y: 20 }}
+                className="site-ui paper bg-page rounded-[2rem] w-full max-w-md shadow-2xl p-8 text-center">
+                <span className="grid place-items-center w-16 h-16 rounded-full border border-flame text-flame mx-auto mb-5"><Icon name="doc" className="w-6 h-6" /></span>
+                <h3 id="reminder-title" className="font-display text-2xl text-ink mb-3">{t.reminderTitle}</h3>
+                <p className="text-copy leading-relaxed mb-7">{t.reminderStart} <strong className="text-ink">{t.reminderStrong}</strong> {t.reminderEnd}</p>
+                <Button onClick={() => { setShowAttachReminder(false); setActiveJob(null); }} className="w-full">{t.gotIt}</Button>
               </motion.div>
             </motion.div>
           )}

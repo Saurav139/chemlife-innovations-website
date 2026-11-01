@@ -41,6 +41,91 @@
   --font-family-body:
     var(--font-maven-pro), var(--font-noto-kannada),
     var(--font-noto-devanagari), Calibri, system-ui, sans-serif;
+
+  /* The site's look: warm paper, navy ink and ChemLife orange. Every text colour here reaches 4.5:1 on the
+     paper, card and alt backgrounds. `.theme-dark` below swaps them for the navy bands. */
+  --color-page: #f3eee4;
+  --color-page-alt: #e9e2d4;
+  --color-card: #fbf8f1;
+  --color-card-hi: #efe8db;
+  --color-line: rgb(20 36 58 / 0.15);
+  --color-ink: #14243a;
+  --color-copy: #3d4a5c;
+  --color-copy-dim: #545e6e;
+  --color-flame: #b03a1b;
+  --color-mint: #0b5f58;
+  --color-paper: #f3eee4;
+  --color-night: #13233a;
+
+  --font-display:
+    var(--font-fraunces), var(--font-noto-kannada), var(--font-noto-devanagari), Georgia, serif;
+  --font-mono:
+    var(--font-jetbrains), var(--font-noto-kannada), var(--font-noto-devanagari), ui-monospace, monospace;
+}
+
+.theme-dark {
+  --color-page: #13233a;
+  --color-page-alt: #182b46;
+  --color-card: #1c3150;
+  --color-card-hi: #233b5e;
+  --color-line: rgb(243 238 228 / 0.16);
+  --color-ink: #f3eee4;
+  --color-copy: #d3d9e2;
+  --color-copy-dim: #aab5c5;
+  --color-flame: #ff8f70;
+  --color-mint: #6fd8c9;
+  color: var(--color-copy);
+}
+
+/* A faint paper grain over the page background. */
+.paper {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.08 0 0 0 0 0.14 0 0 0 0 0.23 0 0 0 0.055 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.site-ui ::selection {
+  background-color: rgb(232 97 74 / 0.25);
+  color: inherit;
+}
+
+/* The page's content column. */
+@utility container-site {
+  width: 100%;
+  max-width: 1280px;
+  margin-inline: auto;
+  padding-inline: 1rem;
+  @media (min-width: 640px) {
+    padding-inline: 1.5rem;
+  }
+  @media (min-width: 1024px) {
+    padding-inline: 2.5rem;
+  }
+}
+
+/* Small capitals for labels, figures and tags, like the labels on a lab sample. */
+@utility label-mono {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.4;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+@keyframes spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 28s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-spin-slow,
+  .animate-marquee,
+  .animate-marquee-reverse {
+    animation: none;
+  }
 }
 
 @font-face {

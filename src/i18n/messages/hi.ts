@@ -81,6 +81,11 @@ const hi: Messages = {
     cookieRegion: "कुकी सहमति",
   },
 
+  ui: {
+    faqTitle: "सवाल, *जवाब*",
+    backToTop: "ऊपर जाएँ",
+  },
+
   notFound: {
     title: "पेज नहीं मिला",
     text: "आप जो पेज ढूँढ रहे हैं, वह मौजूद नहीं है या कहीं और चला गया है।",
