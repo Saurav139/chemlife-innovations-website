@@ -25,12 +25,13 @@ export type RichChapter = {
     chipsTitle?: string;
     chips?: string[];
   };
-  // Used by the "all out" versions for each chapter's backdrop.
+  // Used by the "all out" versions for each chapter's backdrop: a mid tone, and the same deepened.
   accent: string;
+  deep: string;
 };
 
 // The research platforms' full titles are long; these are the short names used on the Research page's cards.
-const PLATFORM_NAMES = ["ANBioT", "Green chelation", "Microencapsulation", "Nano trace minerals", "Nature-identical bioactives"];
+export const PLATFORM_NAMES = ["ANBioT", "Green chelation", "Microencapsulation", "Nano trace minerals", "Nature-identical bioactives"];
 const PLATFORM_IMAGES = [Images.research.anbiot, Images.research.greenTechnology, Images.research.microencapsulation, Images.research.nanoTraceMineral, Images.research.natureIdenticalBio];
 const AWARD_LOGOS = [Images.awards.ccamp, Images.awards.animalHusbandry, Images.awards.birac, Images.awards.naarm];
 const LEADERS = [
@@ -55,7 +56,7 @@ export function useRichChapters(): RichChapter[] {
 
   return [
     {
-      id: "intro", kicker: t.kicker, title: t.title, text: t.intro, accent: "#2f4f7f",
+      id: "intro", kicker: t.kicker, title: t.title, text: t.intro, accent: "#2f4f7f", deep: "#1f3557",
       photo: { src: Images.people.foundersNew, alt: "ChemLife's founders and leadership team", position: "42% 50%" },
       gallery: [
         { src: Images.heroes.about, alt: "A seedling growing in a laboratory flask" },
@@ -75,7 +76,7 @@ export function useRichChapters(): RichChapter[] {
       },
     },
     {
-      id: "make", kicker: "What we make", title: t.faq[0].q, text: t.faq[0].a, accent: "#b8391f",
+      id: "make", kicker: "What we make", title: t.faq[0].q, text: t.faq[0].a, accent: "#b8391f", deep: "#4a1d15",
       photo: { src: Images.research.pellets, alt: t.cards[2].alts[0] },
       gallery: ["MinBioZen", "MethioWiz", "CholiWiz"].map((name) => ({ src: product(name).banner ?? product(name).icon, alt: `${name}: ${product(name).tagline}` })),
       more: {
@@ -86,7 +87,7 @@ export function useRichChapters(): RichChapter[] {
       },
     },
     {
-      id: "tech", kicker: "Our technologies", title: t.faq[1].q, text: t.faq[1].a, accent: "#13786f",
+      id: "tech", kicker: "Our technologies", title: t.faq[1].q, text: t.faq[1].a, accent: "#13786f", deep: "#0e3a36",
       photo: { src: Images.research.researchImage, alt: "ChemLife's research laboratory" },
       gallery: PLATFORM_IMAGES.slice(0, 3).map((src, i) => ({ src, alt: `${PLATFORM_NAMES[i]} illustration` })),
       more: {
@@ -96,7 +97,7 @@ export function useRichChapters(): RichChapter[] {
       },
     },
     {
-      id: "hygiene", kicker: "Feed hygiene", title: t.faq[2].q, text: t.faq[2].a, accent: "#3b6e2f",
+      id: "hygiene", kicker: "Feed hygiene", title: t.faq[2].q, text: t.faq[2].a, accent: "#3b6e2f", deep: "#1d3a1b",
       photo: { src: Images.products.banners.maxdmold, alt: "Feed grain shielded from mould" },
       gallery: ["FeedGenie Prime", "MaxDmold Spray", "AflaMlock"].map((name) => ({ src: product(name).banner ?? product(name).icon, alt: `${name}: ${product(name).tagline}` })),
       more: {
@@ -108,7 +109,7 @@ export function useRichChapters(): RichChapter[] {
       },
     },
     {
-      id: "proof", kicker: "Proof", title: "Certified, recognised and supported", facts: t.facts.slice(4, 8), accent: "#8a5a12",
+      id: "proof", kicker: "Proof", title: "Certified, recognised and supported", facts: t.facts.slice(4, 8), accent: "#8a5a12", deep: "#3b290c",
       photo: { src: Images.heroes.awardsLandscape, alt: all.home.heroAlt, position: "50% 60%" },
       gallery: [
         { src: Images.process.developmentImage, alt: steps[1].alt },
@@ -121,7 +122,7 @@ export function useRichChapters(): RichChapter[] {
       },
     },
     {
-      id: "delivery", kicker: "Delivery", title: t.faq[3].q, text: t.faq[3].a, accent: "#1f5f8b",
+      id: "delivery", kicker: "Delivery", title: t.faq[3].q, text: t.faq[3].a, accent: "#1f5f8b", deep: "#10334f",
       photo: { src: Images.process.delivery, alt: steps[3].alt },
       gallery: [
         { src: Images.process.manufacturingImage, alt: steps[2].alt },
@@ -134,7 +135,7 @@ export function useRichChapters(): RichChapter[] {
       },
     },
     {
-      id: "leaders", kicker: "Leadership", title: "Led by four directors", text: t.leadershipCaption, accent: "#5b3f8c",
+      id: "leaders", kicker: "Leadership", title: "Led by four directors", text: t.leadershipCaption, accent: "#5b3f8c", deep: "#2b2046",
       photo: { src: Images.people.founders, alt: "ChemLife's founders", position: "50% 30%" },
       gallery: LEADERS.slice(0, 3).map((leader) => ({ src: leader.image, alt: leader.name, position: "50% 20%" })),
       more: {

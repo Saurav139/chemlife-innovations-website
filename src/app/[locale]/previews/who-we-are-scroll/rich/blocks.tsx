@@ -7,18 +7,21 @@ import { PRODUCTS } from "@/lib/catalog";
 import { Counter } from "./graphics";
 import type { Photo, RichChapter } from "./content";
 
-export type Level = "info" | "images" | "motion" | "all";
+export type Level = "info" | "images" | "motion" | "all" | "graphics";
 export const LEVELS: { id: Level; label: string; note: string }[] = [
   { id: "info", label: "More info", note: "The same design, with more of ChemLife's story in every chapter: products, platforms, awards, process and people." },
   { id: "images", label: "More info + images", note: "The extra information plus more photography: a collage per chapter, product icons, award logos and leadership portraits." },
   { id: "motion", label: "Motion graphics + images", note: "The original information, brought to life with an animated graphic for each chapter and more photography." },
   { id: "all", label: "All out", note: "Everything at once: extra information, photo collages, motion graphics, counters, parallax, a spinning badge, drifting molecules and a product marquee." },
+  { id: "graphics", label: "Motion graphics only", note: "No photos at all. Every chapter is a full animated scene that builds as you scroll, and runs backwards if you scroll back, with the extra information and every all-out effect." },
 ];
 export const flagsFor = (level: Level) => ({
   more: level !== "motion",
-  images: level !== "info",
+  images: level !== "info" && level !== "graphics",
   graphic: level === "motion" || level === "all",
-  wild: level === "all",
+  wild: level === "all" || level === "graphics",
+  // Full-size scroll-scrubbed scenes in place of photos.
+  scenes: level === "graphics",
 });
 
 const easeOut = [0.25, 0.1, 0, 1] as const;

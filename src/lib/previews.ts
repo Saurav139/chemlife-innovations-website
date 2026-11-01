@@ -8,7 +8,7 @@ export const PREVIEWS = [
     slug: "who-we-are-scroll",
     href: "/previews/who-we-are-scroll",
     title: "Who We Are: scrollytelling",
-    description: "Five scroll-driven versions of Who We Are: pinned chapters, a sideways journey, a feed pellet's path from nature to the farm, a photo zoom with a fact deck, and read-along text. Pinned chapters and the sideways journey each come in four fuller versions too, up to an all-out one with motion graphics.",
+    description: "Five scroll-driven versions of Who We Are: pinned chapters, a sideways journey, a feed pellet's path from nature to the farm, a photo zoom with a fact deck, and read-along text. Pinned chapters and the sideways journey each come in five fuller versions too, up to an all-out one and a motion-graphics-only one with no photos.",
   },
   {
     slug: "who-we-are",

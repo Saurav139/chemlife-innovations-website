@@ -6,12 +6,11 @@ import { motion, useInView, useMotionValueEvent, useReducedMotion, useScroll, us
 import { Closing, PINNED } from "../shared";
 import { useRichChapters, type RichChapter } from "./content";
 import { ChapterGraphic } from "./graphics";
+import { SceneStage } from "./scenes";
 import { Collage, KineticTitle, Marquee, MoreInfo, Particles, SpinBadge, flagsFor, type Level } from "./blocks";
 
 type Flags = ReturnType<typeof flagsFor>;
 const pad = (n: number) => String(n).padStart(2, "0");
-// Each chapter's backdrop in the "all out" version: its accent, deepened.
-const DEEP = ["#1f3557", "#4a1d15", "#0e3a36", "#1d3a1b", "#3b290c", "#10334f", "#2b2046"];
 
 // The fuller panels need a tablet-sized screen or larger; phones get them one under the next.
 function useWide() {
@@ -68,6 +67,8 @@ function Panel({ chapter, index, n, flags, current, progress }: { chapter: RichC
   const textX = useTransform(local, [-1, 1], [120, -120]);
   const visualX = useTransform(local, [-1, 1], [-160, 160]);
   const numberX = useTransform(local, [-1, 1], [420, -420]);
+  // The scene builds as the panel slides in and finishes just after it's centred.
+  const sceneP = useTransform(local, [-1, 0.1], [0, 1]);
   return <div className={`relative h-full flex items-center ${flags.wild ? "pb-36" : "pb-20"}`} style={{ width: `${100 / n}%` }}>
     {flags.wild && <motion.span aria-hidden="true" style={{ x: numberX }} className="absolute right-[6%] top-[8%] font-heading font-bold text-[16rem] leading-none text-transparent [-webkit-text-stroke:2px_rgba(255,255,255,0.12)] select-none pointer-events-none">{pad(index + 1)}</motion.span>}
     <div className="relative max-w-[1240px] mx-auto px-8 w-full grid grid-cols-12 gap-8 lg:gap-12 items-center">
@@ -75,7 +76,7 @@ function Panel({ chapter, index, n, flags, current, progress }: { chapter: RichC
         <ChapterText chapter={chapter} index={index} flags={flags} current={current} dense />
       </motion.div>
       <motion.div className="col-span-6 h-[min(58svh,540px)]" style={flags.wild ? { x: visualX } : undefined}>
-        <ChapterVisual chapter={chapter} flags={flags} current={current} wild={flags.wild} />
+        {flags.scenes ? <SceneStage chapter={chapter} index={index} p={sceneP} active={current} framed={false} /> : <ChapterVisual chapter={chapter} flags={flags} current={current} wild={flags.wild} />}
       </motion.div>
     </div>
   </div>;
@@ -85,11 +86,15 @@ function Panel({ chapter, index, n, flags, current, progress }: { chapter: RichC
 function StackedChapter({ chapter, index, flags }: { chapter: RichChapter; index: number; flags: Flags }) {
   const ref = useRef<HTMLDivElement>(null);
   const seen = useInView(ref, { margin: "-30% 0px -30% 0px" });
-  return <div ref={ref} className="relative py-14 border-b border-white/10 overflow-hidden" style={flags.wild ? { backgroundColor: DEEP[index] } : undefined}>
+  const sceneRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress: sceneP } = useScroll({ target: sceneRef, offset: ["start 0.95", "end 0.6"] });
+  return <div ref={ref} className="relative py-14 border-b border-white/10 overflow-hidden" style={flags.wild ? { backgroundColor: chapter.deep } : undefined}>
     {flags.wild && <Particles light count={8} />}
     <div className="relative px-6 max-w-[700px] mx-auto">
       <ChapterText chapter={chapter} index={index} flags={flags} current={seen} dense={false} />
-      <div className={`mt-8 ${flags.graphic ? "h-[340px]" : "h-[300px]"}`}><ChapterVisual chapter={chapter} flags={flags} current={seen} wild={false} /></div>
+      <div ref={sceneRef} className={`mt-8 ${flags.scenes ? "h-[380px]" : flags.graphic ? "h-[340px]" : "h-[300px]"}`}>
+        {flags.scenes ? <SceneStage chapter={chapter} index={index} p={sceneP} active={seen} framed={false} /> : <ChapterVisual chapter={chapter} flags={flags} current={seen} wild={false} />}
+      </div>
     </div>
   </div>;
 }
@@ -104,7 +109,7 @@ export default function RichSideways({ level }: { level: Level }) {
   const n = chapters.length;
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
   const x = useTransform(scrollYProgress, [0, 1], ["0%", `-${((n - 1) / n) * 100}%`]);
-  const background = useTransform(scrollYProgress, chapters.map((_, i) => i / (n - 1)), DEEP);
+  const background = useTransform(scrollYProgress, chapters.map((_, i) => i / (n - 1)), chapters.map((c) => c.deep));
   const [current, setCurrent] = useState(0);
   useMotionValueEvent(scrollYProgress, "change", (v) => setCurrent(Math.min(n - 1, Math.round(v * (n - 1)))));
 
