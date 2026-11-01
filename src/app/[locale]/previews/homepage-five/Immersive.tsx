@@ -6,8 +6,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Images } from "@/lib/assets";
 import { useHref, useT } from "@/i18n/LocaleProvider";
 import BackgroundVideo, { useNearViewport } from "@/components/BackgroundVideo";
-import { AWARDS, Arrow, Counter, LIFE_VIDEOS, PARTNERS, Play, Reveal, SERVE_CATEGORIES, SERVE_IMAGES, SOCIAL_IMAGES, STATS, STEP_IMAGES, StoryPlayer, TESTIMONIALS,
-  btnLight, btnPrimary, easeOut, h2, kicker, useActions, useRotate } from "./kit";
+import { AWARDS, Arrow, Counter, LIFE_VIDEOS, PARTNERS, Play, Reveal, RotatingImages, SERVE_CATEGORIES, SOCIAL_IMAGES, STATS, STEP_IMAGES, StoryPlayer, TESTIMONIALS,
+  btnLight, btnOutline, btnPrimary, easeOut, h2, kicker, useActions, useRotate, useWhoActions } from "./kit";
 
 const HERO_PHOTOS = [Images.heroes.awardsLandscape, Images.heroes.chicken, Images.heroes.dairy, Images.heroes.slide76];
 
@@ -18,6 +18,8 @@ export default function Immersive() {
   const w = home.whoWeAre;
   const href = useHref();
   const a = useActions();
+  const whoActions = useWhoActions();
+  const [faq, setFaq] = useState(0);
   const [slide] = useRotate(home.taglines.length, 6000);
   const [photo] = useRotate(HERO_PHOTOS.length, 6000);
   const [story, setStory] = useState(false);
@@ -57,25 +59,52 @@ export default function Immersive() {
       </div>
     </section>
 
-    {/* Who we are: big statement, photo beside */}
-    <section className="py-20 md:py-32">
+    {/* Who we are: a big statement, the founders, the facts over a factory photo, then the questions */}
+    <section aria-labelledby="im-who" className="pt-20 md:pt-32">
       <div className="max-w-[1200px] mx-auto px-6">
         <Reveal><span className={`${kicker} text-teal-aa`}>{w.kicker}</span>
-          <p className="font-heading text-3xl md:text-5xl font-bold leading-tight mt-5 max-w-5xl">{w.tagline} <span className="text-slate-aa">{w.title}</span></p></Reveal>
+          <h2 id="im-who" className="font-heading text-3xl md:text-5xl font-bold leading-tight mt-5 max-w-5xl">{w.title}</h2>
+          <p className="font-heading text-2xl md:text-4xl font-bold text-brand-orange-aa mt-4">{w.tagline}</p></Reveal>
         <div className="grid lg:grid-cols-2 gap-12 mt-14 items-center">
           <Reveal><div className="relative aspect-[4/3] rounded-3xl overflow-hidden"><Image src={Images.people.foundersNew} alt={t.about.foundersAlt} fill sizes="(min-width: 1024px) 580px, 100vw" className="object-cover" /></div></Reveal>
           <Reveal delay={0.1}>
-            <p className="text-lg text-slate-600 leading-relaxed">{w.intro}</p>
-            <p className="text-slate-600 leading-relaxed mt-4">{w.leadershipCaption}</p>
-            <div className="flex flex-wrap gap-3 mt-8">
-              <a href={a.leadership.href} className="inline-flex items-center gap-2 font-semibold text-brand-orange-aa hover:underline">{a.leadership.label}<Arrow /></a>
-            </div>
+            <p className="text-xl text-slate-700 leading-relaxed">{w.intro}</p>
+            <p className="text-slate-600 leading-relaxed mt-5 pl-5 border-l-4 border-brand-orange">{w.leadershipCaption}</p>
           </Reveal>
+        </div>
+      </div>
+
+      <div className="relative mt-20 md:mt-28 py-20 md:py-28 overflow-hidden">
+        <Image src={Images.process.manufacturingImage} alt="" fill sizes="100vw" className="object-cover" />
+        <div className="absolute inset-0 bg-brand-navy/90" />
+        <dl className="relative max-w-[1200px] mx-auto px-6 grid md:grid-cols-2 gap-x-14">
+          {w.facts.map((f, i) => <Reveal key={f.label} delay={(i % 2) * 0.06} className="flex gap-5 py-6 border-b border-white/15">
+            <span aria-hidden="true" className="font-heading text-3xl font-bold text-teal-400 w-10 shrink-0">{String(i + 1).padStart(2, "0")}</span>
+            <div><dt className="text-sm font-semibold uppercase tracking-wider text-teal-aa-light">{f.label}</dt><dd className="text-lg text-white mt-1 leading-relaxed">{f.value}</dd></div>
+          </Reveal>)}
+        </dl>
+      </div>
+
+      <div className="max-w-4xl mx-auto px-6 py-20 md:py-28">
+        <ul className="divide-y divide-slate-200 border-y border-slate-200">
+          {w.faq.map((item, i) => <li key={item.q}>
+            <h3><button type="button" onClick={() => setFaq(faq === i ? -1 : i)} aria-expanded={faq === i}
+              className="w-full flex items-center justify-between gap-6 py-6 text-left font-heading text-xl md:text-2xl font-bold cursor-pointer hover:text-brand-orange-aa">
+              {item.q}<span aria-hidden="true" className={`grid place-items-center w-11 h-11 rounded-full border-2 shrink-0 text-2xl transition-all ${faq === i ? "rotate-45 bg-brand-orange-aa border-brand-orange-aa text-white" : "border-slate-300"}`}>+</span>
+            </button></h3>
+            <AnimatePresence initial={false}>
+              {faq === i && <motion.p initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.35, ease: easeOut }}
+                className="overflow-hidden text-lg text-slate-600 leading-relaxed"><span className="block pb-7 pr-14">{item.a}</span></motion.p>}
+            </AnimatePresence>
+          </li>)}
+        </ul>
+        <div className="flex flex-wrap justify-center gap-3 mt-12">
+          {whoActions.map((act, i) => <a key={act.href} href={act.href} data-analytics-click={act.label} className={i === 0 ? btnPrimary : btnOutline}>{act.label}{i === 0 && <Arrow />}</a>)}
         </div>
       </div>
     </section>
 
-    {/* What we serve: three photo panels; the open one widens */}
+    {/* What we serve: three photo panels; the open one widens, each cycling its three photos */}
     <section aria-labelledby="imm-serve" className="pb-20 md:pb-32">
       <div className="max-w-[1200px] mx-auto px-6">
         <h2 id="imm-serve" className={`${h2} mb-10`}>{w.serveTitle}</h2>
@@ -84,7 +113,7 @@ export default function Immersive() {
             const active = open === i;
             return <div key={card.title} onMouseEnter={() => setOpen(i)}
               className={`relative overflow-hidden rounded-3xl min-h-[340px] md:min-h-0 transition-[flex] duration-700 ease-out ${active ? "md:flex-[2.2]" : "md:flex-1"}`}>
-              <Image src={SERVE_IMAGES[i][0]} alt={card.alts[0]} fill sizes="(min-width: 768px) 60vw, 100vw" className="object-cover" />
+              <RotatingImages group={i} offset={i} sizes="(min-width: 768px) 60vw, 100vw" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
               <button type="button" onClick={() => setOpen(i)} aria-expanded={active} className="absolute inset-0 text-left p-7 flex flex-col justify-end cursor-pointer">
                 <span className="text-sm font-semibold text-teal-300">0{i + 1}</span>

@@ -3,11 +3,12 @@
 import { useRef, useState } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion, useReducedMotion, useScroll, useSpring } from "framer-motion";
+import { Images } from "@/lib/assets";
 import { RESEARCH_TOPICS, researchAnchor } from "@/lib/catalog";
 import { useHref, useT } from "@/i18n/LocaleProvider";
 import BackgroundVideo, { useNearViewport } from "@/components/BackgroundVideo";
-import { AWARDS, Arrow, Counter, LIFE_VIDEOS, PARTNERS, Play, Reveal, SOCIAL_IMAGES, STATS, STEP_IMAGES, StoryPlayer, TESTIMONIALS,
-  btnOutline, btnPrimary, easeOut, h2, kicker, useActions, useRotate } from "./kit";
+import { AWARDS, Arrow, Counter, LIFE_VIDEOS, PARTNERS, Play, Reveal, RotatingImages, SERVE_CATEGORIES, SOCIAL_IMAGES, STATS, STEP_IMAGES, StoryPlayer, TESTIMONIALS,
+  btnOutline, btnPrimary, easeOut, h2, kicker, useActions, useRotate, useWhoActions } from "./kit";
 
 // The molecule network in the hero: atoms and the bonds between them, on a 600 × 520 grid.
 const ATOMS = [[300, 90], [420, 160], [420, 300], [300, 370], [180, 300], [180, 160], [520, 90], [530, 380], [300, 480], [70, 380], [80, 90], [300, 230]];
@@ -35,6 +36,8 @@ export default function Science() {
   const r = t.research;
   const href = useHref();
   const a = useActions();
+  const whoActions = useWhoActions();
+  const [faq, setFaq] = useState(0);
   const [slide] = useRotate(home.taglines.length, 5000);
   const [story, setStory] = useState(false);
   const [topic, setTopic] = useState(0);
@@ -130,24 +133,65 @@ export default function Science() {
       </div>
     </section>
 
-    {/* Credentials: who we are, the facts, the awards */}
-    <section className="py-20 md:py-28">
-      <div className="max-w-[1200px] mx-auto px-6 grid lg:grid-cols-12 gap-12">
-        <Reveal className="lg:col-span-5">
+    {/* Who we are, set out like a lab report: summary, data sheet, the team, the questions */}
+    <section aria-labelledby="sc-who" className="py-20 md:py-28">
+      <div className="max-w-[1200px] mx-auto px-6">
+        <Reveal className="max-w-4xl">
           <span className={`${kicker} text-teal-aa`}>{w.kicker}</span>
-          <h2 className={`${h2} mt-3`}>{w.tagline}</h2>
-          <p className="text-slate-600 text-lg leading-relaxed mt-5">{w.intro}</p>
-          <a href={a.dossier.href} className={`${btnPrimary} mt-8`}>{a.dossier.label}<Arrow /></a>
+          <h2 id="sc-who" className={`${h2} mt-3`}>{w.title}</h2>
+          <p className="font-heading text-2xl md:text-3xl font-bold mt-4 bg-gradient-to-r from-brand-orange-aa to-teal-aa bg-clip-text text-transparent w-fit">{w.tagline}</p>
+          <p className="text-lg text-slate-600 leading-relaxed mt-5">{w.intro}</p>
         </Reveal>
-        <div className="lg:col-span-7">
-          <dl className="rounded-3xl border border-slate-200 divide-y divide-slate-200">
-            {w.facts.slice(0, 8).map((f) => <div key={f.label} className="grid sm:grid-cols-[11rem_1fr] gap-1 sm:gap-4 px-6 py-4">
-              <dt className="text-sm font-semibold text-teal-aa">{f.label}</dt><dd className="text-slate-700">{f.value}</dd>
-            </div>)}
-          </dl>
-          <ul className="grid grid-cols-4 gap-3 mt-6">
-            {AWARDS.map((aw, i) => <li key={aw.logo} className="relative aspect-square rounded-2xl border border-slate-200" title={home.awards.items[i].title}><Image src={aw.logo} alt={home.awards.items[i].title} fill sizes="140px" className="object-contain p-3" /></li>)}
-          </ul>
+
+        <dl className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-12">
+          {w.facts.map((f, i) => <Reveal key={f.label} delay={(i % 3) * 0.05} className={`rounded-2xl border border-slate-200 bg-white p-5 border-l-4 ${i % 2 ? "border-l-teal-500" : "border-l-brand-orange"} ${i === 9 ? "sm:col-span-2 lg:col-span-3" : ""}`}>
+            <dt className="flex items-center justify-between text-xs font-bold uppercase tracking-wider text-slate-aa">{f.label}<span className="text-teal-aa">{String(i + 1).padStart(2, "0")}</span></dt>
+            <dd className="font-semibold mt-2 leading-relaxed">{f.value}</dd>
+          </Reveal>)}
+        </dl>
+
+        <div className="grid lg:grid-cols-12 gap-10 mt-16 items-start">
+          <Reveal className="lg:col-span-5">
+            <div className="relative aspect-[4/3] rounded-3xl overflow-hidden"><Image src={Images.people.foundersNew} alt={t.about.foundersAlt} fill sizes="(min-width: 1024px) 460px, 100vw" className="object-cover" /></div>
+            <p className="text-slate-600 leading-relaxed mt-4">{w.leadershipCaption}</p>
+            <ul className="grid grid-cols-4 gap-3 mt-6">
+              {AWARDS.map((aw, i) => <li key={aw.logo} className="relative aspect-square rounded-2xl border border-slate-200 bg-white"><Image src={aw.logo} alt={home.awards.items[i].title} fill sizes="110px" className="object-contain p-2.5" /></li>)}
+            </ul>
+          </Reveal>
+          <Reveal delay={0.1} className="lg:col-span-7">
+            <ol className="space-y-3">
+              {w.faq.map((item, i) => <li key={item.q} className={`rounded-2xl border transition-colors ${faq === i ? "border-teal-300 bg-teal-50/50" : "border-slate-200"}`}>
+                <h3><button type="button" onClick={() => setFaq(faq === i ? -1 : i)} aria-expanded={faq === i} className="w-full flex items-center gap-4 p-5 text-left font-heading text-lg font-bold cursor-pointer">
+                  <span aria-hidden="true" className={`grid place-items-center w-9 h-9 rounded-full text-sm shrink-0 ${faq === i ? "bg-teal-aa text-white" : "bg-slate-100"}`}>{i + 1}</span>
+                  <span className="flex-1">{item.q}</span><span aria-hidden="true" className={`text-2xl text-teal-aa transition-transform ${faq === i ? "rotate-45" : ""}`}>+</span>
+                </button></h3>
+                {faq === i && <p className="px-5 pb-5 sm:pl-[4.25rem] text-slate-600 leading-relaxed">{item.a}</p>}
+              </li>)}
+            </ol>
+            <div className="flex flex-wrap gap-3 mt-8">
+              {whoActions.map((act, i) => <a key={act.href} href={act.href} data-analytics-click={act.label} className={i === 0 ? btnPrimary : btnOutline}>{act.label}{i === 0 && <Arrow />}</a>)}
+            </div>
+          </Reveal>
+        </div>
+      </div>
+    </section>
+
+    {/* What we serve: three cards, each cycling its photos under a soft lab-glass tint */}
+    <section aria-labelledby="sc-serve" className="pb-20 md:pb-28">
+      <div className="max-w-[1200px] mx-auto px-6">
+        <h2 id="sc-serve" className={`${h2} mb-10`}>{w.serveTitle}</h2>
+        <div className="grid md:grid-cols-3 gap-5">
+          {w.cards.map((card, i) => <Reveal key={card.title} delay={i * 0.08}>
+            <a href={href(`/products?q=${encodeURIComponent(SERVE_CATEGORIES[i])}`)} className="group relative block aspect-[4/5] rounded-3xl overflow-hidden">
+              <RotatingImages group={i} offset={i} sizes="(min-width: 768px) 380px, 100vw" className="group-hover:scale-105 transition-transform duration-700" />
+              <div className="absolute inset-0 bg-gradient-to-t from-brand-navy via-brand-navy/40 to-transparent" />
+              <div className="absolute inset-x-4 bottom-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 p-5 text-white">
+                <p className="text-sm font-semibold text-teal-300">0{i + 1}</p>
+                <h3 className="font-heading text-2xl font-bold text-white mt-1">{card.title}</h3>
+                <p className="text-white/90 text-sm leading-relaxed mt-2">{card.description}</p>
+              </div>
+            </a>
+          </Reveal>)}
         </div>
       </div>
     </section>

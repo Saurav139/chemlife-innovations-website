@@ -6,8 +6,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Images } from "@/lib/assets";
 import { useHref, useT } from "@/i18n/LocaleProvider";
 import BackgroundVideo, { useNearViewport } from "@/components/BackgroundVideo";
-import { AWARDS, Arrow, Check, Counter, FLAGSHIPS, LIFE_VIDEOS, PARTNERS, Play, Reveal, SERVE_CATEGORIES, SERVE_IMAGES, SOCIAL_IMAGES, STATS, STEP_IMAGES, StoryPlayer, TESTIMONIALS,
-  btnOutline, btnPrimary, easeOut, h2, kicker, useActions, useProducts, useRotate } from "./kit";
+import { AWARDS, Arrow, Check, Counter, FLAGSHIPS, LIFE_VIDEOS, PARTNERS, Play, Reveal, RotatingImages, SERVE_CATEGORIES, SOCIAL_IMAGES, STATS, STEP_IMAGES, StoryPlayer, TESTIMONIALS,
+  btnOutline, btnPrimary, easeOut, h2, kicker, useActions, useProducts, useRotate, useWhoActions } from "./kit";
 
 /** A: Clarity. White and navy, one message per section, cards in a calm grid. */
 export default function Clarity() {
@@ -16,6 +16,7 @@ export default function Clarity() {
   const w = home.whoWeAre;
   const href = useHref();
   const a = useActions();
+  const whoActions = useWhoActions();
   const products = useProducts();
   const flagships = FLAGSHIPS.map((name) => products.find((p) => p.name === name)!);
   const [slide, setSlide] = useRotate(home.taglines.length, 5000);
@@ -77,43 +78,60 @@ export default function Clarity() {
       </div>
     </section>
 
-    {/* Who we are, with the numbers */}
-    <section className="py-20 md:py-28">
-      <div className="max-w-[1200px] mx-auto px-6 grid lg:grid-cols-12 gap-12">
-        <Reveal className="lg:col-span-5">
+    {/* Who we are: the whole section as a clear company profile */}
+    <section aria-labelledby="cl-who" className="py-20 md:py-28">
+      <div className="max-w-[1200px] mx-auto px-6">
+        <Reveal className="text-center max-w-4xl mx-auto">
           <span className={`${kicker} text-teal-aa`}>{w.kicker}</span>
-          <h2 className={`${h2} mt-3`}>{w.tagline}</h2>
-          <p className="text-slate-600 text-lg leading-relaxed mt-5">{w.intro}</p>
-          <a href={a.leadership.href} className="inline-flex items-center gap-2 font-semibold text-brand-orange-aa mt-6 hover:underline">{a.leadership.label}<Arrow /></a>
+          <h2 id="cl-who" className={`${h2} mt-3`}>{w.title}</h2>
+          <p className="font-heading text-xl md:text-2xl font-semibold text-brand-orange-aa mt-4">{w.tagline}</p>
         </Reveal>
-        <Reveal delay={0.1} className="lg:col-span-7">
-          <dl className="grid grid-cols-2 gap-4">
-            {STATS.map((s, i) => <div key={i} className="rounded-2xl bg-slate-50 border border-slate-100 p-6">
-              <dd className="font-heading text-4xl md:text-5xl font-bold text-brand-navy"><Counter value={s.value} suffix={s.suffix} /></dd>
-              <dt className="text-sm font-semibold uppercase tracking-wider text-slate-aa mt-2">{home.stats[i]}</dt>
-            </div>)}
-          </dl>
-          <ul className="grid sm:grid-cols-2 gap-x-6 gap-y-3 mt-8">
-            {[w.facts[0], w.facts[2], w.facts[4], w.facts[7]].map((f) => <li key={f.label} className="flex gap-3">
-              <span className="mt-1 grid place-items-center w-6 h-6 rounded-full bg-orange-50 text-brand-orange-aa shrink-0"><Check className="w-3.5 h-3.5" /></span>
-              <span><strong className="block text-sm">{f.label}</strong><span className="text-sm text-slate-600">{f.value}</span></span>
-            </li>)}
-          </ul>
-        </Reveal>
+        <div className="grid lg:grid-cols-12 gap-10 mt-14">
+          <Reveal className="lg:col-span-5">
+            <p className="text-lg text-slate-700 leading-relaxed">{w.intro}</p>
+            <dl className="grid grid-cols-2 gap-3 mt-8">
+              {STATS.map((s, i) => <div key={i} className="rounded-2xl bg-slate-50 border border-slate-100 p-5">
+                <dd className="font-heading text-3xl md:text-4xl font-bold"><Counter value={s.value} suffix={s.suffix} /></dd>
+                <dt className="text-xs font-semibold uppercase tracking-wider text-slate-aa mt-1">{home.stats[i]}</dt>
+              </div>)}
+            </dl>
+            <figure className="mt-8">
+              <div className="relative aspect-[16/10] rounded-2xl overflow-hidden"><Image src={Images.people.foundersNew} alt={t.about.foundersAlt} fill sizes="(min-width: 1024px) 460px, 100vw" className="object-cover" /></div>
+              <figcaption className="text-sm text-slate-600 mt-3 leading-relaxed">{w.leadershipCaption}</figcaption>
+            </figure>
+          </Reveal>
+          <Reveal delay={0.1} className="lg:col-span-7">
+            <dl className="rounded-3xl border border-slate-200 divide-y divide-slate-200 overflow-hidden">
+              {w.facts.map((f) => <div key={f.label} className="grid sm:grid-cols-[12rem_1fr] gap-1 sm:gap-6 px-6 py-4 even:bg-slate-50/70">
+                <dt className="flex items-start gap-2 text-sm font-bold text-teal-aa"><Check className="w-4 h-4 mt-0.5 text-brand-orange-aa shrink-0" />{f.label}</dt>
+                <dd className="text-slate-700 leading-relaxed">{f.value}</dd>
+              </div>)}
+            </dl>
+          </Reveal>
+        </div>
+        <div className="grid md:grid-cols-2 gap-5 mt-14">
+          {w.faq.map((item, i) => <Reveal key={item.q} delay={(i % 2) * 0.08} className="rounded-2xl bg-slate-50 border border-slate-100 p-6 md:p-7">
+            <h3 className="font-heading text-xl font-bold flex gap-3"><span aria-hidden="true" className="grid place-items-center w-8 h-8 rounded-full bg-brand-navy text-white text-sm shrink-0">?</span>{item.q}</h3>
+            <p className="text-slate-600 leading-relaxed mt-3 md:pl-11">{item.a}</p>
+          </Reveal>)}
+        </div>
+        <div className="flex flex-wrap justify-center gap-3 mt-12">
+          {whoActions.map((act, i) => <a key={act.href} href={act.href} data-analytics-click={act.label} className={i === 0 ? btnPrimary : btnOutline}>{act.label}{i === 0 && <Arrow />}</a>)}
+        </div>
       </div>
     </section>
 
-    {/* What we serve */}
-    <section className="bg-slate-50 py-20 md:py-28">
+    {/* What we serve: each group's three photos take turns */}
+    <section aria-labelledby="cl-serve" className="bg-slate-50 py-20 md:py-28">
       <div className="max-w-[1200px] mx-auto px-6">
         <div className="text-center max-w-2xl mx-auto mb-12">
-          <span className={`${kicker} text-teal-aa`}>{t.nav.products}</span>
-          <h2 className={`${h2} mt-3`}>{w.serveTitle}</h2>
+          <span className={`${kicker} text-teal-aa`}>{w.kicker}</span>
+          <h2 id="cl-serve" className={`${h2} mt-3`}>{w.serveTitle}</h2>
         </div>
         <div className="grid md:grid-cols-3 gap-6">
           {w.cards.map((card, i) => <Reveal key={card.title} delay={i * 0.08}>
             <a href={href(`/products?q=${encodeURIComponent(SERVE_CATEGORIES[i])}`)} className="group block h-full rounded-3xl bg-white border border-slate-200 overflow-hidden hover:shadow-xl hover:border-brand-orange/30 transition-all">
-              <div className="relative aspect-[16/10] overflow-hidden"><Image src={SERVE_IMAGES[i][0]} alt={card.alts[0]} fill sizes="(min-width: 768px) 380px, 100vw" className="object-cover group-hover:scale-105 transition-transform duration-500" /></div>
+              <div className="relative aspect-[16/10] overflow-hidden"><RotatingImages group={i} offset={i} sizes="(min-width: 768px) 380px, 100vw" /></div>
               <div className="p-6">
                 <h3 className="font-heading text-2xl font-bold">{card.title}</h3>
                 <p className="text-slate-600 mt-2 leading-relaxed">{card.description}</p>
@@ -227,7 +245,7 @@ export default function Clarity() {
       <div className="max-w-[1200px] mx-auto px-6">
         <div className="rounded-3xl bg-brand-orange-aa text-white p-10 md:p-14 flex flex-col md:flex-row md:items-center justify-between gap-8">
           <div><h2 className="font-heading text-3xl md:text-4xl font-bold text-white">{t.contact.titleStart} {t.contact.titleAccent} {t.contact.titleEnd}</h2>
-            <p className="text-white mt-3 max-w-xl">{w.leadershipCaption}</p></div>
+            <p className="text-white mt-3 max-w-xl">{t.contact.intro}</p></div>
           <div className="flex flex-wrap gap-3 shrink-0">
             <a href={a.nutritionist.href} className="inline-flex items-center gap-2 min-h-12 px-7 rounded-full bg-white text-brand-orange-aa font-semibold hover:bg-orange-50">{a.nutritionist.label}<Arrow /></a>
             <a href={a.dossier.href} className="inline-flex items-center min-h-12 px-7 rounded-full border-2 border-white/70 text-white font-semibold hover:bg-white/10">{a.dossier.label}</a>
