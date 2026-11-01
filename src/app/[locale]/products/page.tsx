@@ -9,7 +9,8 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { VariantProvider } from "@/context/VariantContext";
 import SiteSearch from "@/components/SiteSearch";
-import { Images } from "@/lib/assets";
+import Icon from "@/components/site/Icon";
+import { CtaBand, PageHero, twoTone } from "@/components/site/ui";
 import { PRODUCTS, productAnchor, productPath } from "@/lib/catalog";
 import { useHashTarget } from "@/lib/deepLink";
 import { useHref, useT } from "@/i18n/LocaleProvider";
@@ -37,7 +38,8 @@ interface Product {
 // the language file (products.items), in the same order.
 
 export default function ProductsPage() {
-  const t = useT().products;
+  const all = useT();
+  const t = all.products;
   const productsData: Product[] = PRODUCTS.map((p, i) => ({ ...p, ...t.items[i] }));
   const href = useHref();
   const router = useRouter();
@@ -60,6 +62,9 @@ export default function ProductsPage() {
     const params = new URLSearchParams(window.location.search);
     const query = params.get("q") || params.get("query");
     if (query) setSearchQuery(query);
+    // ?category=Ruminants opens the list on one species, as the homepage's "Browse all" buttons do.
+    const category = params.get("category");
+    if (category && categories.includes(category)) setSelectedCategory(category);
     const expand = params.get("expand")?.toLowerCase();
     if (expand) {
       const product =
@@ -82,144 +87,34 @@ export default function ProductsPage() {
     return matchesCategory && matchesSearch;
   });
 
-  const categoryColorStyles = {
-    "All": {
-      focus: "focus-within:border-brand-navy focus-within:ring-brand-navy",
-      accent: "hover:text-brand-navy text-slate-aa",
-      icon: "text-slate-aa"
-    },
-    "Mono-gastric": {
-      focus: "focus-within:border-brand-orange focus-within:ring-brand-orange",
-      accent: "hover:text-brand-orange text-brand-orange",
-      icon: "text-brand-orange"
-    },
-    "Ruminants": {
-      focus: "focus-within:border-blue-600 focus-within:ring-blue-600",
-      accent: "hover:text-blue-600 text-blue-600",
-      icon: "text-blue-600"
-    },
-    "Value Addition": {
-      focus: "focus-within:border-emerald-600 focus-within:ring-emerald-600",
-      accent: "hover:text-emerald-600 text-emerald-600",
-      icon: "text-emerald-600"
-    }
-  };
-
-  const activeStyle = categoryColorStyles[selectedCategory as keyof typeof categoryColorStyles] || categoryColorStyles["All"];
-
   return (
     <VariantProvider>
       <Header />
 
-      <main id="main" tabIndex={-1} className="bg-slate-50/50 min-h-screen text-brand-navy">
+      <main id="main" tabIndex={-1} className="site-ui bg-page min-h-screen">
         {/* Card animations follow the visitor's "reduce motion" setting */}
         <MotionConfig reducedMotion="user">
-        {/* Hero and product list are plain sections: they're in the first screen, so they show without waiting for a fade-in.
-            The hero image is the page's largest paint (LCP), so it loads first. */}
-        <section className="pt-26 md:pt-32 pb-10 md:pb-20 lg:pt-36 lg:pb-28 text-white relative overflow-hidden bg-brand-navy flex items-center">
-          <div className="absolute inset-0 z-0">
-            <Image
-              src={Images.products.heroBanner}
-              alt={t.heroAlt}
-              fill
-              sizes="100vw"
-              className="object-cover opacity-60"
-              priority
-              fetchPriority="high"
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-brand-navy/95 via-brand-navy/75 to-transparent" />
-            <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#1e3a8a_1px,transparent_1px)] [background-size:16px_16px]" />
-          </div>
+        <PageHero eyebrow={t.kicker} title={twoTone(t.titleStart, t.titleAccent)} lead={t.intro} />
 
-          <div className="relative z-10 max-w-[1200px] mx-auto px-6 w-full text-center md:text-left">
-            <span className="text-teal-aa-light text-sm font-semibold tracking-widest uppercase block mb-3">{t.kicker}</span>
-            <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold leading-tight mb-3 md:mb-4 text-white">
-              {t.titleStart} <span className="text-teal-400">{t.titleAccent}</span>
-            </h1>
-            <p className="text-white/85 text-base lg:text-lg leading-relaxed max-w-3xl font-light">
-              {t.intro}
-            </p>
-          </div>
-        </section>
-
-        {/* Products List Section */}
-        <section className="pt-8 pb-16 md:py-16 bg-slate-50/30 relative overflow-hidden">
-          {/* Subtle Product-based Background Image. At 4% opacity a small file looks the same as the 3840px original,
-              and it's decorative, so its empty alt makes screen readers skip it. */}
-          <div className="absolute inset-0 z-0 pointer-events-none select-none opacity-[0.04]">
-            <Image
-              src={Images.products.customBg}
-              alt=""
-              fill
-              sizes="640px"
-              className="object-cover object-center"
-            />
-          </div>
-
-          <div className="relative z-10 max-w-[1200px] mx-auto px-6">
-
-            {/* Left-Aligned Search and Category Selector Container */}
-            <div className="flex flex-col md:flex-row items-center gap-4 mb-10 w-full">
-              {/* Phones: the species filter gets its own row, so the search box has room for its placeholder */}
-              <div className={`flex flex-col sm:flex-row sm:items-center bg-slate-50 border border-slate-200 rounded-3xl sm:rounded-full shadow-xs text-sm w-full md:max-w-xl ${activeStyle.focus} focus-within:ring-1 transition-all duration-300 relative`}>
-                <div className="flex items-center flex-1 min-w-0">
-                {/* Search Icon */}
-                <div className={`pl-4 ${activeStyle.icon} flex-shrink-0 transition-colors duration-300`}>
-                  <svg aria-hidden="true" className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                  </svg>
-                </div>
-
-                {/* Input Text Field */}
-                <input
-                  type="search"
-                  enterKeyHint="search"
-                  aria-label={t.search}
-                  placeholder={t.search}
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full min-w-0 bg-transparent border-0 px-3 py-3 text-brand-navy placeholder-slate-aa focus:outline-none focus:ring-0 text-base md:text-sm [&::-webkit-search-cancel-button]:appearance-none"
-                />
-
-                {/* Clear Search Button */}
-                {searchQuery && (
-                  <button
-                    onClick={() => setSearchQuery("")}
-                    aria-label={t.clearSearch}
-                    className={`mr-2 text-slate-aa ${activeStyle.accent} transition-colors duration-250 cursor-pointer`}
-                  >
-                    <svg aria-hidden="true" className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                  </button>
-                )}
-
-                </div>
-
-                {/* Vertical Divider Line */}
-                <div className="hidden sm:block h-6 w-[1px] bg-slate-200 flex-shrink-0" />
-
-                {/* Category Dropdown Selector inside Search Bar */}
-                <div className="relative flex-shrink-0 border-t border-slate-200 sm:border-t-0">
-                  <select
-                    aria-label={t.filterBySpecies}
-                    value={selectedCategory}
-                    onChange={(e) => setSelectedCategory(e.target.value)}
-                    className="w-full sm:w-auto appearance-none bg-transparent pl-4 pr-10 py-3.5 font-semibold text-base md:text-xs text-slate-600 focus:outline-none cursor-pointer"
-                  >
-                    {categories.map((category) => (
-                      <option key={category} value={category} className="text-brand-navy font-semibold">
-                        {category === "All" ? t.allSpecies : t.categories[category as keyof typeof t.categories]}
-                      </option>
-                    ))}
-                  </select>
-                  {/* Dropdown Chevron Icon */}
-                  <div className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-aa pointer-events-none">
-                    <svg aria-hidden="true" className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </div>
-                </div>
+        <section aria-label={t.listHeading} className="bg-page pb-20 md:pb-28">
+          <div className="container-site">
+            {/* Species as tabs, with the search box beside them */}
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-10">
+              <div role="group" aria-label={t.filterBySpecies} className="flex gap-2 overflow-x-auto -mx-1 px-1 pb-1">
+                {categories.map((category) => {
+                  const count = category === "All" ? productsData.length : productsData.filter((p) => p.category === category).length;
+                  return <button key={category} type="button" aria-pressed={selectedCategory === category} onClick={() => setSelectedCategory(category)}
+                    className={`shrink-0 inline-flex items-center gap-2 min-h-11 px-5 rounded-full border text-[15px] font-semibold transition-colors cursor-pointer ${selectedCategory === category ? "bg-brand-orange-aa border-brand-orange-aa text-white" : "border-line text-copy hover:border-flame/50 hover:text-ink"}`}>
+                    {category === "All" ? t.allSpecies : t.categories[category as keyof typeof t.categories]}
+                    <span className={`text-xs ${selectedCategory === category ? "text-white" : "text-copy-dim"}`}>{count}</span>
+                  </button>;
+                })}
+              </div>
+              <div className="flex items-center rounded-full border border-line bg-card focus-within:border-flame/60 transition-colors w-full lg:max-w-sm">
+                <Icon name="search" className="w-5 h-5 ml-4 text-copy-dim shrink-0" />
+                <input type="search" enterKeyHint="search" aria-label={t.search} placeholder={t.search} value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full min-w-0 bg-transparent border-0 px-3 py-3 text-ink placeholder:text-copy-dim focus:outline-none text-base [&::-webkit-search-cancel-button]:appearance-none" />
+                {searchQuery && <button onClick={() => setSearchQuery("")} aria-label={t.clearSearch} className="mr-2 grid place-items-center w-9 h-9 rounded-full text-copy hover:text-ink cursor-pointer"><Icon name="close" className="w-4 h-4" /></button>}
               </div>
             </div>
 
@@ -230,62 +125,27 @@ export default function ProductsPage() {
                 ? t.resultsCount.replace("{count}", String(filteredProducts.length)).replace("{total}", String(productsData.length))
                 : ""}
             </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 items-stretch">
               {filteredProducts.map((product) => (
-                <motion.div
-                  key={product.id}
-                  id={productAnchor(product.name)}
-                  data-analytics-item={product.name}
-                  layout
-                  transition={{ duration: 0.4, ease: easeOut }}
-                  className="h-full"
-                >
-                  <Link
-                    href={href(productPath(product.name))}
-                    data-analytics-click="View Product"
-                    className="scroll-mt-28 h-full border border-slate-200 rounded-2xl bg-slate-50/50 hover:bg-slate-50/85 transition-colors duration-300 overflow-hidden shadow-xs hover:border-brand-orange/30 flex flex-col group"
-                  >
-                    {/* Top: Product Image or Icon Container */}
-                    {product.banner ? (
-                      <div className="w-full aspect-video relative overflow-hidden bg-slate-100 border-b border-slate-200/60">
-                        <Image
-                          src={product.banner}
-                          alt={`${product.name} ${t.bannerAlt}`}
-                          fill
-                          sizes={BANNER_SIZES}
-                          className="object-cover object-center group-hover:scale-102 transition-transform duration-500"
-                        />
-                      </div>
-                    ) : (
-                      <div className="w-full aspect-video bg-white border-b border-slate-200/60 flex items-center justify-center p-6 relative">
-                        <div className="w-16 h-16 rounded-xl bg-white border border-slate-150 shadow-sm flex items-center justify-center p-2.5">
-                          <div className="relative w-full h-full">
-                            <Image src={product.icon} alt={`${product.name} ${t.iconAlt}`} fill sizes="42px" className="object-contain" />
-                          </div>
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Content: Title, Category and tagline */}
+                <motion.div key={product.id} id={productAnchor(product.name)} data-analytics-item={product.name} layout transition={{ duration: 0.4, ease: easeOut }} className="h-full">
+                  <Link href={href(productPath(product.name))} data-analytics-click="View Product"
+                    className="scroll-mt-28 h-full rounded-2xl border border-line bg-card/70 hover:border-flame/40 hover:bg-card-hi/70 transition-colors overflow-hidden flex flex-col group">
+                    <div className="relative w-full aspect-video overflow-hidden bg-card-hi">
+                      {product.banner
+                        ? <Image src={product.banner} alt={`${product.name} ${t.bannerAlt}`} fill sizes={BANNER_SIZES} className="object-cover group-hover:scale-[1.03] transition-transform duration-500" />
+                        : <div className="absolute inset-0 grid place-items-center"><div className="relative w-20 h-20 rounded-full bg-white"><Image src={product.icon} alt={`${product.name} ${t.iconAlt}`} fill sizes="80px" className="object-contain p-3" /></div></div>}
+                      <span className="absolute left-3 top-3 rounded-full bg-page/80 backdrop-blur px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-mint">
+                        {t.categories[product.category as keyof typeof t.categories]}
+                      </span>
+                    </div>
                     <div className="p-5 flex flex-1 flex-col gap-2">
-                      <div className="flex items-start justify-between gap-3">
-                        <h3 className="font-heading text-lg font-black text-brand-navy group-hover:text-brand-orange-aa transition-colors duration-300 leading-tight">
-                          {product.name}
-                        </h3>
-                        <span className={`px-2.5 py-0.5 rounded-md text-[11px] font-bold uppercase tracking-wider border whitespace-nowrap ${product.category === "Mono-gastric"
-                          ? "bg-orange-50/50 border-orange-150 text-brand-orange-aa"
-                          : product.category === "Ruminants"
-                            ? "bg-blue-50 border-blue-150 text-blue-700"
-                            : "bg-emerald-50 border-emerald-150 text-emerald-700"
-                          }`}>
-                          {t.categories[product.category as keyof typeof t.categories]}
-                        </span>
+                      <div className="flex items-center gap-3">
+                        <span className="relative w-9 h-9 rounded-full bg-white shrink-0 overflow-hidden"><Image src={product.icon} alt="" fill sizes="36px" className="object-contain p-1" /></span>
+                        <h3 className="font-heading text-lg font-bold text-ink group-hover:text-flame transition-colors leading-tight">{product.name}</h3>
                       </div>
-                      {product.tagline && (
-                        <p className="text-sm text-slate-550 italic leading-relaxed">{product.tagline}</p>
-                      )}
-                      <span className="mt-auto pt-2 inline-flex items-center gap-1.5 min-h-11 text-brand-orange-aa text-sm font-bold">
-                        {t.viewProduct} <span aria-hidden="true">→</span>
+                      {product.tagline && <p className="text-[15px] text-copy leading-relaxed">{product.tagline}</p>}
+                      <span className="mt-auto pt-3 inline-flex items-center gap-1.5 text-flame text-sm font-bold">
+                        {t.viewProduct}<Icon name="arrow" className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                       </span>
                     </div>
                   </Link>
@@ -293,16 +153,10 @@ export default function ProductsPage() {
               ))}
 
               {filteredProducts.length === 0 && (
-                <div className="text-center py-16 bg-slate-50 border border-dashed border-slate-200 rounded-2xl col-span-full">
-                  <p className="text-slate-600 text-sm">{t.noResults}</p>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setSearchQuery("");
-                      setSelectedCategory("All");
-                    }}
-                    className="mt-4 inline-flex items-center min-h-11 px-6 rounded-full border-2 border-brand-navy/20 hover:border-brand-navy text-brand-navy text-sm font-semibold transition-colors cursor-pointer"
-                  >
+                <div className="text-center py-16 rounded-2xl border border-dashed border-line col-span-full">
+                  <p className="text-copy">{t.noResults}</p>
+                  <button type="button" onClick={() => { setSearchQuery(""); setSelectedCategory("All"); }}
+                    className="mt-4 inline-flex items-center min-h-11 px-6 rounded-full border border-flame/60 text-flame font-semibold hover:bg-flame/10 cursor-pointer">
                     {t.clearSearch}
                   </button>
                 </div>
@@ -310,6 +164,9 @@ export default function ProductsPage() {
             </div>
           </div>
         </section>
+        <CtaBand title={all.site.cta.title} lead={all.site.cta.lead}
+          primary={{ label: all.home.talkToNutritionist, href: href("/contact?type=nutritionist") }}
+          secondary={{ label: all.home.whoWeAre.requestDossier, href: href("/contact?type=dossier") }} />
         </MotionConfig>
       </main>
 

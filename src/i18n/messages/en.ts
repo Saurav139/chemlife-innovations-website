@@ -87,6 +87,93 @@ const en = {
     popular: "Or try one of these",
   },
 
+  // The redesign (header, footer and homepage). Words between *stars* show in the accent colour.
+  site: {
+    bar: "Every ChemLife product now has its own page, with features, dosage and pack sizes.",
+    barLink: "Explore the range",
+    talk: "Talk to us",
+    menuProducts: "Feed additives for poultry, dairy and swine",
+    allProducts: "All products",
+    hero: {
+      badge: "FAMI-QS certified · Made in Bengaluru",
+      title: "*Nature-driven* science. *Proof* in every kilo.",
+      lead: "ChemLife makes functional feed additives for poultry, dairy and swine: Ayurvedic plant wisdom, powered by our own ANBioT, green-synthesis and microencapsulation technologies.",
+      rangeTitle: "One range, three species",
+      rangeText: "{products} products for poultry, dairy and swine.",
+      hygieneTitle: "Clean feed, storage to stomach",
+      hygieneText: "Mould and mycotoxin control that keeps feed quality in the silo.",
+      techTitle: "Our own technology",
+      techText: "ANBioT turns natural inputs into functional feed additives.",
+      leadersTitle: "years of leadership",
+      leadersText: "Four directors across nutraceuticals, R&D, commerce and HR.",
+      qualityTitle: "FAMI-QS certified",
+      qualityText: "Feed-additive quality and safety",
+    },
+    proof: {
+      title: "Science that *shows up* on the farm",
+      stats: [
+        { value: "106", label: "Years of combined leadership" },
+        { value: "{products}", label: "Products in the range" },
+        { value: "5", label: "Research platforms" },
+        { value: "3", label: "Species: poultry, dairy and swine" },
+      ],
+      recognised: "Recognised and supported by",
+      partners: "Working with industry partners",
+    },
+    feature: {
+      title: "Protect feed from *storage to stomach*",
+      lead: "Four product lines, each built for a job on the farm.",
+      items: [
+        { title: "Feed hygiene", text: "MaxDmold and FeedGenie control mould and mycotoxins, so feed quality holds in storage." },
+        { title: "Bio-trace minerals", text: "MinBioZen: trace minerals chelated the green way, for poultry, dairy and swine." },
+        { title: "Rumen-bypass actives", text: "MethioWiz and CholiWiz pearls carry methionine and choline past the rumen, for peak milk." },
+        { title: "Natural growth promoters", text: "GroGenie, a non-antibiotic gut performance solution, with LivproGenie and GutproGenie for liver and gut." },
+      ],
+      cta: "See all products",
+    },
+    hub: {
+      title: "The right *science*. The right *feed*. The right *outcomes*.",
+      lead: "Five research platforms feed one product range for poultry, dairy and swine.",
+      inLabel: "Research platforms",
+      outLabel: "Animals",
+      cta: "Explore our research",
+    },
+    solutions: {
+      title: "Built for every *animal* you feed",
+      lead: "Choose a species to see the products made for it.",
+      cards: [
+        { title: "Poultry and swine", text: "Gut, liver, growth and shell quality for mono-gastric animals." },
+        { title: "Dairy and cattle", text: "Rumen-bypass actives, rumen balance and milk-quality protection." },
+        { title: "Feed and ingredients", text: "Mould control, trace minerals and cleaner ingredients for feed mills." },
+        { title: "Research partners", text: "Co-develop bioactives, chelation and delivery technologies with us." },
+      ],
+      browse: "Browse all {category} products",
+      products: "products",
+    },
+    process: {
+      title: "From lab to farm in *four steps*",
+      lead: "How a ChemLife product gets from our research to your feed.",
+    },
+    resources: {
+      title: "Resources to *help you* choose",
+      lead: "Learn more about feed, our research and our products, in the way that suits you.",
+      cards: [
+        { title: "Insights", text: "Articles, videos and podcasts on feed hygiene, mycotoxins and animal nutrition." },
+        { title: "Research", text: "The five platforms behind every ChemLife product, and how they work." },
+        { title: "Ask our AI experts", text: "Quick answers about our products and your feed, any time of day." },
+      ],
+      open: "Open",
+    },
+    faq: {
+      title: "Frequently asked *questions*",
+      lead: "Quick answers about ChemLife and what we make.",
+    },
+    cta: {
+      title: "Ready for *cleaner feed*?",
+      lead: "Tell us about your animals and your feed. A ChemLife nutritionist will suggest the right product.",
+    },
+  },
+
   home: {
     taglines: [
       ["Nature Driven", "Functional Feed", "Additives"],

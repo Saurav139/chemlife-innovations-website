@@ -1,536 +1,164 @@
 "use client";
 
-import { motion } from "framer-motion";
 import Image from "next/image";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import SectionWrapper from "@/components/SectionWrapper";
 import { VariantProvider } from "@/context/VariantContext";
 import SiteSearch from "@/components/SiteSearch";
-import { Images } from "@/lib/assets";
-import { useT } from "@/i18n/LocaleProvider";
-import visionStyles from "./vision-mission.module.css";
+import Icon, { type IconName } from "@/components/site/Icon";
+import { CtaBand, Eyebrow, Glow, Reveal, Section, SectionTitle, StatRow, twoTone, Accented } from "@/components/site/ui";
+import { Images, VideoPosters } from "@/lib/assets";
+import { PRODUCTS } from "@/lib/catalog";
+import { useHref, useT } from "@/i18n/LocaleProvider";
 
-const easeOut = [0.25, 0.1, 0, 1] as const;
+// Roles and bios are in the language file (about.leaders), in this order.
+const LEADERS = [
+  { name: "Radhakrishna PM", degree: "Ph.D, PG-Dip in Mgmt", image: Images.people.leaderRadhakrishna },
+  { name: "Sharada KC", degree: "Ph.D", image: Images.people.leaderSharada },
+  { name: "Sneha R", degree: "M.Com", image: Images.people.leaderSneehaCropped },
+  { name: "Shankar CV", degree: "BE, MBA", image: Images.people.leaderShankar },
+];
 
-// Core values redefined using G.I.F.T. framework directly in layout
+// G.I.F.T., in the order of its letters.
+const VALUES: { key: "green" | "innovation" | "facts" | "trust"; icon: IconName }[] = [
+  { key: "green", icon: "leaf" },
+  { key: "innovation", icon: "spark" },
+  { key: "facts", icon: "doc" },
+  { key: "trust", icon: "shield" },
+];
+
+const SOCIAL_IMAGES = [VideoPosters.social1, Images.social.image2, Images.social.image3];
 
 export default function AboutPage() {
-  const t = useT().about;
+  const all = useT();
+  const t = all.about;
+  const w = all.home.whoWeAre;
+  const s = all.home.social;
+  const href = useHref();
+  const leaders = LEADERS.map((leader, i) => ({ ...leader, ...t.leaders[i] }));
+  const stats = all.site.proof.stats.map((stat) => ({ ...stat, value: stat.value.replace("{products}", String(PRODUCTS.length)) }));
+
   return (
     <VariantProvider>
       <Header />
 
-      <main id="main" tabIndex={-1} className="overflow-x-clip bg-brand-navy min-h-screen pt-18 md:pt-20 lg:pt-24">
-        {/* Intro Hero Section with Glass Plant Image BG */}
-        <SectionWrapper className="py-10 md:py-16 lg:py-20 text-white relative overflow-hidden flex items-center">
-          <div className="absolute inset-0 z-0">
-            <Image
-              src={Images.heroes.about}
-              alt={t.heroAlt}
-              fill
-              sizes="100vw"
-              className="object-cover opacity-80"
-              priority
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-brand-navy/95 via-brand-navy/70 to-brand-navy/55" />
-            <div className="absolute inset-0 bg-black/20" />
+      <main id="main" tabIndex={-1} className="site-ui bg-page overflow-x-clip">
+        {/* The founders, with the company's headline over a glow */}
+        <section className="relative overflow-hidden pt-32 md:pt-40 lg:pt-44 pb-16 md:pb-24">
+          <Glow />
+          <div className="relative container-site text-center">
+            <Reveal><Eyebrow icon="users">{all.nav.about}</Eyebrow></Reveal>
+            <Reveal delay={0.05}>
+              <h1 className="font-heading text-[2.4rem] leading-[1.06] sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-ink mt-6 max-w-5xl mx-auto">
+                <Accented text={twoTone(t.titleLine1, t.titleLine2)} />
+              </h1>
+            </Reveal>
+            <Reveal delay={0.1}><p className="text-copy text-lg md:text-xl mt-6 max-w-3xl mx-auto leading-relaxed">{t.journeyText}</p></Reveal>
+            <Reveal delay={0.15} className="relative mt-14 md:mt-20">
+              <div className="relative aspect-[16/9] md:aspect-[21/9] rounded-3xl overflow-hidden border border-line shadow-2xl shadow-ink/10">
+                <Image src={Images.people.foundersNew} alt={t.foundersAlt} fill priority sizes="(min-width: 1240px) 1240px, 100vw" className="object-cover object-[50%_40%]" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#15273f]/80 via-transparent to-transparent" />
+                <p className="absolute left-5 bottom-4 md:left-8 md:bottom-6 font-heading text-lg md:text-2xl font-bold text-white">{t.founders}</p>
+              </div>
+              <div className="hidden md:flex absolute -bottom-7 right-8 gap-3">
+                {[{ icon: "shield" as const, text: w.facts[5].value.split(" ")[0] }, { icon: "pin" as const, text: "Doddaballapura, Bengaluru" }, { icon: "award" as const, text: "106 years combined" }].map((chip) =>
+                  <span key={chip.text} className="flex items-center gap-2 rounded-full border border-line bg-card/95 backdrop-blur px-4 py-2.5 text-sm font-semibold text-ink shadow-xl shadow-ink/10">
+                    <Icon name={chip.icon} className="w-4 h-4 text-flame" />{chip.text}
+                  </span>)}
+              </div>
+            </Reveal>
           </div>
+        </section>
 
-          <div className="relative z-10 max-w-[900px] mx-auto text-center px-6">
-            <motion.h1
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, ease: easeOut }}
-              className="font-heading text-3xl md:text-4xl lg:text-6xl font-bold leading-tight mb-3 md:mb-4"
-            >
-              <span className="text-teal-400">{t.titleLine1}</span><br />
-              <span className="text-white">{t.titleLine2}</span>
-            </motion.h1>
-
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2, ease: easeOut }}
-              className="text-white/85 text-base md:text-lg lg:text-xl leading-relaxed max-w-3xl mx-auto font-light"
-            >
-              {t.intro}
-            </motion.p>
+        {/* Our journey, beside the numbers */}
+        <Section id="our-journey" tone="raised" labelledBy="journey-title">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+            <Reveal>
+              <h2 id="journey-title" className="font-heading text-4xl md:text-5xl font-bold tracking-tight text-ink">{t.journeyTitle}</h2>
+              <p className="text-ink text-lg leading-relaxed mt-6">{t.journeyText}</p>
+              <p className="text-copy leading-relaxed mt-4">{t.journeyText2}</p>
+            </Reveal>
+            <Reveal delay={0.1} className="rounded-3xl border border-line bg-card/70 p-8 md:p-10"><StatRow wide={2} stats={stats} /></Reveal>
           </div>
-        </SectionWrapper>
+        </Section>
 
-        {/* Our Journey */}
-        <SectionWrapper id="our-journey" className="scroll-mt-18 md:scroll-mt-20 lg:scroll-mt-24 py-8 md:py-12 lg:py-16 bg-white text-brand-navy">
-          <div className="max-w-[1200px] mx-auto px-6 grid md:grid-cols-2 gap-6 md:gap-8 lg:gap-12 items-center">
-            {/* Founder/Team Image Section with Founders Tag */}
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, ease: easeOut }}
-              className="flex flex-col items-center w-full"
-            >
-              <div
-                className="aspect-[357/440] w-full max-w-[360px] md:max-w-[340px] border border-orange-100 rounded-2xl relative overflow-hidden shadow-sm"
-              >
-                <Image
-                  src={Images.people.foundersNew}
-                  alt={t.foundersAlt}
-                  width={1600}
-                  height={721}
-                  sizes="1600px"
-                  className="absolute max-w-none"
-                  style={{ width: "448.1793%", height: "auto", left: "-148.4594%", top: "-50%" }}
-                />
-              </div>
-              <div className="mt-3 bg-teal-50 border border-teal-200 text-teal-aa text-xs md:text-sm font-bold uppercase tracking-wider px-5 py-1.5 rounded-full shadow-xs select-none">
-                {t.founders}
-              </div>
-            </motion.div>
+        {/* At a glance: the facts from the homepage copy */}
+        <Section labelledBy="glance-title">
+          <SectionTitle id="glance-title" title={`${w.title.split(":")[0]}: *${w.title.split(":").slice(1).join(":").trim()}*`} lead={w.intro} />
+          <dl className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {w.facts.map((fact, i) => <Reveal key={fact.label} delay={(i % 3) * 0.05} className={`rounded-2xl border border-line bg-card/70 p-6 ${fact.label === w.facts[9].label ? "sm:col-span-2 lg:col-span-3" : ""}`}>
+              <dt className="text-xs font-bold tracking-widest uppercase text-flame">{fact.label}</dt>
+              <dd className="text-ink/90 mt-2 leading-relaxed">{fact.value}</dd>
+            </Reveal>)}
+          </dl>
+        </Section>
 
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, ease: easeOut }}
-            >
-              <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl text-brand-navy mb-4 font-bold leading-tight">
-                {t.journeyTitle}
-              </h2>
-              <div className="space-y-3 text-brand-navy/85 text-base lg:text-lg leading-relaxed">
-                <p>{t.journeyText}</p>
-                <p>{t.journeyText2}</p>
-              </div>
-            </motion.div>
+        {/* Vision and mission */}
+        <Section id="vision-mission" tone="glow" labelledBy="purpose-title">
+          <SectionTitle id="purpose-title" title={`*${t.purposeTitle}*`} />
+          <div className="grid md:grid-cols-2 gap-5">
+            {[{ title: t.visionKicker, text: t.visionText, icon: "eye" as const }, { title: t.missionKicker, text: t.missionText, icon: "target" as const }].map((item, i) =>
+              <Reveal key={item.title} delay={i * 0.08} className="rounded-3xl border border-line bg-gradient-to-br from-card-hi to-page-alt p-8 md:p-10">
+                <span className="grid place-items-center w-14 h-14 rounded-2xl bg-flame/15 text-flame"><Icon name={item.icon} className="w-7 h-7" /></span>
+                <h3 className="font-heading text-2xl md:text-3xl font-bold text-ink mt-6">{item.title}</h3>
+                <p className="text-copy text-lg leading-relaxed mt-4">{item.text}</p>
+              </Reveal>)}
           </div>
-        </SectionWrapper>
+        </Section>
 
-        {/* Our purpose brings the Vision and Mission together. */}
-        <SectionWrapper id="vision-mission" className="scroll-mt-18 md:scroll-mt-20 lg:scroll-mt-24 py-12 md:py-16 lg:py-20 bg-slate-50 border-t border-brand-navy/10">
-          <div className={`max-w-[1200px] mx-auto px-6 ${visionStyles.layout}`}>
-            <h2 className={`${visionStyles.sectionHeading} font-heading text-3xl md:text-4xl lg:text-5xl text-brand-navy font-bold leading-tight`}>{t.purposeTitle}</h2>
-            <figure className={visionStyles.photo}>
-              <Image
-                src={Images.research.researchImage}
-                alt={t.visionPhotoAlt}
-                fill
-                sizes="(min-width: 900px) 420px, calc(100vw - 48px)"
-                className={visionStyles.image}
-              />
-              <figcaption>
-                <span>{t.visionPhotoLabel}</span>
-                <strong>{t.titleLine1}<br />{t.titleLine2}</strong>
-              </figcaption>
-            </figure>
-            <div className={visionStyles.statements}>
-            {[
-              { title: t.visionKicker, text: t.visionText },
-              { title: t.missionKicker, text: t.missionText },
-            ].map((statement, i) => (
-              <article key={statement.title}>
-                <div className={visionStyles.title}>
-                  <span aria-hidden="true">0{i + 1}</span>
-                  <h3>{statement.title}</h3>
-                </div>
-                <p>
-                  {statement.text}
-                </p>
-              </article>
-            ))}
-            </div>
-          </div>
-        </SectionWrapper>
-
-        {/* Leadership Team Section */}
-        <SectionWrapper className="py-8 md:py-12 lg:py-16 bg-gray-50 text-brand-navy border-t border-teal-100">
-          <div className="max-w-[1200px] mx-auto px-6">
-            <div className="text-center mb-6 md:mb-8">
-              <span className="text-teal-aa text-sm lg:text-base font-semibold tracking-widest uppercase block mb-2">{t.leadersKicker}</span>
-              <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl text-brand-navy font-bold leading-tight">
-                {t.leadersTitle}
-              </h2>
-              <div aria-hidden="true" className="flex justify-center gap-1.5 mt-3">
-                <span className="h-1 w-12 rounded-full bg-brand-orange" />
-                <span className="h-1 w-6 rounded-full bg-teal-500" />
+        {/* Leadership */}
+        <Section tone="raised" labelledBy="leaders-title">
+          <SectionTitle id="leaders-title" title={`${t.leadersKicker}: *${t.leadersTitle}*`} lead={w.leadershipCaption} />
+          <ul className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {leaders.map((leader, i) => <Reveal as="li" key={leader.name} delay={i * 0.06} className="group rounded-2xl border border-line bg-card/70 overflow-hidden">
+              <div className="relative aspect-[4/5] bg-card-hi">
+                <Image src={leader.image} alt={leader.name} fill sizes="(min-width: 1024px) 300px, (min-width: 640px) 50vw, 100vw" className="object-cover object-top group-hover:scale-[1.03] transition-transform duration-500" />
+                <div className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent" />
               </div>
-            </div>
-
-            {/* One readable profile on very narrow phones, two from 360px, four on desktop. */}
-            <div className="grid grid-cols-1 min-[360px]:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 lg:gap-8 max-w-[1200px] mx-auto">
-              {[
-                {
-                  name: "Radhakrishna PM",
-                  degree: "Ph.D, PG-Dip in Mgmt",
-                  image: Images.people.leaderRadhakrishna
-                },
-                {
-                  name: "Sharada KC",
-                  degree: "Ph.D",
-                  image: Images.people.leaderSharada
-                },
-                {
-                  name: "Sneha R",
-                  degree: "M.Com",
-                  image: Images.people.leaderSneehaCropped
-                },
-                {
-                  name: "Shankar CV",
-                  degree: "BE, MBA",
-                  image: Images.people.leaderShankar
-                }
-                // Roles and bios are in the language file (about.leaders), in this order.
-              ].map((leader, i) => ({ ...leader, ...t.leaders[i] })).map((leader, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: i * 0.15, ease: easeOut }}
-                  className="bg-white rounded-2xl border border-teal-100 overflow-hidden flex flex-col shadow-sm hover:border-brand-orange/50 hover:shadow-md transition-[border-color,box-shadow] duration-300 group"
-                >
-                  {/* Portrait panel keeps the face and shoulders visible without a circular crop. */}
-                  <div className="relative aspect-[4/3] min-[360px]:aspect-[4/5] sm:aspect-[4/3] lg:aspect-[4/5] overflow-hidden bg-gray-50 m-2 sm:m-3 mb-0 sm:mb-0 rounded-xl border border-orange-100 group-hover:border-orange-200 transition-colors duration-300">
-                    <Image
-                      src={leader.image}
-                      alt={leader.name}
-                      fill
-                      sizes="(max-width: 1023px) 50vw, 280px"
-                      className="object-cover object-top"
-                    />
-                  </div>
-
-                  <div className="flex flex-1 flex-col items-start text-left p-4 md:p-5">
-                  <h3 className="font-heading text-lg md:text-xl font-bold text-brand-orange-aa leading-tight mb-2">
-                    {leader.name}
-                  </h3>
-                  <p className="text-teal-aa font-bold text-xs md:text-sm uppercase tracking-wider leading-relaxed mb-2">
-                    {leader.role}
-                  </p>
-                  <p className="text-brand-navy/70 text-xs md:text-sm font-medium leading-relaxed mb-3">
-                    {leader.degree}
-                  </p>
-                  <p className="text-brand-navy/85 text-sm lg:text-base leading-relaxed border-t border-teal-100 pt-3 w-full">
-                    {leader.bio}
-                  </p>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </SectionWrapper>
-
-        {/* Core Values Section (Brand Navy BG with Honeycomb Hexagons) */}
-        <SectionWrapper id="core-values" className="scroll-mt-18 md:scroll-mt-20 lg:scroll-mt-24 py-8 md:py-12 lg:py-16 bg-brand-navy text-white">
-          <div className="max-w-[1200px] mx-auto px-6">
-            <div className="text-center mb-6 md:mb-8">
-              <span className="text-teal-aa-light text-sm font-semibold tracking-widest uppercase block mb-2">{t.valuesKicker}</span>
-              <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl text-white font-bold leading-tight">
-                {t.valuesTitle}
-              </h2>
-            </div>
-
-            {/* G.I.F.T. Core Values Diamond Grid */}
-            {/* Phones and tablets use compact GIFT cards in a grid; desktop keeps the diamond and connecting lines. */}
-            <div className="grid min-[380px]:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-y-8 md:gap-x-8 max-w-5xl mx-auto pb-2 md:pb-4 relative">
-
-               {/* Connection Lines for Desktop - Positioned underneath the boxes (z-0) */}
-              <svg className="absolute inset-0 w-full h-full pointer-events-none hidden lg:block z-0" viewBox="0 0 100 100" preserveAspectRatio="none">
-                <style>{`
-                  @keyframes stroke-flow {
-                    to {
-                      stroke-dashoffset: -20;
-                    }
-                  }
-                  .stroke-animated {
-                    animation: stroke-flow 1.2s linear infinite;
-                  }
-                `}</style>
- 
-                {/* Clockwise: Top G (50, 20) -> Right I (84, 50) */}
-                <path
-                  d="M 50 20 C 68 20, 84 32, 84 50"
-                  stroke="#f97316"
-                  strokeWidth="2"
-                  strokeDasharray="6,6"
-                  fill="none"
-                  className="stroke-animated opacity-55"
-                />
- 
-                {/* Clockwise: Right I (84, 50) -> Bottom F (50, 80) */}
-                <path
-                  d="M 84 50 C 84 68, 68 80, 50 80"
-                  stroke="#f97316"
-                  strokeWidth="2"
-                  strokeDasharray="6,6"
-                  fill="none"
-                  className="stroke-animated opacity-55"
-                />
- 
-                {/* Clockwise: Bottom F (50, 80) -> Left T (16, 50) */}
-                <path
-                  d="M 50 80 C 32 80, 16 68, 16 50"
-                  stroke="#f97316"
-                  strokeWidth="2"
-                  strokeDasharray="6,6"
-                  fill="none"
-                  className="stroke-animated opacity-55"
-                />
- 
-                {/* Clockwise: Left T (16, 50) -> Top G (50, 20) */}
-                <path
-                  d="M 16 50 C 16 32, 32 20, 50 20"
-                  stroke="#f97316"
-                  strokeWidth="2"
-                  strokeDasharray="6,6"
-                  fill="none"
-                  className="stroke-animated opacity-55"
-                />
-              </svg>
-
-              {/* The cards' CSS transition covers only what hovering changes (border, shadow, zoom). Transitioning
-                  everything also caught the fade-in's opacity and slide, so the slide lagged and Safari flickered. */}
-              {/* Card G - Top Center */}
-              <div className="order-1 lg:order-none lg:col-start-2 lg:row-start-1 flex justify-center">
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: 0.1, ease: easeOut }}
-                  className="relative w-full max-w-[320px] bg-linear-to-b from-teal-900 to-teal-950 rounded-2xl pt-4 pb-9 px-3 md:pt-6 md:pb-12 md:px-5 text-center border border-white/10 shadow-xl hover:border-brand-orange/45 hover:scale-[1.02] transition-[border-color,box-shadow,scale] duration-300 group overflow-hidden"
-                >
-                  <div aria-hidden="true" className="h-8 md:h-10 px-3 md:px-4 rounded-full bg-[#e2e2e2] border-2 border-brand-orange flex items-center justify-center shadow-md mb-3 md:mb-4 mx-auto relative z-10 w-fit">
-                    <div className="flex gap-1.5 md:gap-2.5 font-heading font-black text-sm md:text-lg select-none tracking-wider">
-                      <span className="text-brand-orange text-lg md:text-xl scale-110">G</span>
-                      <span className="text-brand-navy/30">I</span>
-                      <span className="text-brand-navy/30">F</span>
-                      <span className="text-brand-navy/30">T</span>
-                    </div>
-                  </div>
-                  <h3 className="bg-[#102a43] text-blue-200 font-heading text-xs font-bold px-2 md:px-4 py-1.5 rounded-md border border-blue-500/30 inline-block mb-2 md:mb-3.5 shadow-md mx-auto relative z-10 uppercase tracking-wider">
-                    {t.values.green.name}
-                  </h3>
-                  <p className="text-white/90 text-sm leading-relaxed max-w-full md:max-w-[85%] mx-auto relative z-10">
-                    {t.values.green.text}
-                  </p>
-
-                  {/* Sprout Icon sticking to bottom right */}
-                  <svg aria-hidden="true" className="absolute -right-4 -bottom-4 w-14 h-14 md:w-24 md:h-24 opacity-80 pointer-events-none transition-transform duration-500 group-hover:scale-105 group-hover:-rotate-3" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                      <linearGradient id="leafGradG" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stopColor="#4ade80" />
-                        <stop offset="100%" stopColor="#10b981" />
-                      </linearGradient>
-                      <linearGradient id="handGradG" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stopColor="#cbd5e1" />
-                        <stop offset="100%" stopColor="#64748b" />
-                      </linearGradient>
-                      <linearGradient id="glowGradG" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stopColor="#10b981" stopOpacity="0.2" />
-                        <stop offset="100%" stopColor="#10b981" stopOpacity="0" />
-                      </linearGradient>
-                    </defs>
-                    <circle cx="85" cy="85" r="35" fill="url(#glowGradG)" />
-                    <g transform="translate(50, 15)">
-                      <path d="M12 25C12 25 25 18 20 2C20 2 5 8 12 25Z" fill="url(#leafGradG)" />
-                      <path d="M8 25C8 25 -5 18 0 2C0 2 15 8 8 25Z" fill="url(#leafGradG)" />
-                      <path d="M10 25V38" stroke="#10b981" strokeWidth="4" strokeLinecap="round" />
-                    </g>
-                    <path d="M10 90C22 90 32 82 45 80C55 78 65 82 75 82C85 82 98 72 105 65C110 60 108 55 100 58L78 67C70 70 62 70 55 65L32 50L25 55L45 70C50 74 58 74 65 72L95 60" stroke="url(#handGradG)" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </motion.div>
+              <div className="p-5 -mt-10 relative">
+                <h3 className="font-heading text-xl font-bold text-ink">{leader.name}</h3>
+                <p className="text-flame font-semibold mt-1">{leader.role}</p>
+                <p className="text-xs text-copy-dim mt-0.5">{leader.degree}</p>
+                <p className="text-copy text-[15px] leading-relaxed mt-3">{leader.bio}</p>
               </div>
+            </Reveal>)}
+          </ul>
+        </Section>
 
-              {/* Card T - Middle Left */}
-              <div className="order-4 lg:order-none lg:col-start-1 lg:row-start-2 flex justify-center lg:-translate-y-4">
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: 0.4, ease: easeOut }}
-                  className="relative w-full max-w-[320px] bg-linear-to-b from-teal-900 to-teal-950 rounded-2xl pt-4 pb-9 px-3 md:pt-6 md:pb-12 md:px-5 text-center border border-white/10 shadow-xl hover:border-brand-orange/45 hover:scale-[1.02] transition-[border-color,box-shadow,scale] duration-300 group overflow-hidden"
-                >
-                  <div aria-hidden="true" className="h-8 md:h-10 px-3 md:px-4 rounded-full bg-[#e2e2e2] border-2 border-brand-orange flex items-center justify-center shadow-md mb-3 md:mb-4 mx-auto relative z-10 w-fit">
-                    <div className="flex gap-1.5 md:gap-2.5 font-heading font-black text-sm md:text-lg select-none tracking-wider">
-                      <span className="text-brand-navy/30">G</span>
-                      <span className="text-brand-navy/30">I</span>
-                      <span className="text-brand-navy/30">F</span>
-                      <span className="text-brand-orange text-lg md:text-xl scale-110">T</span>
-                    </div>
-                  </div>
-                  <h3 className="bg-[#102a43] text-blue-200 font-heading text-xs font-bold px-2 md:px-4 py-1.5 rounded-md border border-blue-500/30 inline-block mb-2 md:mb-3.5 shadow-md mx-auto relative z-10 uppercase tracking-wider">
-                    {t.values.trust.name}
-                  </h3>
-                  <p className="text-white/90 text-sm leading-relaxed max-w-full md:max-w-[85%] mx-auto relative z-10">
-                    {t.values.trust.text}
-                  </p>
+        {/* G.I.F.T. values */}
+        <Section id="core-values" labelledBy="values-title">
+          <SectionTitle id="values-title" title={`${t.valuesKicker}: *${t.valuesTitle}*`} />
+          <ul className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {VALUES.map((value, i) => <Reveal as="li" key={value.key} delay={i * 0.06} className="relative overflow-hidden rounded-2xl border border-line bg-card/70 p-7">
+              <span aria-hidden="true" className="absolute -right-3 -top-6 font-heading text-[8rem] font-bold leading-none text-ink/5">{"GIFT"[i]}</span>
+              <span className="relative grid place-items-center w-12 h-12 rounded-xl bg-mint/12 text-mint"><Icon name={value.icon} className="w-6 h-6" /></span>
+              <h3 className="relative font-heading text-xl font-bold text-ink mt-6"><span className="text-flame">{"GIFT"[i]}</span> · {t.values[value.key].name}</h3>
+              <p className="relative text-copy leading-relaxed mt-3">{t.values[value.key].text}</p>
+            </Reveal>)}
+          </ul>
+        </Section>
 
-                  {/* Handshake Icon sticking to bottom right */}
-                  <svg aria-hidden="true" className="absolute -right-4 -bottom-4 w-16 h-16 md:w-28 md:h-28 opacity-80 pointer-events-none transition-transform duration-500 group-hover:scale-105 group-hover:rotate-3" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                      <linearGradient id="glowGradT" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stopColor="#f97316" stopOpacity="0.2" />
-                        <stop offset="100%" stopColor="#f97316" stopOpacity="0" />
-                      </linearGradient>
-                      <linearGradient id="handLeftT" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stopColor="#38bdf8" />
-                        <stop offset="100%" stopColor="#0284c7" />
-                      </linearGradient>
-                    </defs>
-                    <circle cx="85" cy="85" r="35" fill="url(#glowGradT)" />
-                    <path d="M35 80H85" stroke="#f97316" strokeWidth="3" strokeLinecap="round" />
-                    <path d="M48 80V92" stroke="#f97316" strokeWidth="2.5" />
-                    <path d="M72 80V92" stroke="#f97316" strokeWidth="2.5" />
-
-                    {/* Left Person */}
-                    <g transform="translate(20, 38)">
-                      <circle cx="15" cy="12" r="5" fill="#0284c7" stroke="#0369a1" strokeWidth="2" />
-                      <path d="M7 30C7 22 11 20 15 20C19 20 23 22 23 30" fill="url(#handLeftT)" stroke="#0369a1" strokeWidth="2" />
-                      <path d="M21 24L32 28" stroke="#0369a1" strokeWidth="3" strokeLinecap="round" />
-                    </g>
-
-                    {/* Right Person */}
-                    <g transform="translate(55, 38)">
-                      <circle cx="15" cy="12" r="5" fill="#f97316" stroke="#ea580c" strokeWidth="2" />
-                      <path d="M7 30C7 22 11 20 15 20C19 20 23 22 23 30" fill="#ffedd5" stroke="#ea580c" strokeWidth="2" />
-                      <path d="M9 24L-2 28" stroke="#ea580c" strokeWidth="3" strokeLinecap="round" />
-                    </g>
-
-                    {/* Handshake Details */}
-                    <g transform="translate(42, 60)">
-                      <circle cx="8" cy="8" r="4" fill="#fed7aa" stroke="#ea580c" strokeWidth="1.5" />
-                    </g>
-                  </svg>
-                </motion.div>
+        {/* Social responsibility */}
+        <Section tone="raised" labelledBy="social-title">
+          <SectionTitle id="social-title" title={`*${s.journalTitle.split(".")[0]}.*${s.journalTitle.split(".").slice(1).join(".")}`} lead={s.introduction} />
+          <ul className="grid md:grid-cols-3 gap-5">
+            {s.items.map((item, i) => <Reveal as="li" key={item.title} delay={i * 0.06} className="rounded-2xl border border-line bg-card/70 overflow-hidden flex flex-col">
+              <div className="relative aspect-[4/3] bg-card-hi">
+                <Image src={SOCIAL_IMAGES[i]} alt={s.imageAlts[i]} fill sizes="(min-width: 768px) 400px, 100vw" className={i === 1 ? "object-contain" : "object-cover"} />
               </div>
-
-              {/* Card I - Middle Right */}
-              <div className="order-2 lg:order-none lg:col-start-3 lg:row-start-2 flex justify-center lg:-translate-y-4">
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: 0.2, ease: easeOut }}
-                  className="relative w-full max-w-[320px] bg-linear-to-b from-teal-900 to-teal-950 rounded-2xl pt-4 pb-9 px-3 md:pt-6 md:pb-12 md:px-5 text-center border border-white/10 shadow-xl hover:border-brand-orange/45 hover:scale-[1.02] transition-[border-color,box-shadow,scale] duration-300 group overflow-hidden"
-                >
-                  <div aria-hidden="true" className="h-8 md:h-10 px-3 md:px-4 rounded-full bg-[#e2e2e2] border-2 border-brand-orange flex items-center justify-center shadow-md mb-3 md:mb-4 mx-auto relative z-10 w-fit">
-                    <div className="flex gap-1.5 md:gap-2.5 font-heading font-black text-sm md:text-lg select-none tracking-wider">
-                      <span className="text-brand-navy/30">G</span>
-                      <span className="text-brand-orange text-lg md:text-xl scale-110">I</span>
-                      <span className="text-brand-navy/30">F</span>
-                      <span className="text-brand-navy/30">T</span>
-                    </div>
-                  </div>
-                  <h3 className="bg-[#102a43] text-blue-200 font-heading text-xs font-bold px-2 md:px-4 py-1.5 rounded-md border border-blue-500/30 inline-block mb-2 md:mb-3.5 shadow-md mx-auto relative z-10 uppercase tracking-wider">
-                    {t.values.innovation.name}
-                  </h3>
-                  <p className="text-white/90 text-sm leading-relaxed max-w-full md:max-w-[85%] mx-auto relative z-10">
-                    {t.values.innovation.text}
-                  </p>
-
-                  {/* Bulb Icon sticking to bottom right */}
-                  <svg aria-hidden="true" className="absolute -right-4 -bottom-4 w-14 h-14 md:w-24 md:h-24 opacity-80 pointer-events-none transition-transform duration-500 group-hover:scale-105 group-hover:rotate-6" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                      <linearGradient id="bulbGradI" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stopColor="#fef08a" />
-                        <stop offset="100%" stopColor="#eab308" />
-                      </linearGradient>
-                      <linearGradient id="gearGradI" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stopColor="#94a3b8" />
-                        <stop offset="100%" stopColor="#475569" />
-                      </linearGradient>
-                      <linearGradient id="glowGradI" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stopColor="#eab308" stopOpacity="0.2" />
-                        <stop offset="100%" stopColor="#eab308" stopOpacity="0" />
-                      </linearGradient>
-                    </defs>
-                    <circle cx="85" cy="85" r="35" fill="url(#glowGradI)" />
-                    <g stroke="#facc15" strokeWidth="2.5" strokeLinecap="round" opacity="0.8">
-                      <line x1="60" y1="25" x2="60" y2="15" />
-                      <line x1="35" y1="40" x2="28" y2="33" />
-                      <line x1="85" y1="40" x2="92" y2="33" />
-                      <line x1="25" y1="65" x2="15" y2="65" />
-                      <line x1="95" y1="65" x2="105" y2="65" />
-                    </g>
-                    <path d="M60 28C43 28 38 40 38 53C38 64 47 70 50 78H70C73 70 82 64 82 53C82 40 77 28 60 28Z" fill="url(#bulbGradI)" stroke="#ca8a04" strokeWidth="3" />
-                    <path d="M50 78H70V85C70 87 67 89 60 89C53 89 50 87 50 85V78Z" fill="#64748b" stroke="#475569" strokeWidth="3" />
-                    <line x1="52" y1="81" x2="68" y2="81" stroke="#334155" strokeWidth="2" />
-                    <g transform="translate(60, 53)">
-                      <circle cx="0" cy="0" r="8" fill="url(#gearGradI)" stroke="#334155" strokeWidth="2" />
-                      <circle cx="0" cy="0" r="2.5" fill="#fef08a" />
-                      <g stroke="#334155" strokeWidth="2" strokeLinecap="round">
-                        <line x1="0" y1="-8" x2="0" y2="-10" />
-                        <line x1="0" y1="8" x2="0" y2="10" />
-                        <line x1="-8" y1="0" x2="-10" y2="0" />
-                        <line x1="8" y1="0" x2="10" y2="0" />
-                      </g>
-                    </g>
-                  </svg>
-                </motion.div>
+              <div className="p-6 flex flex-col flex-1">
+                <p className="text-xs font-bold tracking-widest uppercase text-mint">{s.categories[i]}</p>
+                <h3 className="font-heading text-xl font-bold text-ink mt-2">{s.featureTitles[i]}</h3>
+                <p className="text-copy leading-relaxed mt-2">{item.desc}</p>
+                <p className="mt-auto pt-5 font-semibold text-flame">{s.proofs[i]}</p>
               </div>
+            </Reveal>)}
+          </ul>
+        </Section>
 
-              {/* Card F - Bottom Center */}
-              <div className="order-3 lg:order-none lg:col-start-2 lg:row-start-3 flex justify-center lg:-translate-y-8">
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: 0.3, ease: easeOut }}
-                  className="relative w-full max-w-[320px] bg-linear-to-b from-teal-900 to-teal-950 rounded-2xl pt-4 pb-9 px-3 md:pt-6 md:pb-12 md:px-5 text-center border border-white/10 shadow-xl hover:border-brand-orange/45 hover:scale-[1.02] transition-[border-color,box-shadow,scale] duration-300 group overflow-hidden"
-                >
-                  <div aria-hidden="true" className="h-8 md:h-10 px-3 md:px-4 rounded-full bg-[#e2e2e2] border-2 border-brand-orange flex items-center justify-center shadow-md mb-3 md:mb-4 mx-auto relative z-10 w-fit">
-                    <div className="flex gap-1.5 md:gap-2.5 font-heading font-black text-sm md:text-lg select-none tracking-wider">
-                      <span className="text-brand-navy/30">G</span>
-                      <span className="text-brand-navy/30">I</span>
-                      <span className="text-brand-orange text-lg md:text-xl scale-110">F</span>
-                      <span className="text-brand-navy/30">T</span>
-                    </div>
-                  </div>
-                  <h3 className="bg-[#102a43] text-blue-200 font-heading text-xs font-bold px-2 md:px-4 py-1.5 rounded-md border border-blue-500/30 inline-block mb-2 md:mb-3.5 shadow-md mx-auto relative z-10 uppercase tracking-wider">
-                    {t.values.facts.name}
-                  </h3>
-                  <p className="text-white/90 text-sm leading-relaxed max-w-full md:max-w-[85%] mx-auto relative z-10">
-                    {t.values.facts.text}
-                  </p>
-
-                  {/* Document Icon sticking to bottom right */}
-                  <svg aria-hidden="true" className="absolute -right-4 -bottom-4 w-14 h-14 md:w-24 md:h-24 opacity-80 pointer-events-none transition-transform duration-500 group-hover:scale-105 group-hover:-rotate-3" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                      <linearGradient id="docGradF" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stopColor="#f8fafc" />
-                        <stop offset="100%" stopColor="#cbd5e1" />
-                      </linearGradient>
-                      <linearGradient id="chartGradF" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stopColor="#38bdf8" />
-                        <stop offset="100%" stopColor="#0284c7" />
-                      </linearGradient>
-                      <linearGradient id="glowGradF" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stopColor="#0ea5e9" stopOpacity="0.2" />
-                        <stop offset="100%" stopColor="#0ea5e9" stopOpacity="0" />
-                      </linearGradient>
-                    </defs>
-                    <circle cx="85" cy="85" r="35" fill="url(#glowGradF)" />
-                    <rect x="40" y="30" width="45" height="60" rx="4" fill="#94a3b8" stroke="#475569" strokeWidth="3" />
-                    <rect x="30" y="40" width="45" height="60" rx="4" fill="url(#docGradF)" stroke="#334155" strokeWidth="3" />
-                    <g stroke="#64748b" strokeWidth="2.5" strokeLinecap="round">
-                      <line x1="38" y1="52" x2="60" y2="52" />
-                      <line x1="38" y1="60" x2="68" y2="60" />
-                      <line x1="38" y1="68" x2="52" y2="68" />
-                    </g>
-                    <g fill="url(#chartGradF)" stroke="#0369a1" strokeWidth="1.5">
-                      <rect x="38" y="78" width="6" height="12" rx="1" />
-                      <rect x="48" y="74" width="6" height="16" rx="1" />
-                      <rect x="58" y="81" width="6" height="9" rx="1" />
-                    </g>
-                    <circle cx="82" cy="82" r="10" fill="#22c55e" stroke="#15803d" strokeWidth="2" />
-                    <path d="M78 82L81 85L87 79" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </motion.div>
-              </div>
-
-            </div>
-          </div>
-        </SectionWrapper>
-
+        <CtaBand title={all.site.cta.title} lead={all.site.cta.lead}
+          primary={{ label: all.home.talkToNutritionist, href: href("/contact?type=nutritionist") }}
+          secondary={{ label: w.requestDossier, href: href("/contact?type=dossier") }} />
       </main>
 
       <Footer />

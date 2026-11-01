@@ -30,6 +30,21 @@
   --color-light-orange: #ffffff;
   --color-process-bg: #305280;
 
+  /* The redesign's palette, light: white and pale-navy pages, white cards, deep navy headings (ink), navy-grey text
+     (copy), and the brand orange (flame) and teal (mint) darkened so small text passes contrast on every surface.
+     A section with the theme-dark class gets the navy versions instead (see below). */
+  --color-page: #ffffff;
+  --color-page-alt: #f4f7fb;
+  --color-card: #ffffff;
+  --color-card-hi: #eef3fa;
+  --color-card-hi2: #e3ebf5;
+  --color-line: rgb(48 82 128 / 0.16);
+  --color-ink: #15273f;
+  --color-copy: #46597a;
+  --color-copy-dim: #5b6b84;
+  --color-flame: #c0402a;
+  --color-mint: #0d7268;
+
   /* Maven Pro first; the Noto fonts supply the Kannada and Hindi letters it doesn't have. */
   /* `font-sans` (used by the chat pages and pop-up) is the site font too, not the browser's default. */
   --font-sans:
@@ -234,4 +249,37 @@ nextjs-portal,
 [data-nextjs-toast],
 [data-nextjs-dialog] {
   display: none !important;
+}
+
+/* The redesign's page width: 1240px of content with the side gutter. */
+@utility container-site {
+  width: 100%;
+  max-width: calc(1240px + 3rem);
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+  @media (min-width: 640px) {
+    padding-inline: 1.5rem;
+  }
+}
+
+/* The same tokens in navy, for the few dark parts of the light design: the announcement bar, the closing panel and
+   the footer. Every text colour here is at least 4.5:1 on every surface. */
+.theme-dark {
+  --color-page: #1a2f4d;
+  --color-page-alt: #203858;
+  --color-card: #274468;
+  --color-card-hi: #2d4d76;
+  --color-card-hi2: #375b88;
+  --color-line: rgb(255 255 255 / 0.14);
+  --color-ink: #ffffff;
+  --color-copy: #dbe4f1;
+  --color-copy-dim: #b4c3d8;
+  --color-flame: #ffa58d;
+  --color-mint: #3ee6cd;
+  color: var(--color-copy);
+}
+
+.site-ui ::selection {
+  background-color: rgb(207 65 40 / 0.18);
+  color: var(--color-ink);
 }

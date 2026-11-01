@@ -17,6 +17,8 @@ export const Images = {
     logo: "/images/branding/logo.jpg",
     /** Flask and wordmark side by side on a transparent background, for the header. Built from logo.jpg. */
     logoHorizontal: "/images/branding/logo-horizontal.png",
+    /** The same with white lettering (the orange kept), for the dark header and footer. Made from logo-horizontal.png. */
+    logoHorizontalLight: "/images/branding/logo-horizontal-light.png",
   },
 
   /** Full-page hero background images */
