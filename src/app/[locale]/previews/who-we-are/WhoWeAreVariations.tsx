@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import WhoWeAre from "@/components/WhoWeAre";
+import MotionStory from "./MotionStory";
 import { Images } from "@/lib/assets";
 import { useHref, useT } from "@/i18n/LocaleProvider";
 
@@ -14,6 +15,7 @@ const options = [
   { id: "photo", label: "Photo-led", type: "Human & grounded", note: "The leadership photo carries the tagline; the key facts sit beside it as short labelled lines." },
   { id: "tabs", label: "Tabbed", type: "Compact", note: "One short introduction, then tabs for the facts, the questions and the leadership, so the section stays short." },
   { id: "timeline", label: "Milestones", type: "Story & proof", note: "The partnerships, recognition and government support as a timeline, with the questions in a grid below." },
+  { id: "motion", label: "Motion story", type: "Animated", note: "The facts told with motion graphics: a flow from nature to the farm, counting leadership years, a timeline that draws as you scroll and a moving supply chain." },
 ] as const;
 type Variant = (typeof options)[number]["id"];
 
@@ -251,7 +253,7 @@ export default function WhoWeAreVariations() {
       <Link href="/previews" className="text-sm font-semibold text-brand-orange-aa hover:underline">← Design previews</Link>
       <p className="text-sm font-semibold uppercase tracking-widest text-slate-500 mt-6">Homepage / Design variations</p>
       <h1 className="font-heading text-4xl font-bold text-brand-navy mt-2">Who We Are</h1>
-      <p className="text-brand-navy/70 mt-3 max-w-2xl">Six ways to lay out the same copy. The What we serve circles stay below the section in every version.</p>
+      <p className="text-brand-navy/70 mt-3 max-w-2xl">Seven ways to lay out the same copy. The What we serve circles stay below the section in every version.</p>
       <div role="tablist" aria-label="Who We Are designs" className="flex flex-wrap gap-2 mt-8">
         {options.map((option, index) => <button key={option.id} ref={(el) => { tabs.current[index] = el; }}
           type="button" role="tab" id={`tab-${option.id}`} aria-selected={variant === option.id} aria-controls="design-preview"
@@ -277,6 +279,7 @@ export default function WhoWeAreVariations() {
       {variant === "photo" && <Photo />}
       {variant === "tabs" && <Tabbed />}
       {variant === "timeline" && <Timeline />}
+      {variant === "motion" && <MotionStory />}
     </div>
   </main>;
 }

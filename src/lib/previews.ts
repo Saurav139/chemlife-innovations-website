@@ -7,8 +7,8 @@ export const PREVIEWS = [
   {
     slug: "who-we-are",
     href: "/previews/who-we-are",
-    title: "Who We Are: six variations",
-    description: "The new Who We Are copy in six homepage layouts: the current section, a navy fact sheet, questions first, photo-led, tabbed and a milestones timeline.",
+    title: "Who We Are: seven variations",
+    description: "The new Who We Are copy in seven homepage layouts: the current section, a navy fact sheet, questions first, photo-led, tabbed, a milestones timeline and an animated motion story.",
   },
   {
     slug: "research-taste",
