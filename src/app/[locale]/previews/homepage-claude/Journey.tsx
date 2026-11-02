@@ -87,14 +87,13 @@ export default function Journey() {
           <Reveal delay={0.1} className="lg:col-span-6">
             <figure className="relative">
               <div className="relative aspect-[4/3] rounded-3xl overflow-hidden"><Image src={Images.people.foundersNew} alt={t.about.foundersAlt} fill sizes="(min-width: 1024px) 560px, 100vw" className="object-cover" /></div>
-              <figcaption className="md:absolute md:-bottom-8 md:-left-8 md:max-w-sm mt-4 md:mt-0 rounded-2xl bg-white md:shadow-xl md:border border-slate-100 md:p-5 text-slate-700 leading-relaxed">{w.leadershipCaption}</figcaption>
             </figure>
           </Reveal>
         </div>
         <dl className="grid sm:grid-cols-2 lg:grid-cols-5 gap-px bg-slate-200 rounded-3xl overflow-hidden mt-20 border border-slate-200">
           {w.facts.map((f, i) => <Reveal key={f.label} delay={(i % 5) * 0.05} className={`bg-white p-6 ${i === 9 ? "sm:col-span-2 lg:col-span-5" : ""}`}>
             <dt className="text-xs font-bold uppercase tracking-wider text-teal-aa">{f.label}</dt>
-            <dd className="mt-2 leading-relaxed">{f.value}</dd>
+            <dd className="mt-2 leading-relaxed">{f.value}{i === 9 && <span className="block mt-2 text-slate-600">{w.leadershipCaption}</span>}</dd>
           </Reveal>)}
         </dl>
         <div className="grid lg:grid-cols-12 gap-10 mt-20">
