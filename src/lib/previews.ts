@@ -5,6 +5,12 @@ import { isLiveHost } from "@/lib/seo";
 // the site instead. Never shown on the live site.
 export const PREVIEWS = [
   {
+    slug: "who-we-are-elegant",
+    href: "/previews/who-we-are-elegant",
+    title: "Who We Are: five elegant versions",
+    description: "Five more restrained layouts of Who We Are with the full copy and What we serve: Quiet (centred), Editorial (long-read), Portrait (photo and text), Index (numbered facts, tabbed questions) and Soft panel. The current section is included for comparison.",
+  },
+  {
     slug: "homepage-claude",
     href: "/previews/homepage-claude",
     title: "Homepage: six more designs",
