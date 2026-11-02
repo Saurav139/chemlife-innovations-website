@@ -39,10 +39,11 @@ export const PARTNERS = [...new Set([...Images.partnerLogos.frontRow, ...Images.
 
 export const STEP_IMAGES = [Images.process.researchImage, Images.process.developmentImage, Images.process.manufacturingImage, Images.process.delivery];
 // Three photos for each species group, in the order of home.whoWeAre.cards.
+// Drawn illustrations in one style, matching the alt text of the photos they replace.
 export const SERVE_IMAGES = [
-  [Images.gallery.rotate11, Images.gallery.rotate12, Images.gallery.rotate13],
-  [Images.gallery.rotate21, Images.gallery.rotate22, Images.gallery.rotate23],
-  [Images.research.pellets, Images.gallery.rotate32, Images.gallery.rotate33],
+  [Images.serve.poultry, Images.serve.pig, Images.serve.turkey],
+  [Images.serve.cow, Images.serve.buffalo, Images.serve.goats],
+  [Images.serve.bowls, Images.serve.fodder, Images.serve.granules],
 ];
 export const SERVE_CATEGORIES = ["Mono-gastric", "Ruminants", "Value Addition"];
 export const SOCIAL_IMAGES = [VideoPosters.social1, Images.social.image2, Images.social.image3];

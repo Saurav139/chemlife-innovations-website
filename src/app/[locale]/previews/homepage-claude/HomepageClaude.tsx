@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Journey from "./Journey";
 import JourneyBrands from "./JourneyBrands";
+import JourneyDark from "./JourneyDark";
 import JourneyMotion from "./JourneyMotion";
 import JourneyScience from "./JourneyScience";
 import Needs from "./Needs";
@@ -14,6 +15,7 @@ import Refined from "./Refined";
 const DESIGNS = [
   { id: "journey", label: "Journey", note: "Told as you scroll: the hero's photographs part, and the four process steps pin while their pictures change.", Page: Journey },
   { id: "journey-2", label: "Journey 2", note: "Journey with the live site's rotating hero lines under \"Innovations in Bioactives\", and the partner logos scrolling sideways instead of the taglines.", Page: JourneyBrands },
+  { id: "journey-2-dark", label: "Journey 2 dark", note: "Journey 2 in a dark theme: deep navy, white type, the partner logos and award marks on white.", Page: JourneyDark },
   { id: "journey-3", label: "Journey 3", note: "Journey 2 with a slow, faint network of molecules moving behind the hero titles.", Page: JourneyMotion },
   { id: "journey-4", label: "Journey 4", note: "Journey 2 with ChemLife's science moving behind the titles: chelated minerals, microencapsulation, ANBioT and mycotoxin binding.", Page: JourneyScience },
   { id: "needs", label: "Needs", note: "Arranged by what animals need: feed hygiene, gut and liver, minerals, rumen and dairy, with every product under one.", Page: Needs },
