@@ -9,14 +9,11 @@
   scroll-margin-top: 88px;
 }
 .wrap { max-width: 1200px; margin-inline: auto; padding-inline: 24px; }
-.journal h2, .journal h3 { font-family: "Galaxy", var(--font-family-heading); font-weight: 700; line-height: 1.15; color: var(--csr-blue); text-wrap: balance; }
-.journal h2 { font-size: clamp(1.9rem, 3.2vw, 2.8rem); }
+.journal h3 { font-family: "Galaxy", var(--font-family-heading); font-weight: 700; line-height: 1.15; color: var(--csr-blue); text-wrap: balance; }
 .journal h3 { font-size: clamp(1.4rem, 2vw, 1.75rem); }
 .journal p { font-size: 1rem; line-height: 1.7; }
-.intro { max-width: 720px; margin-bottom: 32px; }
-.intro p { margin-top: 16px; max-width: 65ch; }
-.eyebrow { display: block; font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .13em; line-height: 1.5; margin-bottom: 14px; color: var(--csr-blue); }
-.eyebrow::before { content: ""; display: inline-block; width: 22px; height: 3px; background: var(--csr-orange); vertical-align: middle; margin-right: 10px; }
+.intro { max-width: 720px; margin: 0 auto 32px; text-align: center; }
+.intro p { margin: 16px auto 0; max-width: 65ch; }
 .storyGrid { display: grid; gap: 32px; }
 .storyGrid article { min-width: 0; }
 .photo { position: relative; overflow: hidden; background: var(--csr-paper); aspect-ratio: 16 / 10; min-width: 0; border-radius: 14px; }

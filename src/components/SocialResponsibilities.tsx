@@ -33,8 +33,9 @@ export default function SocialResponsibilities({ id = "social-responsibility" }:
   return <section id={id} className={styles.journal} aria-labelledby={`${scope}-title`}>
     <div className={styles.wrap}>
       <div className={styles.intro}>
-        <span className={styles.eyebrow}>{t.kicker}</span>
-        <h2 id={`${scope}-title`}>{t.journalTitle}</h2>
+        {/* The same title block as the other homepage sections */}
+        <span className="text-teal-aa text-sm lg:text-base font-semibold tracking-widest uppercase block mb-2">{t.kicker}</span>
+        <h2 id={`${scope}-title`} className="font-heading text-3xl md:text-4xl lg:text-5xl text-brand-navy font-bold leading-tight">{t.title}</h2>
         <p>{t.introduction}</p>
       </div>
       <div className={styles.storyGrid}>
