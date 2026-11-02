@@ -143,6 +143,19 @@ export const Images = {
     rotate33: "/images/gallery/rotate_3_3.jpeg",
   },
 
+  /** What we serve: drawn illustrations, one family (previews) */
+  serve: {
+    poultry: "/images/serve/serve-poultry.webp",
+    pig: "/images/serve/serve-pig.webp",
+    turkey: "/images/serve/serve-turkey.webp",
+    cow: "/images/serve/serve-cow.webp",
+    buffalo: "/images/serve/serve-buffalo.webp",
+    goats: "/images/serve/serve-goats.webp",
+    bowls: "/images/serve/serve-bowls.webp",
+    fodder: "/images/serve/serve-fodder.webp",
+    granules: "/images/serve/serve-granules.webp",
+  },
+
   /** CSR / social responsibility imagery */
   social: {
     image2: "/images/social/social2.jpeg",
