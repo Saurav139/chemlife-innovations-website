@@ -91,14 +91,14 @@ export default function TestimonialCarousel() {
                   exit={{ opacity: 0, y: -20 }}
                   transition={{ duration: 0.3, ease: [0.25, 0.1, 0, 1] }}
                 >
-                  <svg className="w-10 h-10 mb-5 md:w-16 md:h-16 md:mb-8 text-teal-400" fill="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-8 h-8 mb-4 md:w-12 md:h-12 md:mb-6 text-teal-400" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10H14.017zM0 21v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151C7.563 6.068 6 8.789 6 11h4v10H0z" />
                   </svg>
 
                   {/* Phones: regular (not light italic) text, which is easier to read at this length, cut to 6 lines. */}
                   <blockquote
                     ref={quoteRef}
-                    className={`text-base md:text-2xl lg:text-3xl leading-relaxed font-normal md:font-light not-italic md:italic ${expanded ? "" : "max-md:line-clamp-6"} ${theme.testimonialsText}`}
+                    className={`max-w-[65ch] text-base md:text-lg lg:text-xl leading-[1.8] font-normal not-italic ${expanded ? "" : "max-md:line-clamp-6"} ${theme.testimonialsText}`}
                   >
                     &ldquo;{testimonials[current].quote}&rdquo;
                   </blockquote>
