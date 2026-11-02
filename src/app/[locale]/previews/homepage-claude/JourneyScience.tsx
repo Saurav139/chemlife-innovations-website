@@ -42,7 +42,7 @@ export default function JourneyScience() {
     {/* Hero: the line, then three photographs that part as the story begins */}
     <section ref={heroRef} className="relative pt-32 md:pt-40 pb-16 overflow-hidden">
       {/* ChemLife's science moves behind the titles and fades out before the photographs */}
-      <div aria-hidden="true" className="absolute inset-x-0 top-0 h-[44rem] md:h-[46rem] [mask-image:linear-gradient(to_bottom,black_70%,transparent)]"><HeroScience /></div>
+      <HeroScience className="absolute inset-x-0 top-0 h-[44rem] md:h-[46rem]" />
       <div className="relative max-w-[1200px] mx-auto px-6 text-center">
         <Reveal><span className={`${kicker} text-teal-aa`}>Innovations in Bioactives</span></Reveal>
         {/* The live site's five hero lines, taking turns; the box keeps three lines' height so nothing below moves */}
