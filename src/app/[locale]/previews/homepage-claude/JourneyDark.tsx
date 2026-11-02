@@ -215,7 +215,7 @@ export default function JourneyDark() {
         </div>
         <div className="lg:col-span-7">
           <span className={`${kicker} text-teal-aa-light`}>{home.social.kicker}</span>
-          <h2 className="font-heading text-3xl md:text-4xl font-bold mt-3">{home.social.journalTitle}</h2>
+          <h2 className={`${h2} mt-3`}>{home.social.title}</h2>
           <p className={`${MUTED} mt-3`}>{home.social.introduction}</p>
           <ul className="mt-8 space-y-5">
             {home.social.items.map((item, i) => <Reveal key={item.title} delay={i * 0.06}><li className="flex gap-5 items-center">
