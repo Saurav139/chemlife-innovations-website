@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Journey from "./Journey";
+import JourneyBrands from "./JourneyBrands";
 import Needs from "./Needs";
 import Storyboard from "./Storyboard";
 import Milestones from "./Milestones";
@@ -10,6 +11,7 @@ import Refined from "./Refined";
 
 const DESIGNS = [
   { id: "journey", label: "Journey", note: "Told as you scroll: the hero's photographs part, and the four process steps pin while their pictures change.", Page: Journey },
+  { id: "journey-2", label: "Journey 2", note: "Journey with the live site's rotating hero lines under \"Innovations in Bioactives\", and the partner logos scrolling sideways instead of the taglines.", Page: JourneyBrands },
   { id: "needs", label: "Needs", note: "Arranged by what animals need: feed hygiene, gut and liver, minerals, rumen and dairy, with every product under one.", Page: Needs },
   { id: "storyboard", label: "Storyboard", note: "A front page of stories: a lead story, cards of different sizes, and Who We Are as the long read.", Page: Storyboard },
   { id: "milestones", label: "Milestones", note: "ChemLife's dated history, 2016 to today, is the spine; a line draws down the years as you read.", Page: Milestones },
