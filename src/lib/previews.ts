@@ -5,6 +5,12 @@ import { isLiveHost } from "@/lib/seo";
 // the site instead. Never shown on the live site.
 export const PREVIEWS = [
   {
+    slug: "who-we-are-corporate",
+    href: "/previews/who-we-are-corporate",
+    title: "Who We Are page: four corporate versions",
+    description: "Four corporate designs of the full Who We Are page (/who-we-are), each with all its content and no photos: Annual report (organisation chart), Executive (gradient hero, icon cards), Dossier (sticky page index) and Split (navy panel beside the content).",
+  },
+  {
     slug: "who-we-are-page",
     href: "/previews/who-we-are-page",
     title: "Who We Are page: five versions",
