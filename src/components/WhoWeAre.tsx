@@ -189,13 +189,20 @@ export default function WhoWeAre() {
   return (
     <section aria-labelledby="who-we-are-title" className="bg-white py-20 md:py-32 overflow-hidden border-b border-gray-100">
       <div className="max-w-[1200px] mx-auto px-6">
+        <div className="text-center mb-10 md:mb-16">
+          <span className="text-teal-aa text-sm lg:text-base font-semibold tracking-widest uppercase block mb-3">
+            {t.homeKicker}
+          </span>
+          <h2 id="who-we-are-title" className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold leading-tight text-brand-navy">
+            {t.homeTitle}
+          </h2>
+        </div>
+
         {/* Who we are: the introduction beside the founders' photo, with a link to the full Who We Are page. */}
         <div className="grid lg:grid-cols-12 gap-12 items-center">
           <Reveal className="lg:col-span-6">
-            <span className="text-teal-aa text-sm lg:text-base font-semibold tracking-widest uppercase">{t.homeKicker}</span>
-            <h2 id="who-we-are-title" className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold leading-tight text-brand-navy mt-3">{t.homeTitle}</h2>
             {/* What ChemLife is, in a line, under the heading. */}
-            <p className="font-heading text-xl md:text-2xl font-semibold leading-snug text-brand-navy/80 mt-4">{t.title}</p>
+            <p className="font-heading text-2xl md:text-3xl lg:text-4xl font-semibold leading-snug text-brand-orange-aa mt-4">{t.title}</p>
             <p className="text-lg text-slate-700 leading-relaxed mt-6">{t.intro}</p>
             {/* The facts and questions that used to be here, in full on their own page. */}
             <a href={href("/who-we-are")} data-analytics-click={t.moreAboutUs} className="inline-flex items-center gap-2 min-h-12 px-6 mt-8 rounded-full bg-brand-navy hover:bg-brand-navy/90 text-white font-semibold transition-colors">

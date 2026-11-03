@@ -12,7 +12,7 @@ import { useT } from "@/i18n/LocaleProvider";
 
 const testimonials = [
   {
-    quote: "We are happy to inform that we have collaboration arrangement with Chemlife Innovations since 2018 and continuing to have technology developer & novel product manufacturing understanding with them. Specifically with the help of Chemlife Innovations using their proprietary multi-layer microencapsulation technology, we have introduced a novel functionalized feed ingredient for dairy. We are happy with the quality of the product and happy with service support provided by them.",
+    quote: "We are pleased to share that we have collaborated with Chemlife Innovations since 2018 on technology development and novel product manufacturing. Using their proprietary multi-layer microencapsulation technology, we have introduced a novel functionalized feed ingredient for dairy. We are very satisfied with both the product quality and their service support.",
     name: "Akmal Reyaz",
     role: "Business Head – Dairy & Aqua",
     company: "Huvepharma Sea (Pune) Private Limited",
