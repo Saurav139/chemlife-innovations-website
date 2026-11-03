@@ -2,7 +2,7 @@ import { lookup } from "node:dns/promises";
 import { isIP } from "node:net";
 import { IMAGE_TYPES, findItem, saveImage } from "./db";
 import { WORDPRESS_SITE, fetchWordPressPost, fetchYouTubeVideos } from "./sources";
-import { cleanTitle, decodeEntities, linkedinActivityDate, linkedinActivityId, normalizeUrl, summarizeDescription, titleFromCaption } from "./text";
+import { cleanTitle, decodeEntities, isLinkedInVideoPage, linkedinActivityDate, linkedinActivityId, linkedinEmbedUrl, normalizeUrl, summarizeDescription, titleFromCaption } from "./text";
 import type { InboxItem, SourceItem } from "./types";
 
 // "Add a post": the moderator pastes a link and gets a filled-in card to check before adding it. Only the
@@ -103,6 +103,7 @@ async function linkedinPreview(url: URL, notes: string[]): Promise<SourceItem> {
     content: text,
     imageUrl: meta["og:image"],
     copyImage: true,
+    videoUrl: activity && isLinkedInVideoPage(html) ? linkedinEmbedUrl(activity) : undefined,
     publishedAt: published ? new Date(published) : base.publishedAt,
   };
 }
@@ -207,6 +208,13 @@ async function fetchPublic(address: string, accept: string, maxBytes: number): P
 
 async function fetchText(address: string): Promise<string> {
   return (await fetchPublic(address, "text/html,application/xhtml+xml", 3_000_000)).bytes.toString("utf8");
+}
+
+/** LinkedIn's player for a post, if the post is a video; nothing if it isn't, or its page can't be read. */
+export async function linkedinVideoUrl(postUrl: string): Promise<string | undefined> {
+  const activity = linkedinActivityId(postUrl);
+  if (!activity) return undefined;
+  return isLinkedInVideoPage(await fetchText(postUrl)) ? linkedinEmbedUrl(activity) : undefined;
 }
 
 /** A feed's text, from a public address only. */

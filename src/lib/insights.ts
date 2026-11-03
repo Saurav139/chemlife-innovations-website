@@ -12,6 +12,8 @@ export interface InsightItem {
   linkUrl?: string;
   imageUrl?: string;
   youtubeId?: string;
+  /** A LinkedIn video post's player: LinkedIn's embed address. The card shows its picture with a play button. */
+  videoUrl?: string;
   content?: string;
   /** Chosen in the Insights inbox to be the featured post of its type (otherwise the newest is). */
   featured?: boolean;
@@ -35,6 +37,7 @@ export const FALLBACK_INSIGHTS: Insights = {
       date: "July 15, 2026",
       imageUrl: Images.gallery.rotate21,
       linkUrl: "https://www.linkedin.com/posts/chemlifeinnovations_feedbites-chemlifeinnovations-animalnutrition-activity-7473607866512355328-G6mF",
+      videoUrl: "https://www.linkedin.com/embed/feed/update/urn:li:activity:7473607866512355328?compact=true",
       content: `In livestock farming, every feed choice determines your operational margins. Feed quality isn't just about weight; it is about gut performance and biochemical stability.
 
 With #FeedBites, we share actionable updates to help dairy and poultry manufacturers make smarter feed preservation decisions. In this post, we discuss:
@@ -109,6 +112,7 @@ This organic chelation increases absorption efficiency, optimizes digestion, and
       date: "January 10, 2026",
       imageUrl: Images.research.pellets,
       linkUrl: "https://www.linkedin.com/posts/chemlifeinnovations_feedhygiene-animalhealth-livestockmanagement-activity-7413944749906309123-6okc",
+      videoUrl: "https://www.linkedin.com/embed/feed/update/urn:li:activity:7413944749906309123?compact=true",
       content: `In poultry and cattle farming, feed accounts for up to 70% of production costs. If your feed is compromised by fungal mold or bacteria, your entire margin is at risk.
 
 Clean feed ensures that animals absorb maximum nutrients, which directly impacts the Feed Conversion Ratio (FCR). By preventing mold growth from the source, farmers avoid the clinical losses associated with secondary bacterial infections and high mortality rates.`

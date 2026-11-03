@@ -27,6 +27,8 @@ export interface SourceItem {
   /** Copy the picture at imageUrl into the database when the post is added. */
   copyImage?: boolean;
   youtubeId?: string;
+  /** A LinkedIn video post's player (LinkedIn's embed address). */
+  videoUrl?: string;
   meta: string;
   publishedAt: Date;
 }
@@ -47,6 +49,7 @@ export interface InboxItem {
   image: string;
   imageId: number | null;
   youtubeId: string;
+  videoUrl: string;
   meta: string;
   publishedAt: string;
   importedAt: string;
@@ -63,6 +66,7 @@ export interface ItemChanges {
   content?: string;
   meta?: string;
   imageId?: number | null;
+  videoUrl?: string | null;
   publishedAt?: Date;
 }
 

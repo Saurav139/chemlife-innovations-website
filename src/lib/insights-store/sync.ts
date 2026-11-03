@@ -4,7 +4,7 @@ import { FALLBACK_INSIGHTS, type InsightItem } from "@/lib/insights";
 import { addImportedItems, addItems, changeItem, getSetting, knownIds, knownUrls, listItems, removeUnusedImages, setSetting, socialAutoPublishSettings } from "./db";
 import type { SocialAutoPublish } from "./social-publishing";
 import { fetchInstagramFeed, fetchLinkedInFeed } from "./feed";
-import { copyImage, fetchFeedText } from "./preview";
+import { copyImage, fetchFeedText, linkedinVideoUrl } from "./preview";
 import { fetchInstagramPosts, fetchWordPressPosts, fetchYouTubeUploads, renewInstagramToken } from "./sources";
 import { articleSummary, cleanTitle, instagramPostId, isFromArticle, linkedinActivityId, normalizeUrl } from "./text";
 import type { ItemChanges, Source, SourceItem, SourceState, SyncResult } from "./types";
@@ -75,6 +75,15 @@ async function importFrom(source: Source, fetchItems: () => Promise<SourceItem[]
         })
       );
     }
+    // A LinkedIn feed doesn't say which posts are videos; their pages do. A few at a time.
+    if (source === "linkedin") {
+      const unchecked = fresh.filter((item) => !item.videoUrl && item.url);
+      for (let i = 0; i < unchecked.length; i += 4) {
+        await Promise.all(unchecked.slice(i, i + 4).map(async (item) => {
+          item.videoUrl = await linkedinVideoUrl(item.url!).catch(() => undefined);
+        }));
+      }
+    }
     const approveNow = firstTimeApproved ? !(await getSetting(firstTimeApproved)) : false;
     const imported = await addImportedItems(source, fresh, approveNow ? "approved" : "pending");
     if (approveNow) await setSetting(firstTimeApproved!, new Date().toISOString());
@@ -91,12 +100,14 @@ async function importFrom(source: Source, fetchItems: () => Promise<SourceItem[]
 export async function startInbox(): Promise<boolean> {
   if (await getSetting("started")) {
     await repairBlogText();
+    await findLinkedInVideos();
     return false;
   }
   await addItems(builtInItems(), "approved");
   await setSetting("started", new Date().toISOString());
   // A new inbox imports blog posts with today's text already.
   await setSetting(BLOG_TEXT_REPAIRED, new Date().toISOString());
+  await findLinkedInVideos();
   return true;
 }
 
@@ -127,6 +138,25 @@ async function repairBlogText(): Promise<void> {
   await setSetting(BLOG_TEXT_REPAIRED, new Date().toISOString());
 }
 
+const LINKEDIN_VIDEOS_FOUND = "repaired:linkedin-videos";
+
+/** Once, for LinkedIn posts added before video posts were recognised (November 2026): each post's page says whether
+ *  it is a video, and a video gets LinkedIn's player. Done again on the next check if a page couldn't be read. */
+async function findLinkedInVideos(): Promise<void> {
+  if (await getSetting(LINKEDIN_VIDEOS_FOUND)) return;
+  let complete = true;
+  for (const item of await listItems()) {
+    if (item.source !== "linkedin" || item.videoUrl || !item.url) continue;
+    try {
+      const videoUrl = await linkedinVideoUrl(item.url);
+      if (videoUrl) await changeItem(item.id, { videoUrl });
+    } catch {
+      complete = false;
+    }
+  }
+  if (complete) await setSetting(LINKEDIN_VIDEOS_FOUND, new Date().toISOString());
+}
+
 function builtInItem(item: InsightItem): SourceItem {
   const url = item.linkUrl ?? "";
   const activity = linkedinActivityId(url);
@@ -144,6 +174,7 @@ function builtInItem(item: InsightItem): SourceItem {
     url: url || (item.youtubeId ? `https://www.youtube.com/watch?v=${item.youtubeId}` : undefined),
     imageUrl: item.imageUrl,
     youtubeId: item.youtubeId,
+    videoUrl: item.videoUrl,
     meta: item.meta,
     publishedAt: Number.isNaN(date.getTime()) ? new Date() : date,
   };

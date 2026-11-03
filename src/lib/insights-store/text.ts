@@ -165,6 +165,16 @@ export function linkedinActivityId(url: string): string | null {
   return url.match(/activity[-:](\d{19})/)?.[1] ?? null;
 }
 
+/** LinkedIn's own player for a post, which plays its video. */
+export function linkedinEmbedUrl(activity: string): string {
+  return `https://www.linkedin.com/embed/feed/update/urn:li:activity:${activity}?compact=true`;
+}
+
+/** A LinkedIn post page whose post is a video: its structured data describes a VideoObject. */
+export function isLinkedInVideoPage(html: string): boolean {
+  return /"@type"\s*:\s*"VideoObject"/.test(html);
+}
+
 /** When a LinkedIn post was published: its activity number starts with the time in milliseconds. */
 export function linkedinActivityDate(id: string): Date {
   return new Date(Number(BigInt(id) >> BigInt(22)));
