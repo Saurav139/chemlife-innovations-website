@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import Image from "next/image";
 import Header from "@/components/Header";
@@ -15,6 +15,7 @@ import type { Insights, InsightItem } from "@/lib/insights";
 import { playOnPage, youtubeWatchUrl } from "@/lib/youtube";
 import { insightAnchor } from "@/lib/catalog";
 import { revealElement, useHashTarget } from "@/lib/deepLink";
+import { useMasonry } from "@/lib/masonry";
 
 const easeOut = [0.25, 0.1, 0, 1] as const;
 
@@ -110,8 +111,8 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
 
   const featuredTitles = new Set([featuredBlog, featuredVideo, featuredPodcast].filter(Boolean).map((item) => item.title));
 
-  // The grid's items for a filter and search: deduplicated, newest first, and for "All" interleaved as 1 video,
-  // 1 podcast, 2 blogs. The newest blog, video and podcast are already in Featured above, so they're left out, unless
+  // The grid's items for a filter and search: deduplicated and newest first, across every type for "All". The newest
+  // blog, video and podcast are already in Featured above, so they're left out, unless
   // the visitor is searching (then every match is listed) or leaving them out would empty the grid.
   const gridItemsFor = (filter: string, rawQuery: string) => {
     const query = rawQuery.toLowerCase();
@@ -135,16 +136,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
     } else if (filter === "Videos") {
       items = filteredVideos;
     } else {
-      let vIndex = 0;
-      let pIndex = 0;
-      let bIndex = 0;
-      while (vIndex < filteredVideos.length || pIndex < filteredPodcasts.length || bIndex < filteredBlogs.length) {
-        if (vIndex < filteredVideos.length) items.push(filteredVideos[vIndex++]);
-        if (pIndex < filteredPodcasts.length) items.push(filteredPodcasts[pIndex++]);
-        for (let k = 0; k < 2; k++) {
-          if (bIndex < filteredBlogs.length) items.push(filteredBlogs[bIndex++]);
-        }
-      }
+      items = [...filteredVideos, ...filteredPodcasts, ...filteredBlogs].sort((a, b) => getTimestamp(b.date) - getTimestamp(a.date));
     }
 
     const withoutFeatured = items.filter((item) => !featuredTitles.has(item.title));
@@ -169,6 +161,8 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
     revealElement(target, 500);
   });
   const visibleItems = gridItems.slice(0, visibleCount);
+  const gridRef = useRef<HTMLDivElement>(null);
+  useMasonry(gridRef, [visibleItems.map((item) => item.title).join("|"), gridVersion]);
 
   return (
     <VariantProvider>
@@ -542,9 +536,10 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
               initial={gridVersion === 0 || reduceMotion ? false : { opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.25, ease: "easeOut" }}
-              // Columns, as on the full-image preview: each card keeps its own height, so a tall post doesn't stretch the
-              // cards beside it.
-              className="columns-1 sm:columns-2 lg:columns-3 gap-x-6"
+              ref={gridRef}
+              // As on the full-image preview, each card keeps its own height, so a tall post doesn't stretch the cards
+              // beside it; useMasonry packs them newest first, across the top and then down the shortest column.
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-start"
             >
                 {visibleItems.map((item, index) => {
                   const isNew = index >= revealFrom;
@@ -556,7 +551,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                       initial={isNew ? (reduceMotion ? { opacity: 0 } : { opacity: 0, y: 12 }) : false}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.35, ease: easeOut, delay: isNew ? Math.min(index - revealFrom, 5) * 0.06 : 0 }}
-                      className={`scroll-mt-28 ${INSIGHT_CARD_CLASS} inline-flex! w-full mb-6 break-inside-avoid align-top`}
+                      className={`scroll-mt-28 ${INSIGHT_CARD_CLASS}`}
                     >
                       <InsightCardContent item={item} imageLayout={isSocialPost(item) ? "natural" : "cropped"} centerTextWithoutImage onRead={setActiveArticle} onPlay={setActiveVideoId} />
                     </motion.div>
