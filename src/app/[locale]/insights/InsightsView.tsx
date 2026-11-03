@@ -162,7 +162,8 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
   });
   const visibleItems = gridItems.slice(0, visibleCount);
   const gridRef = useRef<HTMLDivElement>(null);
-  useMasonry(gridRef, [visibleItems.map((item) => item.title).join("|"), gridVersion]);
+  // Cards keep their columns as their pictures load; a new filter or search (gridVersion) sorts them afresh.
+  useMasonry(gridRef, [visibleItems.map((item) => item.title).join("|")], gridVersion);
 
   return (
     <VariantProvider>
