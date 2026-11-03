@@ -8,6 +8,7 @@ import Footer from "@/components/Footer";
 import SectionWrapper from "@/components/SectionWrapper";
 import { VariantProvider } from "@/context/VariantContext";
 import SiteSearch from "@/components/SiteSearch";
+import NaturalInsightImage from "@/components/NaturalInsightImage";
 import { Images } from "@/lib/assets";
 import type { Insights, InsightItem } from "@/lib/insights";
 import { playOnPage, youtubeWatchUrl } from "@/lib/youtube";
@@ -30,6 +31,12 @@ const isOptimizable = (src: string) =>
   src.startsWith("/") ||
   src.startsWith("https://chemlifeinnovations.wordpress.com/wp-content/uploads/") ||
   src.startsWith("https://img.youtube.com/vi/");
+
+/** LinkedIn and Instagram posts are shown with their whole picture (their own proportions) instead of a 16:9 crop,
+ *  so a headline or detail at the edge of the post is never cut off. */
+const isSocialPost = (item: InsightItem) => {
+  try { return /^(?:www\.)?(?:instagram|linkedin)\.com$/i.test(new URL(item.linkUrl ?? "").hostname); } catch { return false; }
+};
 
 /** A card button label that shortens on the narrowest phones (under 360px), where the full text doesn't fit
  *  beside the other button. Screen readers always get the full text. */
@@ -240,7 +247,10 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                     </h3>
                     
                     {/* Blog Image Preview */}
-                    {featuredBlog.imageUrl && (
+                    {featuredBlog.imageUrl && isSocialPost(featuredBlog) && (
+                      <div className="mb-4"><NaturalInsightImage src={featuredBlog.imageUrl} alt={featuredBlog.title} sizes={FEATURED_IMAGE_SIZES} /></div>
+                    )}
+                    {featuredBlog.imageUrl && !isSocialPost(featuredBlog) && (
                       <div className="relative w-full aspect-video rounded-xl md:rounded-2xl overflow-hidden bg-slate-100 border border-gray-200 select-none mb-4">
                         <Image
                           src={featuredBlog.imageUrl}
@@ -579,7 +589,10 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                         </div>
 
                         {/* Blog Image Preview (Only images for blogs, no videos) */}
-                        {isBlog && item.imageUrl && (
+                        {isBlog && item.imageUrl && isSocialPost(item) && (
+                          <div className="mb-4"><NaturalInsightImage src={item.imageUrl} alt={item.title} sizes={CARD_IMAGE_SIZES} /></div>
+                        )}
+                        {isBlog && item.imageUrl && !isSocialPost(item) && (
                           <div className="relative w-full aspect-video rounded-xl overflow-hidden mb-4 bg-slate-100 border border-gray-200 select-none">
                             <Image
                               src={item.imageUrl}
@@ -788,7 +801,10 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                   {activeArticle.title}
                 </h2>
 
-                {activeArticle.imageUrl && (
+                {activeArticle.imageUrl && isSocialPost(activeArticle) && (
+                  <NaturalInsightImage src={activeArticle.imageUrl} alt={activeArticle.title} sizes={READER_IMAGE_SIZES} />
+                )}
+                {activeArticle.imageUrl && !isSocialPost(activeArticle) && (
                   <div className="relative w-full aspect-video rounded-2xl overflow-hidden bg-slate-100 border border-gray-250 select-none">
                     <Image
                       src={activeArticle.imageUrl}
