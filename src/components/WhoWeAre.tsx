@@ -185,17 +185,11 @@ export default function WhoWeAre() {
     return () => clearInterval(timer);
   }, []);
 
-  const actions = [
-    { label: t.exploreProducts, path: "/products", primary: true },
-    { label: t.seeResearch, path: "/research" },
-    { label: t.meetLeadership, path: "/about" },
-    { label: t.requestDossier, path: "/contact?type=dossier" },
-  ];
 
   return (
     <section aria-labelledby="who-we-are-title" className="bg-white py-20 md:py-32 overflow-hidden border-b border-gray-100">
       <div className="max-w-[1200px] mx-auto px-6">
-        {/* Who we are: the introduction beside the founders' photo, then the tagline and the four buttons. */}
+        {/* Who we are: the introduction beside the founders' photo, with a link to the full Who We Are page. */}
         <div className="grid lg:grid-cols-12 gap-12 items-center">
           <Reveal className="lg:col-span-6">
             <span className="text-teal-aa text-sm lg:text-base font-semibold tracking-widest uppercase">{t.kicker}</span>
@@ -214,28 +208,6 @@ export default function WhoWeAre() {
               <Image src={Images.people.foundersNew} alt={foundersAlt} fill sizes="(min-width: 1024px) 560px, 100vw" className="object-cover" />
             </div>
           </Reveal>
-        </div>
-
-        <div className="mt-16 md:mt-20">
-          <div>
-            <p className="font-heading text-2xl md:text-3xl font-bold text-brand-orange-aa">{t.tagline}</p>
-            <div className="flex flex-wrap gap-3 mt-8">
-              {actions.map((action) => (
-                <a
-                  key={action.path}
-                  href={href(action.path)}
-                  data-analytics-click={action.label}
-                  className={
-                    action.primary
-                      ? "inline-flex items-center justify-center min-h-12 px-6 rounded-full bg-brand-orange-aa hover:bg-brand-orange-aa-hover text-white font-semibold transition-colors"
-                      : "inline-flex items-center justify-center min-h-12 px-6 rounded-full border-2 border-brand-navy/20 hover:border-brand-navy text-brand-navy font-semibold transition-colors"
-                  }
-                >
-                  {action.label}
-                </a>
-              ))}
-            </div>
-          </div>
         </div>
 
         {/* What we serve: the three species groups */}
