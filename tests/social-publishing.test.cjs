@@ -68,7 +68,7 @@ function database({ enabled, settings = {}, rows = [], failInsert = false, failU
   globalThis.insightsTables = Promise.resolve();
   const db = load('src/lib/insights-store/db.ts', {
     'mysql2/promise': { createPool: () => { throw new Error('must not use a real database'); } },
-    './card': {}, './social-publishing': policy,
+    './card': {}, './social-publishing': policy, './types': load('src/lib/insights-store/types.ts'),
   });
   return { state, db };
 }
@@ -257,6 +257,7 @@ test('the dashboard checkbox reflects the persisted setting and describes existi
     '@/lib/assets': { Images: { gallery: { rotate21: '/fallback.jpg' } } },
     '@/lib/insights-store/card': { insightCard: () => ({}) },
     '@/lib/insights-store/social-publishing': policy,
+    '@/lib/insights-store/types': load('src/lib/insights-store/types.ts'),
   }).default;
   const sources = Object.fromEntries(['youtube', 'wordpress', 'instagram', 'linkedin', 'link'].map(source => [source, { state: 'not-set-up', detail: 'Not connected' }]));
   for (const linkedin of [false, true]) for (const instagram of [false, true]) for (const youtube of [false, true]) {

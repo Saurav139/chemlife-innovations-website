@@ -5,7 +5,7 @@ import InsightCardContent, { INSIGHT_CARD_CLASS } from "@/components/InsightCard
 import { Images } from "@/lib/assets";
 import { insightCard } from "@/lib/insights-store/card";
 import { SOCIAL_SOURCES, type SocialAutoPublish, type SocialSource } from "@/lib/insights-store/social-publishing";
-import type { InboxItem, ItemChanges, Kind, Source, SourceItem, SourceState, Status, SyncResult } from "@/lib/insights-store/types";
+import { canBeFeatured, type InboxItem, type ItemChanges, type Kind, type Source, type SourceItem, type SourceState, type Status, type SyncResult } from "@/lib/insights-store/types";
 
 // The Insights inbox: posts from ChemLife's channels wait under "Waiting" until the moderator adds them to the
 // Insights page or hides them. The page updates as soon as a decision is made.
@@ -141,7 +141,7 @@ export default function InsightsInbox({ initial, demo = false }: { initial: Data
     const lists = {} as Record<Kind, InboxItem[]>;
     for (const k of KIND_ORDER) {
       lists[k] = data.items
-        .filter((item) => item.status === "approved" && item.kind === k && (k === "Blog" || item.youtubeId))
+        .filter((item) => item.status === "approved" && item.kind === k && (k === "Blog" || item.youtubeId) && canBeFeatured(item))
         .sort((a, b) => newer(a, b));
     }
     return lists;
@@ -160,7 +160,7 @@ export default function InsightsInbox({ initial, demo = false }: { initial: Data
   };
   /** Whether adding this post to the page makes it featured: the first of its type, or newer than an automatic pick. */
   const becomesFeatured = (item: InboxItem): boolean => {
-    if (item.status === "approved" || (item.kind !== "Blog" && !item.youtubeId)) return false;
+    if (item.status === "approved" || (item.kind !== "Blog" && !item.youtubeId) || !canBeFeatured(item)) return false;
     const slot = featuredNow[item.kind];
     return !slot || (!slot.chosen && newer(item, slot.item) < 0);
   };
@@ -950,7 +950,7 @@ function Post({ item, featuredAs, wouldFeature, busy, highlight, selected, isNew
         )}
         {item.status === "approved" && (
           <>
-            <button
+            {canBeFeatured(item) && <button
               type="button"
               disabled={busy}
               aria-pressed={item.featured}
@@ -959,7 +959,7 @@ function Post({ item, featuredAs, wouldFeature, busy, highlight, selected, isNew
               className={item.featured ? `${BTN} bg-amber-100 text-amber-900 hover:bg-amber-200` : BTN_SECONDARY}
             >
               {item.featured ? "★ Featured" : featuredAs === "newest" ? "☆ Keep featured" : "☆ Feature"}
-            </button>
+            </button>}
             <button type="button" disabled={busy} onClick={onEdit} className={BTN_SECONDARY}>Edit</button>
             <button type="button" disabled={busy} onClick={() => onChange({ status: "hidden" })} className={BTN_SECONDARY}>Take off page</button>
           </>
