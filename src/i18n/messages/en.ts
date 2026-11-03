@@ -118,6 +118,20 @@ const en = {
       moreAboutUs: "More about who we are",
       factsTitle: "At a glance",
       faqTitle: "Questions, answered",
+      // The Who We Are page set out like an annual report: the cover's labels, the fact sheet's three groups (in
+      // the order of the facts they hold), the partners and recognition strip, and the link to the awards.
+      profileLabel: "Company profile",
+      contentsLabel: "Contents",
+      factGroups: [
+        { title: "Portfolio", note: "What we make and who it is for." },
+        { title: "Science & standards", note: "The technology and the checks behind it." },
+        { title: "Partners & presence", note: "Who we work with, and where." },
+      ],
+      boardLabel: "Board of directors",
+      proofPartners: "Industry partners",
+      proofRecognised: "Recognised and supported by",
+      proofBadges: ["FAMI-QS certified", "Technology Development Board supported"],
+      awardsLink: "See all our awards",
       title: "Functional feed-additive biotechnology from Bengaluru",
       tagline: "Nature-driven science. Proof in every kilo.",
       intro: "ChemLife Innovations is a Bengaluru-based manufacturer of functional feed additives and nutraceuticals for poultry, dairy cattle and swine. Its products pair Ayurvedic plant wisdom with proprietary technologies: ANBioT bio-transformation, green synthesis and microencapsulation. The work is supported by the Technology Development Board, Government of India.",

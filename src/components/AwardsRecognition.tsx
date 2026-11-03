@@ -69,7 +69,7 @@ export default function AwardsRecognition() {
   }, [activeStep]);
 
   return (
-    <section className="bg-white py-16 md:py-24 lg:py-32 overflow-hidden">
+    <section id="awards" className="bg-white py-16 md:py-24 lg:py-32 overflow-hidden scroll-mt-20">
       <div className="max-w-[1200px] mx-auto px-6">
         <div className="text-center mb-10 md:mb-16">
           <span className="text-teal-aa text-sm lg:text-base font-semibold tracking-widest uppercase">
