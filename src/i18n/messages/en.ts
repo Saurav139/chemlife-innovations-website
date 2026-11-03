@@ -111,6 +111,9 @@ const en = {
 
     whoWeAre: {
       kicker: "Who we are",
+      // The homepage section's small label and heading.
+      homeKicker: "Get to know",
+      homeTitle: "Who We Are",
       // The Who We Are page (/who-we-are): the homepage button to it, and its two section headings.
       moreAboutUs: "More about who we are",
       factsTitle: "At a glance",

@@ -112,6 +112,9 @@ const hi: Messages = {
 
     whoWeAre: {
       kicker: "हम कौन हैं",
+      // The homepage section's small label and heading.
+      homeKicker: "जानिए",
+      homeTitle: "हम कौन हैं",
       // The Who We Are page (/who-we-are): the homepage button to it, and its two section headings.
       moreAboutUs: "हमारे बारे में और जानें",
       factsTitle: "एक नज़र में",
