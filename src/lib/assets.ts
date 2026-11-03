@@ -95,11 +95,10 @@ export const Images = {
   people: {
     founders: "/images/people/founders.jpg",
     foundersNew: "/images/people/founders-leadership-group.jpg",
-    /** The three studio photos share one 4:5 frame down to mid-chest (face at the same size and height); Shankar's
-     *  only reaches his shoulders, so his is a closer head-and-shoulders crop. */
-    leaderRadhakrishna: "/images/people/leader_radhakrishna_v2.jpg",
-    leaderSharada: "/images/people/leader_sharada_v2.jpg",
-    leaderSneehaCropped: "/images/people/leader_sneha_v2.jpg",
+    /** The four leaders, cropped to the same head-and-shoulders frame (4:5, face at the same size and height). */
+    leaderRadhakrishna: "/images/people/leader_radhakrishna_portrait.jpg",
+    leaderSharada: "/images/people/leader_sharada_portrait.jpg",
+    leaderSneehaCropped: "/images/people/leader_sneha_portrait.jpg",
     leaderShankar: "/images/people/leader_shankar_portrait.jpg",
   },
 
