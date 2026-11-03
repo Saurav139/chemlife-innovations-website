@@ -214,7 +214,7 @@ export default function WhoWeAre() {
   return (
     <section aria-labelledby="who-we-are-title" className="bg-white py-20 md:py-32 overflow-hidden border-b border-gray-100">
       <div className="max-w-[1200px] mx-auto px-6">
-        {/* Who we are, told in order: who (beside the founders' photo), what (the facts), then the questions. */}
+        {/* Who we are, told in order: who (beside the founders' photo), then the questions. */}
         <div className="grid lg:grid-cols-12 gap-12 items-center">
           <Reveal className="lg:col-span-6">
             <h2 id="who-we-are-title" className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.05] text-brand-navy">
@@ -231,19 +231,6 @@ export default function WhoWeAre() {
             </div>
           </Reveal>
         </div>
-
-        {/* The facts; Leadership runs across the bottom, with the directors' experience under their names. */}
-        <dl className="grid sm:grid-cols-2 lg:grid-cols-5 gap-px bg-slate-200 rounded-3xl overflow-hidden mt-20 border border-slate-200">
-          {t.facts.map((fact, i) => (
-            <Reveal key={fact.label} delay={(i % 5) * 0.05} className={`bg-white p-6 ${i === t.facts.length - 1 ? "sm:col-span-2 lg:col-span-5" : ""}`}>
-              <dt className="text-xs font-bold uppercase tracking-wider text-teal-aa">{fact.label}</dt>
-              <dd className="mt-2 leading-relaxed text-brand-navy">
-                {fact.value}
-                {i === t.facts.length - 1 && <span className="block mt-2 text-slate-600">{t.leadershipCaption}</span>}
-              </dd>
-            </Reveal>
-          ))}
-        </dl>
 
         <div className="grid lg:grid-cols-12 gap-10 mt-20">
           <div className="lg:col-span-4">
