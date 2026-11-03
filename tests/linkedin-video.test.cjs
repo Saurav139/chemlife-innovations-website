@@ -97,3 +97,29 @@ test('posts saved before videos were recognised get the built-in list\'s player 
   assert.equal(blogs[1].videoUrl, undefined);
   assert.equal(blogs[2].videoUrl, 'https://www.linkedin.com/embed/feed/update/urn:li:activity:7001000000000000000?compact=true');
 });
+
+test('Instagram reels saved before reels got a player get Instagram\'s player on the page', async () => {
+  const anyImage = new Proxy({}, { get: () => new Proxy({}, { get: () => '/images/x.jpg' }) });
+  const post = (linkUrl, meta) => ({ type: 'Blog', title: linkUrl + meta, description: '', meta, date: 'November 1, 2026', linkUrl });
+  const insights = load('src/lib/insights.ts', {
+    '@/lib/assets': { Images: anyImage },
+    '@/lib/insights-store/sources': { fetchYouTubeUploads: async () => [] },
+    '@/lib/insights-store/text': text,
+    '@/lib/insights-store/db': {
+      storeConfigured: () => true,
+      approvedInsights: async () => ({ blogs: [
+        post('https://www.instagram.com/reel/DfPc8C_MB2N/', 'Instagram reel'),
+        post('https://www.instagram.com/p/DfCfLAAu_Xu/', 'Instagram reel'),
+        post('https://www.instagram.com/reel/De9YtkHsCzX/', 'Instagram post'),
+        post('https://www.instagram.com/p/DfJ-ZMhsPbJ/', 'Instagram post'),
+      ], podcasts: [], videos: [] }),
+    },
+  });
+  const players = (await insights.getInsights()).blogs.map((item) => item.videoUrl);
+  assert.deepEqual(players, [
+    'https://www.instagram.com/p/DfPc8C_MB2N/embed/',
+    'https://www.instagram.com/p/DfCfLAAu_Xu/embed/',
+    'https://www.instagram.com/p/De9YtkHsCzX/embed/',
+    undefined,
+  ]);
+});
