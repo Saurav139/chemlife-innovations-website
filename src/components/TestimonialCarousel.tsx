@@ -139,6 +139,12 @@ export default function TestimonialCarousel() {
                       </p>
                     </div>
                   </div>
+
+                  {/* From laptop width up: just the company under the quote; the list on the right names the person. */}
+                  <p className={`hidden lg:flex items-center gap-3 mt-6 font-heading text-base font-semibold ${theme.testimonialsName}`}>
+                    <span aria-hidden="true" className="w-8 h-px bg-teal-400" />
+                    {testimonials[current].company}
+                  </p>
                 </motion.div>
               </AnimatePresence>
             </div>
