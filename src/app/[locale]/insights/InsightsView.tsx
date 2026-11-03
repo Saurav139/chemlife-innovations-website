@@ -534,7 +534,9 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
               initial={gridVersion === 0 || reduceMotion ? false : { opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.25, ease: "easeOut" }}
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 lg:gap-x-6"
+              // Columns, as on the full-image preview: each card keeps its own height, so a tall post doesn't stretch the
+              // cards beside it.
+              className="columns-1 sm:columns-2 lg:columns-3 gap-x-6"
             >
                 {visibleItems.map((item, index) => {
                   const isNew = index >= revealFrom;
@@ -546,9 +548,9 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                       initial={isNew ? (reduceMotion ? { opacity: 0 } : { opacity: 0, y: 12 }) : false}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.35, ease: easeOut, delay: isNew ? Math.min(index - revealFrom, 5) * 0.06 : 0 }}
-                      className={`scroll-mt-28 ${INSIGHT_CARD_CLASS}`}
+                      className={`scroll-mt-28 ${INSIGHT_CARD_CLASS} inline-flex! w-full mb-6 break-inside-avoid align-top`}
                     >
-                      <InsightCardContent item={item} imageLayout={isSocialPost(item) ? "natural" : "cropped"} onRead={setActiveArticle} onPlay={setActiveVideoId} />
+                      <InsightCardContent item={item} imageLayout={isSocialPost(item) ? "natural" : "cropped"} centerTextWithoutImage onRead={setActiveArticle} onPlay={setActiveVideoId} />
                     </motion.div>
                   );
                 })}
