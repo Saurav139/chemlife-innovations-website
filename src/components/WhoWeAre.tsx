@@ -213,8 +213,9 @@ export default function WhoWeAre() {
             </a>
           </Reveal>
           <Reveal delay={0.1} className="lg:col-span-6">
+            {/* The photo is wider than the frame: positioned 35% across (not centred) to trim 10% more off its right side. */}
             <div className="relative aspect-[4/3] rounded-3xl overflow-hidden">
-              <Image src={Images.people.foundersNew} alt={foundersAlt} fill sizes="(min-width: 1024px) 560px, 100vw" className="object-cover" />
+              <Image src={Images.people.foundersNew} alt={foundersAlt} fill sizes="(min-width: 1024px) 560px, 100vw" className="object-cover object-[35%_50%]" />
             </div>
           </Reveal>
         </div>
