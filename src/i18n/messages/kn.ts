@@ -115,6 +115,7 @@ const kn: Messages = {
       // The homepage section's small label and heading.
       homeKicker: "ತಿಳಿಯಿರಿ",
       homeTitle: "ನಾವು ಯಾರು",
+      homeIntro: "ಕೋಳಿ, ಹೈನು ದನಗಳು ಮತ್ತು ಹಂದಿಗಳಿಗಾಗಿ ಫೀಡ್ ಸೇರ್ಪಡೆಗಳು ಮತ್ತು ನ್ಯೂಟ್ರಾಸ್ಯುಟಿಕಲ್ಸ್, ಆಯುರ್ವೇದದ ಸಸ್ಯ ಜ್ಞಾನವನ್ನು ನಮ್ಮದೇ ತಂತ್ರಜ್ಞಾನಗಳೊಂದಿಗೆ ಜೋಡಿಸಿ: ANBioT ಬಯೋ-ಟ್ರಾನ್ಸ್‌ಫಾರ್ಮೇಷನ್, ಹಸಿರು ಸಂಶ್ಲೇಷಣೆ ಮತ್ತು ಮೈಕ್ರೋಎನ್‌ಕ್ಯಾಪ್ಸುಲೇಷನ್. ಭಾರತ ಸರ್ಕಾರದ ತಂತ್ರಜ್ಞಾನ ಅಭಿವೃದ್ಧಿ ಮಂಡಳಿಯ ಬೆಂಬಲದೊಂದಿಗೆ.",
       // The Who We Are page (/who-we-are): the homepage button to it, and its two section headings.
       moreAboutUs: "ನಮ್ಮ ಬಗ್ಗೆ ಇನ್ನಷ್ಟು ತಿಳಿಯಿರಿ",
       factsTitle: "ಒಂದು ನೋಟದಲ್ಲಿ",
