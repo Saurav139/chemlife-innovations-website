@@ -38,6 +38,32 @@ export const isSocialPost = (item: { linkUrl?: string }) => {
   try { return /^(?:www\.)?(?:instagram|linkedin)\.com$/i.test(new URL(item.linkUrl ?? "").hostname); } catch { return false; }
 };
 
+/** The tag on a card: only WordPress articles are blogs; LinkedIn and Instagram posts carry their channel's name, and
+ *  a pasted link from anywhere else is an article. Videos and podcasts keep their type. */
+export type InsightTag = "Blog" | "LinkedIn" | "Instagram" | "Article" | "Podcast" | "Video";
+export function insightTag(item: Pick<InsightItem, "type" | "linkUrl">): InsightTag {
+  if (item.type !== "Blog") return item.type;
+  let host = "";
+  try { host = new URL(item.linkUrl ?? "").hostname; } catch {}
+  if (host.endsWith("wordpress.com")) return "Blog";
+  if (host.endsWith("linkedin.com")) return "LinkedIn";
+  if (host.endsWith("instagram.com")) return "Instagram";
+  return "Article";
+}
+const TAG_STYLE: Record<InsightTag, string> = {
+  Blog: "bg-teal-50 text-teal-700",
+  LinkedIn: "bg-sky-50 text-sky-800",
+  Instagram: "bg-pink-50 text-pink-700",
+  Article: "bg-slate-100 text-slate-700",
+  Podcast: "bg-red-50 text-red-700",
+  Video: "bg-blue-50 text-blue-700",
+};
+/** The small coloured label at the top of a card. */
+export function InsightTagLabel({ item }: { item: Pick<InsightItem, "type" | "linkUrl"> }) {
+  const tag = insightTag(item);
+  return <span className={`text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md ${TAG_STYLE[tag]}`}>{tag}</span>;
+}
+
 /** What goes inside the card's frame: the label line, picture or video, title, and the two links. */
 export default function InsightCardContent({ item, onRead, onPlay, imageLayout = "cropped", centerTextWithoutImage = false }: {
   item: InsightItem;
@@ -70,15 +96,7 @@ export default function InsightCardContent({ item, onRead, onPlay, imageLayout =
       >
         {/* Meta Category & Date Info */}
         <div className={`flex items-center gap-2 mb-3 ${textOnly ? "flex-wrap justify-center" : ""}`}>
-          <span className={`text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md ${
-            item.type === "Blog"
-              ? "bg-teal-50 text-teal-700"
-              : item.type === "Podcast"
-              ? "bg-red-50 text-red-700"
-              : "bg-blue-50 text-blue-700"
-          }`}>
-            {item.type}
-          </span>
+          <InsightTagLabel item={item} />
           <span className="text-xs text-gray-aa font-medium">
             {item.date} • {item.meta}
           </span>
