@@ -77,7 +77,7 @@ function AnimatedCounter({ value, suffix }: { value: number; suffix: string }) {
   }, [value]);
 
   return (
-    <span ref={ref} className="font-heading text-2xl md:text-3xl font-bold leading-none tracking-tight text-brand-navy tabular-nums">
+    <span ref={ref} className="font-heading text-xl md:text-3xl font-bold leading-none tracking-tight text-brand-navy tabular-nums">
       {count}<span className="text-teal-aa">{suffix}</span>
     </span>
   );
@@ -182,13 +182,14 @@ export default function HeroVariantA() {
       {/* The headline and actions; the headline dots sit at their right. */}
       <div className="relative z-30 flex-1 flex">
       {/* Not held to the 1200px column: the headline sits a fixed margin in from the screen's left edge. */}
-      <div className={`px-6 md:px-12 lg:px-16 xl:px-20 w-full flex flex-col justify-center pt-28 pb-6 md:pt-32 md:pb-8 lg:pt-40 short:pt-32 short:pb-4 short-phone:pt-24 short-phone:pb-2`}>
+      <div className={`px-6 md:px-12 lg:px-16 xl:px-20 w-full flex flex-col justify-start md:justify-center pt-24 pb-6 md:pt-32 md:pb-8 lg:pt-40 short:pt-32 short:pb-4 short-phone:pt-24 short-phone:pb-2`}>
         {/* w-full: without it, this box has no explicit width, so its auto side margins (for centering)
             stop it from stretching and it shrinks to fit whichever tagline is showing — moving and
             resizing the buttons below it from one slide to the next. */}
-        {/* Centred in the height above the numbers' strip, on every photo. */}
-        <div className="w-full max-w-3xl flex-1 flex flex-col text-left items-start justify-center">
-          <div className="flex flex-col items-start text-left w-full min-h-[300px] md:min-h-[340px] short:min-h-0 short-phone:min-h-0 justify-center">
+        {/* Phones: at the top, under the header, leaving the photo below in view. Wider screens: centred in the height
+            above the numbers' strip, on every photo. */}
+        <div className="w-full max-w-3xl flex-1 flex flex-col text-left items-start justify-start md:justify-center">
+          <div className="flex flex-col items-start text-left w-full md:min-h-[340px] short:min-h-0 justify-start md:justify-center">
             {/* Keep the initial headline visible during hydration. */}
             <AnimatePresence mode="wait" initial={false}>
               {/* On phones the size follows the screen width so every tagline fits on its three lines, which keeps
@@ -278,10 +279,10 @@ export default function HeroVariantA() {
           search button (left) and chat bubble sit there on arrival. */}
       <div ref={stripRef} className="relative z-30 bg-white/95 backdrop-blur-md shadow-[0_-10px_30px_rgba(0,0,0,0.18)]">
         <div className="px-[104px] md:px-[116px] lg:px-[312px]">
-          <dl className="max-w-[1000px] mx-auto py-3 md:py-4 grid grid-cols-2 xl:grid-cols-4 gap-y-3 xl:divide-x divide-slate-200">
+          <dl className="max-w-[1000px] mx-auto py-2 md:py-4 grid grid-cols-2 xl:grid-cols-4 gap-y-1.5 md:gap-y-3 xl:divide-x divide-slate-200">
             {stats.map((stat, idx) => (
               <div key={idx} className={`flex flex-col-reverse items-center justify-center text-center px-2 ${idx % 2 === 1 ? "max-xl:border-l max-xl:border-slate-200" : ""}`}>
-                <dt className="text-slate-500 text-[10px] md:text-[11px] font-semibold uppercase tracking-[0.08em] md:tracking-[0.22em] mt-1.5">{t.home.stats[idx]}</dt>
+                <dt className="text-slate-500 text-[10px] md:text-[11px] font-semibold md:uppercase tracking-normal md:tracking-[0.22em] leading-[1.15] mt-1 md:mt-1.5">{t.home.stats[idx]}</dt>
                 <dd><AnimatedCounter value={stat.value} suffix={stat.suffix} /></dd>
               </div>
             ))}
