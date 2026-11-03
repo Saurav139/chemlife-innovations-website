@@ -8,7 +8,7 @@ import Footer from "@/components/Footer";
 import SectionWrapper from "@/components/SectionWrapper";
 import { VariantProvider } from "@/context/VariantContext";
 import SiteSearch from "@/components/SiteSearch";
-import InsightCardContent, { INSIGHT_CARD_CLASS, isOptimizable, isSocialPost, originalLink } from "@/components/InsightCard";
+import InsightCardContent, { INSIGHT_CARD_CLASS, InsightTagLabel, insightTag, isOptimizable, isSocialPost, originalLink } from "@/components/InsightCard";
 import NaturalInsightImage from "@/components/NaturalInsightImage";
 import { Images } from "@/lib/assets";
 import type { Insights, InsightItem } from "@/lib/insights";
@@ -78,7 +78,9 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
     };
   }, [overlayOpen]);
 
-  const filters = ["All", "Blogs", "Podcasts", "Videos"];
+  // "Blogs" is WordPress articles only; LinkedIn and Instagram get their own filter once there are posts from them.
+  const hasTag = (tag: string) => blogs.some((item) => insightTag(item) === tag);
+  const filters = ["All", "Blogs", ...(["LinkedIn", "Instagram"] as const).filter(hasTag), "Podcasts", "Videos"];
 
   // Helper to convert date string for sorting
   const getTimestamp = (dateStr: string) => {
@@ -123,7 +125,9 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
 
     let items: InsightItem[] = [];
     if (filter === "Blogs") {
-      items = filteredBlogs;
+      items = filteredBlogs.filter((item) => insightTag(item) === "Blog");
+    } else if (filter === "LinkedIn" || filter === "Instagram") {
+      items = filteredBlogs.filter((item) => insightTag(item) === filter);
     } else if (filter === "Podcasts") {
       items = filteredPodcasts;
     } else if (filter === "Videos") {
@@ -228,9 +232,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                 >
                   <div className="sm:contents">
                     <div className="flex items-center gap-2 mb-3 sm:max-lg:col-start-2 sm:max-lg:row-start-1">
-                      <span className="text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-teal-50 text-teal-700">
-                        Blog
-                      </span>
+                      <InsightTagLabel item={featuredBlog} />
                       <span className="text-xs text-gray-aa font-medium">Featured • {featuredBlog.date} • {featuredBlog.meta}</span>
                     </div>
                     <h3 className="font-heading text-lg md:text-xl lg:text-2xl font-bold text-brand-navy mb-4 lg:mb-6 group-hover:text-teal-aa transition-colors duration-300 line-clamp-3 sm:max-lg:col-start-2 sm:max-lg:row-start-2">
@@ -473,7 +475,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
               {/* Search Bar + Subtitle */}
               <div className="w-full md:max-w-md">
                 <span className="text-gray-aa text-xs font-semibold uppercase tracking-wider block mb-2">
-                  Search Podcasts, Blogs and Videos
+                  Search blogs, posts, podcasts and videos
                 </span>
                 <div className="relative">
                   <input
