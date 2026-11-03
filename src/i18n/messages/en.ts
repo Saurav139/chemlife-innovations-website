@@ -106,7 +106,7 @@ const en = {
 
     whoWeAre: {
       kicker: "Who we are",
-      title: "ChemLife Innovations: functional feed-additive biotechnology from Bengaluru",
+      title: "Functional feed-additive biotechnology from Bengaluru",
       tagline: "Nature-driven science. Proof in every kilo.",
       intro: "ChemLife Innovations is a Bengaluru-based manufacturer of functional feed additives and nutraceuticals for poultry, dairy cattle and swine. Its products pair Ayurvedic plant wisdom with proprietary technologies: ANBioT bio-transformation, green synthesis and microencapsulation. The work is supported by the Technology Development Board, Government of India.",
       facts: [
