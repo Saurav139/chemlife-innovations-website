@@ -33,7 +33,7 @@ export type RichChapter = {
 // The research platforms' full titles are long; these are the short names used on the Research page's cards.
 export const PLATFORM_NAMES = ["ANBioT", "Green chelation", "Microencapsulation", "Nano trace minerals", "Nature-identical bioactives"];
 const PLATFORM_IMAGES = [Images.research.anbiot, Images.research.greenTechnology, Images.research.microencapsulation, Images.research.nanoTraceMineral, Images.research.natureIdenticalBio];
-const AWARD_LOGOS = [Images.awards.ccamp, Images.awards.animalHusbandry, Images.awards.birac, Images.awards.naarm, Images.awards.businessSuccess2026];
+const AWARD_LOGOS = [Images.awards.ccamp, Images.awards.animalHusbandry, Images.awards.birac, Images.awards.naarm, Images.awards.businessSuccess2026, Images.awards.elevate2019, Images.awards.azadiTop75, Images.awards.climateLaunchpad];
 const LEADERS = [
   { name: "Dr Radhakrishna PM", image: Images.people.leaderRadhakrishna },
   { name: "Dr Sharada KC", image: Images.people.leaderSharada },

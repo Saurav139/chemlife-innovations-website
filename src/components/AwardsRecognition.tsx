@@ -35,6 +35,21 @@ const certificateFiles = [
     organization: "Business Success Awards (Proficorn)",
     year: "2026",
   },
+  {
+    file: "elevate-2019.png",
+    organization: "Department of IT, BT and S&T, Government of Karnataka",
+    year: "2019",
+  },
+  {
+    file: "azadi-ka-amrit-mahotsav-top-75.png",
+    organization: "Dept. of Animal Husbandry & Dairying, Government of India, with CII",
+    year: "",
+  },
+  {
+    file: "climate-launchpad.png",
+    organization: "ClimateLaunchpad, EIT Climate-KIC",
+    year: "",
+  },
 ];
 
 const easeOut = [0.25, 0.1, 0, 1] as const;
@@ -106,7 +121,7 @@ export default function AwardsRecognition() {
                     {/* Caption */}
                     <div className="flex-1 text-center sm:text-left">
                       <span className="text-teal-aa text-sm font-semibold tracking-widest uppercase">
-                        {certificates[activeStep].organization} &bull; {certificates[activeStep].year}
+                        {[certificates[activeStep].organization, certificates[activeStep].year].filter(Boolean).join(" • ")}
                       </span>
                        {certificates[activeStep].title && (
                          <h3 className="font-heading text-2xl lg:text-3xl font-bold text-brand-navy mt-2 mb-4 leading-tight">
@@ -169,7 +184,7 @@ export default function AwardsRecognition() {
 
                     {/* Station marker */}
                     <div
-                      className={`w-12 h-12 flex items-center justify-center rounded-md border-2 transition-all duration-500 ${
+                      className={`w-9 h-9 sm:w-12 sm:h-12 flex items-center justify-center rounded-md border-2 transition-all duration-500 ${
                          isActive
                           ? 'bg-teal-aa-light border-teal-aa-light text-brand-navy scale-110 shadow-lg shadow-teal-400/30'
                           : isCompleted
@@ -177,7 +192,7 @@ export default function AwardsRecognition() {
                           : 'bg-transparent border-teal-400/30 text-slate-aa'
                       }`}
                     >
-                      <span className="text-sm font-bold">{`0${i + 1}`}</span>
+                      <span className="text-xs sm:text-sm font-bold">{`0${i + 1}`}</span>
                     </div>
 
                      {/* Bottom cross-tie */}
