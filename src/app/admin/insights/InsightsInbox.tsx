@@ -429,9 +429,9 @@ export default function InsightsInbox({ initial, demo = false }: { initial: Data
       {/* Room at the bottom for the bar of selected posts, so it never covers the last one */}
       <main className={`max-w-[1100px] mx-auto px-4 sm:px-6 pt-6 sm:pt-8 space-y-6 ${picked.length ? "pb-40 sm:pb-28" : "pb-6 sm:pb-8"}`}>
         <Channels data={data} checking={checking || Boolean(savingAutomatic)} onCheck={() => check()} />
-        <section aria-label="Automatic social posts" className="rounded-2xl bg-white border border-slate-200 shadow-sm px-4 py-4 sm:px-6" aria-busy={Boolean(savingAutomatic)}>
-          <h2 className="font-heading text-base font-bold mb-2">Automatic social posts</h2>
-          <div className="grid gap-1 sm:grid-cols-2 sm:gap-6">
+        <section aria-label="Automatic posts" className="rounded-2xl bg-white border border-slate-200 shadow-sm px-4 py-4 sm:px-6" aria-busy={Boolean(savingAutomatic)}>
+          <h2 className="font-heading text-base font-bold mb-2">Automatic posts</h2>
+          <div className="grid gap-1 sm:grid-cols-3 sm:gap-6">
             {SOCIAL_SOURCES.map((source) => (
               <label key={source} className="flex min-h-11 items-start gap-3 cursor-pointer py-1">
                 <input type="checkbox" checked={data.autoPublishSocial[source]} disabled={Boolean(savingAutomatic) || checking}
