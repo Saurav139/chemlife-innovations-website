@@ -33,6 +33,11 @@ export function originalLink(url?: string) {
   return { full: "Read the original", short: "Original", reader: "Read the original →" };
 }
 
+/** LinkedIn and Instagram posts show their whole picture, in its own proportions, instead of a 16:9 crop. */
+export const isSocialPost = (item: { linkUrl?: string }) => {
+  try { return /^(?:www\.)?(?:instagram|linkedin)\.com$/i.test(new URL(item.linkUrl ?? "").hostname); } catch { return false; }
+};
+
 /** What goes inside the card's frame: the label line, picture or video, title, and the two links. */
 export default function InsightCardContent({ item, onRead, onPlay, imageLayout = "cropped", centerTextWithoutImage = false }: {
   item: InsightItem;
