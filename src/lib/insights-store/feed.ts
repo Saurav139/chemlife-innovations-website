@@ -12,6 +12,8 @@ interface FeedEntry {
   title: string;
   html: string;
   image?: string;
+  /** The entry carries a video: a reel, when the feed is Instagram's. */
+  video?: boolean;
   date?: Date;
 }
 
@@ -50,13 +52,14 @@ function xmlEntries(body: string): FeedEntry[] {
     // The longest of the fields that can hold the post's text.
     const html = ["content:encoded", "content", "description", "summary"].map((name) => field(block, name)).sort((a, b) => b.length - a.length)[0] ?? "";
 
-    const media = [...block.matchAll(/<(?:media:content|media:thumbnail|enclosure)\b[^>]*>/gi)]
-      .map(([tag]) => tag)
-      .find((tag) => attribute(tag, "url") && !/video|audio/i.test(`${attribute(tag, "type")} ${attribute(tag, "medium")}`));
+    const mediaTags = [...block.matchAll(/<(?:media:content|media:thumbnail|enclosure)\b[^>]*>/gi)].map(([tag]) => tag);
+    const kindOf = (tag: string) => `${attribute(tag, "type")} ${attribute(tag, "medium")}`;
+    const media = mediaTags.find((tag) => attribute(tag, "url") && !/video|audio/i.test(kindOf(tag)));
+    const video = mediaTags.some((tag) => /video/i.test(kindOf(tag)));
     const image = (media && attribute(media, "url")) || html.match(/<img\b[^>]*\bsrc\s*=\s*"([^"]+)"/i)?.[1];
 
     const date = asDate(field(block, "pubDate")) ?? asDate(field(block, "published")) ?? asDate(field(block, "dc:date")) ?? asDate(field(block, "updated"));
-    return { link, title: field(block, "title"), html, image: image ? decodeEntities(image) : undefined, date };
+    return { link, title: field(block, "title"), html, image: image ? decodeEntities(image) : undefined, video, date };
   });
 }
 
@@ -71,6 +74,7 @@ function jsonEntries(body: string): FeedEntry[] {
       title: text(item.title),
       html: text(item.content_html) || text(item.content_text) || text(item.summary),
       image: text(item.image) || text(item.banner_image) || text(attached?.url) || undefined,
+      video: attachments.some((a) => text(a.mime_type).startsWith("video/")),
       date: asDate(item.date_published) ?? asDate(item.date_modified),
     };
   });
@@ -134,7 +138,8 @@ export function instagramFeedItem(entry: FeedEntry): SourceItem | null {
     url,
     imageUrl: entry.image,
     copyImage: Boolean(entry.image),
-    videoUrl: instagramReelCode(url) ? instagramEmbedUrl(instagramReelCode(url)!) : undefined,
+    // A reel by its address, or by the video the feed attaches to it (some feeds link reels as /p/ posts).
+    videoUrl: instagramReelCode(url) || entry.video ? instagramEmbedUrl(instagramPostId(url)!) : undefined,
     meta: new URL(url).pathname.startsWith("/reel/") ? "Instagram reel" : "Instagram post",
     publishedAt: date && date.getFullYear() >= 2010 && date.getTime() < Date.now() + 86_400_000 ? date : new Date(),
   };

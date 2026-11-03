@@ -3,6 +3,7 @@
 import Image from "next/image";
 import NaturalInsightImage from "@/components/NaturalInsightImage";
 import type { InsightItem } from "@/lib/insights";
+import { instagramEmbedUrl, instagramPostId } from "@/lib/insights-store/text";
 import { playOnPage, youtubeWatchUrl } from "@/lib/youtube";
 
 // A card in the Insights page's grid. The Insights inbox shows the same card as its live preview, so what the
@@ -64,6 +65,21 @@ export function InsightTagLabel({ item }: { item: Pick<InsightItem, "type" | "li
   return <span className={`text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md ${TAG_STYLE[tag]}`}>{tag}</span>;
 }
 
+/** The reader button's words: a video plays, an Instagram post (picture or reel) opens in Instagram's own player, and
+ *  anything else is read. */
+export function readLabel(item: Pick<InsightItem, "type" | "linkUrl" | "videoUrl">): string {
+  if (item.videoUrl) return "Watch Video";
+  return insightTag(item) === "Instagram" ? "View Post" : "Read Article";
+}
+
+/** Instagram's player for any Instagram post: it plays a reel and shows a picture post as it is on Instagram. So a reel
+ *  saved without being recognised (from a /p/ link) still plays in the reader. */
+export function readerPlayer(item: Pick<InsightItem, "type" | "linkUrl" | "videoUrl">): string | undefined {
+  if (item.videoUrl) return item.videoUrl;
+  const code = insightTag(item) === "Instagram" && item.linkUrl ? instagramPostId(item.linkUrl) : null;
+  return code ? instagramEmbedUrl(code) : undefined;
+}
+
 /** A play button over a LinkedIn video post's picture. The picture opens the reader, which plays the video. */
 export function VideoPlayBadge() {
   return <span aria-hidden="true" className="pointer-events-none absolute inset-0 flex items-center justify-center">
@@ -92,7 +108,7 @@ export default function InsightCardContent({ item, onRead, onPlay, imageLayout =
       {/* Clickable Area of Card Content */}
       <div
         className={`${isBlog ? "cursor-pointer" : ""} ${textOnly ? "flex flex-1 flex-col items-center justify-center py-6 text-center sm:py-8" : ""}`}
-        data-analytics-click={isBlog ? (item.videoUrl ? "Watch Video" : "Read Article") : undefined}
+        data-analytics-click={isBlog ? readLabel(item) : undefined}
         onClick={() => {
           if (isBlog) {
             if (item.linkUrl?.includes("wordpress.com")) {
@@ -174,7 +190,7 @@ export default function InsightCardContent({ item, onRead, onPlay, imageLayout =
               onClick={() => onRead(item)}
               className="tap-target text-xs font-bold text-teal-aa hover:text-teal-700 transition-colors flex items-center gap-1 cursor-pointer"
             >
-              {item.videoUrl ? "Watch Video" : "Read Article"}
+              {readLabel(item)}
             </button>
             <a
               href={item.linkUrl || "https://www.linkedin.com/company/chemlifeinnovations/"}

@@ -8,7 +8,7 @@ import Footer from "@/components/Footer";
 import SectionWrapper from "@/components/SectionWrapper";
 import { VariantProvider } from "@/context/VariantContext";
 import SiteSearch from "@/components/SiteSearch";
-import InsightCardContent, { INSIGHT_CARD_CLASS, InsightTagLabel, VideoPlayBadge, insightTag, isOptimizable, isSocialPost, originalLink } from "@/components/InsightCard";
+import InsightCardContent, { INSIGHT_CARD_CLASS, InsightTagLabel, VideoPlayBadge, insightTag, isOptimizable, isSocialPost, originalLink, readLabel, readerPlayer } from "@/components/InsightCard";
 import NaturalInsightImage from "@/components/NaturalInsightImage";
 import { Images } from "@/lib/assets";
 import type { Insights, InsightItem } from "@/lib/insights";
@@ -222,7 +222,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                 <div
                   id={insightAnchor(featuredBlog.title)}
                   data-analytics-item={featuredBlog.title}
-                  data-analytics-click={featuredBlog.videoUrl ? "Watch Video" : "Read Article"}
+                  data-analytics-click={readLabel(featuredBlog)}
                   className="scroll-mt-28 bg-gray-55 border border-gray-200 rounded-2xl md:rounded-3xl p-5 md:p-6 lg:p-5 xl:p-6 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between sm:max-lg:grid sm:max-lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] sm:max-lg:grid-rows-[auto_1fr_auto] sm:max-lg:gap-x-6 lg:grid lg:grid-rows-subgrid lg:row-span-4 lg:gap-y-0 group cursor-pointer"
                   onClick={() => setActiveArticle(featuredBlog)}
                 >
@@ -267,7 +267,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                       }}
                       className="inline-flex items-center justify-center min-h-11 text-center whitespace-nowrap px-2 py-2.5 rounded-full text-[13px] sm:text-sm lg:text-xs xl:text-sm leading-5 bg-teal-aa hover:bg-teal-700 text-white font-bold shadow-sm hover:shadow transition-all duration-300 cursor-pointer"
                     >
-                      {featuredBlog.videoUrl ? "Watch Video" : "Read Article"}
+                      {readLabel(featuredBlog)}
                     </button>
                     <a
                       href={featuredBlog.linkUrl || "https://www.linkedin.com/company/chemlifeinnovations/"}
@@ -672,23 +672,23 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
 
                 {/* LinkedIn's player fills its box: square on phones, where its overlays would crowd a short 16:9 one.
                     Instagram's is a fixed column (header, the 4:5 reel, then its links), so it gets a tall, narrow box. */}
-                {activeArticle.videoUrl && (
-                  <div className={`relative overflow-hidden rounded-2xl border border-gray-250 ${activeArticle.videoUrl.startsWith("https://www.instagram.com/")
+                {readerPlayer(activeArticle) && (
+                  <div className={`relative overflow-hidden rounded-2xl border border-gray-250 ${readerPlayer(activeArticle)!.startsWith("https://www.instagram.com/")
                     ? "mx-auto w-full max-w-[400px] aspect-[5/8] bg-white"
                     : "w-full aspect-square sm:aspect-video bg-slate-900"}`}>
                     <iframe
-                      src={activeArticle.videoUrl}
-                      title={`${activeArticle.title} (${insightTag(activeArticle)} video)`}
+                      src={readerPlayer(activeArticle)}
+                      title={`${activeArticle.title} (on ${insightTag(activeArticle)})`}
                       allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
                       allowFullScreen
                       className="absolute inset-0 w-full h-full"
                     />
                   </div>
                 )}
-                {!activeArticle.videoUrl && activeArticle.imageUrl && isSocialPost(activeArticle) && (
+                {!readerPlayer(activeArticle) && activeArticle.imageUrl && isSocialPost(activeArticle) && (
                   <NaturalInsightImage src={activeArticle.imageUrl} alt={activeArticle.title} sizes={READER_IMAGE_SIZES} />
                 )}
-                {!activeArticle.videoUrl && activeArticle.imageUrl && !isSocialPost(activeArticle) && (
+                {!readerPlayer(activeArticle) && activeArticle.imageUrl && !isSocialPost(activeArticle) && (
                   <div className="relative w-full aspect-video rounded-2xl overflow-hidden bg-slate-100 border border-gray-250 select-none">
                     <Image
                       src={activeArticle.imageUrl}

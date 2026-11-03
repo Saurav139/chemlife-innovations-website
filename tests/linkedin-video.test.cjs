@@ -123,3 +123,17 @@ test('Instagram reels saved before reels got a player get Instagram\'s player on
     undefined,
   ]);
 });
+
+test('an Instagram feed entry linked as /p/ is a reel when the feed attaches a video', () => {
+  const feed = load('src/lib/insights-store/feed.ts', { './text': text });
+  const rss = (link, media) => `<rss><channel><item><title>Reel</title><link>${link}</link><description>Feed Bites</description>${media}<pubDate>Sat, 01 Nov 2026 10:00:00 GMT</pubDate></item></channel></rss>`;
+  const [reel] = feed.parseFeed(rss('https://www.instagram.com/p/DfCfLAAu_Xu/', '<media:content url="https://cdn.example/v.mp4" medium="video" type="video/mp4"/><media:content url="https://cdn.example/c.jpg" medium="image"/>'));
+  assert.equal(reel.video, true);
+  assert.equal(reel.image, 'https://cdn.example/c.jpg');
+  assert.equal(feed.instagramFeedItem(reel).videoUrl, 'https://www.instagram.com/p/DfCfLAAu_Xu/embed/');
+  const [picture] = feed.parseFeed(rss('https://www.instagram.com/p/DfJ-ZMhsPbJ/', '<media:content url="https://cdn.example/p.jpg" medium="image"/>'));
+  assert.equal(picture.video, false);
+  assert.equal(feed.instagramFeedItem(picture).videoUrl, undefined);
+  const [json] = feed.parseFeed(JSON.stringify({ version: 'https://jsonfeed.org/version/1.1', items: [{ url: 'https://www.instagram.com/p/DfCfLAAu_Xu/', content_text: 'Reel', attachments: [{ url: 'https://cdn.example/v.mp4', mime_type: 'video/mp4' }] }] }));
+  assert.equal(feed.instagramFeedItem(json).videoUrl, 'https://www.instagram.com/p/DfCfLAAu_Xu/embed/');
+});
