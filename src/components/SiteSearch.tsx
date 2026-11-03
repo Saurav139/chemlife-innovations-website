@@ -178,8 +178,10 @@ export default function SiteSearch({ hideButtonOnPhones = false }: { hideButtonO
 
   return (
     <>
-      {/* Floating Search Button on Bottom-Left */}
-      <div className={`fixed bottom-[max(1rem,env(safe-area-inset-bottom))] left-[max(1rem,env(safe-area-inset-left))] md:bottom-6 md:left-6 z-50 ${hideButtonOnPhones ? "max-md:hidden" : ""}`}>
+      {/* Floating Search Button on Bottom-Left, centred level with the chat bubble on the right: that bubble is 60px
+          tall on phones and 72px from tablets up, this button 48px, so it sits 6px (then 12px) higher. It also
+          rises with the bubble over the homepage hero's numbers strip (--float-lift, set by the hero). */}
+      <div className={`fixed bottom-[calc(max(1rem,env(safe-area-inset-bottom))+6px)] left-[max(1rem,env(safe-area-inset-left))] md:bottom-9 md:left-6 z-50 [transform:translateY(calc(-1*var(--float-lift,0px)))] transition-transform duration-300 motion-reduce:transition-none ${hideButtonOnPhones ? "max-md:hidden" : ""}`}>
         <motion.button
           onClick={() => setIsOpen(true)}
           whileHover={{ scale: 1.08 }}

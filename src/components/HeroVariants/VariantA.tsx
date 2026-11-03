@@ -116,6 +116,37 @@ export default function HeroVariantA() {
     return () => clearTimeout(timer);
   }, [slide, taglines.length]);
 
+  // While the numbers' strip is behind the floating search and chat buttons (at the bottom of the screen on arrival),
+  // they rise to sit just above it instead of covering the figures; once it scrolls past, they settle back.
+  const stripRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const strip = stripRef.current;
+    if (!strip) return;
+    const root = document.documentElement;
+    const wide = window.matchMedia("(min-width: 768px)");
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const { top, bottom } = strip.getBoundingClientRect();
+      const view = window.innerHeight;
+      // The buttons' band, up from the bottom of the screen: 16px (24px from tablets up) below a 60px (72px) bubble.
+      const gap = wide.matches ? 24 : 16;
+      const tallest = wide.matches ? 72 : 60;
+      const behind = top < view - gap && bottom > view - gap - tallest;
+      root.style.setProperty("--float-lift", `${behind ? Math.round(view - gap - top + 12) : 0}px`);
+    };
+    const schedule = () => { if (!frame) frame = requestAnimationFrame(update); };
+    update();
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", schedule);
+      root.style.removeProperty("--float-lift");
+    };
+  }, []);
+
   // min-h-svh: the screen height with the browser's toolbars showing, so on phones the stats aren't hidden under them.
   return (
     <section className="relative min-h-svh flex flex-col overflow-hidden bg-brand-navy">
@@ -242,7 +273,7 @@ export default function HeroVariantA() {
       {/* The numbers on a strip of their own, so they never sit on top of the photo's people or scenery. */}
       {/* Deep navy with a fine teal line along the top, white figures and small spaced labels, and hairline
           dividers between the figures (between pairs on phones). */}
-      <div className="relative z-30 bg-gradient-to-b from-[#16294a] to-[#0d1b33]">
+      <div ref={stripRef} className="relative z-30 bg-gradient-to-b from-[#16294a] to-[#0d1b33]">
         <div aria-hidden="true" className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-teal-400/70 to-transparent" />
         <dl className="max-w-[1100px] mx-auto px-6 py-3 md:py-4 grid grid-cols-2 md:grid-cols-4 gap-y-3 md:divide-x divide-white/10">
           {stats.map((stat, idx) => (
