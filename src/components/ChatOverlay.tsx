@@ -10,7 +10,8 @@ export default function ChatOverlay() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="fixed bottom-[max(1rem,env(safe-area-inset-bottom))] right-[max(1rem,env(safe-area-inset-right))] md:bottom-6 md:right-6 z-50 font-sans flex flex-col items-end">
+    // Moves with the search button onto the homepage hero's numbers strip (--float-lift, set by the hero).
+    <div className="fixed bottom-[max(1rem,env(safe-area-inset-bottom))] right-[max(1rem,env(safe-area-inset-right))] md:bottom-6 md:right-6 z-50 font-sans flex flex-col items-end [transform:translateY(calc(-1*var(--float-lift,0px)))] transition-transform duration-300 motion-reduce:transition-none">
       <AnimatePresence>
         {/* Expanded Panel */}
         {isOpen && (

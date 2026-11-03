@@ -116,10 +116,41 @@ export default function HeroVariantA() {
     return () => clearTimeout(timer);
   }, [slide, taglines.length]);
 
+  // While the numbers' strip is behind the floating search and chat buttons (at the bottom of the screen on arrival),
+  // they sit centred on it, at its two ends, beside the figures; once it scrolls past, they settle back.
+  const stripRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const strip = stripRef.current;
+    if (!strip) return;
+    const root = document.documentElement;
+    const wide = window.matchMedia("(min-width: 768px)");
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const { top, bottom } = strip.getBoundingClientRect();
+      const view = window.innerHeight;
+      // The buttons' band, up from the bottom of the screen: 16px (24px from tablets up) below a 60px (72px) bubble.
+      const gap = wide.matches ? 24 : 16;
+      const tallest = wide.matches ? 72 : 60;
+      const behind = top < view - gap && bottom > view - gap - tallest;
+      root.style.setProperty("--float-lift", `${behind ? Math.round(view - gap - tallest / 2 - (top + bottom) / 2) : 0}px`);
+    };
+    const schedule = () => { if (!frame) frame = requestAnimationFrame(update); };
+    update();
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", schedule);
+      root.style.removeProperty("--float-lift");
+    };
+  }, []);
+
   // min-h-svh: the screen height with the browser's toolbars showing, so on phones the stats aren't hidden under them.
   return (
     <section className="relative min-h-svh flex flex-col overflow-hidden bg-brand-navy">
-      {/* The photo behind the headline, the actions and the numbers' strip. */}
+      {/* The photo, behind the headline and actions; the numbers' strip sits below it. */}
       <div className="relative flex-1 flex flex-col">
       {/* Deep Navy Backdrop Base */}
       <div className="absolute inset-0 bg-brand-navy z-0" />
@@ -142,20 +173,18 @@ export default function HeroVariantA() {
         ))}
       </div>
 
-      {/* Subtle Dark Overlay for text readability (keeps original image colors) */}
-      <div className={`absolute inset-x-0 top-0 h-[58%] bg-gradient-to-b from-black/60 via-black/30 to-transparent z-20 transition-opacity duration-1000 motion-reduce:transition-none ${awardLayout ? "opacity-100" : "opacity-0"}`} />
-      <div className={`absolute inset-x-0 bottom-0 h-[42%] bg-gradient-to-t from-black/65 via-black/15 to-transparent z-20 transition-opacity duration-1000 motion-reduce:transition-none ${awardLayout ? "opacity-100" : "opacity-0"}`} />
-      <div className={`absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent z-20 transition-opacity duration-1000 motion-reduce:transition-none ${awardLayout ? "opacity-0" : "opacity-100"}`} />
+      {/* A fade from the left behind the left-aligned headline, on every photo (keeps the rest of the photo's colours). */}
+      <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/45 to-transparent z-20" />
       <div className="absolute inset-0 bg-black/10 z-20" />
 
       {/* The headline and actions; the headline dots sit at their right. */}
       <div className="relative z-30 flex-1 flex">
-      <div className={`max-w-[1200px] mx-auto px-6 w-full flex flex-col justify-center ${awardLayout ? "pt-24 pb-6 md:pt-28 md:pb-8 lg:pt-36" : "pt-28 pb-6 md:pt-32 md:pb-8 lg:pt-40"} short:pt-28 short:pb-4 short-phone:pt-24 short-phone:pb-2`}>
+      <div className={`max-w-[1200px] mx-auto px-6 w-full flex flex-col justify-center ${awardLayout ? "pt-24 pb-6 md:pt-28 md:pb-8 lg:pt-36" : "pt-28 pb-6 md:pt-32 md:pb-8 lg:pt-40"} short:pt-32 short:pb-4 short-phone:pt-24 short-phone:pb-2`}>
         {/* w-full: without it, this box has no explicit width, so its auto side margins (for centering)
             stop it from stretching and it shrinks to fit whichever tagline is showing — moving and
             resizing the buttons below it from one slide to the next. */}
-        <div className={`w-full max-w-4xl flex-1 flex flex-col mx-auto text-center items-center ${awardLayout ? "justify-start" : "justify-center"}`}>
-          <div className={`flex flex-col items-center text-center w-full ${awardLayout ? "justify-start" : "min-h-[300px] md:min-h-[340px] short:min-h-0 short-phone:min-h-0 justify-center"}`}>
+        <div className={`w-full max-w-3xl flex-1 flex flex-col text-left items-start ${awardLayout ? "justify-start" : "justify-center"}`}>
+          <div className={`flex flex-col items-start text-left w-full ${awardLayout ? "justify-start" : "min-h-[300px] md:min-h-[340px] short:min-h-0 short-phone:min-h-0 justify-center"}`}>
             {/* Keep the initial headline visible during hydration. */}
             <AnimatePresence mode="wait" initial={false}>
               {/* On phones the size follows the screen width so every tagline fits on its three lines, which keeps
@@ -166,7 +195,7 @@ export default function HeroVariantA() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.6, ease: [0.25, 0.1, 0, 1] }}
-                className={`font-heading text-[length:clamp(24px,8.8vw_-_4.5px,34px)] sm:text-5xl md:text-6xl leading-[1.1] text-white font-bold text-center ${awardLayout ? "2xl:text-7xl mb-5 sm:mb-8" : "lg:text-7xl mb-8 sm:mb-16"} short:text-5xl short:mb-5 short-phone:mb-4`}
+                className={`font-heading text-[length:clamp(24px,8.8vw_-_4.5px,34px)] sm:text-5xl md:text-6xl leading-[1.1] text-white font-bold text-left ${awardLayout ? "2xl:text-7xl mb-5 sm:mb-8" : "lg:text-7xl mb-8 sm:mb-16"} short:text-5xl short:mb-5 short-phone:mb-4`}
               >
                 {tagline[0]}<br />
                 <span className="text-teal-400">{tagline[1]}</span><br />
@@ -174,8 +203,8 @@ export default function HeroVariantA() {
               </motion.h1>
             </AnimatePresence>
 
-            {/* Phones: stacked, centred, both as wide as the longer label. Wider screens: side by side. */}
-            <div className="grid justify-center gap-3 sm:flex sm:flex-row sm:flex-wrap sm:items-center sm:gap-4 w-full mt-2">
+            {/* Phones: stacked, both as wide as the longer label. Wider screens: side by side. */}
+            <div className="grid justify-start gap-3 sm:flex sm:flex-row sm:flex-wrap sm:items-center sm:gap-4 w-full mt-2">
               <Link href={href("/products")} className={primaryCtaClass}>
                 {t.home.findProduct}
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -200,7 +229,7 @@ export default function HeroVariantA() {
               {t.home.watchStory}
             </a>
 
-            {/* Phones: the headline dots, centred under the buttons (wider screens have them down the right side).
+            {/* Phones: the headline dots under the buttons (wider screens have them down the right side).
                 A 44px-tall tap area around each dot, at least 24px wide (WCAG 2.5.8), so the row stays compact. */}
             <div className="flex mt-3 short-phone:mt-0 md:hidden">
               {taglines.map((_, i) => (
@@ -237,21 +266,22 @@ export default function HeroVariantA() {
         </div>
       </div>
 
-        {/* The numbers on a light card of their own, where they used to sit over the photo, so they never blend into
-            its people or scenery. As wide as the Awards section below (1200px, with its side padding): navy figures
-            with a teal "+", small grey labels and hairline dividers (between pairs on phones). Below it, photo enough
-            to hold the floating search and chat buttons, so they never cover a figure. */}
-        <div className="relative z-30 w-full max-w-[1200px] mx-auto px-6 mt-4 md:mt-8 short:mt-4 short-phone:mt-1 mb-[88px] md:mb-[108px]">
-          <dl className="rounded-2xl bg-white/92 backdrop-blur-md border border-white/70 shadow-xl shadow-black/25 px-4 py-3 md:py-4 grid grid-cols-2 md:grid-cols-4 gap-y-3 md:divide-x divide-slate-200">
+      </div>
+
+      {/* The numbers on a light strip along the bottom of the hero, below the photo, so they never blend into it: navy
+          figures with a teal "+", small grey labels and hairline dividers (between pairs on phones and tablets). Room at
+          its ends for the floating search button (left) and chat bubble (right), which sit on it on arrival. */}
+      <div ref={stripRef} className="relative z-30 bg-white/95 backdrop-blur-md shadow-[0_-10px_30px_rgba(0,0,0,0.18)]">
+        <div className="pl-[72px] pr-[84px] md:pl-[88px] md:pr-[312px]">
+          <dl className="max-w-[1000px] mx-auto py-3 md:py-4 grid grid-cols-2 lg:grid-cols-4 gap-y-3 lg:divide-x divide-slate-200">
             {stats.map((stat, idx) => (
-              <div key={idx} className={`flex flex-col-reverse items-center justify-center text-center px-2 ${idx % 2 === 1 ? "max-md:border-l max-md:border-slate-200" : ""}`}>
-                <dt className="text-slate-500 text-[10px] md:text-[11px] font-semibold uppercase tracking-[0.12em] md:tracking-[0.22em] mt-1.5">{t.home.stats[idx]}</dt>
+              <div key={idx} className={`flex flex-col-reverse items-center justify-center text-center px-2 ${idx % 2 === 1 ? "max-lg:border-l max-lg:border-slate-200" : ""}`}>
+                <dt className="text-slate-500 text-[10px] md:text-[11px] font-semibold uppercase tracking-[0.08em] md:tracking-[0.22em] mt-1.5">{t.home.stats[idx]}</dt>
                 <dd><AnimatedCounter value={stat.value} suffix={stat.suffix} /></dd>
               </div>
             ))}
           </dl>
         </div>
-
       </div>
 
       {/* Story video plays on the page, with the hero actions underneath */}
