@@ -22,6 +22,9 @@ export const AWARDS = [
   { logo: Images.awards.birac, organization: "BIRAC", year: "2021" },
   { logo: Images.awards.naarm, organization: "a-IDEA, ICAR-NAARM", year: "2020" },
   { logo: Images.awards.businessSuccess2026, organization: "Business Success Awards", year: "2026" },
+  { logo: Images.awards.elevate2019, organization: "Government of Karnataka", year: "2019" },
+  { logo: Images.awards.azadiTop75, organization: "Dept. of Animal Husbandry & Dairying, with CII", year: "" },
+  { logo: Images.awards.climateLaunchpad, organization: "ClimateLaunchpad", year: "" },
 ];
 
 // Quotes stay in the words our partners wrote them, in English.

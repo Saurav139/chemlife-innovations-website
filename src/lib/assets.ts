@@ -224,6 +224,9 @@ export const Images = {
     /** Returns the full path for a given awards filename */
     path: (filename: string) => `/images/awards/${filename}`,
     businessSuccess2026: "/images/awards/business-success-awards-2026.png",
+    elevate2019: "/images/awards/elevate-2019.png",
+    azadiTop75: "/images/awards/azadi-ka-amrit-mahotsav-top-75.png",
+    climateLaunchpad: "/images/awards/climate-launchpad.png",
     ccamp: "/images/awards/c-camp-logo.png",
     animalHusbandry: "/images/awards/animal-husbandry.png",
     birac: "/images/awards/birac.png",

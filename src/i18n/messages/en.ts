@@ -220,6 +220,18 @@ const en = {
           title: "The Business Decacorn",
           description: "Presented to our Chairman and Managing Director, Dr Radhakrishna PM, at the Business Success Awards 2026 for outstanding growth and success in business, in the spirit of value creation with values.",
         },
+        {
+          title: "Elevate 2019 Runner-up",
+          description: "Runner-up at Elevate 2019, the Government of Karnataka's business competition run by the Department of IT, BT and S&T, for our concept “Accelerated Biotransformation of Paddy Stubble”.",
+        },
+        {
+          title: "Top 75 Entrepreneurs in India",
+          description: "Recognised among India's top 75 entrepreneurs during Azadi Ka Amrit Mahotsav, organised by the Department of Animal Husbandry and Dairying, Government of India, with the Confederation of Indian Industry.",
+        },
+        {
+          title: "ClimateLaunchpad Regional Winner",
+          description: "Regional winners for Karnataka at ClimateLaunchpad, the world's largest green business ideas competition, qualifying for the global stage with “CowStraw Laddu: More Milk, Less Methane”.",
+        },
       ],
     },
 
