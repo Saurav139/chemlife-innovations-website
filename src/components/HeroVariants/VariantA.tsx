@@ -77,7 +77,7 @@ function AnimatedCounter({ value, suffix }: { value: number; suffix: string }) {
   }, [value]);
 
   return (
-    <span ref={ref} className="font-heading text-3xl md:text-4xl lg:text-[2.75rem] font-bold leading-none tracking-tight text-white tabular-nums">
+    <span ref={ref} className="font-heading text-2xl md:text-3xl font-bold leading-none tracking-tight text-white tabular-nums">
       {count}<span className="text-teal-400">{suffix}</span>
     </span>
   );
@@ -244,10 +244,10 @@ export default function HeroVariantA() {
           dividers between the figures (between pairs on phones). */}
       <div className="relative z-30 bg-gradient-to-b from-[#16294a] to-[#0d1b33]">
         <div aria-hidden="true" className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-teal-400/70 to-transparent" />
-        <dl className="max-w-[1100px] mx-auto px-6 py-5 md:py-7 grid grid-cols-2 md:grid-cols-4 gap-y-5 md:divide-x divide-white/10">
+        <dl className="max-w-[1100px] mx-auto px-6 py-3 md:py-4 grid grid-cols-2 md:grid-cols-4 gap-y-3 md:divide-x divide-white/10">
           {stats.map((stat, idx) => (
             <div key={idx} className={`flex flex-col-reverse items-center justify-center text-center px-2 ${idx % 2 === 1 ? "max-md:border-l max-md:border-white/10" : ""}`}>
-              <dt className="text-white/60 text-[10px] md:text-[11px] font-semibold uppercase tracking-[0.18em] md:tracking-[0.22em] mt-2">{t.home.stats[idx]}</dt>
+              <dt className="text-white/60 text-[10px] md:text-[11px] font-semibold uppercase tracking-[0.18em] md:tracking-[0.22em] mt-1.5">{t.home.stats[idx]}</dt>
               <dd><AnimatedCounter value={stat.value} suffix={stat.suffix} /></dd>
             </div>
           ))}
