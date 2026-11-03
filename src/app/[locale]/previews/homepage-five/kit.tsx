@@ -21,6 +21,7 @@ export const AWARDS = [
   { logo: Images.awards.animalHusbandry, organization: "Dept. of Animal Husbandry, Dairying & Fisheries", year: "2019" },
   { logo: Images.awards.birac, organization: "BIRAC", year: "2021" },
   { logo: Images.awards.naarm, organization: "a-IDEA, ICAR-NAARM", year: "2020" },
+  { logo: Images.awards.businessSuccess2026, organization: "Business Success Awards", year: "2026" },
 ];
 
 // Quotes stay in the words our partners wrote them, in English.

@@ -48,7 +48,7 @@ const VOICES = [
     picture: Images.products.banners.minbiozen, pictureAlt: "MinBioZen bio-trace minerals" },
 ];
 
-const AWARD_YEARS = ["2020–21", "2019", "2021", "2020"];
+const AWARD_YEARS = ["2020–21", "2019", "2021", "2020", "2026"];
 const STEP_IMAGES = [Images.process.researchImage, Images.process.developmentImage, Images.process.manufacturingImage, Images.process.delivery];
 // What we serve: every group's three photographs, with their sizes, the first one lifted out of the run.
 const SERVE = [
