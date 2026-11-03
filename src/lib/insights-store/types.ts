@@ -8,6 +8,8 @@ export type Status = "pending" | "approved" | "hidden";
 
 export const SOURCES: Source[] = ["youtube", "wordpress", "instagram", "linkedin", "link"];
 export const KINDS: Kind[] = ["Blog", "Video", "Podcast"];
+/** The featured written post is always a WordPress article; LinkedIn and Instagram posts stay in the grid. */
+export const canBeFeatured = (item: { kind: Kind; source: Source }) => item.kind !== "Blog" || item.source === "wordpress";
 export const STATUSES: Status[] = ["pending", "approved", "hidden"];
 
 /** A post as a source gives it, before it's in the inbox. */

@@ -2,7 +2,7 @@ import mysql, { type Pool, type PoolConnection, type ResultSetHeader, type RowDa
 import type { Insights } from "@/lib/insights";
 import { insightCard } from "./card";
 import { importedStatus, inheritsLegacySetting, isSocialSource, LEGACY_SOCIAL_AUTO_PUBLISH_SETTING, SOCIAL_AUTO_PUBLISH_SETTINGS, SOCIAL_SOURCES, type SocialAutoPublish, type SocialSource } from "./social-publishing";
-import type { InboxItem, ItemChanges, Kind, Source, SourceItem, Status } from "./types";
+import { canBeFeatured, type InboxItem, type ItemChanges, type Kind, type Source, type SourceItem, type Status } from "./types";
 
 // The inbox's MySQL tables. DATABASE_URL points at the database, e.g. mysql://user:password@host:3306/name (a
 // password with special characters must be URL-encoded). The tables are created on first use.
@@ -315,7 +315,7 @@ export async function changeItem(id: number, changes: ItemChanges): Promise<Inbo
   const conn: PoolConnection = await db.getConnection();
   try {
     await conn.beginTransaction();
-    const [rows] = await conn.execute<RowDataPacket[]>("SELECT kind, status FROM insight_items WHERE id = ? FOR UPDATE", [id]);
+    const [rows] = await conn.execute<RowDataPacket[]>("SELECT kind, status, source FROM insight_items WHERE id = ? FOR UPDATE", [id]);
     if (!rows[0]) {
       await conn.rollback();
       return null;
@@ -340,7 +340,7 @@ export async function changeItem(id: number, changes: ItemChanges): Promise<Inbo
       set("status", changes.status);
       set("decided_at", changes.status === "pending" ? null : new Date());
     }
-    if (status !== "approved" || changes.featured === false) set("featured", 0);
+    if (status !== "approved" || changes.featured === false || !canBeFeatured({ kind, source: rows[0].source as Source })) set("featured", 0);
     else if (changes.featured) {
       await conn.execute("UPDATE insight_items SET featured = 0 WHERE kind = ? AND id <> ?", [kind, id]);
       set("featured", 1);

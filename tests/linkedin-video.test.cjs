@@ -47,3 +47,11 @@ test('a pasted LinkedIn post keeps only LinkedIn\'s own player address', () => {
   ]) assert.equal(pasted(other).videoUrl, undefined);
   assert.equal(pasted(PLAYER, 'link').videoUrl, undefined);
 });
+
+test('only WordPress articles, videos and podcasts can be featured', () => {
+  const types = load('src/lib/insights-store/types.ts');
+  assert.equal(types.canBeFeatured({ kind: 'Blog', source: 'wordpress' }), true);
+  for (const source of ['linkedin', 'instagram', 'link']) assert.equal(types.canBeFeatured({ kind: 'Blog', source }), false);
+  assert.equal(types.canBeFeatured({ kind: 'Video', source: 'youtube' }), true);
+  assert.equal(types.canBeFeatured({ kind: 'Podcast', source: 'youtube' }), true);
+});

@@ -102,7 +102,9 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
   const sortedVideos = getSortedItems(videos);
 
   // The post chosen as featured in the Insights inbox, else the newest.
-  const featuredBlog = sortedBlogs.find((item) => item.featured) ?? sortedBlogs[0];
+  // The featured written post is a WordPress article: LinkedIn and Instagram posts stay in the grid.
+  const articles = sortedBlogs.filter((item) => insightTag(item) === "Blog");
+  const featuredBlog = articles.find((item) => item.featured) ?? articles[0];
   const featuredPodcast = sortedPodcasts.find((item) => item.featured) ?? sortedPodcasts[0];
   const featuredVideo = sortedVideos.find((item) => item.featured) ?? sortedVideos[0];
 
