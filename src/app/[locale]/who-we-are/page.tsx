@@ -1,12 +1,10 @@
 "use client";
 
-import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { VariantProvider } from "@/context/VariantContext";
 import { useHref, useT } from "@/i18n/LocaleProvider";
-import { Images } from "@/lib/assets";
 
 // Who We Are in full, from the homepage's "More about who we are" button, set like a magazine feature: the
 // introduction beside the founders' photo with the headline figures, the facts as a numbered list, the four
@@ -78,8 +76,7 @@ export default function WhoWeArePage() {
       <Header />
 
       <main id="main" tabIndex={-1} className="bg-white min-h-screen text-brand-navy">
-        {/* Opening, kept short: on a warm paper ground, the heading, one lead sentence and the headline figures beside
-            the founders' photo. */}
+        {/* Opening, kept short: on a warm paper ground, the heading and one lead sentence beside the headline figures. */}
         <section className="bg-[#f6f4ef] pt-28 md:pt-32 lg:pt-36 pb-14 md:pb-20">
           <div className="max-w-[1200px] mx-auto px-6 grid lg:grid-cols-12 gap-10 lg:gap-16 items-center">
             <Reveal className="lg:col-span-7">
@@ -89,25 +86,19 @@ export default function WhoWeArePage() {
               </span>
               <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold leading-tight tracking-tight text-brand-navy mt-5">{t.title}</h1>
               <p className="text-lg md:text-xl text-slate-600 leading-relaxed mt-5 max-w-xl">{lead}</p>
-              <dl className="grid grid-cols-2 sm:grid-cols-4 gap-y-5 mt-8 pt-6 border-t border-brand-navy/15">
+            </Reveal>
+            {/* The headline figures, as a 2×2 block beside the heading. */}
+            <Reveal delay={0.12} className="lg:col-span-5">
+              <dl className="grid grid-cols-2 gap-px rounded-[2rem] overflow-hidden bg-brand-navy/10 ring-1 ring-brand-navy/10">
                 {FIGURES.map((figure, i) => (
-                  <div key={figure} className={`flex flex-col-reverse ${i > 0 ? "sm:border-l sm:border-brand-navy/15 sm:pl-6" : ""} ${i % 2 === 1 ? "max-sm:border-l max-sm:border-brand-navy/15 max-sm:pl-6" : ""}`}>
+                  <div key={figure} className="flex flex-col-reverse bg-[#f6f4ef] p-6 md:p-8">
                     <dt className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500 mt-2">{messages.home.stats[i]}</dt>
-                    <dd className="font-heading text-3xl md:text-4xl font-bold text-brand-navy tabular-nums">
+                    <dd className="font-heading text-4xl md:text-5xl font-bold text-brand-navy tabular-nums">
                       {figure.replace("+", "")}<span className="text-teal-aa">+</span>
                     </dd>
                   </div>
                 ))}
               </dl>
-            </Reveal>
-            <Reveal delay={0.12} className="lg:col-span-5">
-              {/* The photo in an offset frame. */}
-              <div className="relative">
-                <div aria-hidden="true" className="absolute -inset-0 translate-x-4 translate-y-4 md:translate-x-6 md:translate-y-6 rounded-[2rem] border border-brand-navy/20" />
-                <div className="relative aspect-[4/3] rounded-[2rem] overflow-hidden shadow-xl shadow-brand-navy/10">
-                  <Image src={Images.people.foundersNew} alt={messages.about.foundersAlt} fill priority sizes="(min-width: 1024px) 440px, 100vw" className="object-cover" />
-                </div>
-              </div>
             </Reveal>
           </div>
         </section>
