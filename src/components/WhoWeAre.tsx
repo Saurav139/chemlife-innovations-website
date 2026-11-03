@@ -143,7 +143,7 @@ function SnowflakeCell({
         <h3 className="font-heading text-lg md:text-xl font-bold text-teal-aa mb-1 md:mb-2 leading-tight transition-colors duration-300 group-hover:text-brand-orange">
           {card.title}
         </h3>
-        <p className="text-slate-600 text-sm leading-relaxed font-normal">
+        <p className="text-slate-600 text-lg leading-relaxed font-normal">
           {card.description}
         </p>
       </div>
