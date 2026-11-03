@@ -114,6 +114,8 @@ const en = {
       // The homepage section's small label and heading.
       homeKicker: "Get to know",
       homeTitle: "Who We Are",
+      // The homepage section's introduction: shorter than intro, without repeating the line above it.
+      homeIntro: "Feed additives and nutraceuticals for poultry, dairy cattle and swine, pairing Ayurvedic plant wisdom with our own technologies: ANBioT bio-transformation, green synthesis and microencapsulation. Supported by the Technology Development Board, Government of India.",
       // The Who We Are page (/who-we-are): the homepage button to it, and its two section headings.
       moreAboutUs: "More about who we are",
       factsTitle: "At a glance",

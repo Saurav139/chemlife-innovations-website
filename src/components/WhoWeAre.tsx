@@ -203,7 +203,7 @@ export default function WhoWeAre() {
           <Reveal className="lg:col-span-6">
             {/* What ChemLife is, in a line, under the heading. */}
             <p className="font-heading text-2xl md:text-3xl lg:text-4xl font-semibold leading-snug text-brand-orange-aa mt-4">{t.title}</p>
-            <p className="text-lg text-slate-700 leading-relaxed mt-6">{t.intro}</p>
+            <p className="text-lg text-slate-700 leading-relaxed mt-6">{t.homeIntro}</p>
             {/* The facts and questions that used to be here, in full on their own page. */}
             <a href={href("/who-we-are")} data-analytics-click={t.moreAboutUs} className="inline-flex items-center gap-2 min-h-12 px-6 mt-8 rounded-full bg-brand-navy hover:bg-brand-navy/90 text-white font-semibold transition-colors">
               {t.moreAboutUs}
