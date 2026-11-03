@@ -199,9 +199,9 @@ export default function WhoWeArePage() {
             </div>
             <div className="lg:col-span-8 lg:border-l lg:border-slate-200 lg:pl-10">
               <p className={`${eyebrow} text-slate-500`}>{t.proofRecognised}</p>
-              <ul className="flex flex-wrap items-center gap-x-8 gap-y-4 mt-4">
+              <ul className="flex flex-wrap items-center gap-x-6 gap-y-4 mt-4">
                 {RECOGNITION_LOGOS.map((logo) => (
-                  <li key={logo.name} className="relative h-12 w-24"><Image src={logo.src} alt={logo.name} fill sizes="96px" className="object-contain" /></li>
+                  <li key={logo.name} className="relative h-14 w-28 md:h-16 md:w-32"><Image src={logo.src} alt={logo.name} fill sizes="128px" className="object-contain" /></li>
                 ))}
                 {t.proofBadges.map((badge) => (
                   <li key={badge} className="inline-flex items-center gap-2 rounded-full border border-teal-aa/30 bg-teal-aa/5 px-4 py-2 text-sm font-semibold text-brand-navy">
