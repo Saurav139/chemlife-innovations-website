@@ -65,6 +65,7 @@ async function importFrom(source: Source, fetchItems: () => Promise<SourceItem[]
       if (post) seenPosts.add(post);
       return true;
     });
+    if (source === "instagram") await addMissingInstagramPlayers(items.filter((item) => item.videoUrl && !fresh.includes(item)));
     // The source's picture address expires, so keep a copy; without one the card shows a stock photo. A few at a time.
     const withPicture = fresh.filter((item) => item.copyImage && item.imageUrl);
     for (let i = 0; i < withPicture.length; i += 4) {
@@ -159,6 +160,17 @@ async function findLinkedInVideos(): Promise<void> {
     }
   }
   if (complete) await setSetting(LINKEDIN_VIDEOS_FOUND, new Date().toISOString());
+}
+
+/** Reels already in the inbox that the feed or API now says are videos (for instance a reel saved from a /p/ link)
+ *  get Instagram's player. */
+async function addMissingInstagramPlayers(videos: SourceItem[]): Promise<void> {
+  if (videos.length === 0) return;
+  const players = new Map(videos.map((item) => [instagramPostId(item.url ?? ""), item.videoUrl!]));
+  for (const saved of await listItems()) {
+    const player = saved.source === "instagram" && !saved.videoUrl ? players.get(instagramPostId(saved.url)) : undefined;
+    if (player) await changeItem(saved.id, { videoUrl: player });
+  }
 }
 
 const INSTAGRAM_REELS_FOUND = "repaired:instagram-reels";

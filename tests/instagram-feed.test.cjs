@@ -114,6 +114,7 @@ function syncHarness({ existing = [], ids = [], entries, error, autoPublish = fa
         return { added: items.length, approved: source === 'instagram' && autoPublish };
       },
       socialAutoPublishSettings: async () => ({ linkedin: false, instagram: autoPublish }),
+      listItems: async () => [], changeItem: async () => null,
     },
     './feed': { ...feed, fetchInstagramFeed: async (url, read) => {
       calls.feed++;
