@@ -98,7 +98,7 @@ export const Images = {
     leaderRadhakrishna: "/images/people/leader_radhakrishna_new.jpg",
     leaderSharada: "/images/people/leader_sharada_new.jpg",
     leaderSneehaCropped: "/images/people/leader_sneha_new.jpg",
-    leaderShankar: "/images/people/leader_shankar.png",
+    leaderShankar: "/images/people/leader_shankar_new.png",
   },
 
   /** R&D / science imagery */
