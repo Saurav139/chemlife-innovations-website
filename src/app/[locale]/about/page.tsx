@@ -188,14 +188,15 @@ export default function AboutPage() {
                   transition={{ duration: 0.5, delay: i * 0.15, ease: easeOut }}
                   className="bg-white rounded-2xl border border-teal-100 overflow-hidden flex flex-col shadow-sm hover:border-brand-orange/50 hover:shadow-md transition-[border-color,box-shadow] duration-300 group"
                 >
-                  {/* Portrait panel keeps the face and shoulders visible without a circular crop. */}
+                  {/* Portrait panel keeps the face and shoulders visible without a circular crop. The photos share one 4:5
+                      head-and-shoulders frame; 40% down keeps the whole face in the 4:3 panels too. */}
                   <div className="relative aspect-[4/3] min-[360px]:aspect-[4/5] sm:aspect-[4/3] lg:aspect-[4/5] overflow-hidden bg-gray-50 m-2 sm:m-3 mb-0 sm:mb-0 rounded-xl border border-orange-100 group-hover:border-orange-200 transition-colors duration-300">
                     <Image
                       src={leader.image}
                       alt={leader.name}
                       fill
                       sizes="(max-width: 1023px) 50vw, 280px"
-                      className="object-cover object-top"
+                      className="object-cover object-[50%_40%]"
                     />
                   </div>
 
