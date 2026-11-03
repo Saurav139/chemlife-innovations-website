@@ -112,9 +112,11 @@ export default function TestimonialCarousel() {
                       {expanded ? t.showLess : t.readMore}
                     </button>
                   )}
-                  <div className="mb-6" />
+                  {/* Who said it: shown below laptop width, where the partner list only names the company. From laptop
+                      width up the list on the right already shows each partner's logo, name and role. */}
+                  <div className="mb-6 lg:hidden" />
 
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-4 lg:hidden">
                     <div className="relative w-14 h-14 rounded-full border-2 border-brand-orange bg-white overflow-hidden flex-shrink-0">
                       <Image
                         src={testimonials[current].logo}
