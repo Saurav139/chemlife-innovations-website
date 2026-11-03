@@ -77,8 +77,8 @@ function AnimatedCounter({ value, suffix }: { value: number; suffix: string }) {
   }, [value]);
 
   return (
-    <span ref={ref} className="font-heading text-2xl md:text-3xl font-bold leading-none tracking-tight text-white tabular-nums">
-      {count}<span className="text-teal-400">{suffix}</span>
+    <span ref={ref} className="font-heading text-2xl md:text-3xl font-bold leading-none tracking-tight text-brand-navy tabular-nums">
+      {count}<span className="text-teal-aa">{suffix}</span>
     </span>
   );
 }
@@ -237,16 +237,15 @@ export default function HeroVariantA() {
         </div>
       </div>
 
-        {/* The numbers on a strip of their own, where they used to sit over the photo, so they never blend into its
-            people or scenery: deep navy with a fine teal line along the top, white figures and small spaced labels,
-            and hairline dividers between the figures (between pairs on phones). Below it, photo enough to hold the
-            floating search and chat buttons, so they never cover a figure. */}
-        <div className="relative z-30 mt-4 md:mt-8 short:mt-4 short-phone:mt-1 mb-[88px] md:mb-[108px] bg-gradient-to-b from-[#16294a]/95 to-[#0d1b33]/95 backdrop-blur-sm">
-          <div aria-hidden="true" className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-teal-400/70 to-transparent" />
-          <dl className="max-w-[1000px] mx-auto px-6 py-3 md:py-4 grid grid-cols-2 md:grid-cols-4 gap-y-3 md:divide-x divide-white/10">
+        {/* The numbers on a light card of their own, where they used to sit over the photo, so they never blend into
+            its people or scenery. As wide as the Awards section below (1200px, with its side padding): navy figures
+            with a teal "+", small grey labels and hairline dividers (between pairs on phones). Below it, photo enough
+            to hold the floating search and chat buttons, so they never cover a figure. */}
+        <div className="relative z-30 w-full max-w-[1200px] mx-auto px-6 mt-4 md:mt-8 short:mt-4 short-phone:mt-1 mb-[88px] md:mb-[108px]">
+          <dl className="rounded-2xl bg-white/92 backdrop-blur-md border border-white/70 shadow-xl shadow-black/25 px-4 py-3 md:py-4 grid grid-cols-2 md:grid-cols-4 gap-y-3 md:divide-x divide-slate-200">
             {stats.map((stat, idx) => (
-              <div key={idx} className={`flex flex-col-reverse items-center justify-center text-center px-2 ${idx % 2 === 1 ? "max-md:border-l max-md:border-white/10" : ""}`}>
-                <dt className="text-white/60 text-[10px] md:text-[11px] font-semibold uppercase tracking-[0.12em] md:tracking-[0.22em] mt-1.5">{t.home.stats[idx]}</dt>
+              <div key={idx} className={`flex flex-col-reverse items-center justify-center text-center px-2 ${idx % 2 === 1 ? "max-md:border-l max-md:border-slate-200" : ""}`}>
+                <dt className="text-slate-500 text-[10px] md:text-[11px] font-semibold uppercase tracking-[0.12em] md:tracking-[0.22em] mt-1.5">{t.home.stats[idx]}</dt>
                 <dd><AnimatedCounter value={stat.value} suffix={stat.suffix} /></dd>
               </div>
             ))}
