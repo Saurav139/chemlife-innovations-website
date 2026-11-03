@@ -73,6 +73,11 @@ async function createTables(db: Pool) {
     UNIQUE KEY source_post (source, external_id),
     KEY by_status (status, published_at)
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`);
+  // Added after launch: a LinkedIn video post's player. MySQL has no ADD COLUMN IF NOT EXISTS, so look first.
+  const [videoColumn] = await db.query<RowDataPacket[]>(
+    "SELECT 1 FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'insight_items' AND COLUMN_NAME = 'video_url'"
+  );
+  if (videoColumn.length === 0) await db.query("ALTER TABLE insight_items ADD COLUMN video_url VARCHAR(500) NULL");
   await db.query(`CREATE TABLE IF NOT EXISTS insight_images (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     mime VARCHAR(40) NOT NULL,
@@ -174,7 +179,7 @@ export async function setSocialAutoPublish(source: SocialSource, enabled: boolea
 // ---------- Posts ----------
 
 const ITEM_COLUMNS = `i.id, i.source, i.external_id, i.kind, i.status, i.featured, i.title, i.summary, i.content, i.url,
-  i.image_url, i.image_id, i.youtube_id, i.meta, i.published_at, i.imported_at, i.decided_at, im.mime AS image_mime`;
+  i.image_url, i.image_id, i.youtube_id, i.video_url, i.meta, i.published_at, i.imported_at, i.decided_at, im.mime AS image_mime`;
 const FROM_ITEMS = "FROM insight_items i LEFT JOIN insight_images im ON im.id = i.image_id";
 
 function toItem(row: RowDataPacket): InboxItem {
@@ -192,6 +197,7 @@ function toItem(row: RowDataPacket): InboxItem {
     image: row.image_id && row.image_mime ? imagePath(row.image_id, row.image_mime) : (row.image_url ?? ""),
     imageId: row.image_id ?? null,
     youtubeId: row.youtube_id ?? "",
+    videoUrl: row.video_url ?? "",
     meta: row.meta,
     publishedAt: new Date(row.published_at).toISOString(),
     importedAt: new Date(row.imported_at).toISOString(),
@@ -249,12 +255,13 @@ async function insertItems(db: Pool | PoolConnection, items: SourceItem[], statu
   for (const item of items) {
     const [result] = await db.execute<ResultSetHeader>(
       `INSERT IGNORE INTO insight_items (source, external_id, kind, status, title, summary, content, url, image_url, image_id,
-        youtube_id, meta, published_at, imported_at, decided_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        youtube_id, meta, published_at, imported_at, decided_at, video_url)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         item.source, item.externalId.slice(0, 191), item.kind, status, item.title.slice(0, 300), item.summary, item.content ?? null,
         item.url?.slice(0, 1000) ?? null, item.imageId ? null : (item.imageUrl?.slice(0, 1000) ?? null), item.imageId ?? null,
         item.youtubeId ?? null, item.meta.slice(0, 60), item.publishedAt, now, status === "pending" ? null : now,
+        item.videoUrl?.slice(0, 500) ?? null,
       ]
     );
     added += result.affectedRows;
@@ -327,6 +334,7 @@ export async function changeItem(id: number, changes: ItemChanges): Promise<Inbo
     if (changes.content !== undefined) set("content", changes.content);
     if (changes.meta !== undefined) set("meta", changes.meta.slice(0, 60));
     if (changes.imageId !== undefined) set("image_id", changes.imageId);
+    if (changes.videoUrl !== undefined) set("video_url", changes.videoUrl?.slice(0, 500) ?? null);
     if (changes.publishedAt) set("published_at", changes.publishedAt);
     if (changes.status && changes.status !== rows[0].status) {
       set("status", changes.status);

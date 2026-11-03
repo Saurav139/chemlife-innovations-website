@@ -995,6 +995,7 @@ interface Draft {
 interface CardBase {
   url?: string;
   youtubeId?: string;
+  videoUrl?: string;
 }
 
 const noop = () => {};
@@ -1012,6 +1013,7 @@ function DraftFields({ draft, set, base, idPrefix }: { draft: Draft; set: (d: Pa
     url: base.url ?? "",
     image: draft.image,
     youtubeId: base.youtubeId ?? "",
+    videoUrl: base.videoUrl ?? "",
     content: draft.content,
     featured: false,
   });
@@ -1212,7 +1214,7 @@ function AddPost({ onAdded, onShow, onError }: { onAdded: (item: InboxItem) => v
               {preview.notes.map((note) => <li key={note} className="text-sm rounded-lg bg-amber-50 border border-amber-200 text-amber-900 px-3 py-2">{note}</li>)}
             </ul>
           )}
-          <DraftFields draft={draft} set={(d) => setDraft({ ...draft, ...d })} base={{ url: preview.item.url, youtubeId: preview.item.youtubeId }} idPrefix="add" />
+          <DraftFields draft={draft} set={(d) => setDraft({ ...draft, ...d })} base={{ url: preview.item.url, youtubeId: preview.item.youtubeId, videoUrl: preview.item.videoUrl }} idPrefix="add" />
           <div className="mt-4 flex flex-wrap gap-2 justify-end">
             <button type="button" onClick={() => { setPreview(null); setDraft(null); }} className={`${BTN} text-slate-600 hover:bg-slate-100`}>Cancel</button>
             <button type="button" disabled={saving} onClick={() => add("pending")} className={BTN_SECONDARY}>Add to Waiting</button>
@@ -1296,7 +1298,7 @@ function EditPost({ item, onClose, onSaved }: { item: InboxItem; onClose: () => 
             </button>
           </div>
           <div className="px-5 sm:px-6 py-5">
-            <DraftFields draft={draft} set={(d) => setDraft((x) => ({ ...x, ...d }))} base={{ url: item.url, youtubeId: item.youtubeId }} idPrefix="edit" />
+            <DraftFields draft={draft} set={(d) => setDraft((x) => ({ ...x, ...d }))} base={{ url: item.url, youtubeId: item.youtubeId, videoUrl: item.videoUrl }} idPrefix="edit" />
             <p className="text-xs text-slate-500 mt-3">Changes here only affect the Insights page, not the original post.</p>
             {error && <p role="alert" className="text-sm text-red-600 mt-2">{error}</p>}
           </div>

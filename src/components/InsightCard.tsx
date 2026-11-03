@@ -64,6 +64,15 @@ export function InsightTagLabel({ item }: { item: Pick<InsightItem, "type" | "li
   return <span className={`text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md ${TAG_STYLE[tag]}`}>{tag}</span>;
 }
 
+/** A play button over a LinkedIn video post's picture. The picture opens the reader, which plays the video. */
+export function VideoPlayBadge() {
+  return <span aria-hidden="true" className="pointer-events-none absolute inset-0 flex items-center justify-center">
+    <span className="flex w-14 h-14 items-center justify-center rounded-full bg-black/60 text-white shadow-lg ring-2 ring-white/70 transition-transform duration-300 group-hover:scale-110">
+      <svg className="w-6 h-6 fill-current ml-1" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
+    </span>
+  </span>;
+}
+
 /** What goes inside the card's frame: the label line, picture or video, title, and the two links. */
 export default function InsightCardContent({ item, onRead, onPlay, imageLayout = "cropped", centerTextWithoutImage = false }: {
   item: InsightItem;
@@ -83,7 +92,7 @@ export default function InsightCardContent({ item, onRead, onPlay, imageLayout =
       {/* Clickable Area of Card Content */}
       <div
         className={`${isBlog ? "cursor-pointer" : ""} ${textOnly ? "flex flex-1 flex-col items-center justify-center py-6 text-center sm:py-8" : ""}`}
-        data-analytics-click={isBlog ? "Read Article" : undefined}
+        data-analytics-click={isBlog ? (item.videoUrl ? "Watch Video" : "Read Article") : undefined}
         onClick={() => {
           if (isBlog) {
             if (item.linkUrl?.includes("wordpress.com")) {
@@ -104,8 +113,9 @@ export default function InsightCardContent({ item, onRead, onPlay, imageLayout =
 
         {/* Blog Image Preview (Only images for blogs, no videos) */}
         {isBlog && item.imageUrl && (
-          imageLayout === "natural" ? <div className="mb-4">
+          imageLayout === "natural" ? <div className="relative mb-4">
             <NaturalInsightImage src={item.imageUrl} alt={item.title} sizes={CARD_IMAGE_SIZES} />
+            {item.videoUrl && <VideoPlayBadge />}
           </div> :
           <div className="relative w-full aspect-video rounded-xl overflow-hidden mb-4 bg-slate-100 border border-gray-200 select-none">
             <Image
@@ -116,6 +126,7 @@ export default function InsightCardContent({ item, onRead, onPlay, imageLayout =
               className="object-cover group-hover:scale-103 transition-transform duration-500"
               unoptimized={!isOptimizable(item.imageUrl)}
             />
+            {item.videoUrl && <VideoPlayBadge />}
           </div>
         )}
 
@@ -163,7 +174,7 @@ export default function InsightCardContent({ item, onRead, onPlay, imageLayout =
               onClick={() => onRead(item)}
               className="tap-target text-xs font-bold text-teal-aa hover:text-teal-700 transition-colors flex items-center gap-1 cursor-pointer"
             >
-              Read Article
+              {item.videoUrl ? "Watch Video" : "Read Article"}
             </button>
             <a
               href={item.linkUrl || "https://www.linkedin.com/company/chemlifeinnovations/"}

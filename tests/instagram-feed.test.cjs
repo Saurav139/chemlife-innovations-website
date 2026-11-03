@@ -106,7 +106,7 @@ function syncHarness({ existing = [], ids = [], entries, error, autoPublish = fa
     'next/cache': { revalidatePath: () => { calls.refreshed++; } },
     '@/lib/insights': { FALLBACK_INSIGHTS: { blogs: [], podcasts: [], videos: [] } },
     './db': {
-      getSetting: async key => ['started', 'repaired:blog-text'].includes(key) ? 'true' : null,
+      getSetting: async key => ['started', 'repaired:blog-text', 'repaired:linkedin-videos'].includes(key) ? 'true' : null,
       setSetting: async () => {}, removeUnusedImages: async () => {},
       knownIds: async () => new Set(ids), knownUrls: async () => existing,
       addImportedItems: async (source, items) => {
