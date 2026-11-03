@@ -1,6 +1,6 @@
 import { Images } from "@/lib/assets";
 import type { Kind, SourceItem } from "./types";
-import { articleSummary, cleanTitle, clip, decodeEntities, htmlToText, isFromArticle, normalizeUrl, readingTime, summarizeDescription, titleFromCaption } from "./text";
+import { articleSummary, cleanTitle, clip, decodeEntities, htmlToText, instagramEmbedUrl, instagramPostId, isFromArticle, normalizeUrl, readingTime, summarizeDescription, titleFromCaption } from "./text";
 
 // Reading posts from ChemLife's channels. Each function returns the latest posts, newest first, or null when the
 // channel isn't set up (no key in the environment).
@@ -167,6 +167,7 @@ async function instagramError(res: Response) {
 function instagramItem(media: InstagramMedia): SourceItem {
   const caption = media.caption ?? "";
   const isVideo = media.media_type === "VIDEO";
+  const code = media.permalink ? instagramPostId(media.permalink) : null;
   return {
     source: "instagram",
     externalId: media.id,
@@ -177,6 +178,7 @@ function instagramItem(media: InstagramMedia): SourceItem {
     url: media.permalink,
     imageUrl: (isVideo ? media.thumbnail_url : media.media_url) ?? undefined,
     copyImage: true,
+    videoUrl: isVideo && code ? instagramEmbedUrl(code) : undefined,
     meta: isVideo ? "Instagram reel" : "Instagram post",
     publishedAt: new Date(media.timestamp || Date.now()),
   };

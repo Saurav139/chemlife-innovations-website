@@ -675,12 +675,15 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                   {activeArticle.title}
                 </h2>
 
-                {/* Square on phones, where LinkedIn's overlays would crowd a short 16:9 player. */}
+                {/* LinkedIn's player fills its box: square on phones, where its overlays would crowd a short 16:9 one.
+                    Instagram's is a fixed column (header, the 4:5 reel, then its links), so it gets a tall, narrow box. */}
                 {activeArticle.videoUrl && (
-                  <div className="relative w-full aspect-square sm:aspect-video rounded-2xl overflow-hidden bg-slate-900 border border-gray-250">
+                  <div className={`relative overflow-hidden rounded-2xl border border-gray-250 ${activeArticle.videoUrl.startsWith("https://www.instagram.com/")
+                    ? "mx-auto w-full max-w-[400px] aspect-[5/8] bg-white"
+                    : "w-full aspect-square sm:aspect-video bg-slate-900"}`}>
                     <iframe
                       src={activeArticle.videoUrl}
-                      title={`${activeArticle.title} (LinkedIn video)`}
+                      title={`${activeArticle.title} (${insightTag(activeArticle)} video)`}
                       allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
                       allowFullScreen
                       className="absolute inset-0 w-full h-full"

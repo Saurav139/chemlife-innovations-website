@@ -170,9 +170,21 @@ export function linkedinEmbedUrl(activity: string): string {
   return `https://www.linkedin.com/embed/feed/update/urn:li:activity:${activity}?compact=true`;
 }
 
-/** A LinkedIn post page whose post is a video: its structured data describes a VideoObject. */
+/** Instagram's own player for a post, by its shortcode. */
+export function instagramEmbedUrl(code: string): string {
+  return `https://www.instagram.com/p/${code}/embed/`;
+}
+
+/** An Instagram reel (or older IGTV video) is told by its address: /reel/… or /tv/…. */
+export function instagramReelCode(address: string): string | null {
+  const code = instagramPostId(address);
+  return code && /^\/(?:reel|tv)\//.test(new URL(address).pathname) ? code : null;
+}
+
+/** A LinkedIn post (or embed) page whose post is a video: its structured data describes a VideoObject, or it has
+ *  LinkedIn's video player in it. */
 export function isLinkedInVideoPage(html: string): boolean {
-  return /"@type"\s*:\s*"VideoObject"/.test(html);
+  return /"@type"\s*:\s*"VideoObject"/.test(html) || /class="[^"]*\bshare-native-video\b/.test(html);
 }
 
 /** When a LinkedIn post was published: its activity number starts with the time in milliseconds. */

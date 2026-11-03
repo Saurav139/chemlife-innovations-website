@@ -20,8 +20,9 @@ const contentSecurityPolicy = [
   "font-src 'self'",
   "media-src 'self'",
   `connect-src 'self'${chatbotApiOrigin ? ` ${chatbotApiOrigin}` : ""} https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com`,
-  // YouTube and LinkedIn video players on Insights; Google Maps on Contact (maps.google.com redirects to www.google.com).
-  "frame-src https://www.youtube-nocookie.com https://www.youtube.com https://www.linkedin.com https://maps.google.com https://www.google.com",
+  // YouTube, LinkedIn and Instagram video players on Insights; Google Maps on Contact (maps.google.com redirects to
+  // www.google.com).
+  "frame-src https://www.youtube-nocookie.com https://www.youtube.com https://www.linkedin.com https://www.instagram.com https://maps.google.com https://www.google.com",
   "object-src 'none'",
   "base-uri 'self'",
   "form-action 'self'",

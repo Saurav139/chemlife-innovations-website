@@ -2,7 +2,7 @@ import { lookup } from "node:dns/promises";
 import { isIP } from "node:net";
 import { IMAGE_TYPES, findItem, saveImage } from "./db";
 import { WORDPRESS_SITE, fetchWordPressPost, fetchYouTubeVideos } from "./sources";
-import { cleanTitle, decodeEntities, isLinkedInVideoPage, linkedinActivityDate, linkedinActivityId, linkedinEmbedUrl, normalizeUrl, summarizeDescription, titleFromCaption } from "./text";
+import { cleanTitle, decodeEntities, instagramEmbedUrl, instagramPostId, instagramReelCode, isLinkedInVideoPage, linkedinActivityDate, linkedinActivityId, linkedinEmbedUrl, normalizeUrl, summarizeDescription, titleFromCaption } from "./text";
 import type { InboxItem, SourceItem } from "./types";
 
 // "Add a post": the moderator pastes a link and gets a filled-in card to check before adding it. Only the
@@ -141,8 +141,17 @@ async function pagePreview(url: URL, source: "instagram" | "link", notes: string
     content: caption,
     imageUrl: meta["og:image"],
     copyImage: true,
+    videoUrl: source === "instagram" ? instagramPlayer(url.toString(), meta) : undefined,
     publishedAt: published && !Number.isNaN(Date.parse(published)) ? new Date(published) : base.publishedAt,
   };
+}
+
+/** A reel's address says it's a video; a /p/ address that is one says so in its preview tags. */
+function instagramPlayer(address: string, meta: Record<string, string>): string | undefined {
+  const reel = instagramReelCode(address);
+  if (reel) return instagramEmbedUrl(reel);
+  const code = instagramPostId(address);
+  return code && (meta["og:video"] || meta["og:type"]?.startsWith("video")) ? instagramEmbedUrl(code) : undefined;
 }
 
 function metaTags(html: string): Record<string, string> {
@@ -214,7 +223,9 @@ async function fetchText(address: string): Promise<string> {
 export async function linkedinVideoUrl(postUrl: string): Promise<string | undefined> {
   const activity = linkedinActivityId(postUrl);
   if (!activity) return undefined;
-  return isLinkedInVideoPage(await fetchText(postUrl)) ? linkedinEmbedUrl(activity) : undefined;
+  // LinkedIn sometimes turns servers away from a post's page; its embed page says the same and is let through more.
+  const html = await fetchText(postUrl).catch(() => fetchText(linkedinEmbedUrl(activity)));
+  return isLinkedInVideoPage(html) ? linkedinEmbedUrl(activity) : undefined;
 }
 
 /** A feed's text, from a public address only. */

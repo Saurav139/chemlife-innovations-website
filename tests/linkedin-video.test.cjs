@@ -55,3 +55,45 @@ test('only WordPress articles, videos and podcasts can be featured', () => {
   assert.equal(types.canBeFeatured({ kind: 'Video', source: 'youtube' }), true);
   assert.equal(types.canBeFeatured({ kind: 'Podcast', source: 'youtube' }), true);
 });
+
+test('Instagram reels are told by their address and get Instagram\'s player', () => {
+  assert.equal(text.instagramReelCode('https://www.instagram.com/reel/DfPc8C_MB2N/'), 'DfPc8C_MB2N');
+  assert.equal(text.instagramReelCode('https://www.instagram.com/tv/DfPc8C_MB2N'), 'DfPc8C_MB2N');
+  assert.equal(text.instagramReelCode('https://www.instagram.com/p/DfJ-ZMhsPbJ/'), null);
+  assert.equal(text.instagramReelCode('https://evil.example/reel/DfPc8C_MB2N/'), null);
+  assert.equal(text.instagramEmbedUrl('DfPc8C_MB2N'), 'https://www.instagram.com/p/DfPc8C_MB2N/embed/');
+});
+
+test('a pasted Instagram post keeps only Instagram\'s own player address', () => {
+  const reel = (videoUrl, source = 'instagram') => validate.parseNewItem({ source, kind: 'Blog', externalId: 'x', title: 'Reel', videoUrl, publishedAt: '2026-11-01' });
+  assert.equal(reel('https://www.instagram.com/p/DfPc8C_MB2N/embed/').videoUrl, 'https://www.instagram.com/p/DfPc8C_MB2N/embed/');
+  assert.equal(reel('https://www.instagram.com/reel/DfPc8C_MB2N/embed').videoUrl, 'https://www.instagram.com/p/DfPc8C_MB2N/embed/');
+  for (const other of ['https://www.instagram.com.evil.example/p/DfPc8C_MB2N/embed/', 'https://www.instagram.com/p/DfPc8C_MB2N/embed/?x=1', 'https://www.instagram.com/p/a/b/embed/'])
+    assert.equal(reel(other).videoUrl, undefined);
+  assert.equal(reel('https://www.instagram.com/p/DfPc8C_MB2N/embed/', 'linkedin').videoUrl, undefined);
+});
+
+test('LinkedIn\'s embed page is recognised as a video by its player as well', () => {
+  assert.equal(text.isLinkedInVideoPage('<div class="share-native-video w-main-feed-card-media" data-test-id="feed-native-video-content">'), true);
+  assert.equal(text.isLinkedInVideoPage('<div class="share-images w-main-feed-card-media">'), false);
+});
+
+test('posts saved before videos were recognised get the built-in list\'s player on the page', async () => {
+  const anyImage = new Proxy({}, { get: () => new Proxy({}, { get: () => '/images/x.jpg' }) });
+  const saved = (linkUrl, videoUrl) => ({ type: 'Blog', title: linkUrl, description: '', meta: '', date: 'June 1, 2026', linkUrl, videoUrl });
+  const feedBites = 'https://www.linkedin.com/posts/chemlifeinnovations_feedbites-chemlifeinnovations-animalnutrition-activity-7473607866512355328-G6mF';
+  const other = 'https://www.linkedin.com/feed/update/urn:li:activity:7000000000000000000';
+  const insights = load('src/lib/insights.ts', {
+    '@/lib/assets': { Images: anyImage },
+    '@/lib/insights-store/sources': { fetchYouTubeUploads: async () => [] },
+    '@/lib/insights-store/text': text,
+    '@/lib/insights-store/db': {
+      storeConfigured: () => true,
+      approvedInsights: async () => ({ blogs: [saved(feedBites), saved(other), saved(other.replace('7000', '7001'), 'https://www.linkedin.com/embed/feed/update/urn:li:activity:7001000000000000000?compact=true')], podcasts: [], videos: [] }),
+    },
+  });
+  const { blogs } = await insights.getInsights();
+  assert.equal(blogs[0].videoUrl, PLAYER);
+  assert.equal(blogs[1].videoUrl, undefined);
+  assert.equal(blogs[2].videoUrl, 'https://www.linkedin.com/embed/feed/update/urn:li:activity:7001000000000000000?compact=true');
+});
