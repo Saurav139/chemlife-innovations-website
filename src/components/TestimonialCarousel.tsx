@@ -28,7 +28,7 @@ const testimonials = [
     logo: Images.testimonials.groxel,
   },
   {
-    quote: "We are pleased to share that we have collaborated with Chemlife Innovations Private Limited since 2016 on technology development and novel product manufacturing. Using their ANBioT technology, we have launched PromoGen (natural growth promoter for poultry) and SlimEat (lean meat inducer for swine) for the export market, and Bio-trace minerals for poultry for the domestic market. We value both the product quality and their service support.",
+    quote: "We are pleased to share that we have collaborated with Chemlife Innovations Private Limited since 2016 on technology development and novel product manufacturing. Using their ANBioT technology, we have launched products for the export market, and Bio-trace minerals for poultry for the domestic market. We appreciate the quality of their products and the service they provide.",
     name: "Lakshmikanth Yadav",
     role: "Managing Director",
     company: "Quadragen VetHealth Private Limited",
