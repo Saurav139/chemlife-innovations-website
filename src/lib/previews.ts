@@ -5,6 +5,12 @@ import { isLiveHost } from "@/lib/seo";
 // the site instead. Never shown on the live site.
 export const PREVIEWS = [
   {
+    slug: "who-we-are-page",
+    href: "/previews/who-we-are-page",
+    title: "Who We Are page: five versions",
+    description: "Five more designs of the full Who We Are page (/who-we-are), each with all its content: Story (pinned photo, one reading column), Bento (a mosaic of tiles), Tabs (about a screen long), Chapters (numbered 01 to 04) and Navy (all dark).",
+  },
+  {
     slug: "who-we-are-elegant",
     href: "/previews/who-we-are-elegant",
     title: "Who We Are: five elegant versions",
