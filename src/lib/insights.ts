@@ -1,7 +1,7 @@
 import { Images } from "@/lib/assets";
 import { approvedInsights, storeConfigured } from "@/lib/insights-store/db";
 import { fetchYouTubeUploads } from "@/lib/insights-store/sources";
-import { displayDate, linkedinActivityId } from "@/lib/insights-store/text";
+import { displayDate, instagramEmbedUrl, instagramPostId, instagramReelCode, linkedinActivityId } from "@/lib/insights-store/text";
 
 export interface InsightItem {
   type: "Blog" | "Podcast" | "Video";
@@ -365,13 +365,16 @@ export async function getInsights(): Promise<Insights> {
   return builtInInsights();
 }
 
-/** Posts saved in the inbox before LinkedIn videos were recognised still get the player the built-in list knows for
- *  them, matched by the post's number, until the inbox's own check has saved one. */
+/** Posts saved in the inbox before videos got a player, until the inbox's own check has saved one: a LinkedIn video
+ *  gets the player the built-in list knows for it (matched by the post's number), and an Instagram reel gets
+ *  Instagram's player when its address is a reel's or the importer called it a reel. */
 function withKnownPlayers(blogs: InsightItem[]): InsightItem[] {
   const known = new Map(FALLBACK_INSIGHTS.blogs.filter((item) => item.videoUrl && item.linkUrl).map((item) => [linkedinActivityId(item.linkUrl!), item.videoUrl!]));
   return blogs.map((item) => {
-    const activity = !item.videoUrl && item.linkUrl ? linkedinActivityId(item.linkUrl) : null;
-    const videoUrl = activity ? known.get(activity) : undefined;
+    if (item.videoUrl || !item.linkUrl) return item;
+    const activity = linkedinActivityId(item.linkUrl);
+    const reel = instagramReelCode(item.linkUrl) ?? (/\breel\b/i.test(item.meta) ? instagramPostId(item.linkUrl) : null);
+    const videoUrl = (activity ? known.get(activity) : undefined) ?? (reel ? instagramEmbedUrl(reel) : undefined);
     return videoUrl ? { ...item, videoUrl } : item;
   });
 }
