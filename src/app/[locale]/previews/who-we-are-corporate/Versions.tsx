@@ -111,8 +111,9 @@ function Accordion({ name, numbered, dark }: { name: string; numbered?: boolean;
 }
 
 // ---------- A · Annual report ----------
-// A navy cover on an architectural grid, the figures as an oversized band, the facts grouped like a report's
-// fact sheet, the directors as an organisation chart, and the questions as an open two-column grid.
+// A navy cover with a contents list on an architectural grid, the figures as an oversized band, then three numbered
+// chapters: the facts grouped like a report's fact sheet, the directors as an organisation chart, and the questions
+// as an open two-column grid.
 
 const GROUPS = [
   { title: "Portfolio", note: "What we make and who it is for.", facts: [0, 1, 3] },
@@ -120,43 +121,70 @@ const GROUPS = [
   { title: "Partners & presence", note: "Who we work with, and where.", facts: [7, 6, 8] },
 ];
 
+const REPORT_CHAPTERS = ["report-glance", "report-leadership", "report-questions"] as const;
+
+/** A chapter heading: a large faint number beside the title, over a heavy navy rule. */
+function ReportHeading({ n, id, aside, children }: { n: number; id: string; aside?: React.ReactNode; children: React.ReactNode }) {
+  return <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-3 border-b-2 border-brand-navy pb-5">
+    <div className="flex items-end gap-4 md:gap-6">
+      <span aria-hidden="true" className="font-heading text-5xl md:text-7xl font-bold leading-[0.8] tabular-nums text-teal-aa/20">{String(n).padStart(2, "0")}</span>
+      <h2 id={id} className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold leading-none">{children}</h2>
+    </div>
+    {aside && <span className={`${eyebrow} text-slate-500`}>{aside}</span>}
+  </div>;
+}
+
 function AnnualReport() {
   const { t, facts, leadership, people, lead, figures } = useWho();
   const [head, ...board] = people;
+  const chapters = [t.factsTitle, leadership.label, t.faqTitle];
   return <div className="bg-white text-brand-navy">
-    {/* Cover */}
+    {/* Cover: the heading and lead sentence, with the report's contents on the right. */}
     <section className="relative overflow-hidden bg-[#1d3557] text-white pt-32 md:pt-40 pb-16 md:pb-24">
       <div aria-hidden="true" className={`absolute inset-0 ${gridLines} [mask-image:radial-gradient(ellipse_80%_90%_at_100%_0%,black,transparent)]`} />
       <div aria-hidden="true" className="absolute -right-32 -top-32 w-[38rem] h-[38rem] rounded-full bg-[radial-gradient(circle,rgba(26,219,195,0.18),transparent_65%)]" />
-      <div className={`relative ${wrap}`}>
-        <div className="flex items-center gap-4 text-white/70">
-          <span className={`${eyebrow} text-teal-aa-light`}>{t.kicker}</span>
-          <span aria-hidden="true" className="h-px flex-1 max-w-24 bg-white/25" />
-          <span className={eyebrow}>Company profile</span>
+      <div className={`relative ${wrap} grid lg:grid-cols-12 gap-12 lg:gap-16 items-end`}>
+        <div className="lg:col-span-8">
+          <div className="flex items-center gap-4 text-white/70">
+            <span className={`${eyebrow} text-teal-aa-light`}>{t.kicker}</span>
+            <span aria-hidden="true" className="h-px flex-1 max-w-24 bg-white/25" />
+            <span className={eyebrow}>Company profile</span>
+          </div>
+          <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.08] tracking-tight text-white mt-6">{t.title}</h1>
+          <p className="text-white/80 text-lg md:text-xl leading-relaxed font-light mt-6 max-w-2xl">{lead}</p>
         </div>
-        <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.08] tracking-tight text-white mt-6 max-w-4xl">{t.title}</h1>
-        <p className="text-white/80 text-lg md:text-xl leading-relaxed font-light mt-6 max-w-2xl">{lead}</p>
+        <nav aria-label="Contents" className="lg:col-span-4">
+          <p className={`${eyebrow} text-white/55`}>Contents</p>
+          <ol className="mt-4 border-t border-white/20">
+            {chapters.map((title, i) => <li key={title} className="border-b border-white/20">
+              <a href={`#${REPORT_CHAPTERS[i]}`} onClick={(e) => { e.preventDefault(); document.getElementById(REPORT_CHAPTERS[i])?.scrollIntoView({ behavior: "smooth" }); }}
+                className="group flex items-center gap-4 py-4 text-white/85 hover:text-white">
+                <span className="font-heading text-sm font-bold tabular-nums text-teal-aa-light">{String(i + 1).padStart(2, "0")}</span>
+                <span className="flex-1 font-heading text-lg font-semibold">{title}</span>
+                <Arrow className="w-4 h-4 text-white/40 transition-transform group-hover:translate-x-1 group-hover:text-white" />
+              </a>
+            </li>)}
+          </ol>
+        </nav>
       </div>
     </section>
 
-    {/* Figures band */}
+    {/* Figures band: a short teal bar over each figure. */}
     <section aria-label="Key figures" className="border-b border-slate-200">
       <dl className={`${wrap} grid grid-cols-2 lg:grid-cols-4 gap-px bg-slate-200 bg-clip-content`}>
         {figures.map((f, i) => <div key={f.label} className={`flex flex-col-reverse justify-end bg-white py-10 md:py-14 pr-6 ${figurePad(i)}`}>
           <dt className="text-sm font-semibold uppercase tracking-wider text-slate-500 mt-3">{f.label}</dt>
           <dd className="font-heading text-5xl md:text-7xl font-bold tabular-nums tracking-tight leading-none">{f.value}<span className="text-teal-aa">+</span></dd>
+          <span aria-hidden="true" className="block w-8 h-1 rounded-full bg-teal-aa mb-6" />
         </div>)}
       </dl>
     </section>
 
-    {/* Fact sheet */}
-    <section className={`${wrap} py-20 md:py-28`}>
-      <div className="flex flex-wrap items-end justify-between gap-4 border-b-2 border-brand-navy pb-5">
-        <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold">{t.factsTitle}</h2>
-        <span className={`${eyebrow} text-slate-500`}>{facts.length} facts · 3 areas</span>
-      </div>
-      <div className="grid lg:grid-cols-3 gap-x-10">
-        {GROUPS.map((g, gi) => <div key={g.title} className="pt-8 lg:pt-10">
+    {/* 01 · Fact sheet, in three columns with hairlines between them. */}
+    <section aria-labelledby={`${REPORT_CHAPTERS[0]}-title`} id={REPORT_CHAPTERS[0]} className={`${wrap} py-20 md:py-28 scroll-mt-24`}>
+      <ReportHeading n={1} id={`${REPORT_CHAPTERS[0]}-title`} aside={`${facts.length} facts · ${GROUPS.length} areas`}>{t.factsTitle}</ReportHeading>
+      <div className="grid lg:grid-cols-3 lg:divide-x divide-slate-200">
+        {GROUPS.map((g, gi) => <div key={g.title} className={`pt-10 ${gi === 0 ? "lg:pr-10" : gi === GROUPS.length - 1 ? "lg:pl-10" : "lg:px-10"}`}>
           <p className={`${eyebrow} text-teal-aa`}>{String(gi + 1).padStart(2, "0")} · {g.title}</p>
           <p className="text-slate-500 mt-2">{g.note}</p>
           <dl className="mt-6 divide-y divide-slate-200 border-t border-slate-200">
@@ -169,13 +197,10 @@ function AnnualReport() {
       </div>
     </section>
 
-    {/* Organisation chart */}
-    <section className="bg-slate-50 border-y border-slate-200 py-20 md:py-28">
+    {/* 02 · Organisation chart: the chairman on a navy card, the three directors linked below. */}
+    <section aria-labelledby={`${REPORT_CHAPTERS[1]}-title`} id={REPORT_CHAPTERS[1]} className="bg-slate-50 border-y border-slate-200 py-20 md:py-28 scroll-mt-24">
       <div className={wrap}>
-        <div className="text-center max-w-3xl mx-auto">
-          <p className={`${eyebrow} text-teal-aa`}>Board of directors</p>
-          <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold mt-3">{leadership.label}</h2>
-        </div>
+        <ReportHeading n={2} id={`${REPORT_CHAPTERS[1]}-title`} aside="Board of directors">{leadership.label}</ReportHeading>
         <div className="flex flex-col items-center mt-14">
           {head && <OrgCard person={head} lead />}
           {board.length > 0 && <>
@@ -189,20 +214,21 @@ function AnnualReport() {
             </div>
           </>}
         </div>
-        <p className="text-center text-lg md:text-xl leading-relaxed text-slate-600 mt-14 max-w-3xl mx-auto">{t.leadershipCaption}</p>
+        {/* Their combined experience, as a pull statement. */}
+        <p className="mt-14 md:mt-16 border-l-4 border-teal-aa pl-6 md:pl-8 font-heading text-xl md:text-2xl leading-snug text-brand-navy max-w-4xl">{t.leadershipCaption}</p>
       </div>
     </section>
 
-    {/* Questions, all open */}
-    <section className={`${wrap} py-20 md:py-28`}>
-      <div className="flex flex-wrap items-end justify-between gap-4 border-b-2 border-brand-navy pb-5">
-        <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold">{t.faqTitle}</h2>
-      </div>
+    {/* 03 · Questions, all open */}
+    <section aria-labelledby={`${REPORT_CHAPTERS[2]}-title`} id={REPORT_CHAPTERS[2]} className={`${wrap} py-20 md:py-28 scroll-mt-24`}>
+      <ReportHeading n={3} id={`${REPORT_CHAPTERS[2]}-title`}>{t.faqTitle}</ReportHeading>
       <div className="grid md:grid-cols-2 gap-x-12">
-        {t.faq.map((item, i) => <div key={item.q} className="py-8 border-b border-slate-200">
-          <p className="font-heading text-sm font-bold text-teal-aa tabular-nums">Q{i + 1}</p>
-          <h3 className="font-heading text-xl font-bold mt-2">{item.q}</h3>
-          <p className="text-slate-600 leading-relaxed mt-3">{item.a}</p>
+        {t.faq.map((item, i) => <div key={item.q} className="grid grid-cols-[2.5rem_minmax(0,1fr)] gap-x-2 py-8 border-b border-slate-200">
+          <p aria-hidden="true" className="font-heading text-sm font-bold text-teal-aa tabular-nums pt-1.5">Q{i + 1}</p>
+          <div>
+            <h3 className="font-heading text-xl font-bold leading-snug">{item.q}</h3>
+            <p className="text-slate-600 leading-relaxed mt-3">{item.a}</p>
+          </div>
         </div>)}
       </div>
     </section>
@@ -212,13 +238,21 @@ function AnnualReport() {
 }
 
 function OrgCard({ person, lead }: { person: { name: string; role: string }; lead?: boolean }) {
-  return <div className={`flex items-center gap-4 rounded-xl border bg-white p-5 shadow-sm ${lead ? "border-brand-navy/30 w-full max-w-sm shadow-lg shadow-brand-navy/10" : "border-slate-200 h-full"}`}>
-    <span aria-hidden="true" className={`grid place-items-center w-12 h-12 shrink-0 rounded-lg font-heading font-bold ${lead ? "bg-brand-navy text-white" : "bg-brand-navy/5 text-brand-navy"}`}>{initials(person.name)}</span>
-    <div className="min-w-0">
-      <p className="font-heading text-lg font-bold leading-snug">{person.name}</p>
-      <p className="text-sm text-slate-500 mt-0.5">{person.role}</p>
+  return lead
+    ? <div className="flex items-center gap-5 rounded-xl bg-[#1d3557] text-white p-6 w-full max-w-md shadow-xl shadow-brand-navy/20">
+      <span aria-hidden="true" className="grid place-items-center w-14 h-14 shrink-0 rounded-lg bg-white/10 ring-1 ring-white/20 font-heading text-lg font-bold text-teal-aa-light">{initials(person.name)}</span>
+      <div className="min-w-0">
+        <p className="font-heading text-xl font-bold leading-snug text-white">{person.name}</p>
+        <p className="text-sm font-semibold uppercase tracking-wider text-teal-aa-light mt-1">{person.role}</p>
+      </div>
     </div>
-  </div>;
+    : <div className="flex items-center gap-4 h-full rounded-xl border border-slate-200 border-t-2 border-t-teal-aa bg-white p-5 shadow-sm">
+      <span aria-hidden="true" className="grid place-items-center w-12 h-12 shrink-0 rounded-lg bg-brand-navy/5 font-heading font-bold text-brand-navy">{initials(person.name)}</span>
+      <div className="min-w-0">
+        <p className="font-heading text-lg font-bold leading-snug">{person.name}</p>
+        <p className="text-sm text-slate-500 mt-0.5">{person.role}</p>
+      </div>
+    </div>;
 }
 
 /** The tagline and the four buttons on a navy band with a teal-to-orange top rule. */
@@ -511,7 +545,7 @@ function Split() {
 // ---------- The switcher ----------
 
 const VERSIONS = [
-  { id: "report", label: "Annual report", note: "A navy cover, oversized figures, the facts grouped into three areas, the directors as an organisation chart and every answer open.", Page: AnnualReport },
+  { id: "report", label: "Annual report", note: "A navy cover with a contents list, oversized figures, then three numbered chapters: the fact sheet, an organisation chart and every answer open.", Page: AnnualReport },
   { id: "executive", label: "Executive", note: "A gradient hero with its two main buttons and glass figure tiles, icon cards for the facts, ringed monograms and numbered questions.", Page: Executive },
   { id: "dossier", label: "Dossier", note: "A consultancy-style white page: large type, light figures, a sticky “On this page” index that follows your scroll, and a dossier request card.", Page: Dossier },
   { id: "split", label: "Split", note: "A navy panel with the heading and figures stays on the left while the facts, leadership, questions and buttons scroll on the right.", Page: Split },
