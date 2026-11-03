@@ -93,18 +93,34 @@ function ChapterHeading({ n, id, aside, children }: { n: number; id: string; asi
   );
 }
 
-function OrgCard({ person, lead }: { person: { name: string; role: string }; lead?: boolean }) {
+// The directors' photos, in the order the leadership fact lists them; all share one 4:5 head-and-shoulders crop.
+const LEADER_PHOTOS = [Images.people.leaderRadhakrishna, Images.people.leaderSharada, Images.people.leaderSneehaCropped, Images.people.leaderShankar];
+
+/** A director's 4:5 photo (the name is beside it, so it needs no text alternative), or their initials if there is none. */
+function Portrait({ name, photo, lead }: { name: string; photo?: string; lead?: boolean }) {
+  const size = lead ? "w-20 h-25" : "w-16 h-20";
+  if (!photo) {
+    return <span aria-hidden="true" className={`grid place-items-center ${size} shrink-0 rounded-lg font-heading font-bold ${lead ? "bg-white/10 ring-1 ring-white/20 text-lg text-teal-aa-light" : "bg-brand-navy/5 text-brand-navy"}`}>{initials(name)}</span>;
+  }
+  return (
+    <span className={`relative ${size} shrink-0 overflow-hidden rounded-lg ${lead ? "ring-2 ring-white/25" : "ring-1 ring-slate-200"}`}>
+      <Image src={photo} alt="" fill sizes={lead ? "80px" : "64px"} className="object-cover" />
+    </span>
+  );
+}
+
+function OrgCard({ person, photo, lead }: { person: { name: string; role: string }; photo?: string; lead?: boolean }) {
   return lead ? (
-    <div className={`flex items-center gap-5 rounded-xl ${navy} p-6 w-full max-w-md shadow-xl shadow-brand-navy/20`}>
-      <span aria-hidden="true" className="grid place-items-center w-14 h-14 shrink-0 rounded-lg bg-white/10 ring-1 ring-white/20 font-heading text-lg font-bold text-teal-aa-light">{initials(person.name)}</span>
+    <div className={`flex items-center gap-5 rounded-xl ${navy} p-5 md:p-6 w-full max-w-md shadow-xl shadow-brand-navy/20`}>
+      <Portrait name={person.name} photo={photo} lead />
       <div className="min-w-0">
         <p className="font-heading text-xl font-bold leading-snug text-white">{person.name}</p>
         <p className="text-sm font-semibold uppercase tracking-wider text-teal-aa-light mt-1">{person.role}</p>
       </div>
     </div>
   ) : (
-    <div className="flex items-center gap-4 h-full rounded-xl border border-slate-200 border-t-2 border-t-teal-aa bg-white p-5 shadow-sm">
-      <span aria-hidden="true" className="grid place-items-center w-12 h-12 shrink-0 rounded-lg bg-brand-navy/5 font-heading font-bold text-brand-navy">{initials(person.name)}</span>
+    <div className="flex items-center gap-4 h-full rounded-xl border border-slate-200 border-t-2 border-t-teal-aa bg-white p-4 md:p-5 shadow-sm">
+      <Portrait name={person.name} photo={photo} />
       <div className="min-w-0">
         <p className="font-heading text-lg font-bold leading-snug text-brand-navy">{person.name}</p>
         <p className="text-sm text-slate-500 mt-0.5">{person.role}</p>
@@ -248,15 +264,15 @@ export default function WhoWeArePage() {
             <ChapterHeading n={2} id="leadership-title" aside={t.boardLabel}>{leadership.label}</ChapterHeading>
             {people ? (
               <Reveal className="flex flex-col items-center mt-14">
-                {head && <OrgCard person={head} lead />}
+                {head && <OrgCard person={head} photo={LEADER_PHOTOS[0]} lead />}
                 {board.length > 0 && <>
                   <span aria-hidden="true" className="w-px h-10 bg-slate-300" />
                   <div className="relative w-full grid md:grid-cols-3 gap-4 md:gap-6 md:pt-10">
                     <span aria-hidden="true" className="hidden md:block absolute top-0 left-[calc((100%-3rem)/6)] right-[calc((100%-3rem)/6)] h-px bg-slate-300" />
-                    {board.map((person) => (
+                    {board.map((person, i) => (
                       <div key={person.name} className="relative">
                         <span aria-hidden="true" className="hidden md:block absolute -top-10 left-1/2 w-px h-10 bg-slate-300" />
-                        <OrgCard person={person} />
+                        <OrgCard person={person} photo={LEADER_PHOTOS[i + 1]} />
                       </div>
                     ))}
                   </div>
