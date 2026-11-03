@@ -7,7 +7,8 @@ import { useTheme } from "@/context/VariantContext";
 import { Images } from "@/lib/assets";
 import { useT } from "@/i18n/LocaleProvider";
 
-// Titles and descriptions are in the language file (home.awards.items), in this order.
+// Titles and descriptions are in the language file (home.awards.items), in this order. New awards go at the end
+// (previews pair these by position); the newest is shown first.
 const certificateFiles = [
   {
     file: "c-camp-logo.png",
@@ -29,6 +30,11 @@ const certificateFiles = [
     organization: "a-IDEA, ICAR-NAARM",
     year: "2020",
   },
+  {
+    file: "business-success-awards-2026.png",
+    organization: "Business Success Awards (Proficorn)",
+    year: "2026",
+  },
 ];
 
 const easeOut = [0.25, 0.1, 0, 1] as const;
@@ -37,7 +43,8 @@ export default function AwardsRecognition() {
   const [activeStep, setActiveStep] = useState(0);
   const { theme } = useTheme();
   const t = useT().home.awards;
-  const certificates = certificateFiles.map((c, i) => ({ ...c, ...t.items[i] }));
+  const listed = certificateFiles.map((c, i) => ({ ...c, ...t.items[i] }));
+  const certificates = [listed[listed.length - 1], ...listed.slice(0, -1)];
 
   useEffect(() => {
     const timer = setInterval(() => {

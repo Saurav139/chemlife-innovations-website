@@ -216,6 +216,10 @@ const en = {
           title: "a-IDEA NAARM Incubated Startup",
           description: "Incubated at a-IDEA, the Technology Business Incubator of ICAR-NAARM (National Academy of Agricultural Research Management) to scale sustainable agri-tech solutions.",
         },
+        {
+          title: "The Business Decacorn",
+          description: "Presented to our Chairman and Managing Director, Dr Radhakrishna PM, at the Business Success Awards 2026 for outstanding growth and success in business, in the spirit of value creation with values.",
+        },
       ],
     },
 

@@ -223,6 +223,7 @@ export const Images = {
   awards: {
     /** Returns the full path for a given awards filename */
     path: (filename: string) => `/images/awards/${filename}`,
+    businessSuccess2026: "/images/awards/business-success-awards-2026.png",
     ccamp: "/images/awards/c-camp-logo.png",
     animalHusbandry: "/images/awards/animal-husbandry.png",
     birac: "/images/awards/birac.png",
