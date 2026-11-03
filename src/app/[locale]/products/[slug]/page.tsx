@@ -4,6 +4,7 @@ import { DEFAULT_LOCALE, isLocale } from "@/i18n/config";
 import { getMessages } from "@/i18n/messages";
 import { PRODUCTS, productPath, slugify } from "@/lib/catalog";
 import { pageMetadata } from "@/lib/seo";
+import { jsonLd, productBreadcrumbs } from "@/lib/structuredData";
 import ProductView from "./ProductView";
 
 type Params = Promise<{ locale: string; slug: string }>;
@@ -34,7 +35,14 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
 }
 
 export default async function ProductPage({ params }: { params: Params }) {
-  const index = productIndex((await params).slug);
+  const { locale, slug } = await params;
+  const lang = isLocale(locale) ? locale : DEFAULT_LOCALE;
+  const index = productIndex(slug);
   if (index < 0) notFound();
-  return <ProductView index={index} />;
+  const product = PRODUCTS[index];
+  const crumbs = productBreadcrumbs(lang, await getMessages(lang), { name: product.name, path: productPath(product.name) });
+  return <>
+    <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(crumbs)} />
+    <ProductView index={index} />
+  </>;
 }
