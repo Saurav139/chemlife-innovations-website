@@ -4,7 +4,6 @@ import { useState, useEffect, useRef } from "react";
 import Image, { getImageProps } from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { useTheme } from "@/context/VariantContext";
 import { Images } from "@/lib/assets";
 import { useHref, useT } from "@/i18n/LocaleProvider";
 import { playOnPage, youtubeWatchUrl } from "@/lib/youtube";
@@ -78,8 +77,8 @@ function AnimatedCounter({ value, suffix }: { value: number; suffix: string }) {
   }, [value]);
 
   return (
-    <span ref={ref} className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold text-teal-400">
-      {count}{suffix}
+    <span ref={ref} className="font-heading text-3xl md:text-4xl lg:text-[2.75rem] font-bold leading-none tracking-tight text-white tabular-nums">
+      {count}<span className="text-teal-400">{suffix}</span>
     </span>
   );
 }
@@ -89,7 +88,6 @@ export default function HeroVariantA() {
   const [slide, setSlide] = useState(0);
   const [photo, setPhoto] = useState(0);
   const [storyOpen, setStoryOpen] = useState(false);
-  const { theme } = useTheme();
   const t = useT();
   const href = useHref();
   const taglines = t.home.taglines;
@@ -120,7 +118,9 @@ export default function HeroVariantA() {
 
   // min-h-svh: the screen height with the browser's toolbars showing, so on phones the stats aren't hidden under them.
   return (
-    <section className="relative min-h-svh flex items-center justify-center overflow-hidden bg-brand-navy">
+    <section className="relative min-h-svh flex flex-col overflow-hidden bg-brand-navy">
+      {/* The photo fills the area above the numbers' strip, so its people sit above the strip, not behind it. */}
+      <div className="relative flex-1 flex flex-col">
       {/* Deep Navy Backdrop Base */}
       <div className="absolute inset-0 bg-brand-navy z-0" />
 
@@ -148,7 +148,9 @@ export default function HeroVariantA() {
       <div className={`absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent z-20 transition-opacity duration-1000 motion-reduce:transition-none ${awardLayout ? "opacity-0" : "opacity-100"}`} />
       <div className="absolute inset-0 bg-black/10 z-20" />
 
-      <div className={`relative z-30 max-w-[1200px] mx-auto px-6 w-full min-h-svh flex flex-col justify-center ${awardLayout ? "pt-24 pb-28 md:pt-28 md:pb-32 lg:pt-36" : "pt-28 pb-28 md:py-32 lg:pt-40"}`}>
+      {/* The headline and actions fill the screen above the numbers' strip; the headline dots sit at its right. */}
+      <div className="relative z-30 flex-1 flex">
+      <div className={`max-w-[1200px] mx-auto px-6 w-full flex flex-col justify-center ${awardLayout ? "pt-24 pb-10 md:pt-28 md:pb-12 lg:pt-36" : "pt-28 pb-10 md:pt-32 md:pb-12 lg:pt-40"}`}>
         {/* w-full: without it, this box has no explicit width, so its auto side margins (for centering)
             stop it from stretching and it shrinks to fit whichever tagline is showing — moving and
             resizing the buttons below it from one slide to the next. */}
@@ -198,9 +200,9 @@ export default function HeroVariantA() {
               {t.home.watchStory}
             </a>
 
-            {/* Slide dots, centred under the buttons at every width (they used to sit on the right edge on desktop,
-                crowding the Rate Us tab). A 44px-tall tap area around each dot, at least 24px wide (WCAG 2.5.8), so the row stays compact. */}
-            <div className="flex mt-3 lg:mt-4">
+            {/* Phones: the headline dots, centred under the buttons (wider screens have them down the right side).
+                A 44px-tall tap area around each dot, at least 24px wide (WCAG 2.5.8), so the row stays compact. */}
+            <div className="flex mt-3 md:hidden">
               {taglines.map((_, i) => (
                 <button
                   key={i}
@@ -216,18 +218,41 @@ export default function HeroVariantA() {
           </div>
         </div>
 
-        {/* Serial Embedded Company Stats */}
-        <div className="w-full mt-12 md:mt-24 md:pt-12 grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-8 md:gap-8">
-          {stats.map((stat, idx) => (
-            <div key={idx} className="flex flex-col items-center justify-center text-center">
-              <AnimatedCounter value={stat.value} suffix={stat.suffix} />
-              <span className="text-white/70 text-xs md:text-sm font-semibold uppercase tracking-wider md:tracking-widest mt-2 md:mt-3">{t.home.stats[idx]}</span>
-            </div>
+      </div>
+
+        {/* Tablets and wider: the headline dots in a column down the right side, set in from the edge so they clear
+            the Rate Us tab. A 44px-wide tap area around each dot, at least 24px tall. */}
+        <div className="hidden md:flex flex-col absolute right-14 lg:right-16 top-1/2 -translate-y-1/2 py-1 rounded-full bg-black/30 backdrop-blur-sm" role="group" aria-label={t.home.goToSlide}>
+          {taglines.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setSlide(i)}
+              className="px-[18px] py-2 flex items-center justify-center cursor-pointer"
+              aria-label={`${t.home.goToSlide} ${i + 1}`}
+              aria-current={i === slide ? "true" : undefined}
+            >
+              <span className={`w-2 rounded-full transition-all duration-300 ${i === slide ? "h-6 bg-teal-400" : "h-2 bg-white/60"}`} />
+            </button>
           ))}
         </div>
       </div>
 
-      <div className={`absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t ${theme.heroBottomGradient} to-transparent`} />
+      </div>
+
+      {/* The numbers on a strip of their own, so they never sit on top of the photo's people or scenery. */}
+      {/* Deep navy with a fine teal line along the top, white figures and small spaced labels, and hairline
+          dividers between the figures (between pairs on phones). */}
+      <div className="relative z-30 bg-gradient-to-b from-[#16294a] to-[#0d1b33]">
+        <div aria-hidden="true" className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-teal-400/70 to-transparent" />
+        <dl className="max-w-[1100px] mx-auto px-6 py-5 md:py-7 grid grid-cols-2 md:grid-cols-4 gap-y-5 md:divide-x divide-white/10">
+          {stats.map((stat, idx) => (
+            <div key={idx} className={`flex flex-col-reverse items-center justify-center text-center px-2 ${idx % 2 === 1 ? "max-md:border-l max-md:border-white/10" : ""}`}>
+              <dt className="text-white/60 text-[10px] md:text-[11px] font-semibold uppercase tracking-[0.18em] md:tracking-[0.22em] mt-2">{t.home.stats[idx]}</dt>
+              <dd><AnimatedCounter value={stat.value} suffix={stat.suffix} /></dd>
+            </div>
+          ))}
+        </dl>
+      </div>
 
       {/* Story video plays on the page, with the hero actions underneath */}
       <AnimatePresence>
