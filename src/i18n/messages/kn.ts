@@ -112,6 +112,9 @@ const kn: Messages = {
 
     whoWeAre: {
       kicker: "ನಾವು ಯಾರು",
+      // The homepage section's small label and heading.
+      homeKicker: "ತಿಳಿಯಿರಿ",
+      homeTitle: "ನಾವು ಯಾರು",
       // The Who We Are page (/who-we-are): the homepage button to it, and its two section headings.
       moreAboutUs: "ನಮ್ಮ ಬಗ್ಗೆ ಇನ್ನಷ್ಟು ತಿಳಿಯಿರಿ",
       factsTitle: "ಒಂದು ನೋಟದಲ್ಲಿ",
