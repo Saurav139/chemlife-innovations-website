@@ -45,6 +45,9 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  // Build with at most 4 workers. Next starts one per CPU less one, and Hostinger's build machine reports ~57 CPUs:
+  // 56 workers ran it out of memory while generating static pages (SIGABRT, 4 Nov 2026).
+  experimental: { cpus: 4 },
   images: {
     // Cache resized images for 30 days (default 4 hours). File names don't change when an image does,
     // so save a replacement under a new name in src/lib/assets.ts.
