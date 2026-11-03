@@ -12,7 +12,7 @@ import { useT } from "@/i18n/LocaleProvider";
 
 const testimonials = [
   {
-    quote: "We are pleased to share that we have collaborated with Chemlife Innovations since 2018 on technology development and novel product manufacturing. Using their proprietary multi-layer microencapsulation technology, we have introduced a novel functionalized feed ingredient for dairy. We are very satisfied with both the product quality and their service support.",
+    quote: "We are pleased to share that we have collaborated with Chemlife Innovations since 2018 on technology development and novel product manufacturing. Using their proprietary multi-layer microencapsulation technology, we have introduced a novel functionalized feed ingredient for dairy. We value both the product quality and their service support.",
     name: "Akmal Reyaz",
     role: "Business Head – Dairy & Aqua",
     company: "Huvepharma Sea (Pune) Private Limited",
@@ -20,7 +20,7 @@ const testimonials = [
     logo: Images.testimonials.huve,
   },
   {
-    quote: "We are associated with M/S Chemlife Innovations Pvt Ltd at # 18, KIADB Industrial Area, 3rd Phase, Obadenahalli, Doddaballapur, Bengaluru Rural District for last 2 years. Chemlife is our Technology partner and Product developer in the field of mold inhibition and toxin management using innovative technology for animal health. We are highly satisfied with the quality of Chemlife's Products and Technologies.",
+    quote: "Chemlife is our Technology partner and Product developer in the field of mold inhibition and toxin management using innovative technology for animal health. We are highly satisfied with the quality of Chemlife's Products and Technologies.",
     name: "Dr Manjunatha B P",
     role: "Chief Executive Officer",
     company: "GROEXL Vet Private Limited",
@@ -28,7 +28,7 @@ const testimonials = [
     logo: Images.testimonials.groxel,
   },
   {
-    quote: "We are happy to inform, that we have collaboration arrangement with Chemlife Innovations Private Limited, since 2016 and continuing to have technology developer & novel product manufacturing understanding with them. We have been able to launch PromoGen (Natural Growth promoter for poultry) and SlimEat (Lean meat inducer for swine) for export market and Bio-trace minerals for poultry for domestic market specifically with the support of Chemlife Innovations using their ANBioT technology. We are pleased with quality and service/support of ChemLife Innovation.",
+    quote: "We are pleased to share that we have collaborated with Chemlife Innovations Private Limited since 2016 on technology development and novel product manufacturing. Using their ANBioT technology, we have launched PromoGen (natural growth promoter for poultry) and SlimEat (lean meat inducer for swine) for the export market, and Bio-trace minerals for poultry for the domestic market. We value both the product quality and their service support.",
     name: "Lakshmikanth Yadav",
     role: "Managing Director",
     company: "Quadragen VetHealth Private Limited",
