@@ -117,7 +117,7 @@ export default function HeroVariantA() {
   }, [slide, taglines.length]);
 
   // While the numbers' strip is behind the floating search and chat buttons (at the bottom of the screen on arrival),
-  // they rise to sit just above it instead of covering the figures; once it scrolls past, they settle back.
+  // they sit centred on it, at its two ends, beside the figures; once it scrolls past, they settle back.
   const stripRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const strip = stripRef.current;
@@ -130,10 +130,11 @@ export default function HeroVariantA() {
       const { top, bottom } = strip.getBoundingClientRect();
       const view = window.innerHeight;
       // The buttons' band, up from the bottom of the screen: 16px (24px from tablets up) below a 60px (72px) bubble.
+      // While the strip is in that band, the buttons are centred on the strip (which leaves room for them at its ends).
       const gap = wide.matches ? 24 : 16;
       const tallest = wide.matches ? 72 : 60;
       const behind = top < view - gap && bottom > view - gap - tallest;
-      root.style.setProperty("--float-lift", `${behind ? Math.round(view - gap - top + 12) : 0}px`);
+      root.style.setProperty("--float-lift", `${behind ? Math.round(view - gap - tallest / 2 - (top + bottom) / 2) : 0}px`);
     };
     const schedule = () => { if (!frame) frame = requestAnimationFrame(update); };
     update();
@@ -275,14 +276,17 @@ export default function HeroVariantA() {
           dividers between the figures (between pairs on phones). */}
       <div ref={stripRef} className="relative z-30 bg-gradient-to-b from-[#16294a] to-[#0d1b33]">
         <div aria-hidden="true" className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-teal-400/70 to-transparent" />
-        <dl className="max-w-[1100px] mx-auto px-6 py-3 md:py-4 grid grid-cols-2 md:grid-cols-4 gap-y-3 md:divide-x divide-white/10">
+        {/* Room at the ends for the floating search button (left) and chat bubble (right), which sit on the strip. */}
+        <div className="pl-[72px] pr-[84px] md:pl-[88px] md:pr-[312px]">
+        <dl className="max-w-[1000px] mx-auto py-3 md:py-4 grid grid-cols-2 lg:grid-cols-4 gap-y-3 lg:divide-x divide-white/10">
           {stats.map((stat, idx) => (
-            <div key={idx} className={`flex flex-col-reverse items-center justify-center text-center px-2 ${idx % 2 === 1 ? "max-md:border-l max-md:border-white/10" : ""}`}>
-              <dt className="text-white/60 text-[10px] md:text-[11px] font-semibold uppercase tracking-[0.18em] md:tracking-[0.22em] mt-1.5">{t.home.stats[idx]}</dt>
+            <div key={idx} className={`flex flex-col-reverse items-center justify-center text-center px-2 ${idx % 2 === 1 ? "max-lg:border-l max-lg:border-white/10" : ""}`}>
+              <dt className="text-white/60 text-[10px] md:text-[11px] font-semibold uppercase tracking-[0.08em] md:tracking-[0.22em] mt-1.5">{t.home.stats[idx]}</dt>
               <dd><AnimatedCounter value={stat.value} suffix={stat.suffix} /></dd>
             </div>
           ))}
         </dl>
+        </div>
       </div>
 
       {/* Story video plays on the page, with the hero actions underneath */}
