@@ -22,7 +22,7 @@ const easeOut = [0.25, 0.1, 0, 1] as const;
 const FEATURED_IMAGE_SIZES = "(min-width: 1024px) 282px, (min-width: 640px) 40vw, calc(100vw - 114px)";
 
 // The grid shows this many cards at first, and this many more each time "Load more" is pressed.
-const PAGE_SIZE = 6;
+const PAGE_SIZE = 9;
 
 const READER_IMAGE_SIZES = "(min-width: 800px) 702px, calc(100vw - 82px)";
 
