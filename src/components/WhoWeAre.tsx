@@ -167,25 +167,6 @@ function Reveal({ children, delay = 0, className }: { children: React.ReactNode;
   );
 }
 
-/** The four questions, one open at a time (the first to start with). Native disclosure boxes, so every answer is in
- *  the page for search and answer engines even while closed, and they work without JavaScript. */
-function Questions({ className = "" }: { className?: string }) {
-  const faq = useT().home.whoWeAre.faq;
-  return (
-    <div className={`${className} divide-y divide-slate-200 border-y border-slate-200`}>
-      {faq.map((item, i) => (
-        <details key={item.q} name="who-we-are-questions" open={i === 0} className="group">
-          <summary className="flex items-center justify-between gap-6 py-5 cursor-pointer list-none [&::-webkit-details-marker]:hidden font-heading text-lg md:text-xl font-bold text-brand-navy hover:text-brand-orange-aa">
-            <h3>{item.q}</h3>
-            <span aria-hidden="true" className="grid place-items-center w-9 h-9 rounded-full shrink-0 text-xl bg-slate-100 text-brand-orange-aa transition-transform group-open:rotate-45">+</span>
-          </summary>
-          <p className="pb-6 pr-12 leading-relaxed text-slate-600">{item.a}</p>
-        </details>
-      ))}
-    </div>
-  );
-}
-
 export default function WhoWeAre() {
   const messages = useT();
   const t = messages.home.whoWeAre;
@@ -214,7 +195,7 @@ export default function WhoWeAre() {
   return (
     <section aria-labelledby="who-we-are-title" className="bg-white py-20 md:py-32 overflow-hidden border-b border-gray-100">
       <div className="max-w-[1200px] mx-auto px-6">
-        {/* Who we are, told in order: who (beside the founders' photo), then the questions. */}
+        {/* Who we are: the introduction beside the founders' photo, then the tagline and the four buttons. */}
         <div className="grid lg:grid-cols-12 gap-12 items-center">
           <Reveal className="lg:col-span-6">
             <span className="text-teal-aa text-sm lg:text-base font-semibold tracking-widest uppercase">{t.kicker}</span>
@@ -228,8 +209,8 @@ export default function WhoWeAre() {
           </Reveal>
         </div>
 
-        <div className="grid lg:grid-cols-12 gap-10 mt-20">
-          <div className="lg:col-span-4">
+        <div className="mt-16 md:mt-20">
+          <div>
             <p className="font-heading text-2xl md:text-3xl font-bold text-brand-orange-aa">{t.tagline}</p>
             <div className="flex flex-wrap gap-3 mt-8">
               {actions.map((action) => (
@@ -248,7 +229,6 @@ export default function WhoWeAre() {
               ))}
             </div>
           </div>
-          <Questions className="lg:col-span-8" />
         </div>
 
         {/* What we serve: the three species groups */}
