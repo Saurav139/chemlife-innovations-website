@@ -200,6 +200,8 @@ export default function WhoWeArePage() {
             <div className="lg:col-span-8 lg:border-l lg:border-slate-200 lg:pl-10">
               <p className={`${eyebrow} text-slate-500`}>{t.proofRecognised}</p>
               <ul className="flex flex-wrap items-center gap-x-6 gap-y-4 mt-4">
+                {/* FAMI-QS first, as the certification; "FAMI-QS certified" is its text alternative. */}
+                <li className="relative h-14 w-28 md:h-16 md:w-32"><Image src={Images.awards.famiQs} alt={t.famiQs} fill sizes="128px" className="object-contain" /></li>
                 {RECOGNITION_LOGOS.map((logo) => (
                   <li key={logo.name} className="relative h-14 w-28 md:h-16 md:w-32"><Image src={logo.src} alt={logo.name} fill sizes="128px" className="object-contain" /></li>
                 ))}
