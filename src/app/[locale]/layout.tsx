@@ -12,6 +12,7 @@ import { SITE_URL, pageMetadata } from "@/lib/seo";
 import { LOCALES, isLocale } from "@/i18n/config";
 import { getMessages } from "@/i18n/messages";
 import { LocaleProvider } from "@/i18n/LocaleProvider";
+import { jsonLd, siteGraph } from "@/lib/structuredData";
 
 
 export const dynamicParams = false;
@@ -65,6 +66,8 @@ export default async function RootLayout({
         `}</style>
       </head>
       <body>
+        {/* The company and the website, as structured data for search and answer engines. */}
+        <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(siteGraph(locale, messages))} />
         <LocaleProvider locale={locale} messages={messages}>
           <SkipLink />
           {children}

@@ -7,6 +7,7 @@ import Footer from "@/components/Footer";
 import { VariantProvider } from "@/context/VariantContext";
 import { useHref, useT } from "@/i18n/LocaleProvider";
 import { Images } from "@/lib/assets";
+import { jsonLd } from "@/lib/structuredData";
 
 // Who We Are in full, from the homepage's "More about who we are" button, set out like an annual report: a navy
 // cover with a contents list, the headline figures, a strip of partners and recognition, then three numbered
@@ -327,7 +328,7 @@ export default function WhoWeArePage() {
           </div>
         </section>
 
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqData).replace(/</g, "\\u003c") }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(faqData)} />
       </main>
 
       <Footer />
