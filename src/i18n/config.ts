@@ -15,7 +15,7 @@ export const LOCALE_NAMES: Record<Locale, string> = { en: "English", kn: "ಕನ
 export const OG_LOCALES: Record<Locale, string> = { en: "en_IN", kn: "kn_IN", hi: "hi_IN" };
 
 /** Pages that exist in every language. The rest (Insights, Privacy, Terms, chat) are English only for now. */
-export const TRANSLATED_PATHS = ["/", "/about", "/products", "/research", "/careers", "/contact"];
+export const TRANSLATED_PATHS = ["/", "/about", "/who-we-are", "/products", "/research", "/careers", "/contact"];
 
 /** Whether a page exists in every language: the pages above, and each product's own page (/products/maxdmold). */
 export function isTranslatedPath(path: string): boolean {

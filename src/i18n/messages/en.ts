@@ -34,6 +34,11 @@ const en = {
       description:
         "Ask ChemLife Innovations about our feed additives or a distribution partnership. Visit us at KIADB Industrial Area, Doddaballapura, Bengaluru.",
     },
+    whoWeAre: {
+      title: "Who We Are",
+      description:
+        "ChemLife Innovations at a glance: what we make, the species we serve, our core technologies, flagship ranges, certification, partners, manufacturing and leadership.",
+    },
   },
 
   nav: {
@@ -106,6 +111,10 @@ const en = {
 
     whoWeAre: {
       kicker: "Who we are",
+      // The Who We Are page (/who-we-are): the homepage button to it, and its two section headings.
+      moreAboutUs: "More about who we are",
+      factsTitle: "At a glance",
+      faqTitle: "Questions, answered",
       title: "Functional feed-additive biotechnology from Bengaluru",
       tagline: "Nature-driven science. Proof in every kilo.",
       intro: "ChemLife Innovations is a Bengaluru-based manufacturer of functional feed additives and nutraceuticals for poultry, dairy cattle and swine. Its products pair Ayurvedic plant wisdom with proprietary technologies: ANBioT bio-transformation, green synthesis and microencapsulation. The work is supported by the Technology Development Board, Government of India.",
