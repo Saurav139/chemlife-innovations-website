@@ -94,12 +94,7 @@ const en = {
       ["Protected Bio-Actives", "Bioavailable at the Site", "of Absorption"],
       ["Green Trace Mineral", "Chelation & Nano", "Technologies"],
     ],
-    slideAlts: [
-      "Free range chicken farm",
-      "Dairy cattle farm",
-      "Cow with her calf in a green pasture",
-      "Chick drinking from a poultry drinker",
-    ],
+    heroAlt: "ChemLife's founders accepting an award on stage",
     findProduct: "Find the right product",
     talkToNutritionist: "Talk to a nutritionist",
     watchStory: "Watch our story",
