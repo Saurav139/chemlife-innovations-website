@@ -64,6 +64,8 @@ export default function WhoWeArePage() {
   const facts = t.facts.slice(0, -1);
   const leadership = t.facts[t.facts.length - 1];
   const people = directors(leadership.value);
+  // The opening keeps the introduction's first sentence; the rest (technologies, government support) is in the facts.
+  const lead = t.intro.split(/(?<=[.।])\s+/)[0];
   // The questions as FAQ structured data, for search and answer engines.
   const faqData = {
     "@context": "https://schema.org",
@@ -76,17 +78,18 @@ export default function WhoWeArePage() {
       <Header />
 
       <main id="main" tabIndex={-1} className="bg-white min-h-screen text-brand-navy">
-        {/* Opening: on a warm paper ground, the introduction and the headline figures beside the founders' photo. */}
-        <section className="bg-[#f6f4ef] pt-28 md:pt-36 lg:pt-44 pb-20 md:pb-28">
-          <div className="max-w-[1200px] mx-auto px-6 grid lg:grid-cols-12 gap-14 lg:gap-16 items-center">
+        {/* Opening, kept short: on a warm paper ground, the heading, one lead sentence and the headline figures beside
+            the founders' photo. */}
+        <section className="bg-[#f6f4ef] pt-28 md:pt-32 lg:pt-36 pb-14 md:pb-20">
+          <div className="max-w-[1200px] mx-auto px-6 grid lg:grid-cols-12 gap-10 lg:gap-16 items-center">
             <Reveal className="lg:col-span-7">
               <span className={sectionLabel}>
                 <span aria-hidden="true" className="w-10 h-px bg-teal-aa" />
                 {t.kicker}
               </span>
-              <h1 className="font-heading text-4xl md:text-5xl lg:text-[3.75rem] font-bold leading-[1.06] tracking-tight text-brand-navy mt-6">{t.title}</h1>
-              <p className="text-lg md:text-xl text-slate-600 leading-relaxed mt-8 max-w-2xl">{t.intro}</p>
-              <dl className="grid grid-cols-2 sm:grid-cols-4 gap-y-6 mt-12 pt-8 border-t border-brand-navy/15">
+              <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold leading-tight tracking-tight text-brand-navy mt-5">{t.title}</h1>
+              <p className="text-lg md:text-xl text-slate-600 leading-relaxed mt-5 max-w-xl">{lead}</p>
+              <dl className="grid grid-cols-2 sm:grid-cols-4 gap-y-5 mt-8 pt-6 border-t border-brand-navy/15">
                 {FIGURES.map((figure, i) => (
                   <div key={figure} className={`flex flex-col-reverse ${i > 0 ? "sm:border-l sm:border-brand-navy/15 sm:pl-6" : ""} ${i % 2 === 1 ? "max-sm:border-l max-sm:border-brand-navy/15 max-sm:pl-6" : ""}`}>
                     <dt className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500 mt-2">{messages.home.stats[i]}</dt>
@@ -101,7 +104,7 @@ export default function WhoWeArePage() {
               {/* The photo in an offset frame. */}
               <div className="relative">
                 <div aria-hidden="true" className="absolute -inset-0 translate-x-4 translate-y-4 md:translate-x-6 md:translate-y-6 rounded-[2rem] border border-brand-navy/20" />
-                <div className="relative aspect-[4/3] lg:aspect-[4/5] rounded-[2rem] overflow-hidden shadow-xl shadow-brand-navy/10">
+                <div className="relative aspect-[4/3] rounded-[2rem] overflow-hidden shadow-xl shadow-brand-navy/10">
                   <Image src={Images.people.foundersNew} alt={messages.about.foundersAlt} fill priority sizes="(min-width: 1024px) 440px, 100vw" className="object-cover" />
                 </div>
               </div>
@@ -110,7 +113,7 @@ export default function WhoWeArePage() {
         </section>
 
         {/* At a glance: the heading stays beside the numbered facts as they pass. */}
-        <section aria-labelledby="facts-title" className="py-24 md:py-32">
+        <section aria-labelledby="facts-title" className="py-20 md:py-24">
           <div className="max-w-[1200px] mx-auto px-6 grid lg:grid-cols-12 gap-10 lg:gap-16">
             <div className="lg:col-span-4">
               <div className="lg:sticky lg:top-32">
@@ -131,7 +134,7 @@ export default function WhoWeArePage() {
         </section>
 
         {/* Leadership: the four directors, then their combined experience as a pull quote. */}
-        <section aria-labelledby="leadership-title" className="bg-[#f6f4ef] py-24 md:py-32">
+        <section aria-labelledby="leadership-title" className="bg-[#f6f4ef] py-20 md:py-24">
           <div className="max-w-[1200px] mx-auto px-6">
             <span className={sectionLabel}><span aria-hidden="true" className="w-10 h-px bg-teal-aa" />{leadership.label}</span>
             <h2 id="leadership-title" className="sr-only">{leadership.label}</h2>
@@ -162,7 +165,7 @@ export default function WhoWeArePage() {
         </section>
 
         {/* Questions: the heading stays beside the answers as they pass. */}
-        <section aria-labelledby="faq-title" className="py-24 md:py-32">
+        <section aria-labelledby="faq-title" className="py-20 md:py-24">
           <div className="max-w-[1200px] mx-auto px-6 grid lg:grid-cols-12 gap-10 lg:gap-16">
             <div className="lg:col-span-4">
               <div className="lg:sticky lg:top-32">
@@ -188,7 +191,7 @@ export default function WhoWeArePage() {
         </section>
 
         {/* Closing: the tagline and the four buttons on a navy panel. */}
-        <section className="pb-24 md:pb-32">
+        <section className="pb-20 md:pb-24">
           <div className="max-w-[1200px] mx-auto px-6">
             <Reveal>
               <div className="relative overflow-hidden rounded-[2rem] bg-brand-navy px-8 py-14 md:px-16 md:py-20 text-center">
