@@ -124,14 +124,16 @@ export default function HeroVariantA() {
     if (!strip) return;
     const root = document.documentElement;
     const wide = window.matchMedia("(min-width: 768px)");
+    const laptop = window.matchMedia("(min-width: 1024px)");
     let frame = 0;
     const update = () => {
       frame = 0;
       const { top, bottom } = strip.getBoundingClientRect();
       const view = window.innerHeight;
-      // The buttons' band, up from the bottom of the screen: 16px (24px from tablets up) below a 60px (72px) bubble.
+      // The buttons' band, up from the bottom of the screen: 16px (24px from tablets up) below a 60px bubble (72px
+      // from laptops up).
       const gap = wide.matches ? 24 : 16;
-      const tallest = wide.matches ? 72 : 60;
+      const tallest = laptop.matches ? 72 : 60;
       const behind = top < view - gap && bottom > view - gap - tallest;
       root.style.setProperty("--float-lift", `${behind ? Math.round(view - gap - tallest / 2 - (top + bottom) / 2) : 0}px`);
     };
@@ -271,13 +273,14 @@ export default function HeroVariantA() {
       </div>
 
       {/* The numbers on a light strip along the bottom of the hero, below the photo, so they never blend into it: navy
-          figures with a teal "+", small grey labels and hairline dividers (between pairs on phones and tablets). Room at
-          its ends for the floating search button (left) and chat bubble (right), which sit on it on arrival. */}
+          figures with a teal "+", small grey labels and hairline dividers (between pairs below 1280px). The same room at
+          both ends, as wide as the chat bubble (on the right) needs, keeps the figures centred on the page; the floating
+          search button (left) and chat bubble sit there on arrival. */}
       <div ref={stripRef} className="relative z-30 bg-white/95 backdrop-blur-md shadow-[0_-10px_30px_rgba(0,0,0,0.18)]">
-        <div className="pl-[72px] pr-[84px] md:pl-[88px] md:pr-[312px]">
-          <dl className="max-w-[1000px] mx-auto py-3 md:py-4 grid grid-cols-2 lg:grid-cols-4 gap-y-3 lg:divide-x divide-slate-200">
+        <div className="px-[104px] md:px-[116px] lg:px-[312px]">
+          <dl className="max-w-[1000px] mx-auto py-3 md:py-4 grid grid-cols-2 xl:grid-cols-4 gap-y-3 xl:divide-x divide-slate-200">
             {stats.map((stat, idx) => (
-              <div key={idx} className={`flex flex-col-reverse items-center justify-center text-center px-2 ${idx % 2 === 1 ? "max-lg:border-l max-lg:border-slate-200" : ""}`}>
+              <div key={idx} className={`flex flex-col-reverse items-center justify-center text-center px-2 ${idx % 2 === 1 ? "max-xl:border-l max-xl:border-slate-200" : ""}`}>
                 <dt className="text-slate-500 text-[10px] md:text-[11px] font-semibold uppercase tracking-[0.08em] md:tracking-[0.22em] mt-1.5">{t.home.stats[idx]}</dt>
                 <dd><AnimatedCounter value={stat.value} suffix={stat.suffix} /></dd>
               </div>
