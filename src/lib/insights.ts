@@ -1,7 +1,7 @@
 import { Images } from "@/lib/assets";
 import { approvedInsights, storeConfigured } from "@/lib/insights-store/db";
 import { fetchYouTubeUploads } from "@/lib/insights-store/sources";
-import { displayDate } from "@/lib/insights-store/text";
+import { displayDate, linkedinActivityId } from "@/lib/insights-store/text";
 
 export interface InsightItem {
   type: "Blog" | "Podcast" | "Video";
@@ -357,12 +357,23 @@ export async function getInsights(): Promise<Insights> {
   if (storeConfigured()) {
     try {
       const approved = await approvedInsights();
-      if (approved) return approved;
+      if (approved) return { ...approved, blogs: withKnownPlayers(approved.blogs) };
     } catch (error) {
       console.warn("Insights inbox unavailable, showing the built-in list", error);
     }
   }
   return builtInInsights();
+}
+
+/** Posts saved in the inbox before LinkedIn videos were recognised still get the player the built-in list knows for
+ *  them, matched by the post's number, until the inbox's own check has saved one. */
+function withKnownPlayers(blogs: InsightItem[]): InsightItem[] {
+  const known = new Map(FALLBACK_INSIGHTS.blogs.filter((item) => item.videoUrl && item.linkUrl).map((item) => [linkedinActivityId(item.linkUrl!), item.videoUrl!]));
+  return blogs.map((item) => {
+    const activity = !item.videoUrl && item.linkUrl ? linkedinActivityId(item.linkUrl) : null;
+    const videoUrl = activity ? known.get(activity) : undefined;
+    return videoUrl ? { ...item, videoUrl } : item;
+  });
 }
 
 async function builtInInsights(): Promise<Insights> {

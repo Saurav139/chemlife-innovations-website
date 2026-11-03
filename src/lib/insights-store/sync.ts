@@ -6,7 +6,7 @@ import type { SocialAutoPublish } from "./social-publishing";
 import { fetchInstagramFeed, fetchLinkedInFeed } from "./feed";
 import { copyImage, fetchFeedText, linkedinVideoUrl } from "./preview";
 import { fetchInstagramPosts, fetchWordPressPosts, fetchYouTubeUploads, renewInstagramToken } from "./sources";
-import { articleSummary, cleanTitle, instagramPostId, isFromArticle, linkedinActivityId, normalizeUrl } from "./text";
+import { articleSummary, cleanTitle, instagramEmbedUrl, instagramPostId, instagramReelCode, isFromArticle, linkedinActivityId, normalizeUrl } from "./text";
 import type { ItemChanges, Source, SourceItem, SourceState, SyncResult } from "./types";
 
 // Checking the channels for new posts. New posts wait in the inbox for the moderator, except on the very first
@@ -101,6 +101,7 @@ export async function startInbox(): Promise<boolean> {
   if (await getSetting("started")) {
     await repairBlogText();
     await findLinkedInVideos();
+    await findInstagramReels();
     return false;
   }
   await addItems(builtInItems(), "approved");
@@ -108,6 +109,7 @@ export async function startInbox(): Promise<boolean> {
   // A new inbox imports blog posts with today's text already.
   await setSetting(BLOG_TEXT_REPAIRED, new Date().toISOString());
   await findLinkedInVideos();
+  await findInstagramReels();
   return true;
 }
 
@@ -145,16 +147,32 @@ const LINKEDIN_VIDEOS_FOUND = "repaired:linkedin-videos";
 async function findLinkedInVideos(): Promise<void> {
   if (await getSetting(LINKEDIN_VIDEOS_FOUND)) return;
   let complete = true;
+  // The built-in list already knows its own video posts.
+  const known = new Map(builtInItems().filter((item) => item.videoUrl).map((item) => [item.externalId, item.videoUrl!]));
   for (const item of await listItems()) {
     if (item.source !== "linkedin" || item.videoUrl || !item.url) continue;
     try {
-      const videoUrl = await linkedinVideoUrl(item.url);
+      const videoUrl = known.get(item.externalId) ?? await linkedinVideoUrl(item.url);
       if (videoUrl) await changeItem(item.id, { videoUrl });
     } catch {
       complete = false;
     }
   }
   if (complete) await setSetting(LINKEDIN_VIDEOS_FOUND, new Date().toISOString());
+}
+
+const INSTAGRAM_REELS_FOUND = "repaired:instagram-reels";
+
+/** Once, for Instagram posts added before reels got a player (November 2026): a reel is told by its address, or by
+ *  the importer having called it a reel (Instagram's API says which posts are videos). */
+async function findInstagramReels(): Promise<void> {
+  if (await getSetting(INSTAGRAM_REELS_FOUND)) return;
+  for (const item of await listItems()) {
+    if (item.source !== "instagram" || item.videoUrl || !item.url) continue;
+    const code = instagramReelCode(item.url) ?? (item.meta === "Instagram reel" ? instagramPostId(item.url) : null);
+    if (code) await changeItem(item.id, { videoUrl: instagramEmbedUrl(code) });
+  }
+  await setSetting(INSTAGRAM_REELS_FOUND, new Date().toISOString());
 }
 
 function builtInItem(item: InsightItem): SourceItem {

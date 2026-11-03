@@ -1,4 +1,4 @@
-import { linkedinEmbedUrl } from "@/lib/insights-store/text";
+import { instagramEmbedUrl, linkedinEmbedUrl } from "@/lib/insights-store/text";
 import { KINDS, SOURCES, STATUSES, type ItemChanges, type Kind, type Source, type SourceItem, type Status } from "@/lib/insights-store/types";
 
 // Checks what the dashboard sends before it reaches the database.
@@ -16,11 +16,19 @@ const webAddress = (value: unknown): string | undefined => {
   }
 };
 
-// A LinkedIn video's player goes into a frame on the page, so only LinkedIn's own embed address is kept, rebuilt
-// from the post's number.
-const linkedinPlayer = (value: unknown): string | undefined => {
-  const activity = typeof value === "string" ? value.match(/^https:\/\/www\.linkedin\.com\/embed\/feed\/update\/urn:li:activity:(\d{19})(?:\?compact=true)?$/)?.[1] : undefined;
-  return activity ? linkedinEmbedUrl(activity) : undefined;
+// A video's player goes into a frame on the page, so only LinkedIn's or Instagram's own embed address is kept,
+// rebuilt from the post's number or shortcode.
+const player = (source: Source, value: unknown): string | undefined => {
+  if (typeof value !== "string") return undefined;
+  if (source === "linkedin") {
+    const activity = value.match(/^https:\/\/www\.linkedin\.com\/embed\/feed\/update\/urn:li:activity:(\d{19})(?:\?compact=true)?$/)?.[1];
+    return activity ? linkedinEmbedUrl(activity) : undefined;
+  }
+  if (source === "instagram") {
+    const code = value.match(/^https:\/\/www\.instagram\.com\/(?:p|reel)\/([\w-]{5,40})\/embed\/?$/)?.[1];
+    return code ? instagramEmbedUrl(code) : undefined;
+  }
+  return undefined;
 };
 
 const picture = (value: unknown): string | undefined =>
@@ -77,7 +85,7 @@ export function parseNewItem(body: Record<string, unknown>): SourceItem | string
     imageUrl: picture(body.imageUrl),
     imageId: Number(body.imageId) || undefined,
     youtubeId,
-    videoUrl: source === "linkedin" ? linkedinPlayer(body.videoUrl) : undefined,
+    videoUrl: player(source, body.videoUrl),
     meta: text(body.meta, 60) ?? "",
     publishedAt: Number.isNaN(publishedAt.getTime()) ? new Date() : publishedAt,
   };
