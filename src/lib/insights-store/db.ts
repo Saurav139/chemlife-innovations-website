@@ -1,7 +1,7 @@
 import mysql, { type Pool, type PoolConnection, type ResultSetHeader, type RowDataPacket } from "mysql2/promise";
 import type { Insights } from "@/lib/insights";
 import { insightCard } from "./card";
-import { importedStatus, isSocialSource, LEGACY_SOCIAL_AUTO_PUBLISH_SETTING, SOCIAL_AUTO_PUBLISH_SETTINGS, type SocialAutoPublish, type SocialSource } from "./social-publishing";
+import { importedStatus, inheritsLegacySetting, isSocialSource, LEGACY_SOCIAL_AUTO_PUBLISH_SETTING, SOCIAL_AUTO_PUBLISH_SETTINGS, SOCIAL_SOURCES, type SocialAutoPublish, type SocialSource } from "./social-publishing";
 import type { InboxItem, ItemChanges, Kind, Source, SourceItem, Status } from "./types";
 
 // The inbox's MySQL tables. DATABASE_URL points at the database, e.g. mysql://user:password@host:3306/name (a
@@ -134,12 +134,13 @@ export async function setSetting(name: string, value: string): Promise<void> {
 export async function socialAutoPublishEnabled(source: SocialSource): Promise<boolean> {
   // Keep the old combined preference until this channel gets its own explicit choice.
   const saved = await getSetting(SOCIAL_AUTO_PUBLISH_SETTINGS[source]);
-  return (saved ?? await getSetting(LEGACY_SOCIAL_AUTO_PUBLISH_SETTING)) === "true";
+  if (saved !== null) return saved === "true";
+  return inheritsLegacySetting(source) && await getSetting(LEGACY_SOCIAL_AUTO_PUBLISH_SETTING) === "true";
 }
 
 export async function socialAutoPublishSettings(): Promise<SocialAutoPublish> {
-  const [linkedin, instagram] = await Promise.all([socialAutoPublishEnabled("linkedin"), socialAutoPublishEnabled("instagram")]);
-  return { linkedin, instagram };
+  const enabled = await Promise.all(SOCIAL_SOURCES.map(socialAutoPublishEnabled));
+  return Object.fromEntries(SOCIAL_SOURCES.map((source, i) => [source, enabled[i]])) as SocialAutoPublish;
 }
 
 /** Saves one channel's preference and approves its waiting posts atomically. Hidden posts are untouched. */
@@ -228,7 +229,7 @@ export async function addImportedItems(source: Source, items: SourceItem[], stat
     await conn.beginTransaction();
     const setting = SOCIAL_AUTO_PUBLISH_SETTINGS[source];
     const [legacy] = await conn.execute<RowDataPacket[]>("SELECT value FROM insight_settings WHERE name = ?", [LEGACY_SOCIAL_AUTO_PUBLISH_SETTING]);
-    await conn.execute("INSERT INTO insight_settings (name, value) VALUES (?, ?) ON DUPLICATE KEY UPDATE name = VALUES(name)", [setting, legacy[0]?.value === "true" ? "true" : "false"]);
+    await conn.execute("INSERT INTO insight_settings (name, value) VALUES (?, ?) ON DUPLICATE KEY UPDATE name = VALUES(name)", [setting, inheritsLegacySetting(source) && legacy[0]?.value === "true" ? "true" : "false"]);
     const [rows] = await conn.execute<RowDataPacket[]>("SELECT value FROM insight_settings WHERE name = ? FOR UPDATE", [setting]);
     const decision = importedStatus(source, status, rows[0]?.value === "true");
     const added = await insertItems(conn, items, decision);

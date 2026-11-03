@@ -12,7 +12,7 @@ export async function PUT(request: Request) {
   if (!storeConfigured()) return Response.json({ error: "The inbox's database isn't set up." }, { status: 503 });
   const body = await request.json().catch(() => null);
   if (!body || !isSocialSource(body.source) || typeof body.enabled !== "boolean") {
-    return Response.json({ error: "Choose a LinkedIn or Instagram channel and whether its posts should be added automatically." }, { status: 400 });
+    return Response.json({ error: "Choose a LinkedIn, Instagram or YouTube channel and whether its posts should be added automatically." }, { status: 400 });
   }
   try {
     await startInbox();

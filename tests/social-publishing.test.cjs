@@ -19,11 +19,11 @@ function load(file, dependencies = {}) {
 
 const previousDatabaseUrl = process.env.DATABASE_URL;
 const policy = load('src/lib/insights-store/social-publishing.ts');
-test('only pending LinkedIn and Instagram imports are automatically approved', () => {
+test('only pending LinkedIn, Instagram and YouTube imports are automatically approved', () => {
   for (const source of ['linkedin', 'instagram', 'youtube', 'wordpress', 'link']) {
     for (const status of ['pending', 'approved', 'hidden']) {
       assert.equal(policy.importedStatus(source, status, false), status);
-      const expected = ['linkedin', 'instagram'].includes(source) && status === 'pending' ? 'approved' : status;
+      const expected = ['linkedin', 'instagram', 'youtube'].includes(source) && status === 'pending' ? 'approved' : status;
       assert.equal(policy.importedStatus(source, status, true), expected);
     }
   }
@@ -87,7 +87,7 @@ test('enabling LinkedIn approves only its waiting posts and preserves hidden, fe
     { source: 'wordpress', status: 'pending' }, { source: 'youtube', status: 'pending' },
   ] });
   assert.equal(await db.setSocialAutoPublish('linkedin', true), 1);
-  assert.deepEqual(await db.socialAutoPublishSettings(), { linkedin: true, instagram: false });
+  assert.deepEqual(await db.socialAutoPublishSettings(), { linkedin: true, instagram: false, youtube: false });
   assert.deepEqual(state.rows.map(row => row.status), ['approved', 'pending', 'hidden', 'approved', 'pending', 'pending']);
   assert.equal(state.rows[3].featured, true);
   assert.deepEqual(state.events.filter(event => typeof event === 'string'), ['begin', 'commit', 'release']);
@@ -96,7 +96,7 @@ test('enabling LinkedIn approves only its waiting posts and preserves hidden, fe
 test('disabling does not remove approved posts, and subsequent social imports wait', async () => {
   const { db, state } = database({ enabled: 'true', rows: [{ source: 'linkedin', externalId: 'old', status: 'approved' }] });
   assert.equal(await db.setSocialAutoPublish('linkedin', false), 0);
-  assert.deepEqual(await db.socialAutoPublishSettings(), { linkedin: false, instagram: true });
+  assert.deepEqual(await db.socialAutoPublishSettings(), { linkedin: false, instagram: true, youtube: false });
   assert.deepEqual(await db.addImportedItems('linkedin', [post('linkedin', 'new')], 'pending'), { added: 1, approved: false });
   assert.deepEqual(state.rows.map(row => row.status), ['approved', 'pending']);
   assert.deepEqual(await db.addImportedItems('instagram', [post('instagram', 'still-on')], 'pending'), { added: 1, approved: true });
@@ -108,30 +108,32 @@ test('enabling Instagram leaves waiting LinkedIn and hidden Instagram posts unch
     { source: 'instagram', status: 'hidden' }, { source: 'wordpress', status: 'pending' },
   ] });
   assert.equal(await db.setSocialAutoPublish('instagram', true), 1);
-  assert.deepEqual(await db.socialAutoPublishSettings(), { linkedin: false, instagram: true });
+  assert.deepEqual(await db.socialAutoPublishSettings(), { linkedin: false, instagram: true, youtube: false });
   assert.deepEqual(state.rows.map(row => row.status), ['pending', 'approved', 'hidden', 'pending']);
 });
 
-test('both channels inherit the combined preference until individually changed, including imports', async () => {
+test('LinkedIn and Instagram inherit the combined preference until individually changed, including imports; YouTube does not', async () => {
   const { db, state } = database({ enabled: 'true' });
-  assert.deepEqual(await db.socialAutoPublishSettings(), { linkedin: true, instagram: true });
+  assert.deepEqual(await db.socialAutoPublishSettings(), { linkedin: true, instagram: true, youtube: false });
+  assert.deepEqual(await db.addImportedItems('youtube', [post('youtube', 'not-inherited')], 'pending'), { added: 1, approved: false });
   assert.deepEqual(await db.addImportedItems('instagram', [post('instagram', 'legacy')], 'pending'), { added: 1, approved: true });
   await db.setSocialAutoPublish('linkedin', false);
-  assert.deepEqual(await db.socialAutoPublishSettings(), { linkedin: false, instagram: true });
+  assert.deepEqual(await db.socialAutoPublishSettings(), { linkedin: false, instagram: true, youtube: false });
   assert.deepEqual(await db.addImportedItems('linkedin', [post('linkedin', 'explicit-off')], 'pending'), { added: 1, approved: false });
   await db.setSocialAutoPublish('instagram', false);
-  assert.deepEqual(await db.socialAutoPublishSettings(), { linkedin: false, instagram: false });
+  assert.deepEqual(await db.socialAutoPublishSettings(), { linkedin: false, instagram: false, youtube: false });
   assert.equal(state.settings[policy.LEGACY_SOCIAL_AUTO_PUBLISH_SETTING], 'true');
 });
 
 test('future imports respect every combination of independent channel settings', async () => {
-  for (const linkedin of [false, true]) for (const instagram of [false, true]) {
+  for (const linkedin of [false, true]) for (const instagram of [false, true]) for (const youtube of [false, true]) {
     const { db, state } = database({ settings: {
       [policy.SOCIAL_AUTO_PUBLISH_SETTINGS.linkedin]: String(linkedin),
       [policy.SOCIAL_AUTO_PUBLISH_SETTINGS.instagram]: String(instagram),
+      [policy.SOCIAL_AUTO_PUBLISH_SETTINGS.youtube]: String(youtube),
     } });
     for (const source of policy.SOCIAL_SOURCES) {
-      const enabled = { linkedin, instagram }[source];
+      const enabled = { linkedin, instagram, youtube }[source];
       assert.deepEqual(await db.addImportedItems(source, [post(source, 'new')], 'pending'), { added: 1, approved: enabled });
       assert.equal(state.rows.find(row => row.source === source).status, enabled ? 'approved' : 'pending');
     }
@@ -143,7 +145,7 @@ test('a failed approval rolls back its saved preference and leaves both channels
     { source: 'linkedin', status: 'pending' }, { source: 'instagram', status: 'pending' },
   ] });
   await assert.rejects(db.setSocialAutoPublish('linkedin', true), /update failed/);
-  assert.deepEqual(await db.socialAutoPublishSettings(), { linkedin: false, instagram: false });
+  assert.deepEqual(await db.socialAutoPublishSettings(), { linkedin: false, instagram: false, youtube: false });
   assert.deepEqual(state.rows.map(row => row.status), ['pending', 'pending']);
   assert.deepEqual(state.events.filter(event => typeof event === 'string'), ['begin', 'rollback', 'release']);
 });
@@ -161,7 +163,7 @@ test('new social imports use the saved setting under a shared lock, with no dupl
 
 test('the default is off and manually pasted posts retain the moderator-selected status', async () => {
   const { db, state } = database();
-  assert.deepEqual(await db.socialAutoPublishSettings(), { linkedin: false, instagram: false });
+  assert.deepEqual(await db.socialAutoPublishSettings(), { linkedin: false, instagram: false, youtube: false });
   await db.addImportedItems('instagram', [post('instagram', 'default')], 'pending');
   assert.equal(state.rows[0].status, 'pending');
   state.settings[policy.LEGACY_SOCIAL_AUTO_PUBLISH_SETTING] = 'true';
@@ -200,7 +202,7 @@ test('settings endpoint rejects unauthorised, unconfigured and invalid requests 
     [{ denied: new Response(null, { status: 403 }) }, { source: 'linkedin', enabled: true }, 403],
     [{ configured: false }, { source: 'linkedin', enabled: true }, 503],
     [{}, { source: 'linkedin', enabled: 'true' }, 400], [{}, null, 400],
-    [{}, { source: 'youtube', enabled: true }, 400],
+    [{}, { source: 'wordpress', enabled: true }, 400],
     [{}, { enabled: true }, 400], [{}, { autoPublishSocial: true }, 400],
   ]) {
     const { route, calls, request } = endpoint(options);
@@ -226,6 +228,20 @@ test('the endpoint saves an Instagram choice without changing LinkedIn', async (
   assert.deepEqual(calls, [{ source: 'instagram', enabled: false }]);
 });
 
+test('the endpoint saves a YouTube choice', async () => {
+  const { route, calls, request } = endpoint();
+  assert.equal((await route.PUT(request({ source: 'youtube', enabled: true }))).status, 200);
+  assert.deepEqual(calls, [{ source: 'youtube', enabled: true }, 'refresh']);
+});
+
+test('enabling YouTube approves only its waiting videos', async () => {
+  const { db, state } = database({ rows: [
+    { source: 'youtube', status: 'pending' }, { source: 'youtube', status: 'hidden' }, { source: 'linkedin', status: 'pending' },
+  ] });
+  assert.equal(await db.setSocialAutoPublish('youtube', true), 1);
+  assert.deepEqual(state.rows.map(row => row.status), ['approved', 'hidden', 'pending']);
+});
+
 test('save errors are reported without leaking database details', async () => {
   const { route, request } = endpoint({ fail: true });
   const response = await route.PUT(request({ source: 'linkedin', enabled: true }));
@@ -243,12 +259,14 @@ test('the dashboard checkbox reflects the persisted setting and describes existi
     '@/lib/insights-store/social-publishing': policy,
   }).default;
   const sources = Object.fromEntries(['youtube', 'wordpress', 'instagram', 'linkedin', 'link'].map(source => [source, { state: 'not-set-up', detail: 'Not connected' }]));
-  for (const linkedin of [false, true]) for (const instagram of [false, true]) {
-    const html = renderToStaticMarkup(React.createElement(Inbox, { initial: { items: [], lastSync: null, sources, autoPublishSocial: { linkedin, instagram } } }));
+  for (const linkedin of [false, true]) for (const instagram of [false, true]) for (const youtube of [false, true]) {
+    const html = renderToStaticMarkup(React.createElement(Inbox, { initial: { items: [], lastSync: null, sources, autoPublishSocial: { linkedin, instagram, youtube } } }));
     const checkboxes = Array.from(html.matchAll(/<input[^>]*aria-describedby="automatic-social-help"[^>]*>/g), match => match[0]);
-    assert.equal(checkboxes.length, 2);
+    assert.equal(checkboxes.length, 3);
     assert.equal(checkboxes[0].includes('checked=""'), linkedin);
     assert.equal(checkboxes[1].includes('checked=""'), instagram);
+    assert.equal(checkboxes[2].includes('checked=""'), youtube);
+    assert.match(html, /Automatically add YouTube posts to Insights/);
     assert.match(html, /Automatically add LinkedIn posts to Insights/);
     assert.match(html, /Automatically add Instagram posts to Insights/);
     assert.match(html, /Hidden posts stay hidden/);
