@@ -13,7 +13,6 @@ import ClientMarquee from "@/components/ClientMarquee";
 import TestimonialCarousel from "@/components/TestimonialCarousel";
 import SocialResponsibilities from "@/components/SocialResponsibilities";
 import Footer from "@/components/Footer";
-import ChatOverlay from "@/components/ChatOverlay";
 import SiteSearch from "@/components/SiteSearch";
 
 export default function Home() {
@@ -31,7 +30,6 @@ export default function Home() {
         <SocialResponsibilities />
       </main>
       <Footer />
-      <ChatOverlay />
       <SiteSearch />
     </VariantProvider>
   );

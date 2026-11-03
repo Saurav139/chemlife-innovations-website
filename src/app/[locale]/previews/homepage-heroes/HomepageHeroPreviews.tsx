@@ -10,7 +10,6 @@ import LifeAtChemLife from "@/components/LifeAtChemLife";
 import ClientMarquee from "@/components/ClientMarquee";
 import TestimonialCarousel from "@/components/TestimonialCarousel";
 import SocialResponsibilities from "@/components/SocialResponsibilities";
-import ChatOverlay from "@/components/ChatOverlay";
 import SiteSearch from "@/components/SiteSearch";
 import { useT } from "@/i18n/LocaleProvider";
 import { Images } from "@/lib/assets";
@@ -195,7 +194,6 @@ export default function HomepageHeroPreviews() {
         </>}
       </div>
     </main>
-    <ChatOverlay />
     <SiteSearch />
   </>;
 }
