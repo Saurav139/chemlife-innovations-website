@@ -213,7 +213,7 @@ export default function WhoWeAre() {
         </div>
 
         {/* What we serve: the three species groups */}
-        <h3 className="font-heading text-2xl md:text-3xl font-bold text-brand-navy text-center mt-16 md:mt-24">
+        <h3 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold leading-tight text-brand-navy text-center mt-16 md:mt-24">
           {t.serveTitle}
         </h3>
 
