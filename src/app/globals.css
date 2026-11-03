@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+/* Tablet-width screens and wider that are short (most laptops show 650-800px of page): the homepage hero tightens its
+   spacing there so its numbers' strip stays clear of the floating buttons. */
+@custom-variant short (@media (min-width: 48rem) and (max-height: 50rem));
+/* Phones with short screens (an iPhone SE shows about 550-670px): the same tightening, for the phone layout. */
+@custom-variant short-phone (@media (max-width: 47.99rem) and (max-height: 45rem));
+
 @theme {
   /* Trying #E8614A as the site orange (the brand orange was #E65C38). */
   --color-brand-orange: #e8614a;
