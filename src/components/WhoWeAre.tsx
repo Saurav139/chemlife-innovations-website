@@ -217,8 +217,12 @@ export default function WhoWeAre() {
         {/* Who we are, told in order: who (beside the founders' photo), what (the facts), then the questions. */}
         <div className="grid lg:grid-cols-12 gap-12 items-center">
           <Reveal className="lg:col-span-6">
-            <span className="text-teal-aa text-sm lg:text-base font-semibold tracking-widest uppercase">{t.kicker}</span>
-            <h2 id="who-we-are-title" className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold leading-tight text-brand-navy mt-3">{t.title}</h2>
+            <h2 id="who-we-are-title" className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.05] text-brand-navy">
+              {t.heading[0]}
+              <span className="block text-teal-aa">{t.heading[1]}</span>
+            </h2>
+            {/* What ChemLife is, in a line: kept under the heading for readers and search engines. */}
+            <p className="font-heading text-xl md:text-2xl font-semibold leading-snug text-brand-navy mt-5">{t.title}</p>
             <p className="text-lg text-slate-700 leading-relaxed mt-6">{t.intro}</p>
           </Reveal>
           <Reveal delay={0.1} className="lg:col-span-6">

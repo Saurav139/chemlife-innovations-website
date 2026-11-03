@@ -6,6 +6,13 @@
 /* Phones with short screens (an iPhone SE shows about 550-670px): the same tightening, for the phone layout. */
 @custom-variant short-phone (@media (max-width: 47.99rem) and (max-height: 45rem));
 
+/* Hindi and Kannada letters join up; letter spacing (the spaced-out capital labels in English) pulls them apart, so
+   those pages set every label without it. */
+:lang(hi) [class*="tracking-"],
+:lang(kn) [class*="tracking-"] {
+  letter-spacing: normal;
+}
+
 @theme {
   /* Trying #E8614A as the site orange (the brand orange was #E65C38). */
   --color-brand-orange: #e8614a;
