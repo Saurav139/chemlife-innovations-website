@@ -180,12 +180,13 @@ export default function HeroVariantA() {
       {/* The headline and actions; the headline dots sit at their right. */}
       <div className="relative z-30 flex-1 flex">
       {/* Not held to the 1200px column: the headline sits a fixed margin in from the screen's left edge. */}
-      <div className={`px-6 md:px-12 lg:px-16 xl:px-20 w-full flex flex-col justify-center ${awardLayout ? "pt-24 pb-6 md:pt-28 md:pb-8 lg:pt-36" : "pt-28 pb-6 md:pt-32 md:pb-8 lg:pt-40"} short:pt-32 short:pb-4 short-phone:pt-24 short-phone:pb-2`}>
+      <div className={`px-6 md:px-12 lg:px-16 xl:px-20 w-full flex flex-col justify-center pt-28 pb-6 md:pt-32 md:pb-8 lg:pt-40 short:pt-32 short:pb-4 short-phone:pt-24 short-phone:pb-2`}>
         {/* w-full: without it, this box has no explicit width, so its auto side margins (for centering)
             stop it from stretching and it shrinks to fit whichever tagline is showing — moving and
             resizing the buttons below it from one slide to the next. */}
-        <div className={`w-full max-w-3xl flex-1 flex flex-col text-left items-start ${awardLayout ? "justify-start" : "justify-center"}`}>
-          <div className={`flex flex-col items-start text-left w-full ${awardLayout ? "justify-start" : "min-h-[300px] md:min-h-[340px] short:min-h-0 short-phone:min-h-0 justify-center"}`}>
+        {/* Centred in the height above the numbers' strip, on every photo. */}
+        <div className="w-full max-w-3xl flex-1 flex flex-col text-left items-start justify-center">
+          <div className="flex flex-col items-start text-left w-full min-h-[300px] md:min-h-[340px] short:min-h-0 short-phone:min-h-0 justify-center">
             {/* Keep the initial headline visible during hydration. */}
             <AnimatePresence mode="wait" initial={false}>
               {/* On phones the size follows the screen width so every tagline fits on its three lines, which keeps
