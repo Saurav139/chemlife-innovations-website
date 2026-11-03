@@ -201,6 +201,13 @@ export default function WhoWeAre() {
             <span className="text-teal-aa text-sm lg:text-base font-semibold tracking-widest uppercase">{t.kicker}</span>
             <h2 id="who-we-are-title" className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold leading-tight text-brand-navy mt-3">{t.title}</h2>
             <p className="text-lg text-slate-700 leading-relaxed mt-6">{t.intro}</p>
+            {/* The facts and questions that used to be here, in full on their own page. */}
+            <a href={href("/who-we-are")} data-analytics-click={t.moreAboutUs} className="inline-flex items-center gap-2 min-h-12 px-6 mt-8 rounded-full bg-brand-navy hover:bg-brand-navy/90 text-white font-semibold transition-colors">
+              {t.moreAboutUs}
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </a>
           </Reveal>
           <Reveal delay={0.1} className="lg:col-span-6">
             <div className="relative aspect-[4/3] rounded-3xl overflow-hidden">

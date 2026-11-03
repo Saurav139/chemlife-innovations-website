@@ -8,6 +8,7 @@ import { PRODUCTS, productPath } from "@/lib/catalog";
 const PAGES = [
   "/",
   "/about",
+  "/who-we-are",
   "/products",
   ...PRODUCTS.map((p) => productPath(p.name)),
   "/research",
