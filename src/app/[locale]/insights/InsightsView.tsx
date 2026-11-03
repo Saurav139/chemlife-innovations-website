@@ -8,7 +8,8 @@ import Footer from "@/components/Footer";
 import SectionWrapper from "@/components/SectionWrapper";
 import { VariantProvider } from "@/context/VariantContext";
 import SiteSearch from "@/components/SiteSearch";
-import InsightCardContent, { INSIGHT_CARD_CLASS, isOptimizable, originalLink } from "@/components/InsightCard";
+import InsightCardContent, { INSIGHT_CARD_CLASS, isOptimizable, isSocialPost, originalLink } from "@/components/InsightCard";
+import NaturalInsightImage from "@/components/NaturalInsightImage";
 import { Images } from "@/lib/assets";
 import type { Insights, InsightItem } from "@/lib/insights";
 import { playOnPage, youtubeWatchUrl } from "@/lib/youtube";
@@ -237,7 +238,12 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                     </h3>
                     
                     {/* Blog Image Preview */}
-                    {featuredBlog.imageUrl && (
+                    {featuredBlog.imageUrl && isSocialPost(featuredBlog) && (
+                      <div className="mb-4 sm:max-lg:col-start-1 sm:max-lg:row-start-1 sm:max-lg:row-span-3 sm:max-lg:self-center sm:max-lg:mb-0">
+                        <NaturalInsightImage src={featuredBlog.imageUrl} alt={featuredBlog.title} sizes={FEATURED_IMAGE_SIZES} />
+                      </div>
+                    )}
+                    {featuredBlog.imageUrl && !isSocialPost(featuredBlog) && (
                       <div className="relative w-full aspect-video rounded-xl md:rounded-2xl overflow-hidden bg-slate-100 border border-gray-200 select-none mb-4 sm:max-lg:col-start-1 sm:max-lg:row-start-1 sm:max-lg:row-span-3 sm:max-lg:aspect-auto sm:max-lg:self-stretch sm:max-lg:min-h-36 sm:max-lg:mb-0">
                         <Image
                           src={featuredBlog.imageUrl}
@@ -542,7 +548,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                       transition={{ duration: 0.35, ease: easeOut, delay: isNew ? Math.min(index - revealFrom, 5) * 0.06 : 0 }}
                       className={`scroll-mt-28 ${INSIGHT_CARD_CLASS}`}
                     >
-                      <InsightCardContent item={item} onRead={setActiveArticle} onPlay={setActiveVideoId} />
+                      <InsightCardContent item={item} imageLayout={isSocialPost(item) ? "natural" : "cropped"} onRead={setActiveArticle} onPlay={setActiveVideoId} />
                     </motion.div>
                   );
                 })}
@@ -661,7 +667,10 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                   {activeArticle.title}
                 </h2>
 
-                {activeArticle.imageUrl && (
+                {activeArticle.imageUrl && isSocialPost(activeArticle) && (
+                  <NaturalInsightImage src={activeArticle.imageUrl} alt={activeArticle.title} sizes={READER_IMAGE_SIZES} />
+                )}
+                {activeArticle.imageUrl && !isSocialPost(activeArticle) && (
                   <div className="relative w-full aspect-video rounded-2xl overflow-hidden bg-slate-100 border border-gray-250 select-none">
                     <Image
                       src={activeArticle.imageUrl}
