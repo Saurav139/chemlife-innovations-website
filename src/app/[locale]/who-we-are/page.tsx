@@ -6,9 +6,9 @@ import Footer from "@/components/Footer";
 import { VariantProvider } from "@/context/VariantContext";
 import { useHref, useT } from "@/i18n/LocaleProvider";
 
-// Who We Are in full, from the homepage's "More about who we are" button, set like a magazine feature: the
-// introduction beside the founders' photo with the headline figures, the facts as a numbered list, the four
-// directors, the questions, and a closing panel with the tagline and the four buttons.
+// Who We Are in full, from the homepage's "More about who we are" button, set out like a company profile: a navy
+// page header with the key figures beneath it, the facts as a profile table, the four directors, the questions, and
+// a closing band with the tagline and the four buttons.
 
 const easeOut = [0.25, 0.1, 0, 1] as const;
 
@@ -37,17 +37,25 @@ function Reveal({ children, delay = 0, className }: { children: React.ReactNode;
   return (
     <motion.div
       className={className}
-      initial={{ opacity: 0, y: reduce ? 0 : 20 }}
+      initial={{ opacity: 0, y: reduce ? 0 : 16 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "0px 0px -8% 0px" }}
-      transition={{ duration: 0.7, delay, ease: easeOut }}
+      transition={{ duration: 0.6, delay, ease: easeOut }}
     >
       {children}
     </motion.div>
   );
 }
 
-const sectionLabel = "inline-flex items-center gap-3 text-teal-aa text-xs md:text-sm font-semibold tracking-[0.2em] uppercase";
+/** A section heading: a short teal rule above the title. */
+function SectionHeading({ id, children }: { id: string; children: React.ReactNode }) {
+  return (
+    <div>
+      <span aria-hidden="true" className="block w-12 h-1 rounded-full bg-teal-aa" />
+      <h2 id={id} className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold leading-tight text-brand-navy mt-5">{children}</h2>
+    </div>
+  );
+}
 
 export default function WhoWeArePage() {
   const messages = useT();
@@ -62,7 +70,7 @@ export default function WhoWeArePage() {
   const facts = t.facts.slice(0, -1);
   const leadership = t.facts[t.facts.length - 1];
   const people = directors(leadership.value);
-  // The opening keeps the introduction's first sentence; the rest (technologies, government support) is in the facts.
+  // The header keeps the introduction's first sentence; the rest (technologies, government support) is in the facts.
   const lead = t.intro.split(/(?<=[.।])\s+/)[0];
   // The questions as FAQ structured data, for search and answer engines.
   const faqData = {
@@ -76,26 +84,41 @@ export default function WhoWeArePage() {
       <Header />
 
       <main id="main" tabIndex={-1} className="bg-white min-h-screen text-brand-navy">
-        {/* Opening, kept short: on a warm paper ground, the heading and one lead sentence beside the headline figures. */}
-        <section className="bg-[#f6f4ef] pt-28 md:pt-32 lg:pt-36 pb-14 md:pb-20">
-          <div className="max-w-[1200px] mx-auto px-6 grid lg:grid-cols-12 gap-10 lg:gap-16 items-center">
-            <Reveal className="lg:col-span-7">
-              <span className={sectionLabel}>
-                <span aria-hidden="true" className="w-10 h-px bg-teal-aa" />
-                {t.kicker}
-              </span>
-              <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold leading-tight tracking-tight text-brand-navy mt-5">{t.title}</h1>
-              <p className="text-lg md:text-xl text-slate-600 leading-relaxed mt-5 max-w-xl">{lead}</p>
-            </Reveal>
-            {/* The headline figures, as a 2×2 block beside the heading. */}
-            <Reveal delay={0.12} className="lg:col-span-5">
-              <dl className="grid grid-cols-2 gap-px rounded-[2rem] overflow-hidden bg-brand-navy/10 ring-1 ring-brand-navy/10">
-                {FIGURES.map((figure, i) => (
-                  <div key={figure} className="flex flex-col-reverse bg-[#f6f4ef] p-6 md:p-8">
-                    <dt className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500 mt-2">{messages.home.stats[i]}</dt>
-                    <dd className="font-heading text-4xl md:text-5xl font-bold text-brand-navy tabular-nums">
-                      {figure.replace("+", "")}<span className="text-teal-aa">+</span>
-                    </dd>
+        {/* Page header, like the other pages': navy with a fine dot grid, the heading and one lead sentence. */}
+        <section className="relative overflow-hidden bg-brand-navy text-white pt-28 md:pt-32 lg:pt-36 pb-28 md:pb-32">
+          <div aria-hidden="true" className="absolute inset-0 opacity-20 bg-[radial-gradient(#1e3a8a_1px,transparent_1px)] [background-size:16px_16px]" />
+          <div aria-hidden="true" className="absolute inset-0 bg-[radial-gradient(48rem_24rem_at_85%_0%,rgba(26,219,195,0.14),transparent_70%)]" />
+          <div className="relative max-w-[1200px] mx-auto px-6">
+            <span className="text-teal-aa-light text-sm font-semibold tracking-widest uppercase block">{t.kicker}</span>
+            <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold leading-tight text-white mt-3 max-w-4xl">{t.title}</h1>
+            <p className="text-white/85 text-base md:text-lg lg:text-xl leading-relaxed font-light mt-5 max-w-3xl">{lead}</p>
+          </div>
+        </section>
+
+        {/* Key figures: a white bar overlapping the header's lower edge. */}
+        <div className="relative max-w-[1200px] mx-auto px-6 -mt-16 md:-mt-20">
+          <dl className="grid grid-cols-2 md:grid-cols-4 gap-px overflow-hidden rounded-xl bg-slate-200 shadow-xl shadow-brand-navy/10 ring-1 ring-slate-200">
+            {FIGURES.map((figure, i) => (
+              <div key={figure} className="flex flex-col-reverse justify-end bg-white px-6 py-6 md:px-8 md:py-8">
+                <dt className="text-xs md:text-sm font-semibold uppercase tracking-wider text-slate-500 mt-2">{messages.home.stats[i]}</dt>
+                <dd className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-brand-navy tabular-nums">
+                  {figure.replace("+", "")}<span className="text-teal-aa">+</span>
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+
+        {/* At a glance, as a company profile table: the label in a grey column beside each fact. */}
+        <section aria-labelledby="facts-title" className="py-20 md:py-24">
+          <div className="max-w-[1200px] mx-auto px-6">
+            <SectionHeading id="facts-title">{t.factsTitle}</SectionHeading>
+            <Reveal className="mt-10">
+              <dl className="overflow-hidden rounded-xl border border-slate-200 divide-y divide-slate-200">
+                {facts.map((fact) => (
+                  <div key={fact.label} className="grid md:grid-cols-[18rem_minmax(0,1fr)]">
+                    <dt className="bg-slate-50 px-6 pt-5 md:py-6 text-xs md:text-sm md:leading-[1.8rem] font-semibold uppercase tracking-wider text-teal-aa md:border-r md:border-slate-200">{fact.label}</dt>
+                    <dd className="bg-slate-50 md:bg-white px-6 pt-2 pb-5 md:py-6 text-base md:text-lg leading-relaxed text-brand-navy">{fact.value}</dd>
                   </div>
                 ))}
               </dl>
@@ -103,40 +126,18 @@ export default function WhoWeArePage() {
           </div>
         </section>
 
-        {/* At a glance: the heading stays beside the numbered facts as they pass. */}
-        <section aria-labelledby="facts-title" className="py-20 md:py-24">
-          <div className="max-w-[1200px] mx-auto px-6 grid lg:grid-cols-12 gap-10 lg:gap-16">
-            <div className="lg:col-span-4">
-              <div className="lg:sticky lg:top-32">
-                <span className={sectionLabel}><span aria-hidden="true" className="w-10 h-px bg-teal-aa" />01–{String(facts.length).padStart(2, "0")}</span>
-                <h2 id="facts-title" className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-brand-navy mt-5">{t.factsTitle}</h2>
-              </div>
-            </div>
-            <dl className="lg:col-span-8 border-t border-slate-200">
-              {facts.map((fact, i) => (
-                <Reveal key={fact.label} className="grid grid-cols-[2.5rem_minmax(0,1fr)] md:grid-cols-[3.5rem_13rem_minmax(0,1fr)] gap-x-6 gap-y-2 py-7 md:py-8 border-b border-slate-200">
-                  <span aria-hidden="true" className="font-heading text-sm font-semibold text-slate-400 tabular-nums md:pt-1">{String(i + 1).padStart(2, "0")}</span>
-                  <dt className="text-xs md:text-sm font-semibold uppercase tracking-[0.18em] text-teal-aa md:pt-1">{fact.label}</dt>
-                  <dd className="col-start-2 md:col-start-3 text-lg md:text-xl leading-relaxed text-brand-navy">{fact.value}</dd>
-                </Reveal>
-              ))}
-            </dl>
-          </div>
-        </section>
-
-        {/* Leadership: the four directors, then their combined experience as a pull quote. */}
-        <section aria-labelledby="leadership-title" className="bg-[#f6f4ef] py-20 md:py-24">
+        {/* Leadership: the four directors on cards with a navy top rule, then their combined experience. */}
+        <section aria-labelledby="leadership-title" className="bg-slate-50 border-y border-slate-200 py-20 md:py-24">
           <div className="max-w-[1200px] mx-auto px-6">
-            <span className={sectionLabel}><span aria-hidden="true" className="w-10 h-px bg-teal-aa" />{leadership.label}</span>
-            <h2 id="leadership-title" className="sr-only">{leadership.label}</h2>
+            <SectionHeading id="leadership-title">{leadership.label}</SectionHeading>
             {people ? (
               <ul className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-10">
                 {people.map((person, i) => (
                   <li key={person.name}>
-                    <Reveal delay={i * 0.06} className="h-full rounded-3xl bg-white p-7 shadow-sm shadow-brand-navy/5 ring-1 ring-brand-navy/5">
-                      <span aria-hidden="true" className="grid place-items-center w-14 h-14 rounded-full bg-brand-navy text-white font-heading text-lg font-bold tracking-wide">{initials(person.name)}</span>
-                      <p className="font-heading text-lg font-bold text-brand-navy mt-6">{person.name}</p>
-                      <p className="text-slate-600 leading-relaxed mt-1">{person.role}</p>
+                    <Reveal delay={i * 0.06} className="h-full rounded-xl bg-white border border-slate-200 border-t-4 border-t-brand-navy p-6 md:p-7 shadow-sm">
+                      <span aria-hidden="true" className="grid place-items-center w-12 h-12 rounded-lg bg-brand-navy/5 text-brand-navy font-heading text-base font-bold tracking-wide">{initials(person.name)}</span>
+                      <p className="font-heading text-lg font-bold text-brand-navy mt-5">{person.name}</p>
+                      <p className="text-sm font-medium uppercase tracking-wider text-slate-500 leading-relaxed mt-1">{person.role}</p>
                     </Reveal>
                   </li>
                 ))}
@@ -145,67 +146,52 @@ export default function WhoWeArePage() {
               <p className="text-lg leading-relaxed text-brand-navy mt-8">{leadership.value}</p>
             )}
             <Reveal>
-              <figure className="relative mt-16 md:mt-20 max-w-4xl">
-                <svg aria-hidden="true" className="w-12 h-12 text-teal-aa/30" viewBox="0 0 48 48" fill="currentColor">
-                  <path d="M20 10c-8 3-13 10-13 19v9h13V25h-7c0-6 3-10 9-12zm22 0c-8 3-13 10-13 19v9h13V25h-7c0-6 3-10 9-12z" />
-                </svg>
-                <blockquote className="font-heading text-2xl md:text-3xl leading-snug text-brand-navy mt-4">{t.leadershipCaption}</blockquote>
-              </figure>
+              <p className="mt-10 border-l-4 border-teal-aa bg-white rounded-r-xl px-6 py-5 md:px-8 md:py-6 text-lg md:text-xl leading-relaxed text-slate-700 max-w-4xl">{t.leadershipCaption}</p>
             </Reveal>
           </div>
         </section>
 
-        {/* Questions: the heading stays beside the answers as they pass. */}
+        {/* Questions: native disclosure boxes in one bordered panel, one open at a time; every answer is in the page even while closed. */}
         <section aria-labelledby="faq-title" className="py-20 md:py-24">
           <div className="max-w-[1200px] mx-auto px-6 grid lg:grid-cols-12 gap-10 lg:gap-16">
             <div className="lg:col-span-4">
-              <div className="lg:sticky lg:top-32">
-                <span className={sectionLabel}><span aria-hidden="true" className="w-10 h-px bg-teal-aa" />01–{String(t.faq.length).padStart(2, "0")}</span>
-                <h2 id="faq-title" className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-brand-navy mt-5">{t.faqTitle}</h2>
-              </div>
+              <SectionHeading id="faq-title">{t.faqTitle}</SectionHeading>
             </div>
-            {/* Native disclosure boxes, one open at a time: every answer is in the page even while closed. */}
-            <div className="lg:col-span-8 border-t border-slate-200">
+            <div className="lg:col-span-8 overflow-hidden rounded-xl border border-slate-200 divide-y divide-slate-200">
               {t.faq.map((item, i) => (
-                <details key={item.q} name="who-we-are-questions" open={i === 0} className="group border-b border-slate-200">
-                  <summary className="flex items-start justify-between gap-6 py-7 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
-                    <h3 className="font-heading text-lg md:text-xl font-bold text-brand-navy group-hover:text-brand-orange-aa transition-colors">{item.q}</h3>
-                    <span aria-hidden="true" className="grid place-items-center w-10 h-10 rounded-full shrink-0 border border-slate-300 text-brand-orange-aa transition-all duration-300 group-open:rotate-45 group-open:bg-brand-orange-aa group-open:border-brand-orange-aa group-open:text-white">
-                      <svg className="w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round"><path d="M8 3v10M3 8h10" /></svg>
-                    </span>
+                <details key={item.q} name="who-we-are-questions" open={i === 0} className="group bg-white open:bg-slate-50/60">
+                  <summary className="flex items-center justify-between gap-6 px-6 py-5 md:py-6 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+                    <h3 className="font-heading text-base md:text-lg font-bold text-brand-navy group-hover:text-teal-aa transition-colors">{item.q}</h3>
+                    <svg aria-hidden="true" className="w-5 h-5 shrink-0 text-slate-400 transition-transform duration-300 group-open:rotate-180 group-open:text-teal-aa" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round"><path d="M5 7.5l5 5 5-5" /></svg>
                   </summary>
-                  <p className="pb-8 pr-14 text-lg leading-relaxed text-slate-600">{item.a}</p>
+                  <p className="px-6 pb-6 pr-12 text-base md:text-lg leading-relaxed text-slate-600">{item.a}</p>
                 </details>
               ))}
             </div>
           </div>
         </section>
 
-        {/* Closing: the tagline and the four buttons on a navy panel. */}
-        <section className="pb-20 md:pb-24">
-          <div className="max-w-[1200px] mx-auto px-6">
-            <Reveal>
-              <div className="relative overflow-hidden rounded-[2rem] bg-brand-navy px-8 py-14 md:px-16 md:py-20 text-center">
-                <div aria-hidden="true" className="absolute inset-0 bg-[radial-gradient(40rem_20rem_at_50%_0%,rgba(26,219,195,0.18),transparent_70%)]" />
-                <p className="relative font-heading text-3xl md:text-4xl lg:text-5xl font-bold leading-tight text-white max-w-3xl mx-auto">{t.tagline}</p>
-                <div className="relative flex flex-wrap justify-center gap-3 mt-10">
-                  {actions.map((action) => (
-                    <a
-                      key={action.path}
-                      href={href(action.path)}
-                      data-analytics-click={action.label}
-                      className={
-                        action.primary
-                          ? "inline-flex items-center justify-center min-h-12 px-7 rounded-full bg-brand-orange-aa hover:bg-brand-orange-aa-hover text-white font-semibold transition-colors"
-                          : "inline-flex items-center justify-center min-h-12 px-7 rounded-full border-2 border-white/40 hover:bg-white hover:text-brand-navy text-white font-semibold transition-colors"
-                      }
-                    >
-                      {action.label}
-                    </a>
-                  ))}
-                </div>
-              </div>
-            </Reveal>
+        {/* Closing: a full-width navy band with the tagline and the four buttons. */}
+        <section className="relative overflow-hidden bg-brand-navy text-white py-16 md:py-20">
+          <div aria-hidden="true" className="absolute inset-0 opacity-20 bg-[radial-gradient(#1e3a8a_1px,transparent_1px)] [background-size:16px_16px]" />
+          <div className="relative max-w-[1200px] mx-auto px-6 grid lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+            <p className="lg:col-span-6 font-heading text-2xl md:text-3xl lg:text-4xl font-bold leading-tight text-white">{t.tagline}</p>
+            <div className="lg:col-span-6 flex flex-wrap lg:justify-end gap-3">
+              {actions.map((action) => (
+                <a
+                  key={action.path}
+                  href={href(action.path)}
+                  data-analytics-click={action.label}
+                  className={
+                    action.primary
+                      ? "inline-flex items-center justify-center min-h-12 px-6 rounded-full bg-brand-orange-aa hover:bg-brand-orange-aa-hover text-white font-semibold transition-colors"
+                      : "inline-flex items-center justify-center min-h-12 px-6 rounded-full border border-white/40 hover:bg-white hover:text-brand-navy text-white font-semibold transition-colors"
+                  }
+                >
+                  {action.label}
+                </a>
+              ))}
+            </div>
           </div>
         </section>
 
