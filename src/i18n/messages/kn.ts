@@ -160,6 +160,7 @@ const kn: Messages = {
       meetLeadership: "ನಾಯಕತ್ವವನ್ನು ಭೇಟಿ ಮಾಡಿ",
       requestDossier: "ತಾಂತ್ರಿಕ ದಾಖಲೆ ಕೋರಿ",
       serveTitle: "ನಾವು ಯಾರಿಗೆ ಸೇವೆ ನೀಡುತ್ತೇವೆ",
+      serveLink: "{count} ಉತ್ಪನ್ನಗಳನ್ನು ನೋಡಿ",
       cards: [
         {
           title: "ಏಕ-ಜಠರ ಪ್ರಾಣಿಗಳು",
@@ -183,9 +184,13 @@ const kn: Messages = {
       ],
     },
 
+    flagship: {
+      kicker: "ನಮ್ಮ ಉತ್ಪನ್ನಗಳು",
+      title: "ಪ್ರಮುಖ ಉತ್ಪನ್ನಗಳು",
+    },
     howWeDo: {
       kicker: "ನಮ್ಮ ಪ್ರಕ್ರಿಯೆ",
-      title: "ನಾವು ಇದನ್ನು ಹೇಗೆ ಮಾಡುತ್ತೇವೆ?",
+      title: "ನಾವು ಹೇಗೆ ಕೆಲಸ ಮಾಡುತ್ತೇವೆ",
       bgAlt: "ನೀಲಿ ಬೆಳಕಿನಲ್ಲಿರುವ ಪ್ರಯೋಗಾಲಯದ ಸ್ವಯಂಚಾಲಿತ ಉಪಕರಣಗಳು",
       steps: [
         {
@@ -269,7 +274,7 @@ const kn: Messages = {
 
     testimonials: {
       kicker: "ಪ್ರಶಂಸಾಪತ್ರಗಳು",
-      title: "ನಮ್ಮ ಪಾಲುದಾರರು ಏನು ಹೇಳುತ್ತಾರೆ?",
+      title: "ನಮ್ಮ ಪಾಲುದಾರರು ಏನು ಹೇಳುತ್ತಾರೆ",
       readMore: "ಇನ್ನಷ್ಟು ಓದಿ",
       showLess: "ಕಡಿಮೆ ತೋರಿಸಿ",
     },

@@ -161,7 +161,9 @@ const en = {
       seeResearch: "See our research",
       meetLeadership: "Meet the leadership",
       requestDossier: "Request a technical dossier",
-      serveTitle: "What we serve",
+      serveTitle: "What We Serve",
+      // Each "What we serve" card's link to its products; {count} is how many.
+      serveLink: "View {count} products",
       cards: [
         {
           title: "Mono-Gastric",
@@ -185,9 +187,13 @@ const en = {
       ],
     },
 
+    flagship: {
+      kicker: "Our products",
+      title: "Flagship Products",
+    },
     howWeDo: {
       kicker: "Our Process",
-      title: "How We Do It?",
+      title: "How We Work",
       bgAlt: "Laboratory automation equipment lit in blue",
       steps: [
         {
@@ -271,7 +277,7 @@ const en = {
 
     testimonials: {
       kicker: "Testimonials",
-      title: "What Our Partners Say?",
+      title: "What Our Partners Say",
       readMore: "Read more",
       showLess: "Show less",
     },

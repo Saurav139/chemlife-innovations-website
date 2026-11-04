@@ -160,6 +160,7 @@ const hi: Messages = {
       meetLeadership: "नेतृत्व से मिलें",
       requestDossier: "तकनीकी डोज़ियर माँगें",
       serveTitle: "हम किनके लिए काम करते हैं",
+      serveLink: "{count} उत्पाद देखें",
       cards: [
         {
           title: "मोनो-गैस्ट्रिक",
@@ -183,9 +184,13 @@ const hi: Messages = {
       ],
     },
 
+    flagship: {
+      kicker: "हमारे उत्पाद",
+      title: "प्रमुख उत्पाद",
+    },
     howWeDo: {
       kicker: "हमारी प्रक्रिया",
-      title: "हम यह कैसे करते हैं?",
+      title: "हम कैसे काम करते हैं",
       bgAlt: "नीली रोशनी में प्रयोगशाला के ऑटोमेशन उपकरण",
       steps: [
         {
@@ -269,7 +274,7 @@ const hi: Messages = {
 
     testimonials: {
       kicker: "प्रशंसापत्र",
-      title: "हमारे साझेदार क्या कहते हैं?",
+      title: "हमारे साझेदार क्या कहते हैं",
       readMore: "और पढ़ें",
       showLess: "कम दिखाएँ",
     },

@@ -5,6 +5,7 @@ import { VariantProvider } from "@/context/VariantContext";
 import Header from "@/components/Header";
 import HeroVariantA from "@/components/HeroVariants/VariantA";
 import WhoWeAre from "@/components/WhoWeAre";
+import FlagshipProducts from "@/components/FlagshipProducts";
 
 import HowWeDo from "@/components/HowWeDo";
 import LifeAtChemLife from "@/components/LifeAtChemLife";
@@ -21,13 +22,15 @@ export default function Home() {
       <Header />
       <main id="main" tabIndex={-1}>
         <HeroVariantA />
+        {/* A buyer's story first (who, what, how, proof), then the people: CSR and life at ChemLife. */}
         <WhoWeAre />
+        <FlagshipProducts />
         <HowWeDo />
         <AwardsRecognition />
-        <LifeAtChemLife />
         <ClientMarquee />
         <TestimonialCarousel />
         <SocialResponsibilities />
+        <LifeAtChemLife />
       </main>
       <Footer />
       <SiteSearch />

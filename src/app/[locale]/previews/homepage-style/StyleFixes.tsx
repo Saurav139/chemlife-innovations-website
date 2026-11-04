@@ -3,8 +3,9 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import AwardsRecognition, { certificateFiles } from "@/components/AwardsRecognition";
-import { SnowflakeCell, cardImages, type Card } from "@/components/WhoWeAre";
+import { certificateFiles } from "@/components/AwardsRecognition";
+import { cardImages } from "@/components/WhoWeAre";
+import { AwardsCurrent, SnowflakeCell, type Card } from "./legacy";
 import { useHref, useT } from "@/i18n/LocaleProvider";
 import { Images } from "@/lib/assets";
 import { PRODUCTS } from "@/lib/catalog";
@@ -211,7 +212,7 @@ export default function StyleFixes() {
 
     <Block n={2} title="Awards & Recognition" note="A shows all eight awards at once as a logo wall; choose one to read about it. B keeps one at a time, on a plain card with numbered tabs, without the orange plaque and the rail track."
       controls={<Switch options={[{ id: "wall", label: "A · Logo wall" }, { id: "simple", label: "B · One at a time" }, { id: "current", label: "Current" }]} value={awards} onChange={setAwards} />}>
-      {awards === "wall" ? <AwardsWall /> : awards === "simple" ? <AwardsSimple /> : <AwardsRecognition />}
+      {awards === "wall" ? <AwardsWall /> : awards === "simple" ? <AwardsSimple /> : <AwardsCurrent />}
     </Block>
 
     <Block n={3} title="Headings" note="One style for every heading: title case and no question marks. The Hindi and Kannada headings would change to match." controls={null}>

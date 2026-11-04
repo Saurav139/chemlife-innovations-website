@@ -35,7 +35,7 @@ export default function HowWeDo() {
 
       <div className="relative z-10 max-w-[1200px] mx-auto px-6">
         {/* Title Section */}
-        <div className="text-center mb-10 md:mb-20">
+        <div className="text-center mb-10 md:mb-14">
           <span className="text-teal-aa-light text-sm lg:text-base font-semibold tracking-widest uppercase block mb-3">
             {t.kicker}
           </span>
@@ -44,59 +44,36 @@ export default function HowWeDo() {
           </h2>
         </div>
 
-        {/* Unified Chessboard Container (Attached rows, shrunken dimensions) */}
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.7, ease: [0.25, 0.1, 0, 1] }}
-          className="rounded-3xl overflow-hidden shadow-2xl border border-white/10 max-w-[850px] lg:max-w-[1100px] mx-auto bg-white divide-y divide-slate-100"
-        >
-          {steps.map((s, i) => {
-            const isEven = i % 2 === 0;
-            return (
-              <div
-                key={s.step}
-                className="grid grid-cols-1 md:grid-cols-2 gap-0 md:h-[260px] lg:h-[300px] items-stretch group"
-              >
-                {/* Image Box */}
-                <div className={`relative w-full h-[200px] md:h-full overflow-hidden order-1 ${isEven ? "md:order-1" : "md:order-2"}`}>
-                  <Image
-                    src={s.image}
-                    alt={s.alt}
-                    fill
-                    sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 550px"
-                    className={`object-cover group-hover:scale-102 transition-transform duration-700 ${s.objectPosition || ""}`}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/15 to-transparent animate-fade-in" />
-                </div>
-
-                {/* Text Box */}
-                <div className={`w-full p-6 lg:p-10 flex flex-col justify-center bg-white order-2 ${isEven ? "md:order-2" : "md:order-1"} relative`}>
-                  {/* Hover Left Side Accent Line */}
-                  <div className="absolute top-0 bottom-0 left-0 w-1.5 bg-brand-orange scale-y-0 group-hover:scale-y-100 transition-transform duration-300 origin-top" />
-
-                  <div className="flex items-start gap-4">
-                    {/* Step Number Circle */}
-                    <div className={`w-10 h-10 rounded-full ${theme.processCircleBg} flex items-center justify-center ${theme.processCircleText} font-bold flex-shrink-0 text-lg shadow-sm`}>
-                      {s.step}
-                    </div>
-
-                    {/* Step Description */}
-                    <div className="flex-1">
-                      <h3 className="font-heading text-xl lg:text-2xl font-bold text-slate-800 mb-2 group-hover:text-brand-orange transition-colors duration-300">
-                        {s.title}
-                      </h3>
-                      <p className="text-slate-600 text-xs md:text-sm lg:text-base leading-relaxed font-normal">
-                        {s.description}
-                      </p>
-                    </div>
-                  </div>
-                </div>
+        {/* The four steps side by side on laptops, two by two on tablets, and a row to swipe through on phones. */}
+        <ol className="flex gap-4 overflow-x-auto snap-x snap-mandatory -mx-6 px-6 scroll-px-6 pb-2 [scrollbar-width:none] sm:mx-0 sm:px-0 sm:pb-0 sm:overflow-visible sm:grid sm:grid-cols-2 lg:grid-cols-4 sm:gap-5 lg:gap-6">
+          {steps.map((s, i) => (
+            <motion.li
+              key={s.step}
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "0px 0px -8% 0px" }}
+              transition={{ duration: 0.6, delay: i * 0.08, ease: [0.25, 0.1, 0, 1] }}
+              className="group flex w-[82%] shrink-0 snap-start flex-col overflow-hidden rounded-2xl bg-white shadow-xl shadow-black/20 sm:w-auto"
+            >
+              <div className="relative aspect-[4/3] overflow-hidden">
+                <Image
+                  src={s.image}
+                  alt={s.alt}
+                  fill
+                  sizes="(min-width: 1024px) 270px, (min-width: 640px) 50vw, 100vw"
+                  className={`object-cover transition-transform duration-700 group-hover:scale-[1.03] ${s.objectPosition || ""}`}
+                />
               </div>
-            );
-          })}
-        </motion.div>
+              <div className="relative flex flex-1 flex-col p-5 lg:p-6">
+                <span className={`absolute -top-5 left-5 lg:left-6 grid place-items-center w-10 h-10 rounded-full ring-4 ring-white ${theme.processCircleBg} ${theme.processCircleText} font-bold text-lg shadow-md`}>
+                  {s.step}
+                </span>
+                <h3 className="font-heading text-xl font-bold text-brand-navy mt-4">{s.title}</h3>
+                <p className="text-slate-600 text-sm lg:text-[15px] leading-relaxed mt-2">{s.description}</p>
+              </div>
+            </motion.li>
+          ))}
+        </ol>
       </div>
     </section>
   );

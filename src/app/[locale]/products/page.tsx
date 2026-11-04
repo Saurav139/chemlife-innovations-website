@@ -10,7 +10,7 @@ import Footer from "@/components/Footer";
 import { VariantProvider } from "@/context/VariantContext";
 import SiteSearch from "@/components/SiteSearch";
 import { Images } from "@/lib/assets";
-import { PRODUCTS, productAnchor, productPath } from "@/lib/catalog";
+import { PRODUCTS, productAnchor, productPath, slugify } from "@/lib/catalog";
 import { useHashTarget } from "@/lib/deepLink";
 import { useHref, useT } from "@/i18n/LocaleProvider";
 
@@ -48,7 +48,8 @@ export default function ProductsPage() {
 
 
   // Older links to one product (/products#product-maxdmold, #MaxDmold, ?expand=MaxDmold, still in chat answers and
-  // bookmarks) go on to that product's own page. ?q=… pre-fills the search box.
+  // bookmarks) go on to that product's own page. ?q=… pre-fills the search box, and ?category=ruminants (from the
+  // homepage's "What we serve" cards) picks that animal group.
   const openProduct = (product: Product) => router.replace(href(productPath(product.name)));
   useHashTarget((target) => {
     const product =
@@ -60,6 +61,8 @@ export default function ProductsPage() {
     const params = new URLSearchParams(window.location.search);
     const query = params.get("q") || params.get("query");
     if (query) setSearchQuery(query);
+    const category = categories.find((c) => c !== "All" && slugify(c) === params.get("category"));
+    if (category) setSelectedCategory(category);
     const expand = params.get("expand")?.toLowerCase();
     if (expand) {
       const product =

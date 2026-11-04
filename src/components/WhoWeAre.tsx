@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { Images } from "@/lib/assets";
+import { PRODUCTS, slugify } from "@/lib/catalog";
 import { useHref, useT } from "@/i18n/LocaleProvider";
 import type { Messages } from "@/i18n/messages/en";
 
@@ -18,136 +19,29 @@ export const cardImages = [
 
 export type Card = Messages["home"]["whoWeAre"]["cards"][number] & { images: { src: string; alt: string }[] };
 
-// Detailed geometric SVG Snowflake vector component for the outer cell boundary
-function SnowflakeFrame({ className, style }: { className?: string; style?: React.CSSProperties }) {
+// The products page's category for each "What we serve" card, in the cards' order.
+const SERVE_CATEGORIES = ["Mono-gastric", "Ruminants", "Value Addition"];
+
+/** A card's photo, cross-fading through its three pictures; the cards change a little out of step. Still for visitors
+ *  who prefer less motion. */
+function FadingPhoto({ images, offset, priority, className = "" }: { images: Card["images"]; offset: number; priority?: boolean; className?: string }) {
+  const reduce = useReducedMotion();
+  const [index, setIndex] = useState(0);
+  useEffect(() => {
+    if (reduce) return;
+    let timer: ReturnType<typeof setInterval> | undefined;
+    const start = setTimeout(() => { timer = setInterval(() => setIndex((i) => i + 1), 4500); }, offset * 1500);
+    return () => { clearTimeout(start); clearInterval(timer); };
+  }, [offset, reduce]);
+  const image = images[index % images.length];
   return (
-    <svg
-      viewBox="0 0 120 120"
-      className={className}
-      style={style}
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      {/* 6 primary spokes */}
-      <line x1="60" y1="10" x2="60" y2="110" />
-      <line x1="16.7" y1="35" x2="103.3" y2="85" />
-      <line x1="16.7" y1="85" x2="103.3" y2="35" />
-
-      {/* Central rings */}
-      <circle cx="60" cy="60" r="15" strokeWidth="1" />
-      <circle cx="60" cy="60" r="7" strokeWidth="0.8" />
-
-      {/* Hexagonal inner connector */}
-      <polygon
-        points="60,38 79,49 79,71 60,82 41,71 41,49"
-        strokeWidth="0.6"
-        strokeDasharray="2,2"
-      />
-
-      {/* Dendrites on vertical arm (top) */}
-      <line x1="60" y1="20" x2="52" y2="15" />
-      <line x1="60" y1="20" x2="68" y2="15" />
-      <line x1="60" y1="32" x2="48" y2="25" />
-      <line x1="60" y1="32" x2="72" y2="25" />
-
-      {/* Dendrites on vertical arm (bottom) */}
-      <line x1="60" y1="100" x2="52" y2="105" />
-      <line x1="60" y1="100" x2="68" y2="105" />
-      <line x1="60" y1="88" x2="48" y2="95" />
-      <line x1="60" y1="88" x2="72" y2="95" />
-
-      {/* Top-Right Spoke (pointing to 103.3, 35) */}
-      <line x1="94.6" y1="40" x2="94.6" y2="30" />
-      <line x1="94.6" y1="40" x2="103.2" y2="45" />
-      <line x1="84.2" y1="46" x2="84.2" y2="36" />
-      <line x1="84.2" y1="46" x2="92.8" y2="51" />
-
-      {/* Bottom-Left Spoke (pointing to 16.7, 85) */}
-      <line x1="25.4" y1="80" x2="25.4" y2="90" />
-      <line x1="25.4" y1="80" x2="16.8" y2="75" />
-      <line x1="35.8" y1="74" x2="35.8" y2="84" />
-      <line x1="35.8" y1="74" x2="27.2" y2="69" />
-
-      {/* Bottom-Right Spoke (pointing to 103.3, 85) */}
-      <line x1="94.6" y1="80" x2="94.6" y2="90" />
-      <line x1="94.6" y1="80" x2="103.2" y2="75" />
-      <line x1="84.2" y1="74" x2="84.2" y2="84" />
-      <line x1="84.2" y1="74" x2="92.8" y2="69" />
-
-      {/* Top-Left Spoke (pointing to 16.7, 35) */}
-      <line x1="25.4" y1="40" x2="25.4" y2="30" />
-      <line x1="25.4" y1="40" x2="16.8" y2="45" />
-      <line x1="35.8" y1="46" x2="35.8" y2="36" />
-      <line x1="35.8" y1="46" x2="27.2" y2="51" />
-    </svg>
-  );
-}
-
-export function SnowflakeCell({
-  card,
-  index,
-  imageIndex,
-}: {
-  card: Card;
-  index: number;
-  imageIndex: number;
-}) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 50 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.6, delay: index * 0.1, ease: [0.25, 0.1, 0, 1] }}
-      className="flex flex-row md:flex-col items-center gap-5 md:gap-0 text-left md:text-center group cursor-pointer"
-    >
-      {/* 3D Visual Snowflake Image Container (No text overlay). Phones: a smaller circle beside the text. */}
-      <div className="relative shrink-0 w-[132px] h-[132px] sm:w-[160px] sm:h-[160px] md:w-[220px] md:h-[220px] lg:w-[320px] lg:h-[320px] flex items-center justify-center">
-        {/* Outer Snowflake Frame (acting as outer border structure) */}
-        <SnowflakeFrame
-          className="absolute w-[128px] h-[128px] sm:w-[156px] sm:h-[156px] md:w-[214px] md:h-[214px] lg:w-[310px] lg:h-[310px] text-teal-500/20 group-hover:text-brand-orange/45 transition-colors duration-500 z-0 pointer-events-none select-none"
-          style={{ animation: "spin 45s linear infinite" }}
-        />
-
-        {/* Enlarged Inner Circular Card (100% visible image, zero overlap) */}
-        <motion.div
-          whileHover={{ scale: 1.05 }}
-          className="relative w-[98px] h-[98px] sm:w-[120px] sm:h-[120px] md:w-[165px] md:h-[165px] lg:w-[235px] lg:h-[235px] rounded-full overflow-hidden border-2 border-teal-500/25 group-hover:border-brand-orange transition-all duration-300 z-10 bg-gray-50 shadow-xl"
-        >
-          <AnimatePresence mode="popLayout">
-            <motion.div
-              key={card.images[imageIndex % card.images.length].src}
-              initial={{ rotate: -180, opacity: 0 }}
-              animate={{ rotate: 0, opacity: 1 }}
-              exit={{ rotate: 180, opacity: 0 }}
-              transition={{ duration: 0.8, ease: "easeInOut" }}
-              className="absolute inset-0 w-full h-full"
-            >
-              <Image
-                src={card.images[imageIndex % card.images.length].src}
-                alt={card.images[imageIndex % card.images.length].alt}
-                fill
-                sizes="(min-width: 1024px) 235px, 165px"
-                className="object-cover opacity-100 group-hover:scale-105 transition-transform duration-700"
-                priority={index === 0}
-              />
-            </motion.div>
-          </AnimatePresence>
+    <div className={`relative overflow-hidden bg-slate-100 ${className}`}>
+      <AnimatePresence initial={false}>
+        <motion.div key={image.src} className="absolute inset-0" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.9, ease: easeOut }}>
+          <Image src={image.src} alt={image.alt} fill priority={priority && index === 0} sizes="(min-width: 1024px) 370px, (min-width: 768px) 33vw, 128px" className="object-cover transition-transform duration-700 group-hover:scale-[1.03]" />
         </motion.div>
-      </div>
-
-      {/* Combined Typography Content (Clean alignment below the image) */}
-      <div className="flex-1 md:flex-none md:mt-4 md:max-w-[270px] md:px-2 flex flex-col items-start md:items-center">
-        <h3 className="font-heading text-lg md:text-xl font-bold text-teal-aa mb-1 md:mb-2 leading-tight transition-colors duration-300 group-hover:text-brand-orange">
-          {card.title}
-        </h3>
-        <p className="text-slate-600 text-lg leading-relaxed font-normal">
-          {card.description}
-        </p>
-      </div>
-    </motion.div>
+      </AnimatePresence>
+    </div>
   );
 }
 
@@ -172,18 +66,10 @@ export default function WhoWeAre() {
   const t = messages.home.whoWeAre;
   const foundersAlt = messages.about.foundersAlt;
   const href = useHref();
-  const [imageIndex, setImageIndex] = useState(0);
   const cards: Card[] = t.cards.map((card, i) => ({
     ...card,
     images: cardImages[i].map((src, j) => ({ src, alt: card.alts[j] })),
   }));
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setImageIndex((prev) => prev + 1);
-    }, 4000);
-    return () => clearInterval(timer);
-  }, []);
 
 
   return (
@@ -220,31 +106,35 @@ export default function WhoWeAre() {
           </Reveal>
         </div>
 
-        {/* What we serve: the three species groups */}
+        {/* What we serve: the three animal groups, each a photo card linking to its products. */}
         <h3 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold leading-tight text-brand-navy text-center mt-16 md:mt-24">
           {t.serveTitle}
         </h3>
-
-        {/* Grid layout containing the Snowflake Cells */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-12 max-w-5xl mx-auto justify-items-stretch md:justify-items-center w-full mt-8 z-10 relative">
-          {cards.map((card, i) => (
-            <SnowflakeCell
-              key={`snowflake-cell-${i}`}
-              card={card}
-              index={i}
-              imageIndex={imageIndex}
-            />
-          ))}
+        {/* Phones: compact rows, a small photo beside the text. Tablets up: three photo cards. */}
+        <div className="grid md:grid-cols-3 gap-4 md:gap-6 mt-8 md:mt-12">
+          {cards.map((card, i) => {
+            const category = SERVE_CATEGORIES[i];
+            const count = PRODUCTS.filter((product) => product.category === category).length;
+            return (
+              <Reveal key={card.title} delay={i * 0.08} className="h-full">
+                <a href={`${href("/products")}?category=${slugify(category)}`} data-analytics-click={card.title}
+                  className="group flex h-full flex-row md:flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-shadow duration-300 hover:shadow-lg">
+                  <FadingPhoto images={card.images} offset={i} className="w-28 shrink-0 self-stretch md:w-auto md:self-auto md:aspect-[4/3]" />
+                  <div className="flex flex-1 flex-col p-4 md:p-6">
+                    <h4 className="font-heading text-lg md:text-xl font-bold text-brand-navy group-hover:text-brand-orange-aa transition-colors">{card.title}</h4>
+                    <p className="text-slate-600 text-sm md:text-base leading-relaxed mt-1 md:mt-2 flex-1">{card.description}</p>
+                    <span className="inline-flex items-center gap-2 min-h-11 mt-1 md:mt-3 text-sm md:text-base font-semibold text-teal-aa">
+                      {t.serveLink.replace("{count}", String(count))}
+                      <svg aria-hidden="true" className="w-4 h-4 transition-transform group-hover:translate-x-0.5" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round"><path d="M4 10h12M11 5l5 5-5 5" /></svg>
+                    </span>
+                  </div>
+                </a>
+              </Reveal>
+            );
+          })}
         </div>
       </div>
 
-      {/* CSS Spin Keyframes for slowly rotating snowflakes */}
-      <style jsx global>{`
-        @keyframes spin {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
-        }
-      `}</style>
     </section>
   );
 }
