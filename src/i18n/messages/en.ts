@@ -366,7 +366,7 @@ const en = {
     iconAlt: "icon",
     items: [
       {
-        tagline: "Bio-copper power. Dual-action mould shield",
+        tagline: "Bio-copper power. Dual-action mold shield",
         about: "MaxDmold is a bioactive mold inhibition solution formulated with copper chelates and natural phenolic compounds. It provides efficient fungal control, protects nutrient integrity, and offers a safer, low-inclusion alternative to conventional copper-based preservatives.",
         features: [
           "Chelated bio-copper mold inhibition system",
@@ -374,7 +374,7 @@ const en = {
           "Low-dose application with improved safety",
           "Protects feed nutrients during storage",
         ],
-        inclusionRate: "25 g/MT of feed or feed ingredients (or as recommended by the Nutritionist)",
+        inclusionRate: "25 g/MT of feed (or as recommended by the Nutritionist)",
         packSize: "25 kg Bag",
       },
       {
@@ -384,14 +384,13 @@ const en = {
           "Protects feed ingredients from mold growth",
           "Long-time protection across full storage cycle",
           "Kills mold before secondary toxins formation",
-          "Safe for galvanized silos, augers & stainless steel",
           "Lower inclusion levels, safer ingredients",
         ],
-        inclusionRate: "Spray 250 g of MaxDMold spray diluted with 250 mL water per metric ton of feed or feed ingredients (or as recommended by the Nutritionist)",
+        inclusionRate: "Spray 250–500 g of MaxDmold Spray diluted with 250–500 mL of water per metric ton of feed ingredients (or as recommended by the Nutritionist)",
         packSize: "35L can",
       },
       {
-        tagline: "Bio-mineral mould guard. Designed for Dairy",
+        tagline: "Bio-mineral mold guard. Designed for Dairy",
         about: "SynDmold is an advanced feed hygiene additive for dairy cattle feeds that combines bioactive mineral complexes with a proprietary natural phytoactive matrix to control bacteria and molds. It helps preserve feed hygiene, nutrient quality, and feed stability throughout feed manufacture, storage, and feeding.",
         features: [
           "Broad-Spectrum Mold & Bacterial Control",
@@ -412,7 +411,7 @@ const en = {
           "Thermostable during commercial feed pelleting",
           "Improves body weight and FCR",
         ],
-        inclusionRate: "250 g/MT of feed or feed ingredients (or as recommended by the Nutritionist)",
+        inclusionRate: "250 g/MT of feed (or as recommended by the Nutritionist)",
         packSize: "25 kg Bag",
       },
       {
@@ -425,7 +424,7 @@ const en = {
           "Free-flowing formulation for uniform mixing",
         ],
         inclusionRate: "Transition Dairy Animals: 20 g/animal/day\nEarly lactation Dairy Animals: 15-25 g/cow/day\nMid-late lactation Dairy Animals: 10-15 g/cow/day\nSmall Ruminants: 5-10 g/animal/day\nFor Dairy Feed: 0.5-2 kg/MT\n\nOr as per the recommendation of a Nutritionist",
-        packSize: "25kg Bag",
+        packSize: "20kg Bag",
       },
       {
         tagline: "Activate rumen power. Drive productivity.",
@@ -436,8 +435,8 @@ const en = {
           "Stabilizes rumen fermentation",
           "Promotes efficient microbial activity",
         ],
-        inclusionRate: "1 kg/MT of feed (or as recommended by the Nutritionist)",
-        packSize: "25kg Bag",
+        inclusionRate: "Young post-wean calves & growing heifers: 2.5–5 g/day\nLactating animals: 10–20 g/day\nFar-off animals in the transition period: 20 g/day\nFeed type: Mix thoroughly with concentrate feed or TMR\n\nOr as recommended by the Nutritionist",
+        packSize: "20kg Bag",
       },
       {
         tagline: "Heat Stable. Stronger rumen power",
@@ -448,7 +447,7 @@ const en = {
           "Maintains efficacy after processing",
           "Supports rumen fermentation efficiency",
         ],
-        inclusionRate: "1 kg/MT of feed (or as recommended by the Nutritionist)",
+        inclusionRate: "Young post-wean calves & growing heifers: 2.5–5 g/day\nLactating animals: 10–20 g/day\nFar-off animals in the transition period: 20 g/day\nFeed type: Mix thoroughly with concentrate feed or TMR\n\nOr as recommended by the Nutritionist",
         packSize: "25kg Bag",
       },
       {
@@ -461,7 +460,7 @@ const en = {
           "Designed for transition cow nutrition",
         ],
         inclusionRate: "Dairy Cattle & Buffalo: 25 g/head/day\nHigh-yield dairy cows & Buffaloes in transition: 25 - 50 g/head/day\n\nFeed inclusion:\nDairy Cow: 0.75 - 2 kg/MT of Dairy Feed\nGoat/Sheep: 2 - 5 g per animal per day\n\nOr as per the recommendation of a Nutritionist",
-        packSize: "25kg Bag",
+        packSize: "20kg Bag",
       },
       {
         tagline: "Rumen pH balance. Steady performance.",
@@ -484,13 +483,13 @@ const en = {
           "MinBioZen-Cu: Copper 20%",
           "MinBioZen-Fe: Iron 20%",
           "MinBioZen-Cr: Chromium 6.5%",
+          "MinBioZen-Co: Cobalt 6.5%",
           "Need-based customizable species-specific blends",
         ],
         features: [
-          "Hydroxy amino acid chelation technology",
-          "High mineral bioavailability",
-          "Reduced mineral antagonism",
-          "Improved biological utilization",
+          "Optimal stability",
+          "Ideal molecular weight",
+          "Perfect solubility profile",
         ],
         inclusionRate: "As recommended by the Nutritionist",
         packSize: "25kg Bag",
@@ -504,19 +503,19 @@ const en = {
           "Supports intestinal microbial balance",
           "Optimizes nutrient absorption",
         ],
-        inclusionRate: "GroGenie 12%: 500 g/MT of feed (up to 1 kg/MT under challenge conditions)\nGroGenie 60%: 100 g/MT of feed (up to 500 g/MT under challenge conditions)",
+        inclusionRate: "GroGenie 12%: 500 g/MT of feed\nGroGenie 60%: 100 g/MT of feed",
         packSize: "25kg Bag",
       },
       {
         tagline: "Revitalize hepatocytes. Sustain performance.",
         about: "LivproGenie is a phyto-nutritional liver support solution designed to optimize hepatic metabolism and detoxification in poultry. It enhances metabolic resilience, nutrient utilization, and liver function during production and toxin-associated stress.",
         features: [
-          "Supports Phase I & II liver detoxification",
+          "Supports liver detoxification",
           "Enhances metabolic efficiency",
           "Helps manage oxidative stress",
           "Optimizes liver–gut functionality",
         ],
-        inclusionRate: "Broilers: 10 ml/ 100 birds: 2-3 weeks\nBroilers: 20 ml/100 birds: 4th week onward\nBreeders & layers: 20 ml/100 birds\n\nOr as recommended by the Nutritionist",
+        inclusionRate: "Broilers: 10 mL/ 100 birds: 2-3 weeks\nBroilers: 20 mL/100 birds: 4th week onward\nBreeders & layers: 20 mL/100 birds\n\nOr as recommended by the Nutritionist",
         packSize: "5L | 35L | 200L",
       },
       {
@@ -540,7 +539,7 @@ const en = {
           "Supports intestinal barrier integrity",
           "Stable, non-corrosive formulation",
         ],
-        inclusionRate: "Chicks: 2-4 ml / L of water\nBroilers: 1-2 ml/L of water\nBreeders & Layers: 1-2 ml/L of water\n\nOr as recommended by the Nutritionist",
+        inclusionRate: "Chicks: 2-4 mL / L of water\nBroilers: 1-2 mL/L of water\nBreeders & Layers: 1-2 mL/L of water\n\nOr as recommended by the Nutritionist",
         packSize: "5L | 35L | 200L",
       },
       {
@@ -552,7 +551,7 @@ const en = {
           "Advanced Adsorption-Based Formulation",
           "Scientifically Validated Performance",
         ],
-        inclusionRate: "1kg /MT",
+        inclusionRate: "1 kg/MT\n\nOr as recommended by the Nutritionist",
         packSize: "25kg Bag",
       },
       {
@@ -564,20 +563,19 @@ const en = {
           "Supports Feed Safety & Hygiene",
           "Easy Feed Incorporation",
         ],
-        inclusionRate: "1-2kg /MT",
+        inclusionRate: "1-2 kg/MT\n\nOr as recommended by the Nutritionist",
         packSize: "25kg Bag",
       },
       {
-        tagline: "Detoxed DDGS for safer nutrition. Clean DDGS. Choice of Animal Nutritionist",
-        about: "DDGS-Dtox is a cutting-edge, dual-acting detoxification strategy specifically designed to target and deactivate aflatoxins and destroy aflatoxin-producing molds. Formulated as a dual-active Copper Bio-complex, it breaks down AFB1 by disrupting its toxic structure and inhibits mold formation by interfering with its metabolic activities, delivering a safe feed ingredient with high protein content.",
+        tagline: "Detoxed DDGS for safe nutrition. Clean DDGS. Choice of Animal Nutritionist",
+        about: "DDGS-Dtox is a cutting-edge, dual-action solution designed to control aflatoxin contamination in DDGS, enabling safer and more reliable utilization in animal feed. Formulated with Bioactive Enzymes, it combines effective aflatoxin adsorption with enzymatic detoxification to reduce toxin-related risks while preserving the nutritional value of DDGS.",
         features: [
-          "Over 90% Aflatoxin Reduction - Effective and reliable detoxification",
           "Preserves Nutrients - Ensures feed retains its full nutritional quality",
           "Eco-Friendly - Operates under mild, environmentally safe conditions",
           "Safe Metabolites - Converts AFB1 into non-toxic metabolites",
           "Easy Integration - Compatible with standard DDGS processing systems",
         ],
-        inclusionRate: "Compatible with standard DDGS processing systems (or as recommended by the Nutritionist)",
+        inclusionRate: "1-2 kg/MT of feed (or as standardised)",
         packSize: "25kg Bag",
       },
       {
