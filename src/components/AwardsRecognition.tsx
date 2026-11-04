@@ -9,7 +9,7 @@ import { useT } from "@/i18n/LocaleProvider";
 
 // Titles and descriptions are in the language file (home.awards.items), in this order. New awards go at the end:
 // previews pair these by position.
-const certificateFiles = [
+export const certificateFiles = [
   {
     file: "c-camp-logo.png",
     organization: "Centre for Cellular and Molecular Platforms (C-CAMP)",

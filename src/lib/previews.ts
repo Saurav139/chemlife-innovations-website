@@ -5,6 +5,12 @@ import { isLiveHost } from "@/lib/seo";
 // the site instead. Never shown on the live site.
 export const PREVIEWS = [
   {
+    slug: "homepage-style",
+    href: "/previews/homepage-style",
+    title: "Homepage: one consistent style",
+    description: "What We Serve as plain photo cards instead of spinning snowflakes, the awards as a logo wall (A) or a plain one-at-a-time card (B), and the headings in one style. Each block switches between the proposal and the current homepage.",
+  },
+  {
     slug: "who-we-are-corporate",
     href: "/previews/who-we-are-corporate",
     title: "Who We Are page: four corporate versions",

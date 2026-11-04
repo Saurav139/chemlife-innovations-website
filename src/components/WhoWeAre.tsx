@@ -10,13 +10,13 @@ import type { Messages } from "@/i18n/messages/en";
 const easeOut = [0.25, 0.1, 0, 1] as const;
 
 // Each card's title, description and photo descriptions are in the language file (home.whoWeAre.cards), in this order.
-const cardImages = [
+export const cardImages = [
   [Images.gallery.rotate11, Images.gallery.rotate12, Images.gallery.rotate13],
   [Images.gallery.rotate21, Images.gallery.rotate22, Images.gallery.rotate23],
   [Images.research.pellets, Images.gallery.rotate32, Images.gallery.rotate33],
 ];
 
-type Card = Messages["home"]["whoWeAre"]["cards"][number] & { images: { src: string; alt: string }[] };
+export type Card = Messages["home"]["whoWeAre"]["cards"][number] & { images: { src: string; alt: string }[] };
 
 // Detailed geometric SVG Snowflake vector component for the outer cell boundary
 function SnowflakeFrame({ className, style }: { className?: string; style?: React.CSSProperties }) {
@@ -86,7 +86,7 @@ function SnowflakeFrame({ className, style }: { className?: string; style?: Reac
   );
 }
 
-function SnowflakeCell({
+export function SnowflakeCell({
   card,
   index,
   imageIndex,
