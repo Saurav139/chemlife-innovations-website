@@ -3,19 +3,10 @@ import { Images } from "@/lib/assets";
 // The site's products, research topics and internships, shared by their pages and the site search. Their text
 // (taglines, descriptions and so on) is in the language files, in the same order as these lists.
 
-/** The product platforms the products page groups by, in its order. Their names are in products.platforms. */
-export const PLATFORMS = ["hygiene", "rumen", "gut", "minerals"] as const;
-export type Platform = (typeof PLATFORMS)[number];
-
 export interface ProductBase {
   id: number;
   name: string;
   category: string;
-  /** Which platform it belongs to, for grouping on the products page. */
-  platform: Platform;
-  /** Its usual dose in short, for the product card ({day}, {birds} and {water} are words from products.units). The
-   *  full inclusion rate is in the language file; without a dose here the card shows that. */
-  dose?: string;
   icon: string;
   banner?: string;
 }
@@ -25,8 +16,6 @@ export const PRODUCTS: ProductBase[] = [
     id: 1,
     name: "MaxDmold",
     category: "Mono-gastric",
-    platform: "hygiene",
-    dose: "25 g/MT",
     icon: Images.products.icons.maxdmold,
     banner: Images.products.banners.maxdmold
   },
@@ -34,8 +23,6 @@ export const PRODUCTS: ProductBase[] = [
     id: 2,
     name: "MaxDmold Spray",
     category: "Value Addition",
-    platform: "hygiene",
-    dose: "250–500 g/MT",
     icon: Images.products.icons.maxdmoldSpray,
     banner: Images.products.banners.maxdmoldSpray
   },
@@ -43,8 +30,6 @@ export const PRODUCTS: ProductBase[] = [
     id: 3,
     name: "SynDmold",
     category: "Ruminants",
-    platform: "hygiene",
-    dose: "50 g/MT",
     icon: Images.products.icons.syndmold,
     banner: Images.products.banners.syndmold
   },
@@ -52,8 +37,6 @@ export const PRODUCTS: ProductBase[] = [
     id: 4,
     name: "MaxDmold Plus",
     category: "Mono-gastric",
-    platform: "hygiene",
-    dose: "250 g/MT",
     icon: Images.products.icons.maxdmoldPlus,
     banner: Images.products.banners.maxdmoldPlus
   },
@@ -61,8 +44,6 @@ export const PRODUCTS: ProductBase[] = [
     id: 5,
     name: "MethioWiz",
     category: "Ruminants",
-    platform: "rumen",
-    dose: "5–25 g/{day}",
     icon: Images.products.icons.methiowiz,
     banner: Images.products.banners.methiowiz
   },
@@ -70,8 +51,6 @@ export const PRODUCTS: ProductBase[] = [
     id: 6,
     name: "MBioWiz Plus",
     category: "Ruminants",
-    platform: "rumen",
-    dose: "2.5–20 g/{day}",
     icon: Images.products.icons.mbiowizPlus,
     banner: Images.products.banners.mbiowizPlus
   },
@@ -79,8 +58,6 @@ export const PRODUCTS: ProductBase[] = [
     id: 7,
     name: "MBioWiz TS",
     category: "Ruminants",
-    platform: "rumen",
-    dose: "2.5–20 g/{day}",
     icon: Images.products.icons.mbiowizTs,
     banner: Images.products.banners.mbiowizTs
   },
@@ -88,8 +65,6 @@ export const PRODUCTS: ProductBase[] = [
     id: 8,
     name: "CholiWiz",
     category: "Ruminants",
-    platform: "rumen",
-    dose: "25–50 g/{day}",
     icon: Images.products.icons.choliwiz,
     banner: Images.products.banners.choliwiz
   },
@@ -97,8 +72,6 @@ export const PRODUCTS: ProductBase[] = [
     id: 9,
     name: "RumiWiz",
     category: "Ruminants",
-    platform: "rumen",
-    dose: "1 kg/MT",
     icon: Images.products.icons.rumiwiz,
     banner: Images.products.banners.rumiwiz
   },
@@ -106,7 +79,6 @@ export const PRODUCTS: ProductBase[] = [
     id: 10,
     name: "MinBioZen",
     category: "Value Addition",
-    platform: "minerals",
     icon: Images.products.icons.minbiozen,
     banner: Images.products.banners.minbiozen
   },
@@ -114,8 +86,6 @@ export const PRODUCTS: ProductBase[] = [
     id: 11,
     name: "GroGenie (12% & 60%)",
     category: "Mono-gastric",
-    platform: "gut",
-    dose: "100–500 g/MT",
     icon: Images.products.icons.grogenie,
     banner: Images.products.banners.grogenie
   },
@@ -123,8 +93,6 @@ export const PRODUCTS: ProductBase[] = [
     id: 12,
     name: "LivproGenie",
     category: "Mono-gastric",
-    platform: "gut",
-    dose: "10–20 mL/100 {birds}",
     icon: Images.products.icons.livprogenie,
     banner: Images.products.banners.livprogenie
   },
@@ -132,8 +100,6 @@ export const PRODUCTS: ProductBase[] = [
     id: 13,
     name: "EggGenie",
     category: "Mono-gastric",
-    platform: "minerals",
-    dose: "500–750 g/MT",
     icon: Images.products.icons.egggenie,
     banner: Images.products.banners.egggenie
   },
@@ -141,8 +107,6 @@ export const PRODUCTS: ProductBase[] = [
     id: 14,
     name: "GutproGenie",
     category: "Mono-gastric",
-    platform: "gut",
-    dose: "1–4 mL/L {water}",
     icon: Images.products.icons.gutprogenie,
     banner: Images.products.banners.gutprogenie
   },
@@ -150,8 +114,6 @@ export const PRODUCTS: ProductBase[] = [
     id: 15,
     name: "AflaMlock",
     category: "Ruminants",
-    platform: "hygiene",
-    dose: "1 kg/MT",
     icon: Images.products.icons.aflamlock,
     banner: Images.products.banners.aflamlock
   },
@@ -159,8 +121,6 @@ export const PRODUCTS: ProductBase[] = [
     id: 16,
     name: "FeedGenie Forte",
     category: "Mono-gastric",
-    platform: "hygiene",
-    dose: "1–2 kg/MT",
     icon: Images.products.icons.feedgenie,
     banner: Images.products.banners.feedgenieFort
   },
@@ -168,8 +128,6 @@ export const PRODUCTS: ProductBase[] = [
     id: 17,
     name: "DDGS-Dtox",
     category: "Value Addition",
-    platform: "hygiene",
-    dose: "1–2 kg/MT",
     icon: Images.products.icons.ddgsDtox,
     banner: Images.products.banners.ddgsDtox
   },
@@ -177,8 +135,6 @@ export const PRODUCTS: ProductBase[] = [
     id: 18,
     name: "FeedGenie Prime",
     category: "Mono-gastric",
-    platform: "hygiene",
-    dose: "1–2 kg/MT",
     icon: Images.products.icons.feedgeniePrime,
     banner: Images.products.banners.feedgeniePrime
   }
