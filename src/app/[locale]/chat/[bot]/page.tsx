@@ -286,6 +286,8 @@ function ChatSessionContent() {
   const meta = BOT_META[botKey];
 
   const initialQuery = searchParams.get("q") || "";
+  // Set when the other bot handed this question over, so it's answered here rather than routed again.
+  const handedOver = searchParams.get("routed") === "1";
 
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
@@ -324,7 +326,7 @@ function ChatSessionContent() {
     if (!initialQuery || firedQueryRef.current[botKey]) return;
     firedQueryRef.current[botKey] = true;
     setMessages([{ role: "user", content: initialQuery }]);
-    fireMessage(initialQuery, []);
+    fireMessage(initialQuery, [], handedOver);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [botKey, initialQuery]);
 
@@ -363,13 +365,13 @@ function ChatSessionContent() {
   const buildHistory = (msgs: Message[]): Turn[] =>
     msgs.filter((m) => !m.isError).slice(-10).map((m) => ({ role: m.role, content: m.content }));
 
-  const fireMessage = useCallback(async (text: string, currentHistory: Turn[]) => {
+  const fireMessage = useCallback(async (text: string, currentHistory: Turn[], routed = false) => {
     setLoading(true);
     try {
-      const data = await sendMessage(text, botKey, currentHistory);
+      const data = await sendMessage(text, botKey, currentHistory, routed);
       if (data.redirect_to) {
         delete firedQueryRef.current[data.redirect_to];
-        router.replace(`/chat/${data.redirect_to}?q=${encodeURIComponent(text)}`);
+        router.replace(`/chat/${data.redirect_to}?q=${encodeURIComponent(text)}&routed=1`);
         return;
       }
       setMessages((prev) => [...prev, { role: "assistant", content: data.reply, sources: data.sources }]);
