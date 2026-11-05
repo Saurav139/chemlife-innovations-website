@@ -442,7 +442,7 @@ export default function InsightsInbox({ initial, demo = false }: { initial: Data
             ))}
           </div>
           <p id="automatic-social-help" className="mt-2 text-sm text-slate-600 leading-relaxed">
-            For each selected channel, adds all waiting posts and publishes future imports from connected channels without review. Hidden posts stay hidden. Turning a channel off keeps its posts already on the page.
+            For each selected channel, adds all waiting posts and publishes future imports from connected channels without review. While any box is ticked, the site checks for new posts every 10 minutes on its own, so nobody needs to open this page. Hidden posts stay hidden. Turning a channel off keeps its posts already on the page.
           </p>
           {savingAutomatic && <p role="status" className="mt-2 text-sm font-semibold text-teal-aa">Saving {SOURCE_LABEL[savingAutomatic]} preference…</p>}
         </section>

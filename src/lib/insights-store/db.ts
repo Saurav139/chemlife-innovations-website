@@ -136,6 +136,18 @@ export async function setSetting(name: string, value: string): Promise<void> {
   await db.execute("INSERT INTO insight_settings (name, value) VALUES (?, ?) ON DUPLICATE KEY UPDATE value = VALUES(value)", [name, value]);
 }
 
+/** Takes a turn shared by every server process: true for the one process that moves the setting's time forward,
+ *  when it is older than `before`. The row lock makes two processes asking at once get one yes between them. */
+export async function claimTurn(name: string, before: Date, now = new Date()): Promise<boolean> {
+  const db = await pool();
+  await db.execute("INSERT IGNORE INTO insight_settings (name, value) VALUES (?, ?)", [name, new Date(0).toISOString()]);
+  const [result] = await db.execute<ResultSetHeader>(
+    "UPDATE insight_settings SET value = ? WHERE name = ? AND value < ?",
+    [now.toISOString(), name, before.toISOString()]
+  );
+  return result.affectedRows > 0;
+}
+
 export async function socialAutoPublishEnabled(source: SocialSource): Promise<boolean> {
   // Keep the old combined preference until this channel gets its own explicit choice.
   const saved = await getSetting(SOCIAL_AUTO_PUBLISH_SETTINGS[source]);

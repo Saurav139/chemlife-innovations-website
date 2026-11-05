@@ -14,11 +14,13 @@ The moderator decides which posts from ChemLife's channels appear on the Insight
   otherwise the newest is featured. **Edit** changes how a post appears on the page, never the original, and shows
   the card as the page will.
 - The inbox checks for new posts when the moderator opens it (at most every 10 minutes), with **Check for new
-  posts**, and from a scheduled job if one is set up.
+  posts**, and from a scheduled job if one is set up. While any **Automatically add … to Insights** box is ticked, the
+  site also checks every 10 minutes by itself (`auto-sync.ts`, started from `src/instrumentation.ts`), and a visit to
+  the Insights page checks if one is due, in case the host paused the server. No one needs to open the inbox.
 - **Automatically add LinkedIn posts to Insights** and **Automatically add Instagram posts to Insights** save
   independent database preferences, off by default. Enabling one adds that channel's waiting posts to the public
   Insights page and checks connected channels immediately. Future imports from that channel are approved during
-  normal dashboard or scheduled checks; the other channel keeps its own setting. Sites with the previous combined
+  the automatic checks (or dashboard and scheduled ones); the other channel keeps its own setting. Sites with the previous combined
   preference inherit it for each channel until that channel gets its own choice.
   Hidden posts and featured selections are preserved. Turning a channel off only changes its future imports; existing
   approved posts stay on the page. Manually pasted posts still use the decision chosen in the Add a post form.
@@ -66,6 +68,7 @@ The staging and live sites should each have their own database, so testing on st
 - `db.ts`: the MySQL tables (created on first use): posts, copied pictures, settings.
 - `sources.ts`: reading YouTube, WordPress and Instagram. `preview.ts`: filling in a pasted link.
 - `feed.ts`: reading LinkedIn and Instagram feeds through the same public-address checks as pasted links.
+- `auto-sync.ts`: the 10-minute check while automatic adding is on; one server process runs each check.
 - `sync.ts`: checking for new posts, and starting the inbox from the built-in list (`FALLBACK_INSIGHTS` in
   `src/lib/insights.ts`). Once per database it also brings blog posts imported before October 2026 up to today's
   summaries and titles.
