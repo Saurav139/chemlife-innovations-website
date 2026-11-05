@@ -136,7 +136,7 @@ function parseHistory(value: unknown): Turn[] {
     .map((t) => ({ role: t.role, content: t.content.slice(0, 2000) }));
 }
 
-async function readRequest(request: Request): Promise<{ message: string; bot: BotKey; history: Turn[] }> {
+async function readRequest(request: Request): Promise<{ message: string; bot: BotKey; history: Turn[]; routed: boolean }> {
   if (Number(request.headers.get("content-length")) > MAX_BODY_BYTES) {
     throw new ChatFailure("invalid_request", "Request body is too large");
   }
@@ -158,7 +158,7 @@ async function readRequest(request: Request): Promise<{ message: string; bot: Bo
   if (body.bot !== "kukku" && body.bot !== "mikku") {
     throw new ChatFailure("invalid_request", "bot must be kukku or mikku");
   }
-  return { message, bot: body.bot, history: parseHistory(body.history) };
+  return { message, bot: body.bot, history: parseHistory(body.history), routed: body.routed === true };
 }
 
 function checkRateLimits(ip: string | null) {
@@ -184,7 +184,7 @@ export function GET() {
   return NextResponse.json({ available: isConfigured() }, { headers: { "Cache-Control": "no-store" } });
 }
 
-const ROUTER_PROMPT = `You are a query classifier. Classify the following query as either 'kukku' (poultry-related: chickens, broilers, layers, eggs, hens, feed, poultry diseases, chicks, swine, pigs) or 'mikku' (dairy-related: cows, buffaloes, milk, rumen, dairy, calves, lactation, fertility in cattle, silages). Return ONLY the single word 'kukku' or 'mikku' with no punctuation or explanation.`;
+const ROUTER_PROMPT = `You are a query classifier for a chat with two assistants. Classify the visitor's LATEST message as 'kukku' (poultry-related: chickens, broilers, layers, eggs, hens, poultry feed, poultry diseases, chicks, swine, pigs) or 'mikku' (dairy-related: cows, buffaloes, milk, rumen, dairy, calves, lactation, fertility in cattle, silages). Use the earlier conversation, if given, only to understand what a short follow-up refers to. If the latest message is not clearly about either (a greeting, thanks, a general question, or a follow-up that continues the current topic without naming animals), return 'none'. Return ONLY the single word 'kukku', 'mikku' or 'none' with no punctuation or explanation.`;
 
 const PRODUCT_URLS: Record<string, string> = {
   "maxdmold plus": "/products?expand=MaxDmold+Plus",
@@ -231,8 +231,14 @@ const PRODUCT_URLS: Record<string, string> = {
   "ddgs dtox": "/products?expand=DDGS-Dtox",
 };
 
-/** Which bot should answer, or null if the classifier fails or is unsure, so the visitor stays where they are. */
-async function classifyQuery(message: string, requestId: string): Promise<BotKey | null> {
+/** Which bot should answer, or null if the classifier fails or is unsure, so the visitor stays where they are. The last
+ *  few turns go with the message, so a short follow-up is read in context. */
+async function classifyQuery(message: string, history: Turn[], requestId: string): Promise<BotKey | null> {
+  const context = history
+    .slice(-4)
+    .map((turn) => `${turn.role === "user" ? "Visitor" : "Assistant"}: ${turn.content.slice(0, 400)}`)
+    .join("\n");
+  const input = context ? `Earlier conversation:\n${context}\n\nLatest message: ${message}` : message;
   try {
     const data = await callOpenAI(
       "chat/completions",
@@ -240,7 +246,7 @@ async function classifyQuery(message: string, requestId: string): Promise<BotKey
         model: "gpt-4o-mini",
         messages: [
           { role: "system", content: ROUTER_PROMPT },
-          { role: "user", content: message },
+          { role: "user", content: input },
         ],
         max_tokens: 5,
         temperature: 0,
@@ -336,7 +342,7 @@ function isSourceReferenced(reply: string, title: string, url: string): boolean 
 export async function POST(request: Request) {
   const requestId = crypto.randomUUID().slice(0, 8);
   try {
-    const { message, bot, history } = await readRequest(request);
+    const { message, bot, history, routed } = await readRequest(request);
 
     checkRateLimits(clientIp(request));
 
@@ -344,10 +350,11 @@ export async function POST(request: Request) {
       throw new ChatFailure("not_configured", "OPENAI_API_KEY or PINECONE_API_KEY is not set");
     }
 
-    // 1. Router Classification, for the first message only. Follow-ups stay with this bot,
-    // which hands over itself with a <redirect> tag when a question belongs to the other one.
-    if (history.length === 0) {
-      const classifiedBot = await classifyQuery(message, requestId);
+    // 1. Router Classification, for every message, so a question about the other bot's animals goes to it at any
+    // point in the chat. A message that was just handed over ("routed") is answered where it landed, so it can't
+    // bounce back.
+    if (!routed) {
+      const classifiedBot = await classifyQuery(message, history, requestId);
       if (classifiedBot && classifiedBot !== bot) {
         return NextResponse.json({
           reply: "",
@@ -493,7 +500,8 @@ User question: ${message}`;
     let redirectTo: string | undefined;
     const redirectMatch = replyText.match(/<redirect>(mikku|kukku)<\/redirect>/i);
     if (redirectMatch) {
-      redirectTo = redirectMatch[1].toLowerCase();
+      // A message that was just handed over stays here, so two bots can't pass it back and forth.
+      if (!routed && redirectMatch[1].toLowerCase() !== bot) redirectTo = redirectMatch[1].toLowerCase();
       replyText = replyText.replace(/<redirect>(mikku|kukku)<\/redirect>/gi, "").trim();
     }
 
