@@ -41,8 +41,7 @@ const CATEGORY_STYLE: Record<string, string> = {
   "Value Addition": "bg-emerald-50 border-emerald-150 text-emerald-700",
 };
 
-/** A product in the list: its picture (from tablets up), its own icon, name, species, tagline, and its usual dose and
- *  pack. On phones a compact row with the icon beside the text. */
+/** A product in the list: its picture (from tablets up), name, species, tagline, and its usual dose and pack. */
 function ProductCard({ product, href }: { product: Product; href: string }) {
   const t = useT().products;
   const dose = product.dose
@@ -60,12 +59,8 @@ function ProductCard({ product, href }: { product: Product; href: string }) {
           <Image src={product.banner} alt={`${product.name} ${t.bannerAlt}`} fill sizes={BANNER_SIZES} className="object-cover transition-transform duration-500 group-hover:scale-[1.03]" />
         </div>
       )}
-      <div className="flex flex-1 gap-4 p-4 sm:flex-col sm:gap-0 sm:px-5 sm:pb-5 sm:pt-0">
-        {/* The product's own icon: beside the text on phones, overlapping the picture from tablets up. */}
-        <span className={`relative shrink-0 w-14 h-14 sm:w-16 sm:h-16 overflow-hidden rounded-full bg-white ring-4 ring-white shadow-md ${product.banner ? "sm:-mt-8" : "sm:mt-5"}`}>
-          <Image src={product.icon} alt={`${product.name} ${t.iconAlt}`} fill sizes="64px" className="object-contain" />
-        </span>
-        <div className="flex min-w-0 flex-1 flex-col sm:mt-3">
+      <div className="flex flex-1 p-4 sm:p-5">
+        <div className="flex min-w-0 flex-1 flex-col">
           <div className="flex items-start justify-between gap-2">
             <h3 className="font-heading text-lg font-bold leading-tight text-brand-navy transition-colors duration-300 group-hover:text-brand-orange-aa">{product.name}</h3>
             <span className={`shrink-0 px-2 py-0.5 rounded-md text-[10px] sm:text-[11px] font-bold uppercase tracking-wider border whitespace-nowrap ${CATEGORY_STYLE[product.category] ?? CATEGORY_STYLE["Value Addition"]}`}>
