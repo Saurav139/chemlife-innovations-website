@@ -25,7 +25,11 @@ export function syncInbox(): Promise<SyncResult[]> {
 
 /** Rebuilds the Insights page (all languages) with the approved posts. */
 export function refreshInsightsPage(): void {
-  revalidatePath("/[locale]/insights", "page");
+  try {
+    revalidatePath("/[locale]/insights", "page");
+  } catch {
+    // Outside a request (the automatic check): the page is rendered for each visit anyway.
+  }
 }
 
 async function runSync(): Promise<SyncResult[]> {
