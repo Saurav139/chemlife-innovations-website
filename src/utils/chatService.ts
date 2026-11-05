@@ -44,14 +44,16 @@ function codeForStatus(status: number): ChatErrorCode {
 export async function sendMessage(
   message: string,
   bot: string,
-  history: Turn[]
+  history: Turn[],
+  /** True for a message the other bot just handed over, so the server doesn't route it again. */
+  routed = false
 ): Promise<ChatResponse> {
   let res: Response;
   try {
     res = await fetch(`${API_URL}/api/chat`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message, bot, history }),
+      body: JSON.stringify({ message, bot, history, routed }),
       signal: AbortSignal.timeout(CHAT_TIMEOUT_MS),
     });
   } catch (err) {
