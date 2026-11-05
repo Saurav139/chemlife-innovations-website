@@ -1,5 +1,6 @@
 // Google Analytics 4. It loads only after the visitor accepts the cookie banner (src/components/Analytics.tsx).
 
+// Loads on the live site only (src/lib/useAnalyticsEnabled.ts).
 // GA4 Measurement ID, e.g. "G-XXXXXXXXXX". It's public (it appears in every page), so it's safe to commit.
 // Empty turns analytics and the cookie banner off. NEXT_PUBLIC_GA_ID overrides it, e.g. to test with another property.
 export const GA_ID = process.env.NEXT_PUBLIC_GA_ID || "G-KND2KMT8PC";
