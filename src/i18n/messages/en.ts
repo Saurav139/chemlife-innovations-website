@@ -341,7 +341,22 @@ const en = {
     kicker: "Our Offerings",
     titleStart: "Feed",
     titleAccent: "Additives & Solutions",
-    intro: "Science-backed solutions formulated for superior mold inhibition, pathogen control, and grain preservation.",
+    intro: "Eighteen science-backed feed additives for poultry, dairy and swine: feed hygiene and mycotoxin control, rumen and dairy performance, gut and liver health, and bio-trace minerals.",
+    // The product groups on the products page (src/lib/catalog.ts PLATFORMS), the words in a card's short dose, and
+    // the panel after the list.
+    platforms: {
+      hygiene: { title: "Feed Hygiene & Mycotoxins", note: "Mold inhibitors and toxin binders that keep feed safe from storage to stomach." },
+      rumen: { title: "Rumen & Dairy Performance", note: "Rumen-bypass nutrients and rumen modulators for milk yield and dairy health." },
+      gut: { title: "Gut & Liver Health", note: "Non-antibiotic support for the gut and liver in poultry and swine." },
+      minerals: { title: "Minerals & Layer Nutrition", note: "Chelated bio-trace minerals and precision nutrition for laying birds." },
+    },
+    allPlatforms: "All products",
+    filterByPlatform: "Filter by product group",
+    units: { day: "day", birds: "birds", water: "water" },
+    closing: {
+      title: "Not sure which product fits?",
+      text: "Tell us about your animals and your feed, and our nutritionists will recommend the right combination.",
+    },
     search: "Search products...",
     allSpecies: "All Species",
     filterBySpecies: "Filter by species",
