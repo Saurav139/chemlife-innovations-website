@@ -213,6 +213,33 @@ const en = {
       ],
     },
 
+    certifications: {
+      kicker: "Quality & Compliance",
+      title: "Certified & Registered",
+      intro: "Independent checks on how we make our feed additives, and the registrations behind our exports.",
+      // In the order of the cards (certificationCards in Certifications.tsx).
+      items: [
+        {
+          name: "FAMI-QS Certified",
+          issuer: "Swiss Cert",
+          description: "Feed safety and quality management, including Good Manufacturing Practice (GMP), for the specialty feed ingredients we make at our Doddaballapura plant.",
+          reference: "FAMI-QS registration FAM-1980",
+        },
+        {
+          name: "Pharmexcil Member",
+          issuer: "Pharmaceuticals Export Promotion Council of India",
+          description: "Registered manufacturer-exporter of veterinary feed supplements under India's Foreign Trade Policy.",
+          reference: "",
+        },
+        {
+          name: "Startup India & Startup Karnataka",
+          issuer: "Government of India · Government of Karnataka",
+          description: "A registered startup under the national and Karnataka startup programmes.",
+          reference: "",
+        },
+      ],
+    },
+
     awards: {
       kicker: "Honors",
       title: "Awards & Recognition",
