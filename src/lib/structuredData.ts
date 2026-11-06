@@ -19,7 +19,7 @@ const PROFILES = [
   "https://www.facebook.com/people/Chemlife-Innovations/100063821717542/",
 ];
 
-const LANGUAGES = { en: "English", hi: "Hindi", kn: "Kannada" } as const;
+const LANGUAGES = { en: "English", hi: "Hindi", kn: "Kannada", bn: "Bengali", mr: "Marathi", te: "Telugu", ta: "Tamil" } as const;
 
 /** The company and the website, on every page. `messages` is the page's language. */
 export function siteGraph(locale: Locale, messages: Messages) {
