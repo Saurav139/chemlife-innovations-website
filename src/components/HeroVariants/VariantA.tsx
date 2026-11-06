@@ -105,10 +105,21 @@ export default function HeroVariantA() {
     return () => window.removeEventListener("keydown", onKey);
   }, [storyOpen]);
 
+  // The other photos aren't shown for 6 s, so they load once the page has: before that they'd share the connection
+  // with the first photo and slow it down on phones. The slideshow starts once they're loading.
+  const [othersReady, setOthersReady] = useState(false);
   useEffect(() => {
+    const ready = () => setOthersReady(true);
+    if (document.readyState === "complete") return ready();
+    window.addEventListener("load", ready, { once: true });
+    return () => window.removeEventListener("load", ready);
+  }, []);
+
+  useEffect(() => {
+    if (!othersReady) return;
     const timer = setInterval(() => setPhoto((p) => (p + 1) % (otherPhotos.length + 1)), 6000);
     return () => clearInterval(timer);
-  }, []);
+  }, [othersReady]);
 
   // Restarts on every change, so a headline picked from the dots also stays up for the full 6 s.
   useEffect(() => {
@@ -168,7 +179,7 @@ export default function HeroVariantA() {
           <img {...portrait} alt={t.home.heroAlt} />
         </picture>
         </div>
-        {otherPhotos.map((image, index) => (
+        {othersReady && otherPhotos.map((image, index) => (
           <div key={image.src} className={`absolute inset-0 transition-opacity duration-1000 motion-reduce:transition-none ${photo === index + 1 ? "opacity-100" : "opacity-0"}`} aria-hidden={photo !== index + 1}>
             <Image src={image.src} alt={image.alt} fill sizes={image.sizes} loading="eager" className="object-cover animate-ken-burns" />
           </div>
