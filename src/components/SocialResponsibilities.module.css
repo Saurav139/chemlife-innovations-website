@@ -9,7 +9,7 @@
   scroll-margin-top: 88px;
 }
 .wrap { max-width: 1200px; margin-inline: auto; padding-inline: 24px; }
-.journal h3 { font-family: "Galaxy", var(--font-family-heading); font-weight: 700; line-height: 1.15; color: var(--csr-blue); text-wrap: balance; }
+.journal h3 { font-family: var(--font-family-heading); font-weight: 700; line-height: 1.15; color: var(--csr-blue); text-wrap: balance; }
 .journal h3 { font-size: clamp(1.4rem, 2vw, 1.75rem); }
 .journal p { font-size: 1rem; line-height: 1.7; }
 .intro { max-width: 720px; margin: 0 auto 32px; text-align: center; }
