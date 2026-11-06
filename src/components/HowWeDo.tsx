@@ -28,7 +28,6 @@ export default function HowWeDo() {
           alt={t.bgAlt}
           fill
           className="object-cover opacity-35"
-          priority
         />
         <div className="absolute inset-0 bg-brand-navy/90 mix-blend-multiply" />
       </div>

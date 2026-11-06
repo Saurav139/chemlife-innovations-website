@@ -22,8 +22,8 @@ export default function AboutPage() {
       <Header />
 
       <main id="main" tabIndex={-1} className="overflow-x-clip bg-brand-navy min-h-screen pt-18 md:pt-20 lg:pt-24">
-        {/* Intro Hero Section with Glass Plant Image BG */}
-        <SectionWrapper className="py-10 md:py-16 lg:py-20 text-white relative overflow-hidden flex items-center">
+        {/* A plain section, not a fade-in: it's the first screen, so it shows without waiting for the page's JavaScript. */}
+        <section className="py-10 md:py-16 lg:py-20 text-white relative overflow-hidden flex items-center">
           <div className="absolute inset-0 z-0">
             <Image
               src={Images.heroes.about}
@@ -38,26 +38,20 @@ export default function AboutPage() {
           </div>
 
           <div className="relative z-10 max-w-[900px] mx-auto text-center px-6">
-            <motion.h1
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, ease: easeOut }}
+            <h1
               className="font-heading text-3xl md:text-4xl lg:text-6xl font-bold leading-tight mb-3 md:mb-4"
             >
               <span className="text-teal-400">{t.titleLine1}</span><br />
               <span className="text-white">{t.titleLine2}</span>
-            </motion.h1>
+            </h1>
 
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2, ease: easeOut }}
+            <p
               className="text-white/85 text-base md:text-lg lg:text-xl leading-relaxed max-w-3xl mx-auto font-light"
             >
               {t.intro}
-            </motion.p>
+            </p>
           </div>
-        </SectionWrapper>
+        </section>
 
         {/* Our Journey */}
         <SectionWrapper id="our-journey" className="scroll-mt-18 md:scroll-mt-20 lg:scroll-mt-24 py-8 md:py-12 lg:py-16 bg-white text-brand-navy">
