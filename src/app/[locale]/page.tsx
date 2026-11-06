@@ -9,7 +9,6 @@ import WhoWeAre from "@/components/WhoWeAre";
 import HowWeDo from "@/components/HowWeDo";
 import LifeAtChemLife from "@/components/LifeAtChemLife";
 import AwardsRecognition from "@/components/AwardsRecognition";
-import Certifications from "@/components/Certifications";
 import ClientMarquee from "@/components/ClientMarquee";
 import TestimonialCarousel from "@/components/TestimonialCarousel";
 import SocialResponsibilities from "@/components/SocialResponsibilities";
@@ -24,7 +23,6 @@ export default function Home() {
         <HeroVariantA />
         <WhoWeAre />
         <HowWeDo />
-        <Certifications />
         <AwardsRecognition />
         <LifeAtChemLife />
         <ClientMarquee />

@@ -236,11 +236,6 @@ export const Images = {
     naarm: "/images/awards/naarm.png",
   },
 
-  /** Logos for the homepage's certifications section (FAMI-QS uses awards.famiQs) */
-  certifications: {
-    startupIndiaKarnataka: "/images/certifications/startup-india-karnataka.png",
-  },
-
   /** Testimonial company logos */
   testimonials: {
     huve: "/images/testimonials/huve_logo.png",
