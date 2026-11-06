@@ -1,14 +1,16 @@
 import { lookup } from "node:dns/promises";
 import { isIP } from "node:net";
 import { IMAGE_TYPES, findItem, saveImage } from "./db";
-import { WORDPRESS_SITE, fetchWordPressPost, fetchYouTubeVideos } from "./sources";
-import { cleanTitle, decodeEntities, instagramEmbedUrl, instagramPostId, instagramReelCode, isLinkedInVideoPage, linkedinActivityDate, linkedinActivityId, linkedinEmbedUrl, normalizeUrl, summarizeDescription, titleFromCaption } from "./text";
+import { WORDPRESS_SITE, fetchWordPressPost, fetchYouTubeVideos, findInstagramPost } from "./sources";
+import { cleanTitle, decodeEntities, instagramEmbedUrl, instagramPostDate, instagramPostId, instagramReelCode, isLinkedInVideoPage, linkedinActivityDate, linkedinActivityId, linkedinEmbedUrl, normalizeUrl, summarizeDescription, titleFromCaption } from "./text";
 import type { InboxItem, SourceItem } from "./types";
 
 // "Add a post": the moderator pastes a link and gets a filled-in card to check before adding it. Only the
 // moderator can ask for a preview, and only public web addresses are fetched.
 
-const BROWSER = "Mozilla/5.0 (Macintosh; Intel Mac OS X 14_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36";
+// The site says who it is. Instagram and LinkedIn give their link preview (title, text, picture) to a named visitor,
+// while one claiming to be a browser can get a sign-in page instead.
+const VISITOR = "Mozilla/5.0 (compatible; ChemLifeInsights/1.0; +https://chemlifeinnovations.com)";
 
 export interface Preview {
   item: SourceItem;
@@ -34,7 +36,7 @@ export async function previewLink(input: string): Promise<Preview> {
   } else if (host === "linkedin.com" || host.endsWith(".linkedin.com")) {
     item = await linkedinPreview(url, notes);
   } else if (host === "instagram.com") {
-    item = await pagePreview(url, "instagram", notes);
+    item = await instagramPreview(url, notes);
   } else {
     item = await pagePreview(url, "link", notes);
   }
@@ -78,12 +80,12 @@ async function linkedinPreview(url: URL, notes: string[]): Promise<SourceItem> {
     meta: "LinkedIn post",
     publishedAt: activity ? linkedinActivityDate(activity) : new Date(),
   };
-  let html = "";
-  try {
-    html = await fetchText(url.toString());
-  } catch (error) {
-    if (error instanceof RefusedAddress) throw error;
-    notes.push("LinkedIn didn't share a preview of this post. Fill in the title and summary yourself.");
+  // The post's page first; LinkedIn's embed page, made for showing a post on other sites, if that page is turned away
+  // or comes back without the post (a sign-in page).
+  let html = await readPage(url.toString());
+  if (activity && !hasPreview(html)) html = (await readPage(linkedinEmbedUrl(activity).replace("?compact=true", ""))) || html;
+  if (!hasPreview(html)) {
+    notes.push("LinkedIn didn't share a preview of this post. Fill in the title and summary yourself, and add a picture with “Replace picture”.");
     return base;
   }
   const meta = metaTags(html);
@@ -91,10 +93,12 @@ async function linkedinPreview(url: URL, notes: string[]): Promise<SourceItem> {
   // for a shared article.
   const parts = (meta["og:title"] ?? "").split(" | ");
   while (parts.length > 1 && /linkedin|posted on the topic|chemlife innovations/i.test(parts[parts.length - 1])) parts.pop();
-  const title = cleanTitle(parts.join(" | "));
+  // A post without a headline is titled "Chemlife Innovations on LinkedIn: the text".
+  const title = cleanTitle(parts.join(" | ").replace(/^[^:]{1,80} on LinkedIn:\s*/i, "").replace(/^["“]|["”]$/g, ""));
   const text = htmlText(html.match(/<p[^>]*data-test-id="main-feed-activity-card__commentary"[^>]*>([\s\S]*?)<\/p>/)?.[1] ?? "") || meta["og:description"] || meta.description || "";
   const published = html.match(/"datePublished":"([^"]+)"/)?.[1];
-  if (!title) notes.push("LinkedIn didn't give this post a title. Write a short one.");
+  if (!title && !text) notes.push("LinkedIn didn't give this post a title. Write a short one.");
+  if (!meta["og:image"]) notes.push("LinkedIn didn't share this post's picture. Add one with “Replace picture”.");
   return {
     ...base,
     url: meta["og:url"] ? normalizeUrl(meta["og:url"]) : base.url,
@@ -106,6 +110,96 @@ async function linkedinPreview(url: URL, notes: string[]): Promise<SourceItem> {
     videoUrl: activity && isLinkedInVideoPage(html) ? linkedinEmbedUrl(activity) : undefined,
     publishedAt: published ? new Date(published) : base.publishedAt,
   };
+}
+
+/** An Instagram post: from Instagram's API when it's connected (exact caption, picture and date), otherwise from the
+ *  post's link preview, with Instagram's embed page (made for showing a post on other sites) filling any gaps. */
+async function instagramPreview(url: URL, notes: string[]): Promise<SourceItem> {
+  const code = instagramPostId(url.toString());
+  if (!code) return pagePreview(url, "instagram", notes);
+  const fromApi = await instagramFromApi(code);
+  if (fromApi) return fromApi;
+
+  // One address per post, however it was shared (with the account's name, tracking codes or a trailing slash).
+  const address = `https://www.instagram.com/${instagramReelCode(url.toString()) ? "reel" : "p"}/${code}`;
+  const page = await readPage(`${address}/`);
+  const meta = metaTags(page);
+  const description = meta["og:description"] ?? meta.description ?? "";
+  // The description is the caption, or reads "123 likes, 4 comments - chemlife on June 5, 2026: "the caption"".
+  let caption = description.match(/:\s*["“]([\s\S]*)["”]\.?\s*$/)?.[1] ?? description;
+  // The title reads 'Chemlife Innovations on Instagram: "the caption"'.
+  if (!caption) caption = meta["og:title"]?.match(/on Instagram:\s*["“]([\s\S]*)["”]\s*$/)?.[1] ?? "";
+  let image: string | undefined = meta["og:image"];
+  if (!caption || !image) {
+    const embed = await readPage(`https://www.instagram.com/p/${code}/embed/captioned/`);
+    image ||= embedImage(embed);
+    caption ||= embedCaption(embed);
+  }
+  if (!caption && !image) {
+    notes.push("Instagram didn't share a preview of this post. Fill in the title and summary yourself, and add a picture with “Replace picture”.");
+  } else if (!image) {
+    notes.push("Instagram didn't share this post's picture. Add one with “Replace picture”.");
+  }
+  const said = meta["article:published_time"] ?? description.match(/on ([A-Z][a-z]+ \d{1,2}, \d{4})/)?.[1];
+  const published = (said && !Number.isNaN(Date.parse(said)) ? new Date(said) : null) ?? instagramPostDate(code);
+  if (!published) notes.push("Check the date: the post doesn't say when it was published, so it's set to today.");
+  const isVideo = Boolean(address.includes("/reel/") || meta["og:video"] || meta["og:type"]?.startsWith("video"));
+  return {
+    source: "instagram",
+    externalId: address,
+    kind: "Blog",
+    title: titleFromCaption(caption, "Instagram post"),
+    summary: summarizeDescription(caption.replace(/#\S+/g, "")),
+    content: caption,
+    url: address,
+    imageUrl: image,
+    copyImage: true,
+    videoUrl: isVideo ? instagramEmbedUrl(code) : undefined,
+    meta: isVideo ? "Instagram reel" : "Instagram post",
+    publishedAt: published ?? new Date(),
+  };
+}
+
+/** The post from ChemLife's own account through Instagram's API, when INSTAGRAM_ACCESS_TOKEN is set. Kept under the
+ *  pasted address, like any pasted post, so the importer and the paste recognise each other. */
+async function instagramFromApi(code: string): Promise<SourceItem | null> {
+  try {
+    const { instagramToken } = await import("./sync");
+    const token = await instagramToken();
+    const post = token ? await findInstagramPost(token, code) : null;
+    return post?.url ? { ...post, externalId: normalizeUrl(post.url), url: normalizeUrl(post.url) } : null;
+  } catch {
+    // Another account's post, or the API is unavailable: the post's own page is read instead.
+    return null;
+  }
+}
+
+function embedImage(html: string): string | undefined {
+  const tag = html.match(/<img\b[^>]*class="[^"]*EmbeddedMediaImage[^"]*"[^>]*>/i)?.[0];
+  const src = tag?.match(/\bsrc="([^"]+)"/i)?.[1];
+  return src ? decodeEntities(src) : undefined;
+}
+
+function embedCaption(html: string): string {
+  const block = html.match(/<div class="Caption">([\s\S]*?)<div class="CaptionComments"/i)?.[1] ?? html.match(/<div class="Caption">([\s\S]*?)<\/div>/i)?.[1] ?? "";
+  return htmlText(block.replace(/<a class="CaptionUsername"[\s\S]*?<\/a>/i, ""));
+}
+
+/** A page's text, or "" if it couldn't be read. An address the site won't fetch is still refused. */
+async function readPage(address: string): Promise<string> {
+  try {
+    return await fetchText(address);
+  } catch (error) {
+    if (error instanceof RefusedAddress) throw error;
+    return "";
+  }
+}
+
+/** Whether a page carries a post's link preview, rather than a sign-in page. */
+function hasPreview(html: string): boolean {
+  const meta = metaTags(html);
+  if (/\b(?:sign in|sign up|log in|join linkedin)\b/i.test(meta["og:title"] ?? "")) return false;
+  return Boolean(meta["og:image"] || meta["og:description"]);
 }
 
 /** Any other page: its title, description and picture from the tags that link previews use. */
@@ -196,7 +290,7 @@ async function fetchPublic(address: string, accept: string, maxBytes: number): P
   let url = new URL(address);
   for (let hop = 0; hop < 4; hop++) {
     await checkAddress(url);
-    const res = await fetch(url, { redirect: "manual", cache: "no-store", headers: { "User-Agent": BROWSER, Accept: accept, "Accept-Language": "en-US,en;q=0.9" }, signal: AbortSignal.timeout(10_000) });
+    const res = await fetch(url, { redirect: "manual", cache: "no-store", headers: { "User-Agent": VISITOR, Accept: accept, "Accept-Language": "en-US,en;q=0.9" }, signal: AbortSignal.timeout(10_000) });
     const next = res.headers.get("location");
     if (res.status >= 300 && res.status < 400 && next) {
       url = new URL(next, url);

@@ -226,7 +226,7 @@ interface InstagramAccess {
 
 /** The current Instagram token: INSTAGRAM_ACCESS_TOKEN, renewed every week and kept in the database, since a
  *  token lasts 60 days and the environment can't be updated from here. */
-async function instagramToken(): Promise<string | null> {
+export async function instagramToken(): Promise<string | null> {
   const given = process.env.INSTAGRAM_ACCESS_TOKEN;
   if (!given) return null;
   const from = createHash("sha256").update(given).digest("hex").slice(0, 16);
