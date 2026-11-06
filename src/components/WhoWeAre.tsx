@@ -131,7 +131,6 @@ export function SnowflakeCell({
                 fill
                 sizes="(min-width: 1024px) 235px, 165px"
                 className="object-cover opacity-100 group-hover:scale-105 transition-transform duration-700"
-                priority={index === 0}
               />
             </motion.div>
           </AnimatePresence>
