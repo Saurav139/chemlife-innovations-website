@@ -26,7 +26,7 @@ function remember(l: Locale) {
   document.cookie = `${LOCALE_COOKIE}=${l}; path=/; max-age=31536000; samesite=lax`;
 }
 
-/** English · ಕನ್ನಡ · हिन्दी. A drop-down in the desktop header, a row of links in the mobile menu (`inline`). */
+/** English · ಕನ್ನಡ · हिन्दी · বাংলা · मराठी · తెలుగు · தமிழ். A drop-down in the desktop header, a row of links in the mobile menu (`inline`). */
 export default function LanguageSwitcher({ inline = false }: { inline?: boolean }) {
   const locale = useLocale();
   const t = useT();
@@ -67,7 +67,7 @@ export default function LanguageSwitcher({ inline = false }: { inline?: boolean 
 
   if (inline) {
     return (
-      <div className="flex items-center gap-2 pt-3 pb-1" role="group" aria-label={t.nav.language}>
+      <div className="flex flex-wrap items-center gap-2 pt-3 pb-1" role="group" aria-label={t.nav.language}>
         <span className="text-brand-navy/60"><Globe /></span>
         {links}
       </div>
