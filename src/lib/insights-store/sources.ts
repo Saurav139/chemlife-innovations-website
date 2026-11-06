@@ -157,6 +157,21 @@ export async function fetchInstagramPosts(token: string): Promise<SourceItem[]> 
   return (((await res.json()).data ?? []) as InstagramMedia[]).map(instagramItem);
 }
 
+/** One of the account's posts, by its shortcode, looking through its newest 150 posts. */
+export async function findInstagramPost(token: string, code: string): Promise<SourceItem | null> {
+  const fields = "id,caption,media_type,media_url,thumbnail_url,permalink,timestamp";
+  let next: string | undefined = `${INSTAGRAM_API}/me/media?fields=${fields}&limit=50&access_token=${encodeURIComponent(token)}`;
+  for (let page = 0; next && page < 3; page++) {
+    const res = await fetch(next, { cache: "no-store" });
+    if (!res.ok) throw new Error(await instagramError(res));
+    const body = (await res.json()) as { data?: InstagramMedia[]; paging?: { next?: string } };
+    const media = body.data?.find((m) => m.permalink && instagramPostId(m.permalink) === code);
+    if (media) return instagramItem(media);
+    next = body.paging?.next;
+  }
+  return null;
+}
+
 // Meta explains a refusal in the body, e.g. code 190 for an expired or revoked token.
 async function instagramError(res: Response) {
   const error = ((await res.json().catch(() => ({}))) as { error?: { message?: string; code?: number } }).error;

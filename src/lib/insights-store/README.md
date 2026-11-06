@@ -66,7 +66,9 @@ The staging and live sites should each have their own database, so testing on st
 ## How it works
 
 - `db.ts`: the MySQL tables (created on first use): posts, copied pictures, settings.
-- `sources.ts`: reading YouTube, WordPress and Instagram. `preview.ts`: filling in a pasted link.
+- `sources.ts`: reading YouTube, WordPress and Instagram. `preview.ts`: filling in a pasted link. A pasted
+  Instagram post comes from Instagram's API when it's connected, otherwise from its link preview; Instagram's and
+  LinkedIn's embed pages fill in what a post's own page leaves out. An Instagram post's date is read from its shortcode.
 - `feed.ts`: reading LinkedIn and Instagram feeds through the same public-address checks as pasted links.
 - `auto-sync.ts`: the 10-minute check while automatic adding is on; one server process runs each check.
 - `sync.ts`: checking for new posts, and starting the inbox from the built-in list (`FALLBACK_INSIGHTS` in

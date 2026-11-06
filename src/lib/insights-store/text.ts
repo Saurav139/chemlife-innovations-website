@@ -8,16 +8,17 @@ export function summarizeDescription(text: string): string {
   const cutoffIndex = text.search(/(⏱️|TIMESTAMPS|\b\d{2}:\d{2}\b|🔗|🌐|📧|📞|🔔|👍|📲)/i);
   let cleaned = cutoffIndex !== -1 ? text.substring(0, cutoffIndex) : text;
 
+  // Remove emojis first, so a line ending in one still ends cleanly
+  cleaned = cleaned.replace(/[\u{1F300}-\u{1F9FF}]|[\u{2600}-\u{26FF}]|\u{FE0F}/gu, "");
+
   // Standardize line breaks to periods so they split cleanly into sentences
   cleaned = cleaned
     .replace(/\r?\n/g, ". ")
     .replace(/\s*(?:--|—|–)\s*/g, " - ") // Normalize em-dashes and double dashes to single dash
     .replace(/\s+/g, " ")                // Collapse consecutive spaces
-    .replace(/\.+/g, ".")                // Clean up duplicate periods
+    .replace(/\.(?:\s*\.)+/g, ".")        // Clean up duplicate periods, including a sentence's own before a line break
+    .replace(/([!?])(?:\s*\.)+/g, "$1")  // A line ending in "?" or "!" doesn't need the period added for its line break
     .trim();
-
-  // Remove emojis
-  cleaned = cleaned.replace(/[\u{1F300}-\u{1F9FF}]|[\u{2600}-\u{26FF}]/gu, "");
 
   // Extract the first 2 sentences
   const sentences = cleaned.split(/(?<=[.!?])\s+/);
@@ -154,7 +155,8 @@ export function instagramPostId(address: string): string | null {
   try {
     const url = new URL(address);
     if (!/^https?:$/.test(url.protocol) || !/^(?:www\.)?instagram\.com$/i.test(url.hostname)) return null;
-    return url.pathname.match(/^\/(?:p|reel|tv)\/([\w-]+)\/?$/)?.[1] ?? null;
+    // Shared links can also carry the account's name first: /chemlifeinnovations_/p/…
+    return url.pathname.match(/^\/(?:[\w.]+\/)?(?:p|reel|tv)\/([\w-]+)\/?$/)?.[1] ?? null;
   } catch {
     return null;
   }
@@ -178,7 +180,21 @@ export function instagramEmbedUrl(code: string): string {
 /** An Instagram reel (or older IGTV video) is told by its address: /reel/… or /tv/…. */
 export function instagramReelCode(address: string): string | null {
   const code = instagramPostId(address);
-  return code && /^\/(?:reel|tv)\//.test(new URL(address).pathname) ? code : null;
+  return code && /^\/(?:[\w.]+\/)?(?:reel|tv)\//.test(new URL(address).pathname) ? code : null;
+}
+
+const SHORTCODE_LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
+/** Milliseconds from 1970 to Instagram's own starting point, which its post numbers count from. */
+const INSTAGRAM_EPOCH = 1314220021721;
+
+/** When an Instagram post was published, read from its shortcode: the shortcode is the post's number, and the number
+ *  starts with the time it was made. Null for a code that isn't a public post's. */
+export function instagramPostDate(code: string, now = Date.now()): Date | null {
+  if (!/^[\w-]{10,12}$/.test(code)) return null;
+  let id = BigInt(0);
+  for (const letter of code) id = id * BigInt(64) + BigInt(SHORTCODE_LETTERS.indexOf(letter));
+  const at = Number(id >> BigInt(23)) + INSTAGRAM_EPOCH;
+  return at > Date.UTC(2012, 0, 1) && at < now + 24 * 3600 * 1000 ? new Date(at) : null;
 }
 
 /** A LinkedIn post (or embed) page whose post is a video: its structured data describes a VideoObject, or it has
