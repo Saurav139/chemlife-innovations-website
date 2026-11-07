@@ -191,13 +191,13 @@ export default function HeroVariantA() {
         {/* Phones: at the top, under the header, leaving the photo below in view. Wider screens: centred in the height
             above the numbers' strip. */}
         <div className="w-full max-w-3xl flex-1 flex flex-col text-left items-start justify-start md:justify-center">
-          <p className="text-teal-400 text-xs sm:text-sm lg:text-base font-semibold tracking-[0.18em] uppercase mb-4 short:mb-3 short-phone:mb-2">
+          <p className="text-teal-400 text-[11px] sm:text-sm lg:text-base font-semibold tracking-[0.18em] uppercase mb-3 md:mb-4 short:mb-3 short-phone:mb-2">
             {hero.kicker}
           </p>
           <h1 className="font-heading text-[length:clamp(30px,8.2vw,40px)] sm:text-5xl md:text-6xl lg:text-[64px] xl:text-7xl leading-[1.05] text-white font-bold text-left mb-5 md:mb-6 short:text-5xl short:mb-4 short-phone:mb-3">
             {hero.title}
           </h1>
-          <p className="text-white/90 text-base md:text-lg lg:text-xl leading-relaxed max-w-xl mb-7 md:mb-9 short:mb-5 short-phone:mb-4">
+          <p className="text-white/90 text-[15px] sm:text-base md:text-lg lg:text-xl leading-relaxed max-w-xl mb-6 md:mb-9 short:mb-5 short-phone:mb-4">
             {hero.subtitle}
           </p>
 
@@ -219,7 +219,7 @@ export default function HeroVariantA() {
             target="_blank"
             rel="noopener noreferrer"
             onClick={(e) => playOnPage(e, () => setStoryOpen(true))}
-            className="tap-target inline-flex items-center gap-2 text-sm lg:text-base font-semibold text-white/85 hover:text-white underline-offset-4 hover:underline transition-colors cursor-pointer mt-5 lg:mt-6 short:mt-3 short-phone:mt-2"
+            className="tap-target inline-flex items-center gap-2 text-sm lg:text-base font-semibold text-white/85 hover:text-white underline-offset-4 hover:underline transition-colors cursor-pointer mt-4 lg:mt-6 short:mt-3 short-phone:mt-2"
           >
             <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current" aria-hidden="true">
               <path d="M8 5v14l11-7z" />
@@ -228,11 +228,11 @@ export default function HeroVariantA() {
           </a>
 
           {/* Three proof points a buyer checks first: certification, government backing, partners. */}
-          <ul className="flex flex-wrap gap-2 mt-7 md:mt-9 short:mt-5 short-phone:mt-4" aria-label={t.home.why.kicker}>
+          <ul className="flex flex-wrap gap-1.5 md:gap-2 mt-5 md:mt-9 short:mt-5 short-phone:mt-3" aria-label={t.home.why.kicker}>
             {hero.proof.map((item) => (
               <li
                 key={item}
-                className="inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-white/10 backdrop-blur-sm px-3 py-1.5 text-xs md:text-sm font-medium text-white"
+                className="inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-white/10 backdrop-blur-sm px-2.5 py-1 md:px-3 md:py-1.5 text-[11px] sm:text-xs md:text-sm font-medium text-white"
               >
                 <svg className="w-3.5 h-3.5 text-teal-400 shrink-0" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                   <path fillRule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clipRule="evenodd" />

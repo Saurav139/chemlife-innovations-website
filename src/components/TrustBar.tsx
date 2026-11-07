@@ -35,13 +35,13 @@ export default function TrustBar() {
               <li
                 key={`${copy}-${file}`}
                 aria-hidden={copy === 1 || undefined}
-                className={`relative h-9 w-28 md:h-11 md:w-36 shrink-0 mx-5 md:mx-8 my-2 grayscale opacity-75 hover:grayscale-0 hover:opacity-100 transition duration-300 ${copy === 1 ? "motion-reduce:hidden" : ""}`}
+                className={`relative h-10 w-32 md:h-12 md:w-44 shrink-0 mx-6 md:mx-9 my-2 grayscale opacity-80 hover:grayscale-0 hover:opacity-100 transition duration-300 ${copy === 1 ? "motion-reduce:hidden" : ""}`}
               >
                 <Image
                   src={Images.partnerLogos.path(file)}
                   alt={copy === 0 ? (Images.partnerLogos.names[file] ?? "") : ""}
                   fill
-                  sizes="144px"
+                  sizes="176px"
                   className="object-contain"
                 />
               </li>

@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Images } from "@/lib/assets";
-import { PRODUCTS } from "@/lib/catalog";
+import { PRODUCTS, productPath } from "@/lib/catalog";
 import { useHref, useT } from "@/i18n/LocaleProvider";
 import { REVEAL_VIEWPORT } from "@/lib/reveal";
 
@@ -22,8 +22,9 @@ const fill = (template: string, count: number) => template.replace("{count}", St
 
 /**
  * Find the right product: a buyer arrives with animals and a problem, not a product name. Each card names the
- * animals, what the group's products help with, and the products themselves, and opens the Products page already
- * filtered to that group.
+ * animals, what the group's products help with, and the products themselves. The whole card opens the Products
+ * page filtered to that group (through its "See all" link, stretched over the card); each product name opens
+ * that product's own page.
  */
 export default function ProductPathways() {
   const messages = useT();
@@ -59,62 +60,69 @@ export default function ProductPathways() {
             const shown = products.slice(0, 4);
             const copy = t.items[i];
             return (
-              <motion.div
+              <motion.article
                 key={group.category}
                 initial={{ opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={REVEAL_VIEWPORT}
                 transition={{ duration: 0.5, delay: i * 0.1, ease: easeOut }}
-                className="h-full"
+                aria-labelledby={`pathway-${i}`}
+                className="group relative flex flex-col h-full rounded-2xl overflow-hidden bg-white border border-slate-200 hover:border-brand-orange/50 hover:shadow-xl hover:-translate-y-1 focus-within:border-brand-orange/50 focus-within:shadow-xl transition-all duration-300"
               >
-                <Link
-                  href={href(`/products?category=${encodeURIComponent(group.category)}`)}
-                  data-analytics-click={`Home products: ${group.category}`}
-                  className="group flex flex-col h-full rounded-2xl overflow-hidden bg-white border border-slate-200 hover:border-brand-orange/50 hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
-                >
-                  <div className="relative aspect-[16/10] overflow-hidden">
-                    <Image
-                      src={group.image}
-                      alt={photoAlts[i].alts[0]}
-                      fill
-                      sizes="(min-width: 1024px) 384px, (min-width: 768px) 33vw, 100vw"
-                      className="object-cover group-hover:scale-105 transition-transform duration-700"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/60 via-transparent to-transparent" />
-                    <span className="absolute left-4 bottom-4 inline-flex items-center rounded-full bg-white/95 px-3 py-1 text-xs font-bold text-brand-navy shadow-sm">
-                      {fill(t.count, products.length)}
-                    </span>
-                  </div>
-                  <div className="flex flex-col flex-1 p-6 lg:p-7">
-                    <h3 className="font-heading text-xl lg:text-2xl font-bold text-brand-navy group-hover:text-brand-orange-aa transition-colors">
-                      {copy.title}
-                    </h3>
-                    <p className="text-sm text-slate-aa mt-1">{copy.who}</p>
+                <div className="relative aspect-[16/10] overflow-hidden">
+                  <Image
+                    src={group.image}
+                    alt={photoAlts[i].alts[0]}
+                    fill
+                    sizes="(min-width: 1024px) 384px, (min-width: 768px) 33vw, 100vw"
+                    className="object-cover group-hover:scale-105 transition-transform duration-700"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/60 via-transparent to-transparent" />
+                  <span className="absolute left-4 bottom-4 inline-flex items-center rounded-full bg-white/95 px-3 py-1 text-xs font-bold text-brand-navy shadow-sm">
+                    {fill(t.count, products.length)}
+                  </span>
+                </div>
+                <div className="flex flex-col flex-1 p-6 lg:p-7">
+                  <h3 id={`pathway-${i}`} className="font-heading text-xl lg:text-2xl font-bold text-brand-navy group-hover:text-brand-orange-aa transition-colors">
+                    {copy.title}
+                  </h3>
+                  <p className="text-sm text-slate-aa mt-1">{copy.who}</p>
 
-                    <p className="text-xs font-semibold tracking-widest uppercase text-teal-aa mt-5">{t.solves}</p>
-                    <p className="text-slate-700 leading-relaxed mt-1">{copy.solves}</p>
+                  <p className="text-xs font-semibold tracking-widest uppercase text-teal-aa mt-5">{t.solves}</p>
+                  <p className="text-slate-700 leading-relaxed mt-1">{copy.solves}</p>
 
-                    <p className="text-xs font-semibold tracking-widest uppercase text-teal-aa mt-5">{t.includes}</p>
-                    <ul className="flex flex-wrap gap-2 mt-2">
-                      {shown.map((p) => (
-                        <li key={p.id} className="rounded-full bg-slate-100 px-3 py-1 text-sm font-medium text-brand-navy">
+                  <p className="text-xs font-semibold tracking-widest uppercase text-teal-aa mt-5">{t.includes}</p>
+                  {/* Above the stretched link (z-10), so each name opens its own product page. */}
+                  <ul className="relative z-10 flex flex-wrap gap-2 mt-2">
+                    {shown.map((p) => (
+                      <li key={p.id}>
+                        <Link
+                          href={href(productPath(p.name))}
+                          data-analytics-click={`Home products: ${p.name}`}
+                          className="inline-flex min-h-8 items-center rounded-full bg-slate-100 px-3 py-1 text-sm font-medium text-brand-navy hover:bg-brand-navy hover:text-white transition-colors"
+                        >
                           {p.name}
-                        </li>
-                      ))}
-                      {products.length > shown.length && (
-                        <li className="rounded-full px-2 py-1 text-sm font-medium text-slate-aa">+{products.length - shown.length}</li>
-                      )}
-                    </ul>
+                        </Link>
+                      </li>
+                    ))}
+                    {products.length > shown.length && (
+                      <li className="inline-flex min-h-8 items-center px-1 text-sm font-medium text-slate-aa">+{products.length - shown.length}</li>
+                    )}
+                  </ul>
 
-                    <span className="mt-auto pt-6 inline-flex items-center gap-2 font-semibold text-brand-orange-aa">
-                      {fill(t.seeAll, products.length)}
-                      <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                      </svg>
-                    </span>
-                  </div>
-                </Link>
-              </motion.div>
+                  {/* Stretched over the whole card (after:inset-0), so a click anywhere else opens the filtered list. */}
+                  <Link
+                    href={href(`/products?category=${encodeURIComponent(group.category)}`)}
+                    data-analytics-click={`Home products: ${group.category}`}
+                    className="mt-auto pt-6 inline-flex items-center gap-2 font-semibold text-brand-orange-aa after:absolute after:inset-0 after:rounded-2xl focus-visible:outline-none focus-visible:after:outline-2 focus-visible:after:outline-teal-aa focus-visible:after:outline-offset-2"
+                  >
+                    {fill(t.seeAll, products.length)}
+                    <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
+                  </Link>
+                </div>
+              </motion.article>
             );
           })}
         </div>
