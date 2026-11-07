@@ -6,6 +6,7 @@ import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { Images } from "@/lib/assets";
 import { useHref, useT } from "@/i18n/LocaleProvider";
 import type { Messages } from "@/i18n/messages/en";
+import { REVEAL_VIEWPORT } from "@/lib/reveal";
 
 const easeOut = [0.25, 0.1, 0, 1] as const;
 
@@ -97,10 +98,10 @@ export function SnowflakeCell({
 }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 50 }}
+      initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.6, delay: index * 0.1, ease: [0.25, 0.1, 0, 1] }}
+      viewport={REVEAL_VIEWPORT}
+      transition={{ duration: 0.5, delay: index * 0.1, ease: [0.25, 0.1, 0, 1] }}
       className="flex flex-row md:flex-col items-center gap-5 md:gap-0 text-left md:text-center group cursor-pointer"
     >
       {/* 3D Visual Snowflake Image Container (No text overlay). Phones: a smaller circle beside the text. */}
@@ -158,7 +159,7 @@ function Reveal({ children, delay = 0, className }: { children: React.ReactNode;
       className={className}
       initial={{ opacity: 0, y: reduce ? 0 : 24 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "0px 0px -8% 0px" }}
+      viewport={REVEAL_VIEWPORT}
       transition={{ duration: 0.6, delay, ease: easeOut }}
     >
       {children}
