@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { MotionConfig } from "framer-motion";
 import { VariantProvider } from "@/context/VariantContext";
 import Header from "@/components/Header";
 import HeroVariantA from "@/components/HeroVariants/VariantA";
@@ -19,16 +19,18 @@ export default function Home() {
   return (
     <VariantProvider>
       <Header />
-      <main id="main" tabIndex={-1}>
-        <HeroVariantA />
-        <WhoWeAre />
-        <HowWeDo />
-        <AwardsRecognition />
-        <LifeAtChemLife />
-        <ClientMarquee />
-        <TestimonialCarousel />
-        <SocialResponsibilities />
-      </main>
+      <MotionConfig reducedMotion="user">
+        <main id="main" tabIndex={-1}>
+          <HeroVariantA />
+          <WhoWeAre />
+          <HowWeDo />
+          <AwardsRecognition />
+          <LifeAtChemLife />
+          <ClientMarquee />
+          <TestimonialCarousel />
+          <SocialResponsibilities />
+        </main>
+      </MotionConfig>
       <Footer />
       <SiteSearch />
     </VariantProvider>
