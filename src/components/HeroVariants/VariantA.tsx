@@ -83,17 +83,17 @@ function AnimatedCounter({ value, suffix }: { value: number; suffix: string }) {
   );
 }
 
+/**
+ * The homepage hero: one fixed, plain-spoken headline over a slow slideshow of ChemLife's own photographs, the two
+ * actions a buyer takes (find a product, talk to a nutritionist), three proof points, and the numbers' strip.
+ * The headline no longer rotates: a visitor deciding whether to trust the company should read one clear message.
+ */
 export default function HeroVariantA() {
-  // Headlines and photos rotate independently so every photo is shown in every language.
-  const [slide, setSlide] = useState(0);
   const [photo, setPhoto] = useState(0);
   const [storyOpen, setStoryOpen] = useState(false);
   const t = useT();
   const href = useHref();
-  const taglines = t.home.taglines;
-  const tagline = taglines[slide];
-  // Only the award photo needs the compact top layout to leave the people unobstructed.
-  const awardLayout = photo === 0;
+  const hero = t.home.hero;
   const photoProps = (src: string, sizes: string) => getImageProps({ src, alt: t.home.heroAlt, fill: true, sizes, priority: true, className: "object-cover animate-ken-burns object-[75%_50%] [@media(min-aspect-ratio:1/1)]:object-[75%_40%]" }).props;
   const landscape = photoProps(Images.heroes.awardsLandscape, LANDSCAPE_SIZES);
   const portrait = photoProps(Images.heroes.awardsPortrait, PORTRAIT_SIZES);
@@ -120,12 +120,6 @@ export default function HeroVariantA() {
     const timer = setInterval(() => setPhoto((p) => (p + 1) % (otherPhotos.length + 1)), 6000);
     return () => clearInterval(timer);
   }, [othersReady]);
-
-  // Restarts on every change, so a headline picked from the dots also stays up for the full 6 s.
-  useEffect(() => {
-    const timer = setTimeout(() => setSlide((p) => (p + 1) % taglines.length), 6000);
-    return () => clearTimeout(timer);
-  }, [slide, taglines.length]);
 
   // While the numbers' strip is behind the floating search and chat buttons (at the bottom of the screen on arrival),
   // they sit centred on it, at its two ends, beside the figures; once it scrolls past, they settle back.
@@ -187,99 +181,68 @@ export default function HeroVariantA() {
       </div>
 
       {/* A fade from the left behind the left-aligned headline, on every photo (keeps the rest of the photo's colours). */}
-      <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/45 to-transparent z-20" />
-      <div className="absolute inset-0 bg-black/10 z-20" />
+      <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/50 to-black/10 z-20" />
+      <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/70 via-transparent to-black/20 z-20" />
 
-      {/* The headline and actions; the headline dots sit at their right. */}
+      {/* The headline and actions. Rendered as they are (no fade-in), so the page's first paint already shows them. */}
       <div className="relative z-30 flex-1 flex">
       {/* Not held to the 1200px column: the headline sits a fixed margin in from the screen's left edge. */}
-      <div className={`px-6 md:px-12 lg:px-16 xl:px-20 w-full flex flex-col justify-start md:justify-center pt-24 pb-6 md:pt-32 md:pb-8 lg:pt-40 short:pt-32 short:pb-4 short-phone:pt-24 short-phone:pb-2`}>
-        {/* w-full: without it, this box has no explicit width, so its auto side margins (for centering)
-            stop it from stretching and it shrinks to fit whichever tagline is showing — moving and
-            resizing the buttons below it from one slide to the next. */}
+      <div className="px-6 md:px-12 lg:px-16 xl:px-20 w-full flex flex-col justify-start md:justify-center pt-24 pb-8 md:pt-32 md:pb-10 lg:pt-40 short:pt-32 short:pb-6 short-phone:pt-24 short-phone:pb-4">
         {/* Phones: at the top, under the header, leaving the photo below in view. Wider screens: centred in the height
-            above the numbers' strip, on every photo. */}
+            above the numbers' strip. */}
         <div className="w-full max-w-3xl flex-1 flex flex-col text-left items-start justify-start md:justify-center">
-          <div className="flex flex-col items-start text-left w-full md:min-h-[340px] short:min-h-0 justify-start md:justify-center">
-            {/* Keep the initial headline visible during hydration. */}
-            <AnimatePresence mode="wait" initial={false}>
-              {/* On phones the size follows the screen width so every tagline fits on its three lines, which keeps
-                  the buttons below in the same place on every slide. */}
-              <motion.h1
-                key={slide}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.6, ease: [0.25, 0.1, 0, 1] }}
-                className={`font-heading text-[length:clamp(24px,8.8vw_-_4.5px,34px)] sm:text-5xl md:text-6xl leading-[1.1] text-white font-bold text-left ${awardLayout ? "2xl:text-7xl mb-5 sm:mb-8" : "lg:text-7xl mb-8 sm:mb-16"} short:text-5xl short:mb-5 short-phone:mb-4`}
-              >
-                {tagline[0]}<br />
-                <span className="text-teal-400">{tagline[1]}</span><br />
-                {tagline[2]}
-              </motion.h1>
-            </AnimatePresence>
+          <p className="text-teal-400 text-xs sm:text-sm lg:text-base font-semibold tracking-[0.18em] uppercase mb-4 short:mb-3 short-phone:mb-2">
+            {hero.kicker}
+          </p>
+          <h1 className="font-heading text-[length:clamp(30px,8.2vw,40px)] sm:text-5xl md:text-6xl lg:text-[64px] xl:text-7xl leading-[1.05] text-white font-bold text-left mb-5 md:mb-6 short:text-5xl short:mb-4 short-phone:mb-3">
+            {hero.title}
+          </h1>
+          <p className="text-white/90 text-base md:text-lg lg:text-xl leading-relaxed max-w-xl mb-7 md:mb-9 short:mb-5 short-phone:mb-4">
+            {hero.subtitle}
+          </p>
 
-            {/* Phones: stacked, both as wide as the longer label. Wider screens: side by side. */}
-            <div className="grid justify-start gap-3 sm:flex sm:flex-row sm:flex-wrap sm:items-center sm:gap-4 w-full mt-2">
-              <Link href={href("/products")} className={primaryCtaClass}>
-                {t.home.findProduct}
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
-              </Link>
-              <Link href={href("/contact?type=nutritionist")} className={secondaryCtaClass}>
-                {t.home.talkToNutritionist}
-              </Link>
-            </div>
-
-            <a
-              href={youtubeWatchUrl(STORY_VIDEO_ID)}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={(e) => playOnPage(e, () => setStoryOpen(true))}
-              className={`tap-target inline-flex items-center gap-2 text-sm lg:text-base font-semibold text-white/85 hover:text-white underline-offset-4 hover:underline transition-colors cursor-pointer ${awardLayout ? "mt-4 lg:mt-5" : "mt-5 lg:mt-6"} short:mt-3 short-phone:mt-2`}
-            >
-              <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current">
-                <path d="M8 5v14l11-7z" />
+          {/* Phones: stacked, both as wide as the longer label. Wider screens: side by side. */}
+          <div className="grid justify-start gap-3 sm:flex sm:flex-row sm:flex-wrap sm:items-center sm:gap-4 w-full">
+            <Link href={href("/products")} className={primaryCtaClass} data-analytics-click="Hero: find product">
+              {t.home.findProduct}
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>
-              {t.home.watchStory}
-            </a>
-
-            {/* Phones: the headline dots under the buttons (wider screens have them down the right side).
-                A 44px-tall tap area around each dot, at least 24px wide (WCAG 2.5.8), so the row stays compact. */}
-            <div className="flex mt-3 short-phone:mt-0 md:hidden">
-              {taglines.map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => setSlide(i)}
-                  className="py-[18px] px-2 flex items-center justify-center"
-                  aria-label={`${t.home.goToSlide} ${i + 1}`}
-                  aria-current={i === slide ? "true" : undefined}
-                >
-                  <span className={`h-2 rounded-full transition-all duration-300 ${i === slide ? "w-6 bg-teal-400" : "w-2 bg-white/40"}`} />
-                </button>
-              ))}
-            </div>
+            </Link>
+            <Link href={href("/contact?type=nutritionist")} className={secondaryCtaClass} data-analytics-click="Hero: talk to nutritionist">
+              {t.home.talkToNutritionist}
+            </Link>
           </div>
-        </div>
 
+          <a
+            href={youtubeWatchUrl(STORY_VIDEO_ID)}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={(e) => playOnPage(e, () => setStoryOpen(true))}
+            className="tap-target inline-flex items-center gap-2 text-sm lg:text-base font-semibold text-white/85 hover:text-white underline-offset-4 hover:underline transition-colors cursor-pointer mt-5 lg:mt-6 short:mt-3 short-phone:mt-2"
+          >
+            <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current" aria-hidden="true">
+              <path d="M8 5v14l11-7z" />
+            </svg>
+            {t.home.watchStory}
+          </a>
+
+          {/* Three proof points a buyer checks first: certification, government backing, partners. */}
+          <ul className="flex flex-wrap gap-2 mt-7 md:mt-9 short:mt-5 short-phone:mt-4" aria-label={t.home.why.kicker}>
+            {hero.proof.map((item) => (
+              <li
+                key={item}
+                className="inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-white/10 backdrop-blur-sm px-3 py-1.5 text-xs md:text-sm font-medium text-white"
+              >
+                <svg className="w-3.5 h-3.5 text-teal-400 shrink-0" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                  <path fillRule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clipRule="evenodd" />
+                </svg>
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
-
-        {/* Tablets and wider: the headline dots in a column down the right side, set in from the edge so they clear
-            the Rate Us tab. A 44px-wide tap area around each dot, at least 24px tall. */}
-        <div className="hidden md:flex flex-col absolute right-14 lg:right-16 top-1/2 -translate-y-1/2 py-1 rounded-full bg-black/30 backdrop-blur-sm" role="group" aria-label={t.home.goToSlide}>
-          {taglines.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => setSlide(i)}
-              className="px-[18px] py-2 flex items-center justify-center cursor-pointer"
-              aria-label={`${t.home.goToSlide} ${i + 1}`}
-              aria-current={i === slide ? "true" : undefined}
-            >
-              <span className={`w-2 rounded-full transition-all duration-300 ${i === slide ? "h-6 bg-teal-400" : "h-2 bg-white/60"}`} />
-            </button>
-          ))}
-        </div>
       </div>
 
       </div>

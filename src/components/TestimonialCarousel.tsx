@@ -68,7 +68,7 @@ export default function TestimonialCarousel() {
   const t = useT().home.testimonials;
 
   return (
-    <SectionWrapper className={`py-16 md:py-24 lg:py-32 ${theme.testimonialsBg}`}>
+    <SectionWrapper id="testimonials" className={`py-16 md:py-24 lg:py-32 scroll-mt-20 ${theme.testimonialsBg}`}>
       <div className="max-w-[1200px] mx-auto px-6">
         <div className="text-center mb-10 md:mb-16">
           <span className="text-teal-aa-light text-sm lg:text-base font-semibold tracking-widest uppercase">

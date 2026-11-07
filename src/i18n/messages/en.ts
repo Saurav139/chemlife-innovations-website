@@ -109,6 +109,53 @@ const en = {
     goToSlide: "Go to slide",
     stats: ["Years of Research", "Products", "Customers Served", "Awards Won"],
 
+    // The hero: one fixed headline (the rotating taglines above stay for the design previews), what we make,
+    // and three proof points under the buttons.
+    hero: {
+      kicker: "Functional feed additives for poultry, dairy cattle and swine",
+      title: "Nature-driven feed additives that perform on the farm",
+      subtitle: "Feed hygiene, bio-trace minerals and rumen-bypass actives, built on our patented ANBioT technology and made in our FAMI-QS certified plant in Bengaluru.",
+      proof: ["FAMI-QS certified", "Supported by the Technology Development Board, Govt of India", "Partners with feed makers since 2016"],
+    },
+    // The partner logo strip under the hero.
+    trust: { title: "Trusted by feed manufacturers and animal-nutrition companies" },
+    // Find the right product: one card for each species group, in the order of src/components/ProductPathways.tsx.
+    pathways: {
+      kicker: "Products",
+      title: "Find the right product for your animals",
+      intro: "Start with the animals you feed. Every product comes with its inclusion rate and pack size.",
+      allProducts: "Browse all products",
+      count: "{count} products",
+      solves: "Helps with",
+      includes: "Includes",
+      seeAll: "See all {count} products",
+      notSure: "Not sure where to start?",
+      items: [
+        { title: "Poultry & swine", who: "Broilers, layers, breeders and pigs", solves: "Mould and mycotoxins in feed, gut and liver health, growth and egg quality" },
+        { title: "Dairy cattle & buffalo", who: "Transition, lactating and growing animals", solves: "Rumen-bypass methionine and choline, rumen pH and fermentation, mould and aflatoxin control" },
+        { title: "Feed ingredients & storage", who: "Feed mills, silos and premix makers", solves: "Spray-on hygiene for stored ingredients, chelated trace minerals and DDGS detoxification" },
+      ],
+    },
+    // Why ChemLife: the four proof points, in the order of src/components/WhyChemLife.tsx. Its heading is whoWeAre.tagline.
+    why: {
+      kicker: "Why ChemLife",
+      intro: "A feed additive is a trust purchase: it goes into every tonne you make. This is what stands behind ours.",
+      items: [
+        { title: "Patented technology", text: "ANBioT accelerated bio-transformation, green chelation and microencapsulation, developed in our own R&D labs.", link: "See the research" },
+        { title: "Certified manufacturing", text: "Made in our own FAMI-QS certified plant in Doddaballapura, Bengaluru, with rigorous quality control.", link: "About our facility" },
+        { title: "Backed by India's science institutions", text: "Supported by the Technology Development Board, BIRAC, C-CAMP and ICAR-NAARM.", link: "See our awards" },
+        { title: "Partnerships that last", text: "Quadragen since 2016, Huvepharma since 2018 and EW Nutrition since 2020 build products on our technologies.", link: "Read what partners say" },
+      ],
+    },
+    // Questions buyers ask: the heading over whoWeAre.faq on the homepage.
+    faq: { kicker: "Before you buy", title: "Questions buyers ask", more: "More questions, answered" },
+    // The closing call to action.
+    cta: {
+      title: "Ready to put ChemLife in your feed?",
+      text: "Tell us the animals you feed and the problem you want solved. Our nutritionists will recommend a product and its inclusion rate.",
+      direct: "Or reach us directly",
+    },
+
     whoWeAre: {
       kicker: "Who we are",
       // The homepage section's small label and heading.

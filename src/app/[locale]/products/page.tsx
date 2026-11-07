@@ -60,6 +60,9 @@ export default function ProductsPage() {
     const params = new URLSearchParams(window.location.search);
     const query = params.get("q") || params.get("query");
     if (query) setSearchQuery(query);
+    // The homepage's product cards open the list filtered to their species group: /products?category=Ruminants
+    const category = params.get("category");
+    if (category && categories.includes(category)) setSelectedCategory(category);
     const expand = params.get("expand")?.toLowerCase();
     if (expand) {
       const product =

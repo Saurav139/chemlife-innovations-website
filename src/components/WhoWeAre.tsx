@@ -1,6 +1,5 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { Images } from "@/lib/assets";
@@ -147,6 +146,14 @@ export function SnowflakeCell({
           {card.description}
         </p>
       </div>
+
+      {/* CSS Spin Keyframes for the slowly rotating snowflake frame */}
+      <style jsx global>{`
+        @keyframes spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+      `}</style>
     </motion.div>
   );
 }
@@ -172,19 +179,6 @@ export default function WhoWeAre() {
   const t = messages.home.whoWeAre;
   const foundersAlt = messages.about.foundersAlt;
   const href = useHref();
-  const [imageIndex, setImageIndex] = useState(0);
-  const cards: Card[] = t.cards.map((card, i) => ({
-    ...card,
-    images: cardImages[i].map((src, j) => ({ src, alt: card.alts[j] })),
-  }));
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setImageIndex((prev) => prev + 1);
-    }, 4000);
-    return () => clearInterval(timer);
-  }, []);
-
 
   return (
     <section aria-labelledby="who-we-are-title" className="bg-white py-20 md:py-32 overflow-hidden border-b border-gray-100">
@@ -219,32 +213,7 @@ export default function WhoWeAre() {
             </div>
           </Reveal>
         </div>
-
-        {/* What we serve: the three species groups */}
-        <h3 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold leading-tight text-brand-navy text-center mt-16 md:mt-24">
-          {t.serveTitle}
-        </h3>
-
-        {/* Grid layout containing the Snowflake Cells */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-12 max-w-5xl mx-auto justify-items-stretch md:justify-items-center w-full mt-8 z-10 relative">
-          {cards.map((card, i) => (
-            <SnowflakeCell
-              key={`snowflake-cell-${i}`}
-              card={card}
-              index={i}
-              imageIndex={imageIndex}
-            />
-          ))}
-        </div>
       </div>
-
-      {/* CSS Spin Keyframes for slowly rotating snowflakes */}
-      <style jsx global>{`
-        @keyframes spin {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
-        }
-      `}</style>
     </section>
   );
 }
