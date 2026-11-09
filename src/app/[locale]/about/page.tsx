@@ -161,7 +161,6 @@ export default function AboutPage() {
                 <span className="h-1 w-12 rounded-full bg-brand-orange" />
                 <span className="h-1 w-6 rounded-full bg-teal-500" />
               </div>
-              <p className="mt-5 max-w-3xl mx-auto text-brand-navy/80 text-base lg:text-lg leading-relaxed">{messages.home.whoWeAre.leadershipCaption}</p>
             </div>
 
             {/* One readable profile on very narrow phones, two from 360px, four on desktop. */}
