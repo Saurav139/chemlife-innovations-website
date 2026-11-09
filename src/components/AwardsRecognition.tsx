@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "@/context/VariantContext";
 import { Images } from "@/lib/assets";
 import { useT } from "@/i18n/LocaleProvider";
+import { Reveal } from "./HomeMotion";
 
 // Titles and descriptions are in the language file (home.awards.items), in this order. New awards go at the end:
 // previews pair these by position.
@@ -71,14 +72,14 @@ export default function AwardsRecognition() {
   return (
     <section id="awards" className="bg-white py-16 md:py-24 lg:py-32 overflow-hidden scroll-mt-20">
       <div className="max-w-[1200px] mx-auto px-6">
-        <div className="text-center mb-10 md:mb-16">
+        <Reveal className="text-center mb-10 md:mb-16">
           <span className="text-teal-aa text-sm lg:text-base font-semibold tracking-widest uppercase">
             {t.kicker}
           </span>
           <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-brand-navy mt-2 mb-4 leading-tight">
             {t.title}
           </h2>
-        </div>
+        </Reveal>
 
         {/* Plaque frame */}
         <motion.div 
