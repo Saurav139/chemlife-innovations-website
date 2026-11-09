@@ -4,6 +4,7 @@ import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import ProofStrip from "@/components/ProofStrip";
 import { VariantProvider } from "@/context/VariantContext";
 import { useHref, useT } from "@/i18n/LocaleProvider";
 import { Images } from "@/lib/assets";
@@ -26,18 +27,6 @@ const AWARDS_GROUP = 2;
 
 // The chapters' ids, for the cover's contents list.
 const CHAPTERS = ["at-a-glance", "leadership", "questions"] as const;
-
-// The partners and recognition strip: logos already on the site.
-const PARTNER_LOGOS = [
-  { src: Images.partnerLogos.path("huve.png"), name: "Huvepharma" },
-  { src: Images.partnerLogos.path("ew_nutr.png"), name: "EW Nutrition" },
-];
-const RECOGNITION_LOGOS = [
-  { src: Images.awards.ccamp, name: "C-CAMP" },
-  { src: Images.awards.birac, name: "BIRAC" },
-  { src: Images.awards.naarm, name: "a-IDEA, ICAR-NAARM" },
-  { src: Images.awards.businessSuccess2026, name: "Business Success Awards 2026" },
-];
 
 /** "Dr Radhakrishna PM (Chairman and MD), Dr Sharada KC (Director, Technical), …" → each director's name and role.
  *  The same pattern in every language; anything else is shown as it is written. */
@@ -204,34 +193,7 @@ export default function WhoWeArePage() {
         </section>
 
         {/* Partners and recognition: logos and the two certifications, before the detail. */}
-        <section aria-label={`${t.proofPartners}, ${t.proofRecognised}`} className="bg-white border-b border-slate-200">
-          <div className={`${wrap} py-10 md:py-12 grid lg:grid-cols-12 gap-8 lg:gap-10 items-center`}>
-            <div className="lg:col-span-4">
-              <p className={`${eyebrow} text-slate-500`}>{t.proofPartners}</p>
-              <ul className="flex items-center gap-8 mt-4">
-                {PARTNER_LOGOS.map((logo) => (
-                  <li key={logo.name} className="relative h-10 w-32"><Image src={logo.src} alt={logo.name} fill sizes="128px" className="object-contain object-left" /></li>
-                ))}
-              </ul>
-            </div>
-            <div className="lg:col-span-8 lg:border-l lg:border-slate-200 lg:pl-10">
-              <p className={`${eyebrow} text-slate-500`}>{t.proofRecognised}</p>
-              <ul className="flex flex-wrap items-center gap-x-6 gap-y-4 mt-4">
-                {/* FAMI-QS first, as the certification; "FAMI-QS certified" is its text alternative. */}
-                <li className="relative h-12 w-24 md:h-14 md:w-28"><Image src={Images.awards.famiQs} alt={t.famiQs} fill sizes="112px" className="object-contain" /></li>
-                {RECOGNITION_LOGOS.map((logo) => (
-                  <li key={logo.name} className="relative h-12 w-24 md:h-14 md:w-28"><Image src={logo.src} alt={logo.name} fill sizes="112px" className="object-contain" /></li>
-                ))}
-                {t.proofBadges.map((badge) => (
-                  <li key={badge} className="inline-flex items-center gap-2 rounded-full border border-teal-aa/30 bg-teal-aa/5 px-4 py-2 text-sm font-semibold text-brand-navy">
-                    <svg aria-hidden="true" className="w-4 h-4 text-teal-aa" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3l8 3v6c0 5-3.4 8.2-8 9-4.6-.8-8-4-8-9V6zM8.8 12.2l2.2 2.2 4.2-4.4" /></svg>
-                    {badge}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </section>
+        <ProofStrip />
 
         {/* 01 · The facts as a fact sheet: three groups with hairlines between them. */}
         <section aria-labelledby="at-a-glance-title" id={CHAPTERS[0]} className={`${wrap} py-20 md:py-28 scroll-mt-20`}>

@@ -348,13 +348,22 @@ const en = {
     heroAlt: "Sustainable science glass plant background",
     titleLine1: "Built on science.",
     titleLine2: "Driven by purpose.",
-    intro:
-      "To pioneer sustainable progress in Animal Feed Functional Additives & Nutraceuticals by championing Green Technologies, fostering Creativity through an Innovative Mindset, and building an unshakable foundation of Trust and Reliability.",
+    // The hero's one-paragraph introduction: who we are, where, for whom, since when.
+    lead: "ChemLife Innovations makes functional feed additives and nutraceuticals for poultry, dairy cattle and swine, from Bengaluru, India. Feed makers have built products on our technologies since 2016.",
     foundersAlt: "ChemLife Founders and Leadership",
     founders: "Our Founders",
     journeyTitle: "Our Journey",
     journeyText: "ChemLife Innovations brings together Ayurvedic plant wisdom and modern biotechnology to develop nature-derived functional feed additives for poultry, dairy and livestock.",
     journeyText2: "Our founders bring experience in animal nutraceuticals, research, technology and business management. Together, they guide our work in bioactives, green technologies and practical solutions for animal nutrition.",
+    // The journey's dated milestones, in order; the year is shown as written.
+    milestonesTitle: "Milestones",
+    milestones: [
+      { year: "2016", text: "Quadragen VetHealth begins building products on ChemLife's ANBioT technology." },
+      { year: "2018", text: "Huvepharma collaboration starts on technology development and novel product manufacturing." },
+      { year: "2020", text: "EW Nutrition partnership; ChemLife is selected for the C-CAMP K-SAP BIO 50 cohort." },
+      { year: "2023", text: "The Technology Development Board, Department of Science and Technology, backs the bio-trace minerals project." },
+      { year: "Today", text: "FAMI-QS certified manufacturing at Doddaballapura, Bengaluru Rural, for poultry, dairy and swine feed makers." },
+    ],
     purposeTitle: "Our purpose",
     visionPhotoAlt: "Laboratory workspace with research equipment and people at work",
     visionPhotoLabel: "Research & Development",
@@ -366,6 +375,7 @@ const en = {
       "Our mission is to integrate eco-conscious solutions into every facet of progress, inspire breakthroughs with a culture rooted in innovation, guide our decisions with evidence and integrity, and cultivate enduring trust by upholding transparency and ethical values.",
     valuesKicker: "Pillars",
     valuesTitle: "Core values",
+    valuesIntro: "Four values, one word: G.I.F.T. They decide what we research, what we release and how we work with partners.",
     values: {
       green: { name: "Green technologies", text: "Lead the way in embracing and promoting eco-friendly products & processes to protect the planet." },
       trust: { name: "Trustworthy", text: "Build enduring trust by fostering transparency, credibility, and unwavering integrity." },
