@@ -2,13 +2,12 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Images } from "@/lib/assets";
 import { useHref, useT } from "@/i18n/LocaleProvider";
 import type { Messages } from "@/i18n/messages/en";
 import { REVEAL_VIEWPORT } from "@/lib/reveal";
-
-const easeOut = [0.25, 0.1, 0, 1] as const;
+import { MoleculeField, Reveal } from "./HomeMotion";
 
 // Each card's title, description and photo descriptions are in the language file (home.whoWeAre.cards), in this order.
 export const cardImages = [
@@ -151,22 +150,6 @@ export function SnowflakeCell({
   );
 }
 
-/** Fades and rises into view once, as it scrolls in (still for visitors who prefer less motion). */
-function Reveal({ children, delay = 0, className }: { children: React.ReactNode; delay?: number; className?: string }) {
-  const reduce = useReducedMotion();
-  return (
-    <motion.div
-      className={className}
-      initial={{ opacity: 0, y: reduce ? 0 : 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={REVEAL_VIEWPORT}
-      transition={{ duration: 0.6, delay, ease: easeOut }}
-    >
-      {children}
-    </motion.div>
-  );
-}
-
 export default function WhoWeAre() {
   const messages = useT();
   const t = messages.home.whoWeAre;
@@ -187,16 +170,17 @@ export default function WhoWeAre() {
 
 
   return (
-    <section aria-labelledby="who-we-are-title" className="bg-white py-20 md:py-32 overflow-hidden border-b border-gray-100">
-      <div className="max-w-[1200px] mx-auto px-6">
-        <div className="text-center mb-10 md:mb-16">
+    <section aria-labelledby="who-we-are-title" className="relative bg-white py-20 md:py-32 overflow-hidden border-b border-gray-100">
+      <MoleculeField />
+      <div className="relative max-w-[1200px] mx-auto px-6">
+        <Reveal className="text-center mb-10 md:mb-16">
           <span className="text-teal-aa text-sm lg:text-base font-semibold tracking-widest uppercase block mb-3">
             {t.homeKicker}
           </span>
           <h2 id="who-we-are-title" className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold leading-tight text-brand-navy">
             {t.homeTitle}
           </h2>
-        </div>
+        </Reveal>
 
         {/* Who we are: the introduction beside the founders' photo, with a link to the full Who We Are page. */}
         <div className="grid lg:grid-cols-12 gap-12 items-center">
@@ -221,9 +205,11 @@ export default function WhoWeAre() {
         </div>
 
         {/* What we serve: the three species groups */}
-        <h3 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold leading-tight text-brand-navy text-center mt-16 md:mt-24">
-          {t.serveTitle}
-        </h3>
+        <Reveal>
+          <h3 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold leading-tight text-brand-navy text-center mt-16 md:mt-24">
+            {t.serveTitle}
+          </h3>
+        </Reveal>
 
         {/* Grid layout containing the Snowflake Cells */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-12 max-w-5xl mx-auto justify-items-stretch md:justify-items-center w-full mt-8 z-10 relative">

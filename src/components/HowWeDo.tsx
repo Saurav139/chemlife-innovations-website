@@ -6,6 +6,7 @@ import { useTheme } from "@/context/VariantContext";
 import { Images } from "@/lib/assets";
 import { useT } from "@/i18n/LocaleProvider";
 import { REVEAL_VIEWPORT } from "@/lib/reveal";
+import { DrawRing, Parallax, Reveal } from "./HomeMotion";
 
 // Titles, descriptions and photo descriptions are in the language file (home.howWeDo.steps), in this order.
 const stepImages: { image: string; objectPosition?: string }[] = [
@@ -22,8 +23,8 @@ export default function HowWeDo() {
 
   return (
     <section className="relative py-16 md:py-24 lg:py-32 overflow-hidden bg-brand-navy">
-      {/* Background Image with Overlay */}
-      <div className="absolute inset-0 z-0 select-none pointer-events-none">
+      {/* Background Image with Overlay, moving a little slower than the page */}
+      <Parallax amount={6} className="absolute inset-0 z-0 select-none pointer-events-none">
         <Image
           src={Images.process.howWeDoBg}
           alt={t.bgAlt}
@@ -31,18 +32,18 @@ export default function HowWeDo() {
           className="object-cover opacity-35"
         />
         <div className="absolute inset-0 bg-brand-navy/90 mix-blend-multiply" />
-      </div>
+      </Parallax>
 
       <div className="relative z-10 max-w-[1200px] mx-auto px-6">
         {/* Title Section */}
-        <div className="text-center mb-10 md:mb-20">
+        <Reveal className="text-center mb-10 md:mb-20">
           <span className="text-teal-aa-light text-sm lg:text-base font-semibold tracking-widest uppercase block mb-3">
             {t.kicker}
           </span>
           <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight">
             {t.title}
           </h2>
-        </div>
+        </Reveal>
 
         {/* Unified Chessboard Container (Attached rows, shrunken dimensions) */}
         <motion.div
@@ -60,7 +61,7 @@ export default function HowWeDo() {
                 className="grid grid-cols-1 md:grid-cols-2 gap-0 md:h-[260px] lg:h-[300px] items-stretch group"
               >
                 {/* Image Box */}
-                <div className={`relative w-full h-[200px] md:h-full overflow-hidden order-1 ${isEven ? "md:order-1" : "md:order-2"}`}>
+                <Parallax className={`relative w-full h-[200px] md:h-full order-1 ${isEven ? "md:order-1" : "md:order-2"}`}>
                   <Image
                     src={s.image}
                     alt={s.alt}
@@ -69,7 +70,7 @@ export default function HowWeDo() {
                     className={`object-cover group-hover:scale-102 transition-transform duration-700 ${s.objectPosition || ""}`}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/15 to-transparent animate-fade-in" />
-                </div>
+                </Parallax>
 
                 {/* Text Box */}
                 <div className={`w-full p-6 lg:p-10 flex flex-col justify-center bg-white order-2 ${isEven ? "md:order-2" : "md:order-1"} relative`}>
@@ -78,8 +79,9 @@ export default function HowWeDo() {
 
                   <div className="flex items-start gap-4">
                     {/* Step Number Circle */}
-                    <div className={`w-10 h-10 rounded-full ${theme.processCircleBg} flex items-center justify-center ${theme.processCircleText} font-bold flex-shrink-0 text-lg shadow-sm`}>
+                    <div className={`relative w-10 h-10 rounded-full ${theme.processCircleBg} flex items-center justify-center ${theme.processCircleText} font-bold flex-shrink-0 text-lg shadow-sm`}>
                       {s.step}
+                      <DrawRing />
                     </div>
 
                     {/* Step Description */}
