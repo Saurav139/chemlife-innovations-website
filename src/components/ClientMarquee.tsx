@@ -5,7 +5,6 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { Images } from "@/lib/assets";
 import { useT } from "@/i18n/LocaleProvider";
-import { MoleculeField, Reveal } from "./HomeMotion";
 
 const frontLogos = [...Images.partnerLogos.frontRow];
 const backLogos = [...Images.partnerLogos.backRow];
@@ -80,20 +79,19 @@ export default function ClientMarquee() {
   }, []);
 
   return (
-    <section className="relative bg-white py-16 md:py-24 lg:py-32 overflow-hidden">
-      <MoleculeField />
-      <div className="relative max-w-[1200px] mx-auto px-6 mb-10 md:mb-16">
-        <Reveal className="text-center">
+    <section className="bg-white py-16 md:py-24 lg:py-32 overflow-hidden">
+      <div className="max-w-[1200px] mx-auto px-6 mb-10 md:mb-16">
+        <div className="text-center">
           <span className="text-teal-aa text-sm lg:text-base font-semibold tracking-widest uppercase">
             {t.kicker}
           </span>
           <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-brand-navy mt-2 mb-4 leading-tight">
             {t.title}
           </h2>
-        </Reveal>
+        </div>
       </div>
 
-      <div className="relative max-w-[1200px] mx-auto px-6">
+      <div className="max-w-[1200px] mx-auto px-6">
         {/* A wrapping row, so the ninth logo on a phone (two across) sits centred rather than alone on the left. */}
         <div className="flex flex-wrap justify-center gap-3 sm:gap-6 md:gap-8 max-w-4xl mx-auto">
           {frontLogos.map((logo, i) => (

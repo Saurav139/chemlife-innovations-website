@@ -239,13 +239,9 @@ export default function HeroVariantA() {
               onClick={(e) => playOnPage(e, () => setStoryOpen(true))}
               className={`tap-target inline-flex items-center gap-2 text-sm lg:text-base font-semibold text-white/85 hover:text-white underline-offset-4 hover:underline transition-colors cursor-pointer ${awardLayout ? "mt-4 lg:mt-5" : "mt-5 lg:mt-6"} short:mt-3 short-phone:mt-2`}
             >
-              {/* A ring ripples out from the play button, so the video is noticed. */}
-              <span className="relative inline-flex w-6 h-6 items-center justify-center rounded-full border border-white/50 bg-white/15">
-                <span className="absolute inset-0 rounded-full border border-white/80 animate-ping-soft motion-reduce:hidden" aria-hidden="true" />
-                <svg viewBox="0 0 24 24" className="w-3 h-3 fill-current" aria-hidden="true">
-                  <path d="M8 5v14l11-7z" />
-                </svg>
-              </span>
+              <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current">
+                <path d="M8 5v14l11-7z" />
+              </svg>
               {t.home.watchStory}
             </a>
 
