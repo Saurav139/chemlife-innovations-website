@@ -108,6 +108,12 @@ const en = {
     closeVideo: "Close video player",
     goToSlide: "Go to slide",
     stats: ["Years of Research", "Products", "Customers Served", "Awards Won"],
+    // The closing call to action.
+    cta: {
+      title: "Ready to put ChemLife in your feed?",
+      text: "Tell us the animals you feed and the problem you want solved. Our nutritionists will recommend a product and its inclusion rate.",
+      direct: "Or reach us directly",
+    },
 
     whoWeAre: {
       kicker: "Who we are",

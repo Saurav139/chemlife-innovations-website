@@ -2,13 +2,15 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SectionWrapper from "@/components/SectionWrapper";
 import { VariantProvider } from "@/context/VariantContext";
 import SiteSearch from "@/components/SiteSearch";
+import FinalCta from "@/components/FinalCta";
 import { Images } from "@/lib/assets";
-import { useT } from "@/i18n/LocaleProvider";
+import { useHref, useT } from "@/i18n/LocaleProvider";
 import visionStyles from "./vision-mission.module.css";
 
 const easeOut = [0.25, 0.1, 0, 1] as const;
@@ -16,7 +18,9 @@ const easeOut = [0.25, 0.1, 0, 1] as const;
 // Core values redefined using G.I.F.T. framework directly in layout
 
 export default function AboutPage() {
-  const t = useT().about;
+  const messages = useT();
+  const t = messages.about;
+  const href = useHref();
   return (
     <VariantProvider>
       <Header />
@@ -95,6 +99,16 @@ export default function AboutPage() {
                 <p>{t.journeyText}</p>
                 <p>{t.journeyText2}</p>
               </div>
+              <Link
+                href={href("/who-we-are")}
+                data-analytics-click="About: who we are"
+                className="group inline-flex items-center gap-2 min-h-11 mt-5 font-semibold text-teal-aa hover:text-brand-navy"
+              >
+                {messages.home.whoWeAre.moreAboutUs}
+                <svg aria-hidden="true" className="w-4 h-4 transition-transform group-hover:translate-x-1" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M4 10h12M11 5l5 5-5 5" />
+                </svg>
+              </Link>
             </motion.div>
           </div>
         </SectionWrapper>
@@ -195,7 +209,7 @@ export default function AboutPage() {
                   </div>
 
                   <div className="flex flex-1 flex-col items-start text-left p-4 md:p-5">
-                  <h3 className="font-heading text-lg md:text-xl font-bold text-brand-orange-aa leading-tight mb-2">
+                  <h3 className="font-heading text-lg md:text-xl font-bold text-brand-navy leading-tight mb-2">
                     {leader.name}
                   </h3>
                   <p className="text-teal-aa font-bold text-xs md:text-sm uppercase tracking-wider leading-relaxed mb-2">
@@ -231,13 +245,18 @@ export default function AboutPage() {
                {/* Connection Lines for Desktop - Positioned underneath the boxes (z-0) */}
               <svg className="absolute inset-0 w-full h-full pointer-events-none hidden lg:block z-0" viewBox="0 0 100 100" preserveAspectRatio="none">
                 <style>{`
+                  /* The dashes repeat every 12 units (6 on, 6 off), so one loop slides exactly two of them (24): the
+                     restart lands where it began and the flow never jumps. 1.44s keeps the original speed. */
                   @keyframes stroke-flow {
                     to {
-                      stroke-dashoffset: -20;
+                      stroke-dashoffset: -24;
                     }
                   }
                   .stroke-animated {
-                    animation: stroke-flow 1.2s linear infinite;
+                    animation: stroke-flow 1.44s linear infinite;
+                  }
+                  @media (prefers-reduced-motion: reduce) {
+                    .stroke-animated { animation: none; }
                   }
                 `}</style>
  
@@ -526,6 +545,7 @@ export default function AboutPage() {
           </div>
         </SectionWrapper>
 
+        <FinalCta />
       </main>
 
       <Footer />
