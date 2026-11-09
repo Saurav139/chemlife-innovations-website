@@ -245,13 +245,18 @@ export default function AboutPage() {
                {/* Connection Lines for Desktop - Positioned underneath the boxes (z-0) */}
               <svg className="absolute inset-0 w-full h-full pointer-events-none hidden lg:block z-0" viewBox="0 0 100 100" preserveAspectRatio="none">
                 <style>{`
+                  /* The dashes repeat every 12 units (6 on, 6 off), so one loop slides exactly two of them (24): the
+                     restart lands where it began and the flow never jumps. 1.44s keeps the original speed. */
                   @keyframes stroke-flow {
                     to {
-                      stroke-dashoffset: -20;
+                      stroke-dashoffset: -24;
                     }
                   }
                   .stroke-animated {
-                    animation: stroke-flow 1.2s linear infinite;
+                    animation: stroke-flow 1.44s linear infinite;
+                  }
+                  @media (prefers-reduced-motion: reduce) {
+                    .stroke-animated { animation: none; }
                   }
                 `}</style>
  
