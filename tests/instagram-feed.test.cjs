@@ -100,8 +100,8 @@ test.afterEach(() => {
   delete globalThis.insightsSync;
 });
 
-function syncHarness({ existing = [], ids = [], entries, error, autoPublish = false } = {}) {
-  const calls = { api: 0, renew: 0, feed: 0, images: 0, imported: [], refreshed: 0 };
+function syncHarness({ existing = [], ids = [], entries, error, autoPublish = false, saved = [], failImages = false } = {}) {
+  const calls = { api: 0, renew: 0, feed: 0, images: 0, imported: [], refreshed: 0, changed: [] };
   const sync = load('src/lib/insights-store/sync.ts', {
     'next/cache': { revalidatePath: () => { calls.refreshed++; } },
     '@/lib/insights': { FALLBACK_INSIGHTS: { blogs: [], podcasts: [], videos: [] } },
@@ -114,7 +114,7 @@ function syncHarness({ existing = [], ids = [], entries, error, autoPublish = fa
         return { added: items.length, approved: source === 'instagram' && autoPublish };
       },
       socialAutoPublishSettings: async () => ({ linkedin: false, instagram: autoPublish }),
-      listItems: async () => [], changeItem: async () => null,
+      listItems: async () => saved, changeItem: async (id, changes) => { calls.changed.push({ id, ...changes }); return null; },
     },
     './feed': { ...feed, fetchInstagramFeed: async (url, read) => {
       calls.feed++;
@@ -122,7 +122,7 @@ function syncHarness({ existing = [], ids = [], entries, error, autoPublish = fa
       if (entries) return entries;
       return feed.fetchInstagramFeed(url, read);
     } },
-    './preview': { fetchFeedText: async () => rss, copyImage: async () => { calls.images++; return 42; } },
+    './preview': { fetchFeedText: async () => rss, copyImage: async () => { calls.images++; if (failImages) throw new Error('expired'); return 42; } },
     './sources': {
       fetchYouTubeUploads: async () => [], fetchWordPressPosts: async () => [],
       fetchInstagramPosts: async () => { calls.api++; return entries ?? []; },
@@ -180,4 +180,34 @@ test('the API still works when no Instagram feed is configured', async () => {
   assert.equal(calls.feed, 0);
   assert.equal(calls.api, 1);
   assert.equal(calls.renew, 1);
+});
+
+test('a saved post whose picture could not be copied gets it on a later check', async () => {
+  process.env.INSTAGRAM_FEED_URL = 'https://feeds.example.com/instagram';
+  const entry = (code, imageUrl) => ({
+    source: 'instagram', externalId: `https://www.instagram.com/p/${code}`, kind: 'Blog', title: code, summary: code,
+    url: `https://www.instagram.com/p/${code}`, imageUrl, copyImage: Boolean(imageUrl), meta: 'Instagram post', publishedAt: new Date(),
+  });
+  const entries = [entry('NoPicture', 'https://images.example.com/a.jpg'), entry('HasPicture', 'https://images.example.com/b.jpg'), entry('FeedHasNone')];
+  const row = (id, code, image, status = 'approved') => ({ id, source: 'instagram', externalId: `old-api-id-${id}`, url: `https://www.instagram.com/p/${code}/`, image, status });
+  const saved = [row(1, 'NoPicture', ''), row(2, 'HasPicture', '/api/insights/media/2.jpg'), row(3, 'FeedHasNone', ''), { ...row(4, 'NoPicture', ''), source: 'linkedin' }];
+  const existing = saved.map(item => item.url);
+
+  const { sync, calls } = syncHarness({ entries, existing, saved });
+  assert.equal((await sync.syncInbox()).find(r => r.source === 'instagram').added, 0);
+  assert.deepEqual(calls.changed, [{ id: 1, imageId: 42 }]);
+  assert.equal(calls.images, 1);
+  assert.equal(calls.refreshed, 1);
+
+  // A picture that still can't be fetched leaves the post as it is, to try again next time.
+  const failing = syncHarness({ entries, existing, saved, failImages: true });
+  await failing.sync.syncInbox();
+  assert.deepEqual(failing.calls.changed, []);
+  assert.equal(failing.calls.refreshed, 0);
+
+  // A post still waiting in the inbox gets its picture without rebuilding the page.
+  const waiting = syncHarness({ entries, existing, saved: [row(1, 'NoPicture', '', 'pending')] });
+  await waiting.sync.syncInbox();
+  assert.deepEqual(waiting.calls.changed, [{ id: 1, imageId: 42 }]);
+  assert.equal(waiting.calls.refreshed, 0);
 });
