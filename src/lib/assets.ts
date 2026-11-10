@@ -96,10 +96,10 @@ export const Images = {
     founders: "/images/people/founders.jpg",
     foundersNew: "/images/people/founders-leadership-group.jpg",
     /** The four leaders, cropped to the same chest-up frame (4:5, face at the same size and height). */
-    leaderRadhakrishna: "/images/people/leader_radhakrishna_portrait.jpg",
-    leaderSharada: "/images/people/leader_sharada_portrait-2.jpg",
-    leaderSneehaCropped: "/images/people/leader_sneha_portrait.jpg",
-    leaderShankar: "/images/people/leader_shankar_portrait.jpg",
+    leaderRadhakrishna: "/images/people/leader_radhakrishna_chest.jpg",
+    leaderSharada: "/images/people/leader_sharada_chest.jpg",
+    leaderSneehaCropped: "/images/people/leader_sneha_chest.jpg",
+    leaderShankar: "/images/people/leader_shankar_chest.jpg",
   },
 
   /** R&D / science imagery */
