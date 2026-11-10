@@ -1,0 +1,81 @@
+# Insights inbox
+
+The moderator decides which posts from ChemLife's channels appear on the Insights page, at `/admin/insights`.
+
+- **YouTube** uploads and **blog** (WordPress) posts come in by themselves. So do **Instagram** posts once
+  `INSTAGRAM_FEED_URL` or `INSTAGRAM_ACCESS_TOKEN` is set.
+- **LinkedIn** posts come in by themselves when `LINKEDIN_FEED_URL` is set (see below); otherwise, like anything
+  else, they are added by pasting the post's link into "Add a post". The title, text,
+  picture and date are filled in from the post where the site allows it.
+- New posts wait under **Waiting**, marked **New** if they arrived since your last visit (remembered per browser).
+  **Add to page** puts one on the Insights page straight away; **Hide** keeps it off. Tick several posts (or
+  **Select all**) to decide for all of them at once; every decision can be undone from the notification. The search
+  box looks through every tab. **Feature** chooses the big card at the top for its type (blog, video, podcast);
+  otherwise the newest is featured. **Edit** changes how a post appears on the page, never the original, and shows
+  the card as the page will.
+- The inbox checks for new posts when the moderator opens it (at most every 10 minutes), with **Check for new
+  posts**, and from a scheduled job if one is set up. While any **Automatically add … to Insights** box is ticked, the
+  site also checks every 10 minutes by itself (`auto-sync.ts`, started from `src/instrumentation.ts`), and a visit to
+  the Insights page checks if one is due, in case the host paused the server. No one needs to open the inbox.
+- **Automatically add LinkedIn posts to Insights** and **Automatically add Instagram posts to Insights** save
+  independent database preferences, off by default. Enabling one adds that channel's waiting posts to the public
+  Insights page and checks connected channels immediately. Future imports from that channel are approved during
+  the automatic checks (or dashboard and scheduled ones); the other channel keeps its own setting. Sites with the previous combined
+  preference inherit it for each channel until that channel gets its own choice.
+  Hidden posts and featured selections are preserved. Turning a channel off only changes its future imports; existing
+  approved posts stay on the page. Manually pasted posts still use the decision chosen in the Add a post form.
+  This preference does not connect accounts or bypass the source's available history: LinkedIn's configured feed
+  supplies its newest 20 entries, and Instagram reads up to 30 posts per check. A feed provider may supply fewer
+  entries or update less frequently depending on its plan and Instagram's public availability.
+
+## Setting it up on Hostinger
+
+1. hPanel → **Databases → MySQL Databases**: create a database and a user. Note the host shown there.
+2. hPanel → the website's **environment variables**:
+   - `DATABASE_URL` = `mysql://USER:PASSWORD@HOST:3306/DATABASE` (URL-encode special characters in the password,
+     e.g. `@` as `%40`)
+   - `ADMIN_PASSWORD` = a long password for the moderator
+3. Redeploy, then open `/admin/insights` and sign in. The first visit copies the page's current posts in as
+   approved, so the Insights page doesn't change until something is added or hidden.
+
+The staging and live sites should each have their own database, so testing on staging never changes the live page.
+
+### Optional
+
+- **Demo on staging without signing in:** set `INSIGHTS_DEMO` to `true` (then `ADMIN_PASSWORD` isn't needed). The
+  inbox shows a "Demo" notice, and anyone who can open the staging site can use it. It never applies on
+  chemlifeinnovations.com. Remove it after the demo.
+- **Instagram through RSS (no Meta app or token):** generate a feed from ChemLife's public Instagram profile
+  using a provider such as [RSS.app](https://help.rss.app/en/articles/11036382-how-to-create-rss-feeds-from-instagram).
+  The profile must be viewable without signing in. Set `INSTAGRAM_FEED_URL` to the generated HTTPS feed address
+  (RSS, Atom and JSON work), apply the environment change and restart the app. Then use **Check for new posts**.
+  Posts use the same Waiting queue and Instagram automatic publishing checkbox. Treat the feed address as private.
+  The feed takes priority if both Instagram variables are set; a failing feed is reported rather than silently
+  switching to the API. Existing API and manually added posts are matched by their Instagram post address,
+  including hidden posts, so changing import methods doesn't bring them back.
+- **Instagram through the API (alternative):** create a Meta app with the *Instagram API with Instagram Login* product, add ChemLife's Instagram
+  business account, generate an access token and set it as `INSTAGRAM_ACCESS_TOKEN`. It lasts 60 days; the inbox
+  renews it every week and keeps the renewed one in the database. Setting a new one in hPanel replaces it.
+- **LinkedIn automatically:** LinkedIn only lets approved apps read a company page's posts, so use a feed service.
+  With RSS.app, make a feed from the public company page (its LinkedIn feed generator), and set `LINKEDIN_FEED_URL`
+  to the feed's address (RSS, Atom and JSON feeds all work). Each check reads the 20 newest posts; new ones wait
+  under **Waiting** with their text, picture and date. Treat the address as private: anyone with it can read the feed.
+- **Scheduled checks:** set `INSIGHTS_SYNC_KEY` to a long random string and add an hPanel cron job, e.g. hourly:
+  `curl -fsS "https://chemlifeinnovations.com/api/admin/insights/sync?key=THE_KEY"`
+
+## How it works
+
+- `db.ts`: the MySQL tables (created on first use): posts, copied pictures, settings.
+- `sources.ts`: reading YouTube, WordPress and Instagram. `preview.ts`: filling in a pasted link. A pasted
+  Instagram post comes from Instagram's API when it's connected, otherwise from its link preview; Instagram's and
+  LinkedIn's embed pages fill in what a post's own page leaves out. An Instagram post's date is read from its shortcode.
+- `feed.ts`: reading LinkedIn and Instagram feeds through the same public-address checks as pasted links.
+- `auto-sync.ts`: the 10-minute check while automatic adding is on; one server process runs each check.
+- `sync.ts`: checking for new posts, and starting the inbox from the built-in list (`FALLBACK_INSIGHTS` in
+  `src/lib/insights.ts`). Once per database it also brings blog posts imported before October 2026 up to today's
+  summaries and titles.
+- `card.ts`: how a post becomes an Insights card, for the page and for the inbox's preview (`src/components/InsightCard.tsx`).
+- `src/lib/insights.ts` `getInsights()`: the approved posts once the inbox has started; the built-in list if the
+  database isn't set up or can't be reached.
+- Instagram and LinkedIn picture addresses expire, so their pictures are copied into the database and served from
+  `/api/insights/media/<id>.<ext>`.
