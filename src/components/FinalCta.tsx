@@ -5,9 +5,9 @@ import { CONTACT_EMAIL, CONTACT_PHONE } from "@/lib/contact";
 import { useHref, useT } from "@/i18n/LocaleProvider";
 
 const primary =
-  "inline-flex items-center justify-center gap-2 min-h-12 lg:min-h-14 px-7 rounded-full bg-white text-brand-orange-aa font-semibold shadow-md hover:bg-brand-navy hover:text-white transition-colors";
+  "inline-flex items-center justify-center gap-2 min-h-12 lg:min-h-14 px-7 rounded-full sm:whitespace-nowrap bg-white text-brand-orange-aa font-semibold shadow-md hover:bg-brand-navy hover:text-white transition-colors";
 const secondary =
-  "inline-flex items-center justify-center gap-2 min-h-12 lg:min-h-14 px-7 rounded-full border-2 border-white/80 text-white font-semibold hover:bg-white hover:text-brand-orange-aa transition-colors";
+  "inline-flex items-center justify-center gap-2 min-h-12 lg:min-h-14 px-7 rounded-full sm:whitespace-nowrap border-2 border-white/80 text-white font-semibold hover:bg-white hover:text-brand-orange-aa transition-colors";
 
 /** The closing ask, on the brand orange: talk to a nutritionist, or request the technical dossier, or just call. */
 export default function FinalCta() {
@@ -28,7 +28,8 @@ export default function FinalCta() {
           <p className="mt-5 text-lg md:text-xl leading-relaxed max-w-2xl">{t.text}</p>
         </div>
         <div className="lg:col-span-5 flex flex-col gap-5 lg:items-end">
-          <div className="flex flex-col sm:flex-row lg:flex-col xl:flex-row gap-3 w-full lg:w-auto">
+          {/* Each label stays on one line: side by side on tablets, stacked beside the heading on desktop where the column is too narrow for both. */}
+          <div className="flex flex-col sm:flex-row sm:flex-wrap lg:flex-col gap-3 w-full lg:w-auto">
             <Link href={href("/contact?type=nutritionist")} className={primary} data-analytics-click="Home CTA: talk to nutritionist">
               {messages.home.talkToNutritionist}
             </Link>
