@@ -46,7 +46,7 @@ const LINKS = links();
 const EXPERIENCE = [
   { years: 30, field: "Animal-nutraceutical innovation", who: "Dr Radhakrishna PM, Chairman and MD" },
   { years: 23, field: "Feed-additive R&D", who: "Dr Sharada KC, Director, Technical" },
-  { years: 38, field: "Commercial project management", who: "Shankar CV, Director, Business and Development" },
+  { years: 38, field: "Commercial project management", who: "Shankar CV, Director, Business Development" },
   { years: 15, field: "Supply-chain accounting and HR", who: "Sneha R, Director, HR and Finance" },
 ];
 

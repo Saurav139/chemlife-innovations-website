@@ -154,7 +154,7 @@ const en = {
         { label: "Recognition", value: "C-CAMP K-SAP BIO 50 cohort, 2020-21" },
         { label: "Industry partners", value: "Huvepharma, in collaboration since 2018; EW Nutrition since 2020" },
         { label: "Manufacturing", value: "Doddaballapura, Bengaluru Rural District, Karnataka, India" },
-        { label: "Leadership", value: "Dr Radhakrishna PM (Chairman and MD), Dr Sharada KC (Director, Technical), Sneha R (Director, HR and Finance), Shankar CV (Director, Business and Development)" },
+        { label: "Leadership", value: "Dr Radhakrishna PM (Chairman and MD), Dr Sharada KC (Director, Technical), Sneha R (Director, HR and Finance), Shankar CV (Director, Business Development)" },
       ],
       faq: [
         { q: "What does ChemLife Innovations make?", a: "ChemLife makes functional feed additives on three platforms: feed-hygiene products such as MaxDmold and FeedGenie that control mould and mycotoxins, bio-trace minerals such as MinBioZen, and rumen-bypass and targeted-delivery actives such as MethioWiz and CholiWiz for dairy." },
@@ -337,7 +337,7 @@ const en = {
       { role: "Chairman & MD", bio: "Finance & Go-to-Market. 30 years in Innovation of Animal Nutraceuticals" },
       { role: "Director - Technical", bio: "Research & Technology. 23 years in R&D of Animal Feed additives & Bio-actives" },
       { role: "Director - HR & Finance", bio: "15 years in Supply Chain Accounting & HR. Experienced Management Professional" },
-      { role: "Director - Business & Development", bio: "Business development & 38 years in commercial project management" },
+      { role: "Director - Business Development", bio: "Business development & 38 years in commercial project management" },
     ],
   },
 
