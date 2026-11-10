@@ -365,7 +365,7 @@ const kn: Messages = {
     related: "ಇದೇ ಪ್ರಾಣಿಗಳಿಗೆ ಇನ್ನಷ್ಟು",
     viewProduct: "ಉತ್ಪನ್ನ ನೋಡಿ",
     allProducts: "ಎಲ್ಲಾ ಉತ್ಪನ್ನಗಳು",
-    askAbout: "ಈ ಉತ್ಪನ್ನದ ಬಗ್ಗೆ ಕೇಳಿ",
+    askAbout: "ಈ ಉತ್ಪನ್ನದ ಬಗ್ಗೆ ಇನ್ನಷ್ಟು ತಿಳಿಯಿರಿ",
     bannerAlt: "ಬ್ಯಾನರ್",
     iconAlt: "ಐಕಾನ್",
     items: [

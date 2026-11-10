@@ -368,7 +368,7 @@ const ta: Messages = {
     related: "இதே விலங்குகளுக்கு மேலும்",
     viewProduct: "தயாரிப்பைப் பாருங்கள்",
     allProducts: "அனைத்து தயாரிப்புகள்",
-    askAbout: "இந்தத் தயாரிப்பு பற்றிக் கேளுங்கள்",
+    askAbout: "இந்தத் தயாரிப்பு பற்றி மேலும் அறிக",
     bannerAlt: "பேனர்",
     iconAlt: "ஐகான்",
     items: [

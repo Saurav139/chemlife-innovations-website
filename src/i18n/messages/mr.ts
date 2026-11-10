@@ -368,7 +368,7 @@ const mr: Messages = {
     related: "याच जनावरांसाठी आणखी उत्पादने",
     viewProduct: "उत्पादन पाहा",
     allProducts: "सर्व उत्पादने",
-    askAbout: "या उत्पादनाबद्दल विचारा",
+    askAbout: "या उत्पादनाबद्दल अधिक जाणून घ्या",
     bannerAlt: "बॅनर",
     iconAlt: "आयकॉन",
     items: [
