@@ -1,4 +1,7 @@
 import { Images } from "@/lib/assets";
+import { approvedInsights, storeConfigured } from "@/lib/insights-store/db";
+import { fetchYouTubeUploads } from "@/lib/insights-store/sources";
+import { displayDate, instagramEmbedUrl, instagramPostId, instagramReelCode, linkedinActivityId } from "@/lib/insights-store/text";
 
 export interface InsightItem {
   type: "Blog" | "Podcast" | "Video";
@@ -9,7 +12,11 @@ export interface InsightItem {
   linkUrl?: string;
   imageUrl?: string;
   youtubeId?: string;
+  /** A LinkedIn video post's player: LinkedIn's embed address. The card shows its picture with a play button. */
+  videoUrl?: string;
   content?: string;
+  /** Chosen in the Insights inbox to be the featured post of its type (otherwise the newest is). */
+  featured?: boolean;
 }
 
 export interface Insights {
@@ -18,8 +25,9 @@ export interface Insights {
   videos: InsightItem[];
 }
 
-// Hardcoded fallback data in case API keys are not supplied or fail
-const fallbackData: Insights = {
+// The built-in list: shown until the Insights inbox is set up (DATABASE_URL), and copied into it as approved posts
+// when it starts. Also the fallback whenever the inbox's database can't be reached.
+export const FALLBACK_INSIGHTS: Insights = {
   blogs: [
     {
       type: "Blog" as const,
@@ -28,7 +36,8 @@ const fallbackData: Insights = {
       meta: "5 min read",
       date: "July 15, 2026",
       imageUrl: Images.gallery.rotate21,
-      linkUrl: "https://www.linkedin.com/posts/chemlifeinnovations_feedbites-chemlifeinnovations-feedbites-activity-7243916601449336832-r_xQ",
+      linkUrl: "https://www.linkedin.com/posts/chemlifeinnovations_feedbites-chemlifeinnovations-animalnutrition-activity-7473607866512355328-G6mF",
+      videoUrl: "https://www.linkedin.com/embed/feed/update/urn:li:activity:7473607866512355328?compact=true",
       content: `In livestock farming, every feed choice determines your operational margins. Feed quality isn't just about weight; it is about gut performance and biochemical stability.
 
 With #FeedBites, we share actionable updates to help dairy and poultry manufacturers make smarter feed preservation decisions. In this post, we discuss:
@@ -46,7 +55,7 @@ Make smarter decisions for better outcomes.`
       meta: "6 min read",
       date: "July 12, 2026",
       imageUrl: Images.gallery.rotate32,
-      linkUrl: "https://www.linkedin.com/company/chemlifeinnovations/posts/?feedView=all",
+      linkUrl: "https://www.linkedin.com/company/chemlifeinnovations/",
       content: `We are proud to share a major milestone: ChemLife Innovations has entered into a strategic collaboration with the Technology Development Board (TDB), Department of Science & Technology, Government of India.
 
 This partnership is focused on the commercial scale-up and manufacturing of bio-trace minerals utilizing our patented Accelerated Natural Biotransformation (ANBioT) technology.
@@ -88,7 +97,7 @@ Here are six practical solutions to help strengthen poultry profitability:
       meta: "5 min read",
       date: "March 22, 2026",
       imageUrl: Images.process.researchImage,
-      linkUrl: "https://www.linkedin.com/company/chemlifeinnovations/posts/?feedView=all",
+      linkUrl: "https://www.linkedin.com/company/chemlifeinnovations/",
       content: `Bridging traditional plant-based wisdom with modern biotechnology is the core mission of ChemLife Innovations.
 
 Through our patented Accelerated Natural Bio-Transformation (ANBioT) platform, we recreate natural bio-chelation pathways. Instead of feeding crude metal oxides or sulfates (which have low absorption and cause toxic stress), we chelate trace minerals directly to hydroxy amino acids.
@@ -102,7 +111,8 @@ This organic chelation increases absorption efficiency, optimizes digestion, and
       meta: "4 min read",
       date: "January 10, 2026",
       imageUrl: Images.research.pellets,
-      linkUrl: "https://www.linkedin.com/company/chemlifeinnovations/posts/?feedView=all",
+      linkUrl: "https://www.linkedin.com/posts/chemlifeinnovations_feedhygiene-animalhealth-livestockmanagement-activity-7413944749906309123-6okc",
+      videoUrl: "https://www.linkedin.com/embed/feed/update/urn:li:activity:7413944749906309123?compact=true",
       content: `In poultry and cattle farming, feed accounts for up to 70% of production costs. If your feed is compromised by fungal mold or bacteria, your entire margin is at risk.
 
 Clean feed ensures that animals absorb maximum nutrients, which directly impacts the Feed Conversion Ratio (FCR). By preventing mold growth from the source, farmers avoid the clinical losses associated with secondary bacterial infections and high mortality rates.`
@@ -114,7 +124,7 @@ Clean feed ensures that animals absorb maximum nutrients, which directly impacts
       meta: "4 min read",
       date: "November 15, 2025",
       imageUrl: Images.gallery.rotate11,
-      linkUrl: "https://www.linkedin.com/company/chemlifeinnovations/posts/?feedView=all",
+      linkUrl: "https://www.linkedin.com/company/chemlifeinnovations/",
       content: `Maintaining poultry gut integrity is key to modern, sustainable farming. Intestinal health directly dictates how well broilers and layers absorb crucial nutrients.
 
 GroGenie provides a non-antibiotic approach to managing enteric pathogens. By suppressing harmful bacteria and supporting healthy microflora, it promotes consistent growth and feed safety without the risks of antibiotic resistance.`
@@ -341,61 +351,41 @@ Prioritize advanced organic chelated minerals (like chelated copper hydroxy anal
   ]
 };
 
-function summarizeDescription(text: string): string {
-  if (!text) return "";
-
-  // Cut off long metadata headers, timestamps, social handles, or footers
-  const cutoffIndex = text.search(/(⏱️|TIMESTAMPS|\b\d{2}:\d{2}\b|🔗|🌐|📧|📞|🔔|👍|📲)/i);
-  let cleaned = cutoffIndex !== -1 ? text.substring(0, cutoffIndex) : text;
-
-  // Standardize line breaks to periods so they split cleanly into sentences
-  cleaned = cleaned
-    .replace(/\r?\n/g, ". ")
-    .replace(/\s*(?:--|—|–)\s*/g, " - ") // Normalize em-dashes and double dashes to single dash
-    .replace(/\s+/g, " ")                // Collapse consecutive spaces
-    .replace(/\.+/g, ".")                // Clean up duplicate periods
-    .trim();
-
-  // Remove emojis
-  cleaned = cleaned.replace(/[\u{1F300}-\u{1F9FF}]|[\u{2600}-\u{26FF}]/gu, "");
-
-  // Extract the first 2 sentences
-  const sentences = cleaned.split(/(?<=[.!?])\s+/);
-  let summary = "";
-  if (sentences.length > 0) {
-    summary = sentences[0] || "";
-    if (sentences[1]) {
-      summary += " " + sentences[1];
+// Server only. The approved posts from the Insights inbox (see src/lib/insights-store); without the inbox, the
+// built-in list with the latest YouTube uploads (and LinkedIn posts, if its keys are set) on top.
+export async function getInsights(): Promise<Insights> {
+  if (storeConfigured()) {
+    try {
+      const approved = await approvedInsights();
+      if (approved) return { ...approved, blogs: withKnownPlayers(approved.blogs) };
+    } catch (error) {
+      console.warn("Insights inbox unavailable, showing the built-in list", error);
     }
-  } else {
-    summary = cleaned;
   }
-
-  summary = summary.trim();
-
-  // Strip trailing period if duplicate, ensure clean structure
-  if (summary.endsWith(".") && summary.endsWith("..")) {
-    summary = summary.replace(/\.+$/, ".");
-  }
-
-  // Capped length safety limit
-  if (summary.length > 180) {
-    summary = summary.substring(0, 177) + "...";
-  }
-
-  return summary;
+  return builtInInsights();
 }
 
-// Server only: reads the LinkedIn and YouTube keys. Live items go on top of the fallback list.
-export async function getInsights(): Promise<Insights> {
+/** Posts saved in the inbox before videos got a player, until the inbox's own check has saved one: a LinkedIn video
+ *  gets the player the built-in list knows for it (matched by the post's number), and an Instagram reel gets
+ *  Instagram's player when its address is a reel's or the importer called it a reel. */
+function withKnownPlayers(blogs: InsightItem[]): InsightItem[] {
+  const known = new Map(FALLBACK_INSIGHTS.blogs.filter((item) => item.videoUrl && item.linkUrl).map((item) => [linkedinActivityId(item.linkUrl!), item.videoUrl!]));
+  return blogs.map((item) => {
+    if (item.videoUrl || !item.linkUrl) return item;
+    const activity = linkedinActivityId(item.linkUrl);
+    const reel = instagramReelCode(item.linkUrl) ?? (/\breel\b/i.test(item.meta) ? instagramPostId(item.linkUrl) : null);
+    const videoUrl = (activity ? known.get(activity) : undefined) ?? (reel ? instagramEmbedUrl(reel) : undefined);
+    return videoUrl ? { ...item, videoUrl } : item;
+  });
+}
+
+async function builtInInsights(): Promise<Insights> {
   const linkedinToken = process.env.LINKEDIN_ACCESS_TOKEN;
   const linkedinOrgId = process.env.LINKEDIN_ORGANIZATION_ID;
-  const youtubeKey = process.env.YOUTUBE_API_KEY;
-  const youtubePlaylistId = process.env.YOUTUBE_PLAYLIST_ID || "UUw9YQ4V85x2n_L3mC0uE7yA"; // Default uploads playlist id or channel uploads
 
-  let liveBlogs = [...fallbackData.blogs];
-  let livePodcasts = [...fallbackData.podcasts];
-  let liveVideos = [...fallbackData.videos];
+  let liveBlogs = [...FALLBACK_INSIGHTS.blogs];
+  let livePodcasts = [...FALLBACK_INSIGHTS.podcasts];
+  let liveVideos = [...FALLBACK_INSIGHTS.videos];
 
   // Try loading live LinkedIn posts if credentials are provided
   if (linkedinToken && linkedinOrgId) {
@@ -433,13 +423,14 @@ export async function getInsights(): Promise<Insights> {
               meta: "3 min read",
               date: formattedDate,
               imageUrl: share.content?.contentEntities?.[0]?.thumbnails?.[0]?.resolvedUrl || Images.gallery.rotate21,
-              linkUrl: `https://www.linkedin.com/feed/update/urn:li:activity:${share.id}`,
+              // The post's own activity URN when LinkedIn sends it; the share id is a different number.
+              linkUrl: `https://www.linkedin.com/feed/update/${share.activity || `urn:li:share:${share.id}`}`,
               content: text,
             };
           });
 
           // Merge live blogs on top of default values
-          liveBlogs = [...mappedBlogs, ...fallbackData.blogs];
+          liveBlogs = [...mappedBlogs, ...FALLBACK_INSIGHTS.blogs];
         }
       }
     } catch (e) {
@@ -447,116 +438,23 @@ export async function getInsights(): Promise<Insights> {
     }
   }
 
-  // Try loading live YouTube uploads if credential is provided
-  if (youtubeKey) {
-    try {
-      const response = await fetch(
-        `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet,contentDetails&playlistId=${youtubePlaylistId}&maxResults=25&key=${youtubeKey}`,
-        {
-          next: { revalidate: 3600 },
-        }
-      );
-
-      if (response.ok) {
-        const data = await response.json();
-        if (data.items && data.items.length > 0) {
-          const videoIds = data.items
-            .map((item: any) => item.contentDetails?.videoId || item.snippet?.resourceId?.videoId)
-            .filter(Boolean)
-            .join(",");
-
-          // Fetch detailed video data (e.g., duration and full metadata)
-          const detailsResponse = await fetch(
-            `https://www.googleapis.com/youtube/v3/videos?part=contentDetails,snippet&id=${videoIds}&key=${youtubeKey}`,
-            {
-              next: { revalidate: 3600 },
-            }
-          );
-
-          if (detailsResponse.ok) {
-            const detailsData = await detailsResponse.json();
-            if (detailsData.items && detailsData.items.length > 0) {
-              const mappedYouTubeItems = detailsData.items
-                .map((item: any) => {
-                  const snippet = item.snippet || {};
-                  const durationStr = item.contentDetails?.duration || "";
-
-                  // Calculate total seconds to filter out Shorts (< 60s)
-                  let durationInSeconds = 0;
-                  const match = durationStr.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);
-                  if (match) {
-                    const hours = parseInt(match[1] || "0", 10);
-                    const minutes = parseInt(match[2] || "0", 10);
-                    const seconds = parseInt(match[3] || "0", 10);
-                    durationInSeconds = hours * 3600 + minutes * 60 + seconds;
-                  }
-
-                  // Discard Shorts (duration < 120 seconds)
-                  if (durationInSeconds < 120) {
-                    return null;
-                  }
-
-                  // Parse duration in ISO 8601 format (e.g., PT36M20S)
-                  const titleLower = (snippet.title || "").toLowerCase();
-                  const descLower = (snippet.description || "").toLowerCase();
-                  const isPodcastKeyword =
-                    titleLower.includes("podcast") ||
-                    titleLower.includes("grand master") ||
-                    titleLower.includes("grandmaster") ||
-                    descLower.includes("podcast") ||
-                    descLower.includes("grand master") ||
-                    descLower.includes("grandmaster");
-
-                  // A video is long (Podcast) if it's >= 10 mins (600s)
-                  const isPodcast = isPodcastKeyword || (durationInSeconds >= 600);
-
-                  const dateObj = new Date(snippet.publishedAt || Date.now());
-                  const formattedDate = dateObj.toLocaleDateString("en-US", {
-                    month: "long",
-                    day: "numeric",
-                    year: "numeric",
-                  });
-
-                  let metaPlay = "Video Play";
-                  if (match) {
-                    const hours = parseInt(match[1] || "0", 10);
-                    const minutes = parseInt(match[2] || "0", 10);
-                    const seconds = parseInt(match[3] || "0", 10);
-                    if (hours > 0) {
-                      metaPlay = `${hours} hr ${minutes} min play`;
-                    } else if (minutes > 0) {
-                      metaPlay = `${minutes} min play`;
-                    } else {
-                      metaPlay = `${seconds} sec play`;
-                    }
-                  }
-
-                  const summary = summarizeDescription(snippet.description || "");
-
-                  return {
-                    type: (isPodcast ? "Podcast" : "Video") as "Podcast" | "Video",
-                    title: snippet.title || "YouTube Video",
-                    description: summary || "ChemLife Innovations YouTube upload details.",
-                    meta: metaPlay,
-                    date: formattedDate,
-                    youtubeId: item.id,
-                  };
-                })
-                .filter(Boolean);
-
-              // Filter out the live items by type
-              const liveFetchedPodcasts = mappedYouTubeItems.filter((item: any) => item.type === "Podcast");
-              const liveFetchedVideos = mappedYouTubeItems.filter((item: any) => item.type === "Video");
-
-              livePodcasts = [...liveFetchedPodcasts, ...fallbackData.podcasts];
-              liveVideos = [...liveFetchedVideos, ...fallbackData.videos];
-            }
-          }
-        }
-      }
-    } catch (e) {
-      console.warn("YouTube API integration error, utilizing fallback cache", e);
+  // The latest YouTube uploads, if the key is set
+  try {
+    const uploads = await fetchYouTubeUploads();
+    if (uploads && uploads.length > 0) {
+      const cards = uploads.map((video) => ({
+        type: video.kind,
+        title: video.title,
+        description: video.summary,
+        meta: video.meta,
+        date: displayDate(video.publishedAt),
+        youtubeId: video.youtubeId,
+      }));
+      livePodcasts = [...cards.filter((item) => item.type === "Podcast"), ...FALLBACK_INSIGHTS.podcasts];
+      liveVideos = [...cards.filter((item) => item.type === "Video"), ...FALLBACK_INSIGHTS.videos];
     }
+  } catch (e) {
+    console.warn("YouTube API integration error, utilizing fallback cache", e);
   }
 
   // Deduplicate entries by exact title matches
