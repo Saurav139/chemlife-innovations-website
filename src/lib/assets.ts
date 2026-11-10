@@ -95,9 +95,8 @@ export const Images = {
   people: {
     founders: "/images/people/founders.jpg",
     foundersNew: "/images/people/founders-leadership-group.jpg",
-    /** The four leaders, cropped to the same head-and-shoulders frame (4:5, face at the same size and height). */
+    /** The four leaders, cropped to the same chest-up frame (4:5, face at the same size and height). */
     leaderRadhakrishna: "/images/people/leader_radhakrishna_portrait.jpg",
-    // Framed from the top of her hair (which sits higher above her face), with the same headroom as the others.
     leaderSharada: "/images/people/leader_sharada_portrait-2.jpg",
     leaderSneehaCropped: "/images/people/leader_sneha_portrait.jpg",
     leaderShankar: "/images/people/leader_shankar_portrait.jpg",
