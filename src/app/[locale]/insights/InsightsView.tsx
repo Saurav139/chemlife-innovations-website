@@ -111,6 +111,9 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
 
   const featuredTitles = new Set([featuredBlog, featuredVideo, featuredPodcast].filter(Boolean).map((item) => item.title));
 
+  // One card per post: the same post on LinkedIn and on Instagram shares a title, and each channel keeps its card.
+  const cardKey = (item: InsightItem) => `${insightTag(item)}|${item.title}`;
+
   // The grid's items for a filter and search: deduplicated and newest first, across every type for "All". The newest
   // blog, video and podcast are already in Featured above, so they're left out, unless
   // the visitor is searching (then every match is listed) or leaving them out would empty the grid.
@@ -118,7 +121,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
     const query = rawQuery.toLowerCase();
     const filterAndSort = (list: InsightItem[]) =>
       list
-        .filter((item, index, self) => self.findIndex((x) => x.title === item.title) === index)
+        .filter((item, index, self) => self.findIndex((x) => cardKey(x) === cardKey(item)) === index)
         .sort((a, b) => getTimestamp(b.date) - getTimestamp(a.date))
         .filter((item) => item.title.toLowerCase().includes(query) || item.description.toLowerCase().includes(query));
 
@@ -163,7 +166,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
   const visibleItems = gridItems.slice(0, visibleCount);
   const gridRef = useRef<HTMLDivElement>(null);
   // Cards keep their columns as their pictures load; a new filter or search (gridVersion) sorts them afresh.
-  useMasonry(gridRef, [visibleItems.map((item) => item.title).join("|")], gridVersion);
+  useMasonry(gridRef, [visibleItems.map(cardKey).join("|")], gridVersion);
 
   return (
     <VariantProvider>
@@ -546,8 +549,9 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                   const isNew = index >= revealFrom;
                   return (
                     <motion.div
-                      key={item.title}
-                      id={featuredTitles.has(item.title) ? undefined : insightAnchor(item.title)}
+                      key={cardKey(item)}
+                      // A page has one anchor per title: the first card with it.
+                      id={featuredTitles.has(item.title) || visibleItems.findIndex((x) => x.title === item.title) !== index ? undefined : insightAnchor(item.title)}
                       data-analytics-item={item.title}
                       initial={isNew ? (reduceMotion ? { opacity: 0 } : { opacity: 0, y: 12 }) : false}
                       animate={{ opacity: 1, y: 0 }}
