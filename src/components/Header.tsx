@@ -30,8 +30,9 @@ export default function Header() {
   // The page's address without its language prefix, to highlight the current page.
   const pathname = splitLocale(usePathname() ?? "/").path;
   const navLinks = NAV.map((link) => ({ label: t.nav[link.key], path: link.href, href: href(link.href) }));
-  // Tamil's menu words don't fit in one row even on wide screens, so Tamil keeps the menu button at every width.
-  const menuOnly = locale === "ta";
+  // Tamil's menu words are the longest: its desktop row is set smaller and closer, and starts at 1280px wide
+  // rather than 1024px, where it can't fit beside the logo.
+  const compact = locale === "ta";
   // Staging only: a button to the design mock-ups awaiting approval.
   const [showPreviews, setShowPreviews] = useState(false);
   useEffect(() => setShowPreviews(previewsAllowed(location.host)), []);
@@ -43,8 +44,8 @@ export default function Header() {
     const root = document.documentElement;
     root.style.overflow = "hidden";
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setMobileOpen(false);
-    const desktop = matchMedia("(min-width: 1024px)");
-    const onWide = () => desktop.matches && !menuOnly && setMobileOpen(false);
+    const desktop = matchMedia(`(min-width: ${compact ? 1280 : 1024}px)`);
+    const onWide = () => desktop.matches && setMobileOpen(false);
     window.addEventListener("keydown", onKey);
     desktop.addEventListener("change", onWide);
     return () => {
@@ -52,7 +53,7 @@ export default function Header() {
       window.removeEventListener("keydown", onKey);
       desktop.removeEventListener("change", onWide);
     };
-  }, [mobileOpen, menuOnly]);
+  }, [mobileOpen, compact]);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60);
@@ -80,7 +81,7 @@ export default function Header() {
             />
           </a>
 
-          <nav className={`hidden ${menuOnly ? "" : "lg:flex"} items-center ${showPreviews ? "gap-3 xl:gap-7" : "gap-7 xl:gap-10"}`}>
+          <nav className={`hidden items-center ${compact ? `xl:flex ${showPreviews ? "gap-2" : "gap-3.5"}` : `lg:flex ${showPreviews ? "gap-3 xl:gap-7" : "gap-7 xl:gap-10"}`}`}>
             {navLinks.map((link) => {
               const isActive =
                 pathname === link.path || (pathname.startsWith(link.path) && link.path !== "/");
@@ -89,7 +90,7 @@ export default function Header() {
                 <a
                   key={link.path}
                   href={link.href}
-                  className={`${locale === "en" ? "text-[17px] xl:text-[19px]" : "text-[16px] xl:text-[17px]"} whitespace-nowrap font-semibold transition-colors tracking-wide ${
+                  className={`${locale === "en" ? "text-[17px] xl:text-[19px]" : compact ? "text-[14px]" : "text-[16px] xl:text-[17px]"} whitespace-nowrap font-semibold transition-colors ${compact ? "" : "tracking-wide"} ${
                     isActive
                       ? "text-brand-orange-aa"
                       : "text-brand-navy hover:text-brand-orange-aa"
@@ -115,7 +116,7 @@ export default function Header() {
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-expanded={mobileOpen}
             aria-controls="mobile-menu"
-            className={`${menuOnly ? "" : "lg:hidden"} flex flex-col items-center justify-center gap-1.5 w-11 h-11 -mr-2.5`}
+            className={`${compact ? "xl:hidden" : "lg:hidden"} flex flex-col items-center justify-center gap-1.5 w-11 h-11 -mr-2.5`}
             aria-label={t.nav.menu}
           >
             <span
@@ -133,7 +134,7 @@ export default function Header() {
 
        {mobileOpen && (
           // Fills the screen below the header (above the chat and search buttons), and scrolls itself if it's taller.
-          <div id="mobile-menu" className={`${menuOnly ? "lg:h-[calc(100dvh-6rem)]" : "lg:hidden"} bg-white border-t border-brand-navy/10 h-[calc(100dvh-4.5rem)] md:h-[calc(100dvh-5rem)] overflow-y-auto overscroll-contain`}>
+          <div id="mobile-menu" className={`${compact ? "xl:hidden lg:h-[calc(100dvh-6rem)]" : "lg:hidden"} bg-white border-t border-brand-navy/10 h-[calc(100dvh-4.5rem)] md:h-[calc(100dvh-5rem)] overflow-y-auto overscroll-contain`}>
             <div className="max-w-[1200px] mx-auto px-6 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
               {navLinks.map((link) => {
                 const isActive =
