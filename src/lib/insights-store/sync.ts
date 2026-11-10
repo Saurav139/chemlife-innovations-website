@@ -70,6 +70,7 @@ async function importFrom(source: Source, fetchItems: () => Promise<SourceItem[]
       return true;
     });
     if (source === "instagram") await addMissingInstagramPlayers(items.filter((item) => item.videoUrl && !fresh.includes(item)));
+    if (await addMissingPictures(source, items.filter((item) => !fresh.includes(item)))) refreshInsightsPage();
     // The source's picture address expires, so keep a copy; without one the card shows a stock photo. A few at a time.
     const withPicture = fresh.filter((item) => item.copyImage && item.imageUrl);
     for (let i = 0; i < withPicture.length; i += 4) {
@@ -175,6 +176,29 @@ async function addMissingInstagramPlayers(videos: SourceItem[]): Promise<void> {
     const player = saved.source === "instagram" && !saved.videoUrl ? players.get(instagramPostId(saved.url)) : undefined;
     if (player) await changeItem(saved.id, { videoUrl: player });
   }
+}
+
+/** Posts already in the inbox whose picture couldn't be copied when they came in get it now, while the channel
+ *  still lists them. Returns whether a post on the Insights page gained its picture. */
+async function addMissingPictures(source: Source, listed: SourceItem[]): Promise<boolean> {
+  const withPicture = listed.filter((item) => item.copyImage && item.imageUrl);
+  if (withPicture.length === 0) return false;
+  // The API and feeds name an Instagram post differently, so match its shortcode, as the import does.
+  const key = (externalId: string, url?: string) => (source === "instagram" && url ? instagramPostId(url) : null) ?? externalId;
+  const pictures = new Map(withPicture.map((item) => [key(item.externalId, item.url), item.imageUrl!]));
+  const missing = (await listItems()).filter((saved) => saved.source === source && !saved.image && pictures.has(key(saved.externalId, saved.url)));
+  let shown = false;
+  for (let i = 0; i < missing.length; i += 4) {
+    await Promise.all(
+      missing.slice(i, i + 4).map(async (saved) => {
+        const imageId = await copyImage(pictures.get(key(saved.externalId, saved.url))!).catch(() => undefined);
+        if (!imageId) return;
+        await changeItem(saved.id, { imageId });
+        if (saved.status === "approved") shown = true;
+      })
+    );
+  }
+  return shown;
 }
 
 const INSTAGRAM_REELS_FOUND = "repaired:instagram-reels";
