@@ -1,5 +1,22 @@
 @import "tailwindcss";
 
+/* Tablet-width screens and wider that are short (most laptops show 650-800px of page): the homepage hero tightens its
+   spacing there so its numbers' strip stays clear of the floating buttons. */
+@custom-variant short (@media (min-width: 48rem) and (max-height: 50rem));
+/* Phones with short screens (an iPhone SE shows about 550-670px): the same tightening, for the phone layout. */
+@custom-variant short-phone (@media (max-width: 47.99rem) and (max-height: 45rem));
+
+/* Indian scripts' letters join up; letter spacing (the spaced-out capital labels in English) pulls them apart, so
+   those pages set every label without it. */
+:lang(hi) [class*="tracking-"],
+:lang(kn) [class*="tracking-"],
+:lang(bn) [class*="tracking-"],
+:lang(mr) [class*="tracking-"],
+:lang(te) [class*="tracking-"],
+:lang(ta) [class*="tracking-"] {
+  letter-spacing: normal;
+}
+
 @theme {
   /* Trying #E8614A as the site orange (the brand orange was #E65C38). */
   --color-brand-orange: #e8614a;
@@ -30,41 +47,23 @@
   --color-light-orange: #ffffff;
   --color-process-bg: #305280;
 
-  /* Maven Pro first; the Noto fonts supply the Kannada and Hindi letters it doesn't have. */
+  /* Maven Pro first; the Noto fonts supply the Indian-script letters it doesn't have (Marathi uses Devanagari). */
   /* `font-sans` (used by the chat pages and pop-up) is the site font too, not the browser's default. */
   --font-sans:
     var(--font-maven-pro), var(--font-noto-kannada),
-    var(--font-noto-devanagari), Calibri, system-ui, sans-serif;
+    var(--font-noto-devanagari), var(--font-noto-bengali),
+    var(--font-noto-telugu), var(--font-noto-tamil), Calibri, system-ui,
+    sans-serif;
   --font-family-heading:
     var(--font-maven-pro), var(--font-noto-kannada),
-    var(--font-noto-devanagari), Calibri, system-ui, sans-serif;
+    var(--font-noto-devanagari), var(--font-noto-bengali),
+    var(--font-noto-telugu), var(--font-noto-tamil), Calibri, system-ui,
+    sans-serif;
   --font-family-body:
     var(--font-maven-pro), var(--font-noto-kannada),
-    var(--font-noto-devanagari), Calibri, system-ui, sans-serif;
-}
-
-@font-face {
-  font-family: "Galaxy";
-  src: url("/fonts/LTGalaxyRegular.woff") format("woff");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Galaxy";
-  src: url("/fonts/LTGalaxyMedium.woff") format("woff");
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Galaxy";
-  src: url("/fonts/LTGalaxyBold.woff") format("woff");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
+    var(--font-noto-devanagari), var(--font-noto-bengali),
+    var(--font-noto-telugu), var(--font-noto-tamil), Calibri, system-ui,
+    sans-serif;
 }
 
 /* A 44×44px touch area around a small link or button, without changing how it looks. Only for things with room
@@ -109,6 +108,28 @@
   :focus-visible {
     outline: 2px solid var(--color-teal-aa);
     outline-offset: 2px;
+  }
+
+  /* Leave room for the fixed header when the skip link scrolls to the content. */
+  main[id="main"] {
+    scroll-margin-top: 4.5rem;
+  }
+
+  @media (min-width: 768px) {
+    main[id="main"] {
+      scroll-margin-top: 5rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    main[id="main"] {
+      scroll-margin-top: 6rem;
+    }
+  }
+
+  /* The skip link moves focus to <main> (tabindex -1) so Tab continues from there; no outline around the whole page. */
+  main[tabindex="-1"]:focus {
+    outline: none;
   }
 
   ::selection {

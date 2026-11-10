@@ -1,12 +1,13 @@
 import { timingSafeEqual } from "node:crypto";
 import { NextResponse, type NextRequest } from "next/server";
 import { isStagingHost } from "@/lib/seo";
-import { DEFAULT_LOCALE, LOCALE_COOKIE, TRANSLATED_PATHS, isLocale, localizePath, preferredLocale } from "@/i18n/config";
+import { DEFAULT_LOCALE, LOCALE_COOKIE, isTranslatedPath, isLocale, localizePath, preferredLocale } from "@/i18n/config";
 
 // Every page lives under src/app/[locale]. English keeps its plain addresses: /products is served from
-// /en/products behind the scenes, and /en/products redirects to /products. /kn/... and /hi/... pass through.
-// A visitor whose browser asks for Kannada or Hindi before English is sent from a translated page's plain
-// address to that language's version, unless they picked a language in the switcher (the "lang" cookie).
+// /en/products behind the scenes, and /en/products redirects to /products. /kn/..., /hi/... and the other
+// languages pass through. A visitor whose browser asks for one of the other languages before English is sent from
+// a translated page's plain address to that language's version, unless they picked a language in the switcher
+// (the "lang" cookie).
 // The staging site (any address other than the live domain) is also kept out of search results, and asks for
 // a password when STAGING_PASSWORD is set in its environment.
 export function proxy(request: NextRequest) {
@@ -43,7 +44,7 @@ function localeRouting(request: NextRequest) {
   }
   if (isLocale(first)) return NextResponse.next();
   const wanted = languageFor(request);
-  if (wanted !== DEFAULT_LOCALE && TRANSLATED_PATHS.includes(pathname)) {
+  if (wanted !== DEFAULT_LOCALE && isTranslatedPath(pathname)) {
     const url = request.nextUrl.clone();
     url.pathname = localizePath(pathname, wanted);
     const response = NextResponse.redirect(url, 307);

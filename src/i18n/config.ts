@@ -1,7 +1,7 @@
 // The site's languages. English keeps the plain addresses (/products); the others are prefixed (/kn/products).
 // src/proxy.ts maps the plain addresses onto the [locale] folder in src/app.
 
-export const LOCALES = ["en", "kn", "hi"] as const;
+export const LOCALES = ["en", "kn", "hi", "bn", "mr", "te", "ta"] as const;
 export type Locale = (typeof LOCALES)[number];
 export const DEFAULT_LOCALE: Locale = "en";
 
@@ -9,13 +9,26 @@ export const DEFAULT_LOCALE: Locale = "en";
 export const LOCALE_COOKIE = "lang";
 
 /** Each language's name, written in that language, for the switcher. */
-export const LOCALE_NAMES: Record<Locale, string> = { en: "English", kn: "ಕನ್ನಡ", hi: "हिन्दी" };
+export const LOCALE_NAMES: Record<Locale, string> = {
+  en: "English",
+  kn: "ಕನ್ನಡ",
+  hi: "हिन्दी",
+  bn: "বাংলা",
+  mr: "मराठी",
+  te: "తెలుగు",
+  ta: "தமிழ்",
+};
 
 /** Open Graph locale codes, for link previews. */
-export const OG_LOCALES: Record<Locale, string> = { en: "en_IN", kn: "kn_IN", hi: "hi_IN" };
+export const OG_LOCALES: Record<Locale, string> = { en: "en_IN", kn: "kn_IN", hi: "hi_IN", bn: "bn_IN", mr: "mr_IN", te: "te_IN", ta: "ta_IN" };
 
 /** Pages that exist in every language. The rest (Insights, Privacy, Terms, chat) are English only for now. */
-export const TRANSLATED_PATHS = ["/", "/about", "/products", "/research", "/careers", "/contact"];
+export const TRANSLATED_PATHS = ["/", "/about", "/who-we-are", "/products", "/research", "/careers", "/contact"];
+
+/** Whether a page exists in every language: the pages above, and each product's own page (/products/maxdmold). */
+export function isTranslatedPath(path: string): boolean {
+  return TRANSLATED_PATHS.includes(path) || /^\/products\/[a-z0-9-]+$/.test(path);
+}
 
 export function isLocale(value: string): value is Locale {
   return (LOCALES as readonly string[]).includes(value);
@@ -36,7 +49,7 @@ export function splitLocale(pathname: string): { locale: Locale; path: string } 
 export function localizePath(href: string, locale: Locale): string {
   if (locale === DEFAULT_LOCALE || !href.startsWith("/")) return href;
   const path = href.split(/[?#]/)[0];
-  if (!TRANSLATED_PATHS.includes(path)) return href;
+  if (!isTranslatedPath(path)) return href;
   return `/${locale}${path === "/" ? href.slice(1) : href}`;
 }
 

@@ -53,3 +53,10 @@ __pycache__/
 /*.webp
 /*.avif
 /*.mp4
+
+# Python bytecode
+__pycache__/
+*.pyc
+
+# Design-review screenshots and reports (made by tooling, not part of the site)
+.taste-skill/

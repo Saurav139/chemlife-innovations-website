@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useTheme } from "@/context/VariantContext";
 import { Images } from "@/lib/assets";
 import { useT } from "@/i18n/LocaleProvider";
+import { REVEAL_VIEWPORT } from "@/lib/reveal";
 
 // Titles, descriptions and photo descriptions are in the language file (home.howWeDo.steps), in this order.
 const stepImages: { image: string; objectPosition?: string }[] = [
@@ -28,7 +29,6 @@ export default function HowWeDo() {
           alt={t.bgAlt}
           fill
           className="object-cover opacity-35"
-          priority
         />
         <div className="absolute inset-0 bg-brand-navy/90 mix-blend-multiply" />
       </div>
@@ -46,10 +46,10 @@ export default function HowWeDo() {
 
         {/* Unified Chessboard Container (Attached rows, shrunken dimensions) */}
         <motion.div
-          initial={{ opacity: 0, y: 50 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.7, ease: [0.25, 0.1, 0, 1] }}
+          viewport={REVEAL_VIEWPORT}
+          transition={{ duration: 0.5, ease: [0.25, 0.1, 0, 1] }}
           className="rounded-3xl overflow-hidden shadow-2xl border border-white/10 max-w-[850px] lg:max-w-[1100px] mx-auto bg-white divide-y divide-slate-100"
         >
           {steps.map((s, i) => {

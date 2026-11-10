@@ -4,26 +4,20 @@ import { useState, useEffect, useRef } from "react";
 import Image, { getImageProps } from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { useTheme } from "@/context/VariantContext";
 import { Images } from "@/lib/assets";
 import { useHref, useT } from "@/i18n/LocaleProvider";
 import { playOnPage, youtubeWatchUrl } from "@/lib/youtube";
 
-// The headlines (home.taglines in the language files) and the photos rotate separately: five headlines, four photos.
+// The award photo uses separate landscape and portrait crops to keep faces clear.
+const LANDSCAPE_SHAPE = "(min-aspect-ratio: 1/1)";
+const LANDSCAPE_SIZES = "(min-aspect-ratio: 3/2) 100vw, 150vh";
+const PORTRAIT_SIZES = "(min-aspect-ratio: 11/20) 100vw, 55vh";
 
-// The slides cover the hero, so on screens taller than the image they're drawn wider than the screen:
-// 1.5× the screen height for 3:2 photos, 2× for 2:1. `sizes` tells the browser which file is sharp enough.
-// Phones only show the middle of a 3:2 photo, so they get a half-width file: about 150 KB instead of 1 MB.
-const sizesFor = (aspect: "3/2" | "2/1") =>
-  aspect === "3/2"
-    ? "(min-aspect-ratio: 3/2) 100vw, (max-width: 767px) 75vh, 150vh"
-    : "(min-aspect-ratio: 2/1) 100vw, 200vh";
-
-const bgImages = [
-  { id: "poultry", src: Images.heroes.chicken, sizes: sizesFor("3/2") },
-  { id: "dairy", src: Images.heroes.dairy, sizes: sizesFor("3/2") },
-  { id: "img76", src: Images.heroes.slide76, sizes: sizesFor("2/1") },
-  { id: "img87", src: Images.heroes.slide87, sizes: sizesFor("2/1") },
+const otherPhotos = [
+  { src: Images.heroes.chicken, alt: "Poultry farming", sizes: "(min-aspect-ratio: 3/2) 100vw, 150vh" },
+  { src: Images.heroes.dairy, alt: "Dairy farming", sizes: "(min-aspect-ratio: 3/2) 100vw, 150vh" },
+  { src: Images.heroes.slide76, alt: "ChemLife animal nutrition", sizes: "(min-aspect-ratio: 2/1) 100vw, 200vh" },
+  { src: Images.heroes.slide87, alt: "ChemLife innovation", sizes: "(min-aspect-ratio: 2/1) 100vw, 200vh" },
 ];
 
 const STORY_VIDEO_ID = "-amOgNcjYNg";
@@ -83,22 +77,27 @@ function AnimatedCounter({ value, suffix }: { value: number; suffix: string }) {
   }, [value]);
 
   return (
-    <span ref={ref} className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold text-teal-400">
-      {count}{suffix}
+    <span ref={ref} className="font-heading text-xl md:text-3xl font-bold leading-none tracking-tight text-brand-navy tabular-nums">
+      {count}<span className="text-teal-aa">{suffix}</span>
     </span>
   );
 }
 
 export default function HeroVariantA() {
-  // `slide` is the headline (and its dot); `photo` is the background, on its own timer.
-  const [slide, setSlide] = useState(0);
+  // One position for both: each headline has its photo, so the dots change the photo along with the headline.
   const [photo, setPhoto] = useState(0);
   const [storyOpen, setStoryOpen] = useState(false);
-  const { theme } = useTheme();
   const t = useT();
   const href = useHref();
   const taglines = t.home.taglines;
+  const slideCount = otherPhotos.length + 1;
+  const slide = photo % taglines.length;
   const tagline = taglines[slide];
+  // Only the award photo needs the compact top layout to leave the people unobstructed.
+  const awardLayout = photo === 0;
+  const photoProps = (src: string, sizes: string) => getImageProps({ src, alt: t.home.heroAlt, fill: true, sizes, priority: true, className: "object-cover animate-ken-burns object-[75%_50%] [@media(min-aspect-ratio:1/1)]:object-[75%_40%]" }).props;
+  const landscape = photoProps(Images.heroes.awardsLandscape, LANDSCAPE_SIZES);
+  const portrait = photoProps(Images.heroes.awardsPortrait, PORTRAIT_SIZES);
 
   useEffect(() => {
     if (!storyOpen) return;
@@ -107,75 +106,104 @@ export default function HeroVariantA() {
     return () => window.removeEventListener("keydown", onKey);
   }, [storyOpen]);
 
-  // Restarts on every change, so a headline picked from the dots also stays up for the full 6 s.
+  // The other photos aren't shown for 6 s, so they load once the page has: before that they'd share the connection
+  // with the first photo and slow it down on phones. The slideshow starts once they're loading.
+  const [othersReady, setOthersReady] = useState(false);
   useEffect(() => {
-    const timer = setTimeout(() => setSlide((p) => (p + 1) % taglines.length), 6000);
-    return () => clearTimeout(timer);
-  }, [slide, taglines.length]);
-
-  useEffect(() => {
-    const timer = setInterval(() => setPhoto((p) => (p + 1) % bgImages.length), 6000);
-    return () => clearInterval(timer);
+    const ready = () => setOthersReady(true);
+    if (document.readyState === "complete") return ready();
+    window.addEventListener("load", ready, { once: true });
+    return () => window.removeEventListener("load", ready);
   }, []);
 
-  // Fetch the next slide while this one is showing, so on slow connections it doesn't fade in blank.
-  // The browser picks the same size from srcset as the slide itself will, so it's reused from the cache.
-  // It waits 2.5 s so the first slide, the page's largest paint, has the connection to itself.
+  // Restarts on every change, so a slide picked from the dots also stays up for the full 6 s.
   useEffect(() => {
-    const timer = setTimeout(() => {
-      const next = bgImages[(photo + 1) % bgImages.length];
-      const { props } = getImageProps({ src: next.src, alt: "", fill: true, sizes: next.sizes });
-      const img = document.createElement("img");
-      img.fetchPriority = "low";
-      img.sizes = props.sizes ?? "";
-      img.srcset = props.srcSet ?? "";
-      img.src = props.src;
-    }, 2500);
+    if (!othersReady) return;
+    const timer = setTimeout(() => setPhoto((p) => (p + 1) % slideCount), 6000);
     return () => clearTimeout(timer);
-  }, [photo]);
+  }, [photo, othersReady, slideCount]);
+
+  // Picking a dot before the page has finished loading starts the other photos loading straight away.
+  const goTo = (i: number) => {
+    setOthersReady(true);
+    setPhoto(i);
+  };
+
+  // While the numbers' strip is behind the floating search and chat buttons (at the bottom of the screen on arrival),
+  // they sit centred on it, at its two ends, beside the figures; once it scrolls past, they settle back.
+  const stripRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const strip = stripRef.current;
+    if (!strip) return;
+    const root = document.documentElement;
+    const wide = window.matchMedia("(min-width: 768px)");
+    const laptop = window.matchMedia("(min-width: 1024px)");
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const { top, bottom } = strip.getBoundingClientRect();
+      const view = window.innerHeight;
+      // The buttons' band, up from the bottom of the screen: 16px (24px from tablets up) below a 60px bubble (72px
+      // from laptops up).
+      const gap = wide.matches ? 24 : 16;
+      const tallest = laptop.matches ? 72 : 60;
+      const behind = top < view - gap && bottom > view - gap - tallest;
+      root.style.setProperty("--float-lift", `${behind ? Math.round(view - gap - tallest / 2 - (top + bottom) / 2) : 0}px`);
+    };
+    const schedule = () => { if (!frame) frame = requestAnimationFrame(update); };
+    update();
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", schedule);
+      root.style.removeProperty("--float-lift");
+    };
+  }, []);
 
   // min-h-svh: the screen height with the browser's toolbars showing, so on phones the stats aren't hidden under them.
   return (
-    <section className="relative min-h-svh flex items-center justify-center overflow-hidden bg-brand-navy">
+    <section className="relative min-h-svh flex flex-col overflow-hidden bg-brand-navy">
+      {/* The photo, behind the headline and actions; the numbers' strip sits below it. */}
+      <div className="relative flex-1 flex flex-col">
       {/* Deep Navy Backdrop Base */}
       <div className="absolute inset-0 bg-brand-navy z-0" />
 
-      {/* Dynamic Background Image cross-fading */}
-      <div className="absolute inset-0 z-10 opacity-100 transition-opacity duration-1000">
-        {/* initial={false}: the first slide and tagline are in the server HTML already visible,
-            so they paint without waiting for JavaScript. Later ones still animate in. */}
-        <AnimatePresence mode="wait" initial={false}>
-          <motion.div
-            key={photo}
-            initial={{ opacity: 0, scale: 1.05 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 1.5, ease: "easeInOut" }}
-            className="absolute inset-0 w-full h-full"
-          >
-            <Image
-              src={bgImages[photo].src}
-              alt={t.home.slideAlts[photo]}
-              fill
-              sizes={bgImages[photo].sizes}
-              className="object-cover animate-ken-burns"
-              priority={photo === 0}
-            />
-          </motion.div>
-        </AnimatePresence>
+      {/* The photo. Preloaded for the screen's shape, since it's the page's largest paint. */}
+      <link rel="preload" as="image" imageSrcSet={landscape.srcSet} imageSizes={landscape.sizes} media={LANDSCAPE_SHAPE} fetchPriority="high" />
+      <link rel="preload" as="image" imageSrcSet={portrait.srcSet} imageSizes={portrait.sizes} media="not all and (min-aspect-ratio: 1/1)" fetchPriority="high" />
+      <div className="absolute inset-0 z-10">
+        <div className={`absolute inset-0 transition-opacity duration-1000 motion-reduce:transition-none ${photo === 0 ? "opacity-100" : "opacity-0"}`} aria-hidden={photo !== 0}>
+        <picture>
+          <source media={LANDSCAPE_SHAPE} srcSet={landscape.srcSet} sizes={landscape.sizes} />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img {...portrait} alt={t.home.heroAlt} />
+        </picture>
+        </div>
+        {othersReady && otherPhotos.map((image, index) => (
+          <div key={image.src} className={`absolute inset-0 transition-opacity duration-1000 motion-reduce:transition-none ${photo === index + 1 ? "opacity-100" : "opacity-0"}`} aria-hidden={photo !== index + 1}>
+            <Image src={image.src} alt={image.alt} fill sizes={image.sizes} loading="eager" className="object-cover animate-ken-burns" />
+          </div>
+        ))}
       </div>
 
-      {/* Subtle Dark Overlay for text readability (keeps original image colors) */}
-      <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent z-20" />
+      {/* A fade from the left behind the left-aligned headline, on every photo (keeps the rest of the photo's colours). */}
+      <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/45 to-transparent z-20" />
       <div className="absolute inset-0 bg-black/10 z-20" />
 
-      <div className="relative z-30 max-w-[1200px] mx-auto px-6 pt-28 pb-16 md:py-32 w-full h-full flex flex-col justify-center">
+      {/* The headline and actions; the headline dots sit at their right. */}
+      <div className="relative z-30 flex-1 flex">
+      {/* Not held to the 1200px column: the headline sits a fixed margin in from the screen's left edge. */}
+      <div className={`px-6 md:px-12 lg:px-16 xl:px-20 w-full flex flex-col justify-start md:justify-center pt-24 pb-6 md:pt-32 md:pb-8 lg:pt-40 short:pt-32 short:pb-4 short-phone:pt-24 short-phone:pb-2`}>
         {/* w-full: without it, this box has no explicit width, so its auto side margins (for centering)
             stop it from stretching and it shrinks to fit whichever tagline is showing — moving and
             resizing the buttons below it from one slide to the next. */}
-        <div className="w-full max-w-4xl flex-1 flex flex-col justify-center mx-auto text-center items-center">
-          <div className="min-h-[300px] md:min-h-[340px] flex flex-col justify-center items-center text-center w-full">
-            {/* initial={false}: see the background slides above */}
+        {/* Phones: at the top, under the header, leaving the photo below in view. Wider screens: centred in the height
+            above the numbers' strip, on every photo. */}
+        <div className="w-full max-w-3xl flex-1 flex flex-col text-left items-start justify-start md:justify-center">
+          <div className="flex flex-col items-start text-left w-full md:min-h-[340px] short:min-h-0 justify-start md:justify-center">
+            {/* Keep the initial headline visible during hydration. */}
             <AnimatePresence mode="wait" initial={false}>
               {/* On phones the size follows the screen width so every tagline fits on its three lines, which keeps
                   the buttons below in the same place on every slide. */}
@@ -185,7 +213,7 @@ export default function HeroVariantA() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.6, ease: [0.25, 0.1, 0, 1] }}
-                className="font-heading text-[length:clamp(24px,8.8vw_-_4.5px,34px)] sm:text-5xl md:text-6xl lg:text-7xl leading-[1.1] mb-8 sm:mb-16 text-white font-bold text-center"
+                className={`font-heading text-[length:clamp(24px,8.8vw_-_4.5px,34px)] sm:text-5xl md:text-6xl leading-[1.1] text-white font-bold text-left ${awardLayout ? "2xl:text-7xl mb-5 sm:mb-8" : "lg:text-7xl mb-8 sm:mb-16"} short:text-5xl short:mb-5 short-phone:mb-4`}
               >
                 {tagline[0]}<br />
                 <span className="text-teal-400">{tagline[1]}</span><br />
@@ -193,8 +221,8 @@ export default function HeroVariantA() {
               </motion.h1>
             </AnimatePresence>
 
-            {/* Phones: stacked, centred, both as wide as the longer label. Wider screens: side by side. */}
-            <div className="grid justify-center gap-3 sm:flex sm:flex-row sm:flex-wrap sm:items-center sm:gap-4 w-full mt-2">
+            {/* Phones: stacked, both as wide as the longer label. Wider screens: side by side. */}
+            <div className="grid justify-start gap-3 sm:flex sm:flex-row sm:flex-wrap sm:items-center sm:gap-4 w-full mt-2">
               <Link href={href("/products")} className={primaryCtaClass}>
                 {t.home.findProduct}
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -211,7 +239,7 @@ export default function HeroVariantA() {
               target="_blank"
               rel="noopener noreferrer"
               onClick={(e) => playOnPage(e, () => setStoryOpen(true))}
-              className="tap-target mt-5 lg:mt-6 inline-flex items-center gap-2 text-sm lg:text-base font-semibold text-white/85 hover:text-white underline-offset-4 hover:underline transition-colors cursor-pointer"
+              className={`tap-target inline-flex items-center gap-2 text-sm lg:text-base font-semibold text-white/85 hover:text-white underline-offset-4 hover:underline transition-colors cursor-pointer ${awardLayout ? "mt-4 lg:mt-5" : "mt-5 lg:mt-6"} short:mt-3 short-phone:mt-2`}
             >
               <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current">
                 <path d="M8 5v14l11-7z" />
@@ -219,35 +247,61 @@ export default function HeroVariantA() {
               {t.home.watchStory}
             </a>
 
-            {/* Slide dots, centred under the buttons at every width (they used to sit on the right edge on desktop,
-                crowding the Rate Us tab). A 44px-tall tap area around each dot, but narrow, so the row stays compact. */}
-            <div className="flex mt-3 lg:mt-4">
-              {taglines.map((_, i) => (
+            {/* Phones: the headline dots under the buttons (wider screens have them down the right side).
+                A 44px-tall tap area around each dot, at least 24px wide (WCAG 2.5.8), so the row stays compact. */}
+            <div className="flex mt-3 short-phone:mt-0 md:hidden">
+              {Array.from({ length: slideCount }, (_, i) => (
                 <button
                   key={i}
-                  onClick={() => setSlide(i)}
-                  className="py-[18px] px-1.5 flex items-center justify-center"
+                  onClick={() => goTo(i)}
+                  className="py-[18px] px-2 flex items-center justify-center"
                   aria-label={`${t.home.goToSlide} ${i + 1}`}
+                  aria-current={i === photo ? "true" : undefined}
                 >
-                  <span className={`h-2 rounded-full transition-all duration-300 ${i === slide ? "w-6 bg-teal-400" : "w-2 bg-white/40"}`} />
+                  <span className={`h-2 rounded-full transition-all duration-300 ${i === photo ? "w-6 bg-teal-400" : "w-2 bg-white/40"}`} />
                 </button>
               ))}
             </div>
           </div>
         </div>
 
-        {/* Serial Embedded Company Stats */}
-        <div className="w-full mt-12 md:mt-24 md:pt-12 grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-8 md:gap-8">
-          {stats.map((stat, idx) => (
-            <div key={idx} className="flex flex-col items-center justify-center text-center">
-              <AnimatedCounter value={stat.value} suffix={stat.suffix} />
-              <span className="text-white/70 text-xs md:text-sm font-semibold uppercase tracking-wider md:tracking-widest mt-2 md:mt-3">{t.home.stats[idx]}</span>
-            </div>
+      </div>
+
+        {/* Tablets and wider: the headline dots in a column down the right side, set in from the edge so they clear
+            the Rate Us tab. A 44px-wide tap area around each dot, at least 24px tall. */}
+        <div className="hidden md:flex flex-col absolute right-14 lg:right-16 top-1/2 -translate-y-1/2 py-1 rounded-full bg-black/30 backdrop-blur-sm" role="group" aria-label={t.home.goToSlide}>
+          {Array.from({ length: slideCount }, (_, i) => (
+            <button
+              key={i}
+              onClick={() => goTo(i)}
+              className="px-[18px] py-2 flex items-center justify-center cursor-pointer"
+              aria-label={`${t.home.goToSlide} ${i + 1}`}
+              aria-current={i === photo ? "true" : undefined}
+            >
+              <span className={`w-2 rounded-full transition-all duration-300 ${i === photo ? "h-6 bg-teal-400" : "h-2 bg-white/60"}`} />
+            </button>
           ))}
         </div>
       </div>
 
-      <div className={`absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t ${theme.heroBottomGradient} to-transparent`} />
+      </div>
+
+      {/* The numbers on a light strip along the bottom of the hero, below the photo, so they never blend into it: navy
+          figures with a teal "+", small grey labels and hairline dividers (between pairs below 1280px). The same room at
+          both ends, as wide as the chat bubble (on the right) needs, keeps the figures centred on the page; the floating
+          search button (left) and chat bubble sit there on arrival. */}
+      <div ref={stripRef} className="relative z-30 bg-white/95 backdrop-blur-md shadow-[0_-10px_30px_rgba(0,0,0,0.18)]">
+        <div className="px-[104px] md:px-[116px] lg:px-[312px]">
+          <dl className="max-w-[1000px] mx-auto py-2 md:py-4 grid grid-cols-2 xl:grid-cols-4 gap-y-1.5 md:gap-y-3 xl:divide-x divide-slate-200">
+            {stats.map((stat, idx) => (
+              <div key={idx} className={`flex flex-col-reverse items-center justify-center text-center px-2 ${idx % 2 === 1 ? "max-xl:border-l max-xl:border-slate-200" : ""}`}>
+                <dt className="text-slate-500 text-[10px] md:text-[11px] font-semibold md:uppercase tracking-normal md:tracking-[0.22em] leading-[1.15] mt-1 md:mt-1.5">{t.home.stats[idx]}</dt>
+                <dd><AnimatedCounter value={stat.value} suffix={stat.suffix} /></dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </div>
 
       {/* Story video plays on the page, with the hero actions underneath */}
       <AnimatePresence>

@@ -6,6 +6,7 @@ import { useTheme } from "@/context/VariantContext";
 import { Videos, VideoPosters } from "@/lib/assets";
 import BackgroundVideo, { useNearViewport } from "./BackgroundVideo";
 import { useHref, useT } from "@/i18n/LocaleProvider";
+import { REVEAL_VIEWPORT } from "@/lib/reveal";
 
 const easeOut = [0.25, 0.1, 0, 1] as const;
 
@@ -60,7 +61,7 @@ export default function LifeAtChemLife() {
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={REVEAL_VIEWPORT}
           transition={{ duration: 0.6, ease: easeOut }}
           className="text-center"
         >
@@ -76,8 +77,8 @@ export default function LifeAtChemLife() {
                 <motion.div
                   initial={{ scaleY: 0 }}
                   whileInView={{ scaleY: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.8, delay: (i + 1) * 0.4, ease: easeOut }}
+                  viewport={REVEAL_VIEWPORT}
+                  transition={{ duration: 0.8, delay: (i + 1) * 0.12, ease: easeOut }}
                   className="absolute w-[3px] bg-brand-navy/40 origin-top"
                   style={{ left: "10.5px", top: "12px", bottom: "-12px" }}
                 />
@@ -85,17 +86,17 @@ export default function LifeAtChemLife() {
               <motion.div
                 initial={{ opacity: 0, scale: 0 }}
                 whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.3, delay: i * 0.4, ease: easeOut }}
+                viewport={REVEAL_VIEWPORT}
+                transition={{ duration: 0.3, delay: i * 0.12, ease: easeOut }}
                 className="relative z-10 w-6 h-6 rounded-full bg-brand-navy flex items-center justify-center flex-shrink-0"
               >
                 <div className="w-3 h-3 rounded-full bg-teal-400" />
               </motion.div>
               <motion.span
-                initial={{ opacity: 0, x: i % 2 === 0 ? -30 : 30 }}
+                initial={{ opacity: 0, x: i % 2 === 0 ? -16 : 16 }}
                 whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: i * 0.4, ease: easeOut }}
+                viewport={REVEAL_VIEWPORT}
+                transition={{ duration: 0.5, delay: i * 0.12, ease: easeOut }}
                 className="text-white/90 text-lg md:text-xl lg:text-2xl"
               >
                 {text}
@@ -107,8 +108,8 @@ export default function LifeAtChemLife() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 1.6, ease: easeOut }}
+          viewport={REVEAL_VIEWPORT}
+          transition={{ duration: 0.5, delay: 0.5, ease: easeOut }}
           className="text-center mt-12"
         >
           <a

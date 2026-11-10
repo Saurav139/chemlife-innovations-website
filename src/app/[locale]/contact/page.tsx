@@ -63,12 +63,25 @@ export default function ContactPage() {
 
   // Pre-fill the form when a call to action links here, e.g. /contact?type=nutritionist from the homepage hero
   useEffect(() => {
-    const type = new URLSearchParams(window.location.search).get("type");
+    const params = new URLSearchParams(window.location.search);
+    const type = params.get("type");
+    // A message carried over from another page, e.g. the mould-loss calculator's figures. Only fills an empty box.
+    const message = params.get("message");
+    if (message) {
+      setFormData((prev) => ({ ...prev, message: prev.message || message.slice(0, CONTACT_LIMITS.message) }));
+    }
     if (type === "nutritionist") {
       setFormData((prev) => ({
         ...prev,
         inquiryType: "Talk to a Nutritionist",
         subject: prev.subject || t.nutritionistSubject,
+      }));
+    } else if (type === "dossier") {
+      // From the homepage's "Request a technical dossier"
+      setFormData((prev) => ({
+        ...prev,
+        inquiryType: "Technical & R&D Partnership",
+        subject: prev.subject || t.dossierSubject,
       }));
     } else if (type === "research") {
       // From the Research page's closing panel
@@ -158,9 +171,9 @@ export default function ContactPage() {
     <VariantProvider>
       <Header />
 
-      <main className="bg-white min-h-screen text-brand-navy">
-        {/* Contact Hero Section */}
-        <SectionWrapper className="pt-26 md:pt-32 pb-10 md:pb-24 lg:pt-36 lg:pb-32 text-white relative overflow-hidden bg-brand-navy flex items-center">
+      <main id="main" tabIndex={-1} className="bg-white min-h-screen text-brand-navy">
+        {/* A plain section, not a fade-in: it's the first screen, so it shows without waiting for the page's JavaScript. */}
+        <section className="pt-26 md:pt-32 pb-10 md:pb-24 lg:pt-36 lg:pb-32 text-white relative overflow-hidden bg-brand-navy flex items-center">
           <div className="absolute inset-0 z-0">
             <Image
               src={Images.heroes.contact}
@@ -185,7 +198,7 @@ export default function ContactPage() {
               {t.intro}
             </p>
           </div>
-        </SectionWrapper>
+        </section>
 
         {/* Main Content: Form & Location Details */}
         <SectionWrapper className="py-12 md:py-24 bg-white">

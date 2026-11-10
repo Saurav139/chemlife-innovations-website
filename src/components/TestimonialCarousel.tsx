@@ -12,7 +12,7 @@ import { useT } from "@/i18n/LocaleProvider";
 
 const testimonials = [
   {
-    quote: "We are happy to inform that we have collaboration arrangement with Chemlife Innovations since 2018 and continuing to have technology developer & novel product manufacturing understanding with them. Specifically with the help of Chemlife Innovations using their proprietary multi-layer microencapsulation technology, we have introduced a novel functionalized feed ingredient for dairy. We are happy with the quality of the product and happy with service support provided by them.",
+    quote: "We are pleased to share that we have collaborated with Chemlife Innovations since 2018 on technology development and novel product manufacturing. Using their proprietary multi-layer microencapsulation technology, we have introduced a novel functionalized feed ingredient for dairy. We value both the product quality and their service support.",
     name: "Akmal Reyaz",
     role: "Business Head – Dairy & Aqua",
     company: "Huvepharma Sea (Pune) Private Limited",
@@ -20,7 +20,7 @@ const testimonials = [
     logo: Images.testimonials.huve,
   },
   {
-    quote: "We are associated with M/S Chemlife Innovations Pvt Ltd at # 18, KIADB Industrial Area, 3rd Phase, Obadenahalli, Doddaballapur, Bengaluru Rural District for last 2 years. Chemlife is our Technology partner and Product developer in the field of mold inhibition and toxin management using innovative technology for animal health. We are highly satisfied with the quality of Chemlife's Products and Technologies.",
+    quote: "Chemlife is our Technology partner and Product developer in the field of mold inhibition and toxin management using innovative technology for animal health. We are highly satisfied with the quality of Chemlife's Products and Technologies.",
     name: "Dr Manjunatha B P",
     role: "Chief Executive Officer",
     company: "GROEXL Vet Private Limited",
@@ -28,7 +28,7 @@ const testimonials = [
     logo: Images.testimonials.groxel,
   },
   {
-    quote: "We are happy to inform, that we have collaboration arrangement with Chemlife Innovations Private Limited, since 2016 and continuing to have technology developer & novel product manufacturing understanding with them. We have been able to launch PromoGen (Natural Growth promoter for poultry) and SlimEat (Lean meat inducer for swine) for export market and Bio-trace minerals for poultry for domestic market specifically with the support of Chemlife Innovations using their ANBioT technology. We are pleased with quality and service/support of ChemLife Innovation.",
+    quote: "We are pleased to share that we have collaborated with Chemlife Innovations Private Limited since 2016 on technology development and novel product manufacturing. Using their ANBioT technology, we have launched products for the export market, and Bio-trace minerals for poultry for the domestic market. We appreciate the quality of their products and the service they provide.",
     name: "Lakshmikanth Yadav",
     role: "Managing Director",
     company: "Quadragen VetHealth Private Limited",
@@ -91,14 +91,14 @@ export default function TestimonialCarousel() {
                   exit={{ opacity: 0, y: -20 }}
                   transition={{ duration: 0.3, ease: [0.25, 0.1, 0, 1] }}
                 >
-                  <svg className="w-10 h-10 mb-5 md:w-16 md:h-16 md:mb-8 text-teal-400" fill="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-7 h-7 mb-3 md:w-9 md:h-9 md:mb-4 text-teal-400" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10H14.017zM0 21v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151C7.563 6.068 6 8.789 6 11h4v10H0z" />
                   </svg>
 
                   {/* Phones: regular (not light italic) text, which is easier to read at this length, cut to 6 lines. */}
                   <blockquote
                     ref={quoteRef}
-                    className={`text-base md:text-2xl lg:text-3xl leading-relaxed font-normal md:font-light not-italic md:italic ${expanded ? "" : "max-md:line-clamp-6"} ${theme.testimonialsText}`}
+                    className={`max-w-[62ch] text-[15px] md:text-base lg:text-[17px] leading-[1.75] font-normal not-italic ${expanded ? "" : "max-md:line-clamp-6"} ${theme.testimonialsText}`}
                   >
                     &ldquo;{testimonials[current].quote}&rdquo;
                   </blockquote>
@@ -112,24 +112,26 @@ export default function TestimonialCarousel() {
                       {expanded ? t.showLess : t.readMore}
                     </button>
                   )}
-                  <div className="mb-8" />
+                  {/* Who said it: shown below laptop width, where the partner list only names the company. From laptop
+                      width up the list on the right already shows each partner's logo, name and role. */}
+                  <div className="mb-6 lg:hidden" />
 
-                  <div className="flex items-center gap-4">
-                    <div className="relative w-20 h-20 rounded-full border-2 border-brand-orange bg-white overflow-hidden flex-shrink-0">
+                  <div className="flex items-center gap-4 lg:hidden">
+                    <div className="relative w-14 h-14 rounded-full border-2 border-brand-orange bg-white overflow-hidden flex-shrink-0">
                       <Image
                         src={testimonials[current].logo}
                         alt={`${testimonials[current].company} logo`}
                         fill
-                        sizes="80px"
-                        className="object-contain p-2"
+                        sizes="56px"
+                        className="object-contain p-1.5"
                       />
                     </div>
 
                     <div>
-                      <p className={`font-heading text-xl ${theme.testimonialsName}`}>
+                      <p className={`font-heading text-base font-semibold ${theme.testimonialsName}`}>
                         {testimonials[current].name}
                       </p>
-                      <p className={`text-base ${theme.testimonialsRole}`}>
+                      <p className={`text-sm ${theme.testimonialsRole}`}>
                         {testimonials[current].role}
                       </p>
                       <p className={`text-sm opacity-75 ${theme.testimonialsRole}`}>
@@ -137,6 +139,12 @@ export default function TestimonialCarousel() {
                       </p>
                     </div>
                   </div>
+
+                  {/* From laptop width up: just the company under the quote; the list on the right names the person. */}
+                  <p className={`hidden lg:flex items-center gap-3 mt-6 font-heading text-base font-semibold ${theme.testimonialsName}`}>
+                    <span aria-hidden="true" className="w-8 h-px bg-teal-400" />
+                    {testimonials[current].company}
+                  </p>
                 </motion.div>
               </AnimatePresence>
             </div>

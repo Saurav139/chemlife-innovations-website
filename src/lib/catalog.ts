@@ -222,6 +222,9 @@ export function slugify(text: string): string {
 // Ids of single items, so a link (from the site search) can open the page at that item:
 // /products#product-maxdmold, /research#research-…, /careers#role-research-intern, /insights#insight-….
 export const productAnchor = (name: string) => `product-${slugify(name)}`;
+
+/** A product's own page: "MaxDmold Spray" is at /products/maxdmold-spray. */
+export const productPath = (name: string) => `/products/${slugify(name)}`;
 export const researchAnchor = (englishTitle: string) => `research-${slugify(englishTitle)}`;
 export const roleAnchor = (id: string) => `role-${id}`;
 export const insightAnchor = (title: string) => `insight-${slugify(title)}`;

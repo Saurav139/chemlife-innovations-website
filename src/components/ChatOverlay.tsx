@@ -10,7 +10,8 @@ export default function ChatOverlay() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="fixed bottom-[max(1rem,env(safe-area-inset-bottom))] right-[max(1rem,env(safe-area-inset-right))] md:bottom-6 md:right-6 z-50 font-sans flex flex-col items-end">
+    // Moves with the search button onto the homepage hero's numbers strip (--float-lift, set by the hero).
+    <div className="fixed bottom-[max(1rem,env(safe-area-inset-bottom))] right-[max(1rem,env(safe-area-inset-right))] md:bottom-6 md:right-6 z-50 font-sans flex flex-col items-end [transform:translateY(calc(-1*var(--float-lift,0px)))] transition-transform duration-300 motion-reduce:transition-none">
       <AnimatePresence>
         {/* Expanded Panel */}
         {isOpen && (
@@ -127,8 +128,8 @@ export default function ChatOverlay() {
         whileTap={{ scale: 0.95 }}
         aria-label="Ask our AI experts"
         aria-expanded={isOpen}
-        // Phones get a compact bubble with just the mascots; the label appears from tablet width up.
-        className="flex items-center gap-2 md:gap-3 bg-brand-orange-aa text-white p-2 md:px-5 md:py-3.5 rounded-full shadow-2xl hover:bg-brand-orange-aa-hover transition-all group border-2 border-white/20 cursor-pointer"
+        // Phones and tablets get a compact bubble with just the mascots (60px); the label appears from laptop width up (72px tall).
+        className="flex items-center gap-2 lg:gap-3 bg-brand-orange-aa text-white p-2 lg:px-5 lg:py-3.5 rounded-full shadow-2xl hover:bg-brand-orange-aa-hover transition-all group border-2 border-white/20 cursor-pointer"
       >
         <div className="flex -space-x-4">
           <div className="w-10 h-10 rounded-full border-2 border-white bg-white overflow-hidden shadow-md flex-shrink-0 flex items-center justify-center p-0.5">
@@ -146,10 +147,10 @@ export default function ChatOverlay() {
             />
           </div>
         </div>
-        <span className="hidden md:inline font-heading font-bold text-xs tracking-wider uppercase select-none">
+        <span className="hidden lg:inline font-heading font-bold text-xs tracking-wider uppercase select-none">
           Ask our AI Experts
         </span>
-        <span className="hidden md:inline text-emerald-400 animate-pulse text-xs select-none" aria-hidden="true">●</span>
+        <span className="hidden lg:inline text-emerald-400 animate-pulse text-xs select-none" aria-hidden="true">●</span>
       </motion.button>
     </div>
   );

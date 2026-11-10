@@ -28,7 +28,7 @@ export default async function TermsPage({ params }: { params: Promise<{ locale: 
     <VariantProvider>
       <Header />
 
-      <main className="bg-white min-h-screen text-brand-navy">
+      <main id="main" tabIndex={-1} className="bg-white min-h-screen text-brand-navy">
         <section className="pt-26 md:pt-32 pb-10 md:pb-16 lg:pt-36 lg:pb-20 bg-brand-navy text-white">
           <div className="max-w-3xl mx-auto px-6">
             <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-white">Terms of Use</h1>
@@ -37,7 +37,7 @@ export default async function TermsPage({ params }: { params: Promise<{ locale: 
         </section>
 
         <section className="py-16">
-          <div className="max-w-3xl mx-auto px-6 text-slate-600 leading-relaxed">
+          <div className="max-w-3xl mx-auto px-6 text-slate-600 leading-relaxed [overflow-wrap:anywhere]">
             <p>
               These terms apply to your use of chemlifeinnovations.com, including its product information, articles
               and AI chatbots. By using the website you agree to them. If you don&apos;t agree, please don&apos;t use

@@ -1,16 +1,18 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, MotionConfig } from "framer-motion";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { VariantProvider } from "@/context/VariantContext";
 import SiteSearch from "@/components/SiteSearch";
 import { Images } from "@/lib/assets";
-import { PRODUCTS, productAnchor } from "@/lib/catalog";
-import { revealElement, useHashTarget } from "@/lib/deepLink";
-import { useT } from "@/i18n/LocaleProvider";
+import { PRODUCTS, productAnchor, productPath } from "@/lib/catalog";
+import { useHashTarget } from "@/lib/deepLink";
+import { useHref, useT } from "@/i18n/LocaleProvider";
 
 const easeOut = [0.25, 0.1, 0, 1] as const;
 
@@ -37,22 +39,17 @@ interface Product {
 export default function ProductsPage() {
   const t = useT().products;
   const productsData: Product[] = PRODUCTS.map((p, i) => ({ ...p, ...t.items[i] }));
-  const [expandedId, setExpandedId] = useState<number | null>(null);
+  const href = useHref();
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
 
   const categories = ["All", "Mono-gastric", "Ruminants", "Value Addition"];
 
 
-  // Opens at one product from a link such as /products#product-maxdmold (the site search) or the older
-  // ?expand=MaxDmold and #MaxDmold forms: shows every category, expands the product and scrolls to it.
-  // ?q=… pre-fills the search box.
-  const openProduct = (product: Product) => {
-    setSelectedCategory("All");
-    setSearchQuery("");
-    setExpandedId(product.id);
-    revealElement(productAnchor(product.name));
-  };
+  // Older links to one product (/products#product-maxdmold, #MaxDmold, ?expand=MaxDmold, still in chat answers and
+  // bookmarks) go on to that product's own page. ?q=… pre-fills the search box.
+  const openProduct = (product: Product) => router.replace(href(productPath(product.name)));
   useHashTarget((target) => {
     const product =
       productsData.find((p) => productAnchor(p.name) === target) ||
@@ -73,10 +70,6 @@ export default function ProductsPage() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps -- once, on arrival
   }, []);
-
-  const toggleExpand = (id: number) => {
-    setExpandedId((prev) => (prev === id ? null : id));
-  };
 
   const filteredProducts = productsData.filter((product) => {
     const matchesCategory = selectedCategory === "All" || product.category === selectedCategory;
@@ -118,7 +111,9 @@ export default function ProductsPage() {
     <VariantProvider>
       <Header />
 
-      <main className="bg-slate-50/50 min-h-screen text-brand-navy">
+      <main id="main" tabIndex={-1} className="bg-slate-50/50 min-h-screen text-brand-navy">
+        {/* Card animations follow the visitor's "reduce motion" setting */}
+        <MotionConfig reducedMotion="user">
         {/* Hero and product list are plain sections: they're in the first screen, so they show without waiting for a fade-in.
             The hero image is the page's largest paint (LCP), so it loads first. */}
         <section className="pt-26 md:pt-32 pb-10 md:pb-20 lg:pt-36 lg:pb-28 text-white relative overflow-hidden bg-brand-navy flex items-center">
@@ -165,10 +160,12 @@ export default function ProductsPage() {
 
             {/* Left-Aligned Search and Category Selector Container */}
             <div className="flex flex-col md:flex-row items-center gap-4 mb-10 w-full">
-              <div className={`flex items-center bg-slate-50 border border-slate-200 rounded-full shadow-xs text-sm w-full md:max-w-xl ${activeStyle.focus} focus-within:ring-1 transition-all duration-300 relative`}>
+              {/* Phones: the species filter gets its own row, so the search box has room for its placeholder */}
+              <div className={`flex flex-col sm:flex-row sm:items-center bg-slate-50 border border-slate-200 rounded-3xl sm:rounded-full shadow-xs text-sm w-full md:max-w-xl ${activeStyle.focus} focus-within:ring-1 transition-all duration-300 relative`}>
+                <div className="flex items-center flex-1 min-w-0">
                 {/* Search Icon */}
                 <div className={`pl-4 ${activeStyle.icon} flex-shrink-0 transition-colors duration-300`}>
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg aria-hidden="true" className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                   </svg>
                 </div>
@@ -181,7 +178,7 @@ export default function ProductsPage() {
                   placeholder={t.search}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-transparent border-0 px-3 py-3 text-brand-navy placeholder-slate-aa focus:outline-none focus:ring-0 text-base md:text-sm [&::-webkit-search-cancel-button]:appearance-none"
+                  className="w-full min-w-0 bg-transparent border-0 px-3 py-3 text-brand-navy placeholder-slate-aa focus:outline-none focus:ring-0 text-base md:text-sm [&::-webkit-search-cancel-button]:appearance-none"
                 />
 
                 {/* Clear Search Button */}
@@ -191,22 +188,24 @@ export default function ProductsPage() {
                     aria-label={t.clearSearch}
                     className={`mr-2 text-slate-aa ${activeStyle.accent} transition-colors duration-250 cursor-pointer`}
                   >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg aria-hidden="true" className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                   </button>
                 )}
 
+                </div>
+
                 {/* Vertical Divider Line */}
-                <div className="h-6 w-[1px] bg-slate-200 flex-shrink-0" />
+                <div className="hidden sm:block h-6 w-[1px] bg-slate-200 flex-shrink-0" />
 
                 {/* Category Dropdown Selector inside Search Bar */}
-                <div className="relative flex-shrink-0">
+                <div className="relative flex-shrink-0 border-t border-slate-200 sm:border-t-0">
                   <select
                     aria-label={t.filterBySpecies}
                     value={selectedCategory}
                     onChange={(e) => setSelectedCategory(e.target.value)}
-                    className="appearance-none bg-transparent pl-4 pr-10 py-3.5 font-semibold text-base md:text-xs text-slate-600 focus:outline-none cursor-pointer"
+                    className="w-full sm:w-auto appearance-none bg-transparent pl-4 pr-10 py-3.5 font-semibold text-base md:text-xs text-slate-600 focus:outline-none cursor-pointer"
                   >
                     {categories.map((category) => (
                       <option key={category} value={category} className="text-brand-navy font-semibold">
@@ -216,7 +215,7 @@ export default function ProductsPage() {
                   </select>
                   {/* Dropdown Chevron Icon */}
                   <div className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-aa pointer-events-none">
-                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg aria-hidden="true" className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" />
                     </svg>
                   </div>
@@ -226,205 +225,72 @@ export default function ProductsPage() {
 
             {/* For screen readers: the product cards (h3) sit under this heading */}
             <h2 className="sr-only">{t.listHeading}</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
-              {filteredProducts.map((product) => {
-                const isExpanded = expandedId === product.id;
-                const emailSubject = encodeURIComponent(`Product Inquiry: ${product.name}`);
-                const emailBody = encodeURIComponent(
-                  `Hi ChemLife Innovations team,\n\nI am writing to inquire about ${product.name}. Please share technical datasheets, pricing, and packaging options.\n\nBest regards,\n[Your Name]\n[Your Company]`
-                );
-                const emailHref = `mailto:innovate@chemlifeinnovations.com?subject=${emailSubject}&body=${emailBody}`;
-
-                return (
-                  <motion.div
-                    key={product.id}
-                    id={productAnchor(product.name)}
-                    data-analytics-item={product.name}
-                    layout
-                    transition={{ duration: 0.4, ease: easeOut }}
-                    className="scroll-mt-28 border border-slate-200 rounded-2xl bg-slate-50/50 hover:bg-slate-50/85 transition-colors duration-300 overflow-hidden shadow-xs hover:border-brand-orange/30 flex flex-col h-fit group"
+            <p className="sr-only" role="status">
+              {searchQuery || selectedCategory !== "All"
+                ? t.resultsCount.replace("{count}", String(filteredProducts.length)).replace("{total}", String(productsData.length))
+                : ""}
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
+              {filteredProducts.map((product) => (
+                <motion.div
+                  key={product.id}
+                  id={productAnchor(product.name)}
+                  data-analytics-item={product.name}
+                  layout
+                  transition={{ duration: 0.4, ease: easeOut }}
+                  className="h-full"
+                >
+                  <Link
+                    href={href(productPath(product.name))}
+                    data-analytics-click="View Product"
+                    className="scroll-mt-28 h-full border border-slate-200 rounded-2xl bg-slate-50/50 hover:bg-slate-50/85 transition-colors duration-300 overflow-hidden shadow-xs hover:border-brand-orange/30 flex flex-col group"
                   >
-                    {/* Card Header (Image/Icon + Title & Category) */}
-                    <div
-                      onClick={() => toggleExpand(product.id)}
-                      data-analytics-click={isExpanded ? "Show Less" : "Learn More"}
-                      className="cursor-pointer select-none flex flex-col"
-                    >
-                      {/* Top: Product Image or Icon Container */}
-                      {product.banner ? (
-                        <div className="w-full aspect-video relative overflow-hidden bg-slate-100 border-b border-slate-200/60">
-                          <Image
-                            src={product.banner}
-                            alt={`${product.name} ${t.bannerAlt}`}
-                            fill
-                            sizes={BANNER_SIZES}
-                            className="object-cover object-center group-hover:scale-102 transition-transform duration-500"
-                          />
-                        </div>
-                      ) : (
-                        <div className="w-full aspect-video bg-white border-b border-slate-200/60 flex items-center justify-center p-6 relative">
-                          <div className="w-16 h-16 rounded-xl bg-white border border-slate-150 shadow-sm flex items-center justify-center p-2.5">
-                            <div className="relative w-full h-full">
-                              <Image
-                                src={product.icon}
-                                alt={`${product.name} ${t.iconAlt}`}
-                                fill
-                                sizes="42px"
-                                className="object-contain"
-                              />
-                            </div>
+                    {/* Top: Product Image or Icon Container */}
+                    {product.banner ? (
+                      <div className="w-full aspect-video relative overflow-hidden bg-slate-100 border-b border-slate-200/60">
+                        <Image
+                          src={product.banner}
+                          alt={`${product.name} ${t.bannerAlt}`}
+                          fill
+                          sizes={BANNER_SIZES}
+                          className="object-cover object-center group-hover:scale-102 transition-transform duration-500"
+                        />
+                      </div>
+                    ) : (
+                      <div className="w-full aspect-video bg-white border-b border-slate-200/60 flex items-center justify-center p-6 relative">
+                        <div className="w-16 h-16 rounded-xl bg-white border border-slate-150 shadow-sm flex items-center justify-center p-2.5">
+                          <div className="relative w-full h-full">
+                            <Image src={product.icon} alt={`${product.name} ${t.iconAlt}`} fill sizes="42px" className="object-contain" />
                           </div>
-                        </div>
-                      )}
-
-                      {/* Content: Title & Category */}
-                      <div className="p-5 flex flex-col gap-2">
-                        <div className="flex items-start justify-between gap-3">
-                          <h3 className="font-heading text-lg font-black text-brand-navy group-hover:text-brand-orange-aa transition-colors duration-300 leading-tight">
-                            {product.name}
-                          </h3>
-
-                          <span className={`px-2.5 py-0.5 rounded-md text-[11px] font-bold uppercase tracking-wider border whitespace-nowrap ${product.category === "Mono-gastric"
-                            ? "bg-orange-50/50 border-orange-150 text-brand-orange-aa"
-                            : product.category === "Ruminants"
-                              ? "bg-blue-50 border-blue-150 text-blue-700"
-                              : "bg-emerald-50 border-emerald-150 text-emerald-700"
-                            }`}>
-                            {t.categories[product.category as keyof typeof t.categories]}
-                          </span>
-                        </div>
-
-                        {product.tagline && (
-                          <p className="text-sm text-slate-550 italic leading-relaxed">
-                            {product.tagline}
-                          </p>
-                        )}
-
-                        <div className="flex items-center gap-1.5 text-brand-orange-aa text-sm font-bold mt-2">
-                          <span>{isExpanded ? t.showLess : t.readMore}</span>
-                          <motion.span
-                            animate={{ rotate: isExpanded ? 180 : 0 }}
-                            transition={{ duration: 0.3 }}
-                          >
-                            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" />
-                            </svg>
-                          </motion.span>
                         </div>
                       </div>
-                    </div>
+                    )}
 
-                    {/* Expandable Body */}
-                    <AnimatePresence initial={false}>
-                      {isExpanded && (
-                        <motion.div
-                          initial={{ height: 0 }}
-                          animate={{ height: "auto" }}
-                          exit={{ height: 0 }}
-                          transition={{ duration: 0.4, ease: easeOut }}
-                          className="overflow-hidden border-t border-slate-100 bg-white"
-                        >
-                          <div className="p-5 space-y-5">
-                            {/* About section */}
-                            <div>
-                              <span className="text-xs font-black uppercase text-teal-aa tracking-wider block mb-1.5">
-                                {t.about}
-                              </span>
-                              <p className="text-slate-600 text-sm leading-relaxed whitespace-pre-line">
-                                {product.about}
-                              </p>
-                            </div>
-
-                            {/* Variants section */}
-                            {product.variants && product.variants.length > 0 && (
-                              <div>
-                                <span className="text-xs font-black uppercase text-teal-aa tracking-wider block mb-1.5">
-                                  {t.variants}
-                                </span>
-                                <ul className="grid grid-cols-1 gap-1.5 text-slate-600 text-sm font-semibold">
-                                  {product.variants.map((variant, index) => (
-                                    <li key={index} className="flex items-center gap-2">
-                                      <span className="w-1.5 h-1.5 rounded-full bg-teal-500 flex-shrink-0" />
-                                      {variant}
-                                    </li>
-                                  ))}
-                                </ul>
-                              </div>
-                            )}
-
-                            {/* Key Features section */}
-                            <div>
-                              <span className="text-xs font-black uppercase text-teal-aa tracking-wider block mb-2">
-                                {t.features}
-                              </span>
-                              <ul className="space-y-2">
-                                {product.features.map((feature, idx) => (
-                                  <li key={idx} className="flex items-start gap-2 text-slate-600 text-sm">
-                                    <svg className="w-3.5 h-3.5 text-brand-orange mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7" />
-                                    </svg>
-                                    <span className="leading-tight">{feature}</span>
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
-
-                            {/* Usage & Presentation section */}
-                            <div className="space-y-3">
-                              <span className="text-xs font-black uppercase text-teal-aa tracking-wider block">
-                                {t.usage}
-                              </span>
-
-                              <div className="space-y-2.5">
-                                {/* Inclusion rate */}
-                                <div className="flex items-start gap-2.5 p-3 bg-slate-50 rounded-lg border border-slate-100">
-                                  <div className="w-7 h-7 rounded-md bg-teal-50 text-teal-aa flex items-center justify-center flex-shrink-0 mt-0.5">
-                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
-                                    </svg>
-                                  </div>
-                                  <div>
-                                    <span className="text-xs text-slate-aa font-bold uppercase tracking-wider block">{t.inclusionRate}</span>
-                                    <span className="text-sm text-brand-navy font-semibold leading-relaxed mt-0.5 block whitespace-pre-line">
-                                      {product.inclusionRate}
-                                    </span>
-                                  </div>
-                                </div>
-
-                                {/* Pack size */}
-                                <div className="flex items-start gap-2.5 p-3 bg-slate-50 rounded-lg border border-slate-100">
-                                  <div className="w-7 h-7 rounded-md bg-teal-50 text-teal-aa flex items-center justify-center flex-shrink-0 mt-0.5">
-                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                                    </svg>
-                                  </div>
-                                  <div>
-                                    <span className="text-xs text-slate-aa font-bold uppercase tracking-wider block">{t.packSize}</span>
-                                    <span className="text-sm text-brand-navy font-semibold leading-relaxed mt-0.5 block whitespace-pre-line">
-                                      {product.packSize}
-                                    </span>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-
-                            {/* Enquire button */}
-                            <a
-                              href={emailHref}
-                              className="w-full py-3 px-4 rounded-xl bg-brand-orange-aa hover:bg-brand-navy text-white text-sm font-semibold transition-all duration-300 shadow-sm hover:shadow flex items-center justify-center gap-2 group/btn cursor-pointer"
-                            >
-                              <svg className="w-3.5 h-3.5 text-white group-hover/btn:translate-x-0.5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                              </svg>
-                              {t.enquire} {product.name}
-                            </a>
-                          </div>
-                        </motion.div>
+                    {/* Content: Title, Category and tagline */}
+                    <div className="p-5 flex flex-1 flex-col gap-2">
+                      <div className="flex items-start justify-between gap-3">
+                        <h3 className="font-heading text-lg font-black text-brand-navy group-hover:text-brand-orange-aa transition-colors duration-300 leading-tight">
+                          {product.name}
+                        </h3>
+                        <span className={`px-2.5 py-0.5 rounded-md text-[11px] font-bold uppercase tracking-wider border whitespace-nowrap ${product.category === "Mono-gastric"
+                          ? "bg-orange-50/50 border-orange-150 text-brand-orange-aa"
+                          : product.category === "Ruminants"
+                            ? "bg-blue-50 border-blue-150 text-blue-700"
+                            : "bg-emerald-50 border-emerald-150 text-emerald-700"
+                          }`}>
+                          {t.categories[product.category as keyof typeof t.categories]}
+                        </span>
+                      </div>
+                      {product.tagline && (
+                        <p className="text-sm text-slate-550 italic leading-relaxed">{product.tagline}</p>
                       )}
-                    </AnimatePresence>
-                  </motion.div>
-                );
-              })}
+                      <span className="mt-auto pt-2 inline-flex items-center gap-1.5 min-h-11 text-brand-orange-aa text-sm font-bold">
+                        {t.viewProduct} <span aria-hidden="true">→</span>
+                      </span>
+                    </div>
+                  </Link>
+                </motion.div>
+              ))}
 
               {filteredProducts.length === 0 && (
                 <div className="text-center py-16 bg-slate-50 border border-dashed border-slate-200 rounded-2xl col-span-full">
@@ -444,6 +310,7 @@ export default function ProductsPage() {
             </div>
           </div>
         </section>
+        </MotionConfig>
       </main>
 
       <Footer />

@@ -32,17 +32,17 @@ export const Images = {
     dairy: "/images/heroes/dairy-bg.jpg",
     slide76: "/images/heroes/76.jpg",
     slide87: "/images/heroes/87.jpg",
+    /** ChemLife's founders accepting an award on stage, centred on the trophy, with dark headroom above them for the
+     *  headline. Landscape for screens at least as wide as tall, portrait for the rest. */
+    awardsLandscape: "/images/heroes/awards-hero-landscape.jpg",
+    awardsPortrait: "/images/heroes/awards-hero-portrait.jpg",
   },
 
   /** Product icons, banners, and category images */
   products: {
     heroBanner: "/images/products/products_hero_banner.png",
     heroBg: "/images/products/products-hero-bg.png",
-    packagesBg: "/images/products/products-packages-bg.png",
     customBg: "/images/products/products-custom-bg.jpg",
-    monoGastric: "/images/products/mono_gastric.png",
-    ruminants: "/images/products/ruminants.jpg",
-    chemdmold: "/images/products/chemdmold.jpg",
     /** Category overview images (used on home/what-we-do) */
     categoryMono: "/images/products/product-mono.png",
     categoryRumi: "/images/products/product-rumi.png",
@@ -94,26 +94,22 @@ export const Images = {
   /** Team / leadership / founders */
   people: {
     founders: "/images/people/founders.jpg",
-    foundersNew: "/images/people/founders_new.jpg",
-    leaderRadhakrishna: "/images/people/leader_radhakrishna.jpg",
-    leaderSharada: "/images/people/leader_sharada.jpg",
-    leaderSneha: "/images/people/leader_sneha.jpg",
-    leaderSneehaCropped: "/images/people/leader_sneha_cropped.jpg",
-    leaderShankar: "/images/people/leader_shankar.png",
+    foundersNew: "/images/people/founders-leadership-group.jpg",
+    /** The four leaders, cropped to the same chest-up frame (4:5, face at the same size and height). */
+    leaderRadhakrishna: "/images/people/leader_radhakrishna_chest.jpg",
+    leaderSharada: "/images/people/leader_sharada_chest.jpg",
+    leaderSneehaCropped: "/images/people/leader_sneha_chest.jpg",
+    leaderShankar: "/images/people/leader_shankar_chest-2.jpg",
   },
 
   /** R&D / science imagery */
   research: {
     heroBanner: "/images/research/research_hero_banner.png",
-    anbiotBanner: "/images/research/research_anbiot_banner.png",
-    chelationBanner: "/images/research/research_chelation_banner.png",
     anbiot: "/images/research/anbiot.png",
-    anbiotJpg: "/images/research/anbiot.jpg",
     greenTechnology: "/images/research/green_technology.png",
     microencapsulation: "/images/research/microencapsulation.png",
     nanoTraceMineral: "/images/research/nano_trace_mineral.jpg",
     natureIdenticalBio: "/images/research/nature_identical_bio.png",
-    capsuleDelivery: "/images/research/capsule_delivery.png",
     pellets: "/images/research/pellets.webp",
     /** General research/lab photo used in process steps and blog thumbnails */
     researchImage: "/images/research/research_image.jpeg",
@@ -127,10 +123,6 @@ export const Images = {
     developmentImage: "/images/process/development_image.jpeg",
     manufacturingImage: "/images/process/manufacturing_image.jpeg",
     delivery: "/images/process/process-delivery.png",
-    deliveryCrop: "/images/process/process-delivery_crop.png",
-    processResearch: "/images/process/process-research.png",
-    processDevelopment: "/images/process/process-development.png",
-    processManufacturing: "/images/process/process-manufacturing.png",
   },
 
   /** Careers section role background images */
@@ -152,11 +144,23 @@ export const Images = {
     rotate33: "/images/gallery/rotate_3_3.jpeg",
   },
 
+  /** What we serve: drawn illustrations, one family (previews) */
+  serve: {
+    poultry: "/images/serve/serve-poultry.webp",
+    pig: "/images/serve/serve-pig.webp",
+    turkey: "/images/serve/serve-turkey.webp",
+    cow: "/images/serve/serve-cow.webp",
+    buffalo: "/images/serve/serve-buffalo.webp",
+    goats: "/images/serve/serve-goats.webp",
+    bowls: "/images/serve/serve-bowls.webp",
+    fodder: "/images/serve/serve-fodder.webp",
+    granules: "/images/serve/serve-granules.webp",
+  },
+
   /** CSR / social responsibility imagery */
   social: {
     image2: "/images/social/social2.jpeg",
     image3: "/images/social/social3.jpeg",
-    helpingPeople: "/images/social/helping-people.gif",
   },
 
   /** Chat bot mascot images */
@@ -220,15 +224,15 @@ export const Images = {
   awards: {
     /** Returns the full path for a given awards filename */
     path: (filename: string) => `/images/awards/${filename}`,
+    businessSuccess2026: "/images/awards/business-success-awards-2026.png",
+    famiQs: "/images/awards/fami-qs.png",
+    elevate2019: "/images/awards/elevate-2019.png",
+    azadiTop75: "/images/awards/azadi-ka-amrit-mahotsav-top-75.png",
+    climateLaunchpad: "/images/awards/climate-launchpad.png",
     ccamp: "/images/awards/c-camp-logo.png",
     animalHusbandry: "/images/awards/animal-husbandry.png",
     birac: "/images/awards/birac.png",
     naarm: "/images/awards/naarm.png",
-    award1: "/images/awards/1awaard.png",
-    award2: "/images/awards/2award.png",
-    award3: "/images/awards/3award.png",
-    award4: "/images/awards/4award.png",
-    award5: "/images/awards/5award.png",
   },
 
   /** Testimonial company logos */
@@ -244,8 +248,6 @@ export const Images = {
 // ---------------------------------------------------------------------------
 
 export const Videos = {
-  /** Full-page hero background video */
-  farmBg: "/videos/farm-bg.mp4",
   /** CSR / social responsibility video */
   social1: "/videos/social1.mp4",
   /** Company trip / life-at-chemlife videos */

@@ -29,6 +29,8 @@ export default function Header() {
   // The page's address without its language prefix, to highlight the current page.
   const pathname = splitLocale(usePathname() ?? "/").path;
   const navLinks = NAV.map((link) => ({ label: t.nav[link.key], path: link.href, href: href(link.href) }));
+  // Tamil's menu words don't fit in one row even on wide screens, so Tamil keeps the menu button at every width.
+  const menuOnly = locale === "ta";
 
   // While the phone menu is open it covers the page: the page underneath stops scrolling, and Escape or
   // widening the window to the desktop nav closes it.
@@ -38,7 +40,7 @@ export default function Header() {
     root.style.overflow = "hidden";
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setMobileOpen(false);
     const desktop = matchMedia("(min-width: 1024px)");
-    const onWide = () => desktop.matches && setMobileOpen(false);
+    const onWide = () => desktop.matches && !menuOnly && setMobileOpen(false);
     window.addEventListener("keydown", onKey);
     desktop.addEventListener("change", onWide);
     return () => {
@@ -46,7 +48,7 @@ export default function Header() {
       window.removeEventListener("keydown", onKey);
       desktop.removeEventListener("change", onWide);
     };
-  }, [mobileOpen]);
+  }, [mobileOpen, menuOnly]);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60);
@@ -68,13 +70,13 @@ export default function Header() {
               alt="ChemLife Innovations"
               width={653}
               height={240}
-              sizes="174px"
+              sizes="(min-width: 1280px) 174px, (min-width: 768px) 153px, 131px"
               loading="eager"
               className="h-12 md:h-14 xl:h-16 w-auto"
             />
           </a>
 
-          <nav className="hidden lg:flex items-center gap-7 xl:gap-10">
+          <nav className={`hidden ${menuOnly ? "" : "lg:flex"} items-center gap-7 xl:gap-10`}>
             {navLinks.map((link) => {
               const isActive =
                 pathname === link.path || (pathname.startsWith(link.path) && link.path !== "/");
@@ -100,7 +102,7 @@ export default function Header() {
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-expanded={mobileOpen}
             aria-controls="mobile-menu"
-            className="lg:hidden flex flex-col items-center justify-center gap-1.5 w-11 h-11 -mr-2.5"
+            className={`${menuOnly ? "" : "lg:hidden"} flex flex-col items-center justify-center gap-1.5 w-11 h-11 -mr-2.5`}
             aria-label={t.nav.menu}
           >
             <span
@@ -118,8 +120,8 @@ export default function Header() {
 
        {mobileOpen && (
           // Fills the screen below the header (above the chat and search buttons), and scrolls itself if it's taller.
-          <div id="mobile-menu" className="lg:hidden bg-white border-t border-brand-navy/10 h-[calc(100dvh-4.5rem)] md:h-[calc(100dvh-5rem)] overflow-y-auto overscroll-contain">
-            <div className="px-6 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+          <div id="mobile-menu" className={`${menuOnly ? "lg:h-[calc(100dvh-6rem)]" : "lg:hidden"} bg-white border-t border-brand-navy/10 h-[calc(100dvh-4.5rem)] md:h-[calc(100dvh-5rem)] overflow-y-auto overscroll-contain`}>
+            <div className="max-w-[1200px] mx-auto px-6 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
               {navLinks.map((link) => {
                 const isActive =
                   pathname === link.path || (pathname.startsWith(link.path) && link.path !== "/");

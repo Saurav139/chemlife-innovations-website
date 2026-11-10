@@ -7,6 +7,10 @@ const loaders: Record<Locale, () => Promise<{ default: Messages }>> = {
   en: () => import("./messages/en"),
   kn: () => import("./messages/kn"),
   hi: () => import("./messages/hi"),
+  bn: () => import("./messages/bn"),
+  mr: () => import("./messages/mr"),
+  te: () => import("./messages/te"),
+  ta: () => import("./messages/ta"),
 };
 
 /** All of a language's text. Loaded on the server and passed to the page, so visitors only download one language. */
