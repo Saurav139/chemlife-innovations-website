@@ -72,7 +72,8 @@ The staging and live sites should each have their own database, so testing on st
 - `feed.ts`: reading LinkedIn and Instagram feeds through the same public-address checks as pasted links.
 - `auto-sync.ts`: the 10-minute check while automatic adding is on; one server process runs each check.
 - `sync.ts`: checking for new posts, and starting the inbox from the built-in list (`FALLBACK_INSIGHTS` in
-  `src/lib/insights.ts`). Once per database it also brings blog posts imported before October 2026 up to today's
+  `src/lib/insights.ts`). A post whose picture couldn't be copied when it came in gets it on a later check,
+  while its channel still lists it. Once per database it also brings blog posts imported before October 2026 up to today's
   summaries and titles.
 - `card.ts`: how a post becomes an Insights card, for the page and for the inbox's preview (`src/components/InsightCard.tsx`).
 - `src/lib/insights.ts` `getInsights()`: the approved posts once the inbox has started; the built-in list if the
