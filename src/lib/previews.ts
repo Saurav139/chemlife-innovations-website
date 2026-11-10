@@ -5,6 +5,12 @@ import { isLiveHost } from "@/lib/seo";
 // the site instead. Never shown on the live site.
 export const PREVIEWS = [
   {
+    slug: "research-v2",
+    href: "/previews/research-v2",
+    title: "Research pages: improved version",
+    description: "The Research page and all five platform pages, redone: each platform's picture and key facts up top, a bar that follows you down the page and steps between platforms, the steps set under the animated figure they explain, and product photos. Same content as the earlier research previews, which are still listed below.",
+  },
+  {
     slug: "homepage-style",
     href: "/previews/homepage-style",
     title: "Homepage: one consistent style",
