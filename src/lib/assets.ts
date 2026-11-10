@@ -99,7 +99,7 @@ export const Images = {
     leaderRadhakrishna: "/images/people/leader_radhakrishna_chest.jpg",
     leaderSharada: "/images/people/leader_sharada_chest.jpg",
     leaderSneehaCropped: "/images/people/leader_sneha_chest.jpg",
-    leaderShankar: "/images/people/leader_shankar_chest.jpg",
+    leaderShankar: "/images/people/leader_shankar_chest-2.jpg",
   },
 
   /** R&D / science imagery */
