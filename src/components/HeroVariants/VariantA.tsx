@@ -84,13 +84,14 @@ function AnimatedCounter({ value, suffix }: { value: number; suffix: string }) {
 }
 
 export default function HeroVariantA() {
-  // Headlines and photos rotate independently so every photo is shown in every language.
-  const [slide, setSlide] = useState(0);
+  // One position for both: each headline has its photo, so the dots change the photo along with the headline.
   const [photo, setPhoto] = useState(0);
   const [storyOpen, setStoryOpen] = useState(false);
   const t = useT();
   const href = useHref();
   const taglines = t.home.taglines;
+  const slideCount = otherPhotos.length + 1;
+  const slide = photo % taglines.length;
   const tagline = taglines[slide];
   // Only the award photo needs the compact top layout to leave the people unobstructed.
   const awardLayout = photo === 0;
@@ -115,17 +116,18 @@ export default function HeroVariantA() {
     return () => window.removeEventListener("load", ready);
   }, []);
 
+  // Restarts on every change, so a slide picked from the dots also stays up for the full 6 s.
   useEffect(() => {
     if (!othersReady) return;
-    const timer = setInterval(() => setPhoto((p) => (p + 1) % (otherPhotos.length + 1)), 6000);
-    return () => clearInterval(timer);
-  }, [othersReady]);
-
-  // Restarts on every change, so a headline picked from the dots also stays up for the full 6 s.
-  useEffect(() => {
-    const timer = setTimeout(() => setSlide((p) => (p + 1) % taglines.length), 6000);
+    const timer = setTimeout(() => setPhoto((p) => (p + 1) % slideCount), 6000);
     return () => clearTimeout(timer);
-  }, [slide, taglines.length]);
+  }, [photo, othersReady, slideCount]);
+
+  // Picking a dot before the page has finished loading starts the other photos loading straight away.
+  const goTo = (i: number) => {
+    setOthersReady(true);
+    setPhoto(i);
+  };
 
   // While the numbers' strip is behind the floating search and chat buttons (at the bottom of the screen on arrival),
   // they sit centred on it, at its two ends, beside the figures; once it scrolls past, they settle back.
@@ -248,15 +250,15 @@ export default function HeroVariantA() {
             {/* Phones: the headline dots under the buttons (wider screens have them down the right side).
                 A 44px-tall tap area around each dot, at least 24px wide (WCAG 2.5.8), so the row stays compact. */}
             <div className="flex mt-3 short-phone:mt-0 md:hidden">
-              {taglines.map((_, i) => (
+              {Array.from({ length: slideCount }, (_, i) => (
                 <button
                   key={i}
-                  onClick={() => setSlide(i)}
+                  onClick={() => goTo(i)}
                   className="py-[18px] px-2 flex items-center justify-center"
                   aria-label={`${t.home.goToSlide} ${i + 1}`}
-                  aria-current={i === slide ? "true" : undefined}
+                  aria-current={i === photo ? "true" : undefined}
                 >
-                  <span className={`h-2 rounded-full transition-all duration-300 ${i === slide ? "w-6 bg-teal-400" : "w-2 bg-white/40"}`} />
+                  <span className={`h-2 rounded-full transition-all duration-300 ${i === photo ? "w-6 bg-teal-400" : "w-2 bg-white/40"}`} />
                 </button>
               ))}
             </div>
@@ -268,15 +270,15 @@ export default function HeroVariantA() {
         {/* Tablets and wider: the headline dots in a column down the right side, set in from the edge so they clear
             the Rate Us tab. A 44px-wide tap area around each dot, at least 24px tall. */}
         <div className="hidden md:flex flex-col absolute right-14 lg:right-16 top-1/2 -translate-y-1/2 py-1 rounded-full bg-black/30 backdrop-blur-sm" role="group" aria-label={t.home.goToSlide}>
-          {taglines.map((_, i) => (
+          {Array.from({ length: slideCount }, (_, i) => (
             <button
               key={i}
-              onClick={() => setSlide(i)}
+              onClick={() => goTo(i)}
               className="px-[18px] py-2 flex items-center justify-center cursor-pointer"
               aria-label={`${t.home.goToSlide} ${i + 1}`}
-              aria-current={i === slide ? "true" : undefined}
+              aria-current={i === photo ? "true" : undefined}
             >
-              <span className={`w-2 rounded-full transition-all duration-300 ${i === slide ? "h-6 bg-teal-400" : "h-2 bg-white/60"}`} />
+              <span className={`w-2 rounded-full transition-all duration-300 ${i === photo ? "h-6 bg-teal-400" : "h-2 bg-white/60"}`} />
             </button>
           ))}
         </div>
