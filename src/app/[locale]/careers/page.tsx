@@ -105,9 +105,9 @@ export default function CareersPage() {
     <VariantProvider>
       <Header />
 
-      <main className="bg-white min-h-screen text-brand-navy">
-        {/* Careers Hero Section */}
-        <SectionWrapper className="pt-26 md:pt-32 pb-10 md:pb-24 lg:pt-36 lg:pb-32 text-white relative overflow-hidden bg-brand-navy flex items-center">
+      <main id="main" tabIndex={-1} className="bg-white min-h-screen text-brand-navy">
+        {/* A plain section, not a fade-in: it's the first screen, so it shows without waiting for the page's JavaScript. */}
+        <section className="pt-26 md:pt-32 pb-10 md:pb-24 lg:pt-36 lg:pb-32 text-white relative overflow-hidden bg-brand-navy flex items-center">
           <div className="absolute inset-0 z-0">
             <Image
               src={Images.heroes.careers}
@@ -132,7 +132,7 @@ export default function CareersPage() {
               {t.intro}
             </p>
           </div>
-        </SectionWrapper>
+        </section>
 
         {/* About & Internship Considerations Section */}
         <SectionWrapper className="py-12 md:py-20 bg-gray-50 border-b border-gray-150">

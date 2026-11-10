@@ -2,13 +2,13 @@
 
 import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
-import { LOCALES, LOCALE_COOKIE, LOCALE_NAMES, TRANSLATED_PATHS, localizePath, splitLocale, type Locale } from "@/i18n/config";
+import { LOCALES, LOCALE_COOKIE, LOCALE_NAMES, isTranslatedPath, localizePath, splitLocale, type Locale } from "@/i18n/config";
 import { useLocale, useT } from "@/i18n/LocaleProvider";
 
 /** The same page in another language, or that language's homepage when the page is English only. */
 function addressIn(target: Locale, pathname: string) {
   const { path } = splitLocale(pathname);
-  if (TRANSLATED_PATHS.includes(path) || target === "en") return localizePath(path, target);
+  if (isTranslatedPath(path) || target === "en") return localizePath(path, target);
   return localizePath("/", target);
 }
 
@@ -26,7 +26,7 @@ function remember(l: Locale) {
   document.cookie = `${LOCALE_COOKIE}=${l}; path=/; max-age=31536000; samesite=lax`;
 }
 
-/** English · ಕನ್ನಡ · हिन्दी. A drop-down in the desktop header, a row of links in the mobile menu (`inline`). */
+/** English · ಕನ್ನಡ · हिन्दी · বাংলা · मराठी · తెలుగు · தமிழ். A drop-down in the desktop header, a row of links in the mobile menu (`inline`). */
 export default function LanguageSwitcher({ inline = false }: { inline?: boolean }) {
   const locale = useLocale();
   const t = useT();
@@ -67,7 +67,7 @@ export default function LanguageSwitcher({ inline = false }: { inline?: boolean 
 
   if (inline) {
     return (
-      <div className="flex items-center gap-2 pt-3 pb-1" role="group" aria-label={t.nav.language}>
+      <div className="flex flex-wrap items-center gap-2 pt-3 pb-1" role="group" aria-label={t.nav.language}>
         <span className="text-brand-navy/60"><Globe /></span>
         {links}
       </div>

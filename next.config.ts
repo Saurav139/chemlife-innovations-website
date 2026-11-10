@@ -20,8 +20,9 @@ const contentSecurityPolicy = [
   "font-src 'self'",
   "media-src 'self'",
   `connect-src 'self'${chatbotApiOrigin ? ` ${chatbotApiOrigin}` : ""} https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com`,
-  // YouTube player on Insights; Google Maps on Contact (maps.google.com redirects to www.google.com).
-  "frame-src https://www.youtube-nocookie.com https://www.youtube.com https://maps.google.com https://www.google.com",
+  // YouTube, LinkedIn and Instagram video players on Insights; Google Maps on Contact (maps.google.com redirects to
+  // www.google.com).
+  "frame-src https://www.youtube-nocookie.com https://www.youtube.com https://www.linkedin.com https://www.instagram.com https://maps.google.com https://www.google.com",
   "object-src 'none'",
   "base-uri 'self'",
   "form-action 'self'",
@@ -44,6 +45,9 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  // Build with at most 4 workers. Next starts one per CPU less one, and Hostinger's build machine reports ~57 CPUs:
+  // 56 workers ran it out of memory while generating static pages (SIGABRT, 4 Nov 2026).
+  experimental: { cpus: 4 },
   images: {
     // Cache resized images for 30 days (default 4 hours). File names don't change when an image does,
     // so save a replacement under a new name in src/lib/assets.ts.
@@ -58,6 +62,8 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       { source: "/:path*", headers: securityHeaders },
+      // The site's fonts (src/app/fonts.css). Each file's name includes its version, so browsers may keep it for good.
+      { source: "/fonts/google/:file", headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }] },
     ];
   },
 };

@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { ReactNode } from "react";
+import { REVEAL_VIEWPORT } from "@/lib/reveal";
 
 interface Props {
   children: ReactNode;
@@ -10,7 +11,7 @@ interface Props {
 }
 
 const variants = {
-  hidden: { opacity: 0, y: 40 },
+  hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0 },
 };
 
@@ -20,8 +21,8 @@ export default function SectionWrapper({ children, className = "", id }: Props) 
       id={id}
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: 0.6, ease: [0.25, 0.1, 0, 1] }}
+      viewport={REVEAL_VIEWPORT}
+      transition={{ duration: 0.5, ease: [0.25, 0.1, 0, 1] }}
       variants={variants}
       className={className}
     >

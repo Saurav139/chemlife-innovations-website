@@ -2,19 +2,22 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { Images } from "@/lib/assets";
-import { useT } from "@/i18n/LocaleProvider";
+import { useHref, useT } from "@/i18n/LocaleProvider";
 import type { Messages } from "@/i18n/messages/en";
+import { REVEAL_VIEWPORT } from "@/lib/reveal";
+
+const easeOut = [0.25, 0.1, 0, 1] as const;
 
 // Each card's title, description and photo descriptions are in the language file (home.whoWeAre.cards), in this order.
-const cardImages = [
+export const cardImages = [
   [Images.gallery.rotate11, Images.gallery.rotate12, Images.gallery.rotate13],
   [Images.gallery.rotate21, Images.gallery.rotate22, Images.gallery.rotate23],
   [Images.research.pellets, Images.gallery.rotate32, Images.gallery.rotate33],
 ];
 
-type Card = Messages["home"]["whoWeAre"]["cards"][number] & { images: { src: string; alt: string }[] };
+export type Card = Messages["home"]["whoWeAre"]["cards"][number] & { images: { src: string; alt: string }[] };
 
 // Detailed geometric SVG Snowflake vector component for the outer cell boundary
 function SnowflakeFrame({ className, style }: { className?: string; style?: React.CSSProperties }) {
@@ -84,7 +87,7 @@ function SnowflakeFrame({ className, style }: { className?: string; style?: Reac
   );
 }
 
-function SnowflakeCell({
+export function SnowflakeCell({
   card,
   index,
   imageIndex,
@@ -95,10 +98,10 @@ function SnowflakeCell({
 }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 50 }}
+      initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.6, delay: index * 0.1, ease: [0.25, 0.1, 0, 1] }}
+      viewport={REVEAL_VIEWPORT}
+      transition={{ duration: 0.5, delay: index * 0.1, ease: [0.25, 0.1, 0, 1] }}
       className="flex flex-row md:flex-col items-center gap-5 md:gap-0 text-left md:text-center group cursor-pointer"
     >
       {/* 3D Visual Snowflake Image Container (No text overlay). Phones: a smaller circle beside the text. */}
@@ -129,7 +132,6 @@ function SnowflakeCell({
                 fill
                 sizes="(min-width: 1024px) 235px, 165px"
                 className="object-cover opacity-100 group-hover:scale-105 transition-transform duration-700"
-                priority={index === 0}
               />
             </motion.div>
           </AnimatePresence>
@@ -141,7 +143,7 @@ function SnowflakeCell({
         <h3 className="font-heading text-lg md:text-xl font-bold text-teal-aa mb-1 md:mb-2 leading-tight transition-colors duration-300 group-hover:text-brand-orange">
           {card.title}
         </h3>
-        <p className="text-slate-600 text-sm leading-relaxed font-normal">
+        <p className="text-slate-600 text-lg leading-relaxed font-normal">
           {card.description}
         </p>
       </div>
@@ -149,9 +151,28 @@ function SnowflakeCell({
   );
 }
 
+/** Fades and rises into view once, as it scrolls in (still for visitors who prefer less motion). */
+function Reveal({ children, delay = 0, className }: { children: React.ReactNode; delay?: number; className?: string }) {
+  const reduce = useReducedMotion();
+  return (
+    <motion.div
+      className={className}
+      initial={{ opacity: 0, y: reduce ? 0 : 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={REVEAL_VIEWPORT}
+      transition={{ duration: 0.6, delay, ease: easeOut }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
 export default function WhoWeAre() {
+  const messages = useT();
+  const t = messages.home.whoWeAre;
+  const foundersAlt = messages.about.foundersAlt;
+  const href = useHref();
   const [imageIndex, setImageIndex] = useState(0);
-  const t = useT().home.whoWeAre;
   const cards: Card[] = t.cards.map((card, i) => ({
     ...card,
     images: cardImages[i].map((src, j) => ({ src, alt: card.alts[j] })),
@@ -164,18 +185,45 @@ export default function WhoWeAre() {
     return () => clearInterval(timer);
   }, []);
 
+
   return (
-    <section className="bg-white py-16 md:py-24 lg:py-32 overflow-hidden border-b border-gray-100">
+    <section aria-labelledby="who-we-are-title" className="bg-white py-20 md:py-32 overflow-hidden border-b border-gray-100">
       <div className="max-w-[1200px] mx-auto px-6">
-        {/* Title Block */}
-        <div className="text-center mb-12">
-          <span className="text-teal-aa text-sm lg:text-base font-semibold tracking-widest uppercase block mb-2">
-            {t.kicker}
+        <div className="text-center mb-10 md:mb-16">
+          <span className="text-teal-aa text-sm lg:text-base font-semibold tracking-widest uppercase block mb-3">
+            {t.homeKicker}
           </span>
-          <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl text-brand-navy font-bold leading-tight">
-            {t.title}
+          <h2 id="who-we-are-title" className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold leading-tight text-brand-navy">
+            {t.homeTitle}
           </h2>
         </div>
+
+        {/* Who we are: the introduction beside the founders' photo, with a link to the full Who We Are page. */}
+        <div className="grid lg:grid-cols-12 gap-12 items-center">
+          <Reveal className="lg:col-span-6">
+            {/* What ChemLife is, in a line, under the heading. */}
+            <p className="font-heading text-2xl md:text-3xl lg:text-4xl font-semibold leading-snug text-brand-orange-aa mt-4">{t.title}</p>
+            <p className="text-lg text-slate-700 leading-relaxed mt-6">{t.homeIntro}</p>
+            {/* The facts and questions that used to be here, in full on their own page. */}
+            <a href={href("/who-we-are")} data-analytics-click={t.moreAboutUs} className="inline-flex items-center gap-2 min-h-12 px-6 mt-8 rounded-full bg-brand-navy hover:bg-brand-navy/90 text-white font-semibold transition-colors">
+              {t.moreAboutUs}
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </a>
+          </Reveal>
+          <Reveal delay={0.1} className="lg:col-span-6">
+            {/* The photo is wider than the frame: positioned 42% across (not centred) to trim 5% more off its right side. */}
+            <div className="relative aspect-[4/3] rounded-3xl overflow-hidden">
+              <Image src={Images.people.foundersNew} alt={foundersAlt} fill sizes="(min-width: 1024px) 560px, 100vw" className="object-cover object-[42%_50%]" />
+            </div>
+          </Reveal>
+        </div>
+
+        {/* What we serve: the three species groups */}
+        <h3 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold leading-tight text-brand-navy text-center mt-16 md:mt-24">
+          {t.serveTitle}
+        </h3>
 
         {/* Grid layout containing the Snowflake Cells */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-12 max-w-5xl mx-auto justify-items-stretch md:justify-items-center w-full mt-8 z-10 relative">

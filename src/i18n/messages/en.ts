@@ -34,6 +34,11 @@ const en = {
       description:
         "Ask ChemLife Innovations about our feed additives or a distribution partnership. Visit us at KIADB Industrial Area, Doddaballapura, Bengaluru.",
     },
+    whoWeAre: {
+      title: "Who We Are",
+      description:
+        "ChemLife Innovations at a glance: what we make, the species we serve, our core technologies, flagship ranges, certification, partners, manufacturing and leadership.",
+    },
   },
 
   nav: {
@@ -69,6 +74,7 @@ const en = {
   },
 
   common: {
+    skipToContent: "Skip to main content",
     rateUs: "Rate Us",
     rateUsLabel: "Rate us on Google",
     hideRateUs: "Hide the Rate us button",
@@ -94,12 +100,7 @@ const en = {
       ["Protected Bio-Actives", "Bioavailable at the Site", "of Absorption"],
       ["Green Trace Mineral", "Chelation & Nano", "Technologies"],
     ],
-    slideAlts: [
-      "Free range chicken farm",
-      "Dairy cattle farm",
-      "Cow with her calf in a green pasture",
-      "Chick drinking from a poultry drinker",
-    ],
+    heroAlt: "ChemLife's founders accepting an award on stage",
     findProduct: "Find the right product",
     talkToNutritionist: "Talk to a nutritionist",
     watchStory: "Watch our story",
@@ -107,10 +108,66 @@ const en = {
     closeVideo: "Close video player",
     goToSlide: "Go to slide",
     stats: ["Years of Research", "Products", "Customers Served", "Awards Won"],
+    // The closing call to action.
+    cta: {
+      title: "Ready to put ChemLife in your feed?",
+      text: "Tell us the animals you feed and the problem you want solved. Our nutritionists will recommend a product and its inclusion rate.",
+      direct: "Or reach us directly",
+    },
 
     whoWeAre: {
-      kicker: "Get to know",
-      title: "Who We Are?",
+      kicker: "Who we are",
+      // The homepage section's small label and heading.
+      homeKicker: "Get to know",
+      homeTitle: "Who We Are",
+      // The homepage section's introduction: shorter than intro, without repeating the line above it.
+      homeIntro: "Feed additives and nutraceuticals for poultry, dairy cattle and swine, pairing Ayurvedic plant wisdom with our own technologies: ANBioT bio-transformation, green synthesis and microencapsulation. Supported by the Technology Development Board, Government of India.",
+      // The Who We Are page (/who-we-are): the homepage button to it, and its two section headings.
+      moreAboutUs: "More about who we are",
+      factsTitle: "At a glance",
+      faqTitle: "Questions, answered",
+      // The Who We Are page set out like an annual report: the cover's labels, the fact sheet's three groups (in
+      // the order of the facts they hold), the partners and recognition strip, and the link to the awards.
+      profileLabel: "Company profile",
+      contentsLabel: "Contents",
+      factGroups: [
+        { title: "Portfolio", note: "What we make and who it is for." },
+        { title: "Science & standards", note: "The technology and the checks behind it." },
+        { title: "Partners & presence", note: "Who we work with, and where." },
+      ],
+      boardLabel: "Board of directors",
+      proofPartners: "Industry partners",
+      proofRecognised: "Recognised and supported by",
+      famiQs: "FAMI-QS certified",
+      proofBadges: ["Technology Development Board supported"],
+      awardsLink: "See all our awards",
+      title: "Functional feed-additive biotechnology from Bengaluru",
+      tagline: "Nature-driven science. Proof in every kilo.",
+      intro: "ChemLife Innovations is a Bengaluru-based manufacturer of functional feed additives and nutraceuticals for poultry, dairy cattle and swine. Its products pair Ayurvedic plant wisdom with proprietary technologies: ANBioT bio-transformation, green synthesis and microencapsulation. The work is supported by the Technology Development Board, Government of India.",
+      facts: [
+        { label: "What we make", value: "Feed hygiene (mould and mycotoxin control), natural growth promoters, bio-trace minerals, rumen-bypass and targeted-delivery actives" },
+        { label: "Species", value: "Poultry, dairy cattle and swine" },
+        { label: "Core technologies", value: "ANBioT, green synthesis, microencapsulation" },
+        { label: "Flagship ranges", value: "MaxDmold and FeedGenie (feed hygiene), MinBioZen (bio-trace minerals), MethioWiz and CholiWiz (rumen-bypass)" },
+        { label: "Government support", value: "Technology Development Board, Department of Science and Technology, bio-trace minerals project, 2023" },
+        { label: "Quality", value: "FAMI-QS feed-additive quality and safety certification" },
+        { label: "Recognition", value: "C-CAMP K-SAP BIO 50 cohort, 2020-21" },
+        { label: "Industry partners", value: "Huvepharma, in collaboration since 2018; EW Nutrition since 2020" },
+        { label: "Manufacturing", value: "Doddaballapura, Bengaluru Rural District, Karnataka, India" },
+        { label: "Leadership", value: "Dr Radhakrishna PM (Chairman and MD), Dr Sharada KC (Director, Technical), Sneha R (Director, HR and Finance), Shankar CV (Director, Business Development)" },
+      ],
+      faq: [
+        { q: "What does ChemLife Innovations make?", a: "ChemLife makes functional feed additives on three platforms: feed-hygiene products such as MaxDmold and FeedGenie that control mould and mycotoxins, bio-trace minerals such as MinBioZen, and rumen-bypass and targeted-delivery actives such as MethioWiz and CholiWiz for dairy." },
+        { q: "What is ANBioT & other technologies?", a: "ANBioT, or Accelerated Natural Bio Transformation, is ChemLife's proprietary process for turning natural inputs into functional feed additives. In its bio-trace minerals, a proprietary nutrient medium lets minerals chelate under milder conditions, using proteins from silkworm pupae, a silk-industry by-product (Technology Development Board, 2023)." },
+        { q: "How does ChemLife protect feed from mould and mycotoxins?", a: "Through its feed-hygiene range. MaxDmold is a dual-action mould shield built on bio-copper, and FeedGenie Prime gives multi-mode, multi-mycotoxin defence. Together they protect feed from storage to stomach, so quality holds in the silo and performance holds on the farm." },
+        { q: "Where is ChemLife based and how does it deliver?", a: "ChemLife is based in Doddaballapura, Bengaluru Rural District, Karnataka, India. Its integrated supply chain moves feed additives from the Bengaluru facility through warehouses and varied transport networks to final delivery, either directly or through distributor channels, serving poultry, swine and dairy producers." },
+      ],
+      leadershipCaption: "Led by four directors with 30 years in animal-nutraceutical innovation, 23 in feed-additive R&D, 38 in commercial project management and 15 in supply-chain accounting and HR.",
+      exploreProducts: "Explore our products",
+      seeResearch: "See our research",
+      meetLeadership: "Meet the leadership",
+      requestDossier: "Request a technical dossier",
+      serveTitle: "What we serve",
       cards: [
         {
           title: "Mono-Gastric",
@@ -165,7 +222,6 @@ const en = {
     awards: {
       kicker: "Honors",
       title: "Awards & Recognition",
-      goTo: "Go to certificate",
       items: [
         {
           title: "K-SAP BIO 50 Cohort",
@@ -182,6 +238,22 @@ const en = {
         {
           title: "a-IDEA NAARM Incubated Startup",
           description: "Incubated at a-IDEA, the Technology Business Incubator of ICAR-NAARM (National Academy of Agricultural Research Management) to scale sustainable agri-tech solutions.",
+        },
+        {
+          title: "The Business Decacorn",
+          description: "Presented to our Chairman and Managing Director, Dr Radhakrishna PM, at the Business Success Awards 2026 for outstanding growth and success in business, in the spirit of value creation with values.",
+        },
+        {
+          title: "Elevate 2019 Runner-up",
+          description: "Runner-up at Elevate 2019, the Government of Karnataka's business competition run by the Department of IT, BT and S&T, for our concept “Accelerated Biotransformation of Paddy Stubble”.",
+        },
+        {
+          title: "Top 75 Entrepreneurs in India",
+          description: "Recognised among India's top 75 entrepreneurs during Azadi Ka Amrit Mahotsav, organised by the Department of Animal Husbandry and Dairying, Government of India, with the Confederation of Indian Industry.",
+        },
+        {
+          title: "ClimateLaunchpad Regional Winner",
+          description: "Regional winners for Karnataka at ClimateLaunchpad, the world's largest green business ideas competition, qualifying for the global stage with “CowStraw Laddu: More Milk, Less Methane”.",
         },
       ],
     },
@@ -213,11 +285,20 @@ const en = {
     social: {
       kicker: "Our Commitment",
       title: "Social Responsibilities",
+      journalTitle: "Small actions. Lasting commitments.",
+      introduction: "Our work extends beyond animal nutrition, through support for students, dignity in the workplace and care for animals.",
+      categories: ["Community / Education", "Our people", "Animal welfare"],
+      featureTitles: ["Supporting the journey to school.", "Dignity and respect at work.", "Care beyond nutrition."],
+      proofs: ["Bicycle donations", "POSH certification", "Two cows. One full year."],
+      imageAlts: ["Students riding donated bicycles in a school courtyard", "ChemLife team members holding certificates at a workplace programme", "Cows resting and feeding at the animal welfare shelter"],
+      viewStory: "View story",
+      moreStories: "Explore our other commitments",
+      watchVideo: "Watch bicycle donation video",
       bgAlt: "ChemLife team members with participants holding certificates at a community programme",
       items: [
-        { title: "Empowering Students", desc: "Bicycles donation for empowering students below the poverty line" },
-        { title: "Prevention of Sexual Harassment", desc: "Chemlife certified with Prevention of Sexual Harassment at Work place" },
-        { title: "Animal Welfare", desc: "Supporting feeding of two cows for one full year" },
+        { title: "Empowering students", desc: "Supporting access to education through bicycle donations to students from families below the poverty line." },
+        { title: "Dignity at work", desc: "Certified under the Prevention of Sexual Harassment at the Workplace (POSH) framework." },
+        { title: "Care beyond nutrition", desc: "Supporting the feeding of two cows for one full year." },
       ],
     },
   },
@@ -230,6 +311,14 @@ const en = {
       "To pioneer sustainable progress in Animal Feed Functional Additives & Nutraceuticals by championing Green Technologies, fostering Creativity through an Innovative Mindset, and building an unshakable foundation of Trust and Reliability.",
     foundersAlt: "ChemLife Founders and Leadership",
     founders: "Our Founders",
+    journeyTitle: "Our Journey",
+    journeyText: "ChemLife Innovations brings together Ayurvedic plant wisdom and modern biotechnology to develop nature-derived functional feed additives for poultry, dairy and livestock.",
+    journeyText2: "Our founders bring experience in animal nutraceuticals, research, technology and business management. Together, they guide our work in bioactives, green technologies and practical solutions for animal nutrition.",
+    purposeTitle: "Our purpose",
+    visionPhotoAlt: "Laboratory workspace with research equipment and people at work",
+    visionPhotoLabel: "Research & Development",
+    visionKicker: "Our Vision",
+    visionText: "To pioneer sustainable progress in Animal Feed Functional Additives & Nutraceuticals by championing green technologies, fostering creativity through an innovative mindset, and building an unshakable foundation of trust and reliability.",
     missionKicker: "Our Mission",
     missionTitle: "To integrate eco-conscious solutions into every facet of progress.",
     missionText:
@@ -248,7 +337,7 @@ const en = {
       { role: "Chairman & MD", bio: "Finance & Go-to-Market. 30 years in Innovation of Animal Nutraceuticals" },
       { role: "Director - Technical", bio: "Research & Technology. 23 years in R&D of Animal Feed additives & Bio-actives" },
       { role: "Director - HR & Finance", bio: "15 years in Supply Chain Accounting & HR. Experienced Management Professional" },
-      { role: "Director - Business & Development", bio: "Business development & 38 years in commercial project management" },
+      { role: "Director - Business Development", bio: "Business development & 38 years in commercial project management" },
     ],
   },
 
@@ -273,7 +362,12 @@ const en = {
     enquire: "Enquire about",
     readMore: "Learn More",
     showLess: "Show Less",
+    resultsCount: "Showing {count} of {total} products",
     noResults: "No products match your search query.",
+    related: "More for the same animals",
+    viewProduct: "View product",
+    allProducts: "All products",
+    askAbout: "Know more about this product",
     bannerAlt: "banner",
     iconAlt: "icon",
     items: [
@@ -518,6 +612,7 @@ const en = {
     intro: "Science-backed studies and platforms formulated for superior bioavailability, green chelation, and stable animal nutrition.",
     search: "Search research pipeline...",
     clearSearch: "Clear search",
+    resultsCount: "Showing {count} of {total} research topics",
     noResults: "No research topics match your search.",
     overview: "Executive Summary",
     challenge: "Core Challenge",
@@ -695,6 +790,7 @@ const en = {
     subjectPlaceholder: "What is this regarding?",
     nutritionistSubject: "I'd like to talk to a nutritionist",
     researchSubject: "Research collaboration",
+    dossierSubject: "Technical dossier request",
     message: "Message",
     messagePlaceholder: "Tell us details about your request...",
     errors: {
