@@ -7,8 +7,8 @@ export const PREVIEWS = [
   {
     slug: "certificates",
     href: "/previews/certificates",
-    title: "Homepage: Certificates section",
-    description: "A new section for the homepage showing the FAMI-QS and Halal certificates: each one's badge, what it covers, who issued it, its number and validity, and the certificate itself to open and read.",
+    title: "Homepage: Certificates section, three designs",
+    description: "A new section for the homepage showing the FAMI-QS and Halal certificates, in three designs to switch between: Detailed (everything on each certificate), Compact (a short strip) and Awards style (one at a time on the orange plaque). Each opens the certificate itself.",
   },
   {
     slug: "research-v2",

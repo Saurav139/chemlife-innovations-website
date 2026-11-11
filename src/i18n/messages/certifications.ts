@@ -16,6 +16,9 @@ export const certifications = {
       issuer: "Certified by Swiss Cert Pvt. Ltd.",
       summary:
         "A Feed Safety and Quality Management System, including Good Manufacturing Practice (GMP), for the specialty feed ingredients we make.",
+      // The short versions of the section show `brief` and `keyFacts` in place of the summary and the full list of facts.
+      brief: "Feed safety and quality management, including GMP, for our specialty feed ingredients.",
+      keyFacts: ["Certificate 510047", "FAMI-QS registration FAM-1980", "Valid to 9 October 2028"],
       facts: [
         { label: "Scope", value: "Production of Specialty Feed Ingredients from Chemical & Mixing Processes. Feed chain Category K." },
         { label: "Standard", value: "FAMI-QS Code (Version 6, 2018-10-02), with the FAMI-QS Feed Fraud Prevention and Defense Module Version 1." },
@@ -53,6 +56,8 @@ export const certifications = {
       issuer: "Issued by Jamiat Ulama-i-Hind Halal Trust, New Delhi",
       summary:
         "Our plant was inspected and assessed by Jamiat Ulama-i-Hind Halal Trust and found to comply with Halal requirements.",
+      brief: "Feed Genie Forte and Feed Genie, made at a plant inspected and found to comply with Halal requirements.",
+      keyFacts: ["Registration 2798", "Valid to 11 August 2028"],
       facts: [
         { label: "Scope", value: "Category-K: Feed Genie Forte & Feed Genie." },
         { label: "Standard", value: "JUHT Scheme SCH-I, as per GSO/UAE.S 2055-1-2015, MS 1500-2019 and HAS-23000-1 Halal Standards." },
