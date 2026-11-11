@@ -85,4 +85,6 @@ export interface SyncResult {
   approved: boolean;
   error?: string;
   skipped?: string;
+  /** Why new posts' pictures couldn't be copied, if any couldn't. */
+  pictureProblem?: string;
 }

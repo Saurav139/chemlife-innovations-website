@@ -4,7 +4,7 @@ import { FALLBACK_INSIGHTS, type InsightItem } from "@/lib/insights";
 import { addImportedItems, addItems, changeItem, getSetting, knownIds, knownUrls, listItems, removeUnusedImages, setSetting, socialAutoPublishSettings } from "./db";
 import type { SocialAutoPublish } from "./social-publishing";
 import { fetchInstagramFeed, fetchLinkedInFeed } from "./feed";
-import { copyImage, fetchFeedText, linkedinVideoUrl } from "./preview";
+import { copyImage, fetchFeedText, linkedinVideoUrl, previewLink } from "./preview";
 import { fetchInstagramPosts, fetchWordPressPosts, fetchYouTubeUploads, renewInstagramToken } from "./sources";
 import { articleSummary, cleanTitle, instagramEmbedUrl, instagramPostId, instagramReelCode, isFromArticle, linkedinActivityId, normalizeUrl } from "./text";
 import type { ItemChanges, Source, SourceItem, SourceState, SyncResult } from "./types";
@@ -70,17 +70,26 @@ async function importFrom(source: Source, fetchItems: () => Promise<SourceItem[]
       return true;
     });
     if (source === "instagram") await addMissingInstagramPlayers(items.filter((item) => item.videoUrl && !fresh.includes(item)));
-    if (await addMissingPictures(source, items.filter((item) => !fresh.includes(item)))) refreshInsightsPage();
-    // The source's picture address expires, so keep a copy; without one the card shows a stock photo. A few at a time.
+    let gained = await addMissingPictures(source, items.filter((item) => !fresh.includes(item)));
+    if (source === "instagram" || source === "linkedin") gained = (await addPicturesFromPosts(source)) || gained;
+    if (gained) refreshInsightsPage();
+    // The source's picture address expires, so keep a copy; without one the card has no picture. A few at a time.
     const withPicture = fresh.filter((item) => item.copyImage && item.imageUrl);
+    const failures: string[] = [];
     for (let i = 0; i < withPicture.length; i += 4) {
       await Promise.all(
         withPicture.slice(i, i + 4).map(async (item) => {
-          item.imageId = await copyImage(item.imageUrl!).catch(() => undefined);
+          item.imageId = await copyImage(item.imageUrl!).catch((error: unknown) => {
+            failures.push(error instanceof Error ? error.message : String(error));
+            return undefined;
+          });
           item.imageUrl = undefined;
         })
       );
     }
+    const pictureProblem = failures.length
+      ? `${failures.length === 1 ? "A new post's picture" : `${failures.length} new posts' pictures`} couldn't be copied (${failures[0]}). The inbox tries again from ${failures.length === 1 ? "the post's" : "each post's"} own page.`
+      : undefined;
     // A LinkedIn feed doesn't say which posts are videos; their pages do. A few at a time.
     if (source === "linkedin") {
       const unchecked = fresh.filter((item) => !item.videoUrl && item.url);
@@ -93,7 +102,7 @@ async function importFrom(source: Source, fetchItems: () => Promise<SourceItem[]
     const approveNow = firstTimeApproved ? !(await getSetting(firstTimeApproved)) : false;
     const imported = await addImportedItems(source, fresh, approveNow ? "approved" : "pending");
     if (approveNow) await setSetting(firstTimeApproved!, new Date().toISOString());
-    return { source, ...imported };
+    return { source, ...imported, ...(pictureProblem ? { pictureProblem } : {}) };
   } catch (error) {
     return { source, added: 0, approved: false, error: error instanceof Error ? error.message : String(error) };
   }
@@ -201,6 +210,43 @@ async function addMissingPictures(source: Source, listed: SourceItem[]): Promise
   return shown;
 }
 
+const PICTURE_LOOKUPS = "picture_lookups";
+const LOOKUP_EVERY = 6 * 60 * 60 * 1000;
+const LOOKUP_TRIES = 5;
+
+/** Posts in the inbox that still have no picture, once their channel no longer offers one (a feed lists only its
+ *  newest posts, and its picture addresses expire), get it from the post's own page, as a pasted link would. Each post
+ *  is tried at most every 6 hours and 5 times in all, since some posts (text-only LinkedIn posts) have none. A few per
+ *  check. Returns whether a post on the Insights page gained its picture. */
+async function addPicturesFromPosts(source: "instagram" | "linkedin"): Promise<boolean> {
+  const isPost = (url: string) => (source === "instagram" ? instagramPostId(url) : linkedinActivityId(url)) !== null;
+  const missing = (await listItems()).filter((saved) => saved.source === source && !saved.image && saved.url && isPost(saved.url));
+  const lookups = JSON.parse((await getSetting(PICTURE_LOOKUPS)) ?? "{}") as Record<string, { tries: number; at: number }>;
+  const now = Date.now();
+  const due = missing.filter((saved) => {
+    const tried = lookups[`${source}:${saved.id}`];
+    return !tried || (tried.tries < LOOKUP_TRIES && now - tried.at >= LOOKUP_EVERY);
+  }).slice(0, 4);
+  if (due.length === 0) return false;
+  let shown = false;
+  await Promise.all(
+    due.map(async (saved) => {
+      const key = `${source}:${saved.id}`;
+      lookups[key] = { tries: (lookups[key]?.tries ?? 0) + 1, at: now };
+      const imageId = await previewLink(saved.url).then((found) => found.item.imageId, () => undefined);
+      if (!imageId) return;
+      await changeItem(saved.id, { imageId });
+      delete lookups[key];
+      if (saved.status === "approved") shown = true;
+    })
+  );
+  // Only posts still without a picture are remembered.
+  const stillMissing = new Set(missing.map((saved) => `${source}:${saved.id}`));
+  for (const key of Object.keys(lookups)) if (key.startsWith(`${source}:`) && !stillMissing.has(key)) delete lookups[key];
+  await setSetting(PICTURE_LOOKUPS, JSON.stringify(lookups));
+  return shown;
+}
+
 const INSTAGRAM_REELS_FOUND = "repaired:instagram-reels";
 
 /** Once, for Instagram posts added before reels got a player (November 2026): a reel is told by its address, or by
@@ -278,11 +324,14 @@ export interface InboxStatus {
 
 export async function inboxStatus(): Promise<InboxStatus> {
   const lastSync = JSON.parse((await getSetting("last_sync")) ?? "null") as InboxStatus["lastSync"];
-  const failed = (source: Source) => lastSync?.results.find((r) => r.source === source)?.error;
+  const result = (source: Source) => lastSync?.results.find((r) => r.source === source);
+  const failed = (source: Source) => result(source)?.error;
   const instagram = JSON.parse((await getSetting("instagram_access")) ?? "null") as InstagramAccess | null;
   const state = (source: Source, ok: SourceState): SourceState => {
     const error = failed(source);
-    return error ? { state: "error", detail: error } : ok;
+    if (error) return { state: "error", detail: error };
+    const pictures = result(source)?.pictureProblem;
+    return pictures ? { ...ok, detail: [ok.detail, pictures].filter(Boolean).join(" ") } : ok;
   };
   return {
     autoPublishSocial: await socialAutoPublishSettings(),
