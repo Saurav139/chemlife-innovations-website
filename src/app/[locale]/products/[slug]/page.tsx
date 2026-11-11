@@ -4,7 +4,7 @@ import { DEFAULT_LOCALE, isLocale } from "@/i18n/config";
 import { getMessages } from "@/i18n/messages";
 import { PRODUCTS, productPath, slugify } from "@/lib/catalog";
 import { pageMetadata } from "@/lib/seo";
-import { jsonLd, productBreadcrumbs } from "@/lib/structuredData";
+import { jsonLd, productBreadcrumbs, productData } from "@/lib/structuredData";
 import ProductView from "./ProductView";
 
 type Params = Promise<{ locale: string; slug: string }>;
@@ -40,9 +40,13 @@ export default async function ProductPage({ params }: { params: Params }) {
   const index = productIndex(slug);
   if (index < 0) notFound();
   const product = PRODUCTS[index];
-  const crumbs = productBreadcrumbs(lang, await getMessages(lang), { name: product.name, path: productPath(product.name) });
+  const messages = await getMessages(lang);
+  const path = productPath(product.name);
+  const crumbs = productBreadcrumbs(lang, messages, { name: product.name, path });
+  const details = productData(lang, messages, { name: product.name, path, category: product.category, image: product.banner }, messages.products.items[index]);
   return <>
     <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(crumbs)} />
+    <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(details)} />
     <ProductView index={index} />
   </>;
 }

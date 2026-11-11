@@ -86,5 +86,32 @@ export function productBreadcrumbs(locale: Locale, messages: Messages, product: 
   };
 }
 
+/**
+ * A product page's product: its name, what it is and who makes it, in the page's language. No price or reviews (the
+ * products are sold through enquiry), so this names the product for search engines rather than earning a shopping result.
+ */
+export function productData(
+  locale: Locale,
+  messages: Messages,
+  product: { name: string; path: string; category: string; image?: string },
+  text: { tagline?: string; about: string },
+) {
+  const categories: Record<string, string> = messages.products.categories;
+  return {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "@id": `${absolute(localizePath(product.path, locale))}#product`,
+    name: product.name,
+    description: text.about,
+    ...(text.tagline ? { slogan: text.tagline } : {}),
+    category: categories[product.category] ?? product.category,
+    ...(product.image ? { image: absolute(product.image) } : {}),
+    url: absolute(localizePath(product.path, locale)),
+    inLanguage: locale,
+    brand: { "@type": "Brand", name: SITE_NAME },
+    manufacturer: { "@id": ORGANIZATION_ID },
+  };
+}
+
 /** The JSON for a <script type="application/ld+json">, with "<" escaped so text can't close the script tag. */
 export const jsonLd = (data: object) => ({ __html: JSON.stringify(data).replace(/</g, "\\u003c") });
