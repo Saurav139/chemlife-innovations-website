@@ -211,3 +211,14 @@ test('a saved post whose picture could not be copied gets it on a later check', 
   assert.deepEqual(waiting.calls.changed, [{ id: 1, imageId: 42 }]);
   assert.equal(waiting.calls.refreshed, 0);
 });
+
+test('a post whose picture never reached the inbox shows the picture kept in the site', () => {
+  const { insightCard } = load('src/lib/insights-store/card.ts', { './text': text });
+  const card = (url, image = '') => insightCard({
+    kind: 'Blog', title: 't', summary: 's', meta: 'Instagram post', publishedAt: '2026-10-27T10:00:00.000Z', url, image, youtubeId: '', content: '', featured: false,
+  }).imageUrl;
+  assert.equal(card('https://www.instagram.com/p/DfALBAYMboD'), '/images/insights/instagram/DfALBAYMboD.jpg');
+  assert.equal(card('https://www.instagram.com/p/DfALBAYMboD/', '/api/insights/media/3.jpg'), '/api/insights/media/3.jpg');
+  assert.equal(card('https://www.instagram.com/p/SomethingElse'), undefined);
+  assert.equal(card(''), undefined);
+});

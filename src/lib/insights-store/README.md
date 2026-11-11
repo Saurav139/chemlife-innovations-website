@@ -80,3 +80,5 @@ The staging and live sites should each have their own database, so testing on st
   database isn't set up or can't be reached.
 - Instagram and LinkedIn picture addresses expire, so their pictures are copied into the database and served from
   `/api/insights/media/<id>.<ext>`.
+- A post whose picture never got copied before its feed stopped listing it can't get one from a later check. Save the
+  picture as `public/images/insights/instagram/<shortcode>.jpg` and add the shortcode in `card.ts`.
