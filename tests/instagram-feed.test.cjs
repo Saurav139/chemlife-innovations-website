@@ -100,14 +100,14 @@ test.afterEach(() => {
   delete globalThis.insightsSync;
 });
 
-function syncHarness({ existing = [], ids = [], entries, error, autoPublish = false, saved = [], failImages = false } = {}) {
-  const calls = { api: 0, renew: 0, feed: 0, images: 0, imported: [], refreshed: 0, changed: [] };
+function syncHarness({ existing = [], ids = [], entries, error, autoPublish = false, saved = [], failImages = false, postPictures = {}, settings = {} } = {}) {
+  const calls = { api: 0, renew: 0, feed: 0, images: 0, imported: [], refreshed: 0, changed: [], lookedUp: [], settings: { ...settings } };
   const sync = load('src/lib/insights-store/sync.ts', {
     'next/cache': { revalidatePath: () => { calls.refreshed++; } },
     '@/lib/insights': { FALLBACK_INSIGHTS: { blogs: [], podcasts: [], videos: [] } },
     './db': {
-      getSetting: async key => ['started', 'repaired:blog-text', 'repaired:linkedin-videos', 'repaired:instagram-reels'].includes(key) ? 'true' : null,
-      setSetting: async () => {}, removeUnusedImages: async () => {},
+      getSetting: async key => ['started', 'repaired:blog-text', 'repaired:linkedin-videos', 'repaired:instagram-reels'].includes(key) ? 'true' : (calls.settings[key] ?? null),
+      setSetting: async (key, value) => { calls.settings[key] = value; }, removeUnusedImages: async () => {},
       knownIds: async () => new Set(ids), knownUrls: async () => existing,
       addImportedItems: async (source, items) => {
         calls.imported.push(...items);
@@ -122,7 +122,11 @@ function syncHarness({ existing = [], ids = [], entries, error, autoPublish = fa
       if (entries) return entries;
       return feed.fetchInstagramFeed(url, read);
     } },
-    './preview': { fetchFeedText: async () => rss, copyImage: async () => { calls.images++; if (failImages) throw new Error('expired'); return 42; } },
+    './preview': {
+      fetchFeedText: async () => rss,
+      copyImage: async () => { calls.images++; if (failImages) throw new Error('The page answered 403'); return 42; },
+      previewLink: async url => { calls.lookedUp.push(url); return { item: { imageId: postPictures[url] }, existing: null, notes: [] }; },
+    },
     './sources': {
       fetchYouTubeUploads: async () => [], fetchWordPressPosts: async () => [],
       fetchInstagramPosts: async () => { calls.api++; return entries ?? []; },
@@ -221,4 +225,44 @@ test('a post whose picture never reached the inbox shows the picture kept in the
   assert.equal(card('https://www.instagram.com/p/DfALBAYMboD/', '/api/insights/media/3.jpg'), '/api/insights/media/3.jpg');
   assert.equal(card('https://www.instagram.com/p/SomethingElse'), undefined);
   assert.equal(card(''), undefined);
+});
+
+test("a post the feed no longer lists gets its picture from the post's own page, a few tries at most", async () => {
+  process.env.INSTAGRAM_FEED_URL = 'https://feeds.example.com/instagram';
+  const row = (id, code, status = 'approved') => ({ id, source: 'instagram', externalId: `https://www.instagram.com/p/${code}`, url: `https://www.instagram.com/p/${code}`, image: '', status });
+  const saved = [row(7, 'Dropped'), row(8, 'NoneAnywhere', 'pending'), { ...row(9, 'Pictured'), image: '/api/insights/media/9.jpg' }];
+  const postPictures = { 'https://www.instagram.com/p/Dropped': 77 };
+
+  const first = syncHarness({ entries: [], saved, postPictures });
+  await first.sync.syncInbox();
+  assert.deepEqual(first.calls.lookedUp, ['https://www.instagram.com/p/Dropped', 'https://www.instagram.com/p/NoneAnywhere']);
+  assert.deepEqual(first.calls.changed, [{ id: 7, imageId: 77 }]);
+  assert.equal(first.calls.refreshed, 1);
+  // Only the post that's still missing its picture is remembered.
+  const remembered = JSON.parse(first.calls.settings.picture_lookups);
+  assert.deepEqual(Object.keys(remembered), ['instagram:8']);
+
+  // Not again within 6 hours; again after that; never after 5 tries.
+  const soon = syncHarness({ entries: [], saved: [saved[1]], settings: first.calls.settings });
+  await soon.sync.syncInbox();
+  assert.deepEqual(soon.calls.lookedUp, []);
+  const later = syncHarness({ entries: [], saved: [saved[1]], settings: { picture_lookups: JSON.stringify({ 'instagram:8': { tries: 1, at: Date.now() - 7 * 3600e3 } }) } });
+  await later.sync.syncInbox();
+  assert.equal(later.calls.lookedUp.length, 1);
+  const givenUp = syncHarness({ entries: [], saved: [saved[1]], settings: { picture_lookups: JSON.stringify({ 'instagram:8': { tries: 5, at: 0 } }) } });
+  await givenUp.sync.syncInbox();
+  assert.deepEqual(givenUp.calls.lookedUp, []);
+});
+
+test("why a new post's picture couldn't be copied shows under the channel", async () => {
+  process.env.INSTAGRAM_FEED_URL = 'https://feeds.example.com/instagram';
+  const { sync, calls } = syncHarness({ failImages: true });
+  const result = (await sync.syncInbox()).find(r => r.source === 'instagram');
+  assert.equal(result.added, 1);
+  assert.equal(calls.imported[0].imageId, undefined);
+  assert.match(result.pictureProblem, /couldn't be copied \(The page answered 403\)/);
+  calls.settings.last_sync = JSON.stringify({ at: new Date().toISOString(), results: [result] });
+  const status = await syncHarness({ settings: calls.settings }).sync.inboxStatus();
+  assert.equal(status.sources.instagram.state, 'connected');
+  assert.match(status.sources.instagram.detail, /token is needed\. A new post's picture couldn't be copied \(The page answered 403\)\. The inbox tries again/);
 });

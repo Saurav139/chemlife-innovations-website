@@ -918,6 +918,11 @@ function Post({ item, featuredAs, wouldFeature, busy, highlight, selected, isNew
             <span>{item.kind}</span>
             <span aria-hidden="true">·</span>
             <span>{day(item.publishedAt)}</span>
+            {item.kind === "Blog" && !item.youtubeId && !insightCard(item).imageUrl && (
+              <span className="rounded-full bg-red-50 text-red-700 px-2 py-0.5" title="The card shows no picture. The inbox keeps trying the post's own page; to add one now, choose Edit, then Add a picture.">
+                No picture
+              </span>
+            )}
             {featuredAs === "chosen" && <span className="rounded-full bg-amber-100 text-amber-800 px-2 py-0.5">★ Featured</span>}
             {featuredAs === "newest" && (
               <span className="rounded-full bg-amber-50 border border-amber-200 text-amber-800 px-2 py-0.5" title="Featured because it's the newest. Choose a post with Feature to change it.">

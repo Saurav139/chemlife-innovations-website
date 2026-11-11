@@ -74,11 +74,13 @@ The staging and live sites should each have their own database, so testing on st
 - `sync.ts`: checking for new posts, and starting the inbox from the built-in list (`FALLBACK_INSIGHTS` in
   `src/lib/insights.ts`). A post whose picture couldn't be copied when it came in gets it on a later check,
   while its channel still lists it. Once per database it also brings blog posts imported before October 2026 up to today's
-  summaries and titles.
+  summaries and titles. A post that still has no picture once its channel stops listing it gets one from the post's
+  own page (as a pasted link would), tried at most every 6 hours and 5 times in all. Why a new post's picture couldn't
+  be copied shows under the channel, and the inbox marks posts whose card has no picture.
 - `card.ts`: how a post becomes an Insights card, for the page and for the inbox's preview (`src/components/InsightCard.tsx`).
 - `src/lib/insights.ts` `getInsights()`: the approved posts once the inbox has started; the built-in list if the
   database isn't set up or can't be reached.
 - Instagram and LinkedIn picture addresses expire, so their pictures are copied into the database and served from
   `/api/insights/media/<id>.<ext>`.
-- A post whose picture never got copied before its feed stopped listing it can't get one from a later check. Save the
-  picture as `public/images/insights/instagram/<shortcode>.jpg` and add the shortcode in `card.ts`.
+- If a post's own page doesn't give its picture either, add one in the inbox (Edit, then Add a picture), or save it as
+  `public/images/insights/instagram/<shortcode>.jpg` and add the shortcode in `card.ts`.
