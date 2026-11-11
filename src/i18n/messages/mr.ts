@@ -278,7 +278,7 @@ const mr: Messages = {
 
     testimonials: {
       kicker: "अभिप्राय",
-      title: "आमचे भागीदार काय म्हणतात?",
+      title: "आमचे भागीदार काय म्हणतात",
       readMore: "अधिक वाचा",
       showLess: "कमी दाखवा",
     },

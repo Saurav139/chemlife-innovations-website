@@ -275,7 +275,7 @@ const kn: Messages = {
 
     testimonials: {
       kicker: "ಪ್ರಶಂಸಾಪತ್ರಗಳು",
-      title: "ನಮ್ಮ ಪಾಲುದಾರರು ಏನು ಹೇಳುತ್ತಾರೆ?",
+      title: "ನಮ್ಮ ಪಾಲುದಾರರು ಏನು ಹೇಳುತ್ತಾರೆ",
       readMore: "ಇನ್ನಷ್ಟು ಓದಿ",
       showLess: "ಕಡಿಮೆ ತೋರಿಸಿ",
     },

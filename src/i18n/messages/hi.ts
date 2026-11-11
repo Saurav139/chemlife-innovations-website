@@ -275,7 +275,7 @@ const hi: Messages = {
 
     testimonials: {
       kicker: "प्रशंसापत्र",
-      title: "हमारे साझेदार क्या कहते हैं?",
+      title: "हमारे साझेदार क्या कहते हैं",
       readMore: "और पढ़ें",
       showLess: "कम दिखाएँ",
     },

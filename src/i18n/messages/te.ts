@@ -278,7 +278,7 @@ const te: Messages = {
 
     testimonials: {
       kicker: "అభిప్రాయాలు",
-      title: "మా భాగస్వాములు ఏమంటున్నారు?",
+      title: "మా భాగస్వాములు ఏమంటున్నారు",
       readMore: "ఇంకా చదవండి",
       showLess: "తక్కువ చూపించు",
     },

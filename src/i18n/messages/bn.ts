@@ -278,7 +278,7 @@ const bn: Messages = {
 
     testimonials: {
       kicker: "মতামত",
-      title: "আমাদের অংশীদাররা কী বলেন?",
+      title: "আমাদের অংশীদাররা কী বলেন",
       readMore: "আরও পড়ুন",
       showLess: "কম দেখান",
     },
