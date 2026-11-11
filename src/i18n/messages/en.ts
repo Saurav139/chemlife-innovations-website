@@ -2,6 +2,8 @@
 // kn.ts and hi.ts must have exactly the same shape; the type check reports anything missing.
 // Product names, ANBioT, people's names and addresses stay in English in every language.
 
+import { certifications } from "./certifications";
+
 const en = {
   meta: {
     siteTitle: "Natural Functional Feed Additives",
@@ -218,6 +220,8 @@ const en = {
         },
       ],
     },
+
+    certifications,
 
     awards: {
       kicker: "Honors",

@@ -235,6 +235,19 @@ export const Images = {
     naarm: "/images/awards/naarm.png",
   },
 
+  /** Certificates: the marks cut from each certificate, and a picture of the certificate itself */
+  certifications: {
+    /** Jamiat Ulama-i-Hind Halal Trust seal, from the Halal certificate */
+    juhtHalal: "/images/certifications/juht-halal.png",
+    swissCert: "/images/certifications/swisscert.png",
+    eiac: "/images/certifications/eiac.png",
+    gacHalal: "/images/certifications/gac-halal.png",
+    /** Wordmark only: the crescent beside it is cut off by the page edge on the scan */
+    saudiHalalCenter: "/images/certifications/saudi-halal-center.png",
+    famiQsCertificate: "/images/certifications/fami-qs-certificate.webp",
+    halalCertificate: "/images/certifications/halal-certificate.webp",
+  },
+
   /** Testimonial company logos */
   testimonials: {
     huve: "/images/testimonials/huve_logo.png",

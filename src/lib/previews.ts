@@ -5,6 +5,12 @@ import { isLiveHost } from "@/lib/seo";
 // the site instead. Never shown on the live site.
 export const PREVIEWS = [
   {
+    slug: "certificates",
+    href: "/previews/certificates",
+    title: "Homepage: Certificates section",
+    description: "A new section for the homepage showing the FAMI-QS and Halal certificates: each one's badge, what it covers, who issued it, its number and validity, and the certificate itself to open and read.",
+  },
+  {
     slug: "research-v2",
     href: "/previews/research-v2",
     title: "Research pages: improved version",

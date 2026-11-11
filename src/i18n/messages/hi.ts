@@ -2,6 +2,7 @@
 // Product names, ANBioT, people's names, addresses and units (g, kg, MT, ml) stay as in English.
 
 import type { Messages } from "./en";
+import { certifications } from "./certifications";
 
 const hi: Messages = {
   meta: {
@@ -216,6 +217,8 @@ const hi: Messages = {
         },
       ],
     },
+
+    certifications,
 
     awards: {
       kicker: "सम्मान",
