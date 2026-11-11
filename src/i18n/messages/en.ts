@@ -167,7 +167,7 @@ const en = {
       seeResearch: "See our research",
       meetLeadership: "Meet the leadership",
       requestDossier: "Request a technical dossier",
-      serveTitle: "What we serve",
+      serveTitle: "What We Serve",
       cards: [
         {
           title: "Mono-Gastric",
@@ -277,7 +277,7 @@ const en = {
 
     testimonials: {
       kicker: "Testimonials",
-      title: "What Our Partners Say?",
+      title: "What Our Partners Say",
       readMore: "Read more",
       showLess: "Show less",
     },
