@@ -319,7 +319,7 @@ const MAX_WORDS = 8;
 const MAX_RESULTS = 20;
 
 // The order results are listed in, by kind.
-const GROUP: Record<SearchCategory, number> = { Product: 0, Research: 1, Page: 2, Article: 3, Video: 3, Podcast: 3 };
+const GROUP: Record<SearchCategory, number> = { Product: 0, Research: 1, Article: 2, Video: 2, Podcast: 2, Page: 3 };
 // A result scoring below this share of the best one only mentions the search in passing, and isn't listed.
 const FLOOR = 0.25;
 // A result goes above a later kind's best match only if it scores at least this share of it.
@@ -418,7 +418,7 @@ export function searchSite(index: SearchIndex, query: string): SearchOutcome {
   // A passing mention is dropped when there are far better matches.
   const floor = Math.max(0, ...hits.map((result) => result.score)) * FLOOR;
   const listed = hits.filter((result) => result.score >= floor);
-  // Products first, then research, then pages, then articles, videos and podcasts; the best match first within each.
+  // Products first, then research, then articles, videos and podcasts, then pages; the best match first within each.
   // A result is only put above a later kind if it is at least a third as good as that kind's best match; one that isn't
   // only mentions the search in passing, and is left out ("an biot" lists ANBioT, not a product that mentions "bio").
   // The closest results to a search nothing fully matches are listed closest first.
