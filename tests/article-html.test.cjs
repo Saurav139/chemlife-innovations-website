@@ -17,7 +17,8 @@ function load(file, dependencies = {}) {
   return module.exports;
 }
 const text = load('src/lib/insights-store/text.ts');
-const { sanitizeArticleHtml, isUnedited } = load('src/lib/article-html.ts', { './insights-store/text': text });
+const { sanitizeArticleHtml } = load('src/lib/article-html.ts', { './insights-store/text': text });
+const { isUnedited } = text;
 const UPLOADS = 'https://chemlifeinnovations.wordpress.com/wp-content/uploads/2025/09';
 const clean = (html, skip) => sanitizeArticleHtml(html, skip).html;
 
@@ -61,7 +62,7 @@ test('empty paragraphs are dropped', () => {
   assert.equal(clean('<p>A</p><p>&nbsp;</p><p><br></p><p>B</p>'), '<p>A</p><p>B</p>');
 });
 
-test('WordPress formatting is used unless the saved text was rewritten', () => {
+test('saved text counts as rewritten when it is neither WordPress\'s nor the built-in summary', () => {
   const wordpress = 'Feed hygiene matters.\n\nKeep bins dry.';
   assert.equal(isUnedited('Feed hygiene matters.\nKeep bins dry.', wordpress), true);
   assert.equal(isUnedited(undefined, wordpress), true);

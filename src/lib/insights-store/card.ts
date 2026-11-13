@@ -2,7 +2,7 @@ import type { InsightItem } from "@/lib/insights";
 import { displayDate } from "./text";
 import type { InboxItem } from "./types";
 
-type CardFields = Pick<InboxItem, "kind" | "title" | "summary" | "meta" | "publishedAt" | "url" | "image" | "youtubeId" | "content" | "featured"> & Partial<Pick<InboxItem, "videoUrl">>;
+type CardFields = Pick<InboxItem, "kind" | "title" | "summary" | "meta" | "publishedAt" | "url" | "image" | "youtubeId" | "content" | "featured"> & Partial<Pick<InboxItem, "videoUrl" | "contentEdited">>;
 
 /** How a post appears on the Insights page. Shared by the page's data and the inbox's live preview, so the preview
  *  shows exactly what the page will. */
@@ -18,6 +18,7 @@ export function insightCard(item: CardFields): InsightItem {
     youtubeId: item.youtubeId || undefined,
     videoUrl: item.videoUrl || undefined,
     content: item.content || undefined,
+    contentEdited: item.contentEdited ?? undefined,
     featured: item.featured || undefined,
   };
 }

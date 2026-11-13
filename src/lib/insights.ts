@@ -16,6 +16,9 @@ export interface InsightItem {
   /** A LinkedIn video post's player: LinkedIn's embed address. The card shows its picture with a play button. */
   videoUrl?: string;
   content?: string;
+  /** Whether the text was rewritten in the Insights inbox (then an article's page shows it, not WordPress's
+   *  version). Left out when that isn't recorded: the built-in list, or a post the inbox hasn't checked yet. */
+  contentEdited?: boolean;
   /** Chosen in the Insights inbox to be the featured post of its type (otherwise the newest is). */
   featured?: boolean;
 }

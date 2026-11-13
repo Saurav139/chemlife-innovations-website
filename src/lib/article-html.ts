@@ -127,12 +127,3 @@ export function sanitizeArticleHtml(source: string, skipImage?: string): Article
     startsWithImage,
   };
 }
-
-const letters = (text: string) => text.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, "");
-
-/** Whether the text saved for an article is still the importer's: the article's own text, or the built-in list's
- *  summary of it. Text rewritten in the Insights inbox is shown as written instead of WordPress's version. */
-export function isUnedited(saved: string | undefined, wordpressText: string, builtIn?: string): boolean {
-  if (!saved?.trim()) return true;
-  return letters(saved) === letters(wordpressText) || (builtIn !== undefined && saved.trim() === builtIn.trim());
-}
