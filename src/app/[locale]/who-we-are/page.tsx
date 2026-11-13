@@ -160,7 +160,7 @@ export default function WhoWeArePage() {
 
       <main id="main" tabIndex={-1} className="bg-white min-h-screen text-brand-navy">
         {/* Cover: the heading and lead sentence, with the contents on the right. */}
-        <section className={`relative overflow-hidden ${navy} text-white pt-28 md:pt-36 lg:pt-40 pb-16 md:pb-24`}>
+        <section className={`relative overflow-hidden ${navy} text-white pt-30 md:pt-40 lg:pt-48 pb-16 md:pb-24`}>
           <div aria-hidden="true" className={`absolute inset-0 ${gridLines} [mask-image:radial-gradient(ellipse_80%_90%_at_100%_0%,black,transparent)]`} />
           <div aria-hidden="true" className="absolute -right-32 -top-32 w-[38rem] h-[38rem] rounded-full bg-[radial-gradient(circle,rgba(26,219,195,0.18),transparent_65%)]" />
           <div className={`relative ${wrap} grid lg:grid-cols-12 gap-12 lg:gap-16 items-end`}>

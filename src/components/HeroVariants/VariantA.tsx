@@ -195,7 +195,7 @@ export default function HeroVariantA() {
       {/* The headline and actions; the headline dots sit at their right. */}
       <div className="relative z-30 flex-1 flex">
       {/* Not held to the 1200px column: the headline sits a fixed margin in from the screen's left edge. */}
-      <div className={`px-6 md:px-12 lg:px-16 xl:px-20 w-full flex flex-col justify-start md:justify-center pt-24 pb-6 md:pt-32 md:pb-8 lg:pt-40 short:pt-32 short:pb-4 short-phone:pt-24 short-phone:pb-2`}>
+      <div className={`px-6 md:px-12 lg:px-16 xl:px-20 w-full flex flex-col justify-start md:justify-center pt-24 pb-6 md:pt-32 md:pb-8 lg:pt-40 short:pt-32 lg:short:pt-40 short:pb-4 short-phone:pt-24 short-phone:pb-2`}>
         {/* w-full: without it, this box has no explicit width, so its auto side margins (for centering)
             stop it from stretching and it shrinks to fit whichever tagline is showing — moving and
             resizing the buttons below it from one slide to the next. */}

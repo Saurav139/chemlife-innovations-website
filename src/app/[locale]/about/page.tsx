@@ -25,7 +25,7 @@ export default function AboutPage() {
     <VariantProvider>
       <Header />
 
-      <main id="main" tabIndex={-1} className="overflow-x-clip bg-brand-navy min-h-screen pt-18 md:pt-20 lg:pt-24">
+      <main id="main" tabIndex={-1} className="overflow-x-clip bg-brand-navy min-h-screen pt-20 md:pt-24 lg:pt-32">
         {/* A plain section, not a fade-in: it's the first screen, so it shows without waiting for the page's JavaScript. */}
         <section className="py-10 md:py-16 lg:py-20 text-white relative overflow-hidden flex items-center">
           <div className="absolute inset-0 z-0">
@@ -58,7 +58,7 @@ export default function AboutPage() {
         </section>
 
         {/* Our Journey */}
-        <SectionWrapper id="our-journey" className="scroll-mt-18 md:scroll-mt-20 lg:scroll-mt-24 py-8 md:py-12 lg:py-16 bg-white text-brand-navy">
+        <SectionWrapper id="our-journey" className="scroll-mt-20 md:scroll-mt-24 lg:scroll-mt-32 py-8 md:py-12 lg:py-16 bg-white text-brand-navy">
           <div className="max-w-[1200px] mx-auto px-6 grid md:grid-cols-2 gap-6 md:gap-8 lg:gap-12 items-center">
             {/* Founder/Team Image Section with Founders Tag */}
             <motion.div
@@ -114,7 +114,7 @@ export default function AboutPage() {
         </SectionWrapper>
 
         {/* Our purpose brings the Vision and Mission together. */}
-        <SectionWrapper id="vision-mission" className="scroll-mt-18 md:scroll-mt-20 lg:scroll-mt-24 py-12 md:py-16 lg:py-20 bg-slate-50 border-t border-brand-navy/10">
+        <SectionWrapper id="vision-mission" className="scroll-mt-20 md:scroll-mt-24 lg:scroll-mt-32 py-12 md:py-16 lg:py-20 bg-slate-50 border-t border-brand-navy/10">
           <div className={`max-w-[1200px] mx-auto px-6 ${visionStyles.layout}`}>
             <h2 className={`${visionStyles.sectionHeading} font-heading text-3xl md:text-4xl lg:text-5xl text-brand-navy font-bold leading-tight`}>{t.purposeTitle}</h2>
             <figure className={visionStyles.photo}>
@@ -229,7 +229,7 @@ export default function AboutPage() {
         </SectionWrapper>
 
         {/* Core Values Section (Brand Navy BG with Honeycomb Hexagons) */}
-        <SectionWrapper id="core-values" className="scroll-mt-18 md:scroll-mt-20 lg:scroll-mt-24 py-8 md:py-12 lg:py-16 bg-brand-navy text-white">
+        <SectionWrapper id="core-values" className="scroll-mt-20 md:scroll-mt-24 lg:scroll-mt-32 py-8 md:py-12 lg:py-16 bg-brand-navy text-white">
           <div className="max-w-[1200px] mx-auto px-6">
             <div className="text-center mb-6 md:mb-8">
               <span className="text-teal-aa-light text-sm font-semibold tracking-widest uppercase block mb-2">{t.valuesKicker}</span>
