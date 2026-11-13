@@ -48,14 +48,17 @@ export function revealElement(id: string, delay = 350) {
 
 /**
  * Goes to a search result. A result on the page that's already open only changes the #hash, which the page hears
- * through useHashTarget; the old hash is cleared first, so picking the same result twice works too.
+ * through useHashTarget (and the browser scrolls to). Picking the result the address already points at changes
+ * nothing, so the page is told and scrolled by hand.
  */
 export function goToResult(href: string, push: (href: string) => void) {
   const url = new URL(href, window.location.origin);
-  if (url.hash && url.pathname === window.location.pathname) {
-    window.history.replaceState(window.history.state, "", url.pathname + url.search);
+  if (!url.hash || url.pathname !== window.location.pathname) {
+    push(href);
+  } else if (url.hash !== window.location.hash) {
     window.location.hash = url.hash;
   } else {
-    push(href);
+    window.dispatchEvent(new HashChangeEvent("hashchange"));
+    document.getElementById(decodeURIComponent(url.hash.slice(1)))?.scrollIntoView();
   }
 }

@@ -3,6 +3,7 @@ import { englishOnly } from "@/i18n/server";
 import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import SiteSearch from "@/components/SiteSearch";
 import { VariantProvider } from "@/context/VariantContext";
 import { pageMetadata } from "@/lib/seo";
 
@@ -185,6 +186,7 @@ export default async function TermsPage({ params }: { params: Promise<{ locale: 
       </main>
 
       <Footer />
+      <SiteSearch />
     </VariantProvider>
   );
 }

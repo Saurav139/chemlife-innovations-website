@@ -160,6 +160,8 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
       return;
     }
     const index = gridItemsFor("All", "").findIndex((entry) => entry.title === item.title);
+    // An article left open in the reader would cover the video or podcast.
+    setActiveArticle(null);
     if (index >= 0) setVisibleCount(Math.max(PAGE_SIZE, Math.ceil((index + 1) / PAGE_SIZE) * PAGE_SIZE));
     revealElement(target, 500);
   });
