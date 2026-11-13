@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { useHref, useT } from "@/i18n/LocaleProvider";
 import { INTERNSHIP_ROLES, PRODUCTS, RESEARCH_TOPICS, insightAnchor, productPath, researchAnchor, roleAnchor } from "@/lib/catalog";
+import { articlePath } from "@/lib/articles";
 import { goToResult } from "@/lib/deepLink";
 import type { Insights } from "@/lib/insights";
 
@@ -155,7 +156,7 @@ export default function SiteSearch({ hideButtonOnPhones = false }: { hideButtonO
             title: item.title,
             category: (item.type === "Blog" ? "Article" : item.type) as Category,
             description: item.description,
-            link: `/insights#${insightAnchor(item.title)}`,
+            link: articlePath(item) ?? `/insights#${insightAnchor(item.title)}`,
             keywords: `${item.type} ${item.date}`,
           }))
       : [];

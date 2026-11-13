@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SectionWrapper from "@/components/SectionWrapper";
@@ -10,6 +12,7 @@ import { VariantProvider } from "@/context/VariantContext";
 import SiteSearch from "@/components/SiteSearch";
 import InsightCardContent, { INSIGHT_CARD_CLASS, InsightTagLabel, VideoPlayBadge, insightTag, isOptimizable, isSocialPost, originalLink, readLabel, readerPlayer } from "@/components/InsightCard";
 import NaturalInsightImage from "@/components/NaturalInsightImage";
+import { articlePath } from "@/lib/articles";
 import { Images } from "@/lib/assets";
 import type { Insights, InsightItem } from "@/lib/insights";
 import { playOnPage, youtubeWatchUrl } from "@/lib/youtube";
@@ -41,6 +44,7 @@ function ButtonLabel({ full, short }: { full: string; short: string }) {
 }
 
 export default function InsightsView({ blogs, podcasts, videos }: Insights) {
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedFilter, setSelectedFilter] = useState("All");
   const [activeVideoId, setActiveVideoId] = useState<string | null>(null);
@@ -106,6 +110,8 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
   // The featured written post is a WordPress article: LinkedIn and Instagram posts stay in the grid.
   const articles = sortedBlogs.filter((item) => insightTag(item) === "Blog");
   const featuredBlog = articles.find((item) => item.featured) ?? articles[0];
+  // A WordPress article has its own page on this site (/insights/<slug>); anything else opens in the reader.
+  const featuredBlogPath = featuredBlog ? articlePath(featuredBlog) : null;
   const featuredPodcast = sortedPodcasts.find((item) => item.featured) ?? sortedPodcasts[0];
   const featuredVideo = sortedVideos.find((item) => item.featured) ?? sortedVideos[0];
 
@@ -156,7 +162,9 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
     setSelectedFilter("All");
     setSearchQuery("");
     if (item.type === "Blog") {
-      setActiveArticle(item);
+      const path = articlePath(item);
+      if (path) router.replace(path);
+      else setActiveArticle(item);
       return;
     }
     const index = gridItemsFor("All", "").findIndex((entry) => entry.title === item.title);
@@ -218,7 +226,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                 titles, images and buttons line up across the three cards whatever their text length.
                 The two buttons in each card are always the same width: half the card on phones and desktop, 192px
                 on tablets. On 1024–1279px screens, where the cards are narrowest, their text is 12px so the longest
-                label ("Read on WordPress") still fits. */}
+                label ("View on Instagram") still fits. A WordPress article has one button, to its page on this site. */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 md:gap-8 lg:gap-x-6 lg:gap-y-0">
               
               {/* Featured Blog */}
@@ -228,7 +236,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                   data-analytics-item={featuredBlog.title}
                   data-analytics-click={readLabel(featuredBlog)}
                   className="scroll-mt-40 bg-gray-55 border border-gray-200 rounded-2xl md:rounded-3xl p-5 md:p-6 lg:p-5 xl:p-6 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between sm:max-lg:grid sm:max-lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] sm:max-lg:grid-rows-[auto_1fr_auto] sm:max-lg:gap-x-6 lg:grid lg:grid-rows-subgrid lg:row-span-4 lg:gap-y-0 group cursor-pointer"
-                  onClick={() => setActiveArticle(featuredBlog)}
+                  onClick={() => (featuredBlogPath ? router.push(featuredBlogPath) : setActiveArticle(featuredBlog))}
                 >
                   <div className="sm:contents">
                     <div className="flex items-center gap-2 mb-3 sm:max-lg:col-start-2 sm:max-lg:row-start-1">
@@ -264,6 +272,15 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                   </div>
 
                   <div className="grid grid-cols-2 sm:grid-cols-[repeat(2,minmax(0,12rem))] lg:grid-cols-2 lg:row-start-4 items-center gap-2 sm:gap-4 lg:gap-2 pt-4 border-t border-gray-100 sm:max-lg:col-start-2 sm:max-lg:row-start-3 sm:max-lg:self-end">
+                    {featuredBlogPath ? (
+                    <Link
+                      href={featuredBlogPath}
+                      onClick={(e) => e.stopPropagation()}
+                      className="col-span-2 sm:col-span-1 lg:col-span-2 inline-flex items-center justify-center min-h-11 text-center whitespace-nowrap px-2 py-2.5 rounded-full text-[13px] sm:text-sm lg:text-xs xl:text-sm leading-5 bg-teal-aa hover:bg-teal-700 text-white font-bold shadow-sm hover:shadow transition-all duration-300"
+                    >
+                      {readLabel(featuredBlog)}
+                    </Link>
+                    ) : (<>
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
@@ -282,6 +299,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                     >
                       <ButtonLabel full={originalLink(featuredBlog.linkUrl).full} short={originalLink(featuredBlog.linkUrl).short} />
                     </a>
+                    </>)}
                   </div>
                 </div>
               )}
