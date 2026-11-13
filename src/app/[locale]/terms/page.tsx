@@ -47,7 +47,7 @@ export default async function TermsPage({ params }: { params: Promise<{ locale: 
             <h2 className={h2}>Who we are</h2>
             <p>
               The website is run by ChemLife Innovations Pvt Ltd (&ldquo;ChemLife&rdquo;, &ldquo;we&rdquo;, &ldquo;us&rdquo;),
-              Plot no 18, KIADB Industrial Area, 3rd Phase, Obadenahalli, Doddaballapura, Greater Bengaluru 561 203,
+              Plot no 18, KIADB Industrial Area, 3rd Phase, Obadenahalli, Doddaballapura, <span className="whitespace-nowrap">Rural Bengaluru - 561 203</span>,
               Karnataka, India. You can reach us at <a href={`mailto:${EMAIL}`} className={link}>{EMAIL}</a> or
               +91 95358 62570.
             </p>
