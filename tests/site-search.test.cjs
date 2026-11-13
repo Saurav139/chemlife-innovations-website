@@ -152,10 +152,10 @@ test('the same post on two channels is one result, and every result has its own 
   }
 });
 
-test('products come first, then research, then pages, then articles, videos and podcasts', () => {
-  const rank = { Product: 0, Research: 1, Page: 2, Article: 3, Video: 3, Podcast: 3 };
+test('products come first, then research, then articles, videos and podcasts, then pages', () => {
+  const rank = { Product: 0, Research: 1, Article: 2, Video: 2, Podcast: 2, Page: 3 };
   const kinds = (query) => results(query).map((result) => result.category);
-  assert.deepEqual(kinds('copper'), ['Product', 'Product', 'Article']);
+  assert.deepEqual(kinds('copper'), ['Product', 'Product', 'Article', 'Page']);
   assert.equal(first('aflatoxin'), 'AflaMlock');
   for (const query of ['mold', 'poultry', 'dairy', 'aflatoxin', 'feed hygiene', 'copper', 'feed', 'bio', 'water', 'what is fcr']) {
     const order = kinds(query).map((kind) => rank[kind]);
