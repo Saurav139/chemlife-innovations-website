@@ -143,6 +143,19 @@ test('a post is found by its title, either spelling, or a word in its text', () 
   assert.match(fifo.snippet, /^…No FIFO Rotation/);
 });
 
+test('a product found by a word only in its full text shows the sentence with that word', () => {
+  // "afla" matches FeedGenie Forte and DDGS-Dtox through "aflatoxin" in their search terms and product text, but not
+  // their taglines: the line shown is the one from the product text, so the word can be bolded.
+  const shown = Object.fromEntries(results('afla').map((r) => [r.title, r.snippet]));
+  assert.match(shown['FeedGenie Forte'], /aflatoxin management/);
+  assert.match(shown['DDGS-Dtox'], /aflatoxin contamination/);
+  assert.match(shown.AflaMlock, /^Locks aflatoxins/);
+  const { terms } = searchSite(index, 'afla');
+  for (const title of ['FeedGenie Forte', 'DDGS-Dtox']) {
+    assert.ok(highlight(shown[title], terms).some((part) => part.hit), `${title}: nothing to bold`);
+  }
+});
+
 test('the same post on two channels is one result, and every result has its own address', () => {
   assert.equal(titles("water's ph").filter((title) => title.startsWith('Your water')).length, 1);
   assert.equal(results('lowering ph').length, 1);
