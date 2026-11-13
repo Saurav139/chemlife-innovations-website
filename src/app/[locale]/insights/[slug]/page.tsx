@@ -9,7 +9,7 @@ import SiteSearch from "@/components/SiteSearch";
 import { VariantProvider } from "@/context/VariantContext";
 import { formattedArticle } from "@/lib/article-source";
 import { articleBlocks, articlePath, isOptimizableImage, isoDate } from "@/lib/articles";
-import { MIN_HEADINGS, headingId, withHeadingIds, type ArticleHeading } from "@/lib/article-toc";
+import { headingId, tocEntries, withHeadingIds, type ArticleHeading } from "@/lib/article-toc";
 import { getArticle, type InsightItem } from "@/lib/insights";
 import { SITE_NAME, SITE_URL, pageMetadata } from "@/lib/seo";
 import { jsonLd } from "@/lib/structuredData";
@@ -67,7 +67,7 @@ export default async function ArticlePage({ params }: { params: Params }) {
   const headings: ArticleHeading[] = body
     ? body.headings
     : blocks.flatMap((block, i) => (block.kind === "heading" ? [{ id: blockIds[i]!, text: block.text, level: 2 as const }] : []));
-  const toc = headings.length >= MIN_HEADINGS ? headings : [];
+  const toc = tocEntries(headings, article.title);
 
   // The articles either side of this one by date, then others to read (those two last, as they're already offered).
   const all = [article, ...found.others].sort(newestFirst);

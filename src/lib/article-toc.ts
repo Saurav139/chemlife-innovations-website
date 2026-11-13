@@ -35,3 +35,29 @@ export function withHeadingIds(html: string): { html: string; headings: ArticleH
   });
   return { html: marked, headings };
 }
+
+/** A heading as the list shows it. */
+export interface TocEntry extends ArticleHeading {
+  /** Short enough for a narrow list: "1. Feed Formulation Optimization: Getting More Value" → "1. Feed Formulation Optimization". */
+  label: string;
+}
+
+const compare = (text: string) => text.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+
+function shortLabel(text: string): string {
+  const [topic, ...rest] = text.split(/[:–—]\s/);
+  const short = rest.length && topic.trim().split(/\s+/).length >= 2 ? topic.trim() : text;
+  return short.length > 64 ? `${short.slice(0, 61).trimEnd()}…` : short;
+}
+
+/** The headings worth listing: the article's own title (WordPress posts often repeat it as a heading) is left out,
+ *  and when the article has enough main headings (h2), the sub-headings under them are left out too, so the list
+ *  stays short. Articles written with bold lines only have h3s, which are listed instead. */
+export function tocEntries(headings: ArticleHeading[], title: string): TocEntry[] {
+  const own = compare(title);
+  const kept = headings.filter((heading) => compare(heading.text) !== own);
+  const main = kept.filter((heading) => heading.level === 2);
+  const listed = main.length >= MIN_HEADINGS ? main : kept;
+  if (listed.length < MIN_HEADINGS) return [];
+  return listed.map((heading) => ({ ...heading, level: main.length >= MIN_HEADINGS ? 2 : heading.level, label: shortLabel(heading.text) }));
+}

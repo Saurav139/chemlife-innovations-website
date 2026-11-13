@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import type { ArticleHeading } from "@/lib/article-toc";
+import type { TocEntry } from "@/lib/article-toc";
 
 // "In this article": the article's sub-headings as links. On a wide screen it's a list that stays in view beside the
 // text; on a phone it's a box above the text that opens on a tap. The heading being read is highlighted.
@@ -39,24 +39,25 @@ function useActiveHeading(ids: string[]): string | null {
   return active;
 }
 
-function Links({ headings, active, onPick }: { headings: ArticleHeading[]; active: string | null; onPick?: () => void }) {
+function Links({ headings, active, onPick }: { headings: TocEntry[]; active: string | null; onPick?: () => void }) {
   return (
-    <ol className="space-y-1">
+    <ol className="space-y-0.5">
       {headings.map((heading) => {
         const current = heading.id === active;
         return (
-          <li key={heading.id} className={heading.level === 3 ? "pl-4" : ""}>
+          <li key={heading.id} className={heading.level === 3 ? "pl-3" : ""}>
             <a
               href={`#${heading.id}`}
               onClick={onPick}
+              title={heading.label === heading.text ? undefined : heading.text}
               aria-current={current ? "location" : undefined}
-              className={`block border-l-2 py-1 pl-3 text-sm leading-snug transition-colors ${
+              className={`block border-l-2 py-1 pl-3 text-[0.8125rem] leading-snug line-clamp-2 transition-colors ${
                 current
                   ? "border-teal-aa text-teal-aa font-semibold"
                   : "border-gray-200 text-slate-600 hover:border-teal-500/50 hover:text-brand-navy"
               }`}
             >
-              {heading.text}
+              {heading.label}
             </a>
           </li>
         );
@@ -65,14 +66,14 @@ function Links({ headings, active, onPick }: { headings: ArticleHeading[]; activ
   );
 }
 
-export default function ArticleToc({ headings, variant }: { headings: ArticleHeading[]; variant: "sidebar" | "inline" }) {
+export default function ArticleToc({ headings, variant }: { headings: TocEntry[]; variant: "sidebar" | "inline" }) {
   const ids = headings.map((heading) => heading.id);
   const active = useActiveHeading(ids);
   const [open, setOpen] = useState(false);
 
   if (variant === "sidebar") {
     return (
-      <nav aria-label="In this article" className="sticky top-36">
+      <nav aria-label="In this article" className="sticky top-36 max-h-[calc(100vh-10rem)] overflow-y-auto overscroll-contain pr-1">
         <p className="text-xs font-bold uppercase tracking-wider text-gray-aa mb-3">In this article</p>
         <Links headings={headings} active={active} />
       </nav>
