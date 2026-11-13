@@ -309,7 +309,10 @@ export default function WhoWeArePage() {
           <div aria-hidden="true" className="h-1 bg-gradient-to-r from-teal-aa-light via-teal-aa to-brand-orange" />
           <div aria-hidden="true" className={`absolute inset-0 ${gridLines} [mask-image:linear-gradient(to_left,black,transparent_60%)]`} />
           <div className={`relative ${wrap} py-16 md:py-20 grid lg:grid-cols-12 gap-8 lg:gap-12 items-center`}>
-            <p className="lg:col-span-6 font-heading text-3xl md:text-4xl font-bold leading-tight">{t.tagline}</p>
+            {/* Each sentence of the tagline on a line of its own. */}
+            <p className="lg:col-span-6 font-heading text-3xl md:text-4xl font-bold leading-tight">
+              {t.tagline.split(/(?<=[.।])\s+/).map((sentence) => <span key={sentence} className="block">{sentence} </span>)}
+            </p>
             <div className="lg:col-span-6 lg:justify-self-end">
               <a href={href("/contact?type=dossier")} data-analytics-click={t.requestDossier}
                 className="group inline-flex items-center justify-center gap-2 min-h-12 px-7 rounded-full bg-brand-orange-aa hover:bg-brand-orange-aa-hover text-white font-semibold transition-colors">
