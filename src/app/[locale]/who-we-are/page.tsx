@@ -4,6 +4,7 @@ import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import SiteSearch from "@/components/SiteSearch";
 import { VariantProvider } from "@/context/VariantContext";
 import { useHref, useT } from "@/i18n/LocaleProvider";
 import { Images } from "@/lib/assets";
@@ -335,6 +336,7 @@ export default function WhoWeArePage() {
       </main>
 
       <Footer />
+      <SiteSearch />
     </VariantProvider>
   );
 }

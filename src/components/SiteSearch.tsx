@@ -3,39 +3,17 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
-import { useHref, useT } from "@/i18n/LocaleProvider";
-import { INTERNSHIP_ROLES, PRODUCTS, RESEARCH_TOPICS, insightAnchor, productPath, researchAnchor, roleAnchor } from "@/lib/catalog";
+import { useHref, useLocale, useT } from "@/i18n/LocaleProvider";
+import type { Messages } from "@/i18n/messages";
 import { goToResult } from "@/lib/deepLink";
 import type { Insights } from "@/lib/insights";
+import { buildSearchIndex, highlight, searchSite, type SearchCategory, type SearchOutcome, type SearchTerm } from "@/lib/siteSearch";
 
-type Category = "Page" | "Product" | "Research" | "Career" | "Article" | "Video" | "Podcast";
+// What the search looks through, and how it matches and ranks, is in src/lib/siteSearch.ts.
 
-interface SearchItem {
-  title: string;
-  category: Category;
-  description: string;
-  /** Where the result goes: a page, or one item on it (/products#product-maxdmold). */
-  link: string;
-  /** Extra words that match but aren't shown. */
-  keywords: string;
-}
+const SUGGESTIONS = ["MaxDmold", "ANBioT", "Toxin binder", "Dairy", "Internships", "Feed Bites"];
 
-// The site's pages. Products, research topics, internships and Insights are added from their own data below, each
-// linking straight to the item.
-const PAGES: Omit<SearchItem, "category">[] = [
-  { title: "Home", link: "/", description: "Nature-driven functional feed additives and our process, from research to delivery.", keywords: "home main overview chemlife process awards partners" },
-  { title: "About Us", link: "/about", description: "Our mission, core values and leadership team.", keywords: "about mission vision values leadership team founders gift" },
-  { title: "Products & Solutions", link: "/products", description: "All our feed additives for poultry, swine, dairy and cattle.", keywords: "products solutions additives feed poultry swine dairy cattle catalogue" },
-  { title: "Research & Development", link: "/research", description: "Our research pipeline, including ANBioT bio-transformation.", keywords: "research technology science innovation pipeline dossier" },
-  { title: "Insights", link: "/insights", description: "Articles, videos and podcasts on feed hygiene, gut health and chelation.", keywords: "insights blogs articles podcasts videos news learning" },
-  { title: "Careers", link: "/careers", description: "Internships at ChemLife and how to apply.", keywords: "careers jobs internships hiring openings apply" },
-  { title: "Contact Us", link: "/contact", description: "Send us a message, or find our office and plant.", keywords: "contact email address phone office location enquiry nutritionist" },
-  { title: "AI Experts", link: "/chat", description: "Ask Dr. Kukku (poultry) or Dr. Mikku (dairy), our AI nutrition assistants.", keywords: "chat ai assistant kukku mikku chatbot ask" },
-];
-
-const SUGGESTIONS = ["MaxDmold", "ANBioT", "Mould", "Ruminants", "Internships", "Feed Bites"];
-
-const BADGE: Record<Category, string> = {
+const BADGE: Record<SearchCategory, string> = {
   Page: "bg-blue-50 text-blue-600 border border-blue-100",
   Product: "bg-teal-50 text-teal-aa border border-teal-100",
   Research: "bg-purple-50 text-purple-600 border border-purple-100",
@@ -45,27 +23,23 @@ const BADGE: Record<Category, string> = {
   Podcast: "bg-orange-50/50 text-brand-orange-aa border border-orange-100",
 };
 
-// British and American spellings both match ("mould" finds "mold" and the other way round).
-const spellings = (word: string) => [word, word.replace(/mould/g, "mold"), word.replace(/mold/g, "mould")];
+const NOTHING: SearchOutcome = { results: [], partial: false, terms: [] };
 
-/** Results that contain every word typed, best first: title matches, then the rest in index order. */
-function search(items: SearchItem[], query: string): SearchItem[] {
-  const words = query.toLowerCase().split(/\s+/).filter(Boolean);
-  if (words.length === 0) return [];
-  const phrase = words.join(" ");
-  return items
-    .map((item, order) => {
-      const title = item.title.toLowerCase();
-      const text = `${title} ${item.description.toLowerCase()} ${item.keywords.toLowerCase()}`;
-      const has = (haystack: string, word: string) => spellings(word).some((form) => haystack.includes(form));
-      if (!words.every((word) => text.includes(word) || has(text, word))) return null;
-      const score = title.startsWith(phrase) ? 3 : title.includes(phrase) ? 2 : words.every((word) => has(title, word)) ? 1 : 0;
-      return { item, score, order };
-    })
-    .filter((result): result is { item: SearchItem; score: number; order: number } => result !== null)
-    .sort((a, b) => b.score - a.score || a.order - b.order)
-    .slice(0, 25)
-    .map((result) => result.item);
+/** Text with the words the search matched picked out. */
+function Matched({ text, terms, className }: { text: string; terms: SearchTerm[]; className: string }) {
+  return (
+    <>
+      {highlight(text, terms).map((part, i) =>
+        part.hit ? (
+          <mark key={i} className={className}>
+            {part.text}
+          </mark>
+        ) : (
+          part.text
+        ),
+      )}
+    </>
+  );
 }
 
 /** `hideButtonOnPhones`: leave out the floating button on phones (the chat page, where it would cover the message
@@ -74,9 +48,12 @@ export default function SiteSearch({ hideButtonOnPhones = false }: { hideButtonO
   const router = useRouter();
   const t = useT();
   const href = useHref();
+  const locale = useLocale();
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [insights, setInsights] = useState<Insights | null>(null);
+  const [insightsLoading, setInsightsLoading] = useState(false);
+  const [english, setEnglish] = useState<Messages | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   // Cmd/Ctrl + K opens the search; Escape closes it.
@@ -93,76 +70,41 @@ export default function SiteSearch({ hideButtonOnPhones = false }: { hideButtonO
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  // Focus input when modal opens
+  // The box takes the keyboard as soon as the search opens, so typing straight after Ctrl+K loses no letters.
   useEffect(() => {
-    if (isOpen) {
-      setTimeout(() => {
-        inputRef.current?.focus();
-      }, 100);
-    } else {
-      setQuery("");
-    }
+    if (isOpen) inputRef.current?.focus({ preventScroll: true });
+    else setQuery("");
   }, [isOpen]);
 
   // The Insights list (articles, videos, podcasts) loads the first time the search opens, so pages don't carry it.
   useEffect(() => {
     if (!isOpen || insights) return;
+    setInsightsLoading(true);
     fetch("/api/insights")
       .then((response) => (response.ok ? response.json() : null))
       .then((data: Insights | null) => data && setInsights(data))
       .catch(() => {
         // Search still works for pages, products, research and careers.
-      });
+      })
+      .finally(() => setInsightsLoading(false));
   }, [isOpen, insights]);
 
-  // Products, research topics and internships come in the page's language; Insights is English only.
-  const index = useMemo<SearchItem[]>(() => {
-    const pages = PAGES.map((page) => ({ ...page, category: "Page" as const, link: href(page.link) }));
-    const products = PRODUCTS.map((product, i) => {
-      const text = t.products.items[i];
-      return {
-        title: product.name,
-        category: "Product" as const,
-        description: text.tagline ?? text.about,
-        link: href(productPath(product.name)),
-        keywords: [product.category, text.about, ...text.features].join(" "),
-      };
-    });
-    const research = RESEARCH_TOPICS.map((topic, i) => {
-      const text = t.research.topics[i];
-      return {
-        title: text.title,
-        category: "Research" as const,
-        description: text.tagline,
-        link: href(`/research#${researchAnchor(topic.englishTitle)}`),
-        keywords: `${topic.englishTitle} ${text.preview}`,
-      };
-    });
-    const roles = INTERNSHIP_ROLES.map((role, i) => {
-      const text = t.careers.roles[i];
-      return {
-        title: text.title,
-        category: "Career" as const,
-        description: text.department,
-        link: href(`/careers#${roleAnchor(role.id)}`),
-        keywords: `${role.englishTitle} ${role.englishDepartment} internship job ${text.roleScope}`,
-      };
-    });
-    const media = insights
-      ? [...insights.blogs, ...insights.videos, ...insights.podcasts]
-          .filter((item, i, all) => all.findIndex((other) => other.title === item.title) === i)
-          .map((item) => ({
-            title: item.title,
-            category: (item.type === "Blog" ? "Article" : item.type) as Category,
-            description: item.description,
-            link: `/insights#${insightAnchor(item.title)}`,
-            keywords: `${item.type} ${item.date}`,
-          }))
-      : [];
-    return [...products, ...research, ...roles, ...media, ...pages];
-  }, [t, href, insights]);
+  // On a page in another language, the English text loads too, so "mold inhibitor" still finds MaxDmold there.
+  useEffect(() => {
+    if (!isOpen || locale === "en" || english) return;
+    import("@/i18n/messages/en").then((messages) => setEnglish(messages.default)).catch(() => {});
+  }, [isOpen, locale, english]);
 
-  const filteredResults = useMemo(() => search(index, query), [index, query]);
+  // Built when the search first opens. Products, research topics and internships come in the page's language;
+  // Insights is English only.
+  const [opened, setOpened] = useState(false);
+  useEffect(() => {
+    if (isOpen) setOpened(true);
+  }, [isOpen]);
+  const index = useMemo(() => (opened ? buildSearchIndex({ messages: t, english: english ?? undefined, href, insights }) : null), [opened, t, english, href, insights]);
+
+  const outcome = useMemo(() => (index ? searchSite(index, query) : NOTHING), [index, query]);
+  const filteredResults = outcome.results;
   // The result picked with the arrow keys (Enter opens it); back to the top one as the query changes.
   const [active, setActive] = useState(0);
   useEffect(() => setActive(0), [query]);
@@ -246,6 +188,11 @@ export default function SiteSearch({ hideButtonOnPhones = false }: { hideButtonO
                   aria-activedescendant={filteredResults[active] ? `search-result-${active}` : undefined}
                   aria-label="Search the ChemLife website"
                   placeholder="Search products, research, articles…"
+                  autoComplete="off"
+                  autoCorrect="off"
+                  autoCapitalize="off"
+                  spellCheck={false}
+                  enterKeyHint="search"
                   className="w-full text-base md:text-sm pl-11 pr-14 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-hidden focus:border-brand-navy focus:ring-1 focus:ring-brand-navy text-slate-800 placeholder-slate-aa focus:bg-white transition-all font-medium"
                 />
                 <button
@@ -282,43 +229,69 @@ export default function SiteSearch({ hideButtonOnPhones = false }: { hideButtonO
                   </div>
                 ) : filteredResults.length > 0 ? (
                   // Search Results
-                  filteredResults.map((item, i) => (
-                    <button
-                      key={item.link}
-                      id={`search-result-${i}`}
-                      data-index={i}
-                      role="option"
-                      aria-selected={i === active}
-                      tabIndex={-1}
-                      onClick={() => handleResultClick(item.link)}
-                      onMouseMove={() => setActive(i)}
-                      className={`w-full text-left p-3 border rounded-xl transition-colors flex items-start gap-4 group cursor-pointer ${i === active ? "bg-slate-50 border-slate-200" : "border-transparent"}`}
-                    >
-                      {/* Badge indicator */}
-                      <span
-                        className={`w-[4.75rem] text-center text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 mt-0.5 rounded-md shrink-0 ${BADGE[item.category]}`}
+                  <>
+                    {outcome.partial && (
+                      <p role="presentation" className="px-3 pt-1 pb-2 text-xs text-slate-500">
+                        Nothing matches all of &ldquo;<span className="font-semibold text-slate-600">{query.trim()}</span>&rdquo;. The closest results:
+                      </p>
+                    )}
+                    {filteredResults.map((item, i) => (
+                      <button
+                        key={item.link}
+                        id={`search-result-${i}`}
+                        data-index={i}
+                        role="option"
+                        aria-selected={i === active}
+                        tabIndex={-1}
+                        onClick={() => handleResultClick(item.link)}
+                        onMouseMove={() => setActive(i)}
+                        className={`w-full text-left p-3 border rounded-xl transition-colors flex items-start gap-4 group cursor-pointer ${i === active ? "bg-slate-50 border-slate-200" : "border-transparent"}`}
                       >
-                        {item.category}
-                      </span>
-                      <div className="flex-1 min-w-0">
-                        <p className={`font-heading text-sm font-bold transition-colors ${i === active ? "text-brand-orange-aa" : "text-slate-800"}`}>
-                          {item.title}
-                        </p>
-                        <p className="text-xs text-slate-500 leading-normal line-clamp-1 mt-0.5 font-normal">
-                          {item.description}
-                        </p>
-                      </div>
-                    </button>
-                  ))
+                        {/* Badge indicator */}
+                        <span
+                          className={`w-[4.75rem] text-center text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 mt-0.5 rounded-md shrink-0 ${BADGE[item.category]}`}
+                        >
+                          {item.category}
+                        </span>
+                        <div className="flex-1 min-w-0">
+                          <p className={`font-heading text-sm font-bold transition-colors ${i === active ? "text-brand-orange-aa" : "text-slate-800"}`}>
+                            <Matched text={item.title} terms={outcome.terms} className="bg-teal-100/80 text-inherit rounded-[3px]" />
+                          </p>
+                          <p className="text-xs text-slate-500 leading-normal line-clamp-2 mt-0.5 font-normal">
+                            <Matched text={item.snippet} terms={outcome.terms} className="bg-transparent font-semibold text-slate-800" />
+                          </p>
+                        </div>
+                      </button>
+                    ))}
+                  </>
+                ) : insightsLoading ? (
+                  // Articles, videos and podcasts are still on their way
+                  <p className="text-center py-10 text-slate-aa text-sm font-normal">Searching…</p>
                 ) : (
                   // No results state
-                  <div className="text-center py-10 font-normal">
-                    <span className="text-slate-aa text-sm">
+                  <div className="text-center py-8 font-normal">
+                    <p className="text-slate-aa text-sm">
                       No matching pages, products or articles found for &ldquo;<span className="font-semibold text-slate-600">{query}</span>&rdquo;.
-                    </span>
+                    </p>
+                    <p className="text-xs text-slate-500 mt-4 mb-2.5">Try one of these, or a product name:</p>
+                    <div className="flex flex-wrap justify-center gap-2 px-2">
+                      {SUGGESTIONS.map((term) => (
+                        <button
+                          key={term}
+                          onClick={() => setQuery(term)}
+                          className="inline-flex items-center min-h-9 px-3.5 rounded-full bg-slate-50 hover:bg-slate-100 border border-slate-200 text-sm font-semibold text-slate-600 cursor-pointer transition-colors"
+                        >
+                          {term}
+                        </button>
+                      ))}
+                    </div>
                   </div>
                 )}
               </div>
+              {/* Tells screen readers how many results there are, as they change */}
+              <p className="sr-only" role="status">
+                {query.trim() === "" ? "" : filteredResults.length === 0 ? (insightsLoading ? "Searching" : "No results") : `${filteredResults.length} result${filteredResults.length === 1 ? "" : "s"}`}
+              </p>
 
               {/* Keyboard hints (desktop only: there's no keyboard to hint at on a phone) */}
               <div className="hidden md:flex px-5 py-2.5 bg-slate-50 border-t border-slate-100 items-center gap-4 text-xs text-slate-aa">

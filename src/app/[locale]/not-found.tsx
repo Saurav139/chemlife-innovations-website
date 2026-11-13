@@ -2,6 +2,7 @@
 
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import SiteSearch from "@/components/SiteSearch";
 import { VariantProvider } from "@/context/VariantContext";
 import { useHref, useT } from "@/i18n/LocaleProvider";
 
@@ -48,6 +49,7 @@ export default function NotFound() {
         </nav>
       </main>
       <Footer />
+      <SiteSearch />
     </VariantProvider>
   );
 }
