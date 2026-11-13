@@ -126,13 +126,15 @@ export default async function ArticlePage({ params }: { params: Params }) {
           </div>
         </section>
 
-        <div className={`mx-auto px-6 py-10 md:py-14 ${toc.length ? "max-w-[1200px] lg:grid lg:grid-cols-[14rem_minmax(0,48rem)] lg:justify-center lg:gap-14" : "max-w-3xl"}`}>
+        {/* The text column sits exactly under the title band's text (45rem: its 48rem column less its padding, centred). On a wide screen the
+            "In this article" list sits in the margin to its left, so the text doesn't move. */}
+        <div className={`mx-auto px-6 py-10 md:py-14 ${toc.length ? "xl:grid xl:grid-cols-[minmax(0,1fr)_45rem_minmax(0,1fr)] xl:gap-8" : "max-w-3xl"}`}>
         {toc.length > 0 && (
-          <aside className="hidden lg:block">
+          <aside className="hidden xl:block justify-self-end w-48">
             <ArticleToc headings={toc} variant="sidebar" />
           </aside>
         )}
-        <article id="article" className="min-w-0">
+        <article id="article" className={`min-w-0 ${toc.length ? "max-w-3xl mx-auto w-full xl:max-w-none" : ""}`}>
           {article.imageUrl && !formatted?.startsWithImage && (
             <div className="relative w-full aspect-video rounded-2xl overflow-hidden bg-slate-100 border border-gray-200 mb-10">
               <Image
@@ -148,7 +150,7 @@ export default async function ArticlePage({ params }: { params: Params }) {
           )}
 
           {toc.length > 0 && (
-            <div className="lg:hidden">
+            <div className="xl:hidden">
               <ArticleToc headings={toc} variant="inline" />
             </div>
           )}
