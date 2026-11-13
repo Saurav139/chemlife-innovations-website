@@ -828,7 +828,7 @@ const en = {
   // The technical dossier form (components/DossierRequest.tsx). Name, email and the error fallback come from contact.
   dossier: {
     title: "Request the technical dossier",
-    intro: "Tell us a little about yourself and the dossier PDF downloads straight away. Your details go to the ChemLife team.",
+    intro: "Tell us a little about yourself and we'll email you a 4-digit code to download the dossier.",
     company: "Company",
     companyPlaceholder: "Your company or organisation",
     role: "Role",
@@ -854,7 +854,31 @@ const en = {
       send_failed: "Your request couldn't be sent right now.",
       network: "Your request couldn't be sent. Please check your connection and try again.",
     },
-    submit: "Get the dossier",
+    submit: "Email me the code",
+    // The code step: {email} is the visitor's address, {resend} the "send a new code" link, {left} a number.
+    codeTitle: "Check your email",
+    codeText: "We've sent a 4-digit code to {email}. Enter it here to download the dossier.",
+    codeLabel: "Code",
+    verify: "Verify and download",
+    verifying: "Checking...",
+    resendPrompt: "Didn't get it? Check your spam folder, or {resend}.",
+    resendLink: "send a new code",
+    resent: "We've sent you a new code.",
+    changeEmail: "Use a different email",
+    codeErrors: {
+      empty: "Enter the 4-digit code from the email.",
+      wrong: "That code isn't right. Tries left: {left}.",
+      expired: "This code has expired. Send a new one below.",
+      attempts: "Too many wrong tries. Send a new code below.",
+    },
+    // The email with the code (plain text). {code}, {name} and {minutes} are filled in by /api/dossier.
+    codeEmail: {
+      subject: "{code} is your ChemLife dossier code",
+      greeting: "Hello {name},",
+      body: "Your code for the ChemLife technical dossier is {code}. It works for {minutes} minutes.",
+      ignore: "If you didn't ask for the dossier, you can ignore this email.",
+      signoff: "ChemLife Innovations",
+    },
     sending: "Sending...",
     startedTitle: "Your download has started",
     startedText: "Thank you, {name}. Your details have reached the ChemLife team.",
