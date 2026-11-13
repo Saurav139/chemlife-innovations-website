@@ -368,7 +368,7 @@ const te: Messages = {
     related: "ఇవే జంతువుల కోసం మరిన్ని",
     viewProduct: "ఉత్పత్తిని చూడండి",
     allProducts: "అన్ని ఉత్పత్తులు",
-    askAbout: "ఈ ఉత్పత్తి గురించి మరింత తెలుసుకోండి",
+    askAbout: "మా నిపుణుడితో చాట్ చేయండి",
     bannerAlt: "బ్యానర్",
     iconAlt: "ఐకాన్",
     items: [

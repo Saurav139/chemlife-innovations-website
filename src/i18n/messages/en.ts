@@ -367,7 +367,7 @@ const en = {
     related: "More for the same animals",
     viewProduct: "View product",
     allProducts: "All products",
-    askAbout: "Know more about this product",
+    askAbout: "Chat with our specialist",
     bannerAlt: "banner",
     iconAlt: "icon",
     items: [

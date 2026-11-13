@@ -365,7 +365,7 @@ const hi: Messages = {
     related: "इन्हीं पशुओं के लिए और उत्पाद",
     viewProduct: "उत्पाद देखें",
     allProducts: "सभी उत्पाद",
-    askAbout: "इस उत्पाद के बारे में और जानें",
+    askAbout: "हमारे विशेषज्ञ से चैट करें",
     bannerAlt: "बैनर",
     iconAlt: "आइकन",
     items: [
