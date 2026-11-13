@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { englishOnly } from "@/i18n/server";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import SiteSearch from "@/components/SiteSearch";
 import { VariantProvider } from "@/context/VariantContext";
 import { pageMetadata } from "@/lib/seo";
 
@@ -120,6 +121,7 @@ export default async function PrivacyPage({ params }: { params: Promise<{ locale
       </main>
 
       <Footer />
+      <SiteSearch />
     </VariantProvider>
   );
 }
