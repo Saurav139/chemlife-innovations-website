@@ -34,7 +34,7 @@ export default function ReadingProgress({ id }: { id: string }) {
 
   return (
     <div className="fixed top-32 left-0 w-full h-1 z-40 pointer-events-none" aria-hidden="true">
-      <div className="h-full bg-teal-aa origin-left transition-transform duration-75" style={{ transform: `scaleX(${progress})` }} />
+      <div className="h-full bg-teal-aa origin-left transition-transform duration-300 ease-out motion-reduce:transition-none will-change-transform" style={{ transform: `scaleX(${progress})` }} />
     </div>
   );
 }
