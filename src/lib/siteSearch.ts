@@ -478,7 +478,8 @@ interface PageEntry {
 }
 
 // The site's pages, and the parts of them people look for by name. Aliases are separated by commas.
-// About Us and Careers are found by their name only: nothing on them is searched (no text, sections or roles).
+// About Us, Careers, Privacy Policy and Terms of Use are found by their name only: nothing on them is searched (no
+// text, sections or roles).
 const PAGES: PageEntry[] = [
   {
     title: "Home",
@@ -582,13 +583,13 @@ const PAGES: PageEntry[] = [
     title: "Privacy Policy",
     link: "/privacy",
     description: "How ChemLife collects, uses and protects your information.",
-    aliases: "privacy, data, personal information, cookies, data protection",
+    aliases: "privacy, privacy policy",
   },
   {
     title: "Terms of Use",
     link: "/terms",
     description: "The terms for using this website.",
-    aliases: "terms, terms and conditions, conditions, legal, disclaimer",
+    aliases: "terms, terms of use, terms and conditions",
   },
 ];
 
