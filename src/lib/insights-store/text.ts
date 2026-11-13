@@ -86,6 +86,13 @@ export function clip(text: string, max: number): string {
 
 const letters = (text: string) => text.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, "");
 
+/** Whether the text saved for an article is still its source's: the article's own text, or the built-in list's
+ *  summary of it. Used where it isn't recorded whether the moderator rewrote the text (content_edited is null). */
+export function isUnedited(saved: string | undefined, sourceText: string, builtIn?: string): boolean {
+  if (!saved?.trim()) return true;
+  return letters(saved) === letters(sourceText) || (builtIn !== undefined && saved.trim() === builtIn.trim());
+}
+
 /** Whether a summary was cut from the start of the article itself, like WordPress's automatic excerpts (which run
  *  headings into the next sentence: "IntroductionAccess to…"), rather than written for it. */
 export function isFromArticle(summary: string, article: string): boolean {

@@ -3,6 +3,19 @@ import { KINDS, SOURCES, STATUSES, type ItemChanges, type Kind, type Source, typ
 
 // Checks what the dashboard sends before it reaches the database.
 
+/** What an edit means for a post's text. The edit form sends the text every time, so text that wasn't touched isn't
+ *  a rewrite. A rewrite is recorded, so the post stops following its source (a blog post otherwise keeps up with
+ *  WordPress); emptying the text hands it back to the source. */
+export function withTextDecision(changes: ItemChanges, before: string): ItemChanges {
+  if (changes.content === undefined) return changes;
+  const plain = (value: string) => value.replace(/\r\n/g, "\n").trim();
+  if (plain(changes.content) === plain(before)) {
+    const { content: _untouched, ...rest } = changes;
+    return rest;
+  }
+  return { ...changes, contentEdited: plain(changes.content) !== "" };
+}
+
 const text = (value: unknown, max: number): string | undefined =>
   typeof value === "string" ? value.trim().slice(0, max) : undefined;
 
