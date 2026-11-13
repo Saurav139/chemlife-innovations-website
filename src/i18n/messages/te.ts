@@ -804,6 +804,7 @@ const te: Messages = {
     },
     submitErrors: {
       invalid: "కొన్ని వివరాలు సరిగా లేనట్లున్నాయి. దయచేసి ఫారమ్‌ను పరిశీలించి మళ్లీ ప్రయత్నించండి.",
+      captcha: "మీరు వ్యక్తి అని నిర్ధారించలేకపోయాం. దయచేసి మళ్లీ ప్రయత్నించండి.",
       rate_limited: "మీరు తక్కువ సమయంలో అనేక సందేశాలు పంపారు, అందుకే ఫారమ్‌ను కొంతసేపు నిలిపివేశాం.",
       unavailable: "సంప్రదింపు ఫారమ్ ప్రస్తుతం అందుబాటులో లేదు.",
       send_failed: "మీ సందేశాన్ని ప్రస్తుతం పంపలేకపోయాం.",
@@ -812,6 +813,8 @@ const te: Messages = {
     // {email}, {address} and {phone} are filled in by the page.
     fallback: "బదులుగా మీరు {address} కు {email}, లేదా {phone} కు కాల్ చేయవచ్చు.",
     fallbackEmail: "ఇమెయిల్ పంపవచ్చు",
+    // Shown under the Send button until the CAPTCHA (Cloudflare Turnstile) has let the visitor through.
+    captchaPending: "మీరు వ్యక్తి అని తనిఖీ చేస్తున్నాం...",
     sending: "సందేశం పంపుతున్నాం...",
     send: "సందేశం పంపండి",
     sentTitle: "సందేశం పంపబడింది!",

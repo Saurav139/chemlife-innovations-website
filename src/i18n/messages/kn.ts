@@ -800,6 +800,7 @@ const kn: Messages = {
     },
     submitErrors: {
       invalid: "ಕೆಲವು ವಿವರಗಳು ಸರಿಯಾಗಿಲ್ಲ ಎನಿಸುತ್ತದೆ. ದಯವಿಟ್ಟು ಫಾರ್ಮ್ ಪರಿಶೀಲಿಸಿ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.",
+      captcha: "ನೀವು ವ್ಯಕ್ತಿ ಎಂದು ಖಚಿತಪಡಿಸಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ. ದಯವಿಟ್ಟು ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.",
       rate_limited: "ನೀವು ಕಡಿಮೆ ಸಮಯದಲ್ಲಿ ಹಲವು ಸಂದೇಶಗಳನ್ನು ಕಳುಹಿಸಿದ್ದೀರಿ, ಆದ್ದರಿಂದ ಫಾರ್ಮ್ ಅನ್ನು ಸ್ವಲ್ಪ ಸಮಯ ತಡೆಹಿಡಿಯಲಾಗಿದೆ.",
       unavailable: "ಸಂಪರ್ಕ ಫಾರ್ಮ್ ಈಗ ಲಭ್ಯವಿಲ್ಲ.",
       send_failed: "ನಿಮ್ಮ ಸಂದೇಶವನ್ನು ಈಗ ಕಳುಹಿಸಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ.",
@@ -807,6 +808,8 @@ const kn: Messages = {
     },
     fallback: "ಬದಲಾಗಿ ನೀವು ಇದನ್ನು {address} ಗೆ {email}, ಅಥವಾ {phone} ಗೆ ಕರೆ ಮಾಡಿ.",
     fallbackEmail: "ಇಮೇಲ್ ಮಾಡಬಹುದು",
+    // Shown under the Send button until the CAPTCHA (Cloudflare Turnstile) has let the visitor through.
+    captchaPending: "ನೀವು ವ್ಯಕ್ತಿ ಎಂದು ಪರಿಶೀಲಿಸಲಾಗುತ್ತಿದೆ...",
     sending: "ಸಂದೇಶ ಕಳುಹಿಸಲಾಗುತ್ತಿದೆ...",
     send: "ಸಂದೇಶ ಕಳುಹಿಸಿ",
     sentTitle: "ಸಂದೇಶ ಕಳುಹಿಸಲಾಗಿದೆ!",

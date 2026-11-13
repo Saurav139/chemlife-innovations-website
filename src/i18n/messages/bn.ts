@@ -803,6 +803,7 @@ const bn: Messages = {
     },
     submitErrors: {
       invalid: "কিছু তথ্য সঠিক মনে হচ্ছে না। অনুগ্রহ করে ফর্মটি যাচাই করে আবার চেষ্টা করুন।",
+      captcha: "আমরা নিশ্চিত হতে পারিনি যে আপনি একজন মানুষ। অনুগ্রহ করে আবার চেষ্টা করুন।",
       rate_limited: "আপনি অল্প সময়ে কয়েকটি বার্তা পাঠিয়েছেন, তাই ফর্মটি কিছুক্ষণের জন্য বন্ধ রাখা হয়েছে।",
       unavailable: "যোগাযোগ ফর্মটি এই মুহূর্তে পাওয়া যাচ্ছে না।",
       send_failed: "আপনার বার্তাটি এই মুহূর্তে পাঠানো যায়নি।",
@@ -811,6 +812,8 @@ const bn: Messages = {
     // {email}, {address} and {phone} are filled in by the page.
     fallback: "এর বদলে আপনি {address} ঠিকানায় {email}, অথবা {phone} নম্বরে ফোন করতে পারেন।",
     fallbackEmail: "ইমেল করতে পারেন",
+    // Shown under the Send button until the CAPTCHA (Cloudflare Turnstile) has let the visitor through.
+    captchaPending: "আপনি একজন মানুষ কিনা তা যাচাই করা হচ্ছে...",
     sending: "বার্তা পাঠানো হচ্ছে...",
     send: "বার্তা পাঠান",
     sentTitle: "বার্তা পাঠানো হয়েছে!",
