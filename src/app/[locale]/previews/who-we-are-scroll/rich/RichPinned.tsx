@@ -84,7 +84,7 @@ export default function RichPinned({ level }: { level: Level }) {
       {flags.wild && <Particles />}
       <div className="relative max-w-[1240px] mx-auto px-6 pt-10 md:pt-16 lg:grid lg:grid-cols-12 lg:gap-14">
         {/* Phones: the picture pins across the top and the text scrolls up under it. */}
-        <div className={`sticky top-18 md:top-20 lg:top-24 z-10 ${flags.scenes ? "h-[46svh]" : "h-[38svh]"} md:h-[46svh] lg:h-[calc(100svh-6rem)] lg:col-span-6 lg:order-2 flex flex-col justify-center py-3 bg-white lg:bg-transparent`}>
+        <div className={`sticky top-20 md:top-24 lg:top-32 z-10 ${flags.scenes ? "h-[46svh]" : "h-[38svh]"} md:h-[46svh] lg:h-[calc(100svh-8rem)] lg:col-span-6 lg:order-2 flex flex-col justify-center py-3 bg-white lg:bg-transparent`}>
           {flags.wild && <motion.div aria-hidden="true" className="absolute inset-x-0 top-0 h-1 rounded-full bg-brand-orange origin-left z-20" style={{ scaleX: progress }} />}
           <div className="relative w-full flex-1 lg:flex-none lg:h-[76%]">
             {flags.wild && <motion.div aria-hidden="true" className="absolute -inset-5 rounded-[2.5rem] blur-2xl opacity-30" animate={{ backgroundColor: chapter.accent }} transition={{ duration: 0.8 }} />}

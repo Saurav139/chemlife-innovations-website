@@ -40,7 +40,7 @@ export default function ResearchHubPreview() {
       <Header />
 
       <main id="main" tabIndex={-1} className="bg-slate-50/50 min-h-screen text-brand-navy">
-        <section className="pt-26 md:pt-32 pb-10 md:pb-20 lg:pt-36 lg:pb-28 text-white relative overflow-hidden bg-brand-navy flex items-center">
+        <section className="pt-28 md:pt-36 pb-10 md:pb-20 lg:pt-44 lg:pb-28 text-white relative overflow-hidden bg-brand-navy flex items-center">
           <div className="absolute inset-0 z-0">
             <Image
               src={Images.research.heroBanner}
