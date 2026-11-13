@@ -111,8 +111,6 @@ export default async function ArticlePage({ params }: { params: Params }) {
                 <li><Link href="/" className="text-teal-aa-light font-semibold hover:text-white transition-colors">Home</Link></li>
                 <li aria-hidden="true">›</li>
                 <li><Link href="/insights" className="text-teal-aa-light font-semibold hover:text-white transition-colors">Insights</Link></li>
-                <li aria-hidden="true">›</li>
-                <li aria-current="page" className="line-clamp-1">{article.title}</li>
               </ol>
             </nav>
             <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold leading-tight text-white">{article.title}</h1>
