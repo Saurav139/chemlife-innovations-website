@@ -37,6 +37,9 @@ const insights = {
     // The same post on LinkedIn and on Instagram
     post('Blog', 'Your water’s pH could be affecting more than you think.', 'Water pH and acidifiers.', 'On LinkedIn.', 'November 7, 2026', 'https://www.linkedin.com/feed/update/1'),
     post('Blog', 'Your water’s pH could be affecting more than you think.', 'Water pH and acidifiers.', 'On Instagram.', 'November 7, 2026', 'https://www.instagram.com/p/1'),
+    // The same post again, its Instagram title ending in an emoji: same address on the Insights page
+    post('Blog', 'Lowering pH doesn’t automatically mean you’ve solved your water quality problems.', 'Lowering pH.', 'On LinkedIn.', 'November 2, 2026', 'https://www.linkedin.com/feed/update/2'),
+    post('Blog', 'Lowering pH doesn’t automatically mean you’ve solved your water quality problems. 👀', 'Lowering pH.', 'On Instagram.', 'November 2, 2026', 'https://www.instagram.com/p/2'),
   ],
   videos: [post('Video', 'What is important? Moisture in corn or water activity', 'Moisture content and water activity in corn-based animal feed.', '', 'August 20, 2025')],
   podcasts: [post('Podcast', 'India’s Antibiotic-Free Protein Problem Explained | Myths & Poultry Science', 'Dr. Santosh Ire demystifies antibiotic usage myths in poultry farming.', '', 'August 15, 2025')],
@@ -89,27 +92,39 @@ test('an animal lists the products for it', () => {
 test('a short word is a word, not a few letters inside another', () => {
   assert.equal(first('ai'), 'AI Experts');
   assert.equal(results('ai').length, 1);
-  assert.equal(first('hr'), 'Operations, Marketing and Human Resources Intern');
   assert.ok(!titles('ph').includes('GutproGenie'), '"ph" is not "phytogenic"');
 });
 
-test('research topics and roles', () => {
+test('research topics', () => {
   for (const query of ['anbiot', 'an biot', 'bio transformation', 'bio-transformation']) assert.equal(first(query), 'Accelerated Natural BioTransformation (ANBioT)', query);
   assert.ok(first('micro encapsulation').startsWith('Microencapsulation'));
   assert.equal(first('r&d'), 'Research & Development');
   assert.equal(first('reserch'), 'Research & Development');
-  assert.equal(first('research intern'), 'Research Intern');
-  assert.equal(first('marketing internship'), 'Operations, Marketing and Human Resources Intern');
-  assert.equal(first('internhsip'), 'Research Intern');
+});
+
+test('About Us, Careers, Privacy and Terms are found by their name, and nothing on them is searched', () => {
+  for (const query of ['about', 'about us', 'company']) assert.equal(first(query), 'About Us', query);
+  for (const query of ['privacy', 'privacy policy']) assert.equal(first(query), 'Privacy Policy', query);
+  for (const query of ['terms', 'terms of use', 'terms and conditions']) assert.equal(first(query), 'Terms of Use', query);
+  for (const query of ['cookies', 'personal data', 'legal', 'disclaimer']) {
+    assert.ok(!results(query).some((result) => /^\/(privacy|terms)\b/.test(result.link)), query);
+  }
+  for (const query of ['careers', 'internship', 'internhsip', 'jobs', 'marketing internship', 'nutrition intern', 'how much stipend do interns get']) assert.equal(first(query), 'Careers', query);
+  // Words only those pages use (the internship's stipend, lunch and accommodation; the founders' story) find neither.
+  for (const query of ['stipend', 'lunch', 'accommodation', 'pre-placement offer', 'green technologies', 'eco-conscious']) {
+    assert.ok(!results(query).some((result) => /^\/(about|careers)\b/.test(result.link)), query);
+  }
+  // No internship role is a result of its own.
+  assert.ok(!['intern', 'research intern', 'hr'].some((query) => results(query).some((result) => result.link.includes('#role-'))));
 });
 
 test('what people ask for leads to the page that answers it', () => {
   const pages = {
     'phone number': 'Contact Us', address: 'Contact Us', price: 'Contact Us', distributor: 'Contact Us', 'where are you located': 'Contact Us',
-    jobs: 'Careers', vacancy: 'Careers', 'how to apply': 'Careers', 'work with us': 'Careers', stipend: 'Careers',
+    jobs: 'Careers', vacancy: 'Careers', 'how to apply': 'Careers', 'work with us': 'Careers',
     blog: 'Insights', news: 'Insights', catalogue: 'Products & Solutions', chatbot: 'AI Experts', 'dr kukku': 'AI Experts',
     home: 'Home', about: 'About Us', 'who we are': 'Who We Are', certification: 'Who We Are', privacy: 'Privacy Policy', terms: 'Terms of Use',
-    mission: 'Vision & Mission', leadership: 'Leadership', faq: 'Questions & Answers', awards: 'Awards & Recognition',
+    leadership: 'Leadership', founder: 'Leadership', faq: 'Questions & Answers', awards: 'Awards & Recognition',
   };
   for (const [query, page] of Object.entries(pages)) assert.equal(first(query), page, query);
 });
@@ -130,10 +145,27 @@ test('a post is found by its title, either spelling, or a word in its text', () 
 
 test('the same post on two channels is one result, and every result has its own address', () => {
   assert.equal(titles("water's ph").filter((title) => title.startsWith('Your water')).length, 1);
-  for (const query of ['feed', 'm', 'poultry', 'copper', 'a']) {
+  assert.equal(results('lowering ph').length, 1);
+  for (const query of ['feed', 'm', 'poultry', 'copper', 'a', 'ph', 'water', 'lowering']) {
     const links = results(query).map((result) => result.link);
     assert.equal(new Set(links).size, links.length, query);
   }
+});
+
+test('products come first, then research, then pages, then articles, videos and podcasts', () => {
+  const rank = { Product: 0, Research: 1, Page: 2, Article: 3, Video: 3, Podcast: 3 };
+  const kinds = (query) => results(query).map((result) => result.category);
+  assert.deepEqual(kinds('copper'), ['Product', 'Product', 'Article']);
+  assert.equal(first('aflatoxin'), 'AflaMlock');
+  for (const query of ['mold', 'poultry', 'dairy', 'aflatoxin', 'feed hygiene', 'copper', 'feed', 'bio', 'water', 'what is fcr']) {
+    const order = kinds(query).map((kind) => rank[kind]);
+    assert.deepEqual(order, [...order].sort((a, b) => a - b), query);
+  }
+  // A passing mention isn't listed: "an biot" opens with ANBioT, not a product that mentions "bio".
+  assert.equal(first('an biot'), 'Accelerated Natural BioTransformation (ANBioT)');
+  // The closest results to a search nothing fully matches stay closest first.
+  assert.equal(searchSite(index, 'nutrition intern').partial, true);
+  assert.equal(first('nutrition intern'), 'Careers');
 });
 
 test('nothing is found for something the site does not have; a near miss says so', () => {

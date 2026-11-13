@@ -1,4 +1,4 @@
-import { INTERNSHIP_ROLES, PRODUCTS, RESEARCH_TOPICS, insightAnchor, productPath, researchAnchor, roleAnchor } from "@/lib/catalog";
+import { PRODUCTS, RESEARCH_TOPICS, insightAnchor, productPath, researchAnchor } from "@/lib/catalog";
 import type { Messages } from "@/i18n/messages";
 import type { InsightItem, Insights } from "@/lib/insights";
 
@@ -7,7 +7,7 @@ import type { InsightItem, Insights } from "@/lib/insights";
 // ("aflalock"), British or American spelling, plurals, everyday words for a product ("toxin binder") and whole
 // questions ("how to apply"). SiteSearch.tsx shows the results; tests/site-search.test.cjs holds it to account.
 
-export type SearchCategory = "Page" | "Product" | "Research" | "Career" | "Article" | "Video" | "Podcast";
+export type SearchCategory = "Page" | "Product" | "Research" | "Article" | "Video" | "Podcast";
 
 /** One thing the search can find. */
 export interface SearchEntry {
@@ -95,7 +95,7 @@ function wordsOf(text: string): string[] {
 // Words that carry no meaning in a question ("how do I apply" is a search for "apply"). They only count when the
 // search is nothing else ("who we are").
 const STOP_WORDS = new Set(
-  "a an and any are as at be become by can do does find for from get have how i in is it its me my need of on or our that the their there this to us want was we what when where which who why with you your".split(" "),
+  "a an and any are as at be become by can do does find for from get have how i in is it its many me much my need of on or our that the their there this to us want was we what when where which who why with you your".split(" "),
 );
 
 // Everyday words for the words the site uses. Checked in their compared form (singular).
@@ -134,15 +134,18 @@ function sharedStart(a: string, b: string): number {
  * the start of a word ("methio" in "methiowiz"), another form of it ("chelated" and "chelation"), or its ending
  * ("toxin" in "mycotoxin", "genie" in "grogenie"). In a title, anywhere inside counts ("bio" in "mbiowiz").
  * `mode`: "exact" for a spelling correction, "start" for words typed apart and joined ("max d mold").
- * `startFactor` lowers the first kind for a word that is complete as typed: "product" is not "production".
+ * `startFactor` is below 1 for a word that is complete as typed, a word the site uses on its own: then it doesn't
+ * match longer words that start with it ("intern" is not "international") or other forms of it ("interact"),
+ * except in a title, where it ranks lower ("product" before "production").
  */
 function wordMatch(term: string, token: string, inTitle: boolean, mode: "any" | "start" | "exact", minStart: number, startFactor = 1): number {
   if (term === token) return 1;
   if (mode === "exact" || term.length < minStart || /^\d+$/.test(term)) return 0;
-  if (token.startsWith(term)) return (0.6 + 0.35 * (term.length / token.length)) * startFactor;
+  const whole = startFactor < 1 && !inTitle;
+  if (token.startsWith(term)) return whole ? 0 : (0.6 + 0.35 * (term.length / token.length)) * startFactor;
   if (mode === "start") return 0;
   const shared = sharedStart(term, token);
-  if (shared >= 5 && shared / Math.max(term.length, token.length) >= 0.6) return 0.5;
+  if (!whole && shared >= 5 && shared / Math.max(term.length, token.length) >= 0.6) return 0.5;
   if (term.length >= 4 && token.endsWith(term)) return 0.45;
   if (inTitle && term.length >= 3 && token.includes(term)) return 0.45;
   return 0;
@@ -211,20 +214,19 @@ const TAGS: Record<SearchCategory, string> = {
   Page: "page",
   Product: "product",
   Research: "research technology",
-  Career: "career internship job",
   Article: "article blog post",
   Video: "video",
   Podcast: "podcast",
 };
 
 // Among equally good matches, a product or a page is more likely what the visitor wants than a post mentioning it.
-const PRIOR: Record<SearchCategory, number> = { Product: 1.3, Page: 1.2, Research: 1.1, Career: 1.1, Article: 1, Video: 1, Podcast: 1 };
+const PRIOR: Record<SearchCategory, number> = { Product: 1.3, Page: 1.2, Research: 1.1, Article: 1, Video: 1, Podcast: 1 };
 // Unless they ask a question ("what is FCR"): then something that explains comes before something to buy.
 const QUESTION = new Set(["what", "why", "how"]);
-const QUESTION_PRIOR: Record<SearchCategory, number> = { Product: 1, Page: 1.2, Research: 1.1, Career: 1.1, Article: 1.15, Video: 1.15, Podcast: 1.15 };
+const QUESTION_PRIOR: Record<SearchCategory, number> = { Product: 1, Page: 1.2, Research: 1.1, Article: 1.15, Video: 1.15, Podcast: 1.15 };
 
-// A product, research topic or role is described by its body; a page or a post only mentions things in it.
-const OWN_TEXT = new Set<SearchCategory>(["Product", "Research", "Career"]);
+// A product or research topic is described by its body; a page or a post only mentions things in it.
+const OWN_TEXT = new Set<SearchCategory>(["Product", "Research"]);
 
 const unique = (tokens: string[]) => [...new Set(tokens)];
 // Joined as written, before plurals are trimmed: "Feed" + "Bites" is "feedbites".
@@ -316,6 +318,13 @@ function corrections(term: string, vocabulary: string[]): Alternative[] {
 const MAX_WORDS = 8;
 const MAX_RESULTS = 20;
 
+// The order results are listed in, by kind.
+const GROUP: Record<SearchCategory, number> = { Product: 0, Research: 1, Page: 2, Article: 3, Video: 3, Podcast: 3 };
+// A result scoring below this share of the best one only mentions the search in passing, and isn't listed.
+const FLOOR = 0.25;
+// A result goes above a later kind's best match only if it scores at least this share of it.
+const JUMP = 1 / 3;
+
 export function searchSite(index: SearchIndex, query: string): SearchOutcome {
   const typed = wordsOf(query).slice(0, MAX_WORDS);
   if (typed.length === 0) return { results: [], partial: false, terms: [] };
@@ -406,11 +415,23 @@ export function searchSite(index: SearchIndex, query: string): SearchOutcome {
     hits = most * 2 >= words.length ? ranked.filter((result) => result.matched === most) : [];
   }
 
-  hits.sort((a, b) => b.score - a.score || (b.item.entry.date ?? 0) - (a.item.entry.date ?? 0) || a.item.order - b.item.order);
   // A passing mention is dropped when there are far better matches.
-  const floor = (hits[0]?.score ?? 0) * 0.25;
-  const results = hits
-    .filter((result) => result.score >= floor)
+  const floor = Math.max(0, ...hits.map((result) => result.score)) * FLOOR;
+  const listed = hits.filter((result) => result.score >= floor);
+  // Products first, then research, then pages, then articles, videos and podcasts; the best match first within each.
+  // A result is only put above a later kind if it is at least a third as good as that kind's best match; one that isn't
+  // only mentions the search in passing, and is left out ("an biot" lists ANBioT, not a product that mentions "bio").
+  // The closest results to a search nothing fully matches are listed closest first.
+  const bestFrom = (group: number) => Math.max(0, ...listed.filter((result) => GROUP[result.item.entry.category] > group).map((result) => result.score));
+  const results = listed
+    .filter((result) => partial || result.score >= bestFrom(GROUP[result.item.entry.category]) * JUMP)
+    .sort(
+      (a, b) =>
+        (partial ? 0 : GROUP[a.item.entry.category] - GROUP[b.item.entry.category]) ||
+        b.score - a.score ||
+        (b.item.entry.date ?? 0) - (a.item.entry.date ?? 0) ||
+        a.item.order - b.item.order,
+    )
     .slice(0, MAX_RESULTS)
     .map(({ item }) => ({ ...item.entry, snippet: snippetFor(item.entry, terms) }));
 
@@ -476,6 +497,8 @@ interface PageEntry {
 }
 
 // The site's pages, and the parts of them people look for by name. Aliases are separated by commas.
+// About Us, Careers, Privacy Policy and Terms of Use are found by their name only: nothing on them is searched (no
+// text, sections or roles).
 const PAGES: PageEntry[] = [
   {
     title: "Home",
@@ -490,25 +513,8 @@ const PAGES: PageEntry[] = [
     title: "About Us",
     link: "/about",
     description: "Our mission, core values and leadership team.",
-    aliases: "about, about chemlife, company, our story, our journey, history, founders, team, management, purpose",
+    aliases: "about, about chemlife, about the company, company",
     label: (m) => m.nav.about,
-    summary: (m) => m.meta.about.description,
-    body: (m) => [m.about.intro, m.about.journeyText, m.about.journeyText2, m.about.leaders],
-  },
-  {
-    title: "Vision & Mission",
-    link: "/about#vision-mission",
-    description: "What ChemLife is working towards, on the About Us page.",
-    aliases: "vision, mission, our vision, our mission, purpose, goal",
-    body: (m) => [m.about.visionText, m.about.missionTitle, m.about.missionText],
-  },
-  {
-    title: "Core Values",
-    link: "/about#core-values",
-    description: "The values ChemLife works by, on the About Us page.",
-    aliases: "values, pillars, principles, green, trust, innovation",
-    label: (m) => m.about.valuesTitle,
-    body: (m) => m.about.values,
   },
   {
     title: "Who We Are",
@@ -524,9 +530,9 @@ const PAGES: PageEntry[] = [
     link: "/who-we-are#leadership",
     description: "ChemLife's board of directors, on the Who We Are page.",
     aliases: "leadership team, leaders, directors, board of directors, board, management, founders, chairman, managing director, md, ceo, team",
-    label: (m) => m.about.leadersTitle,
-    // The last fact names the directors, as on the page.
-    body: (m) => [m.home.whoWeAre.facts[m.home.whoWeAre.facts.length - 1], m.home.whoWeAre.leadershipCaption, m.about.leaders],
+    // The page's heading for it is the label of its last fact, which names the directors.
+    label: (m) => m.home.whoWeAre.facts[m.home.whoWeAre.facts.length - 1].label,
+    body: (m) => [m.home.whoWeAre.facts[m.home.whoWeAre.facts.length - 1], m.home.whoWeAre.leadershipCaption],
   },
   {
     title: "Questions & Answers",
@@ -573,14 +579,8 @@ const PAGES: PageEntry[] = [
     title: "Careers",
     link: "/careers",
     description: "Internships at ChemLife and how to apply.",
-    aliases: "jobs, job openings, openings, vacancy, vacancies, hiring, recruitment, employment, work with us, join us, apply, how to apply, application, resume, cv, internships, internship program, stipend, students, freshers",
+    aliases: "career, jobs, job openings, openings, vacancy, vacancies, hiring, recruitment, employment, work with us, join us, apply, how to apply, application, resume, cv, internship, internships, intern",
     label: (m) => m.nav.careers,
-    summary: (m) => m.meta.careers.description,
-    body: (m) => {
-      // Everything on the page but the roles, which are results of their own.
-      const { roles: _roles, ...page } = m.careers;
-      return page;
-    },
   },
   {
     title: "Contact Us",
@@ -602,13 +602,13 @@ const PAGES: PageEntry[] = [
     title: "Privacy Policy",
     link: "/privacy",
     description: "How ChemLife collects, uses and protects your information.",
-    aliases: "privacy, data, personal information, cookies, data protection",
+    aliases: "privacy, privacy policy",
   },
   {
     title: "Terms of Use",
     link: "/terms",
     description: "The terms for using this website.",
-    aliases: "terms, terms and conditions, conditions, legal, disclaimer",
+    aliases: "terms, terms of use, terms and conditions",
   },
 ];
 
@@ -708,35 +708,21 @@ export function buildSearchIndex({ messages: t, english, href, insights, insight
     };
   });
 
-  const roles = INTERNSHIP_ROLES.map((role, i): SearchEntry => {
-    const text = t.careers.roles[i];
-    return {
-      title: text.title,
-      category: "Career",
-      description: text.department,
-      link: href(`/careers#${roleAnchor(role.id)}`),
-      aliases: [role.englishTitle, role.englishDepartment, role.id, "internship", "job", "opening"],
-      body: both((m) => [m.careers.roles[i].roleScope, m.careers.roles[i].requirements, m.careers.roles[i].qualifications]),
-    };
-  });
+  const media = (insights ? [...insights.blogs, ...insights.videos, ...insights.podcasts] : []).map(
+    (item): SearchEntry => ({
+      title: item.title,
+      category: item.type === "Blog" ? "Article" : item.type,
+      description: item.description,
+      link: insightHref?.(item) ?? `/insights#${insightAnchor(item.title)}`,
+      body: item.content,
+      date: Date.parse(item.date) || 0,
+    }),
+  );
 
-  // One result per post: the same post on LinkedIn and Instagram shares its title and its place on the page.
+  // One result per address. The same post on LinkedIn and Instagram goes to one place, even when the titles differ
+  // by an emoji. The results list tells its rows apart by their address: two alike, and a row can stay on screen
+  // after the search has changed.
   const seen = new Set<string>();
-  const media = (insights ? [...insights.blogs, ...insights.videos, ...insights.podcasts] : []).flatMap((item): SearchEntry[] => {
-    const link = insightHref?.(item) ?? `/insights#${insightAnchor(item.title)}`;
-    if (seen.has(link)) return [];
-    seen.add(link);
-    return [
-      {
-        title: item.title,
-        category: item.type === "Blog" ? "Article" : item.type,
-        description: item.description,
-        link,
-        body: item.content,
-        date: Date.parse(item.date) || 0,
-      },
-    ];
-  });
-
-  return prepareIndex([...products, ...research, ...roles, ...pages, ...media]);
+  const entries = [...products, ...research, ...pages, ...media].filter((entry) => !seen.has(entry.link) && seen.add(entry.link));
+  return prepareIndex(entries);
 }
