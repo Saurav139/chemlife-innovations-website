@@ -2,6 +2,8 @@ import type { MetadataRoute } from "next";
 import { SITE_URL } from "@/lib/seo";
 import { LOCALES, isTranslatedPath, localizePath } from "@/i18n/config";
 import { PRODUCTS, productPath } from "@/lib/catalog";
+import { articlePath } from "@/lib/articles";
+import { getInsights } from "@/lib/insights";
 
 // Pages for search engines, as their canonical URLs. /launch is left out because it's noindexed.
 // Translated pages are also listed in Kannada and Hindi, each with its language alternates. Add new pages here. No lastModified: Google ignores dates that aren't kept accurate.
@@ -22,12 +24,23 @@ const PAGES = [
   "/terms",
 ];
 
+// Blog articles come from the Insights inbox, so the list is made again at most once an hour.
+export const revalidate = 3600;
+
 const url = (path: string) => (path === "/" ? SITE_URL : `${SITE_URL}${path}`);
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  return PAGES.flatMap((path) => {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const pages = PAGES.flatMap((path) => {
     if (!isTranslatedPath(path)) return [{ url: url(path) }];
     const languages = Object.fromEntries(LOCALES.map((l) => [l, url(localizePath(path, l))]));
     return LOCALES.map((l) => ({ url: url(localizePath(path, l)), alternates: { languages } }));
   });
+  // Each blog article's page on this site (English only).
+  let articles: MetadataRoute.Sitemap = [];
+  try {
+    articles = [...new Set((await getInsights()).blogs.map(articlePath).filter((path): path is string => !!path))].map((path) => ({ url: url(path) }));
+  } catch (error) {
+    console.warn("Sitemap: couldn't list the blog articles", error);
+  }
+  return [...pages, ...articles];
 }
