@@ -95,7 +95,7 @@ function wordsOf(text: string): string[] {
 // Words that carry no meaning in a question ("how do I apply" is a search for "apply"). They only count when the
 // search is nothing else ("who we are").
 const STOP_WORDS = new Set(
-  "a an and are as at be by can do does for from how i in is it its me my of on or our that the their this to us was we what when where which who why with you your".split(" "),
+  "a an and any are as at be become by can do does find for from get have how i in is it its me my need of on or our that the their there this to us want was we what when where which who why with you your".split(" "),
 );
 
 // Everyday words for the words the site uses. Checked in their compared form (singular).
@@ -190,7 +190,6 @@ interface Prepared {
   aliasPhrases: Set<string>;
   descriptionPhrase: string;
   bodyPhrase: string;
-  prior: number;
 }
 
 export interface SearchIndex {
@@ -220,6 +219,9 @@ const TAGS: Record<SearchCategory, string> = {
 
 // Among equally good matches, a product or a page is more likely what the visitor wants than a post mentioning it.
 const PRIOR: Record<SearchCategory, number> = { Product: 1.3, Page: 1.2, Research: 1.1, Career: 1.1, Article: 1, Video: 1, Podcast: 1 };
+// Unless they ask a question ("what is FCR"): then something that explains comes before something to buy.
+const QUESTION = new Set(["what", "why", "how"]);
+const QUESTION_PRIOR: Record<SearchCategory, number> = { Product: 1, Page: 1.2, Research: 1.1, Career: 1.1, Article: 1.15, Video: 1.15, Podcast: 1.15 };
 
 // A product, research topic or role is described by its body; a page or a post only mentions things in it.
 const OWN_TEXT = new Set<SearchCategory>(["Product", "Research", "Career"]);
@@ -252,7 +254,6 @@ function prepareIndex(entries: SearchEntry[]): SearchIndex {
       aliasPhrases: new Set(aliases.map((words) => words.join(" "))),
       descriptionPhrase: phrase(wordsOf(entry.description)),
       bodyPhrase: phrase(wordsOf(entry.body ?? "")),
-      prior: PRIOR[entry.category],
     };
   });
   const words = new Set(items.flatMap((item) => item.fields.flatMap((field) => field.tokens)));
@@ -349,6 +350,8 @@ export function searchSite(index: SearchIndex, query: string): SearchOutcome {
     return result;
   };
 
+  const prior = meaningful.length > 0 && typed.some((word) => QUESTION.has(word)) ? QUESTION_PRIOR : PRIOR;
+
   // The search as a whole, with and without its small words.
   const whole = words.length === typed.length ? [typed] : [typed, words];
 
@@ -391,7 +394,7 @@ export function searchSite(index: SearchIndex, query: string): SearchOutcome {
       }
       score += bonus;
 
-      return { item, matched, score: score * item.prior };
+      return { item, matched, score: score * prior[item.entry.category] };
     })
     .filter((result): result is { item: Prepared; matched: number; score: number } => result !== null);
 
@@ -573,7 +576,11 @@ const PAGES: PageEntry[] = [
     aliases: "jobs, job openings, openings, vacancy, vacancies, hiring, recruitment, employment, work with us, join us, apply, how to apply, application, resume, cv, internships, internship program, stipend, students, freshers",
     label: (m) => m.nav.careers,
     summary: (m) => m.meta.careers.description,
-    body: (m) => [m.careers.intro, m.careers.aboutText, m.careers.durationText, m.careers.stipendText, m.careers.lunchText, m.careers.accommodationText, m.careers.travelText, m.careers.opportunityText],
+    body: (m) => {
+      // Everything on the page but the roles, which are results of their own.
+      const { roles: _roles, ...page } = m.careers;
+      return page;
+    },
   },
   {
     title: "Contact Us",
