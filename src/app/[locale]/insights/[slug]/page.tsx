@@ -7,10 +7,13 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SiteSearch from "@/components/SiteSearch";
 import { VariantProvider } from "@/context/VariantContext";
+import { formattedArticle } from "@/lib/article-source";
 import { articleBlocks, articlePath, isOptimizableImage, isoDate } from "@/lib/articles";
 import { getArticle, type InsightItem } from "@/lib/insights";
 import { SITE_NAME, SITE_URL, pageMetadata } from "@/lib/seo";
 import { jsonLd } from "@/lib/structuredData";
+import ArticleShare from "./ArticleShare";
+import styles from "./article.module.css";
 
 type Params = Promise<{ locale: string; slug: string }>;
 
@@ -49,8 +52,16 @@ export default async function ArticlePage({ params }: { params: Params }) {
   if (!found) notFound();
   const { article } = found;
   const path = articlePath(article)!;
-  const others = [...found.others].sort(newestFirst).slice(0, MORE_ARTICLES);
   const published = isoDate(article.date);
+  // The article as WordPress formats it; without it (WordPress unreachable, or text rewritten in the inbox), the saved text.
+  const formatted = await formattedArticle(article);
+
+  // The articles either side of this one by date, then others to read (those two last, as they're already offered).
+  const all = [article, ...found.others].sort(newestFirst);
+  const at = all.indexOf(article);
+  const newer = all[at - 1];
+  const older = all[at + 1];
+  const others = [...all.filter((item) => item !== article && item !== newer && item !== older), ...[newer, older].filter(Boolean)].slice(0, MORE_ARTICLES);
 
   const posting = {
     "@context": "https://schema.org",
@@ -98,7 +109,7 @@ export default async function ArticlePage({ params }: { params: Params }) {
         </section>
 
         <article className="max-w-3xl mx-auto px-6 py-10 md:py-14">
-          {article.imageUrl && (
+          {article.imageUrl && !formatted?.startsWithImage && (
             <div className="relative w-full aspect-video rounded-2xl overflow-hidden bg-slate-100 border border-gray-200 mb-10">
               <Image
                 src={article.imageUrl}
@@ -112,6 +123,9 @@ export default async function ArticlePage({ params }: { params: Params }) {
             </div>
           )}
 
+          {formatted ? (
+          <div className={`text-slate-700 text-base md:text-lg leading-relaxed ${styles.body}`} dangerouslySetInnerHTML={{ __html: formatted.html }} />
+          ) : (
           <div className="text-slate-700 text-base md:text-lg leading-relaxed space-y-5 [overflow-wrap:anywhere]">
             {articleBlocks(article.content ?? article.description).map((block, i) =>
               block.kind === "heading" ? (
@@ -125,8 +139,28 @@ export default async function ArticlePage({ params }: { params: Params }) {
               ),
             )}
           </div>
+          )}
 
-          <div className="mt-12 rounded-2xl bg-gray-55 border border-gray-200 p-6 md:p-8 flex flex-col sm:flex-row sm:items-center gap-4 sm:justify-between">
+          <div className="mt-10 pt-6 border-t border-gray-200">
+            <ArticleShare title={article.title} url={`${SITE_URL}${path}`} />
+          </div>
+
+          {(newer || older) && (
+            <nav aria-label="More from the blog" className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {[{ item: older, label: "← Older article", side: "" }, { item: newer, label: "Newer article →", side: "sm:col-start-2 sm:text-right" }].map(({ item, label, side }) => item && (
+                <Link
+                  key={label}
+                  href={articlePath(item)!}
+                  className={`group rounded-2xl border border-gray-200 p-5 hover:border-teal-500/40 hover:shadow-sm transition-[box-shadow,border-color] ${side}`}
+                >
+                  <span className="block text-xs font-bold uppercase tracking-wider text-teal-aa mb-1.5">{label}</span>
+                  <span className="block font-heading font-bold text-brand-navy group-hover:text-teal-aa transition-colors line-clamp-2">{item.title}</span>
+                </Link>
+              ))}
+            </nav>
+          )}
+
+          <div className="mt-8 rounded-2xl bg-gray-55 border border-gray-200 p-6 md:p-8 flex flex-col sm:flex-row sm:items-center gap-4 sm:justify-between">
             <p className="font-heading text-lg font-bold text-brand-navy">Questions about feed hygiene or our products?</p>
             <Link
               href="/contact"
