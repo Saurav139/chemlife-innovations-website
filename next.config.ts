@@ -11,8 +11,9 @@ const chatbotApiOrigin = /^https?:\/\//.test(chatbotApiUrl) ? new URL(chatbotApi
 const contentSecurityPolicy = [
   "default-src 'self'",
   // Next.js inlines page data as <script> tags. Nonces would remove 'unsafe-inline' but force every page to render per request.
-  // Google Analytics (gtag.js) loads only after a visitor accepts the cookie banner.
-  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""} https://www.googletagmanager.com`,
+  // Google Analytics (gtag.js) loads only after a visitor accepts the cookie banner. Cloudflare Turnstile is the
+  // contact form's CAPTCHA (script and challenge frame).
+  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""} https://www.googletagmanager.com https://challenges.cloudflare.com`,
   "style-src 'self' 'unsafe-inline'",
   // Insights images: WordPress blog, YouTube thumbnails, LinkedIn post thumbnails (once the LinkedIn feed is enabled).
   // Google Analytics hosts below are Google's documented list for GA4 without Google Signals.
@@ -21,8 +22,8 @@ const contentSecurityPolicy = [
   "media-src 'self'",
   `connect-src 'self'${chatbotApiOrigin ? ` ${chatbotApiOrigin}` : ""} https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com`,
   // YouTube, LinkedIn and Instagram video players on Insights; Google Maps on Contact (maps.google.com redirects to
-  // www.google.com).
-  "frame-src https://www.youtube-nocookie.com https://www.youtube.com https://www.linkedin.com https://www.instagram.com https://maps.google.com https://www.google.com",
+  // www.google.com); Cloudflare Turnstile on Contact.
+  "frame-src https://www.youtube-nocookie.com https://www.youtube.com https://www.linkedin.com https://www.instagram.com https://maps.google.com https://www.google.com https://challenges.cloudflare.com",
   "object-src 'none'",
   "base-uri 'self'",
   "form-action 'self'",

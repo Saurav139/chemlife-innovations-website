@@ -806,6 +806,7 @@ const ta: Messages = {
     },
     submitErrors: {
       invalid: "சில விவரங்கள் தவறாகத் தெரிகின்றன. படிவத்தைச் சரிபார்த்து மீண்டும் முயலவும்.",
+      captcha: "நீங்கள் ஒரு நபர் என்பதை உறுதிப்படுத்த முடியவில்லை. மீண்டும் முயலவும்.",
       rate_limited: "குறுகிய நேரத்தில் பல செய்திகளை அனுப்பியுள்ளீர்கள், எனவே படிவம் சிறிது நேரம் நிறுத்தி வைக்கப்பட்டுள்ளது.",
       unavailable: "தொடர்புப் படிவம் தற்போது கிடைக்கவில்லை.",
       send_failed: "உங்கள் செய்தியை இப்போது அனுப்ப முடியவில்லை.",
@@ -814,6 +815,8 @@ const ta: Messages = {
     // {email}, {address} and {phone} are filled in by the page.
     fallback: "அதற்குப் பதிலாக நீங்கள் {address} என்ற முகவரிக்கு {email}, அல்லது {phone} என்ற எண்ணில் அழைக்கலாம்.",
     fallbackEmail: "மின்னஞ்சல் அனுப்பலாம்",
+    // Shown under the Send button until the CAPTCHA (Cloudflare Turnstile) has let the visitor through.
+    captchaPending: "நீங்கள் ஒரு நபர் என்பதைச் சரிபார்க்கிறோம்...",
     sending: "செய்தி அனுப்பப்படுகிறது...",
     send: "செய்தி அனுப்பு",
     sentTitle: "செய்தி அனுப்பப்பட்டது!",

@@ -806,6 +806,7 @@ const en = {
     },
     submitErrors: {
       invalid: "Some details look wrong. Please check the form and try again.",
+      captcha: "We couldn't confirm that you're a person. Please try again.",
       rate_limited: "You've sent several messages in a short time, so we've paused the form for a while.",
       unavailable: "The contact form isn't available right now.",
       send_failed: "Your message couldn't be sent right now.",
@@ -814,6 +815,8 @@ const en = {
     // {email}, {address} and {phone} are filled in by the page.
     fallback: "You can {email} at {address}, or call {phone}.",
     fallbackEmail: "email it to us instead",
+    // Shown under the Send button until the CAPTCHA (Cloudflare Turnstile) has let the visitor through.
+    captchaPending: "Checking that you're a person...",
     sending: "Sending Message...",
     send: "Send Message",
     sentTitle: "Message Sent!",

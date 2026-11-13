@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { RateLimiter, clientIp } from "@/lib/rateLimit";
+import { verifyTurnstile } from "@/lib/turnstile";
 import {
   CONTACT_EMAIL,
   CONTACT_LIMITS,
@@ -25,8 +26,9 @@ function fail(error: ContactErrorCode, status: number, retryAfter?: number) {
 
 const oneLine = (value: string) => value.replace(/\s+/g, " ").trim();
 
-/** The message, cleaned up, or null if it's incomplete or too long. `trap` is the hidden field only bots fill in. */
-function parse(body: unknown): (ContactMessage & { trap: boolean }) | null {
+/** The message, cleaned up, or null if it's incomplete or too long. `trap` is the hidden field only bots fill in;
+ * `token` is the CAPTCHA token from the Turnstile widget. */
+function parse(body: unknown): (ContactMessage & { trap: boolean; token: string }) | null {
   if (!body || typeof body !== "object") return null;
   const field = (key: string) => {
     const value = (body as Record<string, unknown>)[key];
@@ -45,11 +47,11 @@ function parse(body: unknown): (ContactMessage & { trap: boolean }) | null {
     EMAIL_PATTERN.test(form.email) &&
     (INQUIRY_TYPES as readonly string[]).includes(form.inquiryType) &&
     (Object.keys(CONTACT_LIMITS) as (keyof typeof CONTACT_LIMITS)[]).every((key) => form[key].length <= CONTACT_LIMITS[key]);
-  return valid ? { ...form, trap: field("website") !== "" } : null;
+  return valid ? { ...form, trap: field("website") !== "", token: field("turnstileToken") } : null;
 }
 
 export async function POST(request: Request) {
-  if (!process.env.RESEND_API_KEY) return fail("unavailable", 503);
+  if (!process.env.RESEND_API_KEY || !process.env.TURNSTILE_SECRET_KEY) return fail("unavailable", 503);
 
   const form = parse(await request.json().catch(() => null));
   if (!form) return fail("invalid", 400);
@@ -59,6 +61,8 @@ export async function POST(request: Request) {
   const ip = clientIp(request);
   const wait = (ip && (perHour.retryAfter(ip) || perDay.retryAfter(ip))) || siteWide.retryAfter("site");
   if (wait) return fail("rate_limited", 429, wait);
+  // The CAPTCHA: nothing is sent unless Cloudflare confirms the token came from this visitor's widget.
+  if (!(await verifyTurnstile(form.token, ip))) return fail("captcha", 403);
   if (ip) {
     perHour.consume(ip);
     perDay.consume(ip);

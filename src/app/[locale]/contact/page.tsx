@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useState, useEffect } from "react";
+import { Fragment, useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Header from "@/components/Header";
@@ -8,9 +8,10 @@ import Footer from "@/components/Footer";
 import SectionWrapper from "@/components/SectionWrapper";
 import { VariantProvider } from "@/context/VariantContext";
 import SiteSearch from "@/components/SiteSearch";
+import Turnstile, { type TurnstileHandle } from "@/components/Turnstile";
 import { Images } from "@/lib/assets";
 import { track } from "@/lib/analytics";
-import { useT } from "@/i18n/LocaleProvider";
+import { useLocale, useT } from "@/i18n/LocaleProvider";
 import {
   CONTACT_EMAIL,
   CONTACT_LIMITS,
@@ -22,6 +23,9 @@ import {
 } from "@/lib/contact";
 
 const easeOut = [0.25, 0.1, 0, 1] as const;
+
+// The CAPTCHA's site key. Without it the form can't be sent and says so.
+const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? "";
 
 // `website` is a hidden spam trap: people never see it, bots fill it in.
 type FormData = ContactMessage & { website: string };
@@ -52,6 +56,7 @@ interface FormErrors {
 
 export default function ContactPage() {
   const t = useT().contact;
+  const locale = useLocale();
   // What to tell the visitor when the message couldn't be sent. All of them also offer to email it instead.
   const SUBMIT_ERRORS: Record<SubmitError, string> = t.submitErrors;
   const [formData, setFormData] = useState<FormData>(EMPTY_FORM);
@@ -60,6 +65,9 @@ export default function ContactPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [submitError, setSubmitError] = useState<SubmitError | null>(null);
+  // The CAPTCHA token from the Turnstile widget. Null until the visitor passes; the form can't be sent without it.
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const captcha = useRef<TurnstileHandle>(null);
 
   // Pre-fill the form when a call to action links here, e.g. /contact?type=nutritionist from the homepage hero
   useEffect(() => {
@@ -132,7 +140,7 @@ export default function ContactPage() {
   // Emails the message to the team through /api/contact. "Sent" is only shown once the email has gone.
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!validateForm()) return;
+    if (!validateForm() || !captchaToken) return;
 
     setIsSubmitting(true);
     setSubmitError(null);
@@ -141,7 +149,7 @@ export default function ContactPage() {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ ...formData, turnstileToken: captchaToken }),
         signal: AbortSignal.timeout(20_000),
       });
       if (!res.ok) {
@@ -152,6 +160,8 @@ export default function ContactPage() {
       error = "network";
     }
     setIsSubmitting(false);
+    // Tokens are single-use: ask the widget for a fresh one before any further attempt.
+    captcha.current?.reset();
     if (error) {
       setSubmitError(error);
       return;
@@ -373,6 +383,15 @@ export default function ContactPage() {
                             />
                           </div>
 
+                          {/* CAPTCHA (Cloudflare Turnstile). Without a site key the form can't be sent, so say so instead. */}
+                          {TURNSTILE_SITE_KEY ? (
+                            <Turnstile ref={captcha} siteKey={TURNSTILE_SITE_KEY} language={locale} onToken={setCaptchaToken} />
+                          ) : (
+                            submitError !== "unavailable" && (
+                              <p className="text-sm text-red-700">{SUBMIT_ERRORS.unavailable}</p>
+                            )
+                          )}
+
                           {submitError && (
                             <div role="alert" className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
                               <p className="font-semibold">{SUBMIT_ERRORS[submitError]}</p>
@@ -398,7 +417,7 @@ export default function ContactPage() {
                           <div className="pt-2">
                             <button
                               type="submit"
-                              disabled={isSubmitting}
+                              disabled={isSubmitting || !captchaToken}
                               className="w-full md:w-auto px-8 py-3.5 bg-brand-navy text-white font-bold text-sm rounded-full hover:bg-teal-aa focus:outline-none transition-all duration-300 shadow-sm flex items-center justify-center gap-2 cursor-pointer disabled:bg-slate-400"
                             >
                               {isSubmitting ? (
@@ -413,6 +432,9 @@ export default function ContactPage() {
                                 t.send
                               )}
                             </button>
+                            {TURNSTILE_SITE_KEY && !captchaToken && !isSubmitting && (
+                              <p className="mt-2 text-xs text-slate-500" aria-live="polite">{t.captchaPending}</p>
+                            )}
                           </div>
                         </form>
                       </motion.div>

@@ -806,6 +806,7 @@ const mr: Messages = {
     },
     submitErrors: {
       invalid: "काही तपशील चुकीचे दिसत आहेत. कृपया फॉर्म तपासून पुन्हा प्रयत्न करा.",
+      captcha: "तुम्ही व्यक्ती आहात याची खात्री करता आली नाही. कृपया पुन्हा प्रयत्न करा.",
       rate_limited: "तुम्ही कमी वेळात अनेक संदेश पाठवले आहेत, त्यामुळे फॉर्म काही काळासाठी थांबवला आहे.",
       unavailable: "संपर्क फॉर्म सध्या उपलब्ध नाही.",
       send_failed: "तुमचा संदेश सध्या पाठवता आला नाही.",
@@ -814,6 +815,8 @@ const mr: Messages = {
     // {email}, {address} and {phone} are filled in by the page.
     fallback: "त्याऐवजी तुम्ही {address} वर {email}, किंवा {phone} वर फोन करू शकता.",
     fallbackEmail: "आम्हाला ईमेल पाठवू शकता",
+    // Shown under the Send button until the CAPTCHA (Cloudflare Turnstile) has let the visitor through.
+    captchaPending: "तुम्ही व्यक्ती आहात याची तपासणी सुरू आहे...",
     sending: "संदेश पाठवत आहोत...",
     send: "संदेश पाठवा",
     sentTitle: "संदेश पाठवला!",
