@@ -4,8 +4,8 @@ import { useHref, useT } from "@/i18n/LocaleProvider";
 
 export const easeOut = [0.25, 0.1, 0, 1] as const;
 
-// A pinned panel sits just below the fixed header (h-20, md:h-24, lg:h-32) and fills the rest of the screen.
-export const PINNED = "sticky top-20 md:top-24 lg:top-32 h-[calc(100svh-5rem)] md:h-[calc(100svh-6rem)] lg:h-[calc(100svh-8rem)]";
+// A pinned panel sits just below the fixed header (h-32) and fills the rest of the screen.
+export const PINNED = "sticky top-32 h-[calc(100svh-8rem)]";
 
 export function useWhoWeAre() {
   return useT().home.whoWeAre;

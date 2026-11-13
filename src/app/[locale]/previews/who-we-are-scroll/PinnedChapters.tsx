@@ -44,7 +44,7 @@ export default function PinnedChapters() {
   return <section aria-label="Who we are, pinned chapters" className="bg-white">
     <div className="max-w-[1200px] mx-auto px-6 pt-10 md:pt-16 lg:grid lg:grid-cols-12 lg:gap-16">
       {/* Phones: the picture pins across the top and the text scrolls up under it. */}
-      <div className="sticky top-20 md:top-24 lg:top-32 z-10 h-[34svh] md:h-[40svh] lg:h-[calc(100svh-8rem)] lg:col-span-6 lg:order-2 flex items-center py-3 bg-white">
+      <div className="sticky top-32 z-10 h-[34svh] md:h-[40svh] lg:h-[calc(100svh-8rem)] lg:col-span-6 lg:order-2 flex items-center py-3 bg-white">
         <div className="relative w-full h-full lg:h-[80%] rounded-2xl overflow-hidden bg-slate-100">
           {chapters.map((chapter, i) => <motion.div key={chapter.title} className="absolute inset-0" initial={false}
             animate={{ opacity: active === i ? 1 : 0, scale: active === i ? 1 : 1.08 }} transition={{ duration: 0.7, ease: easeOut }}>
