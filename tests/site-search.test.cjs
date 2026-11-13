@@ -102,8 +102,13 @@ test('research topics', () => {
   assert.equal(first('reserch'), 'Research & Development');
 });
 
-test('About Us and Careers are found by their name, and nothing on them is searched', () => {
+test('About Us, Careers, Privacy and Terms are found by their name, and nothing on them is searched', () => {
   for (const query of ['about', 'about us', 'company']) assert.equal(first(query), 'About Us', query);
+  for (const query of ['privacy', 'privacy policy']) assert.equal(first(query), 'Privacy Policy', query);
+  for (const query of ['terms', 'terms of use', 'terms and conditions']) assert.equal(first(query), 'Terms of Use', query);
+  for (const query of ['cookies', 'personal data', 'legal', 'disclaimer']) {
+    assert.ok(!results(query).some((result) => /^\/(privacy|terms)\b/.test(result.link)), query);
+  }
   for (const query of ['careers', 'internship', 'internhsip', 'jobs', 'marketing internship', 'nutrition intern', 'how much stipend do interns get']) assert.equal(first(query), 'Careers', query);
   // Words only those pages use (the internship's stipend, lunch and accommodation; the founders' story) find neither.
   for (const query of ['stipend', 'lunch', 'accommodation', 'pre-placement offer', 'green technologies', 'eco-conscious']) {
