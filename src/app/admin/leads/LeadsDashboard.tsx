@@ -182,7 +182,7 @@ export default function LeadsDashboard({ initial }: { initial: Data }) {
                 }`}
               >
                 {t.label} <span className="font-semibold text-slate-500">({stats[t.id].total})</span>
-                {open > 0 && <span className="ml-1.5 rounded-full bg-brand-orange-aa px-2 py-0.5 text-xs text-white">{open} new</span>}
+                {open > 0 && <span className="ml-1.5 inline-block whitespace-nowrap rounded-full bg-brand-orange-aa px-2 py-0.5 text-xs text-white">{open} new</span>}
               </button>
             );
           })}
