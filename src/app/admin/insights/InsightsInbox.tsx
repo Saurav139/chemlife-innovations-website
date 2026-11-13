@@ -1049,6 +1049,11 @@ function DraftFields({ draft, set, base, idPrefix }: { draft: Draft; set: (d: Pa
         <details className="rounded-xl border border-slate-200 px-3 py-2">
           <summary className="text-sm font-semibold cursor-pointer">Full text for the reader</summary>
           <textarea value={draft.content} onChange={(e) => set({ content: e.target.value })} rows={8} className={FIELD} aria-label="Full text for the reader" />
+          {base.url?.includes("wordpress.com") && (
+            <p className="mt-2 text-xs text-slate-600 leading-relaxed">
+              Left as it is, this article follows WordPress: changes made there reach its page by themselves. If you rewrite the text here, the page shows your version as plain text and stops following WordPress. Clear the text to follow WordPress again.
+            </p>
+          )}
         </details>
       </div>
 

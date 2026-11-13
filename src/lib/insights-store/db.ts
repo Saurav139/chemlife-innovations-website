@@ -78,6 +78,12 @@ async function createTables(db: Pool) {
     "SELECT 1 FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'insight_items' AND COLUMN_NAME = 'video_url'"
   );
   if (videoColumn.length === 0) await db.query("ALTER TABLE insight_items ADD COLUMN video_url VARCHAR(500) NULL");
+  // Added November 2026: whether the moderator rewrote a post's text (1), or it's still the source's own (0). Null
+  // until that's known; the next check for new posts works it out for blog posts (sync.ts).
+  const [editedColumn] = await db.query<RowDataPacket[]>(
+    "SELECT 1 FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'insight_items' AND COLUMN_NAME = 'content_edited'"
+  );
+  if (editedColumn.length === 0) await db.query("ALTER TABLE insight_items ADD COLUMN content_edited TINYINT(1) NULL");
   await db.query(`CREATE TABLE IF NOT EXISTS insight_images (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     mime VARCHAR(40) NOT NULL,
@@ -191,7 +197,8 @@ export async function setSocialAutoPublish(source: SocialSource, enabled: boolea
 // ---------- Posts ----------
 
 const ITEM_COLUMNS = `i.id, i.source, i.external_id, i.kind, i.status, i.featured, i.title, i.summary, i.content, i.url,
-  i.image_url, i.image_id, i.youtube_id, i.video_url, i.meta, i.published_at, i.imported_at, i.decided_at, im.mime AS image_mime`;
+  i.image_url, i.image_id, i.youtube_id, i.video_url, i.meta, i.published_at, i.imported_at, i.decided_at, i.content_edited,
+  im.mime AS image_mime`;
 const FROM_ITEMS = "FROM insight_items i LEFT JOIN insight_images im ON im.id = i.image_id";
 
 function toItem(row: RowDataPacket): InboxItem {
@@ -205,6 +212,7 @@ function toItem(row: RowDataPacket): InboxItem {
     title: row.title,
     summary: row.summary,
     content: row.content ?? "",
+    contentEdited: row.content_edited === null || row.content_edited === undefined ? null : Boolean(row.content_edited),
     url: row.url ?? "",
     image: row.image_id && row.image_mime ? imagePath(row.image_id, row.image_mime) : (row.image_url ?? ""),
     imageId: row.image_id ?? null,
@@ -267,13 +275,13 @@ async function insertItems(db: Pool | PoolConnection, items: SourceItem[], statu
   for (const item of items) {
     const [result] = await db.execute<ResultSetHeader>(
       `INSERT IGNORE INTO insight_items (source, external_id, kind, status, title, summary, content, url, image_url, image_id,
-        youtube_id, meta, published_at, imported_at, decided_at, video_url)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        youtube_id, meta, published_at, imported_at, decided_at, video_url, content_edited)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         item.source, item.externalId.slice(0, 191), item.kind, status, item.title.slice(0, 300), item.summary, item.content ?? null,
         item.url?.slice(0, 1000) ?? null, item.imageId ? null : (item.imageUrl?.slice(0, 1000) ?? null), item.imageId ?? null,
         item.youtubeId ?? null, item.meta.slice(0, 60), item.publishedAt, now, status === "pending" ? null : now,
-        item.videoUrl?.slice(0, 500) ?? null,
+        item.videoUrl?.slice(0, 500) ?? null, item.contentEdited === undefined ? null : Number(item.contentEdited),
       ]
     );
     added += result.affectedRows;
@@ -344,6 +352,7 @@ export async function changeItem(id: number, changes: ItemChanges): Promise<Inbo
     if (changes.title !== undefined) set("title", changes.title.slice(0, 300));
     if (changes.summary !== undefined) set("summary", changes.summary);
     if (changes.content !== undefined) set("content", changes.content);
+    if (changes.contentEdited !== undefined) set("content_edited", Number(changes.contentEdited));
     if (changes.meta !== undefined) set("meta", changes.meta.slice(0, 60));
     if (changes.imageId !== undefined) set("image_id", changes.imageId);
     if (changes.videoUrl !== undefined) set("video_url", changes.videoUrl?.slice(0, 500) ?? null);
@@ -366,6 +375,24 @@ export async function changeItem(id: number, changes: ItemChanges): Promise<Inbo
     conn.release();
   }
   return getItem(id);
+}
+
+/** Records whether a post's text was rewritten in the inbox, for a post where that wasn't known yet. */
+export async function settleContentEdited(id: number, edited: boolean): Promise<void> {
+  const db = await pool();
+  await db.execute("UPDATE insight_items SET content_edited = ? WHERE id = ? AND content_edited IS NULL", [Number(edited), id]);
+}
+
+/** Brings a post's text up to date with its source; a summary or card label is replaced only when one is given.
+ *  Never over text the moderator rewrote: that's checked in the same statement, so an edit saved meanwhile wins.
+ *  Returns whether the post changed. */
+export async function refreshSourceText(id: number, text: { content: string; summary?: string; meta?: string }): Promise<boolean> {
+  const db = await pool();
+  const [result] = await db.execute<ResultSetHeader>(
+    "UPDATE insight_items SET content = ?, summary = COALESCE(?, summary), meta = COALESCE(?, meta) WHERE id = ? AND content_edited = 0",
+    [text.content, text.summary ?? null, text.meta?.slice(0, 60) ?? null, id]
+  );
+  return result.affectedRows > 0;
 }
 
 /** The approved posts, for the Insights page. Null until the inbox has been started (see sync.ts), so the page keeps

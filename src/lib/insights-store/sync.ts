@@ -1,12 +1,12 @@
 import { createHash } from "node:crypto";
 import { revalidatePath } from "next/cache";
 import { FALLBACK_INSIGHTS, type InsightItem } from "@/lib/insights";
-import { addImportedItems, addItems, changeItem, getSetting, knownIds, knownUrls, listItems, removeUnusedImages, setSetting, socialAutoPublishSettings } from "./db";
+import { addImportedItems, addItems, changeItem, getSetting, knownIds, knownUrls, listItems, refreshSourceText, removeUnusedImages, setSetting, settleContentEdited, socialAutoPublishSettings } from "./db";
 import type { SocialAutoPublish } from "./social-publishing";
 import { fetchInstagramFeed, fetchLinkedInFeed } from "./feed";
 import { copyImage, fetchFeedText, linkedinVideoUrl } from "./preview";
 import { fetchInstagramPosts, fetchWordPressPosts, fetchYouTubeUploads, renewInstagramToken } from "./sources";
-import { articleSummary, cleanTitle, instagramEmbedUrl, instagramPostId, instagramReelCode, isFromArticle, linkedinActivityId, normalizeUrl } from "./text";
+import { articleSummary, cleanTitle, instagramEmbedUrl, instagramPostId, instagramReelCode, isFromArticle, isUnedited, linkedinActivityId, normalizeUrl, readingTime } from "./text";
 import type { ItemChanges, Source, SourceItem, SourceState, SyncResult } from "./types";
 
 // Checking the channels for new posts. New posts wait in the inbox for the moderator, except on the very first
@@ -71,6 +71,11 @@ async function importFrom(source: Source, fetchItems: () => Promise<SourceItem[]
     });
     if (source === "instagram") await addMissingInstagramPlayers(items.filter((item) => item.videoUrl && !fresh.includes(item)));
     if (await addMissingPictures(source, items.filter((item) => !fresh.includes(item)))) refreshInsightsPage();
+    if (source === "wordpress") {
+      // The importer's text is WordPress's own; posts already in the inbox keep up with it.
+      for (const item of fresh) item.contentEdited = false;
+      if (await refreshBlogText(items.filter((item) => !fresh.includes(item)))) refreshInsightsPage();
+    }
     // The source's picture address expires, so keep a copy; without one the card shows a stock photo. A few at a time.
     const withPicture = fresh.filter((item) => item.copyImage && item.imageUrl);
     for (let i = 0; i < withPicture.length; i += 4) {
@@ -197,6 +202,35 @@ async function addMissingPictures(source: Source, listed: SourceItem[]): Promise
         if (saved.status === "approved") shown = true;
       })
     );
+  }
+  return shown;
+}
+
+/** Blog posts already in the inbox keep up with WordPress: a post whose wording was changed there gets the new text,
+ *  with the reading time and summary made from it when the old ones were the importer's too. Text the moderator
+ *  rewrote in the inbox is left alone. Returns whether a post on the page changed. */
+async function refreshBlogText(posts: SourceItem[]): Promise<boolean> {
+  if (posts.length === 0) return false;
+  const current = new Map(posts.map((post) => [post.externalId, post]));
+  const builtIn = new Map(builtInItems().filter((item) => item.source === "wordpress").map((item) => [item.externalId, item.content]));
+  let shown = false;
+  for (const saved of await listItems()) {
+    const post = saved.source === "wordpress" ? current.get(saved.externalId) : undefined;
+    if (!post?.content) continue;
+    let edited = saved.contentEdited;
+    if (edited === null) {
+      // Not recorded yet (a post from before this was tracked, or one added by pasting its link): rewritten if the
+      // saved text is neither WordPress's nor the built-in list's.
+      edited = !isUnedited(saved.content, post.content, builtIn.get(saved.externalId));
+      await settleContentEdited(saved.id, edited);
+    }
+    if (edited || saved.content === post.content) continue;
+    const changed = await refreshSourceText(saved.id, {
+      content: post.content,
+      summary: saved.content && saved.summary === articleSummary(saved.content) ? post.summary : undefined,
+      meta: saved.content && saved.meta === readingTime(saved.content) ? post.meta : undefined,
+    });
+    if (changed && saved.status === "approved") shown = true;
   }
   return shown;
 }
