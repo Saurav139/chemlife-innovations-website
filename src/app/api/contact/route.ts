@@ -1,7 +1,8 @@
-import { NextResponse } from "next/server";
+import { NextResponse, after } from "next/server";
 import { RateLimiter, clientIp } from "@/lib/rateLimit";
 import { verifyTurnstile } from "@/lib/turnstile";
 import { emailTeam } from "@/lib/teamEmail";
+import { saveContactMessage } from "@/lib/leads-store";
 import {
   CONTACT_LIMITS,
   EMAIL_PATTERN,
@@ -10,7 +11,8 @@ import {
   type ContactMessage,
 } from "@/lib/contact";
 
-// Contact form messages are emailed to the team through Resend (see src/lib/teamEmail.ts).
+// Contact form messages are emailed to the team through Resend (see src/lib/teamEmail.ts), then kept for the leads
+// dashboard (/admin/leads) when the site has a database.
 
 // Generous for a person, tight for a script. Without the visitor's address only the site-wide limit applies.
 const perHour = new RateLimiter(5, 3_600_000);
@@ -87,5 +89,8 @@ export async function POST(request: Request) {
   );
   if (!sent) return fail("send_failed", 502);
 
+  // After answering, so a slow or missing database never holds up or breaks the form.
+  const { name, email, phone, inquiryType, subject, message } = form;
+  after(() => saveContactMessage({ name, email, phone, inquiryType, subject, message }));
   return NextResponse.json({ ok: true });
 }

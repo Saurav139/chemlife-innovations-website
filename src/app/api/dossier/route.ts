@@ -1,7 +1,8 @@
-import { NextResponse } from "next/server";
+import { NextResponse, after } from "next/server";
 import { RateLimiter, clientIp } from "@/lib/rateLimit";
 import { verifyTurnstile } from "@/lib/turnstile";
 import { emailTeam, emailVisitor } from "@/lib/teamEmail";
+import { saveDossierDownload } from "@/lib/leads-store";
 import { EMAIL_PATTERN } from "@/lib/contact";
 import { DOSSIER_INTERESTS, DOSSIER_LIMITS, type DossierErrorCode, type DossierRequest } from "@/lib/dossier";
 import { CODE_MINUTES, checkCode, dossierSecret, issueChallenge, issueDownloadToken, readChallenge } from "@/lib/dossierCode";
@@ -11,8 +12,8 @@ import { getMessages } from "@/i18n/messages";
 // Technical dossier requests, in three steps sent as `action`:
 //   "start"  details + CAPTCHA → a 4-digit code is emailed to the visitor; the browser keeps the signed challenge
 //   "resend" challenge → a new code to the same address
-//   "verify" challenge + code → the details are emailed to the team (the contact form's inbox) and the browser gets
-//            a download pass for /api/dossier/download
+//   "verify" challenge + code → the details are emailed to the team (the contact form's inbox) and saved for the
+//            leads dashboard, and the browser gets a download pass for /api/dossier/download
 // Same protection as /api/contact (CAPTCHA, spam trap, rate limits), plus a cap on codes per address so the form
 // can't be used to flood someone's inbox, and on wrong tries per code.
 
@@ -126,6 +127,8 @@ export async function POST(request: Request) {
     const sent = await emailTeam({ subject: `[Website] Technical dossier request: ${d.name}, ${d.company}`, text: lead, replyTo: d.email }, "dossier");
     if (!sent) return fail("send_failed", 502);
     entry.used = true;
+    // Kept for the leads dashboard (/admin/leads) after answering, so the database never holds up the download.
+    after(() => saveDossierDownload(d, check.data.locale));
     return NextResponse.json({ ok: true, download: `/api/dossier/download?token=${issueDownloadToken(secret)}` });
   }
 

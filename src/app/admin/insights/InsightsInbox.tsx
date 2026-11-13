@@ -413,6 +413,11 @@ export default function InsightsInbox({ initial, demo = false }: { initial: Data
               View the Insights page ↗
             </a>
             {!demo && (
+              <a href="/admin/leads" className="inline-flex items-center min-h-10 px-3 rounded-full text-sm font-semibold text-teal-aa hover:bg-teal-50">
+                Leads
+              </a>
+            )}
+            {!demo && (
               <button type="button" onClick={signOut} className="min-h-10 px-3 rounded-full text-sm font-semibold text-slate-600 hover:bg-slate-100 cursor-pointer">
                 Sign out
               </button>

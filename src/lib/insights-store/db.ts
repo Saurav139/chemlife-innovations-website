@@ -39,6 +39,11 @@ export function databaseProblem(error: unknown): { hint: string; detail: string 
   return { hint: "The database couldn't be used. The details below say why.", detail };
 }
 
+/** The site's database connection, for the other tables kept in the same database (see src/lib/leads-store.ts). */
+export function database(): Promise<Pool> {
+  return pool();
+}
+
 async function pool(): Promise<Pool> {
   const uri = process.env.DATABASE_URL;
   if (!uri) throw new Error("DATABASE_URL isn't set");
