@@ -92,27 +92,34 @@ test('an animal lists the products for it', () => {
 test('a short word is a word, not a few letters inside another', () => {
   assert.equal(first('ai'), 'AI Experts');
   assert.equal(results('ai').length, 1);
-  assert.equal(first('hr'), 'Operations, Marketing and Human Resources Intern');
   assert.ok(!titles('ph').includes('GutproGenie'), '"ph" is not "phytogenic"');
 });
 
-test('research topics and roles', () => {
+test('research topics', () => {
   for (const query of ['anbiot', 'an biot', 'bio transformation', 'bio-transformation']) assert.equal(first(query), 'Accelerated Natural BioTransformation (ANBioT)', query);
   assert.ok(first('micro encapsulation').startsWith('Microencapsulation'));
   assert.equal(first('r&d'), 'Research & Development');
   assert.equal(first('reserch'), 'Research & Development');
-  assert.equal(first('research intern'), 'Research Intern');
-  assert.equal(first('marketing internship'), 'Operations, Marketing and Human Resources Intern');
-  assert.equal(first('internhsip'), 'Research Intern');
+});
+
+test('About Us and Careers are found by their name, and nothing on them is searched', () => {
+  for (const query of ['about', 'about us', 'company']) assert.equal(first(query), 'About Us', query);
+  for (const query of ['careers', 'internship', 'internhsip', 'jobs', 'marketing internship', 'nutrition intern', 'how much stipend do interns get']) assert.equal(first(query), 'Careers', query);
+  // Words only those pages use (the internship's stipend, lunch and accommodation; the founders' story) find neither.
+  for (const query of ['stipend', 'lunch', 'accommodation', 'pre-placement offer', 'green technologies', 'eco-conscious']) {
+    assert.ok(!results(query).some((result) => /^\/(about|careers)\b/.test(result.link)), query);
+  }
+  // No internship role is a result of its own.
+  assert.ok(!['intern', 'research intern', 'hr'].some((query) => results(query).some((result) => result.link.includes('#role-'))));
 });
 
 test('what people ask for leads to the page that answers it', () => {
   const pages = {
     'phone number': 'Contact Us', address: 'Contact Us', price: 'Contact Us', distributor: 'Contact Us', 'where are you located': 'Contact Us',
-    jobs: 'Careers', vacancy: 'Careers', 'how to apply': 'Careers', 'work with us': 'Careers', stipend: 'Careers',
+    jobs: 'Careers', vacancy: 'Careers', 'how to apply': 'Careers', 'work with us': 'Careers',
     blog: 'Insights', news: 'Insights', catalogue: 'Products & Solutions', chatbot: 'AI Experts', 'dr kukku': 'AI Experts',
     home: 'Home', about: 'About Us', 'who we are': 'Who We Are', certification: 'Who We Are', privacy: 'Privacy Policy', terms: 'Terms of Use',
-    mission: 'Vision & Mission', leadership: 'Leadership', faq: 'Questions & Answers', awards: 'Awards & Recognition',
+    leadership: 'Leadership', founder: 'Leadership', faq: 'Questions & Answers', awards: 'Awards & Recognition',
   };
   for (const [query, page] of Object.entries(pages)) assert.equal(first(query), page, query);
 });

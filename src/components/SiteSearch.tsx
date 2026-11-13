@@ -17,7 +17,6 @@ const BADGE: Record<SearchCategory, string> = {
   Page: "bg-blue-50 text-blue-600 border border-blue-100",
   Product: "bg-teal-50 text-teal-aa border border-teal-100",
   Research: "bg-purple-50 text-purple-600 border border-purple-100",
-  Career: "bg-amber-50 text-amber-700 border border-amber-100",
   Article: "bg-orange-50/50 text-brand-orange-aa border border-orange-100",
   Video: "bg-orange-50/50 text-brand-orange-aa border border-orange-100",
   Podcast: "bg-orange-50/50 text-brand-orange-aa border border-orange-100",
