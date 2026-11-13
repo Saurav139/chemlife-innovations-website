@@ -38,7 +38,7 @@ export default function ProductView({ index }: { index: number }) {
 
       <main id="main" tabIndex={-1} className="bg-white min-h-screen text-brand-navy">
         {/* The product at a glance: shown at once (no fade-in), its picture is the page's largest paint. */}
-        <section className="pt-28 md:pt-36 lg:pt-44 pb-12 md:pb-16 lg:pb-20 bg-brand-navy text-white">
+        <section className="pt-40 md:pt-44 pb-12 md:pb-16 lg:pb-20 bg-brand-navy text-white">
           <div className="max-w-[1200px] mx-auto px-6 grid lg:grid-cols-12 gap-8 lg:gap-12 items-center">
             <div className="lg:col-span-6">
               <nav aria-label="Breadcrumb" className="text-sm text-white/75 mb-5">

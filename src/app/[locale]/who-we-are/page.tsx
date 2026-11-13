@@ -160,7 +160,7 @@ export default function WhoWeArePage() {
 
       <main id="main" tabIndex={-1} className="bg-white min-h-screen text-brand-navy">
         {/* Cover: the heading and lead sentence, with the contents on the right. */}
-        <section className={`relative overflow-hidden ${navy} text-white pt-30 md:pt-40 lg:pt-48 pb-16 md:pb-24`}>
+        <section className={`relative overflow-hidden ${navy} text-white pt-42 md:pt-48 pb-16 md:pb-24`}>
           <div aria-hidden="true" className={`absolute inset-0 ${gridLines} [mask-image:radial-gradient(ellipse_80%_90%_at_100%_0%,black,transparent)]`} />
           <div aria-hidden="true" className="absolute -right-32 -top-32 w-[38rem] h-[38rem] rounded-full bg-[radial-gradient(circle,rgba(26,219,195,0.18),transparent_65%)]" />
           <div className={`relative ${wrap} grid lg:grid-cols-12 gap-12 lg:gap-16 items-end`}>
@@ -234,7 +234,7 @@ export default function WhoWeArePage() {
         </section>
 
         {/* 01 · The facts as a fact sheet: three groups with hairlines between them. */}
-        <section aria-labelledby="at-a-glance-title" id={CHAPTERS[0]} className={`${wrap} py-20 md:py-28 scroll-mt-20`}>
+        <section aria-labelledby="at-a-glance-title" id={CHAPTERS[0]} className={`${wrap} py-20 md:py-28 scroll-mt-36`}>
           <ChapterHeading n={1} id="at-a-glance-title">{t.factsTitle}</ChapterHeading>
           <div className="grid lg:grid-cols-3 lg:divide-x divide-slate-200">
             {GROUP_FACTS.map((positions, gi) => (
@@ -260,7 +260,7 @@ export default function WhoWeArePage() {
         </section>
 
         {/* 02 · Leadership: the chairman on a navy card, the three directors linked below, then their experience. */}
-        <section aria-labelledby="leadership-title" id={CHAPTERS[1]} className="bg-slate-50 border-y border-slate-200 py-20 md:py-28 scroll-mt-20">
+        <section aria-labelledby="leadership-title" id={CHAPTERS[1]} className="bg-slate-50 border-y border-slate-200 py-20 md:py-28 scroll-mt-36">
           <div className={wrap}>
             <ChapterHeading n={2} id="leadership-title" aside={t.boardLabel}>{leadership.label}</ChapterHeading>
             {people ? (
@@ -289,7 +289,7 @@ export default function WhoWeArePage() {
         </section>
 
         {/* 03 · Questions, all open: nothing to click, and every answer is plain text for search and answer engines. */}
-        <section aria-labelledby="questions-title" id={CHAPTERS[2]} className={`${wrap} py-20 md:py-28 scroll-mt-20`}>
+        <section aria-labelledby="questions-title" id={CHAPTERS[2]} className={`${wrap} py-20 md:py-28 scroll-mt-36`}>
           <ChapterHeading n={3} id="questions-title">{t.faqTitle}</ChapterHeading>
           <div className="grid md:grid-cols-2 gap-x-12">
             {t.faq.map((item, i) => (

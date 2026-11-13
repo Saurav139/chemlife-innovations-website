@@ -64,16 +64,16 @@ export default function Header() {
       }`}
     >
       <div className="max-w-[1200px] mx-auto pr-6 pl-2">
-        <div className="flex items-center justify-between gap-6 h-20 md:h-24 lg:h-32">
+        <div className="flex items-center justify-between gap-6 h-32">
           <a href={href("/")} className="flex-shrink-0">
             <Image
               src={Images.branding.logo}
               alt="ChemLife Innovations"
               width={1021}
               height={1024}
-              sizes="(min-width: 1024px) 112px, (min-width: 768px) 80px, 64px"
+              sizes="112px"
               loading="eager"
-              className="h-16 md:h-20 lg:h-28 w-auto mix-blend-multiply"
+              className="h-28 w-auto mix-blend-multiply"
             />
           </a>
 
@@ -121,7 +121,7 @@ export default function Header() {
 
        {mobileOpen && (
           // Fills the screen below the header (above the chat and search buttons), and scrolls itself if it's taller.
-          <div id="mobile-menu" className={`${compact ? "xl:hidden lg:h-[calc(100dvh-8rem)]" : "lg:hidden"} bg-white border-t border-brand-navy/10 h-[calc(100dvh-5rem)] md:h-[calc(100dvh-6rem)] overflow-y-auto overscroll-contain`}>
+          <div id="mobile-menu" className={`${compact ? "xl:hidden" : "lg:hidden"} bg-white border-t border-brand-navy/10 h-[calc(100dvh-8rem)] overflow-y-auto overscroll-contain`}>
             <div className="max-w-[1200px] mx-auto px-6 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
               {navLinks.map((link) => {
                 const isActive =
