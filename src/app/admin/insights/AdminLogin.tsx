@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-export default function AdminLogin() {
+export default function AdminLogin({ title = "Insights inbox", blurb = "Choose what appears on the Insights page." }: { title?: string; blurb?: string }) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
@@ -30,8 +30,8 @@ export default function AdminLogin() {
       <form onSubmit={signIn} className="w-full max-w-sm rounded-2xl bg-white border border-slate-200 shadow-sm p-8">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/images/branding/logo-horizontal.png" alt="ChemLife Innovations" className="h-10 w-auto" />
-        <h1 className="font-heading text-2xl font-bold mt-6">Insights inbox</h1>
-        <p className="text-slate-600 text-sm mt-1">Choose what appears on the Insights page.</p>
+        <h1 className="font-heading text-2xl font-bold mt-6">{title}</h1>
+        <p className="text-slate-600 text-sm mt-1">{blurb}</p>
         <label htmlFor="password" className="block text-sm font-semibold mt-6">Password</label>
         <input
           id="password"

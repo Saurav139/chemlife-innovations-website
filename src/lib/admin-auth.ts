@@ -52,11 +52,12 @@ function cookieFrom(request: Request): string | undefined {
   return header.split(/;\s*/).find((part) => part.startsWith(`${ADMIN_COOKIE}=`))?.slice(ADMIN_COOKIE.length + 1);
 }
 
-/** For the inbox's API routes: null when the moderator is signed in, otherwise the response to send. Changes must
- *  also come from this site's own pages (the Origin header), so another site can't make them. */
-export function requireAdmin(request: Request): Response | null {
+/** For the admin API routes: null when the moderator is signed in, otherwise the response to send. Changes must
+ *  also come from this site's own pages (the Origin header), so another site can't make them. `allowDemo: false`
+ *  keeps the password even in demo mode, for pages with visitors' personal details (the leads dashboard). */
+export function requireAdmin(request: Request, { allowDemo = true } = {}): Response | null {
   if (request.method !== "GET" && !sameOrigin(request)) return Response.json({ error: "Not allowed." }, { status: 403 });
-  if (demoMode(request.headers.get("host") ?? "")) return null;
+  if (allowDemo && demoMode(request.headers.get("host") ?? "")) return null;
   if (!validSession(cookieFrom(request))) return Response.json({ error: "Please sign in again." }, { status: 401 });
   return null;
 }
