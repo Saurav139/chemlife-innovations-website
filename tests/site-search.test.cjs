@@ -152,6 +152,22 @@ test('the same post on two channels is one result, and every result has its own 
   }
 });
 
+test('products come first, then research, then pages, then articles, videos and podcasts', () => {
+  const rank = { Product: 0, Research: 1, Page: 2, Article: 3, Video: 3, Podcast: 3 };
+  const kinds = (query) => results(query).map((result) => result.category);
+  assert.deepEqual(kinds('copper'), ['Product', 'Product', 'Article']);
+  assert.equal(first('aflatoxin'), 'AflaMlock');
+  for (const query of ['mold', 'poultry', 'dairy', 'aflatoxin', 'feed hygiene', 'copper', 'feed', 'bio', 'water', 'what is fcr']) {
+    const order = kinds(query).map((kind) => rank[kind]);
+    assert.deepEqual(order, [...order].sort((a, b) => a - b), query);
+  }
+  // A passing mention isn't listed: "an biot" opens with ANBioT, not a product that mentions "bio".
+  assert.equal(first('an biot'), 'Accelerated Natural BioTransformation (ANBioT)');
+  // The closest results to a search nothing fully matches stay closest first.
+  assert.equal(searchSite(index, 'nutrition intern').partial, true);
+  assert.equal(first('nutrition intern'), 'Careers');
+});
+
 test('nothing is found for something the site does not have; a near miss says so', () => {
   for (const query of ['', '   ', 'xyzzyq', 'cryptocurrency', '!!!']) assert.equal(results(query).length, 0, JSON.stringify(query));
   const near = searchSite(index, 'xyzzyq maxdmold');
