@@ -720,23 +720,21 @@ export function buildSearchIndex({ messages: t, english, href, insights, insight
     };
   });
 
-  // One result per post: the same post on LinkedIn and Instagram shares its title and its place on the page.
-  const seen = new Set<string>();
-  const media = (insights ? [...insights.blogs, ...insights.videos, ...insights.podcasts] : []).flatMap((item): SearchEntry[] => {
-    const link = insightHref?.(item) ?? `/insights#${insightAnchor(item.title)}`;
-    if (seen.has(link)) return [];
-    seen.add(link);
-    return [
-      {
-        title: item.title,
-        category: item.type === "Blog" ? "Article" : item.type,
-        description: item.description,
-        link,
-        body: item.content,
-        date: Date.parse(item.date) || 0,
-      },
-    ];
-  });
+  const media = (insights ? [...insights.blogs, ...insights.videos, ...insights.podcasts] : []).map(
+    (item): SearchEntry => ({
+      title: item.title,
+      category: item.type === "Blog" ? "Article" : item.type,
+      description: item.description,
+      link: insightHref?.(item) ?? `/insights#${insightAnchor(item.title)}`,
+      body: item.content,
+      date: Date.parse(item.date) || 0,
+    }),
+  );
 
-  return prepareIndex([...products, ...research, ...roles, ...pages, ...media]);
+  // One result per address. The same post on LinkedIn and Instagram goes to one place, even when the titles differ
+  // by an emoji. The results list tells its rows apart by their address: two alike, and a row can stay on screen
+  // after the search has changed.
+  const seen = new Set<string>();
+  const entries = [...products, ...research, ...roles, ...pages, ...media].filter((entry) => !seen.has(entry.link) && seen.add(entry.link));
+  return prepareIndex(entries);
 }

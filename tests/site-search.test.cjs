@@ -37,6 +37,9 @@ const insights = {
     // The same post on LinkedIn and on Instagram
     post('Blog', 'Your water’s pH could be affecting more than you think.', 'Water pH and acidifiers.', 'On LinkedIn.', 'November 7, 2026', 'https://www.linkedin.com/feed/update/1'),
     post('Blog', 'Your water’s pH could be affecting more than you think.', 'Water pH and acidifiers.', 'On Instagram.', 'November 7, 2026', 'https://www.instagram.com/p/1'),
+    // The same post again, its Instagram title ending in an emoji: same address on the Insights page
+    post('Blog', 'Lowering pH doesn’t automatically mean you’ve solved your water quality problems.', 'Lowering pH.', 'On LinkedIn.', 'November 2, 2026', 'https://www.linkedin.com/feed/update/2'),
+    post('Blog', 'Lowering pH doesn’t automatically mean you’ve solved your water quality problems. 👀', 'Lowering pH.', 'On Instagram.', 'November 2, 2026', 'https://www.instagram.com/p/2'),
   ],
   videos: [post('Video', 'What is important? Moisture in corn or water activity', 'Moisture content and water activity in corn-based animal feed.', '', 'August 20, 2025')],
   podcasts: [post('Podcast', 'India’s Antibiotic-Free Protein Problem Explained | Myths & Poultry Science', 'Dr. Santosh Ire demystifies antibiotic usage myths in poultry farming.', '', 'August 15, 2025')],
@@ -130,7 +133,8 @@ test('a post is found by its title, either spelling, or a word in its text', () 
 
 test('the same post on two channels is one result, and every result has its own address', () => {
   assert.equal(titles("water's ph").filter((title) => title.startsWith('Your water')).length, 1);
-  for (const query of ['feed', 'm', 'poultry', 'copper', 'a']) {
+  assert.equal(results('lowering ph').length, 1);
+  for (const query of ['feed', 'm', 'poultry', 'copper', 'a', 'ph', 'water', 'lowering']) {
     const links = results(query).map((result) => result.link);
     assert.equal(new Set(links).size, links.length, query);
   }
