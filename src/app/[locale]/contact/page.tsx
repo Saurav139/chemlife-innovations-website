@@ -461,7 +461,7 @@ export default function ContactPage() {
                       {t.officeTitle}
                     </h3>
                     <p className="text-gray-500 text-sm leading-relaxed mb-4 max-w-prose">
-                      Plot no 18, KIADB Industrial Area, 3rd Phase, Obadenahalli, Doddaballapura, Greater Bengaluru - 561 203, Karnataka, India.
+                      Plot no 18, KIADB Industrial Area, 3rd Phase, Obadenahalli, Doddaballapura, <span className="whitespace-nowrap">Rural Bengaluru - 561 203</span>, Karnataka, India.
                     </p>
                     <div className="space-y-3 text-sm">
                       <div className="flex items-center gap-3 text-gray-500">
