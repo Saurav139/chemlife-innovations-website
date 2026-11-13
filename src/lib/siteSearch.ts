@@ -318,6 +318,13 @@ function corrections(term: string, vocabulary: string[]): Alternative[] {
 const MAX_WORDS = 8;
 const MAX_RESULTS = 20;
 
+// The order results are listed in, by kind.
+const GROUP: Record<SearchCategory, number> = { Product: 0, Research: 1, Page: 2, Article: 3, Video: 3, Podcast: 3 };
+// A result scoring below this share of the best one only mentions the search in passing, and isn't listed.
+const FLOOR = 0.25;
+// A result goes above a later kind's best match only if it scores at least this share of it.
+const JUMP = 1 / 3;
+
 export function searchSite(index: SearchIndex, query: string): SearchOutcome {
   const typed = wordsOf(query).slice(0, MAX_WORDS);
   if (typed.length === 0) return { results: [], partial: false, terms: [] };
@@ -408,11 +415,23 @@ export function searchSite(index: SearchIndex, query: string): SearchOutcome {
     hits = most * 2 >= words.length ? ranked.filter((result) => result.matched === most) : [];
   }
 
-  hits.sort((a, b) => b.score - a.score || (b.item.entry.date ?? 0) - (a.item.entry.date ?? 0) || a.item.order - b.item.order);
   // A passing mention is dropped when there are far better matches.
-  const floor = (hits[0]?.score ?? 0) * 0.25;
-  const results = hits
-    .filter((result) => result.score >= floor)
+  const floor = Math.max(0, ...hits.map((result) => result.score)) * FLOOR;
+  const listed = hits.filter((result) => result.score >= floor);
+  // Products first, then research, then pages, then articles, videos and podcasts; the best match first within each.
+  // A result is only put above a later kind if it is at least a third as good as that kind's best match; one that isn't
+  // only mentions the search in passing, and is left out ("an biot" lists ANBioT, not a product that mentions "bio").
+  // The closest results to a search nothing fully matches are listed closest first.
+  const bestFrom = (group: number) => Math.max(0, ...listed.filter((result) => GROUP[result.item.entry.category] > group).map((result) => result.score));
+  const results = listed
+    .filter((result) => partial || result.score >= bestFrom(GROUP[result.item.entry.category]) * JUMP)
+    .sort(
+      (a, b) =>
+        (partial ? 0 : GROUP[a.item.entry.category] - GROUP[b.item.entry.category]) ||
+        b.score - a.score ||
+        (b.item.entry.date ?? 0) - (a.item.entry.date ?? 0) ||
+        a.item.order - b.item.order,
+    )
     .slice(0, MAX_RESULTS)
     .map(({ item }) => ({ ...item.entry, snippet: snippetFor(item.entry, terms) }));
 
