@@ -461,11 +461,13 @@ export function highlight(text: string, terms: SearchTerm[]): { text: string; hi
 
 const SNIPPET_LENGTH = 150;
 
-/** The description, unless the match is only in the body: then the part of the body around it. */
+/** The description, unless the word searched for isn't in it or the title: then the part of the body around it, so
+ *  the result shows (and bolds) why it matched. A match on a hidden search term (aliases) that the body doesn't
+ *  have either keeps the description. */
 function snippetFor(entry: SearchEntry, terms: SearchTerm[]): string {
   if (!entry.body) return entry.description;
   const found = (text: string) => [...text.matchAll(WORD)].find((match) => isHit(match[0], terms));
-  if (found(entry.title) || found(entry.description) || entry.aliases?.some(found)) return entry.description;
+  if (found(entry.title) || found(entry.description)) return entry.description;
   const body = entry.body.replace(/\s+/g, " ").trim();
   const match = found(body);
   if (!match) return entry.description;
