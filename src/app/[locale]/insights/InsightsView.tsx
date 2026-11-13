@@ -175,7 +175,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
       <main id="main" tabIndex={-1} className="bg-white min-h-screen text-brand-navy">
         {/* Hero and Featured are plain sections: they're in the first screen, so they show without waiting for a fade-in.
             The hero image is the page's largest paint (LCP), so it loads first. */}
-        <section className="pt-26 md:pt-32 pb-10 md:pb-24 lg:pt-36 lg:pb-32 text-white relative overflow-hidden bg-brand-navy flex items-center">
+        <section className="pt-40 md:pt-44 pb-10 md:pb-24 lg:pb-32 text-white relative overflow-hidden bg-brand-navy flex items-center">
           <div className="absolute inset-0 z-0">
             <Image
               src={Images.heroes.insights}
@@ -227,7 +227,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                   id={insightAnchor(featuredBlog.title)}
                   data-analytics-item={featuredBlog.title}
                   data-analytics-click={readLabel(featuredBlog)}
-                  className="scroll-mt-28 bg-gray-55 border border-gray-200 rounded-2xl md:rounded-3xl p-5 md:p-6 lg:p-5 xl:p-6 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between sm:max-lg:grid sm:max-lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] sm:max-lg:grid-rows-[auto_1fr_auto] sm:max-lg:gap-x-6 lg:grid lg:grid-rows-subgrid lg:row-span-4 lg:gap-y-0 group cursor-pointer"
+                  className="scroll-mt-40 bg-gray-55 border border-gray-200 rounded-2xl md:rounded-3xl p-5 md:p-6 lg:p-5 xl:p-6 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between sm:max-lg:grid sm:max-lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] sm:max-lg:grid-rows-[auto_1fr_auto] sm:max-lg:gap-x-6 lg:grid lg:grid-rows-subgrid lg:row-span-4 lg:gap-y-0 group cursor-pointer"
                   onClick={() => setActiveArticle(featuredBlog)}
                 >
                   <div className="sm:contents">
@@ -291,7 +291,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                 <div
                   id={insightAnchor(featuredVideo.title)}
                   data-analytics-item={featuredVideo.title}
-                  className="scroll-mt-28 bg-gray-55 border border-gray-200 rounded-2xl md:rounded-3xl p-5 md:p-6 lg:p-5 xl:p-6 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between sm:max-lg:grid sm:max-lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] sm:max-lg:grid-rows-[auto_1fr_auto] sm:max-lg:gap-x-6 lg:grid lg:grid-rows-subgrid lg:row-span-4 lg:gap-y-0 group"
+                  className="scroll-mt-40 bg-gray-55 border border-gray-200 rounded-2xl md:rounded-3xl p-5 md:p-6 lg:p-5 xl:p-6 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between sm:max-lg:grid sm:max-lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] sm:max-lg:grid-rows-[auto_1fr_auto] sm:max-lg:gap-x-6 lg:grid lg:grid-rows-subgrid lg:row-span-4 lg:gap-y-0 group"
                 >
                   <div className="sm:contents">
                     <div className="flex items-center gap-2 mb-3 sm:max-lg:col-start-2 sm:max-lg:row-start-1">
@@ -361,7 +361,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                 <div
                   id={insightAnchor(featuredPodcast.title)}
                   data-analytics-item={featuredPodcast.title}
-                  className="scroll-mt-28 bg-gray-55 border border-gray-200 rounded-2xl md:rounded-3xl p-5 md:p-6 lg:p-5 xl:p-6 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between sm:max-lg:grid sm:max-lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] sm:max-lg:grid-rows-[auto_1fr_auto] sm:max-lg:gap-x-6 lg:grid lg:grid-rows-subgrid lg:row-span-4 lg:gap-y-0 group"
+                  className="scroll-mt-40 bg-gray-55 border border-gray-200 rounded-2xl md:rounded-3xl p-5 md:p-6 lg:p-5 xl:p-6 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between sm:max-lg:grid sm:max-lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] sm:max-lg:grid-rows-[auto_1fr_auto] sm:max-lg:gap-x-6 lg:grid lg:grid-rows-subgrid lg:row-span-4 lg:gap-y-0 group"
                 >
                   <div className="sm:contents">
                     <div className="flex items-center gap-2 mb-3 sm:max-lg:col-start-2 sm:max-lg:row-start-1">
@@ -556,7 +556,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                       initial={isNew ? (reduceMotion ? { opacity: 0 } : { opacity: 0, y: 12 }) : false}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.35, ease: easeOut, delay: isNew ? Math.min(index - revealFrom, 5) * 0.06 : 0 }}
-                      className={`scroll-mt-28 ${INSIGHT_CARD_CLASS}`}
+                      className={`scroll-mt-40 ${INSIGHT_CARD_CLASS}`}
                     >
                       <InsightCardContent item={item} imageLayout={isSocialPost(item) ? "natural" : "cropped"} centerTextWithoutImage onRead={setActiveArticle} onPlay={setActiveVideoId} />
                     </motion.div>
