@@ -9,10 +9,13 @@ import SiteSearch from "@/components/SiteSearch";
 import { VariantProvider } from "@/context/VariantContext";
 import { formattedArticle } from "@/lib/article-source";
 import { articleBlocks, articlePath, isOptimizableImage, isoDate } from "@/lib/articles";
+import { MIN_HEADINGS, headingId, withHeadingIds, type ArticleHeading } from "@/lib/article-toc";
 import { getArticle, type InsightItem } from "@/lib/insights";
 import { SITE_NAME, SITE_URL, pageMetadata } from "@/lib/seo";
 import { jsonLd } from "@/lib/structuredData";
 import ArticleShare from "./ArticleShare";
+import ArticleToc from "./ArticleToc";
+import ReadingProgress from "./ReadingProgress";
 import styles from "./article.module.css";
 
 type Params = Promise<{ locale: string; slug: string }>;
@@ -56,6 +59,16 @@ export default async function ArticlePage({ params }: { params: Params }) {
   // The article as WordPress formats it; without it (WordPress unreachable, or text rewritten in the inbox), the saved text.
   const formatted = await formattedArticle(article);
 
+  // The sub-headings, for "In this article": from the formatted text, or from the saved text's heading lines.
+  const body = formatted ? withHeadingIds(formatted.html) : null;
+  const blocks = formatted ? [] : articleBlocks(article.content ?? article.description);
+  const used = new Set<string>();
+  const blockIds = blocks.map((block) => (block.kind === "heading" ? headingId(block.text, used) : null));
+  const headings: ArticleHeading[] = body
+    ? body.headings
+    : blocks.flatMap((block, i) => (block.kind === "heading" ? [{ id: blockIds[i]!, text: block.text, level: 2 as const }] : []));
+  const toc = headings.length >= MIN_HEADINGS ? headings : [];
+
   // The articles either side of this one by date, then others to read (those two last, as they're already offered).
   const all = [article, ...found.others].sort(newestFirst);
   const at = all.indexOf(article);
@@ -90,14 +103,19 @@ export default async function ArticlePage({ params }: { params: Params }) {
       <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(posting)} />
       <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(crumbs)} />
       <Header />
+      <ReadingProgress id="article" />
 
       <main id="main" tabIndex={-1} className="bg-white min-h-screen text-brand-navy">
         <section className="pt-40 md:pt-44 pb-10 md:pb-14 bg-brand-navy text-white">
           <div className="max-w-3xl mx-auto px-6">
             <nav aria-label="Breadcrumb" className="mb-5 text-sm">
-              <Link href="/insights" className="text-teal-aa-light font-semibold hover:text-white transition-colors">
-                ← All insights
-              </Link>
+              <ol className="flex flex-wrap items-center gap-x-2 gap-y-1 text-white/70">
+                <li><Link href="/" className="text-teal-aa-light font-semibold hover:text-white transition-colors">Home</Link></li>
+                <li aria-hidden="true">›</li>
+                <li><Link href="/insights" className="text-teal-aa-light font-semibold hover:text-white transition-colors">Insights</Link></li>
+                <li aria-hidden="true">›</li>
+                <li aria-current="page" className="line-clamp-1">{article.title}</li>
+              </ol>
             </nav>
             <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold leading-tight text-white">{article.title}</h1>
             <p className="mt-4 text-white/75 text-sm md:text-base">
@@ -108,7 +126,13 @@ export default async function ArticlePage({ params }: { params: Params }) {
           </div>
         </section>
 
-        <article className="max-w-3xl mx-auto px-6 py-10 md:py-14">
+        <div className={`mx-auto px-6 py-10 md:py-14 ${toc.length ? "max-w-[1200px] lg:grid lg:grid-cols-[14rem_minmax(0,48rem)] lg:justify-center lg:gap-14" : "max-w-3xl"}`}>
+        {toc.length > 0 && (
+          <aside className="hidden lg:block">
+            <ArticleToc headings={toc} variant="sidebar" />
+          </aside>
+        )}
+        <article id="article" className="min-w-0">
           {article.imageUrl && !formatted?.startsWithImage && (
             <div className="relative w-full aspect-video rounded-2xl overflow-hidden bg-slate-100 border border-gray-200 mb-10">
               <Image
@@ -123,13 +147,19 @@ export default async function ArticlePage({ params }: { params: Params }) {
             </div>
           )}
 
-          {formatted ? (
-          <div className={`text-slate-700 text-base md:text-lg leading-relaxed ${styles.body}`} dangerouslySetInnerHTML={{ __html: formatted.html }} />
+          {toc.length > 0 && (
+            <div className="lg:hidden">
+              <ArticleToc headings={toc} variant="inline" />
+            </div>
+          )}
+
+          {body ? (
+          <div className={`text-slate-700 text-base md:text-lg leading-relaxed ${styles.body}`} dangerouslySetInnerHTML={{ __html: body.html }} />
           ) : (
           <div className="text-slate-700 text-base md:text-lg leading-relaxed space-y-5 [overflow-wrap:anywhere]">
-            {articleBlocks(article.content ?? article.description).map((block, i) =>
+            {blocks.map((block, i) =>
               block.kind === "heading" ? (
-                <h2 key={i} className="font-heading text-xl md:text-2xl font-bold text-brand-navy pt-4">{block.text}</h2>
+                <h2 key={i} id={blockIds[i]!} className="font-heading text-xl md:text-2xl font-bold text-brand-navy pt-4 scroll-mt-36">{block.text}</h2>
               ) : block.kind === "list" ? (
                 <ul key={i} className="list-disc pl-6 space-y-2">
                   {block.items.map((item, j) => <li key={j}>{item}</li>)}
@@ -170,6 +200,7 @@ export default async function ArticlePage({ params }: { params: Params }) {
             </Link>
           </div>
         </article>
+        </div>
 
         {others.length > 0 && (
           <section className="bg-gray-55 border-t border-gray-200 py-12 md:py-16">
