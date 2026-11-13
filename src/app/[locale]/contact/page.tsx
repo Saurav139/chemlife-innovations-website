@@ -85,7 +85,7 @@ export default function ContactPage() {
         subject: prev.subject || t.nutritionistSubject,
       }));
     } else if (type === "dossier") {
-      // From the homepage's "Request a technical dossier"
+      // From older links: "Request a technical dossier" now opens its own form (components/DossierRequest.tsx)
       setFormData((prev) => ({
         ...prev,
         inquiryType: "Technical & R&D Partnership",
