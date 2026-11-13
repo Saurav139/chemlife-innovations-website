@@ -1056,7 +1056,7 @@ function DraftFields({ draft, set, base, idPrefix }: { draft: Draft; set: (d: Pa
       <div className="min-w-0 md:sticky md:top-20">
         <p className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">On the Insights page</p>
         <div inert className={INSIGHT_CARD_CLASS}>
-          <InsightCardContent item={card} onRead={noop} onPlay={noop} />
+          <InsightCardContent item={card} onRead={noop} onPlay={noop} linkArticles={false} />
         </div>
         {draft.kind === "Blog" ? (
           <>

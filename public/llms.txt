@@ -51,4 +51,4 @@ The range covers mycotoxin binders, mold inhibitors and feed hygiene, gut and li
 
 ## Optional
 
-- [Blog](https://chemlifeinnovations.wordpress.com): Full text of the articles listed on the Insights page.
+- [Blog articles](https://chemlifeinnovations.com/insights): Each article on the Insights page has its own page with the full text, at https://chemlifeinnovations.com/insights/<article-slug>.

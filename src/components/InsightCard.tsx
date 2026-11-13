@@ -1,7 +1,10 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import NaturalInsightImage from "@/components/NaturalInsightImage";
+import { articlePath } from "@/lib/articles";
 import type { InsightItem } from "@/lib/insights";
 import { instagramEmbedUrl, instagramPostId } from "@/lib/insights-store/text";
 import { playOnPage, youtubeWatchUrl } from "@/lib/youtube";
@@ -90,7 +93,7 @@ export function VideoPlayBadge() {
 }
 
 /** What goes inside the card's frame: the label line, picture or video, title, and the two links. */
-export default function InsightCardContent({ item, onRead, onPlay, imageLayout = "cropped", centerTextWithoutImage = false }: {
+export default function InsightCardContent({ item, onRead, onPlay, imageLayout = "cropped", centerTextWithoutImage = false, linkArticles = true }: {
   item: InsightItem;
   /** Opens the article reader. */
   onRead: (item: InsightItem) => void;
@@ -100,8 +103,12 @@ export default function InsightCardContent({ item, onRead, onPlay, imageLayout =
   imageLayout?: "cropped" | "natural";
   /** Preview treatment for LinkedIn posts whose feed has no picture. */
   centerTextWithoutImage?: boolean;
+  /** A WordPress article opens its own page on this site. Off in the inbox's preview, which stays where it is. */
+  linkArticles?: boolean;
 }) {
+  const router = useRouter();
   const isBlog = item.type === "Blog";
+  const pagePath = linkArticles ? articlePath(item) : null;
   const textOnly = centerTextWithoutImage && isBlog && !item.imageUrl && originalLink(item.linkUrl).short === "LinkedIn";
   return (
     <>
@@ -111,11 +118,8 @@ export default function InsightCardContent({ item, onRead, onPlay, imageLayout =
         data-analytics-click={isBlog ? readLabel(item) : undefined}
         onClick={() => {
           if (isBlog) {
-            if (item.linkUrl?.includes("wordpress.com")) {
-              window.open(item.linkUrl, "_blank", "noopener,noreferrer");
-            } else {
-              onRead(item);
-            }
+            if (pagePath) router.push(pagePath);
+            else onRead(item);
           }
         }}
       >
@@ -184,7 +188,15 @@ export default function InsightCardContent({ item, onRead, onPlay, imageLayout =
 
       {/* Card Action Buttons (Direct + View on LinkedIn) - isolated outside clicking div */}
       <div className="flex items-center gap-3 pt-3 border-t border-gray-100 mt-2">
-        {isBlog ? (
+        {pagePath ? (
+          <Link
+            href={pagePath}
+            className="tap-target text-xs font-bold text-teal-aa hover:text-teal-700 transition-colors flex items-center gap-1"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {readLabel(item)}
+          </Link>
+        ) : isBlog ? (
           <div className="flex items-center gap-2 w-full justify-between">
             <button
               onClick={() => onRead(item)}

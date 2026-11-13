@@ -5,8 +5,10 @@ import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { useHref, useLocale, useT } from "@/i18n/LocaleProvider";
 import type { Messages } from "@/i18n/messages";
+import { articlePath } from "@/lib/articles";
+import { insightAnchor } from "@/lib/catalog";
 import { goToResult } from "@/lib/deepLink";
-import type { Insights } from "@/lib/insights";
+import type { InsightItem, Insights } from "@/lib/insights";
 import { buildSearchIndex, highlight, searchSite, type SearchCategory, type SearchOutcome, type SearchTerm } from "@/lib/siteSearch";
 
 // What the search looks through, and how it matches and ranks, is in src/lib/siteSearch.ts.
@@ -21,6 +23,9 @@ const BADGE: Record<SearchCategory, string> = {
   Video: "bg-orange-50/50 text-brand-orange-aa border border-orange-100",
   Podcast: "bg-orange-50/50 text-brand-orange-aa border border-orange-100",
 };
+
+// A blog article opens on its own page; any other post at its card on the Insights page.
+const insightHref = (item: InsightItem) => articlePath(item) ?? `/insights#${insightAnchor(item.title)}`;
 
 const NOTHING: SearchOutcome = { results: [], partial: false, terms: [] };
 
@@ -100,7 +105,7 @@ export default function SiteSearch({ hideButtonOnPhones = false }: { hideButtonO
   useEffect(() => {
     if (isOpen) setOpened(true);
   }, [isOpen]);
-  const index = useMemo(() => (opened ? buildSearchIndex({ messages: t, english: english ?? undefined, href, insights }) : null), [opened, t, english, href, insights]);
+  const index = useMemo(() => (opened ? buildSearchIndex({ messages: t, english: english ?? undefined, href, insights, insightHref }) : null), [opened, t, english, href, insights]);
 
   const outcome = useMemo(() => (index ? searchSite(index, query) : NOTHING), [index, query]);
   const filteredResults = outcome.results;
