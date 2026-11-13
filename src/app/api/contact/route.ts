@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import { RateLimiter, clientIp } from "@/lib/rateLimit";
 import { verifyTurnstile } from "@/lib/turnstile";
+import { emailTeam } from "@/lib/teamEmail";
 import {
-  CONTACT_EMAIL,
   CONTACT_LIMITS,
   EMAIL_PATTERN,
   INQUIRY_TYPES,
@@ -10,10 +10,7 @@ import {
   type ContactMessage,
 } from "@/lib/contact";
 
-// Contact form messages are emailed to the team through Resend (resend.com). RESEND_API_KEY turns this on;
-// the sender address must be on a domain verified in Resend.
-const FROM = process.env.CONTACT_FROM || "ChemLife Website <website@notify.chemlifeinnovations.com>";
-const TO = process.env.CONTACT_TO || CONTACT_EMAIL;
+// Contact form messages are emailed to the team through Resend (see src/lib/teamEmail.ts).
 
 // Generous for a person, tight for a script. Without the visitor's address only the site-wide limit applies.
 const perHour = new RateLimiter(5, 3_600_000);
@@ -84,28 +81,11 @@ export async function POST(request: Request) {
     `Reply to this email to answer ${form.name} directly.`,
   ].join("\n");
 
-  try {
-    const res = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: { Authorization: `Bearer ${process.env.RESEND_API_KEY}`, "Content-Type": "application/json" },
-      body: JSON.stringify({
-        from: FROM,
-        to: TO,
-        reply_to: form.email,
-        subject: `[Website] ${form.inquiryType}: ${form.subject}`,
-        text,
-      }),
-      signal: AbortSignal.timeout(10_000),
-    });
-    if (!res.ok) {
-      // Resend's reason (bad key, unverified domain, ...) goes to the server log; the visitor's message doesn't.
-      console.error(`[contact] Resend refused the email: ${res.status} ${(await res.text()).slice(0, 300)}`);
-      return fail("send_failed", 502);
-    }
-  } catch (err) {
-    console.error(`[contact] Couldn't reach Resend: ${err instanceof Error ? err.message : String(err)}`);
-    return fail("send_failed", 502);
-  }
+  const sent = await emailTeam(
+    { subject: `[Website] ${form.inquiryType}: ${form.subject}`, text, replyTo: form.email },
+    "contact",
+  );
+  if (!sent) return fail("send_failed", 502);
 
   return NextResponse.json({ ok: true });
 }

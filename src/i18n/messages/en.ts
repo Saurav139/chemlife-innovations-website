@@ -829,6 +829,44 @@ const en = {
     mapTitle: "ChemLife Corporate Office Location Map",
     openInMaps: "Open in Google Maps",
   },
+  // The technical dossier form (components/DossierRequest.tsx). Name, email and the error fallback come from contact.
+  dossier: {
+    title: "Request the technical dossier",
+    intro: "Tell us a little about yourself and the dossier PDF downloads straight away. Your details go to the ChemLife team.",
+    company: "Company",
+    companyPlaceholder: "Your company or organisation",
+    role: "Role",
+    rolePlaceholder: "e.g. Nutritionist, Procurement",
+    country: "Country",
+    countryPlaceholder: "e.g. India",
+    interest: "Interested in",
+    interestPlaceholder: "Choose an area",
+    interests: {
+      "Feed hygiene": "Feed hygiene (mould and mycotoxins)",
+      "Bio-trace minerals": "Bio-trace minerals",
+      "Rumen-bypass and targeted delivery": "Rumen-bypass and targeted delivery",
+      "Distribution partnership": "Distribution partnership",
+      "Research collaboration": "Research collaboration",
+      "Other": "Something else",
+    },
+    errors: { company: "Company is required.", country: "Country is required." },
+    submitErrors: {
+      invalid: "Some details look wrong. Please check the form and try again.",
+      captcha: "We couldn't confirm that you're a person. Please try again.",
+      rate_limited: "You've sent several requests in a short time, so we've paused the form for a while.",
+      unavailable: "The dossier form isn't available right now.",
+      send_failed: "Your request couldn't be sent right now.",
+      network: "Your request couldn't be sent. Please check your connection and try again.",
+    },
+    submit: "Get the dossier",
+    sending: "Sending...",
+    startedTitle: "Your download has started",
+    startedText: "Thank you, {name}. Your details have reached the ChemLife team.",
+    // {link} is the fallbackLinkText link to the PDF.
+    fallbackLink: "If it hasn't started, {link}.",
+    fallbackLinkText: "download the dossier here",
+    close: "Close",
+  },
 };
 
 export default en;

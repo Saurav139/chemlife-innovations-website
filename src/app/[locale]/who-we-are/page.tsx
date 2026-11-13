@@ -5,6 +5,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SiteSearch from "@/components/SiteSearch";
+import DossierRequest from "@/components/DossierRequest";
 import { VariantProvider } from "@/context/VariantContext";
 import { useHref, useT } from "@/i18n/LocaleProvider";
 import { Images } from "@/lib/assets";
@@ -312,10 +313,10 @@ export default function WhoWeArePage() {
           <div className={`relative ${wrap} py-16 md:py-20 grid lg:grid-cols-12 gap-8 lg:gap-12 items-center`}>
             <p className="lg:col-span-6 font-heading text-3xl md:text-4xl font-bold leading-tight">{t.tagline}</p>
             <div className="lg:col-span-6 lg:justify-self-end">
-              <a href={href("/contact?type=dossier")} data-analytics-click={t.requestDossier}
-                className="group inline-flex items-center justify-center gap-2 min-h-12 px-7 rounded-full bg-brand-orange-aa hover:bg-brand-orange-aa-hover text-white font-semibold transition-colors">
+              <DossierRequest analytics={t.requestDossier}
+                className="group inline-flex items-center justify-center gap-2 min-h-12 px-7 rounded-full bg-brand-orange-aa hover:bg-brand-orange-aa-hover text-white font-semibold transition-colors cursor-pointer">
                 {t.requestDossier}<Arrow className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
-              </a>
+              </DossierRequest>
               <ul className="flex flex-wrap gap-x-6 gap-y-1 mt-5">
                 {links.map((link) => (
                   <li key={link.path}>
