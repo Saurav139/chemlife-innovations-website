@@ -26,4 +26,4 @@ export interface ContactMessage {
 }
 
 /** Why /api/contact refused or couldn't send a message. */
-export type ContactErrorCode = "invalid" | "rate_limited" | "unavailable" | "send_failed";
+export type ContactErrorCode = "invalid" | "captcha" | "rate_limited" | "unavailable" | "send_failed";

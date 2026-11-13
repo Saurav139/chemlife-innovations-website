@@ -800,6 +800,7 @@ const hi: Messages = {
     },
     submitErrors: {
       invalid: "कुछ जानकारी सही नहीं लग रही। कृपया फ़ॉर्म जाँचकर दोबारा कोशिश करें।",
+      captcha: "हम यह पुष्टि नहीं कर सके कि आप एक व्यक्ति हैं। कृपया दोबारा कोशिश करें।",
       rate_limited: "आपने कम समय में कई संदेश भेजे हैं, इसलिए फ़ॉर्म को कुछ देर के लिए रोक दिया गया है।",
       unavailable: "संपर्क फ़ॉर्म अभी उपलब्ध नहीं है।",
       send_failed: "आपका संदेश अभी नहीं भेजा जा सका।",
@@ -807,6 +808,8 @@ const hi: Messages = {
     },
     fallback: "आप इसके बजाय इसे {address} पर {email}, या {phone} पर कॉल करें।",
     fallbackEmail: "ईमेल कर सकते हैं",
+    // Shown under the Send button until the CAPTCHA (Cloudflare Turnstile) has let the visitor through.
+    captchaPending: "जाँच की जा रही है कि आप एक व्यक्ति हैं...",
     sending: "संदेश भेजा जा रहा है...",
     send: "संदेश भेजें",
     sentTitle: "संदेश भेज दिया गया!",
