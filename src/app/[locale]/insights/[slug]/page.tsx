@@ -15,7 +15,6 @@ import { SITE_NAME, SITE_URL, pageMetadata } from "@/lib/seo";
 import { jsonLd } from "@/lib/structuredData";
 import ArticleShare from "./ArticleShare";
 import ArticleToc from "./ArticleToc";
-import ReadingProgress from "./ReadingProgress";
 import styles from "./article.module.css";
 
 type Params = Promise<{ locale: string; slug: string }>;
@@ -103,7 +102,6 @@ export default async function ArticlePage({ params }: { params: Params }) {
       <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(posting)} />
       <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(crumbs)} />
       <Header />
-      <ReadingProgress id="article" />
 
       <main id="main" tabIndex={-1} className="bg-white min-h-screen text-brand-navy">
         <section className="pt-40 md:pt-44 pb-10 md:pb-14 bg-brand-navy text-white">
