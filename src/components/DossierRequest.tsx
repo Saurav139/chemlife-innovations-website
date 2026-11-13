@@ -3,39 +3,62 @@
 import { Fragment, useEffect, useRef, useState, type ReactNode } from "react";
 import Turnstile, { type TurnstileHandle } from "@/components/Turnstile";
 import { track } from "@/lib/analytics";
-import { CONTACT_EMAIL, CONTACT_PHONE, EMAIL_PATTERN, type ContactErrorCode } from "@/lib/contact";
-import { DOSSIER_INTERESTS, DOSSIER_LIMITS, DOSSIER_PDF, type DossierRequest as Details } from "@/lib/dossier";
+import { CONTACT_EMAIL, CONTACT_PHONE, EMAIL_PATTERN } from "@/lib/contact";
+import { DOSSIER_INTERESTS, DOSSIER_LIMITS, type DossierErrorCode, type DossierRequest as Details } from "@/lib/dossier";
 import { useLocale, useT } from "@/i18n/LocaleProvider";
 
-// "Request a technical dossier": a button that opens a short form in a pop-up. The details are emailed to the team
-// through /api/dossier, then the PDF downloads straight away, with a link in case the download doesn't start.
+// "Request a technical dossier": a button that opens a short form in a pop-up. The visitor gives their details,
+// /api/dossier emails them a 4-digit code, and the right code emails the details to the team and downloads the PDF,
+// with a link in case the download doesn't start.
 
 const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? "";
+const CODE_LENGTH = 4;
 
 // `website` is a hidden spam trap: people never see it, bots fill it in.
 type FormData = Details & { website: string };
 const EMPTY_FORM: FormData = { name: "", email: "", company: "", role: "", country: "", interest: "", website: "" };
 
-type SubmitError = ContactErrorCode | "network";
+type SubmitError = DossierErrorCode | "network";
 type Required = "name" | "email" | "company" | "country";
+type Step = "details" | "code" | "done";
 
 /** Fills {name} placeholders in a translated sentence with links or other elements. */
 function fill(template: string, parts: Record<string, ReactNode>) {
   return template.split(/\{(\w+)\}/).map((piece, i) => (i % 2 ? <Fragment key={i}>{parts[piece]}</Fragment> : piece));
 }
 
-function startDownload() {
+function startDownload(href: string) {
   const link = document.createElement("a");
-  link.href = DOSSIER_PDF;
+  link.href = href;
   link.download = "";
   document.body.appendChild(link);
   link.click();
   link.remove();
 }
 
+/** Posts one step to /api/dossier. Returns the response body, or the reason it failed. */
+async function post(body: object): Promise<{ data?: Record<string, unknown>; error?: SubmitError; left?: number }> {
+  try {
+    const res = await fetch("/api/dossier", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+      signal: AbortSignal.timeout(20_000),
+    });
+    const data = await res.json().catch(() => null);
+    if (res.ok && data) return { data };
+    return { error: typeof data?.error === "string" ? data.error : "send_failed", left: data?.left };
+  } catch {
+    return { error: "network" };
+  }
+}
+
 const input =
   "w-full bg-white border rounded-xl px-4 py-3 text-base md:text-sm text-brand-navy focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all";
 const label = "block text-xs font-bold text-brand-navy uppercase tracking-wider mb-2";
+const primaryButton =
+  "w-full sm:w-auto min-h-12 px-8 bg-brand-orange-aa hover:bg-brand-orange-aa-hover text-white font-bold text-sm rounded-full transition-colors shadow-sm inline-flex items-center justify-center gap-2 cursor-pointer disabled:bg-slate-400 disabled:cursor-not-allowed";
+const textButton = "font-semibold text-teal-aa underline underline-offset-4 hover:text-brand-navy cursor-pointer disabled:opacity-60";
 
 interface Props {
   className: string;
@@ -84,21 +107,40 @@ export default function DossierRequest({ className, analytics, children }: Props
   );
 }
 
+function Spinner() {
+  return (
+    <svg aria-hidden="true" className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+    </svg>
+  );
+}
+
 function DossierForm({ onClose }: { onClose: () => void }) {
   const messages = useT();
   const t = messages.dossier;
   const c = messages.contact;
   const locale = useLocale();
+  const [step, setStep] = useState<Step>("details");
   const [form, setForm] = useState<FormData>(EMPTY_FORM);
   const [errors, setErrors] = useState<Partial<Record<Required, string>>>({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitError, setSubmitError] = useState<SubmitError | null>(null);
-  const [done, setDone] = useState(false);
+  const [busy, setBusy] = useState<"submit" | "resend" | null>(null);
+  const [submitError, setSubmitError] = useState<{ code: SubmitError; left?: number } | null>(null);
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
   const captcha = useRef<TurnstileHandle>(null);
   const firstField = useRef<HTMLInputElement>(null);
+  // The signed challenge from /api/dossier, the code the visitor types, and the download address it unlocks.
+  const [challenge, setChallenge] = useState("");
+  const [code, setCode] = useState("");
+  const [codeMissing, setCodeMissing] = useState(false);
+  const [resent, setResent] = useState(false);
+  const [download, setDownload] = useState("");
+  const codeField = useRef<HTMLInputElement>(null);
 
-  useEffect(() => firstField.current?.focus(), []);
+  useEffect(() => {
+    if (step === "details") firstField.current?.focus();
+    if (step === "code") codeField.current?.focus();
+  }, [step]);
 
   const validate = () => {
     const next: typeof errors = {};
@@ -119,38 +161,57 @@ function DossierForm({ onClose }: { onClose: () => void }) {
     if (errors[name as Required]) setErrors((prev) => ({ ...prev, [name]: undefined }));
   };
 
-  // Sends the details through /api/dossier; the download only starts once the email has gone.
-  const submit = async (e: React.FormEvent) => {
+  // Step 1: the details go to /api/dossier, which emails the visitor a code.
+  const submitDetails = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate() || !captchaToken) return;
-
-    setIsSubmitting(true);
+    setBusy("submit");
     setSubmitError(null);
-    let error: SubmitError | null = null;
-    try {
-      const res = await fetch("/api/dossier", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...form, turnstileToken: captchaToken }),
-        signal: AbortSignal.timeout(20_000),
-      });
-      if (!res.ok) {
-        const code = (await res.json().catch(() => null))?.error;
-        error = code && code in t.submitErrors ? code : "send_failed";
-      }
-    } catch {
-      error = "network";
-    }
-    setIsSubmitting(false);
+    const { data, error } = await post({ action: "start", ...form, locale, turnstileToken: captchaToken });
+    setBusy(null);
     // Tokens are single-use: ask the widget for a fresh one before any further attempt.
     captcha.current?.reset();
-    if (error) {
-      setSubmitError(error);
-      return;
+    if (error) return setSubmitError({ code: error });
+    setChallenge(String(data?.challenge ?? ""));
+    setCode("");
+    setResent(false);
+    setStep("code");
+  };
+
+  // Step 2: the right code sends the details to the team and starts the download.
+  const submitCode = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (code.length !== CODE_LENGTH) {
+      setCodeMissing(true);
+      return codeField.current?.focus();
     }
+    setBusy("submit");
+    setSubmitError(null);
+    setResent(false);
+    const { data, error, left } = await post({ action: "verify", challenge, code });
+    setBusy(null);
+    if (error) {
+      setSubmitError({ code: error, left });
+      return codeField.current?.select();
+    }
+    const href = String(data?.download ?? "");
     track("dossier_request", { interest: form.interest || "not given" });
-    setDone(true);
-    startDownload();
+    setDownload(href);
+    setStep("done");
+    startDownload(href);
+  };
+
+  const resendCode = async () => {
+    setBusy("resend");
+    setSubmitError(null);
+    setResent(false);
+    const { data, error } = await post({ action: "resend", challenge });
+    setBusy(null);
+    if (error) return setSubmitError({ code: error });
+    setChallenge(String(data?.challenge ?? ""));
+    setCode("");
+    setResent(true);
+    codeField.current?.focus();
   };
 
   const field = (name: Required | "role", type: string, autoComplete: string, required: boolean, labelText: string, placeholder: string) => (
@@ -192,7 +253,7 @@ function DossierForm({ onClose }: { onClose: () => void }) {
     </button>
   );
 
-  if (done) {
+  if (step === "done") {
     return (
       <div className="relative p-6 sm:p-10 text-center" role="status">
         {closeButton}
@@ -206,7 +267,7 @@ function DossierForm({ onClose }: { onClose: () => void }) {
         <p className="mt-3 text-sm text-slate-600">
           {fill(t.fallbackLink, {
             link: (
-              <a href={DOSSIER_PDF} download className="font-semibold text-teal-aa underline underline-offset-4 hover:text-brand-navy">
+              <a href={download} download className="font-semibold text-teal-aa underline underline-offset-4 hover:text-brand-navy">
                 {t.fallbackLinkText}
               </a>
             ),
@@ -227,13 +288,106 @@ function DossierForm({ onClose }: { onClose: () => void }) {
     [form.name, form.role, form.company, form.country].filter(Boolean).join("\n"),
   )}`;
 
+  // Problems with the code itself are told plainly; anything else also offers to email or call instead.
+  const errorBox = submitError && (
+    <div role="alert" className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+      {submitError.code === "code_wrong" || submitError.code === "code_expired" || submitError.code === "code_attempts" ? (
+        <p className="font-semibold">
+          {submitError.code === "code_wrong"
+            ? fill(t.codeErrors.wrong, { left: submitError.left ?? 1 })
+            : submitError.code === "code_expired"
+              ? t.codeErrors.expired
+              : t.codeErrors.attempts}
+        </p>
+      ) : (
+        <>
+          <p className="font-semibold">{t.submitErrors[submitError.code in t.submitErrors ? (submitError.code as keyof typeof t.submitErrors) : "send_failed"]}</p>
+          <p className="mt-1">
+            {fill(c.fallback, {
+              email: <a href={fallbackEmail} className="underline font-semibold hover:text-red-800">{c.fallbackEmail}</a>,
+              address: CONTACT_EMAIL,
+              phone: (
+                <a href={`tel:${CONTACT_PHONE.replace(/\s/g, "")}`} className="underline whitespace-nowrap hover:text-red-800">{CONTACT_PHONE}</a>
+              ),
+            })}
+          </p>
+        </>
+      )}
+    </div>
+  );
+
+  if (step === "code") {
+    return (
+      <div className="relative p-6 sm:p-10">
+        {closeButton}
+        <h2 id="dossier-title" className="font-heading text-2xl md:text-3xl font-bold text-brand-navy pr-10">{t.codeTitle}</h2>
+        <p className="mt-2 mb-6 text-sm text-slate-600 leading-relaxed">
+          {fill(t.codeText, { email: <strong className="font-semibold text-brand-navy break-all">{form.email.trim()}</strong> })}
+        </p>
+
+        <form onSubmit={submitCode} noValidate className="space-y-5">
+          <div>
+            <label htmlFor="dossier-code" className={label}>{t.codeLabel}</label>
+            <input
+              ref={codeField}
+              id="dossier-code"
+              name="code"
+              type="text"
+              inputMode="numeric"
+              autoComplete="one-time-code"
+              pattern="[0-9]*"
+              maxLength={CODE_LENGTH}
+              value={code}
+              onChange={(e) => {
+                setCode(e.target.value.replace(/\D/g, "").slice(0, CODE_LENGTH));
+                setCodeMissing(false);
+              }}
+              aria-invalid={codeMissing || undefined}
+              aria-describedby={codeMissing ? "dossier-code-error" : undefined}
+              className={`${input.replace("w-full ", "")} ${codeMissing ? "border-red-600" : "border-gray-300"} w-40 text-center text-2xl md:text-2xl font-bold tracking-[0.5em] pl-6`}
+            />
+            {codeMissing && <p id="dossier-code-error" className="text-red-600 text-xs mt-1.5 font-medium">{t.codeErrors.empty}</p>}
+          </div>
+
+          {errorBox}
+          {resent && !submitError && <p className="text-sm text-teal-aa font-semibold" aria-live="polite">{t.resent}</p>}
+
+          <button type="submit" disabled={busy !== null} className={primaryButton}>
+            {busy === "submit" ? <><Spinner />{t.verifying}</> : t.verify}
+          </button>
+          <p className="text-sm text-slate-600">
+            {fill(t.resendPrompt, {
+              resend: (
+                <button type="button" onClick={resendCode} disabled={busy !== null} className={textButton}>
+                  {busy === "resend" ? t.sending : t.resendLink}
+                </button>
+              ),
+            })}
+          </p>
+          <p className="text-sm">
+            <button
+              type="button"
+              onClick={() => {
+                setSubmitError(null);
+                setStep("details");
+              }}
+              className={textButton}
+            >
+              {t.changeEmail}
+            </button>
+          </p>
+        </form>
+      </div>
+    );
+  }
+
   return (
     <div className="relative p-6 sm:p-10">
       {closeButton}
       <h2 id="dossier-title" className="font-heading text-2xl md:text-3xl font-bold text-brand-navy pr-10">{t.title}</h2>
       <p className="mt-2 mb-6 text-sm text-slate-600 leading-relaxed">{t.intro}</p>
 
-      <form onSubmit={submit} noValidate className="space-y-5">
+      <form onSubmit={submitDetails} noValidate className="space-y-5">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           {field("name", "text", "name", true, c.name, c.namePlaceholder)}
           {field("email", "email", "email", true, c.email, c.emailPlaceholder)}
@@ -274,45 +428,16 @@ function DossierForm({ onClose }: { onClose: () => void }) {
         {TURNSTILE_SITE_KEY ? (
           <Turnstile ref={captcha} siteKey={TURNSTILE_SITE_KEY} language={locale} onToken={setCaptchaToken} />
         ) : (
-          submitError !== "unavailable" && <p className="text-sm text-red-700">{t.submitErrors.unavailable}</p>
+          submitError?.code !== "unavailable" && <p className="text-sm text-red-700">{t.submitErrors.unavailable}</p>
         )}
 
-        {submitError && (
-          <div role="alert" className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-            <p className="font-semibold">{t.submitErrors[submitError]}</p>
-            <p className="mt-1">
-              {fill(c.fallback, {
-                email: (
-                  <a href={fallbackEmail} className="underline font-semibold hover:text-red-800">{c.fallbackEmail}</a>
-                ),
-                address: CONTACT_EMAIL,
-                phone: (
-                  <a href={`tel:${CONTACT_PHONE.replace(/\s/g, "")}`} className="underline whitespace-nowrap hover:text-red-800">{CONTACT_PHONE}</a>
-                ),
-              })}
-            </p>
-          </div>
-        )}
+        {errorBox}
 
         <div>
-          <button
-            type="submit"
-            disabled={isSubmitting || !captchaToken}
-            className="w-full sm:w-auto min-h-12 px-8 bg-brand-orange-aa hover:bg-brand-orange-aa-hover text-white font-bold text-sm rounded-full transition-colors shadow-sm inline-flex items-center justify-center gap-2 cursor-pointer disabled:bg-slate-400 disabled:cursor-not-allowed"
-          >
-            {isSubmitting ? (
-              <>
-                <svg aria-hidden="true" className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                </svg>
-                {t.sending}
-              </>
-            ) : (
-              t.submit
-            )}
+          <button type="submit" disabled={busy !== null || !captchaToken} className={primaryButton}>
+            {busy ? <><Spinner />{t.sending}</> : t.submit}
           </button>
-          {TURNSTILE_SITE_KEY && !captchaToken && !isSubmitting && (
+          {TURNSTILE_SITE_KEY && !captchaToken && !busy && (
             <p className="mt-2 text-xs text-slate-500" aria-live="polite">{c.captchaPending}</p>
           )}
         </div>
