@@ -368,7 +368,7 @@ const bn: Messages = {
     related: "একই প্রাণীদের জন্য আরও পণ্য",
     viewProduct: "পণ্যটি দেখুন",
     allProducts: "সব পণ্য",
-    askAbout: "এই পণ্য সম্পর্কে আরও জানুন",
+    askAbout: "আমাদের বিশেষজ্ঞের সাথে চ্যাট করুন",
     bannerAlt: "ব্যানার",
     iconAlt: "আইকন",
     items: [
