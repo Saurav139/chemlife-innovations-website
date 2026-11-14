@@ -1,3 +1,4 @@
+import { articleSlug } from "@/lib/articles";
 import { Images } from "@/lib/assets";
 import { approvedInsights, storeConfigured } from "@/lib/insights-store/db";
 import { fetchYouTubeUploads } from "@/lib/insights-store/sources";
@@ -15,6 +16,9 @@ export interface InsightItem {
   /** A LinkedIn video post's player: LinkedIn's embed address. The card shows its picture with a play button. */
   videoUrl?: string;
   content?: string;
+  /** Whether the text was rewritten in the Insights inbox (then an article's page shows it, not WordPress's
+   *  version). Left out when that isn't recorded: the built-in list, or a post the inbox hasn't checked yet. */
+  contentEdited?: boolean;
   /** Chosen in the Insights inbox to be the featured post of its type (otherwise the newest is). */
   featured?: boolean;
 }
@@ -363,6 +367,14 @@ export async function getInsights(): Promise<Insights> {
     }
   }
   return builtInInsights();
+}
+
+/** Server only. The blog article whose page is /insights/<slug> (see src/lib/articles.ts) and the other articles,
+ *  newest first; null when no article on the Insights page has that slug. */
+export async function getArticle(slug: string): Promise<{ article: InsightItem; others: InsightItem[] } | null> {
+  const articles = (await getInsights()).blogs.filter((item) => articleSlug(item.linkUrl));
+  const article = articles.find((item) => articleSlug(item.linkUrl) === slug);
+  return article ? { article, others: articles.filter((item) => item !== article) } : null;
 }
 
 /** Posts saved in the inbox before videos got a player, until the inbox's own check has saved one: a LinkedIn video

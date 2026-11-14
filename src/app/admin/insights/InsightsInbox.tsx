@@ -431,7 +431,7 @@ export default function InsightsInbox({ initial, demo = false }: { initial: Data
         <Channels data={data} checking={checking || Boolean(savingAutomatic)} onCheck={() => check()} />
         <section aria-label="Automatic posts" className="rounded-2xl bg-white border border-slate-200 shadow-sm px-4 py-4 sm:px-6" aria-busy={Boolean(savingAutomatic)}>
           <h2 className="font-heading text-base font-bold mb-2">Automatic posts</h2>
-          <div className="grid gap-1 sm:grid-cols-3 sm:gap-6">
+          <div className="grid gap-1 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-1">
             {SOCIAL_SOURCES.map((source) => (
               <label key={source} className="flex min-h-11 items-start gap-3 cursor-pointer py-1">
                 <input type="checkbox" checked={data.autoPublishSocial[source]} disabled={Boolean(savingAutomatic) || checking}
@@ -442,7 +442,7 @@ export default function InsightsInbox({ initial, demo = false }: { initial: Data
             ))}
           </div>
           <p id="automatic-social-help" className="mt-2 text-sm text-slate-600 leading-relaxed">
-            For each selected channel, adds all waiting posts and publishes future imports from connected channels without review. While any box is ticked, the site checks for new posts every 10 minutes on its own, so nobody needs to open this page. Hidden posts stay hidden. Turning a channel off keeps its posts already on the page.
+            For each selected channel, adds all waiting posts and publishes future imports from connected channels without review. While any box is ticked, the site checks for new posts every 10 minutes on its own, so nobody needs to open this page. Hidden posts stay hidden. Turning a channel off keeps its posts already on the page. A WordPress blog post added this way gets its own article page straight away.
           </p>
           {savingAutomatic && <p role="status" className="mt-2 text-sm font-semibold text-teal-aa">Saving {SOURCE_LABEL[savingAutomatic]} preference…</p>}
         </section>
@@ -1049,6 +1049,11 @@ function DraftFields({ draft, set, base, idPrefix }: { draft: Draft; set: (d: Pa
         <details className="rounded-xl border border-slate-200 px-3 py-2">
           <summary className="text-sm font-semibold cursor-pointer">Full text for the reader</summary>
           <textarea value={draft.content} onChange={(e) => set({ content: e.target.value })} rows={8} className={FIELD} aria-label="Full text for the reader" />
+          {base.url?.includes("wordpress.com") && (
+            <p className="mt-2 text-xs text-slate-600 leading-relaxed">
+              Left as it is, this article follows WordPress: changes made there reach its page by themselves. If you rewrite the text here, the page shows your version as plain text and stops following WordPress. Clear the text to follow WordPress again.
+            </p>
+          )}
         </details>
       </div>
 
@@ -1056,7 +1061,7 @@ function DraftFields({ draft, set, base, idPrefix }: { draft: Draft; set: (d: Pa
       <div className="min-w-0 md:sticky md:top-20">
         <p className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">On the Insights page</p>
         <div inert className={INSIGHT_CARD_CLASS}>
-          <InsightCardContent item={card} onRead={noop} onPlay={noop} />
+          <InsightCardContent item={card} onRead={noop} onPlay={noop} linkArticles={false} />
         </div>
         {draft.kind === "Blog" ? (
           <>

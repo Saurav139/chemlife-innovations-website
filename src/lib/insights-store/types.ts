@@ -33,6 +33,9 @@ export interface SourceItem {
   videoUrl?: string;
   meta: string;
   publishedAt: Date;
+  /** False for a post the importer read from its source: its text is the source's own. Left out when that isn't
+   *  known (a pasted link, whose text the moderator may have changed before adding it). */
+  contentEdited?: boolean;
 }
 
 /** A post in the inbox. */
@@ -46,6 +49,9 @@ export interface InboxItem {
   title: string;
   summary: string;
   content: string;
+  /** Whether the moderator rewrote the text in the inbox; null when that isn't known yet (the next check works it
+   *  out). A blog post that wasn't rewritten keeps up with WordPress. */
+  contentEdited: boolean | null;
   url: string;
   /** The picture to show: a copied picture's address on this site, or the source's own address. */
   image: string;
@@ -66,6 +72,8 @@ export interface ItemChanges {
   title?: string;
   summary?: string;
   content?: string;
+  /** Set with `content` by the edit endpoint, never by the dashboard itself. */
+  contentEdited?: boolean;
   meta?: string;
   imageId?: number | null;
   videoUrl?: string | null;

@@ -17,6 +17,12 @@ The moderator decides which posts from ChemLife's channels appear on the Insight
   posts**, and from a scheduled job if one is set up. While any **Automatically add … to Insights** box is ticked, the
   site also checks every 10 minutes by itself (`auto-sync.ts`, started from `src/instrumentation.ts`), and a visit to
   the Insights page checks if one is due, in case the host paused the server. No one needs to open the inbox.
+- **Automatically add WordPress posts to Insights** does the same for the blog, off by default: with it ticked, a
+  post published in WordPress goes onto the Insights page, with its own article page, at the next check.
+- A blog post keeps up with WordPress after it's in the inbox: each check brings in wording changed there (and the
+  reading time and summary, when those were the importer's own), and the article's page reads WordPress's current
+  version, at most 10 minutes old. Rewriting the text under **Edit** stops that for the post: the page then shows the
+  rewritten text, plain. Clearing the text there hands it back to WordPress. Titles and card pictures don't follow.
 - **Automatically add LinkedIn posts to Insights** and **Automatically add Instagram posts to Insights** save
   independent database preferences, off by default. Enabling one adds that channel's waiting posts to the public
   Insights page and checks connected channels immediately. Future imports from that channel are approved during
