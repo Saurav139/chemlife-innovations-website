@@ -68,17 +68,21 @@ export default function Header() {
         scrolled ? "shadow-lg shadow-black/10" : ""
       }`}
     >
-      <div className="max-w-[1200px] mx-auto pr-6 pl-2">
+      <div className="max-w-[1200px] mx-auto px-6">
         <div className="flex items-center justify-between gap-6 h-32">
-          <Link href={href("/")} className="flex-shrink-0">
+          {/* The logo file is mostly empty margin: the flask and name fill 60% of its width and 78% of its height.
+              The margins are cropped away here (the box shows the file's 650×836 middle), so the mark itself is
+              nearly the full height of the header and lines up with the page's left edge. */}
+          <Link href={href("/")} className="relative block h-26 aspect-[650/836] flex-shrink-0 overflow-hidden">
             <Image
               src={Images.branding.logo}
               alt="ChemLife Innovations"
               width={1021}
               height={1024}
-              sizes="112px"
+              sizes="150px"
               loading="eager"
-              className="h-28 w-auto mix-blend-multiply"
+              className="absolute max-w-none h-auto mix-blend-multiply"
+              style={{ width: "157.08%", left: "-28.46%", top: "-10.77%" }}
             />
           </Link>
 
