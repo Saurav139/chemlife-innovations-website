@@ -61,7 +61,7 @@ async function youtubePreview(url: URL, notes: string[]): Promise<SourceItem> {
   const [video] = await fetchYouTubeVideos([id], { fresh: true }, true);
   if (video) return video;
   // Without the YouTube key: the public oEmbed answer has the title.
-  const res = await fetch(`https://www.youtube.com/oembed?url=${encodeURIComponent(`https://www.youtube.com/watch?v=${id}`)}&format=json`, { cache: "no-store" });
+  const res = await fetch(`https://www.youtube.com/oembed?url=${encodeURIComponent(`https://www.youtube.com/watch?v=${id}`)}&format=json`, { cache: "no-store", signal: AbortSignal.timeout(8_000) });
   if (!res.ok) throw new Error("YouTube doesn't know that video, or it isn't public.");
   const { title } = (await res.json()) as { title: string };
   notes.push("Add a short description, and check the date: YouTube's key isn't set, so only the title was filled in.");

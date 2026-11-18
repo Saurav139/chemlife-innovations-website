@@ -23,6 +23,11 @@ export class RateLimiter {
     this.windows.set(key, { start: now, count: 1 });
   }
 
+  /** Forgets `key`'s count, e.g. after a correct password. */
+  reset(key: string): void {
+    this.windows.delete(key);
+  }
+
   private prune(now: number) {
     for (const [key, w] of this.windows) {
       if (now - w.start >= this.windowMs) this.windows.delete(key);

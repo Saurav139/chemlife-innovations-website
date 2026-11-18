@@ -1,4 +1,5 @@
 import { createHash, createHmac, timingSafeEqual } from "node:crypto";
+import { RateLimiter, clientIp } from "@/lib/rateLimit";
 import { isLiveHost } from "@/lib/seo";
 
 // The Insights inbox's single moderator signs in with ADMIN_PASSWORD. Signing in sets a cookie holding an expiry
@@ -77,28 +78,28 @@ export function sameOrigin(request: Request): boolean {
 
 // ---------- Too many wrong passwords ----------
 
-const attempts = new Map<string, { count: number; since: number }>();
+// Five wrong passwords from one address locks that address out for 15 minutes. The address is the one the web
+// server saw (clientIp), never one the visitor wrote into a header, so sending a different header each time
+// doesn't get more tries. A second, site-wide count stops guessing spread across many addresses.
 const WINDOW = 15 * 60 * 1000;
-const LIMIT = 5;
+const perAddress = new RateLimiter(5, WINDOW);
+const siteWide = new RateLimiter(200, WINDOW);
+const EVERYONE = "everyone";
 
 export function clientAddress(request: Request): string {
-  return request.headers.get("x-forwarded-for")?.split(",")[0].trim() || request.headers.get("x-real-ip") || "unknown";
+  return clientIp(request) ?? "unknown";
 }
 
 /** Whether this address may try a password now. */
 export function mayTry(address: string): boolean {
-  const entry = attempts.get(address);
-  if (!entry || Date.now() - entry.since > WINDOW) return true;
-  return entry.count < LIMIT;
+  return perAddress.retryAfter(address) === 0 && siteWide.retryAfter(EVERYONE) === 0;
 }
 
 export function recordFailure(address: string): void {
-  const entry = attempts.get(address);
-  if (!entry || Date.now() - entry.since > WINDOW) attempts.set(address, { count: 1, since: Date.now() });
-  else entry.count++;
-  if (attempts.size > 1000) attempts.clear();
+  perAddress.consume(address);
+  siteWide.consume(EVERYONE);
 }
 
 export function clearFailures(address: string): void {
-  attempts.delete(address);
+  perAddress.reset(address);
 }
