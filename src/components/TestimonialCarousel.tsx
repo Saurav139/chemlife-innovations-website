@@ -83,7 +83,7 @@ export default function TestimonialCarousel() {
           {/* Large Quote Section */}
           <div className="lg:col-span-2">
             <div className="relative">
-              <AnimatePresence mode="wait">
+              <AnimatePresence mode="wait" initial={false}>
                 <motion.div
                   key={current}
                   initial={{ opacity: 0, y: 20 }}

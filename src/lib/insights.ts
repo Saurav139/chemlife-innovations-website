@@ -410,6 +410,7 @@ async function builtInInsights(): Promise<Insights> {
             "X-Restli-Protocol-Version": "2.0.0",
           },
           next: { revalidate: 3600 }, // Cache on server for 1 hour
+          signal: AbortSignal.timeout(8_000), // Don't hold the page up if LinkedIn stops answering
         }
       );
 

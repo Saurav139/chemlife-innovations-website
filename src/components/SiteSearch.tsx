@@ -9,6 +9,7 @@ import { articlePath } from "@/lib/articles";
 import { insightAnchor } from "@/lib/catalog";
 import { goToResult } from "@/lib/deepLink";
 import type { InsightItem, Insights } from "@/lib/insights";
+import { useDialogFocus } from "@/lib/useDialogFocus";
 import { buildSearchIndex, highlight, searchSite, type SearchCategory, type SearchOutcome, type SearchTerm } from "@/lib/siteSearch";
 
 // What the search looks through, and how it matches and ranks, is in src/lib/siteSearch.ts.
@@ -75,9 +76,10 @@ export default function SiteSearch({ hideButtonOnPhones = false }: { hideButtonO
   }, []);
 
   // The box takes the keyboard as soon as the search opens, so typing straight after Ctrl+K loses no letters.
+  // Tab stays inside the search while it's open, and closing it returns to where the visitor was.
+  const dialogRef = useDialogFocus<HTMLDivElement>(isOpen, inputRef);
   useEffect(() => {
-    if (isOpen) inputRef.current?.focus({ preventScroll: true });
-    else setQuery("");
+    if (!isOpen) setQuery("");
   }, [isOpen]);
 
   // The Insights list (articles, videos, podcasts) loads the first time the search opens, so pages don't carry it.
@@ -158,6 +160,10 @@ export default function SiteSearch({ hideButtonOnPhones = false }: { hideButtonO
 
             {/* Modal Box */}
             <motion.div
+              ref={dialogRef}
+              role="dialog"
+              aria-modal="true"
+              aria-label="Search the ChemLife website"
               initial={{ opacity: 0, y: -20, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -20, scale: 0.95 }}
@@ -212,7 +218,7 @@ export default function SiteSearch({ hideButtonOnPhones = false }: { hideButtonO
               </div>
 
               {/* Results Area */}
-              <div ref={listRef} id="search-results" role="listbox" className="max-h-[min(420px,60dvh)] overflow-y-auto p-3 flex flex-col gap-1">
+              <div ref={listRef} id="search-results" role={query.trim() !== "" && filteredResults.length > 0 ? "listbox" : undefined} aria-label="Search results" className="max-h-[min(420px,60dvh)] overflow-y-auto p-3 flex flex-col gap-1">
                 {query.trim() === "" ? (
                   // Suggested Searches
                   <div className="py-2">
