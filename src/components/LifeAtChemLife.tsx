@@ -4,11 +4,9 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "@/context/VariantContext";
 import { Videos, VideoPosters } from "@/lib/assets";
+import Reveal from "./Reveal";
 import BackgroundVideo, { useNearViewport } from "./BackgroundVideo";
 import { useHref, useT } from "@/i18n/LocaleProvider";
-import { REVEAL_VIEWPORT } from "@/lib/reveal";
-
-const easeOut = [0.25, 0.1, 0, 1] as const;
 
 const videos = [
   { src: Videos.trip1, poster: VideoPosters.trip1 },
@@ -58,58 +56,40 @@ export default function LifeAtChemLife() {
       <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/90 via-black/60 to-brand-navy/80 z-10" />
 
       <div className="relative z-20 w-full max-w-[1200px] mx-auto px-6 py-16 md:py-24 lg:py-32">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={REVEAL_VIEWPORT}
-          transition={{ duration: 0.6, ease: easeOut }}
+        <Reveal
           className="text-center"
         >
           <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-10 md:mb-16 leading-tight">
             {t.title}
           </h2>
-        </motion.div>
+        </Reveal>
  
          <div className="max-w-2xl mx-auto">
           {bulletPoints.map((text, i) => (
             <div key={text} className="relative flex items-start gap-5 pb-7 md:pb-10 last:pb-0">
               {i < bulletPoints.length - 1 && (
-                <motion.div
-                  initial={{ scaleY: 0 }}
-                  whileInView={{ scaleY: 1 }}
-                  viewport={REVEAL_VIEWPORT}
-                  transition={{ duration: 0.8, delay: (i + 1) * 0.12, ease: easeOut }}
-                  className="absolute w-[3px] bg-brand-navy/40 origin-top"
+                <div
+                  className="absolute w-[3px] bg-brand-navy/40"
                   style={{ left: "10.5px", top: "12px", bottom: "-12px" }}
                 />
               )}
-              <motion.div
-                initial={{ opacity: 0, scale: 0 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={REVEAL_VIEWPORT}
-                transition={{ duration: 0.3, delay: i * 0.12, ease: easeOut }}
-                className="relative z-10 w-6 h-6 rounded-full bg-brand-navy flex items-center justify-center flex-shrink-0"
-              >
+              <div className="relative z-10 w-6 h-6 rounded-full bg-brand-navy flex items-center justify-center flex-shrink-0">
                 <div className="w-3 h-3 rounded-full bg-teal-400" />
-              </motion.div>
-              <motion.span
-                initial={{ opacity: 0, x: i % 2 === 0 ? -16 : 16 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={REVEAL_VIEWPORT}
-                transition={{ duration: 0.5, delay: i * 0.12, ease: easeOut }}
+              </div>
+              <Reveal
+                as="span"
+                from={i % 2 === 0 ? "left" : "right"}
+                delay={i * 0.12}
                 className="text-white/90 text-lg md:text-xl lg:text-2xl"
               >
                 {text}
-              </motion.span>
+              </Reveal>
             </div>
           ))}
         </div>
  
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={REVEAL_VIEWPORT}
-          transition={{ duration: 0.5, delay: 0.5, ease: easeOut }}
+        <Reveal
+          delay={0.5}
           className="text-center mt-12"
         >
           <a
@@ -118,7 +98,7 @@ export default function LifeAtChemLife() {
           >
             {t.joinUs}
           </a>
-        </motion.div>
+        </Reveal>
       </div>
     </section>
   );

@@ -1,10 +1,12 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
+import { useDialogFocus } from "@/lib/useDialogFocus";
 
-/** The pop-up YouTube player for a video or podcast card. The page that opens it closes it on Escape and stops the
- *  page behind from scrolling. */
+/** The pop-up YouTube player for a video or podcast card. Keyboard focus stays inside it while it's open and returns
+ *  to the card afterwards. The page that opens it closes it on Escape and stops the page behind from scrolling. */
 export default function InsightVideoModal({ videoId, onClose }: { videoId: string | null; onClose: () => void }) {
+  const dialog = useDialogFocus<HTMLDivElement>(!!videoId);
   return (
     <AnimatePresence>
       {videoId && (
@@ -16,6 +18,10 @@ export default function InsightVideoModal({ videoId, onClose }: { videoId: strin
           onClick={() => onClose()}
         >
           <motion.div
+            ref={dialog}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Video player"
             initial={{ scale: 0.95, y: 20 }}
             animate={{ scale: 1, y: 0 }}
             exit={{ scale: 0.95, y: 20 }}

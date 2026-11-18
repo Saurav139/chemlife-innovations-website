@@ -1,11 +1,10 @@
 "use client";
 
-import { motion } from "framer-motion";
 import Image from "next/image";
 import { useTheme } from "@/context/VariantContext";
 import { Images } from "@/lib/assets";
 import { useT } from "@/i18n/LocaleProvider";
-import { REVEAL_VIEWPORT } from "@/lib/reveal";
+import Reveal from "./Reveal";
 
 // Titles, descriptions and photo descriptions are in the language file (home.howWeDo.steps), in this order.
 const stepImages: { image: string; objectPosition?: string }[] = [
@@ -45,11 +44,7 @@ export default function HowWeDo() {
         </div>
 
         {/* Unified Chessboard Container (Attached rows, shrunken dimensions) */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={REVEAL_VIEWPORT}
-          transition={{ duration: 0.5, ease: [0.25, 0.1, 0, 1] }}
+        <Reveal
           className="rounded-3xl overflow-hidden shadow-2xl border border-white/10 max-w-[850px] lg:max-w-[1100px] mx-auto bg-white divide-y divide-slate-100"
         >
           {steps.map((s, i) => {
@@ -96,7 +91,7 @@ export default function HowWeDo() {
               </div>
             );
           })}
-        </motion.div>
+        </Reveal>
       </div>
     </section>
   );

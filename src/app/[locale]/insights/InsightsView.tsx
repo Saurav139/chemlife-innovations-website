@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
+import { useDialogFocus } from "@/lib/useDialogFocus";
 import { useRouter } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -94,6 +95,10 @@ export default function InsightsView({ blogs, podcasts, videos, initialFilters =
   useEffect(() => {
     if (query !== window.location.search) window.history.replaceState(null, "", `${window.location.pathname}${query}`);
   }, [query]);
+
+  // Keyboard focus stays inside the reader while it's open, and returns to the card afterwards (the video player
+  // does the same itself, in InsightVideoModal).
+  const articleDialog = useDialogFocus<HTMLDivElement>(!!activeArticle);
 
   // Escape closes the video player or the article reader, and the page behind them doesn't scroll while one is open.
   const overlayOpen = !!activeVideoId || !!activeArticle;
@@ -672,6 +677,10 @@ export default function InsightsView({ blogs, podcasts, videos, initialFilters =
             onClick={() => setActiveArticle(null)}
           >
             <motion.div
+              ref={articleDialog}
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="reader-dialog-title"
               initial={{ scale: 0.95, y: 20 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.95, y: 20 }}
@@ -700,7 +709,7 @@ export default function InsightsView({ blogs, podcasts, videos, initialFilters =
 
               {/* Scrollable Article Body */}
               <div className="overflow-y-auto p-6 md:p-8 space-y-6">
-                <h2 className="font-heading text-2xl md:text-3xl font-bold text-brand-navy leading-tight">
+                <h2 id="reader-dialog-title" className="font-heading text-2xl md:text-3xl font-bold text-brand-navy leading-tight">
                   {activeArticle.title}
                 </h2>
 

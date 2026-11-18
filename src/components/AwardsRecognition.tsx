@@ -88,7 +88,7 @@ export default function AwardsRecognition() {
         >
           <div className="bg-brand-orange rounded-2xl p-[3px] shadow-2xl">
             <div className="bg-white rounded-xl p-6 lg:p-8 min-h-[320px] flex items-center">
-              <AnimatePresence mode="wait">
+              <AnimatePresence mode="wait" initial={false}>
                 {activeStep >= 0 && (
                   <motion.div
                     key={activeStep}

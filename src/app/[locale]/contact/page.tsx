@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useState, useEffect, useRef } from "react";
+import { Fragment, useCallback, useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Header from "@/components/Header";
@@ -101,6 +101,8 @@ export default function ContactPage() {
     }
   }, []);
 
+  const focusOnMount = useCallback((el: HTMLElement | null) => el?.focus({ preventScroll: true }), []);
+
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
 
@@ -123,7 +125,10 @@ export default function ContactPage() {
     }
 
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    // Take the keyboard (and a screen reader) to the first field that needs fixing; its message is read with it.
+    const firstInvalid = (["name", "email", "subject", "message"] as const).find((field) => newErrors[field]);
+    if (firstInvalid) document.getElementById(firstInvalid)?.focus();
+    return !firstInvalid;
   };
 
   const handleInputChange = (
@@ -243,6 +248,9 @@ export default function ContactPage() {
                               <input
                                 type="text"
                                 id="name"
+                                aria-required="true"
+                                aria-invalid={errors.name ? true : undefined}
+                                aria-describedby={errors.name ? "name-error" : undefined}
                                 name="name"
                                 maxLength={CONTACT_LIMITS.name}
                                 autoComplete="name"
@@ -253,7 +261,7 @@ export default function ContactPage() {
                                 placeholder={t.namePlaceholder}
                               />
                               {errors.name && (
-                                <p className="text-red-600 text-xs mt-1.5 font-medium">{errors.name}</p>
+                                <p id="name-error" className="text-red-600 text-xs mt-1.5 font-medium">{errors.name}</p>
                               )}
                             </div>
 
@@ -265,6 +273,9 @@ export default function ContactPage() {
                               <input
                                 type="email"
                                 id="email"
+                                aria-required="true"
+                                aria-invalid={errors.email ? true : undefined}
+                                aria-describedby={errors.email ? "email-error" : undefined}
                                 name="email"
                                 maxLength={CONTACT_LIMITS.email}
                                 autoComplete="email"
@@ -275,7 +286,7 @@ export default function ContactPage() {
                                 placeholder={t.emailPlaceholder}
                               />
                               {errors.email && (
-                                <p className="text-red-600 text-xs mt-1.5 font-medium">{errors.email}</p>
+                                <p id="email-error" className="text-red-600 text-xs mt-1.5 font-medium">{errors.email}</p>
                               )}
                             </div>
                           </div>
@@ -335,6 +346,9 @@ export default function ContactPage() {
                             <input
                               type="text"
                               id="subject"
+                              aria-required="true"
+                              aria-invalid={errors.subject ? true : undefined}
+                              aria-describedby={errors.subject ? "subject-error" : undefined}
                               name="subject"
                               maxLength={CONTACT_LIMITS.subject}
                               value={formData.subject}
@@ -344,7 +358,7 @@ export default function ContactPage() {
                               placeholder={t.subjectPlaceholder}
                             />
                             {errors.subject && (
-                              <p className="text-red-600 text-xs mt-1.5 font-medium">{errors.subject}</p>
+                              <p id="subject-error" className="text-red-600 text-xs mt-1.5 font-medium">{errors.subject}</p>
                             )}
                           </div>
 
@@ -355,6 +369,9 @@ export default function ContactPage() {
                             </label>
                             <textarea
                               id="message"
+                              aria-required="true"
+                              aria-invalid={errors.message ? true : undefined}
+                              aria-describedby={errors.message ? "message-error" : undefined}
                               name="message"
                               maxLength={CONTACT_LIMITS.message}
                               rows={5}
@@ -365,7 +382,7 @@ export default function ContactPage() {
                               placeholder={t.messagePlaceholder}
                             />
                             {errors.message && (
-                              <p className="text-red-600 text-xs mt-1.5 font-medium">{errors.message}</p>
+                              <p id="message-error" className="text-red-600 text-xs mt-1.5 font-medium">{errors.message}</p>
                             )}
                           </div>
 
@@ -444,6 +461,7 @@ export default function ContactPage() {
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 0.4, ease: easeOut }}
+                        role="status"
                         className="py-12 text-center flex flex-col items-center"
                       >
                         {/* Animated Checkmark */}
@@ -452,7 +470,8 @@ export default function ContactPage() {
                             <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                           </svg>
                         </div>
-                        <h2 className="font-heading text-2xl md:text-3xl font-bold text-brand-navy mb-4">
+                        {/* Focus moves here when the form is replaced, so "sent" is read out and Tab carries on from it. */}
+                        <h2 ref={focusOnMount} tabIndex={-1} className="font-heading text-2xl md:text-3xl font-bold text-brand-navy mb-4 focus:outline-none">
                           {t.sentTitle}
                         </h2>
                         <p className="text-gray-500 text-sm max-w-md mx-auto leading-relaxed mb-8">

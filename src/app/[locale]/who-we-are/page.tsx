@@ -1,9 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import { motion, useReducedMotion } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import Reveal from "@/components/Reveal";
 import SiteSearch from "@/components/SiteSearch";
 import { VariantProvider } from "@/context/VariantContext";
 import { useHref, useT } from "@/i18n/LocaleProvider";
@@ -14,8 +14,6 @@ import { jsonLd } from "@/lib/structuredData";
 // cover with a contents list, the headline figures, a strip of partners and recognition, then three numbered
 // chapters (the facts as a fact sheet, the directors as an organisation chart, the questions all open) and a
 // closing band whose one main button asks for the technical dossier.
-
-const easeOut = [0.25, 0.1, 0, 1] as const;
 
 // The homepage hero's figures, with their labels in the language file (home.stats), in this order.
 const FIGURES = ["30", "16", "22", "7"];
@@ -54,22 +52,6 @@ function initials(name: string): string {
   const first = (word?: string) => (word ? Array.from(word)[0] : "");
   if (!/^[\x00-\x7F]*$/.test(name)) return first(words[0]);
   return (first(words[0]) + (words.length > 1 ? first(words[words.length - 1]) : "")).toUpperCase();
-}
-
-/** Fades and rises into view once (still for visitors who prefer less motion). */
-function Reveal({ children, delay = 0, className }: { children: React.ReactNode; delay?: number; className?: string }) {
-  const reduce = useReducedMotion();
-  return (
-    <motion.div
-      className={className}
-      initial={{ opacity: 0, y: reduce ? 0 : 16 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "0px 0px -8% 0px" }}
-      transition={{ duration: 0.6, delay, ease: easeOut }}
-    >
-      {children}
-    </motion.div>
-  );
 }
 
 const wrap = "max-w-[1200px] mx-auto px-6";

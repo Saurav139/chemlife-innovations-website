@@ -2,13 +2,11 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Images } from "@/lib/assets";
 import { useHref, useT } from "@/i18n/LocaleProvider";
 import type { Messages } from "@/i18n/messages/en";
-import { REVEAL_VIEWPORT } from "@/lib/reveal";
-
-const easeOut = [0.25, 0.1, 0, 1] as const;
+import Reveal from "./Reveal";
 
 // Each card's title, description and photo descriptions are in the language file (home.whoWeAre.cards), in this order.
 export const cardImages = [
@@ -97,11 +95,8 @@ export function SnowflakeCell({
   imageIndex: number;
 }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={REVEAL_VIEWPORT}
-      transition={{ duration: 0.5, delay: index * 0.1, ease: [0.25, 0.1, 0, 1] }}
+    <Reveal
+      delay={index * 0.1}
       className="flex flex-row md:flex-col items-center gap-5 md:gap-0 text-left md:text-center group cursor-pointer"
     >
       {/* 3D Visual Snowflake Image Container (No text overlay). Phones: a smaller circle beside the text. */}
@@ -117,7 +112,7 @@ export function SnowflakeCell({
           whileHover={{ scale: 1.05 }}
           className="relative w-[98px] h-[98px] sm:w-[120px] sm:h-[120px] md:w-[165px] md:h-[165px] lg:w-[235px] lg:h-[235px] rounded-full overflow-hidden border-2 border-teal-500/25 group-hover:border-brand-orange transition-all duration-300 z-10 bg-gray-50 shadow-xl"
         >
-          <AnimatePresence mode="popLayout">
+          <AnimatePresence mode="popLayout" initial={false}>
             <motion.div
               key={card.images[imageIndex % card.images.length].src}
               initial={{ rotate: -180, opacity: 0 }}
@@ -147,23 +142,7 @@ export function SnowflakeCell({
           {card.description}
         </p>
       </div>
-    </motion.div>
-  );
-}
-
-/** Fades and rises into view once, as it scrolls in (still for visitors who prefer less motion). */
-function Reveal({ children, delay = 0, className }: { children: React.ReactNode; delay?: number; className?: string }) {
-  const reduce = useReducedMotion();
-  return (
-    <motion.div
-      className={className}
-      initial={{ opacity: 0, y: reduce ? 0 : 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={REVEAL_VIEWPORT}
-      transition={{ duration: 0.6, delay, ease: easeOut }}
-    >
-      {children}
-    </motion.div>
+    </Reveal>
   );
 }
 
