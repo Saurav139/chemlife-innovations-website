@@ -124,5 +124,8 @@ export function topicsFor(item: { title: string; description?: string; content?:
 
 export const topicBySlug = (slug: string): InsightTopic | undefined => INSIGHT_TOPICS.find((topic) => topic.slug === slug);
 
+/** The topic's own page on this site (its copy is in insight-topic-pages.ts). */
+export const topicPath = (slug: string) => `/insights/topic/${slug}`;
+
 /** The name shown for a topic's slug (the slug itself if the topic is no longer in the list). */
 export const topicName = (slug: string): string => topicBySlug(slug)?.name ?? slug;

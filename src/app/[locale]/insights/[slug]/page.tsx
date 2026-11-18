@@ -11,7 +11,7 @@ import { formattedArticle } from "@/lib/article-source";
 import { articleBlocks, articlePath, isOptimizableImage, isoDate } from "@/lib/articles";
 import { headingId, tocEntries, withHeadingIds, type ArticleHeading } from "@/lib/article-toc";
 import { getArticle, type InsightItem } from "@/lib/insights";
-import { topicName } from "@/lib/insight-topics";
+import { topicName, topicPath } from "@/lib/insight-topics";
 import { SITE_NAME, SITE_URL, pageMetadata } from "@/lib/seo";
 import { jsonLd } from "@/lib/structuredData";
 import ArticleShare from "./ArticleShare";
@@ -171,14 +171,14 @@ export default async function ArticlePage({ params }: { params: Params }) {
           </div>
           )}
 
-          {/* The article's topic tags: each opens the Insights page filtered by that topic. */}
+          {/* The article's topic tags: each opens that topic's page. */}
           {article.topics && article.topics.length > 0 && (
             <div className="mt-10 flex flex-wrap items-center gap-2">
               <span className="text-xs font-bold uppercase tracking-wider text-gray-aa mr-1">Topics</span>
               {article.topics.map((slug) => (
                 <Link
                   key={slug}
-                  href={`/insights?topic=${slug}#explore`}
+                  href={topicPath(slug)}
                   className="tap-target inline-flex items-center px-3 py-1.5 rounded-full border border-gray-200 bg-gray-55 text-xs font-semibold text-slate-700 hover:border-teal-aa hover:text-teal-aa transition-colors"
                 >
                   {topicName(slug)}

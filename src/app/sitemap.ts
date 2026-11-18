@@ -4,6 +4,7 @@ import { LOCALES, isTranslatedPath, localizePath } from "@/i18n/config";
 import { PRODUCTS, productPath } from "@/lib/catalog";
 import { articlePath } from "@/lib/articles";
 import { getInsights } from "@/lib/insights";
+import { INSIGHT_TOPICS, topicPath } from "@/lib/insight-topics";
 
 // Pages for search engines, as their canonical URLs. /launch is left out because it's noindexed.
 // Translated pages are also listed in Kannada and Hindi, each with its language alternates. Add new pages here. No lastModified: Google ignores dates that aren't kept accurate.
@@ -35,12 +36,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const languages = Object.fromEntries(LOCALES.map((l) => [l, url(localizePath(path, l))]));
     return LOCALES.map((l) => ({ url: url(localizePath(path, l)), alternates: { languages } }));
   });
-  // Each blog article's page on this site (English only).
+  // Each blog article's page on this site, and each topic's page that has posts (English only).
   let articles: MetadataRoute.Sitemap = [];
+  let topics: MetadataRoute.Sitemap = [];
   try {
-    articles = [...new Set((await getInsights()).blogs.map(articlePath).filter((path): path is string => !!path))].map((path) => ({ url: url(path) }));
+    const { blogs, podcasts, videos } = await getInsights();
+    articles = [...new Set(blogs.map(articlePath).filter((path): path is string => !!path))].map((path) => ({ url: url(path) }));
+    const tagged = new Set([...blogs, ...podcasts, ...videos].flatMap((item) => item.topics ?? []));
+    topics = INSIGHT_TOPICS.filter((topic) => tagged.has(topic.slug)).map((topic) => ({ url: url(topicPath(topic.slug)) }));
   } catch (error) {
-    console.warn("Sitemap: couldn't list the blog articles", error);
+    console.warn("Sitemap: couldn't list the blog articles and topics", error);
   }
-  return [...pages, ...articles];
+  return [...pages, ...topics, ...articles];
 }
