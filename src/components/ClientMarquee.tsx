@@ -5,8 +5,6 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { Images } from "@/lib/assets";
 import { useT } from "@/i18n/LocaleProvider";
-import { usePausable } from "@/lib/usePausable";
-import PauseButton from "./PauseButton";
 
 const frontLogos = [...Images.partnerLogos.frontRow];
 const backLogos = [...Images.partnerLogos.backRow];
@@ -73,15 +71,12 @@ export default function ClientMarquee() {
   const t = useT().home.partners;
   const [flipped, setFlipped] = useState(false);
 
-  // The cards flip every 3 s until paused (the button under the heading).
-  const [paused, togglePaused] = usePausable();
   useEffect(() => {
-    if (paused) return;
     const interval = setInterval(() => {
       setFlipped((prev) => !prev);
     }, 3000);
     return () => clearInterval(interval);
-  }, [paused]);
+  }, []);
 
   return (
     <section className="bg-white py-16 md:py-24 lg:py-32 overflow-hidden">
@@ -93,9 +88,6 @@ export default function ClientMarquee() {
           <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-brand-navy mt-2 mb-4 leading-tight">
             {t.title}
           </h2>
-          <div className="flex justify-center">
-            <PauseButton paused={paused} onToggle={togglePaused} />
-          </div>
         </div>
       </div>
 
