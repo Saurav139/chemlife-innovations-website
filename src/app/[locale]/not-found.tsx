@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SiteSearch from "@/components/SiteSearch";
@@ -27,23 +26,23 @@ export default function NotFound() {
         </p>
         <h1 className="font-heading text-3xl md:text-4xl font-bold text-brand-navy mt-2">{t.notFound.title}</h1>
         <p className="text-slate-600 mt-4 max-w-md mx-auto">{t.notFound.text}</p>
-        <Link
+        <a
           href={href("/")}
           className="inline-flex items-center justify-center min-h-12 mt-8 rounded-full bg-brand-orange-aa hover:bg-brand-orange-aa-hover px-7 text-sm font-semibold text-white transition-colors"
         >
           {t.notFound.home}
-        </Link>
+        </a>
         <nav aria-label={t.notFound.popular} className="mt-10">
           <p className="text-sm text-slate-aa">{t.notFound.popular}</p>
           <ul className="mt-2 flex flex-wrap justify-center gap-x-6">
             {SUGGESTED.map((page) => (
               <li key={page.path}>
-                <Link
+                <a
                   href={href(page.path)}
                   className="inline-flex items-center min-h-11 text-sm font-semibold text-teal-aa hover:text-teal-700 underline-offset-4 hover:underline"
                 >
                   {t.nav[page.key]}
-                </Link>
+                </a>
               </li>
             ))}
           </ul>

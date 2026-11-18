@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence, MotionConfig } from "framer-motion";
 import Image from "next/image";
-import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { VariantProvider } from "@/context/VariantContext";
@@ -334,7 +333,7 @@ export default function ResearchPage() {
                 <h2 className="font-heading text-2xl md:text-3xl font-bold text-white">{t.ctaTitle}</h2>
                 <p className="text-white/80 text-base mt-2 max-w-2xl leading-relaxed">{t.ctaText}</p>
               </div>
-              <Link
+              <a
                 href={href("/contact?type=research")}
                 className="inline-flex items-center justify-center gap-2 min-h-12 px-7 rounded-full bg-brand-orange-aa hover:bg-brand-orange-aa-hover text-white font-semibold shrink-0 transition-colors"
               >
@@ -342,7 +341,7 @@ export default function ResearchPage() {
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
-              </Link>
+              </a>
             </div>
 
           </div>

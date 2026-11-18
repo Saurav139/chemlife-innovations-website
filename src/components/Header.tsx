@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { useTheme } from "@/context/VariantContext";
 import { usePathname } from "next/navigation";
 import { Images } from "@/lib/assets";
@@ -69,7 +68,7 @@ export default function Header() {
           {/* The logo file is mostly empty margin: the flask and name fill 60% of its width and 78% of its height.
               The margins are cropped away here (the box shows the file's 650×836 middle), so the mark itself is
               nearly the full height of the header and lines up with the page's left edge. */}
-          <Link href={href("/")} className="relative block h-26 aspect-[650/836] flex-shrink-0 overflow-hidden">
+          <a href={href("/")} className="relative block h-26 aspect-[650/836] flex-shrink-0 overflow-hidden">
             <Image
               src={Images.branding.logo}
               alt="ChemLife Innovations"
@@ -80,7 +79,7 @@ export default function Header() {
               className="absolute max-w-none h-auto mix-blend-multiply"
               style={{ width: "157.08%", left: "-28.46%", top: "-10.77%" }}
             />
-          </Link>
+          </a>
 
           <nav className={`hidden items-center ${compact ? "xl:flex gap-3.5" : "lg:flex gap-7 xl:gap-10"}`}>
             {navLinks.map((link) => {
@@ -88,7 +87,7 @@ export default function Header() {
                 pathname === link.path || (pathname.startsWith(link.path) && link.path !== "/");
 
               return (
-                <Link
+                <a
                   key={link.path}
                   href={link.href}
                   aria-current={isActive ? "page" : undefined}
@@ -99,7 +98,7 @@ export default function Header() {
                   }`}
                 >
                   {link.label}
-                </Link>
+                </a>
               );
             })}
             <LanguageSwitcher />
@@ -134,7 +133,7 @@ export default function Header() {
                   pathname === link.path || (pathname.startsWith(link.path) && link.path !== "/");
 
                 return (
-                  <Link
+                  <a
                     key={link.path}
                     href={link.href}
                     aria-current={isActive ? "page" : undefined}
@@ -146,7 +145,7 @@ export default function Header() {
                     onClick={() => setMobileOpen(false)}
                   >
                     {link.label}
-                  </Link>
+                  </a>
                 );
               })}
               <LanguageSwitcher inline />
