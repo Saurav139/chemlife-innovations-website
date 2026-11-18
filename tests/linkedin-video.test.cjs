@@ -88,6 +88,7 @@ test('posts saved before videos were recognised get the built-in list\'s player 
     '@/lib/insights-store/sources': { fetchYouTubeUploads: async () => [] },
     '@/lib/insights-store/text': text,
     '@/lib/articles': load('src/lib/articles.ts'),
+    '@/lib/insight-topics': load('src/lib/insight-topics.ts'),
     '@/lib/insights-store/db': {
       storeConfigured: () => true,
       approvedInsights: async () => ({ blogs: [saved(feedBites), saved(other), saved(other.replace('7000', '7001'), 'https://www.linkedin.com/embed/feed/update/urn:li:activity:7001000000000000000?compact=true')], podcasts: [], videos: [] }),
@@ -107,6 +108,7 @@ test('Instagram reels saved before reels got a player get Instagram\'s player on
     '@/lib/insights-store/sources': { fetchYouTubeUploads: async () => [] },
     '@/lib/insights-store/text': text,
     '@/lib/articles': load('src/lib/articles.ts'),
+    '@/lib/insight-topics': load('src/lib/insight-topics.ts'),
     '@/lib/insights-store/db': {
       storeConfigured: () => true,
       approvedInsights: async () => ({ blogs: [

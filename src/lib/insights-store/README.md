@@ -81,6 +81,9 @@ The staging and live sites should each have their own database, so testing on st
   `src/lib/insights.ts`). A post whose picture couldn't be copied when it came in gets it on a later check,
   while its channel still lists it. Once per database it also brings blog posts imported before October 2026 up to today's
   summaries and titles.
+- `src/lib/insight-topics.ts`: the topic tags (Feed Hygiene, Mycotoxins…) and the keywords that give a post each one.
+  Posts are tagged from their own words each time the page is shown, so nothing is stored; edit that list to add a
+  topic or a keyword. `src/lib/insight-filters.ts` is how the page's filters are written in its address.
 - `card.ts`: how a post becomes an Insights card, for the page and for the inbox's preview (`src/components/InsightCard.tsx`).
 - `src/lib/insights.ts` `getInsights()`: the approved posts once the inbox has started; the built-in list if the
   database isn't set up or can't be reached.

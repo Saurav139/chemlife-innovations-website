@@ -15,10 +15,13 @@ import NaturalInsightImage from "@/components/NaturalInsightImage";
 import { articlePath } from "@/lib/articles";
 import { Images } from "@/lib/assets";
 import type { Insights, InsightItem } from "@/lib/insights";
+import { CONTENT_TYPES, NO_FILTERS, filtersQuery, isFiltered, toggled, type InsightFilters } from "@/lib/insight-filters";
+import { INSIGHT_TOPICS, topicName } from "@/lib/insight-topics";
 import { playOnPage, youtubeWatchUrl } from "@/lib/youtube";
 import { insightAnchor } from "@/lib/catalog";
 import { revealElement, useHashTarget } from "@/lib/deepLink";
 import { useMasonry } from "@/lib/masonry";
+import InsightsFilterPanel from "./InsightsFilterPanel";
 
 const easeOut = [0.25, 0.1, 0, 1] as const;
 
@@ -43,10 +46,17 @@ function ButtonLabel({ full, short }: { full: string; short: string }) {
   );
 }
 
-export default function InsightsView({ blogs, podcasts, videos }: Insights) {
+/** The content type (a slug from CONTENT_TYPES) a post is filtered under. */
+const typeOf = (item: InsightItem) => CONTENT_TYPES.find((type) => type.tag === insightTag(item))!.slug;
+
+export default function InsightsView({ blogs, podcasts, videos, initialFilters = NO_FILTERS }: Insights & {
+  /** The filters the page's address asks for (/insights?topic=…), so a link to a filtered view opens filtered. */
+  initialFilters?: InsightFilters;
+}) {
   const router = useRouter();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedFilter, setSelectedFilter] = useState("All");
+  const [filters, setFilters] = useState(initialFilters);
+  // Phones and tablets: whether the filter panel's tick lists are showing.
+  const [filtersOpen, setFiltersOpen] = useState(false);
   const [activeVideoId, setActiveVideoId] = useState<string | null>(null);
   const [activeArticle, setActiveArticle] = useState<InsightItem | null>(null);
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
@@ -64,6 +74,25 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
     setRevealFrom(Infinity);
     setGridVersion((v) => v + 1);
   };
+  const changeFilters = (change: Partial<InsightFilters>) => {
+    setFilters((current) => ({ ...current, ...change }));
+    resetGrid();
+  };
+
+  // A link to another filtered view of this page (or to the plain page) while it's open brings new filters.
+  const addressFilters = filtersQuery(initialFilters);
+  const [seenAddressFilters, setSeenAddressFilters] = useState(addressFilters);
+  if (seenAddressFilters !== addressFilters) {
+    setSeenAddressFilters(addressFilters);
+    setFilters(initialFilters);
+    resetGrid();
+  }
+
+  // The address follows the filters, so the view can be shared or reloaded as it is.
+  const query = filtersQuery(filters);
+  useEffect(() => {
+    if (query !== window.location.search) window.history.replaceState(null, "", `${window.location.pathname}${query}`);
+  }, [query]);
 
   // Escape closes the video player or the article reader, and the page behind them doesn't scroll while one is open.
   const overlayOpen = !!activeVideoId || !!activeArticle;
@@ -82,10 +111,6 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
       window.removeEventListener("keydown", onKey);
     };
   }, [overlayOpen]);
-
-  // "Blogs" is WordPress articles only; LinkedIn and Instagram get their own filter once there are posts from them.
-  const hasTag = (tag: string) => blogs.some((item) => insightTag(item) === tag);
-  const filters = ["All", "Blogs", ...(["LinkedIn", "Instagram"] as const).filter(hasTag), "Podcasts", "Videos"];
 
   // Helper to convert date string for sorting
   const getTimestamp = (dateStr: string) => {
@@ -119,55 +144,67 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
 
   // One card per post: the same post on LinkedIn and on Instagram shares a title, and each channel keeps its card.
   const cardKey = (item: InsightItem) => `${insightTag(item)}|${item.title}`;
+  const allItems = [...videos, ...podcasts, ...blogs].filter((item, index, self) => self.findIndex((x) => cardKey(x) === cardKey(item)) === index);
 
-  // The grid's items for a filter and search: deduplicated and newest first, across every type for "All". The newest
-  // blog, video and podcast are already in Featured above, so they're left out, unless
-  // the visitor is searching (then every match is listed) or leaving them out would empty the grid.
-  const gridItemsFor = (filter: string, rawQuery: string) => {
-    const query = rawQuery.toLowerCase();
-    const filterAndSort = (list: InsightItem[]) =>
-      list
-        .filter((item, index, self) => self.findIndex((x) => cardKey(x) === cardKey(item)) === index)
-        .sort((a, b) => getTimestamp(b.date) - getTimestamp(a.date))
-        .filter((item) => item.title.toLowerCase().includes(query) || item.description.toLowerCase().includes(query));
-
-    const filteredBlogs = filterAndSort(blogs);
-    const filteredPodcasts = filterAndSort(podcasts);
-    const filteredVideos = filterAndSort(videos);
-
-    let items: InsightItem[] = [];
-    if (filter === "Blogs") {
-      items = filteredBlogs.filter((item) => insightTag(item) === "Blog");
-    } else if (filter === "LinkedIn" || filter === "Instagram") {
-      items = filteredBlogs.filter((item) => insightTag(item) === filter);
-    } else if (filter === "Podcasts") {
-      items = filteredPodcasts;
-    } else if (filter === "Videos") {
-      items = filteredVideos;
-    } else {
-      items = [...filteredVideos, ...filteredPodcasts, ...filteredBlogs].sort((a, b) => getTimestamp(b.date) - getTimestamp(a.date));
-    }
-
-    const withoutFeatured = items.filter((item) => !featuredTitles.has(item.title));
-    return rawQuery.trim() || withoutFeatured.length === 0 ? items : withoutFeatured;
+  // Whether a post passes the search and the ticked content types and topics. `except` leaves one tick list out, to
+  // count what each of its options would show.
+  const matches = (item: InsightItem, by: InsightFilters, except?: "types" | "topics") => {
+    const search = by.query.trim().toLowerCase();
+    const topics = item.topics ?? [];
+    if (search && ![item.title, item.description, ...topics.map(topicName)].some((text) => text.toLowerCase().includes(search))) return false;
+    if (except !== "types" && by.types.length > 0 && !by.types.includes(typeOf(item))) return false;
+    if (except !== "topics" && by.topics.length > 0 && !by.topics.some((topic) => topics.includes(topic))) return false;
+    return true;
   };
 
-  const gridItems = gridItemsFor(selectedFilter, searchQuery);
+  // The grid's items for a set of filters, newest (or oldest) first across every type. The newest blog, video and
+  // podcast are already in Featured above, so they're left out, unless the visitor is searching or filtering (then
+  // every match is listed) or leaving them out would empty the grid.
+  const gridItemsFor = (by: InsightFilters) => {
+    const direction = by.sort === "oldest" ? -1 : 1;
+    const items = allItems.filter((item) => matches(item, by)).sort((a, b) => direction * (getTimestamp(b.date) - getTimestamp(a.date)));
+    const withoutFeatured = items.filter((item) => !featuredTitles.has(item.title));
+    return isFiltered(by) || withoutFeatured.length === 0 ? items : withoutFeatured;
+  };
+
+  const gridItems = gridItemsFor(filters);
+
+  // The tick lists: the content types and topics that have posts, each with how many it would show now.
+  const typeOptions = CONTENT_TYPES.filter((type) => allItems.some((item) => typeOf(item) === type.slug)).map(({ slug, name }) => ({
+    slug,
+    name,
+    count: allItems.filter((item) => typeOf(item) === slug && matches(item, filters, "types")).length,
+  }));
+  const topicOptions = INSIGHT_TOPICS.filter((topic) => allItems.some((item) => item.topics?.includes(topic.slug))).map(({ slug, name }) => ({
+    slug,
+    name,
+    count: allItems.filter((item) => item.topics?.includes(slug) && matches(item, filters, "topics")).length,
+  }));
+  const chosenFilters = [
+    ...filters.topics.map((slug) => ({ key: `topic:${slug}`, name: topicName(slug), remove: () => changeFilters({ topics: toggled(filters.topics, slug) }) })),
+    ...filters.types.map((slug) => ({ key: `type:${slug}`, name: CONTENT_TYPES.find((type) => type.slug === slug)?.name ?? slug, remove: () => changeFilters({ types: toggled(filters.types, slug) }) })),
+  ];
+
+  // A tag on a card filters the grid by that topic (or stops, if it already does) and goes back to the grid's top.
+  const exploreRef = useRef<HTMLDivElement>(null);
+  const pickTopic = (slug: string) => {
+    changeFilters({ topics: toggled(filters.topics, slug) });
+    exploreRef.current?.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+  };
 
   // Opens at one item from a link such as /insights#insight-feed-bites-… (the site search): an article opens in the
   // reader; a video or podcast is scrolled to (its card in Featured, or in the grid, showing enough cards to reach it).
   useHashTarget((target) => {
     const item = [...blogs, ...videos, ...podcasts].find((entry) => insightAnchor(entry.title) === target);
     if (!item) return;
-    setSelectedFilter("All");
-    setSearchQuery("");
+    setFilters(NO_FILTERS);
     if (item.type === "Blog") {
       const path = articlePath(item);
       if (path) router.replace(path);
       else setActiveArticle(item);
       return;
     }
-    const index = gridItemsFor("All", "").findIndex((entry) => entry.title === item.title);
+    const index = gridItemsFor(NO_FILTERS).findIndex((entry) => entry.title === item.title);
     // An article left open in the reader would cover the video or podcast.
     setActiveArticle(null);
     if (index >= 0) setVisibleCount(Math.max(PAGE_SIZE, Math.ceil((index + 1) / PAGE_SIZE) * PAGE_SIZE));
@@ -491,70 +528,56 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
           </div>
         </SectionWrapper>
 
-        {/* Filters and Search Row */}
-        <SectionWrapper className="pt-12 pb-8 bg-white">
-          <div className="max-w-[1200px] mx-auto px-6">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-8 border-b border-gray-100">
-              
-              {/* Search Bar + Subtitle */}
-              <div className="w-full md:max-w-md">
-                <span className="text-gray-aa text-xs font-semibold uppercase tracking-wider block mb-2">
-                  Search blogs, posts, podcasts and videos
-                </span>
-                <div className="relative">
-                  <input
-                    type="text"
-                    value={searchQuery}
-                    onChange={(e) => { setSearchQuery(e.target.value); resetGrid(); }}
-                    placeholder="Search titles, topics, or authors..."
-                    className="w-full bg-gray-50 border border-gray-250 rounded-full px-6 py-3 text-base md:text-sm text-brand-navy placeholder-gray-aa focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all duration-300 shadow-sm"
-                  />
-                  <div className="absolute right-4 top-3.5 text-gray-aa">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                  </div>
-                </div>
-              </div>
+        {/* Explore: the filter panel beside the grid (above it on phones and tablets) */}
+        <SectionWrapper className="pt-12 pb-24 bg-white">
+          <div ref={exploreRef} id="explore" className="scroll-mt-44 max-w-[1200px] mx-auto px-6 lg:grid lg:grid-cols-[15rem_minmax(0,1fr)] lg:gap-10 lg:items-start">
 
-              {/* Oval Filter Pills */}
-              <div className="flex flex-wrap gap-3">
-                {filters.map((filter) => {
-                  const isActive = selectedFilter === filter;
-                  return (
-                    <button
-                      key={filter}
-                      onClick={() => { setSelectedFilter(filter); resetGrid(); }}
-                      className={`tap-target px-6 py-2 rounded-full text-sm font-semibold transition-all duration-300 border cursor-pointer ${
-                        isActive
-                          ? "bg-teal-aa border-teal-600 text-white shadow-sm"
-                          : "bg-gray-100 border-transparent text-gray-aa hover:bg-gray-200"
-                      }`}
-                    >
-                      {filter}
-                    </button>
-                  );
-                })}
-              </div>
-
+            <div className="mb-8 lg:mb-0 lg:sticky lg:top-36 lg:max-h-[calc(100vh-10rem)] lg:overflow-y-auto lg:pr-2">
+              <InsightsFilterPanel
+                filters={filters}
+                onChange={changeFilters}
+                typeOptions={typeOptions}
+                topicOptions={topicOptions}
+                open={filtersOpen}
+                onOpenChange={setFiltersOpen}
+              />
             </div>
-          </div>
-        </SectionWrapper>
 
-        {/* Separator Section */}
-        <div className="max-w-[1200px] mx-auto px-6 mb-8">
-          <div className="flex items-center gap-4">
-            <span className="text-xs font-bold text-gray-aa uppercase tracking-wider whitespace-nowrap">
-              Explore All Insights ({gridItems.length})
-            </span>
-            <div className="w-full h-[1px] bg-gray-150" />
-          </div>
-        </div>
+            <div className="min-w-0">
+            <div className="flex items-center gap-4 mb-6" aria-live="polite">
+              <span className="text-xs font-bold text-gray-aa uppercase tracking-wider whitespace-nowrap">
+                {isFiltered(filters) ? "Matching Insights" : "Explore All Insights"} ({gridItems.length})
+              </span>
+              <div className="w-full h-[1px] bg-gray-150" />
+            </div>
 
-        {/* Combined Grid Section */}
-        <SectionWrapper className="pt-0 pb-24 bg-white">
-          <div className="max-w-[1200px] mx-auto px-6">
-            
+            {/* The ticked filters, each removable where the visitor is looking */}
+            {chosenFilters.length > 0 && (
+              <div className="flex flex-wrap items-center gap-2 mb-6">
+                {chosenFilters.map((chosen) => (
+                  <button
+                    key={chosen.key}
+                    type="button"
+                    onClick={chosen.remove}
+                    aria-label={`Remove filter: ${chosen.name}`}
+                    className="tap-target inline-flex items-center gap-1.5 pl-3 pr-2 py-1 rounded-full bg-teal-50 border border-teal-600/20 text-teal-700 text-xs font-bold hover:bg-teal-100 transition-colors cursor-pointer"
+                  >
+                    {chosen.name}
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                ))}
+                <button
+                  type="button"
+                  onClick={() => changeFilters({ types: [], topics: [] })}
+                  className="tap-target ml-1 text-xs font-bold text-gray-aa hover:text-teal-aa underline underline-offset-4 cursor-pointer"
+                >
+                  Clear all
+                </button>
+              </div>
+            )}
+
             <motion.div
               key={gridVersion}
               initial={gridVersion === 0 || reduceMotion ? false : { opacity: 0 }}
@@ -563,7 +586,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
               ref={gridRef}
               // As on the full-image preview, each card keeps its own height, so a tall post doesn't stretch the cards
               // beside it; useMasonry packs them newest first, across the top and then down the shortest column.
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-start"
+              className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 items-start"
             >
                 {visibleItems.map((item, index) => {
                   const isNew = index >= revealFrom;
@@ -578,7 +601,7 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
                       transition={{ duration: 0.35, ease: easeOut, delay: isNew ? Math.min(index - revealFrom, 5) * 0.06 : 0 }}
                       className={`scroll-mt-40 ${INSIGHT_CARD_CLASS}`}
                     >
-                      <InsightCardContent item={item} imageLayout={isSocialPost(item) ? "natural" : "cropped"} centerTextWithoutImage onRead={setActiveArticle} onPlay={setActiveVideoId} />
+                      <InsightCardContent item={item} imageLayout={isSocialPost(item) ? "natural" : "cropped"} centerTextWithoutImage onRead={setActiveArticle} onPlay={setActiveVideoId} onTopic={pickTopic} selectedTopics={filters.topics} />
                     </motion.div>
                   );
                 })}
@@ -597,11 +620,21 @@ export default function InsightsView({ blogs, podcasts, videos }: Insights) {
             )}
 
             {gridItems.length === 0 && (
-              <div className="text-center py-20 bg-gray-50 rounded-2xl border border-dashed border-gray-200">
-                <span className="text-gray-aa text-sm">No insights found matching your search query.</span>
+              <div className="text-center py-20 px-6 bg-gray-50 rounded-2xl border border-dashed border-gray-200">
+                <p className="text-gray-aa text-sm">No insights match your search and filters.</p>
+                {isFiltered(filters) && (
+                  <button
+                    type="button"
+                    onClick={() => changeFilters({ query: "", types: [], topics: [] })}
+                    className="mt-4 inline-flex items-center justify-center min-h-11 px-6 rounded-full border-2 border-teal-aa text-teal-aa hover:bg-teal-aa hover:text-white text-sm font-bold transition-colors cursor-pointer"
+                  >
+                    Clear all filters
+                  </button>
+                )}
               </div>
             )}
 
+            </div>
           </div>
         </SectionWrapper>
       </main>
