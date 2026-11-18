@@ -8,8 +8,6 @@ import { Images } from "@/lib/assets";
 import { useHref, useT } from "@/i18n/LocaleProvider";
 import type { Messages } from "@/i18n/messages/en";
 import Reveal from "./Reveal";
-import { usePausable } from "@/lib/usePausable";
-import PauseButton from "./PauseButton";
 
 // Each card's title, description and photo descriptions are in the language file (home.whoWeAre.cards), in this order.
 export const cardImages = [
@@ -92,12 +90,10 @@ export function SnowflakeCell({
   card,
   index,
   imageIndex,
-  paused = false,
 }: {
   card: Card;
   index: number;
   imageIndex: number;
-  paused?: boolean;
 }) {
   return (
     <Reveal
@@ -109,7 +105,7 @@ export function SnowflakeCell({
         {/* Outer Snowflake Frame (acting as outer border structure) */}
         <SnowflakeFrame
           className="absolute w-[128px] h-[128px] sm:w-[156px] sm:h-[156px] md:w-[214px] md:h-[214px] lg:w-[310px] lg:h-[310px] text-teal-500/20 group-hover:text-brand-orange/45 transition-colors duration-500 z-0 pointer-events-none select-none"
-          style={{ animation: "spin 45s linear infinite", animationPlayState: paused ? "paused" : "running" }}
+          style={{ animation: "spin 45s linear infinite" }}
         />
 
         {/* Enlarged Inner Circular Card (100% visible image, zero overlap) */}
@@ -162,15 +158,12 @@ export default function WhoWeAre() {
     images: cardImages[i].map((src, j) => ({ src, alt: card.alts[j] })),
   }));
 
-  // The pictures change every 4 s until paused (the button under "What We Serve").
-  const [paused, togglePaused] = usePausable();
   useEffect(() => {
-    if (paused) return;
     const timer = setInterval(() => {
       setImageIndex((prev) => prev + 1);
     }, 4000);
     return () => clearInterval(timer);
-  }, [paused]);
+  }, []);
 
 
   return (
@@ -211,9 +204,6 @@ export default function WhoWeAre() {
         <h3 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold leading-tight text-brand-navy text-center mt-16 md:mt-24">
           {t.serveTitle}
         </h3>
-        <div className="flex justify-center mt-4">
-          <PauseButton paused={paused} onToggle={togglePaused} />
-        </div>
 
         {/* Grid layout containing the Snowflake Cells */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-12 max-w-5xl mx-auto justify-items-stretch md:justify-items-center w-full mt-8 z-10 relative">
@@ -223,7 +213,6 @@ export default function WhoWeAre() {
               card={card}
               index={i}
               imageIndex={imageIndex}
-              paused={paused}
             />
           ))}
         </div>

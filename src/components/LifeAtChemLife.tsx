@@ -6,8 +6,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "@/context/VariantContext";
 import { Videos, VideoPosters } from "@/lib/assets";
 import Reveal from "./Reveal";
-import { usePausable } from "@/lib/usePausable";
-import PauseButton from "./PauseButton";
 import BackgroundVideo, { useNearViewport } from "./BackgroundVideo";
 import { useHref, useT } from "@/i18n/LocaleProvider";
 
@@ -25,16 +23,14 @@ export default function LifeAtChemLife() {
   const [videoIndex, setVideoIndex] = useState(0);
   const [sectionRef, near] = useNearViewport<HTMLElement>();
 
-  // Rotate only while the section is near the screen, so the other videos aren't fetched for nothing, and not
-  // while paused (the button in the section's corner, which also stops the video).
-  const [paused, togglePaused] = usePausable();
+  // Rotate only while the section is near the screen, so the other videos aren't fetched for nothing.
   useEffect(() => {
-    if (!near || paused) return;
+    if (!near) return;
     const timer = setInterval(() => {
       setVideoIndex((prev) => (prev + 1) % videos.length);
     }, 6000);
     return () => clearInterval(timer);
-  }, [near, paused]);
+  }, [near]);
 
   return (
     <section ref={sectionRef} className="relative min-h-[600px] flex items-center overflow-hidden">
@@ -52,7 +48,6 @@ export default function LifeAtChemLife() {
               src={videos[videoIndex].src}
               poster={videos[videoIndex].poster}
               active={near}
-              paused={paused}
               className="w-full h-full object-cover"
             />
           </motion.div>
@@ -60,8 +55,6 @@ export default function LifeAtChemLife() {
       </div>
 
       <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/90 via-black/60 to-brand-navy/80 z-10" />
-
-      <PauseButton paused={paused} onToggle={togglePaused} tone="dark" className="absolute z-30 top-4 right-4 md:top-6 md:right-6" />
 
       <div className="relative z-20 w-full max-w-[1200px] mx-auto px-6 py-16 md:py-24 lg:py-32">
         <Reveal

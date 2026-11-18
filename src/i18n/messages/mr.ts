@@ -80,8 +80,6 @@ const mr: Messages = {
     rateUs: "रेटिंग द्या",
     rateUsLabel: "Google वर आम्हाला रेटिंग द्या",
     hideRateUs: "‘रेटिंग द्या’ बटण लपवा",
-    pauseMotion: "ॲनिमेशन थांबवा",
-    playMotion: "ॲनिमेशन सुरू करा",
     cookieText: "अभ्यागत ही साइट कशी वापरतात हे समजून घेऊन ती अधिक चांगली करता यावी, यासाठी आम्ही Google Analytics कुकीज वापरू इच्छितो.",
     cookiePrivacy: "गोपनीयता धोरण",
     cookieDecline: "नाकारा",
