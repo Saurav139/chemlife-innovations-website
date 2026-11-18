@@ -819,6 +819,19 @@ const en = {
     captchaPending: "Checking that you're a person...",
     sending: "Sending Message...",
     send: "Send Message",
+    // The code step: before the message is sent, the visitor confirms their email address with a 4-digit code.
+    // Its other wording (title, "send a new code", wrong-code errors) is the dossier form's, below.
+    codeHint: "We'll email you a 4-digit code to confirm your address before your message is sent.",
+    // {email} is the visitor's address.
+    codeText: "We've sent a 4-digit code to {email}. Enter it here to send your message.",
+    verify: "Confirm and Send",
+    // The email with the code (plain text). {code} and {minutes} are filled in by /api/contact; the greeting and
+    // sign-off are the dossier email's.
+    codeEmail: {
+      subject: "{code} is your ChemLife code",
+      body: "Your code to send your message to ChemLife Innovations is {code}. It works for {minutes} minutes.",
+      ignore: "If you didn't write to us, you can ignore this email.",
+    },
     sentTitle: "Message Sent!",
     sentText: "Thank you for reaching out to ChemLife Innovations. Our team will review your inquiry and get back to you within 24 to 48 hours.",
     sendAnother: "Send Another Message",

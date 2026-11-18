@@ -21,7 +21,7 @@ function load(file) {
 }
 
 const dossier = load('src/lib/dossier.ts');
-const codes = load('src/lib/dossierCode.ts');
+const codes = load('src/lib/emailCode.ts');
 const secret = Buffer.from('test-secret');
 const details = { name: 'Asha', email: 'asha@example.com', company: 'Farm Co', role: '', country: 'India', interest: '' };
 

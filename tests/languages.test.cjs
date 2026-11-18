@@ -12,7 +12,9 @@ function load(file) {
     fileName: filename,
   }).outputText;
   const module = { exports: {} };
-  new Function('require', 'module', 'exports', js)(require, module, module.exports);
+  // Language files import shared text from the file next to them (./certifications).
+  const local = (id) => (id.startsWith('.') ? load(path.relative(path.resolve(__dirname, '..'), path.resolve(path.dirname(filename), `${id}.ts`))) : require(id));
+  new Function('require', 'module', 'exports', js)(local, module, module.exports);
   return module.exports;
 }
 

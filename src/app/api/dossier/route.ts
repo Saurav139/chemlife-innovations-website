@@ -5,7 +5,7 @@ import { emailTeam, emailVisitor } from "@/lib/teamEmail";
 import { saveDossierDownload } from "@/lib/leads-store";
 import { EMAIL_PATTERN } from "@/lib/contact";
 import { DOSSIER_INTERESTS, DOSSIER_LIMITS, type DossierErrorCode, type DossierRequest } from "@/lib/dossier";
-import { CODE_MINUTES, checkCode, dossierSecret, issueChallenge, issueDownloadToken, readChallenge } from "@/lib/dossierCode";
+import { CODE_MINUTES, CodeTries, dossierSecret, issueChallenge, issueDownloadToken, readChallenge } from "@/lib/emailCode";
 import { DEFAULT_LOCALE, isLocale } from "@/i18n/config";
 import { getMessages } from "@/i18n/messages";
 
@@ -22,20 +22,8 @@ const perDay = new RateLimiter(20, 86_400_000);
 const siteWide = new RateLimiter(200, 86_400_000);
 const codesPerAddress = new RateLimiter(5, 3_600_000);
 const verifyPerHour = new RateLimiter(30, 3_600_000);
-const MAX_WRONG_TRIES = 5;
-
-// Wrong tries per code, and codes already used, by challenge id. Kept in this process like the rate limits; ids
-// expire with their code, so old ones are dropped.
-const tries = new Map<string, { wrong: number; used: boolean; expires: number }>();
-function triesFor(id: string, expires: number) {
-  if (tries.size >= 10_000) {
-    const now = Date.now();
-    for (const [key, entry] of tries) if (entry.expires < now) tries.delete(key);
-  }
-  let entry = tries.get(id);
-  if (!entry) tries.set(id, (entry = { wrong: 0, used: false, expires }));
-  return entry;
-}
+// Wrong tries per code, and codes already used.
+const tries = new CodeTries();
 
 function fail(error: DossierErrorCode, status: number, extra?: { retryAfter?: number; left?: number }) {
   return NextResponse.json(
@@ -97,18 +85,8 @@ export async function POST(request: Request) {
   if (action === "verify") {
     if (ip && verifyPerHour.retryAfter(ip)) return fail("rate_limited", 429, { retryAfter: verifyPerHour.retryAfter(ip) });
     if (ip) verifyPerHour.consume(ip);
-    const check = checkCode(text(body, "challenge"), text(body, "code").trim(), secret);
-    if (!check.ok && check.reason === "invalid") return fail("invalid", 400);
-    if (!check.ok && check.reason === "expired") return fail("code_expired", 410);
-
-    const data = readChallenge(text(body, "challenge"), secret)!;
-    const entry = triesFor(data.id, data.expires);
-    if (entry.used || entry.wrong >= MAX_WRONG_TRIES) return fail("code_attempts", 429);
-    if (!check.ok) {
-      entry.wrong++;
-      const left = MAX_WRONG_TRIES - entry.wrong;
-      return left > 0 ? fail("code_wrong", 400, { left }) : fail("code_attempts", 429);
-    }
+    const check = tries.check(text(body, "challenge"), text(body, "code").trim(), secret);
+    if (!check.ok) return fail(check.error, check.status, { left: check.left });
 
     const d = check.data.details;
     const lead = [
@@ -126,7 +104,7 @@ export async function POST(request: Request) {
     ].join("\n");
     const sent = await emailTeam({ subject: `[Website] Technical dossier request: ${d.name}, ${d.company}`, text: lead, replyTo: d.email }, "dossier");
     if (!sent) return fail("send_failed", 502);
-    entry.used = true;
+    check.use();
     // Kept for the leads dashboard (/admin/leads) after answering, so the database never holds up the download.
     after(() => saveDossierDownload(d, check.data.locale));
     return NextResponse.json({ ok: true, download: `/api/dossier/download?token=${issueDownloadToken(secret)}` });

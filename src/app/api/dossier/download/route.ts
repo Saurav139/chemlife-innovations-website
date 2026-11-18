@@ -1,7 +1,7 @@
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { DOSSIER_PDF_FILE } from "@/lib/dossier";
-import { checkDownloadToken, dossierSecret } from "@/lib/dossierCode";
+import { checkDownloadToken, dossierSecret } from "@/lib/emailCode";
 
 // The technical dossier PDF, only for a visitor holding the download pass /api/dossier gave them after they entered
 // the code emailed to them. The pass works for 30 minutes, so the "download it here" link keeps working for a while.
