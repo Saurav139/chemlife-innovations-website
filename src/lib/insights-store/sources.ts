@@ -5,8 +5,12 @@ import { articleSummary, cleanTitle, clip, decodeEntities, htmlToText, instagram
 // Reading posts from ChemLife's channels. Each function returns the latest posts, newest first, or null when the
 // channel isn't set up (no key in the environment).
 
+// Every request gives up after this long, so a channel that stops answering can't hold up the check for new posts
+// (or, without the database, the Insights page itself).
+const within = () => AbortSignal.timeout(8_000);
+
 type FetchMode = { fresh?: boolean };
-const cacheFor = ({ fresh }: FetchMode) => (fresh ? { cache: "no-store" as const } : { next: { revalidate: 3600 } });
+const cacheFor = ({ fresh }: FetchMode) => ({ ...(fresh ? { cache: "no-store" as const } : { next: { revalidate: 3600 } }), signal: within() });
 
 // ---------- YouTube ----------
 
@@ -105,7 +109,7 @@ export async function fetchWordPressPosts(mode: FetchMode = {}): Promise<SourceI
 export async function fetchWordPressPost(url: string): Promise<SourceItem | null> {
   const slug = new URL(url).pathname.split("/").filter(Boolean).pop();
   if (!slug) return null;
-  const res = await fetch(`${WORDPRESS_API}?slug=${encodeURIComponent(slug)}&_fields=${WORDPRESS_FIELDS}`, { cache: "no-store" });
+  const res = await fetch(`${WORDPRESS_API}?slug=${encodeURIComponent(slug)}&_fields=${WORDPRESS_FIELDS}`, { cache: "no-store", signal: within() });
   if (!res.ok) throw new Error(`WordPress answered ${res.status}`);
   const [post] = (await res.json()) as WordPressPost[];
   return post ? wordpressItem(post) : null;
@@ -152,7 +156,7 @@ interface InstagramMedia {
 /** The account's latest posts. Their picture addresses expire, so the pictures are copied in when added. */
 export async function fetchInstagramPosts(token: string): Promise<SourceItem[]> {
   const fields = "id,caption,media_type,media_url,thumbnail_url,permalink,timestamp";
-  const res = await fetch(`${INSTAGRAM_API}/me/media?fields=${fields}&limit=30&access_token=${encodeURIComponent(token)}`, { cache: "no-store" });
+  const res = await fetch(`${INSTAGRAM_API}/me/media?fields=${fields}&limit=30&access_token=${encodeURIComponent(token)}`, { cache: "no-store", signal: within() });
   if (!res.ok) throw new Error(await instagramError(res));
   return (((await res.json()).data ?? []) as InstagramMedia[]).map(instagramItem);
 }
@@ -162,7 +166,7 @@ export async function findInstagramPost(token: string, code: string): Promise<So
   const fields = "id,caption,media_type,media_url,thumbnail_url,permalink,timestamp";
   let next: string | undefined = `${INSTAGRAM_API}/me/media?fields=${fields}&limit=50&access_token=${encodeURIComponent(token)}`;
   for (let page = 0; next && page < 3; page++) {
-    const res = await fetch(next, { cache: "no-store" });
+    const res = await fetch(next, { cache: "no-store", signal: within() });
     if (!res.ok) throw new Error(await instagramError(res));
     const body = (await res.json()) as { data?: InstagramMedia[]; paging?: { next?: string } };
     const media = body.data?.find((m) => m.permalink && instagramPostId(m.permalink) === code);
@@ -201,7 +205,7 @@ function instagramItem(media: InstagramMedia): SourceItem {
 
 /** A fresh 60-day token for this one. Meta accepts a token for renewal once it's at least a day old. */
 export async function renewInstagramToken(token: string): Promise<{ token: string; expiresAt: Date }> {
-  const res = await fetch(`${INSTAGRAM_API}/refresh_access_token?grant_type=ig_refresh_token&access_token=${encodeURIComponent(token)}`, { cache: "no-store" });
+  const res = await fetch(`${INSTAGRAM_API}/refresh_access_token?grant_type=ig_refresh_token&access_token=${encodeURIComponent(token)}`, { cache: "no-store", signal: within() });
   if (!res.ok) throw new Error(await instagramError(res));
   const body = (await res.json()) as { access_token: string; expires_in: number };
   return { token: body.access_token, expiresAt: new Date(Date.now() + body.expires_in * 1000) };
