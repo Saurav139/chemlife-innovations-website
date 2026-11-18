@@ -83,6 +83,9 @@ The staging and live sites should each have their own database, so testing on st
   summaries and titles. A post that still has no picture once its channel stops listing it gets one from the post's
   own page (as a pasted link would), tried at most every 6 hours and 5 times in all. Why a new post's picture couldn't
   be copied shows under the channel, and the inbox marks posts whose card has no picture.
+- `src/lib/insight-topics.ts`: the topic tags (Feed Hygiene, Mycotoxins…) and the keywords that give a post each one.
+  Posts are tagged from their own words each time the page is shown, so nothing is stored; edit that list to add a
+  topic or a keyword. `src/lib/insight-filters.ts` is how the page's filters are written in its address.
 - `card.ts`: how a post becomes an Insights card, for the page and for the inbox's preview (`src/components/InsightCard.tsx`).
 - `src/lib/insights.ts` `getInsights()`: the approved posts once the inbox has started; the built-in list if the
   database isn't set up or can't be reached.

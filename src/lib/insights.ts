@@ -3,6 +3,7 @@ import { Images } from "@/lib/assets";
 import { approvedInsights, storeConfigured } from "@/lib/insights-store/db";
 import { fetchYouTubeUploads } from "@/lib/insights-store/sources";
 import { displayDate, instagramEmbedUrl, instagramPostId, instagramReelCode, linkedinActivityId } from "@/lib/insights-store/text";
+import { topicsFor } from "@/lib/insight-topics";
 
 export interface InsightItem {
   type: "Blog" | "Podcast" | "Video";
@@ -21,6 +22,8 @@ export interface InsightItem {
   contentEdited?: boolean;
   /** Chosen in the Insights inbox to be the featured post of its type (otherwise the newest is). */
   featured?: boolean;
+  /** The post's topic tags (slugs from src/lib/insight-topics.ts), worked out from its words by getInsights(). */
+  topics?: string[];
 }
 
 export interface Insights {
@@ -358,6 +361,10 @@ Prioritize advanced organic chelated minerals (like chelated copper hydroxy anal
 // Server only. The approved posts from the Insights inbox (see src/lib/insights-store); without the inbox, the
 // built-in list with the latest YouTube uploads (and LinkedIn posts, if its keys are set) on top.
 export async function getInsights(): Promise<Insights> {
+  return withTopics(await untaggedInsights());
+}
+
+async function untaggedInsights(): Promise<Insights> {
   if (storeConfigured()) {
     try {
       const approved = await approvedInsights();
@@ -367,6 +374,12 @@ export async function getInsights(): Promise<Insights> {
     }
   }
   return builtInInsights();
+}
+
+/** Every post with its topic tags. */
+function withTopics({ blogs, podcasts, videos }: Insights): Insights {
+  const tagged = (items: InsightItem[]) => items.map((item) => ({ ...item, topics: topicsFor(item) }));
+  return { blogs: tagged(blogs), podcasts: tagged(podcasts), videos: tagged(videos) };
 }
 
 /** Server only. The blog article whose page is /insights/<slug> (see src/lib/articles.ts) and the other articles,

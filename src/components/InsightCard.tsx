@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import NaturalInsightImage from "@/components/NaturalInsightImage";
 import { articlePath } from "@/lib/articles";
 import type { InsightItem } from "@/lib/insights";
+import { topicName } from "@/lib/insight-topics";
 import { instagramEmbedUrl, instagramPostId } from "@/lib/insights-store/text";
 import { playOnPage, youtubeWatchUrl } from "@/lib/youtube";
 
@@ -92,13 +93,60 @@ export function VideoPlayBadge() {
   </span>;
 }
 
-/** What goes inside the card's frame: the label line, picture or video, title, and the two links. */
-export default function InsightCardContent({ item, onRead, onPlay, imageLayout = "cropped", centerTextWithoutImage = false, linkArticles = true }: {
+const TOPIC_TAG_CLASS = "inline-flex items-center px-2.5 py-1 rounded-full border text-[11px] font-semibold leading-none transition-colors";
+
+/** A post's topic tags. With `onPick` each is a button that filters the Insights grid by that topic (pressed while the
+ *  grid is filtered by it); without, they're labels. */
+export function InsightTopicTags({ topics, onPick, selected = [], className = "" }: {
+  topics?: string[];
+  onPick?: (slug: string) => void;
+  selected?: string[];
+  className?: string;
+}) {
+  if (!topics?.length) return null;
+  return (
+    <ul aria-label="Topics" className={`flex flex-wrap gap-1.5 ${className}`}>
+      {topics.map((slug) => {
+        const active = selected.includes(slug);
+        return (
+          <li key={slug} className="flex">
+            {onPick ? (
+              <button
+                type="button"
+                aria-pressed={active}
+                title={active ? `Stop filtering by ${topicName(slug)}` : `Show insights on ${topicName(slug)}`}
+                data-analytics-click={`Topic: ${topicName(slug)}`}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onPick(slug);
+                }}
+                className={`tap-target cursor-pointer ${TOPIC_TAG_CLASS} ${
+                  active ? "bg-teal-aa border-teal-aa text-white" : "bg-white border-gray-200 text-slate-600 hover:border-teal-aa hover:text-teal-aa"
+                }`}
+              >
+                {topicName(slug)}
+              </button>
+            ) : (
+              <span className={`${TOPIC_TAG_CLASS} bg-white border-gray-200 text-slate-600`}>{topicName(slug)}</span>
+            )}
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
+
+/** What goes inside the card's frame: the label line, picture or video, title, topic tags, and the two links. */
+export default function InsightCardContent({ item, onRead, onPlay, onTopic, selectedTopics, imageLayout = "cropped", centerTextWithoutImage = false, linkArticles = true }: {
   item: InsightItem;
   /** Opens the article reader. */
   onRead: (item: InsightItem) => void;
   /** Opens the video player. */
   onPlay: (youtubeId: string) => void;
+  /** Filters the Insights grid by one of the post's topic tags. Without it the tags are labels. */
+  onTopic?: (slug: string) => void;
+  /** The topics the grid is filtered by; their tags show as pressed. */
+  selectedTopics?: string[];
   /** Design preview only; existing cards keep their 16:9 crop. */
   imageLayout?: "cropped" | "natural";
   /** Preview treatment for LinkedIn posts whose feed has no picture. */
@@ -184,6 +232,7 @@ export default function InsightCardContent({ item, onRead, onPlay, imageLayout =
           {item.title}
         </h4>
         {textOnly && item.description && <p className="max-w-prose text-sm leading-relaxed text-gray-600">{item.description}</p>}
+        <InsightTopicTags topics={item.topics} onPick={onTopic} selected={selectedTopics} className={textOnly ? "justify-center mt-4" : "mb-2"} />
       </div>
 
       {/* Card Action Buttons (Direct + View on LinkedIn) - isolated outside clicking div */}

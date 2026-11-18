@@ -11,6 +11,7 @@ import { formattedArticle } from "@/lib/article-source";
 import { articleBlocks, articlePath, isOptimizableImage, isoDate } from "@/lib/articles";
 import { headingId, tocEntries, withHeadingIds, type ArticleHeading } from "@/lib/article-toc";
 import { getArticle, type InsightItem } from "@/lib/insights";
+import { topicName } from "@/lib/insight-topics";
 import { SITE_NAME, SITE_URL, pageMetadata } from "@/lib/seo";
 import { jsonLd } from "@/lib/structuredData";
 import ArticleShare from "./ArticleShare";
@@ -82,6 +83,7 @@ export default async function ArticlePage({ params }: { params: Params }) {
     description: article.description,
     ...(article.imageUrl && { image: absolute(article.imageUrl) }),
     ...(published && { datePublished: published }),
+    ...(article.topics?.length && { keywords: article.topics.map(topicName).join(", ") }),
     author: { "@type": "Organization", name: SITE_NAME, url: SITE_URL },
     publisher: { "@id": `${SITE_URL}/#organization` },
     mainEntityOfPage: `${SITE_URL}${path}`,
@@ -169,7 +171,23 @@ export default async function ArticlePage({ params }: { params: Params }) {
           </div>
           )}
 
-          <div className="mt-10 pt-6 border-t border-gray-200">
+          {/* The article's topic tags: each opens the Insights page filtered by that topic. */}
+          {article.topics && article.topics.length > 0 && (
+            <div className="mt-10 flex flex-wrap items-center gap-2">
+              <span className="text-xs font-bold uppercase tracking-wider text-gray-aa mr-1">Topics</span>
+              {article.topics.map((slug) => (
+                <Link
+                  key={slug}
+                  href={`/insights?topic=${slug}#explore`}
+                  className="tap-target inline-flex items-center px-3 py-1.5 rounded-full border border-gray-200 bg-gray-55 text-xs font-semibold text-slate-700 hover:border-teal-aa hover:text-teal-aa transition-colors"
+                >
+                  {topicName(slug)}
+                </Link>
+              ))}
+            </div>
+          )}
+
+          <div className={`${article.topics?.length ? "mt-6" : "mt-10"} pt-6 border-t border-gray-200`}>
             <ArticleShare title={article.title} url={`${SITE_URL}${path}`} />
           </div>
 
