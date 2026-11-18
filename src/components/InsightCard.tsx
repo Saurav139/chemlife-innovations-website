@@ -13,8 +13,9 @@ import { playOnPage, youtubeWatchUrl } from "@/lib/youtube";
 // A card in the Insights page's grid. The Insights inbox shows the same card as its live preview, so what the
 // moderator sees while editing is what the page shows.
 
-// Card image widths for the browser to pick a file size from. They follow the grid and padding on the Insights page.
-const CARD_IMAGE_SIZES = "(min-width: 1024px) 312px, (min-width: 768px) calc(50vw - 90px), calc(100vw - 98px)";
+// Card image widths for the browser to pick a file size from. They follow the grid and padding on the Insights page:
+// three columns beside the filter panel on a large screen, two on a mid-size one.
+const CARD_IMAGE_SIZES = "(min-width: 1360px) 320px, (min-width: 1024px) calc(50vw - 200px), (min-width: 768px) calc(50vw - 90px), calc(100vw - 98px)";
 
 /** The card's frame. The Insights page adds its anchor and animation around it. */
 export const INSIGHT_CARD_CLASS =
