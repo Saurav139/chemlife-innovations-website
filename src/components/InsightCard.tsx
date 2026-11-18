@@ -96,10 +96,11 @@ export function VideoPlayBadge() {
 const TOPIC_TAG_CLASS = "inline-flex items-center px-2.5 py-1 rounded-full border text-[11px] font-semibold leading-none transition-colors";
 
 /** A post's topic tags. With `onPick` each is a button that filters the Insights grid by that topic (pressed while the
- *  grid is filtered by it); without, they're labels. */
-export function InsightTopicTags({ topics, onPick, selected = [], className = "" }: {
+ *  grid is filtered by it); with `hrefFor` each is a link (to the topic's page); without either, they're labels. */
+export function InsightTopicTags({ topics, onPick, hrefFor, selected = [], className = "" }: {
   topics?: string[];
   onPick?: (slug: string) => void;
+  hrefFor?: (slug: string) => string;
   selected?: string[];
   className?: string;
 }) {
@@ -126,6 +127,18 @@ export function InsightTopicTags({ topics, onPick, selected = [], className = ""
               >
                 {topicName(slug)}
               </button>
+            ) : hrefFor ? (
+              <Link
+                href={hrefFor(slug)}
+                aria-current={active ? "page" : undefined}
+                data-analytics-click={`Topic: ${topicName(slug)}`}
+                onClick={(e) => e.stopPropagation()}
+                className={`tap-target ${TOPIC_TAG_CLASS} ${
+                  active ? "bg-teal-aa border-teal-aa text-white" : "bg-white border-gray-200 text-slate-600 hover:border-teal-aa hover:text-teal-aa"
+                }`}
+              >
+                {topicName(slug)}
+              </Link>
             ) : (
               <span className={`${TOPIC_TAG_CLASS} bg-white border-gray-200 text-slate-600`}>{topicName(slug)}</span>
             )}
@@ -137,7 +150,7 @@ export function InsightTopicTags({ topics, onPick, selected = [], className = ""
 }
 
 /** What goes inside the card's frame: the label line, picture or video, title, topic tags, and the two links. */
-export default function InsightCardContent({ item, onRead, onPlay, onTopic, selectedTopics, imageLayout = "cropped", centerTextWithoutImage = false, linkArticles = true }: {
+export default function InsightCardContent({ item, onRead, onPlay, onTopic, topicHref, selectedTopics, imageLayout = "cropped", centerTextWithoutImage = false, linkArticles = true }: {
   item: InsightItem;
   /** Opens the article reader. */
   onRead: (item: InsightItem) => void;
@@ -145,7 +158,9 @@ export default function InsightCardContent({ item, onRead, onPlay, onTopic, sele
   onPlay: (youtubeId: string) => void;
   /** Filters the Insights grid by one of the post's topic tags. Without it the tags are labels. */
   onTopic?: (slug: string) => void;
-  /** The topics the grid is filtered by; their tags show as pressed. */
+  /** Makes the tags links instead, each to the address this gives (a topic's own page). */
+  topicHref?: (slug: string) => string;
+  /** The topics the grid is filtered by (or the topic page being shown); their tags show as pressed. */
   selectedTopics?: string[];
   /** Design preview only; existing cards keep their 16:9 crop. */
   imageLayout?: "cropped" | "natural";
@@ -232,7 +247,7 @@ export default function InsightCardContent({ item, onRead, onPlay, onTopic, sele
           {item.title}
         </h4>
         {textOnly && item.description && <p className="max-w-prose text-sm leading-relaxed text-gray-600">{item.description}</p>}
-        <InsightTopicTags topics={item.topics} onPick={onTopic} selected={selectedTopics} className={textOnly ? "justify-center mt-4" : "mb-2"} />
+        <InsightTopicTags topics={item.topics} onPick={onTopic} hrefFor={topicHref} selected={selectedTopics} className={textOnly ? "justify-center mt-4" : "mb-2"} />
       </div>
 
       {/* Card Action Buttons (Direct + View on LinkedIn) - isolated outside clicking div */}

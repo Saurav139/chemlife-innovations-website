@@ -14,7 +14,8 @@ function load(file) {
   new Function('require', 'module', 'exports', js)(require, module, module.exports);
   return module.exports;
 }
-const { INSIGHT_TOPICS, MAX_TOPICS, topicsFor, topicName } = load('src/lib/insight-topics.ts');
+const { INSIGHT_TOPICS, MAX_TOPICS, topicsFor, topicName, topicPath } = load('src/lib/insight-topics.ts');
+const { TOPIC_PAGES } = load('src/lib/insight-topic-pages.ts');
 const { NO_FILTERS, parseFilters, filtersQuery, isFiltered, toggled } = load('src/lib/insight-filters.ts');
 
 test('a post is tagged by a keyword in its title or summary', () => {
@@ -84,4 +85,23 @@ test('the order alone does not count as filtering; toggling adds and removes', (
   assert.equal(isFiltered({ ...NO_FILTERS, query: '  ' }), false);
   assert.deepEqual(toggled(['a'], 'b'), ['a', 'b']);
   assert.deepEqual(toggled(['a', 'b'], 'a'), ['b']);
+});
+
+test('every topic has a page with a description that fits a search result and an introduction', () => {
+  assert.equal(topicPath('mycotoxins'), '/insights/topic/mycotoxins');
+  assert.deepEqual(Object.keys(TOPIC_PAGES).sort(), INSIGHT_TOPICS.map((topic) => topic.slug).sort());
+  for (const [slug, page] of Object.entries(TOPIC_PAGES)) {
+    assert.ok(page.description.length >= 50 && page.description.length <= 160, `${slug}: description is ${page.description.length} characters`);
+    assert.ok(page.intro.length >= 80, `${slug}: introduction`);
+  }
+});
+
+test('each question is asked on one topic page only, with an answer of about 40 to 50 words', () => {
+  const questions = Object.values(TOPIC_PAGES).flatMap((page) => page.questions ?? []);
+  assert.equal(new Set(questions.map((entry) => entry.question)).size, questions.length);
+  for (const { question, answer } of questions) {
+    assert.match(question, /\?$/);
+    const words = answer.split(/\s+/).length;
+    assert.ok(words >= 35 && words <= 55, `"${question}": the answer is ${words} words`);
+  }
 });

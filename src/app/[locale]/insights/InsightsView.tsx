@@ -11,12 +11,13 @@ import SectionWrapper from "@/components/SectionWrapper";
 import { VariantProvider } from "@/context/VariantContext";
 import SiteSearch from "@/components/SiteSearch";
 import InsightCardContent, { INSIGHT_CARD_CLASS, InsightTagLabel, VideoPlayBadge, insightTag, isOptimizable, isSocialPost, originalLink, readLabel, readerPlayer } from "@/components/InsightCard";
+import InsightVideoModal from "@/components/InsightVideoModal";
 import NaturalInsightImage from "@/components/NaturalInsightImage";
 import { articlePath } from "@/lib/articles";
 import { Images } from "@/lib/assets";
 import type { Insights, InsightItem } from "@/lib/insights";
 import { CONTENT_TYPES, NO_FILTERS, filtersQuery, isFiltered, toggled, type InsightFilters } from "@/lib/insight-filters";
-import { INSIGHT_TOPICS, topicName } from "@/lib/insight-topics";
+import { INSIGHT_TOPICS, topicName, topicPath } from "@/lib/insight-topics";
 import { playOnPage, youtubeWatchUrl } from "@/lib/youtube";
 import { insightAnchor } from "@/lib/catalog";
 import { revealElement, useHashTarget } from "@/lib/deepLink";
@@ -634,56 +635,31 @@ export default function InsightsView({ blogs, podcasts, videos, initialFilters =
               </div>
             )}
 
+            {/* Each topic also has its own page, with an introduction and every post on it. */}
+            {topicOptions.length > 0 && (
+              <nav aria-label="Topic pages" className="mt-14 pt-8 border-t border-gray-150">
+                <h2 className="text-xs font-bold uppercase tracking-wider text-gray-aa mb-4">Browse by topic</h2>
+                <ul className="flex flex-wrap gap-2">
+                  {topicOptions.map((topic) => (
+                    <li key={topic.slug}>
+                      <Link
+                        href={topicPath(topic.slug)}
+                        className="tap-target inline-flex items-center px-3.5 py-1.5 rounded-full border border-gray-200 bg-gray-55 text-sm font-semibold text-slate-700 hover:border-teal-aa hover:text-teal-aa transition-colors"
+                      >
+                        {topic.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+            )}
+
             </div>
           </div>
         </SectionWrapper>
       </main>
 
-      {/* YouTube Video Modal Overlay */}
-      <AnimatePresence>
-        {activeVideoId && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[70] flex items-center justify-center bg-black/95 p-4"
-            onClick={() => setActiveVideoId(null)}
-          >
-            <motion.div
-              initial={{ scale: 0.95, y: 20 }}
-              animate={{ scale: 1, y: 0 }}
-              exit={{ scale: 0.95, y: 20 }}
-              transition={{ duration: 0.3 }}
-              className="relative w-full max-w-4xl"
-              onClick={(e) => e.stopPropagation()}
-            >
-              {/* Close button above the player, so it doesn't cover YouTube's own controls */}
-              <div className="flex justify-end mb-3">
-                <button
-                  onClick={() => setActiveVideoId(null)}
-                  className="w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors cursor-pointer border border-white/15"
-                  aria-label="Close video player"
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-              </div>
-              <div className="aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl border border-white/10">
-              {/* YouTube Iframe Embed */}
-              <iframe
-                src={`https://www.youtube-nocookie.com/embed/${activeVideoId}?autoplay=1&rel=0`}
-                title="YouTube video player"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; compute-pressure; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowFullScreen
-                className="w-full h-full"
-              />
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <InsightVideoModal videoId={activeVideoId} onClose={() => setActiveVideoId(null)} />
 
       {/* Blog Article Reader Modal Overlay */}
       <AnimatePresence>

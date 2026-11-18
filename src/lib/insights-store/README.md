@@ -84,6 +84,8 @@ The staging and live sites should each have their own database, so testing on st
 - `src/lib/insight-topics.ts`: the topic tags (Feed Hygiene, Mycotoxins…) and the keywords that give a post each one.
   Posts are tagged from their own words each time the page is shown, so nothing is stored; edit that list to add a
   topic or a keyword. `src/lib/insight-filters.ts` is how the page's filters are written in its address.
+  Each topic with posts also has its own page, `/insights/topic/<slug>`; its introduction and questions are in
+  `src/lib/insight-topic-pages.ts`.
 - `card.ts`: how a post becomes an Insights card, for the page and for the inbox's preview (`src/components/InsightCard.tsx`).
 - `src/lib/insights.ts` `getInsights()`: the approved posts once the inbox has started; the built-in list if the
   database isn't set up or can't be reached.
