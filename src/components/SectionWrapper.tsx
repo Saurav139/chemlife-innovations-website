@@ -1,8 +1,5 @@
-"use client";
-
-import { motion } from "framer-motion";
 import { ReactNode } from "react";
-import { REVEAL_VIEWPORT } from "@/lib/reveal";
+import Reveal from "./Reveal";
 
 interface Props {
   children: ReactNode;
@@ -10,23 +7,11 @@ interface Props {
   id?: string;
 }
 
-const variants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0 },
-};
-
+/** A page section that fades in as it scrolls up. Visible from the start if it's already on screen (see Reveal). */
 export default function SectionWrapper({ children, className = "", id }: Props) {
   return (
-    <motion.section
-      id={id}
-      initial="hidden"
-      whileInView="visible"
-      viewport={REVEAL_VIEWPORT}
-      transition={{ duration: 0.5, ease: [0.25, 0.1, 0, 1] }}
-      variants={variants}
-      className={className}
-    >
+    <Reveal as="section" id={id} className={className}>
       {children}
-    </motion.section>
+    </Reveal>
   );
 }

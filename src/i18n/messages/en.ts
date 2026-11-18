@@ -78,6 +78,8 @@ const en = {
     rateUs: "Rate Us",
     rateUsLabel: "Rate us on Google",
     hideRateUs: "Hide the Rate us button",
+    pauseMotion: "Pause animation",
+    playMotion: "Play animation",
     cookieText: "We'd like to use Google Analytics cookies to see how visitors use this site, so we can improve it.",
     cookiePrivacy: "Privacy policy",
     cookieDecline: "Decline",

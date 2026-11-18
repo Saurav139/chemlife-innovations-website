@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { useTheme } from "@/context/VariantContext";
 import { usePathname } from "next/navigation";
 import { Images } from "@/lib/assets";
@@ -65,7 +66,7 @@ export default function Header() {
     >
       <div className="max-w-[1200px] mx-auto pr-6 pl-2">
         <div className="flex items-center justify-between gap-6 h-32">
-          <a href={href("/")} className="flex-shrink-0">
+          <Link href={href("/")} className="flex-shrink-0">
             <Image
               src={Images.branding.logo}
               alt="ChemLife Innovations"
@@ -75,7 +76,7 @@ export default function Header() {
               loading="eager"
               className="h-28 w-auto mix-blend-multiply"
             />
-          </a>
+          </Link>
 
           <nav className={`hidden items-center ${compact ? "xl:flex gap-3.5" : "lg:flex gap-7 xl:gap-10"}`}>
             {navLinks.map((link) => {
@@ -83,9 +84,10 @@ export default function Header() {
                 pathname === link.path || (pathname.startsWith(link.path) && link.path !== "/");
 
               return (
-                <a
+                <Link
                   key={link.path}
                   href={link.href}
+                  aria-current={isActive ? "page" : undefined}
                   className={`${locale === "en" ? "text-[17px] xl:text-[19px]" : compact ? "text-[14px]" : "text-[16px] xl:text-[17px]"} whitespace-nowrap font-semibold transition-colors ${compact ? "" : "tracking-wide"} ${
                     isActive
                       ? "text-brand-orange-aa"
@@ -93,7 +95,7 @@ export default function Header() {
                   }`}
                 >
                   {link.label}
-                </a>
+                </Link>
               );
             })}
             <LanguageSwitcher />
@@ -128,9 +130,10 @@ export default function Header() {
                   pathname === link.path || (pathname.startsWith(link.path) && link.path !== "/");
 
                 return (
-                  <a
+                  <Link
                     key={link.path}
                     href={link.href}
+                    aria-current={isActive ? "page" : undefined}
                     className={`flex items-center min-h-11 text-base font-medium ${
                       isActive
                         ? "text-brand-orange-aa"
@@ -139,7 +142,7 @@ export default function Header() {
                     onClick={() => setMobileOpen(false)}
                   >
                     {link.label}
-                  </a>
+                  </Link>
                 );
               })}
               <LanguageSwitcher inline />

@@ -79,6 +79,8 @@ const te: Messages = {
     rateUs: "రేట్ చేయండి",
     rateUsLabel: "Google లో మాకు రేటింగ్ ఇవ్వండి",
     hideRateUs: "‘రేట్ చేయండి’ బటన్‌ను దాచండి",
+    pauseMotion: "యానిమేషన్‌ను ఆపండి",
+    playMotion: "యానిమేషన్‌ను ప్లే చేయండి",
     cookieText: "సందర్శకులు ఈ సైట్‌ను ఎలా ఉపయోగిస్తున్నారో తెలుసుకుని దాన్ని మెరుగుపరచడానికి మేము Google Analytics కుకీలను ఉపయోగించాలనుకుంటున్నాం.",
     cookiePrivacy: "గోప్యతా విధానం",
     cookieDecline: "తిరస్కరించండి",
