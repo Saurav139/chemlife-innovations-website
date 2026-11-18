@@ -6,7 +6,7 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Images } from "@/lib/assets";
 import { useT } from "@/i18n/LocaleProvider";
 import type { Messages } from "@/i18n/messages/en";
-import { REVEAL_VIEWPORT } from "@/lib/reveal";
+import Reveal from "./Reveal";
 
 type Picture = { src: string; width: number; height: number };
 type Card = { badge: Picture; certificate: Picture; marks: (Picture & { size: string })[] };
@@ -111,12 +111,10 @@ function Detailed({ t, open, reduceMotion }: BodyProps) {
       {certificateCards.map((card, i) => {
         const item = t.items[i];
         return (
-          <motion.li
+          <Reveal
+            as="li"
             key={item.name}
-            initial={reduceMotion ? false : { opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={REVEAL_VIEWPORT}
-            transition={{ duration: 0.6, delay: i * 0.12, ease: easeOut }}
+            delay={i * 0.12}
             className="flex flex-col rounded-2xl border border-brand-navy/10 bg-white p-6 md:p-8"
           >
             <div className="flex items-center gap-5">
@@ -190,7 +188,7 @@ function Detailed({ t, open, reduceMotion }: BodyProps) {
                 <Arrow className="ml-auto mr-2 h-5 w-5 shrink-0 text-teal-aa transition-transform duration-200 group-hover/view:translate-x-1" />
               </button>
             </div>
-          </motion.li>
+          </Reveal>
         );
       })}
     </ul>
@@ -204,12 +202,10 @@ function Compact({ t, open, reduceMotion }: BodyProps) {
       {certificateCards.map((card, i) => {
         const item = t.items[i];
         return (
-          <motion.li
+          <Reveal
+            as="li"
             key={item.name}
-            initial={reduceMotion ? false : { opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={REVEAL_VIEWPORT}
-            transition={{ duration: 0.5, delay: i * 0.1, ease: easeOut }}
+            delay={i * 0.1}
             className="flex gap-4 rounded-2xl border border-brand-navy/10 bg-white p-5"
           >
             <div className="flex h-14 w-16 shrink-0 items-center justify-center sm:w-20">
@@ -230,7 +226,7 @@ function Compact({ t, open, reduceMotion }: BodyProps) {
                 <Arrow className="h-4 w-4 transition-transform duration-200 group-hover/view:translate-x-1" />
               </button>
             </div>
-          </motion.li>
+          </Reveal>
         );
       })}
     </ul>
