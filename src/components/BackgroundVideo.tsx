@@ -21,22 +21,24 @@ export function useNearViewport<T extends Element>(rootMargin = "300px") {
 
 /**
  * A muted, looping background video. Nothing downloads until `active` (its section is near the screen);
- * it pauses when inactive, and shows only the poster to visitors who ask for reduced motion.
+ * it pauses when inactive or `paused`, and shows only the poster to visitors who ask for reduced motion.
  */
 export default function BackgroundVideo({
   src,
   poster,
   active,
+  paused = false,
   className,
 }: {
   src: string;
   poster?: string;
   active: boolean;
+  paused?: boolean;
   className?: string;
 }) {
   const ref = useRef<HTMLVideoElement>(null);
   const reduceMotion = useReducedMotion();
-  const play = active && !reduceMotion;
+  const play = active && !paused && !reduceMotion;
 
   useEffect(() => {
     const video = ref.current;

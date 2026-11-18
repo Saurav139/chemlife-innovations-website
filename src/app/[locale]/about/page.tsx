@@ -1,10 +1,10 @@
 "use client";
 
-import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import Reveal from "@/components/Reveal";
 import SectionWrapper from "@/components/SectionWrapper";
 import { VariantProvider } from "@/context/VariantContext";
 import SiteSearch from "@/components/SiteSearch";
@@ -13,7 +13,6 @@ import { Images } from "@/lib/assets";
 import { useHref, useT } from "@/i18n/LocaleProvider";
 import visionStyles from "./vision-mission.module.css";
 
-const easeOut = [0.25, 0.1, 0, 1] as const;
 
 // Core values redefined using G.I.F.T. framework directly in layout
 
@@ -61,11 +60,8 @@ export default function AboutPage() {
         <SectionWrapper id="our-journey" className="scroll-mt-32 py-8 md:py-12 lg:py-16 bg-white text-brand-navy">
           <div className="max-w-[1200px] mx-auto px-6 grid md:grid-cols-2 gap-6 md:gap-8 lg:gap-12 items-center">
             {/* Founder/Team Image Section with Founders Tag */}
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, ease: easeOut }}
+            <Reveal
+              from="left"
               className="flex flex-col items-center w-full"
             >
               <div
@@ -84,13 +80,10 @@ export default function AboutPage() {
               <div className="mt-3 bg-teal-50 border border-teal-200 text-teal-aa text-xs md:text-sm font-bold uppercase tracking-wider px-5 py-1.5 rounded-full shadow-xs select-none">
                 {t.founders}
               </div>
-            </motion.div>
+            </Reveal>
 
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, ease: easeOut }}
+            <Reveal
+              from="right"
             >
               <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl text-brand-navy mb-4 font-bold leading-tight">
                 {t.journeyTitle}
@@ -109,7 +102,7 @@ export default function AboutPage() {
                   <path d="M4 10h12M11 5l5 5-5 5" />
                 </svg>
               </Link>
-            </motion.div>
+            </Reveal>
           </div>
         </SectionWrapper>
 
@@ -188,12 +181,9 @@ export default function AboutPage() {
                 }
                 // Roles and bios are in the language file (about.leaders), in this order.
               ].map((leader, i) => ({ ...leader, ...t.leaders[i] })).map((leader, i) => (
-                <motion.div
+                <Reveal
                   key={i}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: i * 0.15, ease: easeOut }}
+                  delay={i * 0.15}
                   className="bg-white rounded-2xl border border-teal-100 overflow-hidden flex flex-col shadow-sm hover:border-brand-orange/50 hover:shadow-md transition-[border-color,box-shadow] duration-300 group"
                 >
                   {/* Portrait panel keeps the face and shoulders visible without a circular crop. The photos share one 4:5
@@ -222,7 +212,7 @@ export default function AboutPage() {
                     {leader.bio}
                   </p>
                   </div>
-                </motion.div>
+                </Reveal>
               ))}
             </div>
           </div>
@@ -305,11 +295,8 @@ export default function AboutPage() {
                   everything also caught the fade-in's opacity and slide, so the slide lagged and Safari flickered. */}
               {/* Card G - Top Center */}
               <div className="order-1 lg:order-none lg:col-start-2 lg:row-start-1 flex justify-center">
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: 0.1, ease: easeOut }}
+                <Reveal
+                  delay={0.1}
                   className="relative w-full max-w-[320px] bg-linear-to-b from-teal-900 to-teal-950 rounded-2xl pt-4 pb-9 px-3 md:pt-6 md:pb-12 md:px-5 text-center border border-white/10 shadow-xl hover:border-brand-orange/45 hover:scale-[1.02] transition-[border-color,box-shadow,scale] duration-300 group overflow-hidden"
                 >
                   <div aria-hidden="true" className="h-8 md:h-10 px-3 md:px-4 rounded-full bg-[#e2e2e2] border-2 border-brand-orange flex items-center justify-center shadow-md mb-3 md:mb-4 mx-auto relative z-10 w-fit">
@@ -351,16 +338,13 @@ export default function AboutPage() {
                     </g>
                     <path d="M10 90C22 90 32 82 45 80C55 78 65 82 75 82C85 82 98 72 105 65C110 60 108 55 100 58L78 67C70 70 62 70 55 65L32 50L25 55L45 70C50 74 58 74 65 72L95 60" stroke="url(#handGradG)" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
-                </motion.div>
+                </Reveal>
               </div>
 
               {/* Card T - Middle Left */}
               <div className="order-4 lg:order-none lg:col-start-1 lg:row-start-2 flex justify-center lg:-translate-y-4">
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: 0.4, ease: easeOut }}
+                <Reveal
+                  delay={0.4}
                   className="relative w-full max-w-[320px] bg-linear-to-b from-teal-900 to-teal-950 rounded-2xl pt-4 pb-9 px-3 md:pt-6 md:pb-12 md:px-5 text-center border border-white/10 shadow-xl hover:border-brand-orange/45 hover:scale-[1.02] transition-[border-color,box-shadow,scale] duration-300 group overflow-hidden"
                 >
                   <div aria-hidden="true" className="h-8 md:h-10 px-3 md:px-4 rounded-full bg-[#e2e2e2] border-2 border-brand-orange flex items-center justify-center shadow-md mb-3 md:mb-4 mx-auto relative z-10 w-fit">
@@ -414,16 +398,13 @@ export default function AboutPage() {
                       <circle cx="8" cy="8" r="4" fill="#fed7aa" stroke="#ea580c" strokeWidth="1.5" />
                     </g>
                   </svg>
-                </motion.div>
+                </Reveal>
               </div>
 
               {/* Card I - Middle Right */}
               <div className="order-2 lg:order-none lg:col-start-3 lg:row-start-2 flex justify-center lg:-translate-y-4">
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: 0.2, ease: easeOut }}
+                <Reveal
+                  delay={0.2}
                   className="relative w-full max-w-[320px] bg-linear-to-b from-teal-900 to-teal-950 rounded-2xl pt-4 pb-9 px-3 md:pt-6 md:pb-12 md:px-5 text-center border border-white/10 shadow-xl hover:border-brand-orange/45 hover:scale-[1.02] transition-[border-color,box-shadow,scale] duration-300 group overflow-hidden"
                 >
                   <div aria-hidden="true" className="h-8 md:h-10 px-3 md:px-4 rounded-full bg-[#e2e2e2] border-2 border-brand-orange flex items-center justify-center shadow-md mb-3 md:mb-4 mx-auto relative z-10 w-fit">
@@ -479,16 +460,13 @@ export default function AboutPage() {
                       </g>
                     </g>
                   </svg>
-                </motion.div>
+                </Reveal>
               </div>
 
               {/* Card F - Bottom Center */}
               <div className="order-3 lg:order-none lg:col-start-2 lg:row-start-3 flex justify-center lg:-translate-y-8">
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: 0.3, ease: easeOut }}
+                <Reveal
+                  delay={0.3}
                   className="relative w-full max-w-[320px] bg-linear-to-b from-teal-900 to-teal-950 rounded-2xl pt-4 pb-9 px-3 md:pt-6 md:pb-12 md:px-5 text-center border border-white/10 shadow-xl hover:border-brand-orange/45 hover:scale-[1.02] transition-[border-color,box-shadow,scale] duration-300 group overflow-hidden"
                 >
                   <div aria-hidden="true" className="h-8 md:h-10 px-3 md:px-4 rounded-full bg-[#e2e2e2] border-2 border-brand-orange flex items-center justify-center shadow-md mb-3 md:mb-4 mx-auto relative z-10 w-fit">
@@ -538,7 +516,7 @@ export default function AboutPage() {
                     <circle cx="82" cy="82" r="10" fill="#22c55e" stroke="#15803d" strokeWidth="2" />
                     <path d="M78 82L81 85L87 79" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
-                </motion.div>
+                </Reveal>
               </div>
 
             </div>

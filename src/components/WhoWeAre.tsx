@@ -2,13 +2,14 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
 import { Images } from "@/lib/assets";
 import { useHref, useT } from "@/i18n/LocaleProvider";
 import type { Messages } from "@/i18n/messages/en";
-import { REVEAL_VIEWPORT } from "@/lib/reveal";
-
-const easeOut = [0.25, 0.1, 0, 1] as const;
+import Reveal from "./Reveal";
+import { usePausable } from "@/lib/usePausable";
+import PauseButton from "./PauseButton";
 
 // Each card's title, description and photo descriptions are in the language file (home.whoWeAre.cards), in this order.
 export const cardImages = [
@@ -91,17 +92,16 @@ export function SnowflakeCell({
   card,
   index,
   imageIndex,
+  paused = false,
 }: {
   card: Card;
   index: number;
   imageIndex: number;
+  paused?: boolean;
 }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={REVEAL_VIEWPORT}
-      transition={{ duration: 0.5, delay: index * 0.1, ease: [0.25, 0.1, 0, 1] }}
+    <Reveal
+      delay={index * 0.1}
       className="flex flex-row md:flex-col items-center gap-5 md:gap-0 text-left md:text-center group cursor-pointer"
     >
       {/* 3D Visual Snowflake Image Container (No text overlay). Phones: a smaller circle beside the text. */}
@@ -109,7 +109,7 @@ export function SnowflakeCell({
         {/* Outer Snowflake Frame (acting as outer border structure) */}
         <SnowflakeFrame
           className="absolute w-[128px] h-[128px] sm:w-[156px] sm:h-[156px] md:w-[214px] md:h-[214px] lg:w-[310px] lg:h-[310px] text-teal-500/20 group-hover:text-brand-orange/45 transition-colors duration-500 z-0 pointer-events-none select-none"
-          style={{ animation: "spin 45s linear infinite" }}
+          style={{ animation: "spin 45s linear infinite", animationPlayState: paused ? "paused" : "running" }}
         />
 
         {/* Enlarged Inner Circular Card (100% visible image, zero overlap) */}
@@ -117,7 +117,7 @@ export function SnowflakeCell({
           whileHover={{ scale: 1.05 }}
           className="relative w-[98px] h-[98px] sm:w-[120px] sm:h-[120px] md:w-[165px] md:h-[165px] lg:w-[235px] lg:h-[235px] rounded-full overflow-hidden border-2 border-teal-500/25 group-hover:border-brand-orange transition-all duration-300 z-10 bg-gray-50 shadow-xl"
         >
-          <AnimatePresence mode="popLayout">
+          <AnimatePresence mode="popLayout" initial={false}>
             <motion.div
               key={card.images[imageIndex % card.images.length].src}
               initial={{ rotate: -180, opacity: 0 }}
@@ -147,23 +147,7 @@ export function SnowflakeCell({
           {card.description}
         </p>
       </div>
-    </motion.div>
-  );
-}
-
-/** Fades and rises into view once, as it scrolls in (still for visitors who prefer less motion). */
-function Reveal({ children, delay = 0, className }: { children: React.ReactNode; delay?: number; className?: string }) {
-  const reduce = useReducedMotion();
-  return (
-    <motion.div
-      className={className}
-      initial={{ opacity: 0, y: reduce ? 0 : 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={REVEAL_VIEWPORT}
-      transition={{ duration: 0.6, delay, ease: easeOut }}
-    >
-      {children}
-    </motion.div>
+    </Reveal>
   );
 }
 
@@ -178,12 +162,15 @@ export default function WhoWeAre() {
     images: cardImages[i].map((src, j) => ({ src, alt: card.alts[j] })),
   }));
 
+  // The pictures change every 4 s until paused (the button under "What We Serve").
+  const [paused, togglePaused] = usePausable();
   useEffect(() => {
+    if (paused) return;
     const timer = setInterval(() => {
       setImageIndex((prev) => prev + 1);
     }, 4000);
     return () => clearInterval(timer);
-  }, []);
+  }, [paused]);
 
 
   return (
@@ -205,12 +192,12 @@ export default function WhoWeAre() {
             <p className="font-heading text-2xl md:text-3xl lg:text-4xl font-semibold leading-snug text-brand-orange-aa mt-4">{t.title}</p>
             <p className="text-lg text-slate-700 leading-relaxed mt-6">{t.homeIntro}</p>
             {/* The facts and questions that used to be here, in full on their own page. */}
-            <a href={href("/who-we-are")} data-analytics-click={t.moreAboutUs} className="inline-flex items-center gap-2 min-h-12 px-6 mt-8 rounded-full bg-brand-navy hover:bg-brand-navy/90 text-white font-semibold transition-colors">
+            <Link href={href("/who-we-are")} data-analytics-click={t.moreAboutUs} className="inline-flex items-center gap-2 min-h-12 px-6 mt-8 rounded-full bg-brand-navy hover:bg-brand-navy/90 text-white font-semibold transition-colors">
               {t.moreAboutUs}
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>
-            </a>
+            </Link>
           </Reveal>
           <Reveal delay={0.1} className="lg:col-span-6">
             {/* The photo is wider than the frame: positioned 42% across (not centred) to trim 5% more off its right side. */}
@@ -224,6 +211,9 @@ export default function WhoWeAre() {
         <h3 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold leading-tight text-brand-navy text-center mt-16 md:mt-24">
           {t.serveTitle}
         </h3>
+        <div className="flex justify-center mt-4">
+          <PauseButton paused={paused} onToggle={togglePaused} />
+        </div>
 
         {/* Grid layout containing the Snowflake Cells */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-12 max-w-5xl mx-auto justify-items-stretch md:justify-items-center w-full mt-8 z-10 relative">
@@ -233,6 +223,7 @@ export default function WhoWeAre() {
               card={card}
               index={i}
               imageIndex={imageIndex}
+              paused={paused}
             />
           ))}
         </div>

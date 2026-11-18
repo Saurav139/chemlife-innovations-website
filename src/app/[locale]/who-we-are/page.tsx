@@ -1,9 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import { motion, useReducedMotion } from "framer-motion";
+import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import Reveal from "@/components/Reveal";
 import SiteSearch from "@/components/SiteSearch";
 import DossierRequest from "@/components/DossierRequest";
 import { VariantProvider } from "@/context/VariantContext";
@@ -15,8 +16,6 @@ import { jsonLd } from "@/lib/structuredData";
 // cover with a contents list, the headline figures, a strip of partners and recognition, then three numbered
 // chapters (the facts as a fact sheet, the directors as an organisation chart, the questions all open) and a
 // closing band whose one main button asks for the technical dossier.
-
-const easeOut = [0.25, 0.1, 0, 1] as const;
 
 // The homepage hero's figures, with their labels in the language file (home.stats), in this order.
 const FIGURES = ["30", "16", "22", "7"];
@@ -55,22 +54,6 @@ function initials(name: string): string {
   const first = (word?: string) => (word ? Array.from(word)[0] : "");
   if (!/^[\x00-\x7F]*$/.test(name)) return first(words[0]);
   return (first(words[0]) + (words.length > 1 ? first(words[words.length - 1]) : "")).toUpperCase();
-}
-
-/** Fades and rises into view once (still for visitors who prefer less motion). */
-function Reveal({ children, delay = 0, className }: { children: React.ReactNode; delay?: number; className?: string }) {
-  const reduce = useReducedMotion();
-  return (
-    <motion.div
-      className={className}
-      initial={{ opacity: 0, y: reduce ? 0 : 16 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "0px 0px -8% 0px" }}
-      transition={{ duration: 0.6, delay, ease: easeOut }}
-    >
-      {children}
-    </motion.div>
-  );
 }
 
 const wrap = "max-w-[1200px] mx-auto px-6";
@@ -252,9 +235,9 @@ export default function WhoWeArePage() {
                   ))}
                 </dl>
                 {gi === AWARDS_GROUP && (
-                  <a href={`${href("/")}#awards`} className="inline-flex items-center gap-2 min-h-11 mt-2 font-semibold text-teal-aa hover:text-brand-navy">
+                  <Link href={`${href("/")}#awards`} className="inline-flex items-center gap-2 min-h-11 mt-2 font-semibold text-teal-aa hover:text-brand-navy">
                     {t.awardsLink}<Arrow />
-                  </a>
+                  </Link>
                 )}
               </Reveal>
             ))}
@@ -320,9 +303,9 @@ export default function WhoWeArePage() {
               <ul className="flex flex-wrap gap-x-6 gap-y-1 mt-5">
                 {links.map((link) => (
                   <li key={link.path}>
-                    <a href={href(link.path)} data-analytics-click={link.label} className="inline-flex items-center gap-1.5 min-h-11 font-semibold text-white/80 hover:text-white underline-offset-4 hover:underline">
+                    <Link href={href(link.path)} data-analytics-click={link.label} className="inline-flex items-center gap-1.5 min-h-11 font-semibold text-white/80 hover:text-white underline-offset-4 hover:underline">
                       {link.label}<Arrow className="w-3.5 h-3.5" />
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>

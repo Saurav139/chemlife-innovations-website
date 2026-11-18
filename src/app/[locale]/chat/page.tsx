@@ -1,14 +1,11 @@
 "use client";
 
-import { motion } from "framer-motion";
 import Link from "next/link";
 import { VariantProvider } from "@/context/VariantContext";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SiteSearch from "@/components/SiteSearch";
 import { Images } from "@/lib/assets";
-
-const easeOut = [0.25, 0.1, 0, 1] as const;
 
 export default function ChatLandingPage() {
   return (
@@ -21,10 +18,7 @@ export default function ChatLandingPage() {
         <main id="main" tabIndex={-1} className="pt-40 flex-1 max-w-[1200px] mx-auto px-6 py-16 flex flex-col items-center justify-center w-full">
           
           {/* Main Card Container */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: easeOut }}
+          <div
             className="w-full max-w-[850px] bg-white border border-slate-200 rounded-3xl p-8 md:p-12 shadow-sm text-center relative overflow-hidden flex flex-col items-center"
           >
             {/* Beta Version Badge */}
@@ -102,7 +96,7 @@ export default function ChatLandingPage() {
                 Back to Home
               </Link>
             </div>
-          </motion.div>
+          </div>
         </main>
 
         {/* Global Footer */}

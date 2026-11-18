@@ -6,6 +6,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "@/context/VariantContext";
 import { Images } from "@/lib/assets";
 import { useT } from "@/i18n/LocaleProvider";
+import { usePausable } from "@/lib/usePausable";
+import PauseButton from "./PauseButton";
 
 // Titles and descriptions are in the language file (home.awards.items), in this order. New awards go at the end:
 // previews pair these by position.
@@ -60,13 +62,16 @@ export default function AwardsRecognition() {
   const t = useT().home.awards;
   const certificates = certificateFiles.map((c, i) => ({ ...c, ...t.items[i] }));
 
+  // Moves on every 6 s until paused (the button under the numbered steps).
+  const [paused, togglePaused] = usePausable();
   useEffect(() => {
+    if (paused) return;
     const timer = setInterval(() => {
       setActiveStep((prev) => (prev + 1) % certificateFiles.length);
     }, 6000);
 
     return () => clearInterval(timer);
-  }, [activeStep]);
+  }, [activeStep, paused]);
 
   return (
     <section id="awards" className="bg-white py-16 md:py-24 lg:py-32 overflow-hidden scroll-mt-36">
@@ -88,7 +93,7 @@ export default function AwardsRecognition() {
         >
           <div className="bg-brand-orange rounded-2xl p-[3px] shadow-2xl">
             <div className="bg-white rounded-xl p-6 lg:p-8 min-h-[320px] flex items-center">
-              <AnimatePresence mode="wait">
+              <AnimatePresence mode="wait" initial={false}>
                 {activeStep >= 0 && (
                   <motion.div
                     key={activeStep}
@@ -201,6 +206,9 @@ export default function AwardsRecognition() {
                 );
               })}
             </div>
+          </div>
+          <div className="flex justify-center mt-5">
+            <PauseButton paused={paused} onToggle={togglePaused} />
           </div>
         </div>
       </div>

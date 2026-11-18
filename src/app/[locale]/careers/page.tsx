@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useDialogFocus } from "@/lib/useDialogFocus";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Header from "@/components/Header";
@@ -39,6 +40,10 @@ export default function CareersPage() {
   const [emailSubject, setEmailSubject] = useState("");
   const [emailBody, setEmailBody] = useState("");
   const [showAttachReminder, setShowAttachReminder] = useState(false);
+
+  // Keyboard focus stays inside whichever of the two is on top, and returns to the Apply button afterwards.
+  const applyDialog = useDialogFocus<HTMLDivElement>(!!activeJob && !showAttachReminder);
+  const reminderDialog = useDialogFocus<HTMLDivElement>(showAttachReminder);
 
   // Escape closes the application form or the reminder, and the page behind doesn't scroll while one is open.
   const overlayOpen = !!activeJob || showAttachReminder;
@@ -386,6 +391,10 @@ export default function CareersPage() {
               className="fixed inset-0 z-[70] flex items-center justify-center bg-black/60 p-4 overflow-y-auto"
             >
               <motion.div
+                ref={applyDialog}
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="apply-dialog-title"
                 initial={{ scale: 0.95, y: 20 }}
                 animate={{ scale: 1, y: 0 }}
                 exit={{ scale: 0.95, y: 20 }}
@@ -407,7 +416,7 @@ export default function CareersPage() {
                   <span className="text-teal-aa-light text-xs font-bold uppercase tracking-wider block mb-1">
                     {t.modalTitle}
                   </span>
-                  <h3 className="font-heading text-xl lg:text-2xl font-bold text-white pr-10">
+                  <h3 id="apply-dialog-title" className="font-heading text-xl lg:text-2xl font-bold text-white pr-10">
                     {activeJob.title}
                   </h3>
                   <p className="text-white/70 text-sm mt-1">
@@ -506,6 +515,11 @@ export default function CareersPage() {
               className="fixed inset-0 z-[70] flex items-center justify-center bg-black/60 p-4"
             >
               <motion.div
+                ref={reminderDialog}
+                role="alertdialog"
+                aria-modal="true"
+                aria-labelledby="reminder-dialog-title"
+                aria-describedby="reminder-dialog-text"
                 initial={{ scale: 0.95, y: 20 }}
                 animate={{ scale: 1, y: 0 }}
                 exit={{ scale: 0.95, y: 20 }}
@@ -516,10 +530,10 @@ export default function CareersPage() {
                     <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path>
                   </svg>
                 </div>
-                <h3 className="font-heading text-xl font-bold text-brand-navy mb-2">
+                <h3 id="reminder-dialog-title" className="font-heading text-xl font-bold text-brand-navy mb-2">
                   {t.reminderTitle}
                 </h3>
-                <p className="text-gray-500 text-sm leading-relaxed mb-6">
+                <p id="reminder-dialog-text" className="text-gray-500 text-sm leading-relaxed mb-6">
                   {t.reminderStart} <strong>{t.reminderStrong}</strong> {t.reminderEnd}
                 </p>
                 <button

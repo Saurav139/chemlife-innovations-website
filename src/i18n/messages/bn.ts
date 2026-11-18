@@ -80,6 +80,8 @@ const bn: Messages = {
     rateUs: "রেটিং দিন",
     rateUsLabel: "Google-এ আমাদের রেটিং দিন",
     hideRateUs: "‘রেটিং দিন’ বোতামটি লুকান",
+    pauseMotion: "অ্যানিমেশন থামান",
+    playMotion: "অ্যানিমেশন চালান",
     cookieText: "দর্শকেরা এই সাইটটি কীভাবে ব্যবহার করেন তা বুঝে সাইটটিকে আরও উন্নত করতে আমরা Google Analytics কুকি ব্যবহার করতে চাই।",
     cookiePrivacy: "গোপনীয়তা নীতি",
     cookieDecline: "প্রত্যাখ্যান করুন",

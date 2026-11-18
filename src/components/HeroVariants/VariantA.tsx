@@ -7,6 +7,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Images } from "@/lib/assets";
 import { useHref, useT } from "@/i18n/LocaleProvider";
 import { playOnPage, youtubeWatchUrl } from "@/lib/youtube";
+import { usePausable } from "@/lib/usePausable";
+import PauseButton from "@/components/PauseButton";
 
 // The award photo uses separate landscape and portrait crops to keep faces clear.
 const LANDSCAPE_SHAPE = "(min-aspect-ratio: 1/1)";
@@ -116,12 +118,14 @@ export default function HeroVariantA() {
     return () => window.removeEventListener("load", ready);
   }, []);
 
-  // Restarts on every change, so a slide picked from the dots also stays up for the full 6 s.
+  // Restarts on every change, so a slide picked from the dots also stays up for the full 6 s. The pause button
+  // beside the dots stops the slideshow and the photos' slow zoom.
+  const [paused, togglePaused] = usePausable();
   useEffect(() => {
-    if (!othersReady) return;
+    if (!othersReady || paused) return;
     const timer = setTimeout(() => setPhoto((p) => (p + 1) % slideCount), 6000);
     return () => clearTimeout(timer);
-  }, [photo, othersReady, slideCount]);
+  }, [photo, othersReady, slideCount, paused]);
 
   // Picking a dot before the page has finished loading starts the other photos loading straight away.
   const goTo = (i: number) => {
@@ -173,7 +177,7 @@ export default function HeroVariantA() {
       {/* The photo. Preloaded for the screen's shape, since it's the page's largest paint. */}
       <link rel="preload" as="image" imageSrcSet={landscape.srcSet} imageSizes={landscape.sizes} media={LANDSCAPE_SHAPE} fetchPriority="high" />
       <link rel="preload" as="image" imageSrcSet={portrait.srcSet} imageSizes={portrait.sizes} media="not all and (min-aspect-ratio: 1/1)" fetchPriority="high" />
-      <div className="absolute inset-0 z-10">
+      <div className={`absolute inset-0 z-10 ${paused ? "[&_img]:[animation-play-state:paused]" : ""}`}>
         <div className={`absolute inset-0 transition-opacity duration-1000 motion-reduce:transition-none ${photo === 0 ? "opacity-100" : "opacity-0"}`} aria-hidden={photo !== 0}>
         <picture>
           <source media={LANDSCAPE_SHAPE} srcSet={landscape.srcSet} sizes={landscape.sizes} />
@@ -261,6 +265,7 @@ export default function HeroVariantA() {
                   <span className={`h-2 rounded-full transition-all duration-300 ${i === photo ? "w-6 bg-teal-400" : "w-2 bg-white/40"}`} />
                 </button>
               ))}
+              <PauseButton paused={paused} onToggle={togglePaused} tone="dark" className="self-center ml-3" />
             </div>
           </div>
         </div>
@@ -281,6 +286,7 @@ export default function HeroVariantA() {
               <span className={`w-2 rounded-full transition-all duration-300 ${i === photo ? "h-6 bg-teal-400" : "h-2 bg-white/60"}`} />
             </button>
           ))}
+          <PauseButton paused={paused} onToggle={togglePaused} tone="dark" className="self-center my-1" />
         </div>
       </div>
 

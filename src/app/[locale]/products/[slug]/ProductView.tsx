@@ -2,15 +2,14 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import Reveal from "@/components/Reveal";
 import SiteSearch from "@/components/SiteSearch";
 import { VariantProvider } from "@/context/VariantContext";
 import { PRODUCTS, productPath } from "@/lib/catalog";
 import { useHref, useT } from "@/i18n/LocaleProvider";
 
-const easeOut = [0.25, 0.1, 0, 1] as const;
 
 // The category's colours, as on the product cards.
 const CATEGORY_TAG: Record<string, string> = {
@@ -75,11 +74,7 @@ export default function ProductView({ index }: { index: number }) {
         {/* The details: description, features and variants beside how it's used and packed */}
         <section className="py-12 md:py-20">
           <div className="max-w-[1200px] mx-auto px-6 grid lg:grid-cols-12 gap-10 lg:gap-16">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, ease: easeOut }}
+            <Reveal
               className="lg:col-span-7 space-y-10"
             >
               <div>
@@ -111,13 +106,11 @@ export default function ProductView({ index }: { index: number }) {
                   </ul>
                 </div>
               )}
-            </motion.div>
+            </Reveal>
 
-            <motion.aside
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.1, ease: easeOut }}
+            <Reveal
+              as="aside"
+              delay={0.1}
               className="lg:col-span-5"
             >
               <div className="lg:sticky lg:top-32 rounded-2xl bg-slate-50 border border-slate-200 p-6 md:p-8">
@@ -136,7 +129,7 @@ export default function ProductView({ index }: { index: number }) {
                   {t.askAbout}
                 </a>
               </div>
-            </motion.aside>
+            </Reveal>
           </div>
         </section>
 
