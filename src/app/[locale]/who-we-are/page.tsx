@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Reveal from "@/components/Reveal";
@@ -235,9 +234,9 @@ export default function WhoWeArePage() {
                   ))}
                 </dl>
                 {gi === AWARDS_GROUP && (
-                  <Link href={`${href("/")}#awards`} className="inline-flex items-center gap-2 min-h-11 mt-2 font-semibold text-teal-aa hover:text-brand-navy">
+                  <a href={`${href("/")}#awards`} className="inline-flex items-center gap-2 min-h-11 mt-2 font-semibold text-teal-aa hover:text-brand-navy">
                     {t.awardsLink}<Arrow />
-                  </Link>
+                  </a>
                 )}
               </Reveal>
             ))}
@@ -303,9 +302,9 @@ export default function WhoWeArePage() {
               <ul className="flex flex-wrap gap-x-6 gap-y-1 mt-5">
                 {links.map((link) => (
                   <li key={link.path}>
-                    <Link href={href(link.path)} data-analytics-click={link.label} className="inline-flex items-center gap-1.5 min-h-11 font-semibold text-white/80 hover:text-white underline-offset-4 hover:underline">
+                    <a href={href(link.path)} data-analytics-click={link.label} className="inline-flex items-center gap-1.5 min-h-11 font-semibold text-white/80 hover:text-white underline-offset-4 hover:underline">
                       {link.label}<Arrow className="w-3.5 h-3.5" />
-                    </Link>
+                    </a>
                   </li>
                 ))}
               </ul>

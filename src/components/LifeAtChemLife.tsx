@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "@/context/VariantContext";
 import { Videos, VideoPosters } from "@/lib/assets";
@@ -93,12 +92,12 @@ export default function LifeAtChemLife() {
           delay={0.5}
           className="text-center mt-12"
         >
-          <Link
+          <a
             href={href("/careers")}
             className="inline-block border-2 border-brand-orange text-brand-orange-aa bg-white hover:bg-brand-orange-aa hover:text-white font-semibold px-8 py-3 rounded-full shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5"
           >
             {t.joinUs}
-          </Link>
+          </a>
         </Reveal>
       </div>
     </section>

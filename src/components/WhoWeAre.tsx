@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Images } from "@/lib/assets";
 import { useHref, useT } from "@/i18n/LocaleProvider";
@@ -185,12 +184,12 @@ export default function WhoWeAre() {
             <p className="font-heading text-2xl md:text-3xl lg:text-4xl font-semibold leading-snug text-brand-orange-aa mt-4">{t.title}</p>
             <p className="text-lg text-slate-700 leading-relaxed mt-6">{t.homeIntro}</p>
             {/* The facts and questions that used to be here, in full on their own page. */}
-            <Link href={href("/who-we-are")} data-analytics-click={t.moreAboutUs} className="inline-flex items-center gap-2 min-h-12 px-6 mt-8 rounded-full bg-brand-navy hover:bg-brand-navy/90 text-white font-semibold transition-colors">
+            <a href={href("/who-we-are")} data-analytics-click={t.moreAboutUs} className="inline-flex items-center gap-2 min-h-12 px-6 mt-8 rounded-full bg-brand-navy hover:bg-brand-navy/90 text-white font-semibold transition-colors">
               {t.moreAboutUs}
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>
-            </Link>
+            </a>
           </Reveal>
           <Reveal delay={0.1} className="lg:col-span-6">
             {/* The photo is wider than the frame: positioned 42% across (not centred) to trim 5% more off its right side. */}
