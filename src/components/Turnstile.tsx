@@ -2,8 +2,9 @@
 
 import { useEffect, useImperativeHandle, useRef, forwardRef } from "react";
 
-// Cloudflare Turnstile: the CAPTCHA on the contact form. Most visitors only see a short "verifying" state;
-// the widget hands back a token that /api/contact checks with Cloudflare before sending the email.
+// Cloudflare Turnstile: the CAPTCHA on the contact form. Most visitors never see it: the widget takes up no room
+// unless Cloudflare asks the visitor to tick a box. It hands back a token that /api/contact checks with Cloudflare
+// before emailing anyone.
 // The site key comes from NEXT_PUBLIC_TURNSTILE_SITE_KEY (the dashboard's test key 1x00000000000000000000AA always passes).
 
 const SCRIPT_URL = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
@@ -15,6 +16,7 @@ interface TurnstileApi {
       sitekey: string;
       language?: string;
       theme?: "light" | "dark" | "auto";
+      appearance?: "always" | "execute" | "interaction-only";
       callback: (token: string) => void;
       "expired-callback"?: () => void;
       "error-callback"?: () => void;
@@ -81,6 +83,9 @@ const Turnstile = forwardRef<TurnstileHandle, Props>(function Turnstile({ siteKe
           sitekey: siteKey,
           language,
           theme: "light",
+          // The box only shows when Cloudflare needs the visitor to do something; otherwise the check runs unseen and
+          // the form says "Checking that you're a person..." until it passes.
+          appearance: "interaction-only",
           callback: (token) => onTokenRef.current(token),
           "expired-callback": () => onTokenRef.current(null),
           "error-callback": () => onTokenRef.current(null),
