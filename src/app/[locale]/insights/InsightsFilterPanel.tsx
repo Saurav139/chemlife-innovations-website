@@ -107,7 +107,7 @@ export default function InsightsFilterPanel({ filters, onChange, typeOptions, to
           margin they're always open, one under the other. */}
       <div
         id="insights-filter-lists"
-        className={`${open ? "block" : "hidden"} min-[108rem]:block mt-5 md:rounded-2xl md:border md:border-gray-200 md:bg-gray-55 md:p-6 md:grid md:grid-cols-[11rem_minmax(0,1fr)] md:gap-10 max-md:space-y-6 min-[108rem]:mt-6 min-[108rem]:block min-[108rem]:space-y-6 min-[108rem]:border-0 min-[108rem]:bg-transparent min-[108rem]:p-0 min-[108rem]:rounded-none`}
+        className={`${open ? "block md:grid" : "hidden"} min-[108rem]:block mt-5 md:rounded-2xl md:border md:border-gray-200 md:bg-gray-55 md:p-6 md:grid-cols-[11rem_minmax(0,1fr)] md:gap-10 max-md:space-y-6 min-[108rem]:mt-6 min-[108rem]:block min-[108rem]:space-y-6 min-[108rem]:border-0 min-[108rem]:bg-transparent min-[108rem]:p-0 min-[108rem]:rounded-none`}
       >
         <OptionList legend="Content type" options={typeOptions} selected={filters.types} onToggle={(slug) => onChange({ types: toggled(filters.types, slug) })} />
         {topicOptions.length > 0 && (

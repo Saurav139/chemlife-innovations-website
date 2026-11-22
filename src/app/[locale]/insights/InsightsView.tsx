@@ -255,8 +255,31 @@ export default function InsightsView({ blogs, podcasts, videos, initialFilters =
           </div>
         </section>
 
+        {/* Featured, the channel links and the grid share one filter panel. On a screen wide enough (1728px and up) it's
+            a column in the margin left of the page's content, from Featured down, so the content doesn't move. On
+            narrower screens it's a bar above Featured, with the tick lists behind its "Filters" button. While a search
+            or filter is on, Featured and the channel links make way, so the matching posts sit right under the panel. */}
+        <div className="relative">
+          <div className="max-w-[1200px] mx-auto px-6 pt-10 md:pt-12 min-[108rem]:absolute min-[108rem]:inset-x-0 min-[108rem]:inset-y-0 min-[108rem]:pt-0 min-[108rem]:pointer-events-none">
+            {/* In the margin, the panel stays in view as the page scrolls. It ends above the round search button in the
+                corner, and scrolls within itself when its lists are taller than the screen. */}
+            <div className={`min-[108rem]:absolute min-[108rem]:bottom-0 min-[108rem]:right-full min-[108rem]:mr-4 min-[108rem]:w-56 min-[108rem]:pointer-events-auto ${isFiltered(filters) ? "min-[108rem]:top-12" : "min-[108rem]:top-24"}`}>
+              <div className="min-[108rem]:sticky min-[108rem]:top-36 min-[108rem]:max-h-[calc(100vh-15rem)] min-[108rem]:overflow-y-auto min-[108rem]:pr-2">
+                <InsightsFilterPanel
+                  filters={filters}
+                  onChange={changeFilters}
+                  typeOptions={typeOptions}
+                  topicOptions={topicOptions}
+                  open={filtersOpen}
+                  onOpenChange={setFiltersOpen}
+                />
+              </div>
+            </div>
+          </div>
+
+        {!isFiltered(filters) && (<>
         {/* Featured Section (Three Columns) */}
-        <section className="pt-10 md:pt-16 lg:pt-24 pb-8 bg-white">
+        <section className="pt-8 md:pt-10 min-[108rem]:pt-24 pb-8 bg-white">
           <div className="max-w-[1200px] mx-auto px-6">
             <div className="mb-6 md:mb-10">
               <h2 className="font-heading text-3xl lg:text-4xl font-bold text-brand-navy">
@@ -532,27 +555,11 @@ export default function InsightsView({ blogs, podcasts, videos, initialFilters =
             </div>
           </div>
         </SectionWrapper>
+        </>)}
 
-        {/* Explore: the grid lines up with Featured above it. On a screen wide enough (1728px and up) the filter panel
-            sits in the margin to the grid's left, so the grid doesn't move; on narrower screens it's a bar above the
-            grid, with the tick lists behind its "Filters" button. */}
-        <SectionWrapper className="pt-12 pb-24 bg-white">
+        {/* Explore: the grid, in the same column as Featured above it. */}
+        <SectionWrapper className={`${isFiltered(filters) ? "pt-8 min-[108rem]:pt-12" : "pt-12"} pb-24 bg-white`}>
           <div ref={exploreRef} id="explore" className="scroll-mt-44 relative max-w-[1200px] mx-auto px-6">
-
-            {/* In the margin, the panel stays in view as the grid scrolls. It ends above the round search button in the
-                corner, and scrolls within itself when its lists are taller than the screen. */}
-            <div className="mb-8 min-[108rem]:mb-0 min-[108rem]:absolute min-[108rem]:top-0 min-[108rem]:bottom-0 min-[108rem]:right-full min-[108rem]:mr-4 min-[108rem]:w-56">
-              <div className="min-[108rem]:sticky min-[108rem]:top-36 min-[108rem]:max-h-[calc(100vh-15rem)] min-[108rem]:overflow-y-auto min-[108rem]:pr-2">
-                <InsightsFilterPanel
-                  filters={filters}
-                  onChange={changeFilters}
-                  typeOptions={typeOptions}
-                  topicOptions={topicOptions}
-                  open={filtersOpen}
-                  onOpenChange={setFiltersOpen}
-                />
-              </div>
-            </div>
 
             <div className="min-w-0">
             <div className="flex items-center gap-4 mb-6" aria-live="polite">
@@ -649,6 +656,7 @@ export default function InsightsView({ blogs, podcasts, videos, initialFilters =
             </div>
           </div>
         </SectionWrapper>
+        </div>
       </main>
 
       <InsightVideoModal videoId={activeVideoId} onClose={() => setActiveVideoId(null)} />
