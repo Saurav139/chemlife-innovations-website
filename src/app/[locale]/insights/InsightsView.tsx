@@ -534,23 +534,25 @@ export default function InsightsView({ blogs, podcasts, videos, initialFilters =
           </div>
         </SectionWrapper>
 
-        {/* Explore: the filter panel beside the grid (above it on phones and tablets). This section is wider than the
-            rest of the page on a large screen, so the cards beside the panel are as wide as they were without it; on
-            a mid-size screen the grid has two columns rather than three narrow ones. */}
+        {/* Explore: the grid lines up with Featured above it. On a screen wide enough (1728px and up) the filter panel
+            sits in the margin to the grid's left, so the grid doesn't move; on narrower screens it's a bar above the
+            grid, with the tick lists behind its "Filters" button. */}
         <SectionWrapper className="pt-12 pb-24 bg-white">
-          <div ref={exploreRef} id="explore" className="scroll-mt-44 max-w-[1400px] mx-auto px-6 lg:grid lg:grid-cols-[15rem_minmax(0,1fr)] lg:gap-8 xl:gap-10 lg:items-start">
+          <div ref={exploreRef} id="explore" className="scroll-mt-44 relative max-w-[1200px] mx-auto px-6">
 
-            {/* The panel stays in view beside the grid. It ends above the round search button in the corner, and scrolls
-                within itself when its lists are taller than the screen. */}
-            <div className="mb-8 lg:mb-0 lg:sticky lg:top-36 lg:max-h-[calc(100vh-15rem)] lg:overflow-y-auto lg:pr-2">
-              <InsightsFilterPanel
-                filters={filters}
-                onChange={changeFilters}
-                typeOptions={typeOptions}
-                topicOptions={topicOptions}
-                open={filtersOpen}
-                onOpenChange={setFiltersOpen}
-              />
+            {/* In the margin, the panel stays in view as the grid scrolls. It ends above the round search button in the
+                corner, and scrolls within itself when its lists are taller than the screen. */}
+            <div className="mb-8 min-[108rem]:mb-0 min-[108rem]:absolute min-[108rem]:top-0 min-[108rem]:bottom-0 min-[108rem]:right-full min-[108rem]:mr-4 min-[108rem]:w-56">
+              <div className="min-[108rem]:sticky min-[108rem]:top-36 min-[108rem]:max-h-[calc(100vh-15rem)] min-[108rem]:overflow-y-auto min-[108rem]:pr-2">
+                <InsightsFilterPanel
+                  filters={filters}
+                  onChange={changeFilters}
+                  typeOptions={typeOptions}
+                  topicOptions={topicOptions}
+                  open={filtersOpen}
+                  onOpenChange={setFiltersOpen}
+                />
+              </div>
             </div>
 
             <div className="min-w-0">
@@ -596,8 +598,7 @@ export default function InsightsView({ blogs, podcasts, videos, initialFilters =
               ref={gridRef}
               // As on the full-image preview, each card keeps its own height, so a tall post doesn't stretch the cards
               // beside it; useMasonry packs them newest first, across the top and then down the shortest column.
-              // Three columns from 1360px (85rem, in rem so the rule sorts after sm: in the stylesheet).
-              className="grid grid-cols-1 sm:grid-cols-2 min-[85rem]:grid-cols-3 gap-6 items-start"
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-start"
             >
                 {visibleItems.map((item, index) => {
                   const isNew = index >= revealFrom;
