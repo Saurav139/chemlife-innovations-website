@@ -516,10 +516,11 @@ export default function InsightsView({ blogs, podcasts, videos, initialFilters =
           </div>
         </section>
 
-        {/* Social Channel Connectors Banner */}
-        <SectionWrapper className="py-6 bg-slate-50 border-y border-gray-200/60">
+        {/* Social Channel Connectors Banner. A band across the whole page, except where the filter panel is in the
+            left margin (1728px and up): there it's a box within the content column, so the panel never crosses it. */}
+        <SectionWrapper className="py-6 bg-slate-50 border-y border-gray-200/60 min-[108rem]:py-0 min-[108rem]:bg-transparent min-[108rem]:border-y-0">
           <div className="max-w-[1200px] mx-auto px-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 min-[108rem]:p-6 min-[108rem]:bg-slate-50 min-[108rem]:border min-[108rem]:border-gray-200/60 min-[108rem]:rounded-3xl">
               <a
                 href="https://www.linkedin.com/company/chemlifeinnovations/"
                 target="_blank"
