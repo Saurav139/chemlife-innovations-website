@@ -1,5 +1,5 @@
 // The Insights page's filters, and how they're written in the page's address, so a filtered view can be linked to
-// and shared: /insights?topic=mycotoxins,feed-hygiene&type=blogs&sort=oldest&q=copper
+// and shared: /insights?topic=mycotoxins,feed-hygiene&type=blogs&q=copper. Posts are always newest first.
 //
 // No imports here, so the tests can load this file on its own.
 
@@ -13,8 +13,6 @@ export const CONTENT_TYPES = [
   { slug: "videos", name: "Videos", tag: "Video" },
 ] as const;
 
-export type InsightSort = "newest" | "oldest";
-
 export interface InsightFilters {
   /** What the visitor typed in the search box. */
   query: string;
@@ -22,12 +20,11 @@ export interface InsightFilters {
   types: string[];
   /** Topic slugs (src/lib/insight-topics.ts); a post with any of them is shown. None chosen shows every topic. */
   topics: string[];
-  sort: InsightSort;
 }
 
-export const NO_FILTERS: InsightFilters = { query: "", types: [], topics: [], sort: "newest" };
+export const NO_FILTERS: InsightFilters = { query: "", types: [], topics: [] };
 
-/** Whether anything narrows the list (the order alone doesn't). */
+/** Whether anything narrows the list. */
 export const isFiltered = (filters: InsightFilters) => filters.query.trim() !== "" || filters.types.length > 0 || filters.topics.length > 0;
 
 type Params = Record<string, string | string[] | undefined>;
@@ -49,7 +46,6 @@ export function parseFilters(params: Params, knownTopics?: readonly string[]): I
     query,
     types: slugs(params.type).filter((slug) => CONTENT_TYPES.some((type) => type.slug === slug)),
     topics: slugs(params.topic).filter((slug) => !knownTopics || knownTopics.includes(slug)),
-    sort: [params.sort ?? ""].flat()[0] === "oldest" ? "oldest" : "newest",
   };
 }
 
@@ -58,7 +54,6 @@ export function filtersQuery(filters: InsightFilters): string {
   const parts = [
     filters.topics.length ? `topic=${filters.topics.join(",")}` : "",
     filters.types.length ? `type=${filters.types.join(",")}` : "",
-    filters.sort === "oldest" ? "sort=oldest" : "",
     filters.query.trim() ? `q=${encodeURIComponent(filters.query.trim())}` : "",
   ].filter(Boolean);
   return parts.length ? `?${parts.join("&")}` : "";

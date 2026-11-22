@@ -163,12 +163,11 @@ export default function InsightsView({ blogs, podcasts, videos, initialFilters =
     return true;
   };
 
-  // The grid's items for a set of filters, newest (or oldest) first across every type. The newest blog, video and
+  // The grid's items for a set of filters, newest first across every type. The newest blog, video and
   // podcast are already in Featured above, so they're left out, unless the visitor is searching or filtering (then
   // every match is listed) or leaving them out would empty the grid.
   const gridItemsFor = (by: InsightFilters) => {
-    const direction = by.sort === "oldest" ? -1 : 1;
-    const items = allItems.filter((item) => matches(item, by)).sort((a, b) => direction * (getTimestamp(b.date) - getTimestamp(a.date)));
+    const items = allItems.filter((item) => matches(item, by)).sort((a, b) => getTimestamp(b.date) - getTimestamp(a.date));
     const withoutFeatured = items.filter((item) => !featuredTitles.has(item.title));
     return isFiltered(by) || withoutFeatured.length === 0 ? items : withoutFeatured;
   };
