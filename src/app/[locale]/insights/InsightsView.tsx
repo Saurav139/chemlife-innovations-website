@@ -18,7 +18,7 @@ import { articlePath } from "@/lib/articles";
 import { Images } from "@/lib/assets";
 import type { Insights, InsightItem } from "@/lib/insights";
 import { CONTENT_TYPES, NO_FILTERS, filtersQuery, isFiltered, toggled, type InsightFilters } from "@/lib/insight-filters";
-import { INSIGHT_TOPICS, topicName, topicPath } from "@/lib/insight-topics";
+import { INSIGHT_TOPICS, topicName } from "@/lib/insight-topics";
 import { playOnPage, youtubeWatchUrl } from "@/lib/youtube";
 import { insightAnchor } from "@/lib/catalog";
 import { revealElement, useHashTarget } from "@/lib/deepLink";
@@ -645,24 +645,6 @@ export default function InsightsView({ blogs, podcasts, videos, initialFilters =
               </div>
             )}
 
-            {/* Each topic also has its own page, with an introduction and every post on it. */}
-            {topicOptions.length > 0 && (
-              <nav aria-label="Topic pages" className="mt-14 pt-8 border-t border-gray-150">
-                <h2 className="text-xs font-bold uppercase tracking-wider text-gray-aa mb-4">Browse by topic</h2>
-                <ul className="flex flex-wrap gap-2">
-                  {topicOptions.map((topic) => (
-                    <li key={topic.slug}>
-                      <Link
-                        href={topicPath(topic.slug)}
-                        className="tap-target inline-flex items-center px-3.5 py-1.5 rounded-full border border-gray-200 bg-gray-55 text-sm font-semibold text-slate-700 hover:border-teal-aa hover:text-teal-aa transition-colors"
-                      >
-                        {topic.name}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </nav>
-            )}
 
             </div>
           </div>
