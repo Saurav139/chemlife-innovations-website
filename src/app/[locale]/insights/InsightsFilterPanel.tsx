@@ -1,8 +1,8 @@
 "use client";
 
-import { isFiltered, toggled, type InsightFilters, type InsightSort } from "@/lib/insight-filters";
+import { isFiltered, toggled, type InsightFilters } from "@/lib/insight-filters";
 
-// The Insights page's filter panel: search, newest or oldest first, and tick lists for content type and topic, each
+// The Insights page's filter panel: search, and tick lists for content type and topic, each
 // option with the number of posts it would show. On a screen wide enough (1728px, 108rem) it's a column in the margin
 // left of the grid. Narrower, it's a bar above the grid, and the tick lists fold away behind a "Filters" button.
 
@@ -12,11 +12,6 @@ export interface FilterOption {
   /** Posts this option shows, given the search and the other list's ticks. */
   count: number;
 }
-
-const SORTS: { value: InsightSort; label: string }[] = [
-  { value: "newest", label: "Newest" },
-  { value: "oldest", label: "Oldest" },
-];
 
 function OptionList({ legend, options, selected, onToggle, listClassName = "" }: {
   legend: string;
@@ -90,7 +85,7 @@ export default function InsightsFilterPanel({ filters, onChange, typeOptions, to
       </div>
       </div>
 
-      <div className="flex items-center justify-between md:justify-start gap-3">
+      <div className="flex items-center min-[108rem]:hidden">
         <button
           type="button"
           onClick={() => onOpenChange(!open)}
@@ -105,26 +100,6 @@ export default function InsightsFilterPanel({ filters, onChange, typeOptions, to
           {chosen > 0 && <span className="inline-flex items-center justify-center min-w-5 h-5 px-1.5 rounded-full bg-teal-aa text-white text-[11px]">{chosen}</span>}
         </button>
 
-        {/* Newest or oldest first */}
-        <div role="group" aria-label="Sort by date" className="inline-flex rounded-full bg-gray-100 p-1 min-[108rem]:w-full">
-          {SORTS.map((sort) => {
-            const active = filters.sort === sort.value;
-            return (
-              <button
-                key={sort.value}
-                type="button"
-                aria-pressed={active}
-                onClick={() => onChange({ sort: sort.value })}
-                data-analytics-click={`Sort: ${sort.label}`}
-                className={`tap-target min-[108rem]:flex-1 px-4 py-1.5 rounded-full text-sm font-semibold transition-colors duration-200 cursor-pointer ${
-                  active ? "bg-teal-aa text-white shadow-sm" : "text-gray-aa hover:text-brand-navy"
-                }`}
-              >
-                {sort.label}
-              </button>
-            );
-          })}
-        </div>
       </div>
       </div>
 

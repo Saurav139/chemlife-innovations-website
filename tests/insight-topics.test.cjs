@@ -66,21 +66,20 @@ test('filters are read from the address, dropping what is unknown', () => {
     query: 'copper',
     types: ['blogs', 'videos'],
     topics: ['mycotoxins', 'feed-hygiene'],
-    sort: 'oldest',
   });
-  assert.deepEqual(parseFilters({ topic: ['mycotoxins', 'mycotoxins'], sort: 'sideways' }, known), { ...NO_FILTERS, topics: ['mycotoxins'] });
+  assert.deepEqual(parseFilters({ topic: ['mycotoxins', 'mycotoxins'] }, known), { ...NO_FILTERS, topics: ['mycotoxins'] });
 });
 
 test('filters are written to the address and read back the same', () => {
   assert.equal(filtersQuery(NO_FILTERS), '');
-  const filters = { query: 'water pH', types: ['blogs'], topics: ['mycotoxins', 'feed-hygiene'], sort: 'oldest' };
+  const filters = { query: 'water pH', types: ['blogs'], topics: ['mycotoxins', 'feed-hygiene'] };
   const query = filtersQuery(filters);
-  assert.equal(query, '?topic=mycotoxins,feed-hygiene&type=blogs&sort=oldest&q=water%20pH');
+  assert.equal(query, '?topic=mycotoxins,feed-hygiene&type=blogs&q=water%20pH');
   assert.deepEqual(parseFilters(Object.fromEntries(new URLSearchParams(query))), filters);
 });
 
-test('the order alone does not count as filtering; toggling adds and removes', () => {
-  assert.equal(isFiltered({ ...NO_FILTERS, sort: 'oldest' }), false);
+test('an empty search is not filtering; toggling adds and removes', () => {
+  assert.equal(isFiltered(NO_FILTERS), false);
   assert.equal(isFiltered({ ...NO_FILTERS, topics: ['mycotoxins'] }), true);
   assert.equal(isFiltered({ ...NO_FILTERS, query: '  ' }), false);
   assert.deepEqual(toggled(['a'], 'b'), ['a', 'b']);
