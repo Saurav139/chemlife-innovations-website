@@ -3,8 +3,8 @@
 import { isFiltered, toggled, type InsightFilters, type InsightSort } from "@/lib/insight-filters";
 
 // The Insights page's filter panel: search, newest or oldest first, and tick lists for content type and topic, each
-// option with the number of posts it would show. Beside the grid on a desktop; on phones and tablets the tick lists
-// fold away behind a "Filters" button.
+// option with the number of posts it would show. On a screen wide enough (1728px, 108rem) it's a column in the margin
+// left of the grid. Narrower, it's a bar above the grid, and the tick lists fold away behind a "Filters" button.
 
 export interface FilterOption {
   slug: string;
@@ -18,23 +18,25 @@ const SORTS: { value: InsightSort; label: string }[] = [
   { value: "oldest", label: "Oldest" },
 ];
 
-function OptionList({ legend, options, selected, onToggle }: {
+function OptionList({ legend, options, selected, onToggle, listClassName = "" }: {
   legend: string;
   options: FilterOption[];
   selected: string[];
   onToggle: (slug: string) => void;
+  /** Columns for the list in the bar above the grid. */
+  listClassName?: string;
 }) {
   return (
-    <fieldset>
+    <fieldset className="min-w-0">
       <legend className="text-xs font-bold uppercase tracking-wider text-brand-navy pb-2 mb-2 border-b border-gray-200 w-full">{legend}</legend>
-      <ul>
+      <ul className={`gap-x-8 ${listClassName} min-[108rem]:columns-1`}>
         {options.map((option) => {
           const checked = selected.includes(option.slug);
           // An option that would show nothing can't be ticked, but one already ticked can always be unticked.
           const disabled = option.count === 0 && !checked;
           return (
-            <li key={option.slug}>
-              <label className={`flex items-center gap-2.5 py-2 lg:py-1.5 text-sm ${disabled ? "text-gray-400" : "text-slate-700 hover:text-teal-aa cursor-pointer"}`}>
+            <li key={option.slug} className="break-inside-avoid">
+              <label className={`flex items-center gap-2.5 py-2 md:py-1.5 text-sm ${disabled ? "text-gray-400" : "text-slate-700 hover:text-teal-aa cursor-pointer"}`}>
                 <input
                   type="checkbox"
                   checked={checked}
@@ -66,6 +68,8 @@ export default function InsightsFilterPanel({ filters, onChange, typeOptions, to
   const chosen = filters.types.length + filters.topics.length;
   return (
     <aside aria-label="Search and filter insights">
+      <div className="flex flex-col md:flex-row md:items-end gap-4 md:gap-6 min-[108rem]:flex-col min-[108rem]:items-stretch min-[108rem]:gap-4">
+      <div className="w-full md:max-w-md min-[108rem]:max-w-none">
       <label htmlFor="insights-search" className="text-gray-aa text-xs font-semibold uppercase tracking-wider block mb-2">
         Search insights
       </label>
@@ -84,14 +88,15 @@ export default function InsightsFilterPanel({ filters, onChange, typeOptions, to
           </svg>
         </div>
       </div>
+      </div>
 
-      <div className="mt-4 flex items-center justify-between gap-3">
+      <div className="flex items-center justify-between md:justify-start gap-3">
         <button
           type="button"
           onClick={() => onOpenChange(!open)}
           aria-expanded={open}
           aria-controls="insights-filter-lists"
-          className="lg:hidden inline-flex items-center gap-2 min-h-11 px-5 rounded-full border border-gray-250 bg-white text-sm font-bold text-brand-navy cursor-pointer"
+          className="min-[108rem]:hidden inline-flex items-center gap-2 min-h-11 px-5 rounded-full border border-gray-250 bg-white text-sm font-bold text-brand-navy cursor-pointer"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5h18M6 12h12M10 19h4" />
@@ -101,7 +106,7 @@ export default function InsightsFilterPanel({ filters, onChange, typeOptions, to
         </button>
 
         {/* Newest or oldest first */}
-        <div role="group" aria-label="Sort by date" className="inline-flex rounded-full bg-gray-100 p-1 lg:w-full">
+        <div role="group" aria-label="Sort by date" className="inline-flex rounded-full bg-gray-100 p-1 min-[108rem]:w-full">
           {SORTS.map((sort) => {
             const active = filters.sort === sort.value;
             return (
@@ -111,7 +116,7 @@ export default function InsightsFilterPanel({ filters, onChange, typeOptions, to
                 aria-pressed={active}
                 onClick={() => onChange({ sort: sort.value })}
                 data-analytics-click={`Sort: ${sort.label}`}
-                className={`tap-target lg:flex-1 px-4 py-1.5 rounded-full text-sm font-semibold transition-colors duration-200 cursor-pointer ${
+                className={`tap-target min-[108rem]:flex-1 px-4 py-1.5 rounded-full text-sm font-semibold transition-colors duration-200 cursor-pointer ${
                   active ? "bg-teal-aa text-white shadow-sm" : "text-gray-aa hover:text-brand-navy"
                 }`}
               >
@@ -121,17 +126,24 @@ export default function InsightsFilterPanel({ filters, onChange, typeOptions, to
           })}
         </div>
       </div>
+      </div>
 
-      <div id="insights-filter-lists" className={`${open ? "block" : "hidden"} lg:block mt-6 space-y-6`}>
+      {/* Above the grid, the open lists sit side by side in a box: content type, then topics in columns. In the
+          margin they're always open, one under the other. */}
+      <div
+        id="insights-filter-lists"
+        className={`${open ? "block" : "hidden"} min-[108rem]:block mt-5 md:rounded-2xl md:border md:border-gray-200 md:bg-gray-55 md:p-6 md:grid md:grid-cols-[11rem_minmax(0,1fr)] md:gap-10 max-md:space-y-6 min-[108rem]:mt-6 min-[108rem]:block min-[108rem]:space-y-6 min-[108rem]:border-0 min-[108rem]:bg-transparent min-[108rem]:p-0 min-[108rem]:rounded-none`}
+      >
         <OptionList legend="Content type" options={typeOptions} selected={filters.types} onToggle={(slug) => onChange({ types: toggled(filters.types, slug) })} />
         {topicOptions.length > 0 && (
-          <OptionList legend="Topics" options={topicOptions} selected={filters.topics} onToggle={(slug) => onChange({ topics: toggled(filters.topics, slug) })} />
+          <OptionList legend="Topics" options={topicOptions} selected={filters.topics} onToggle={(slug) => onChange({ topics: toggled(filters.topics, slug) })} listClassName="md:columns-2 lg:columns-3" />
         )}
         {isFiltered(filters) && (
           <button
             type="button"
             onClick={() => onChange({ query: "", types: [], topics: [] })}
-            className="tap-target text-sm font-bold text-teal-aa hover:text-teal-700 underline underline-offset-4 cursor-pointer"
+            // Above the grid on a tablet or computer, the chosen filters' row has its own "Clear all".
+            className="md:hidden min-[108rem]:inline-block tap-target text-sm font-bold text-teal-aa hover:text-teal-700 underline underline-offset-4 cursor-pointer"
           >
             Clear all filters
           </button>
