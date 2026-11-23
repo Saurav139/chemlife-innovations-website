@@ -269,7 +269,7 @@ details.more .field:first-of-type{border-top:0}
       <p><strong>Feed spoiled</strong> = feed produced × share lost to mould × feed value.</p>
       <p><strong>Birds fed</strong> = feed produced ÷ feed one bird eats (live weight × FCR, allowing for deaths).</p>
       <p><strong>Lost in the flocks</strong> = flock profit with clean feed − flock profit with this feed. Deaths = general + feed-related + weather-related. Profit per bird = live weight × sale price − cost per bird.</p>
-      <p><strong>Treat</strong> = treatment cost on every tonne, plus whatever spoilage and flock loss it does not stop.</p>
+      <p><strong>Treat</strong> = treatment cost on every tonne. The mould inhibitor stops all of the storage loss; any flock loss the treatment does not prevent is added.</p>
       <p><strong>Reject</strong> = the part of the feed's value you don't get back. The flocks then eat clean feed. Storage losses stay.</p>
       <p class="small">An estimate for planning, not a prediction. Effects are added together, which understates flocks hit by heat and mycotoxins at once. Transport and delay on rejected feed are not counted.</p>
     </div>
@@ -349,7 +349,6 @@ details.more .field:first-of-type{border-top:0}
     ] },
     { title: "If you treat or reject the feed", fields: [
       { id: "bcost", label: "Treatment cost", def: 750, min: 0, max: 20000, smin: 0, smax: 3000, step: 50, pre: "₹", suf: "/ tonne", hint: "Mould inhibitor and toxin binder for each tonne of feed. Our article puts this at ₹500 to ₹1,000." },
-      { id: "seff", label: "Storage loss treatment stops", def: 100, min: 0, max: 100, smin: 0, smax: 100, step: 5, suf: "%", hint: "The article assumes all of it. Lower it for a cautious estimate." },
       { id: "beff", label: "Mycotoxin damage treatment prevents" + DRAFT, def: 50, min: 0, max: 100, smin: 0, smax: 100, step: 5, suf: "%" },
       { id: "rec", label: "Recovered on rejected feed" + DRAFT, def: 50, min: 0, max: 100, smin: 0, smax: 100, step: 5, suf: "%", hint: "Share of its value you get back from the supplier or by selling it on." }
     ] }
@@ -451,7 +450,7 @@ details.more .field:first-of-type{border-top:0}
     var spoilT = state.tonnes * state.spoil / 100;
     var spoil = spoilT * state.value;
     var nothing = { name: "Do nothing", spoil: spoil, birds: clean.profit - used.profit, action: 0 };
-    var treat = { name: "Treat the feed", spoil: spoil * (1 - state.seff / 100), birds: clean.profit - treated.profit, action: state.tonnes * state.bcost };
+    var treat = { name: "Treat the feed", spoil: 0, birds: clean.profit - treated.profit, action: state.tonnes * state.bcost };
     var reject = { name: "Reject and replace", spoil: spoil, birds: 0, action: feedValue * (1 - state.rec / 100) };
     var options = level > 0 ? [nothing, treat, reject] : [nothing, treat];
     options.forEach(function (o) { o.total = o.spoil + o.birds + o.action; });
