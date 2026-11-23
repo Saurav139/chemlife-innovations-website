@@ -174,8 +174,7 @@ export default function Footer() {
 
       {/* Copyright Bar */}
       <div className="border-t border-white/5 bg-[#0F1C2E] relative z-10">
-        {/* Phones: room at the bottom so the search button doesn't cover the last line. The chat bubble moves up
-            above the links instead (ChatOverlay, #footer-legal). */}
+        {/* Phones: room at the bottom so the search button doesn't cover the last line. */}
         <div className="max-w-[1200px] mx-auto px-6 pt-6 pb-24 md:pb-6 flex flex-col sm:flex-row justify-between items-center gap-4">
           <div className="flex items-center gap-3">
             <Image
@@ -189,7 +188,7 @@ export default function Footer() {
               &copy; {new Date().getFullYear()} ChemLife Innovations Pvt Ltd. {t.footer.rights}
             </p>
           </div>
-          <div id="footer-legal" className="flex gap-6">
+          <div className="flex gap-6">
             <Link href="/privacy" className="tap-target text-slate-450 text-xs hover:text-brand-orange transition-colors">{t.footer.privacy + english}</Link>
             <Link href="/terms" className="tap-target text-slate-450 text-xs hover:text-brand-orange transition-colors">{t.footer.terms + english}</Link>
             {analyticsEnabled && (
