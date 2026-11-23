@@ -19,6 +19,7 @@ import { Images } from "@/lib/assets";
 import type { Insights, InsightItem } from "@/lib/insights";
 import { CONTENT_TYPES, NO_FILTERS, filtersQuery, isFiltered, toggled, type InsightFilters } from "@/lib/insight-filters";
 import { INSIGHT_TOPICS, topicName } from "@/lib/insight-topics";
+import { searchScore } from "@/lib/insight-search";
 import { playOnPage, youtubeWatchUrl } from "@/lib/youtube";
 import { insightAnchor } from "@/lib/catalog";
 import { revealElement, useHashTarget } from "@/lib/deepLink";
@@ -160,10 +161,12 @@ export default function InsightsView({ blogs, podcasts, videos, initialFilters =
 
   // Whether a post passes the search and the ticked content types and topics. `except` leaves one tick list out, to
   // count what each of its options would show.
+  // How well a post answers the search (0: it doesn't): its title, topics, type, summary and text are all searched.
+  const scoreFor = (item: InsightItem, query: string) =>
+    searchScore({ title: item.title, description: item.description, content: item.content, labels: [...(item.topics ?? []).map(topicName), insightTag(item)] }, query);
   const matches = (item: InsightItem, by: InsightFilters, except?: "types" | "topics") => {
-    const search = by.query.trim().toLowerCase();
     const topics = item.topics ?? [];
-    if (search && ![item.title, item.description, ...topics.map(topicName)].some((text) => text.toLowerCase().includes(search))) return false;
+    if (scoreFor(item, by.query) === 0) return false;
     if (except !== "types" && by.types.length > 0 && !by.types.includes(typeOf(item))) return false;
     if (except !== "topics" && by.topics.length > 0 && !by.topics.some((topic) => topics.includes(topic))) return false;
     return true;
@@ -173,7 +176,13 @@ export default function InsightsView({ blogs, podcasts, videos, initialFilters =
   // podcast are already in Featured above, so they're left out, unless the visitor is searching or filtering (then
   // every match is listed) or leaving them out would empty the grid.
   const gridItemsFor = (by: InsightFilters) => {
-    const items = allItems.filter((item) => matches(item, by)).sort((a, b) => getTimestamp(b.date) - getTimestamp(a.date));
+    // A search lists its best answers first (the words in the title, then in the topics, summary and text); posts that
+    // answer it equally well, and every post when there's no search, are newest first.
+    const items = allItems
+      .filter((item) => matches(item, by))
+      .map((item) => ({ item, score: scoreFor(item, by.query) }))
+      .sort((a, b) => b.score - a.score || getTimestamp(b.item.date) - getTimestamp(a.item.date))
+      .map(({ item }) => item);
     const withoutFeatured = items.filter((item) => !featuredTitles.has(item.title));
     return isFiltered(by) || withoutFeatured.length === 0 ? items : withoutFeatured;
   };
@@ -644,7 +653,11 @@ export default function InsightsView({ blogs, podcasts, videos, initialFilters =
 
             {gridItems.length === 0 && (
               <div className="text-center py-20 px-6 bg-gray-50 rounded-2xl border border-dashed border-gray-200">
-                <p className="text-gray-aa text-sm">No insights match your search and filters.</p>
+                <p className="text-gray-aa text-sm">
+                  {filters.query.trim()
+                    ? <>Nothing found for <span className="font-semibold text-brand-navy">“{filters.query.trim()}”</span>{filters.types.length + filters.topics.length > 0 ? " with these filters" : ""}. Try fewer or different words.</>
+                    : "No insights match these filters."}
+                </p>
                 {isFiltered(filters) && (
                   <button
                     type="button"

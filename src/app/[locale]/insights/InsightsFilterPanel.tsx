@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import { isFiltered, toggled, type InsightFilters } from "@/lib/insight-filters";
 
 // The Insights page's filter panel: search, and tick lists for content type and topic, each
@@ -61,6 +62,31 @@ export default function InsightsFilterPanel({ filters, onChange, typeOptions, to
   onOpenChange: (open: boolean) => void;
 }) {
   const chosen = filters.types.length + filters.topics.length;
+
+  // The box shows each letter at once; the grid follows a moment after the typing pauses, so it doesn't redraw on
+  // every letter. `sent` is the search the grid has: when the page's search changes some other way (Clear all, a
+  // link), the box takes it.
+  const [text, setText] = useState(filters.query);
+  const sent = useRef(filters.query);
+  const waiting = useRef<number | undefined>(undefined);
+  useEffect(() => {
+    if (filters.query !== sent.current) {
+      sent.current = filters.query;
+      setText(filters.query);
+    }
+  }, [filters.query]);
+  useEffect(() => () => window.clearTimeout(waiting.current), []);
+  const search = (value: string, now = false) => {
+    setText(value);
+    window.clearTimeout(waiting.current);
+    const send = () => {
+      sent.current = value;
+      onChange({ query: value });
+    };
+    if (now) send();
+    else waiting.current = window.setTimeout(send, 180);
+  };
+
   return (
     <aside aria-label="Search and filter insights">
       <div className="flex flex-col md:flex-row md:items-end gap-4 md:gap-6 min-[108rem]:flex-col min-[108rem]:items-stretch min-[108rem]:gap-4">
@@ -72,16 +98,43 @@ export default function InsightsFilterPanel({ filters, onChange, typeOptions, to
         <input
           id="insights-search"
           type="search"
-          value={filters.query}
-          onChange={(e) => onChange({ query: e.target.value })}
-          placeholder="Search titles or topics..."
+          value={text}
+          onChange={(e) => search(e.target.value)}
+          onKeyDown={(e) => {
+            // Escape empties the box; Enter searches at once (and puts a phone's keyboard away).
+            if (e.key === "Escape" && text) search("", true);
+            if (e.key === "Enter") {
+              search(text, true);
+              if (window.matchMedia("(pointer: coarse)").matches) e.currentTarget.blur();
+            }
+          }}
+          enterKeyHint="search"
+          autoComplete="off"
+          spellCheck={false}
+          placeholder="Search articles, videos, topics..."
           className="w-full bg-gray-50 border border-gray-250 rounded-full pl-5 pr-11 py-3 text-base md:text-sm text-brand-navy placeholder-gray-aa focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all duration-300 shadow-sm [&::-webkit-search-cancel-button]:hidden"
         />
-        <div className="absolute right-4 top-3.5 text-gray-aa pointer-events-none">
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-          </svg>
-        </div>
+        {text ? (
+          <button
+            type="button"
+            onClick={(e) => {
+              search("", true);
+              (e.currentTarget.previousElementSibling as HTMLInputElement | null)?.focus();
+            }}
+            aria-label="Clear the search"
+            className="tap-target absolute right-2.5 top-1/2 -translate-y-1/2 flex h-7 w-7 items-center justify-center rounded-full text-gray-aa hover:bg-gray-200 hover:text-brand-navy transition-colors cursor-pointer"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        ) : (
+          <div className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-aa pointer-events-none">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </div>
+        )}
       </div>
       </div>
 
