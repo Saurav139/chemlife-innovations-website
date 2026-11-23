@@ -88,28 +88,6 @@ input[type=range]:focus-visible{outline:2px solid var(--navy);outline-offset:4px
 .headline.loss .ratio strong{color:#FFB4A6}
 .headline.loss{background:#5B3A3A}
 
-.compare h3{font-size:16px;margin:0 0 14px;font-weight:700}
-.bar-row{display:grid;gap:6px}
-.bar-row + .bar-row{margin-top:14px}
-.bar-top{display:flex;justify-content:space-between;align-items:baseline;gap:12px;font-size:14px}
-.bar-top b{font-weight:700;white-space:nowrap;font-variant-numeric:tabular-nums}
-.track{display:flex;height:14px;border-radius:7px;background:var(--panel);overflow:hidden}
-.seg{height:100%;transition:width .35s ease}
-.seg.loss{background:var(--orange)}
-.seg.left{background:var(--orange-soft)}
-.seg.cost{background:var(--teal)}
-.legend{display:flex;flex-wrap:wrap;gap:6px 16px;margin:12px 0 0;padding:0;list-style:none;font-size:13px;color:var(--muted)}
-.legend li{display:flex;align-items:center;gap:6px}
-.legend i{display:inline-block;width:10px;height:10px;border-radius:3px}
-
-.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px}
-.stat{background:var(--panel);border-radius:12px;padding:14px}
-.stat p{margin:0;font-size:13px;color:var(--muted);line-height:1.4}
-.stat strong{display:block;font-size:20px;margin-top:4px;line-height:1.2;font-variant-numeric:tabular-nums}
-.stat span{display:block;font-size:13px;color:var(--muted);margin-top:2px}
-
-.breakeven{margin:16px 0 0;border-left:4px solid var(--teal);background:var(--teal-soft);border-radius:0 12px 12px 0;padding:14px 16px;font-size:15px}
-.breakeven strong{color:var(--teal)}
 
 .cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:20px}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 22px;border-radius:999px;font:inherit;font-weight:600;font-size:15px;text-decoration:none;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
@@ -166,12 +144,9 @@ table.scen .best{background:var(--teal-soft)}
 table.scen thead th.best{color:var(--teal)}
 table.scen td.neg{color:var(--orange-aa)}
 .notes a{color:var(--teal);font-weight:600}
-.seg.birds{background:var(--navy)}
 .pick{display:inline-block;margin-left:6px;padding:1px 8px;border-radius:999px;background:var(--teal-soft);color:var(--teal);font-size:12px;font-weight:700;white-space:nowrap}
 details.more{border-top:1px solid var(--line);margin-top:4px}
 details.more summary{min-height:44px;display:flex;align-items:center;font-size:14px;font-weight:600;color:var(--teal);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
-details.more .field:first-of-type{border-top:0}
-.compare .sub{margin:-8px 0 12px;color:var(--muted);font-size:14px}
 @media (prefers-reduced-motion:reduce){.seg,.dock{transition:none}}
 
 /* Printing: the results and the numbers behind them, without the controls */
@@ -181,8 +156,55 @@ details.more .field:first-of-type{border-top:0}
   .hero h1,.hero p,.hero p a{color:var(--navy)}
   .calc{grid-template-columns:1fr 1fr;padding-top:12px}
   .headline{-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  .seg,.legend i{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+
 }
+
+/* Numbered steps, three-way choices and the folded-away settings */
+.card h3.group{display:flex;align-items:center;gap:10px}
+.card h3.group b{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:var(--teal);color:#fff;font-size:13px;letter-spacing:0}
+.choices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+.choices label{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:48px;padding:6px 8px;border-radius:12px;line-height:1.25}
+.choices small{font-size:12px;font-weight:400;opacity:.85}
+details.more{margin-top:20px;border:1px solid var(--line);border-radius:12px;padding:0 16px;background:var(--panel)}
+details.more[open]{background:#fff}
+details.more summary{position:relative;flex-direction:column;align-items:flex-start;justify-content:center;gap:2px;min-height:60px;padding:10px 28px 10px 0;text-decoration:none;list-style:none}
+details.more summary::-webkit-details-marker{display:none}
+details.more summary::after{content:"+";position:absolute;right:0;top:50%;transform:translateY(-50%);font-size:24px;font-weight:400;line-height:1;color:var(--teal)}
+details.more[open] summary::after{content:"−"}
+details.more summary span{font-size:15px;font-weight:700;color:var(--navy)}
+details.more summary small{font-size:13px;font-weight:400;color:var(--muted)}
+details.more .field{border-top:1px solid var(--line)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px 12px;padding:16px 0;border-top:1px solid var(--line)}
+.mini{display:flex;flex-direction:column;justify-content:flex-end}
+.mini label{display:block;font-size:13px;font-weight:600;line-height:1.3;margin-bottom:6px}
+.mini .num{width:100%}
+.mini .num input{flex:1 1 auto;width:100%}
+details.more > .hint{margin:0;padding:0 0 16px}
+
+/* Results: the cost, its two parts, then each choice with one bar and one line */
+.headline .split{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0 0}
+.headline .split[hidden]{display:none}
+.headline .split div{background:rgba(255,255,255,.1);border-radius:12px;padding:12px 14px}
+.headline .split b{display:block;font-size:20px;line-height:1.2;font-variant-numeric:tabular-nums}
+.headline .split span{display:block;margin-top:2px;font-size:13px;line-height:1.4;color:rgba(255,255,255,.82)}
+.card h3.title{font-size:18px;margin:0 0 4px;font-weight:700}
+.card p.lead{margin:0 0 16px;color:var(--muted);font-size:14px}
+.opt{padding:14px 0;border-top:1px solid var(--line)}
+.opt:first-child{border-top:0;padding-top:0}
+.opt:last-child{padding-bottom:0}
+.opt-top{display:flex;justify-content:space-between;align-items:baseline;gap:12px;font-size:16px;font-weight:700}
+.opt-top b{white-space:nowrap;font-variant-numeric:tabular-nums}
+.track{height:10px;border-radius:5px;background:var(--panel);overflow:hidden;margin:8px 0}
+.seg{height:100%;border-radius:5px;background:var(--orange);transition:width .35s ease}
+.opt.best .seg{background:var(--teal)}
+.opt p{margin:0;font-size:14px;line-height:1.5;color:var(--muted)}
+.opt p.note{color:var(--navy)}
+table.scen:not(.all) tr.extra{display:none}
+.rows{background:none;border:0;padding:0;font:inherit;font-size:14px;font-weight:600;color:var(--teal);text-decoration:underline;text-underline-offset:3px;cursor:pointer;min-height:44px}
+.rows:hover{color:#0E615A}
+details.sources summary{font-size:20px;font-weight:700;cursor:pointer;min-height:44px}
+details.sources ul{margin-top:10px}
+@media print{.rows,details.more summary::after{display:none!important}.seg{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
 </style>
 </head>
 <body>
@@ -199,9 +221,7 @@ details.more .field:first-of-type{border-top:0}
   <div class="wrap">
     <p class="kicker">Feed mill calculator</p>
     <h1>What are mould and mycotoxins costing your mill?</h1>
-    <p>Enter your mill's numbers to see what is lost in storage, what affected feed does to the birds that eat it, and whether it pays to treat the feed or reject it.
-      The storage figures follow our article,
-      <a href="https://chemlifeinnovations.wordpress.com/2025/09/02/the-economics-of-prevention-why-mold-control-pays-for-itself/" target="_blank" rel="noopener">The Economics of Prevention</a>.</p>
+    <p>Put in six numbers. See what you lose each month, in storage and in the birds that eat the feed, and whether it pays to treat the feed, reject it or do nothing.</p>
   </div>
 </section>
 
@@ -209,8 +229,8 @@ details.more .field:first-of-type{border-top:0}
   <div class="calc">
 
     <form class="card" id="inputs" novalidate onsubmit="return false">
-      <h2>Your mill</h2>
-      <p class="sub">Move a slider or type a number. The results update as you go.</p>
+      <h2>Your numbers</h2>
+      <p class="sub">The example is a 500-tonne mill. Change anything to match yours.</p>
       <div id="fields"></div>
       <button type="button" class="reset" id="reset">Reset to the example mill</button>
     </form>
@@ -221,36 +241,24 @@ details.more .field:first-of-type{border-top:0}
         <p class="label" id="h-label"></p>
         <p class="big" id="h-big">₹0</p>
         <p class="month" id="h-sub"></p>
+        <div class="split" id="h-split">
+          <div><b id="h-store">₹0</b><span id="h-store-sub"></span></div>
+          <div><b id="h-flock">₹0</b><span>lost in the birds that eat the feed</span></div>
+        </div>
         <p class="ratio" id="h-best"></p>
       </div>
 
       <div class="card" style="margin-top:16px">
-        <div class="compare">
-          <h3>Your monthly cost, by what you do about it</h3>
-          <div id="bars"></div>
-          <ul class="legend" aria-hidden="true">
-            <li><i style="background:var(--orange)"></i>Feed spoiled in storage</li>
-            <li><i style="background:var(--navy)"></i>Lost in the flocks</li>
-            <li><i style="background:var(--teal)"></i>Treatment or rejection</li>
-          </ul>
-        </div>
-
-        <div class="stats">
-          <div class="stat"><p>Feed spoiled in storage</p><strong id="s-spoil">0 t</strong><span id="s-spoil-sub"></span></div>
-          <div class="stat"><p id="s-birds-label">Lost in the flocks</p><strong id="s-birds">₹0</strong><span id="s-birds-sub"></span></div>
-          <div class="stat"><p>Cost per tonne of feed</p><strong id="s-tonne">₹0</strong><span id="s-tonne-sub"></span></div>
-          <div class="stat"><p>Each ₹1 of treatment saves</p><strong id="s-ratio">₹0</strong><span id="s-ratio-sub"></span></div>
-        </div>
-
-        <p class="breakeven" id="even"></p>
+        <h3 class="title">What each choice costs a month</h3>
+        <p class="lead">The shorter the bar, the better.</p>
+        <div id="options"></div>
       </div>
 
       <div class="card" style="margin-top:16px">
-        <div class="compare">
-          <h3 id="flock-title">In the flocks that eat this feed</h3>
-          <p class="sub" id="flock-sub"></p>
-          <div class="scroll"><table class="scen" id="flock-table"></table></div>
-        </div>
+        <h3 class="title">What this feed does to the birds</h3>
+        <p class="lead" id="flock-sub"></p>
+        <div class="scroll"><table class="scen" id="flock-table"></table></div>
+        <button type="button" class="rows" id="rows" aria-expanded="false" aria-controls="flock-table">Show all the bird figures</button>
         <div class="cta">
           <a class="btn primary" id="ask" href="/contact?type=nutritionist">Send these numbers to a nutritionist</a>
           <a class="btn ghost" href="/products">See mould-control products</a>
@@ -266,26 +274,29 @@ details.more .field:first-of-type{border-top:0}
   <div class="notes">
     <div>
       <h2>How it works</h2>
-      <p><strong>Feed spoiled</strong> = feed produced × share lost to mould × feed value.</p>
-      <p><strong>Birds fed</strong> = feed produced ÷ feed one bird eats (live weight × FCR, allowing for deaths).</p>
-      <p><strong>Lost in the flocks</strong> = flock profit with clean feed − flock profit with this feed. Deaths = general + feed-related + weather-related. Profit per bird = live weight × sale price − cost per bird.</p>
-      <p><strong>Treat</strong> = treatment cost on every tonne. The mould inhibitor stops all of the storage loss; any flock loss the treatment does not prevent is added.</p>
-      <p><strong>Reject</strong> = the part of the feed's value you don't get back. The flocks then eat clean feed. Storage losses stay.</p>
-      <p class="small">An estimate for planning, not a prediction. Effects are added together, which understates flocks hit by heat and mycotoxins at once. Transport and delay on rejected feed are not counted.</p>
+      <ul>
+        <li><strong>Storage loss</strong> is the feed you make, times the share lost to mould, times its value.</li>
+        <li><strong>Flock loss</strong> is the profit on the birds your feed grows with clean feed, minus their profit with this feed. Mycotoxins mean more deaths, a worse FCR and lighter birds.</li>
+        <li><strong>Treating</strong> costs the same on every tonne. The mould inhibitor stops all of the storage loss. The toxin binder prevents part of the flock loss.</li>
+        <li><strong>Rejecting</strong> costs the part of the feed's value you don't get back. The birds then eat clean feed. The storage loss stays.</li>
+      </ul>
+      <p class="small" style="margin-top:10px">The flock loss falls on whoever grows the birds: you, or the customers who judge your feed by it. This is an estimate for planning, not a prediction. Transport and delay on rejected feed are not counted.</p>
     </div>
     <div>
-      <h2>Where the figures come from</h2>
-      <ul>
-        <li>Storage loss and treatment cost: 10 to 15% lost in unprotected stores and ₹500 to ₹1,000 a tonne, from our Economics of Prevention article. <span class="draft">Placeholder</span> The 5% starting figure for a mill is our guess.</li>
-        <li>Mycotoxins, full effect: FCR +0.12, deaths +2.0 points, weight −217 g, applied here as 9% of live weight (<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC9334311" target="_blank" rel="noopener">Weaver 2022</a>, 25 trials).</li>
-        <li>Mycotoxin level: no effect under 20 ppb, half at 20 to 200 ppb, full above 200 ppb. <span class="draft">Our reading</span> of <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4753465" target="_blank" rel="noopener">aflatoxin dose trials</a>.</li>
-        <li>Hot season: FCR +0.17, weight −6% (<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7647856" target="_blank" rel="noopener">Liu 2020</a>). <span class="draft">To check</span> against the full paper. No published figure for deaths, so none is added.</li>
-        <li>Cold season: deaths +7.6 points from ascites (<a href="https://koreascience.kr/article/JAKO200628066507293.pdf" target="_blank" rel="noopener">Ipek &amp; Sahan 2006</a>, a severe-cold trial). No published percentage for FCR, so none is added.</li>
-        <li>Acidifier: FCR 3% better (<a href="https://pubmed.ncbi.nlm.nih.gov/28938776/" target="_blank" rel="noopener">Polycarpo 2017</a> reports up to 5.7% under disease pressure).</li>
-        <li>Bird figures: FCR 1.80 and 95.3% survival from an <a href="https://www.ijah.in/upload/snippet/023-25-Res.pdf" target="_blank" rel="noopener">Indian field study</a>; dressing yield 67% at about 2.2 kg (<a href="https://doaj.org/article/00c4f09d96964a8f9239378d418a6cba" target="_blank" rel="noopener">IJAS 2024</a>).</li>
-        <li><span class="draft">Placeholder</span> Feed value, other bird costs, how much mycotoxin damage treatment prevents and how much is recovered on rejected feed are our starting guesses, for ChemLife to replace.</li>
-      </ul>
-      <p class="small" style="margin-top:10px">Vaccination and antibiotic growth promoters are left out: vaccines protect against deaths only when the disease is present, and antibiotic growth promoters give a small gain and are not for promotion.</p>
+      <details class="sources">
+        <summary>Where the figures come from</summary>
+        <ul>
+          <li>Storage loss and treatment cost: 10 to 15% lost in unprotected stores and ₹500 to ₹1,000 a tonne, from our article <a href="https://chemlifeinnovations.wordpress.com/2025/09/02/the-economics-of-prevention-why-mold-control-pays-for-itself/" target="_blank" rel="noopener">The Economics of Prevention</a>. <span class="draft">Placeholder</span> The 5% starting figure for a mill is our guess.</li>
+          <li>Mycotoxins, full effect: FCR +0.12, deaths +2.0 points, weight −217 g, applied here as 9% of live weight (<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC9334311" target="_blank" rel="noopener">Weaver 2022</a>, 25 trials).</li>
+          <li>Mycotoxin level: no effect under 20 ppb, half at 20 to 200 ppb, full above 200 ppb. <span class="draft">Our reading</span> of <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4753465" target="_blank" rel="noopener">aflatoxin dose trials</a>.</li>
+          <li>Hot season: FCR +0.17, weight −6% (<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7647856" target="_blank" rel="noopener">Liu 2020</a>). <span class="draft">To check</span> against the full paper. No published figure for deaths, so none is added.</li>
+          <li>Cold season: deaths +7.6 points from ascites (<a href="https://koreascience.kr/article/JAKO200628066507293.pdf" target="_blank" rel="noopener">Ipek &amp; Sahan 2006</a>, a severe-cold trial). No published percentage for FCR, so none is added.</li>
+          <li>Acidifier: FCR 3% better (<a href="https://pubmed.ncbi.nlm.nih.gov/28938776/" target="_blank" rel="noopener">Polycarpo 2017</a> reports up to 5.7% under disease pressure).</li>
+          <li>Bird figures: FCR 1.80 and 95.3% survival from an <a href="https://www.ijah.in/upload/snippet/023-25-Res.pdf" target="_blank" rel="noopener">Indian field study</a>; dressing yield 67% at about 2.2 kg (<a href="https://doaj.org/article/00c4f09d96964a8f9239378d418a6cba" target="_blank" rel="noopener">IJAS 2024</a>).</li>
+          <li><span class="draft">Placeholder</span> Feed value, other costs per bird, how much flock loss treatment prevents and the money back on rejected feed are our starting guesses, for ChemLife to replace.</li>
+        </ul>
+        <p class="small" style="margin-top:10px">Effects are added together, which understates flocks hit by heat and mycotoxins at once. Vaccination and antibiotic growth promoters are left out: vaccines protect against deaths only when the disease is present, and antibiotic growth promoters give a small gain and are not for promotion.</p>
+      </details>
     </div>
   </div>
 
@@ -293,7 +304,7 @@ details.more .field:first-of-type{border-top:0}
 </main>
 
 <div class="dock" id="dock" hidden>
-  <div><p id="dock-label">Mould and mycotoxins cost, per month</p><strong id="dock-net">₹0</strong></div>
+  <div><p>Cost each month</p><strong id="dock-net">₹0</strong></div>
   <a href="#results-title">See details ↓</a>
 </div>
 
@@ -314,86 +325,76 @@ details.more .field:first-of-type{border-top:0}
   var $ = function (id) { return document.getElementById(id); };
   var rupees = new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 });
   function fmt(v, d) { return new Intl.NumberFormat("en-IN", { maximumFractionDigits: d || 0, minimumFractionDigits: d === 2 ? 2 : 0 }).format(v); }
-  // ₹3,00,000 plus "(3 lakh)" or "(1.2 crore)", the way money is spoken of in India.
-  function words(n) {
-    var a = Math.abs(n);
-    if (a >= 1e7) return fmt(a / 1e7, 1) + " crore";
-    if (a >= 1e5) return fmt(a / 1e5, 1) + " lakh";
+  var loose = new Intl.NumberFormat("en-IN", { maximumFractionDigits: 2 });
+  // Large numbers the way they are spoken in India: 23.6 lakh, 1.1 crore. Smaller ones in full.
+  function spoken(a) {
+    if (a >= 9995000) return loose.format(a / 1e7) + " crore";
+    if (a >= 99950) return fmt(a / 1e5, 1) + " lakh";
     return "";
   }
-  function money(n) { return (n < 0 ? "−" : "") + rupees.format(Math.abs(n)); }
-  function moneyWords(n) { var w = words(n); return money(n) + (w ? " (" + w + ")" : ""); }
-  function moneyHtml(n) { var w = words(n); return money(n) + (w ? " <small>(" + w + ")</small>" : ""); }
+  function money(n) { var a = Math.abs(n), s = spoken(a); return (n < 0 ? "−" : "") + (s ? "₹" + s : rupees.format(a)); }
+  function count(n) { return spoken(n) || fmt(n); }
 
-  var DRAFT = ' <span class="draft">Placeholder</span>';
-  // Each row: a number box with a slider. min/max bound the box, smin/smax the slider.
-  var GROUPS = [
-    { title: "Mill", fields: [
-      { id: "tonnes", label: "Feed produced", def: 500, min: 1, max: 1000000, log: true, suf: "t / month", hint: "Finished feed leaving the mill each month." },
-      { id: "value", label: "Feed value" + DRAFT, def: 40000, min: 1000, max: 200000, smin: 20000, smax: 60000, step: 500, pre: "₹", suf: "/ tonne" }
-    ] },
-    { title: "Storage", fields: [
-      { id: "spoil", label: "Lost to mould in storage" + DRAFT, def: 5, d: 1, min: 0, max: 100, smin: 0, smax: 30, step: 0.5, suf: "% of feed", hint: "Raw material and feed that spoils without protection. Our article puts unprotected farm stores at 10 to 15%." }
-    ] },
-    { title: "Feed quality", custom: "quality", fields: [] },
-    { title: "The birds that eat it", custom: "birds", fields: [
-      { id: "wmort", label: "Extra deaths from weather", def: 0, d: 1, min: 0, max: 100, smin: 0, smax: 15, step: 0.1, suf: "%", hint: "Filled in from the season. Change it if you know your own figure." }
-    ], more: [
-      { id: "wt", label: "Live weight at sale", def: 2.4, d: 2, min: 0.5, max: 5, smin: 1.2, smax: 3.5, step: 0.05, suf: "kg" },
-      { id: "fcr", label: "Normal FCR", def: 1.8, d: 2, min: 1, max: 4, smin: 1.4, smax: 2.4, step: 0.01, suf: "kg feed / kg", hint: "Feed eaten for each kg of live weight sold, with clean feed in mild weather." },
-      { id: "mort", label: "General mortality", def: 4.7, d: 1, min: 0, max: 100, smin: 0, smax: 15, step: 0.1, suf: "%", hint: "Deaths expected anyway, with clean feed and mild weather." },
-      { id: "chick", label: "Chick cost", def: 44, min: 0, max: 500, smin: 20, smax: 80, step: 1, pre: "₹", suf: "/ chick" },
-      { id: "other", label: "Other costs" + DRAFT, def: 20, min: 0, max: 500, smin: 0, smax: 60, step: 1, pre: "₹", suf: "/ bird", hint: "Medicine, vaccines, labour, power and litter for each bird placed." },
-      { id: "sale", label: "Sale price", def: 120, min: 1, max: 1000, smin: 60, smax: 200, step: 1, pre: "₹", suf: "/ kg live" },
-      { id: "dress", label: "Dressing yield", def: 67, d: 1, min: 40, max: 90, smin: 60, smax: 78, step: 0.5, suf: "%", hint: "Dressed carcass as a share of live weight." }
-    ] },
-    { title: "If you treat or reject the feed", fields: [
-      { id: "bcost", label: "Treatment cost", def: 750, min: 0, max: 20000, smin: 0, smax: 3000, step: 50, pre: "₹", suf: "/ tonne", hint: "Mould inhibitor and toxin binder for each tonne of feed. Our article puts this at ₹500 to ₹1,000." },
-      { id: "beff", label: "Mycotoxin damage treatment prevents" + DRAFT, def: 50, min: 0, max: 100, smin: 0, smax: 100, step: 5, suf: "%" },
-      { id: "rec", label: "Recovered on rejected feed" + DRAFT, def: 50, min: 0, max: 100, smin: 0, smax: 100, step: 5, suf: "%", hint: "Share of its value you get back from the supplier or by selling it on." }
-    ] }
-  ];
-  var FIELDS = {};
-  GROUPS.forEach(function (g) { g.fields.concat(g.more || []).forEach(function (f) { FIELDS[f.id] = f; }); });
+  // The six numbers on show have a slider; the folded-away ones are a plain box.
+  var FIELDS = {
+    tonnes: { label: "Feed produced", def: 500, min: 1, max: 1000000, log: true, suf: "t / month" },
+    value: { label: "Feed value", def: 40000, min: 1000, max: 200000, smin: 20000, smax: 60000, step: 500, pre: "₹", suf: "/ tonne" },
+    spoil: { label: "Lost to mould in storage", def: 5, d: 1, min: 0, max: 100, smin: 0, smax: 30, step: 0.5, suf: "% of feed", hint: "Raw material and feed that spoils when it is not protected." },
+    bcost: { label: "Treatment cost", def: 750, min: 0, max: 20000, smin: 0, smax: 3000, step: 50, pre: "₹", suf: "/ tonne", hint: "Mould inhibitor and toxin binder. Our article puts this at ₹500 to ₹1,000 a tonne." },
+    rec: { label: "Money back on rejected feed", def: 90, min: 0, max: 100, smin: 0, smax: 100, step: 5, suf: "% of its value", hint: "From the supplier, or by selling it on." },
+    wmort: { label: "Extra deaths in this season", def: 0, d: 1, min: 0, max: 100, suf: "%" },
+    mort: { label: "General mortality", def: 4.7, d: 1, min: 0, max: 100, suf: "%" },
+    wt: { label: "Live weight at sale", def: 2.4, d: 2, min: 0.5, max: 5, suf: "kg" },
+    fcr: { label: "Normal FCR", def: 1.8, d: 2, min: 1, max: 4 },
+    sale: { label: "Sale price, live", def: 120, min: 1, max: 1000, pre: "₹", suf: "/ kg" },
+    chick: { label: "Chick cost", def: 44, min: 0, max: 500, pre: "₹" },
+    other: { label: "Other costs per bird", def: 20, min: 0, max: 500, pre: "₹" },
+    dress: { label: "Dressing yield", def: 67, d: 1, min: 40, max: 90, suf: "%" },
+    beff: { label: "Flock loss treatment prevents", def: 50, min: 0, max: 100, suf: "%" }
+  };
   var ids = Object.keys(FIELDS);
   var CHOICES = {
-    myco: { legend: "Mycotoxin level", def: "1", options: [["0", "Clean, under 20 ppb"], ["1", "Medium, 20 to 200 ppb"], ["2", "High, over 200 ppb"]],
-      hint: "From a lab test of the feed or its maize. No test? Musty smell, lumps or visible mould suggest medium or high." },
-    grower: { legend: "Who grows the birds?", def: "own", options: [["own", "My own or contract farms"], ["customers", "My customers"]] },
-    season: { legend: "Season", def: "mild", options: [["mild", "Mild"], ["hot", "Hot"], ["cold", "Cold"]] }
+    myco: { legend: "Mycotoxins in the feed", def: "1", options: [["0", "Clean", "under 20 ppb"], ["1", "Medium", "20 to 200 ppb"], ["2", "High", "over 200 ppb"]],
+      hint: "From a lab test. No test? A musty smell, lumps or visible mould point to medium or high." },
+    season: { legend: "Season", def: "mild", options: [["mild", "Mild"], ["hot", "Hot"], ["cold", "Cold"]],
+      hint: "Hot weather worsens FCR and weight. Cold adds deaths from ascites." }
   };
   var choiceIds = Object.keys(CHOICES);
   var DEFAULTS = { acid: false };
   ids.forEach(function (id) { DEFAULTS[id] = FIELDS[id].def; });
   choiceIds.forEach(function (id) { DEFAULTS[id] = CHOICES[id].def; });
 
+  function box(id) {
+    var f = FIELDS[id];
+    return '<div class="num">' + (f.pre ? '<span class="pre">' + f.pre + '</span>' : "")
+      + '<input id="' + id + '" type="text" inputmode="decimal" autocomplete="off">'
+      + (f.suf ? '<span class="suf">' + f.suf + '</span>' : "") + '</div>';
+  }
+  function row(id) {
+    var f = FIELDS[id];
+    return '<div class="field" id="f-' + id + '"><div class="field-head"><label for="' + id + '" id="' + id + '-label">' + f.label + '</label>' + box(id) + '</div>'
+      + (f.log
+        ? '<input type="range" data-for="' + id + '" min="0" max="1000" step="1" aria-labelledby="' + id + '-label">'
+        : '<input type="range" data-for="' + id + '" min="' + f.smin + '" max="' + f.smax + '" step="' + f.step + '" aria-labelledby="' + id + '-label">')
+      + (f.hint ? '<p class="hint">' + f.hint + '</p>' : "") + '</div>';
+  }
+  function mini(id) { return '<div class="mini"><label for="' + id + '">' + FIELDS[id].label + '</label>' + box(id) + '</div>'; }
   function choices(name) {
     var c = CHOICES[name];
     return '<div class="field"><div class="field-head"><label id="' + name + '-label">' + c.legend + '</label></div><div class="choices" role="radiogroup" aria-labelledby="' + name + '-label">'
-      + c.options.map(function (o) { return '<label><input type="radio" name="' + name + '" value="' + o[0] + '">' + o[1] + '</label>'; }).join("") + '</div>'
-      + (c.hint ? '<p class="hint">' + c.hint + '</p>' : "") + '</div>';
+      + c.options.map(function (o) { return '<label><input type="radio" name="' + name + '" value="' + o[0] + '"><span>' + o[1] + '</span>' + (o[2] ? '<small>' + o[2] + '</small>' : "") + '</label>'; }).join("") + '</div>'
+      + '<p class="hint">' + c.hint + '</p></div>';
   }
-  function row(f) {
-    return '<div class="field"><div class="field-head"><label for="' + f.id + '" id="' + f.id + '-label">' + f.label + '</label><div class="num">'
-      + (f.pre ? '<span class="pre">' + f.pre + '</span>' : "")
-      + '<input id="' + f.id + '" type="text" inputmode="decimal" autocomplete="off">'
-      + (f.suf ? '<span class="suf">' + f.suf + '</span>' : "") + '</div></div>'
-      + (f.log
-        ? '<input type="range" data-for="' + f.id + '" min="0" max="1000" step="1" aria-labelledby="' + f.id + '-label">'
-        : '<input type="range" data-for="' + f.id + '" min="' + f.smin + '" max="' + f.smax + '" step="' + f.step + '" aria-labelledby="' + f.id + '-label">')
-      + (f.hint ? '<p class="hint">' + f.hint + '</p>' : "") + '</div>';
-  }
-  $("fields").innerHTML = GROUPS.map(function (g) {
-    var html = '<h3 class="group">' + g.title + '</h3>';
-    if (g.custom === "quality") html += choices("myco");
-    if (g.custom === "birds") html += choices("grower") + choices("season");
-    html += g.fields.map(row).join("");
-    if (g.custom === "birds") {
-      html += '<div class="field"><label class="tick"><input type="checkbox" id="acid"><span>Acidifier in the feed<br><span class="hint" style="font-weight:400">Improves FCR by about 3%.</span></span></label></div>'
-        + '<details class="more"><summary>Change the bird figures</summary>' + g.more.map(row).join("") + '</details>';
-    }
-    return html;
-  }).join("");
+  function step(n, title) { return '<h3 class="group"><b>' + n + '</b>' + title + '</h3>'; }
+  $("fields").innerHTML = step(1, "Your mill") + row("tonnes") + row("value")
+    + step(2, "The feed") + row("spoil") + choices("myco")
+    + step(3, "Your choices") + row("bcost") + row("rec")
+    + '<details class="more"><summary><span>Season and bird figures</span><small id="more-now"></small></summary>'
+    + choices("season")
+    + '<div class="grid2">' + ["wmort", "mort", "wt", "fcr", "sale", "chick", "other", "dress", "beff"].map(mini).join("") + '</div>'
+    + '<div class="field"><label class="tick"><input type="checkbox" id="acid"><span>Acidifier in the feed<br><span class="hint" style="font-weight:400">Improves FCR by about 3%.</span></span></label></div>'
+    + '<p class="hint">General mortality is the deaths expected anyway, on clean feed in mild weather. Other costs are medicine, vaccines, labour, power and litter.</p>'
+    + '</details>';
 
   // The feed slider covers 10 to 1,00,000 tonnes, so it is logarithmic and snaps to two significant figures.
   function logFromSlider(pos) {
@@ -407,11 +408,12 @@ details.more .field:first-of-type{border-top:0}
   var slider = function (id) { return document.querySelector('input[type=range][data-for="' + id + '"]'); };
   function clamp(id, v) { return Math.min(Math.max(v, FIELDS[id].min), FIELDS[id].max); }
   function parseNum(text) { var v = parseFloat(String(text).replace(/[^0-9.]/g, "")); return isNaN(v) ? 0 : v; }
-  // Each box is as wide as its value, so the unit sits right after the number.
-  function fit(box) { box.style.width = Math.max(2, box.value.length) + 1 + "ch"; }
-  function show(id) { var box = $(id); box.value = fmt(state[id], FIELDS[id].d || 0); fit(box); }
+  // A box beside a slider is as wide as its value, so the unit sits right after the number.
+  function fit(el) { if (slider(el.id)) el.style.width = Math.max(2, el.value.length) + 1 + "ch"; }
+  function show(id) { var el = $(id); el.value = fmt(state[id], FIELDS[id].d || 0); fit(el); }
   function paint(id) {
     var r = slider(id);
+    if (!r) return;
     r.value = FIELDS[id].log ? logToSlider(state[id]) : Math.min(Math.max(state[id], r.min), r.max);
     r.style.setProperty("--fill", ((r.value - r.min) / (r.max - r.min)) * 100 + "%");
     r.setAttribute("aria-valuetext", fmt(state[id], FIELDS[id].d || 0) + " " + (FIELDS[id].suf || "").replace("/", "per"));
@@ -439,7 +441,6 @@ details.more .field:first-of-type{border-top:0}
 
   function update(quiet) {
     var level = MYCO_LEVEL[+state.myco];
-    var own = state.grower === "own";
     var feedValue = state.tonnes * state.value;
 
     // Birds placed each month: the feed produced, divided by what one placed bird eats on clean feed.
@@ -449,90 +450,88 @@ details.more .field:first-of-type{border-top:0}
 
     var spoilT = state.tonnes * state.spoil / 100;
     var spoil = spoilT * state.value;
-    var nothing = { name: "Do nothing", spoil: spoil, birds: clean.profit - used.profit, action: 0 };
-    var treat = { name: "Treat the feed", spoil: 0, birds: clean.profit - treated.profit, action: state.tonnes * state.bcost };
-    var reject = { name: "Reject and replace", spoil: spoil, birds: 0, action: feedValue * (1 - state.rec / 100) };
+    var flockLoss = clean.profit - used.profit;
+    var flockLeft = clean.profit - treated.profit;
+    var treatCost = state.tonnes * state.bcost;
+    var notBack = feedValue * (1 - state.rec / 100);
+
+    var nothing = { name: "Do nothing", parts: [[spoil, "spoiled in storage"], [flockLoss, "lost in the birds"]] };
+    var treat = { name: "Treat the feed", parts: [[treatCost, "treatment"], [flockLeft, "still lost in the birds"]] };
+    var reject = { name: "Reject the feed", parts: [[notBack, "lost on the rejected feed"], [spoil, "spoiled in storage"]] };
     var options = level > 0 ? [nothing, treat, reject] : [nothing, treat];
-    options.forEach(function (o) { o.total = o.spoil + o.birds + o.action; });
+    options.forEach(function (o) { o.total = o.parts[0][0] + o.parts[1][0]; });
     var best = options.reduce(function (a, b) { return b.total < a.total - 0.5 ? b : a; });
     var top = Math.max.apply(null, options.map(function (o) { return o.total; }).concat([1]));
-
     var zero = nothing.total < 1;
-    $("headline").classList.toggle("loss", !zero);
-    $("h-label").textContent = zero ? "No mould or mycotoxin cost at these numbers"
-      : own ? "Mould and mycotoxins cost you, per month" : "Mould and mycotoxins cost you and your customers, per month";
-    $("h-big").innerHTML = moneyHtml(nothing.total);
-    $("h-sub").textContent = zero ? "" : money(state.tonnes > 0 ? nothing.total / state.tonnes : 0) + " on every tonne of feed. About " + moneyWords(nothing.total * 12) + " a year.";
-    $("h-best").innerHTML = zero ? "Enter a storage loss or choose a mycotoxin level."
-      : best === nothing ? "At these numbers, <strong>doing nothing</strong> costs least."
-        : "<strong>" + best.name + "</strong> to keep " + moneyWords(nothing.total - best.total) + " of that each month.";
-    $("dock-label").textContent = own ? "Mould and mycotoxins cost you, per month" : "Cost to you and your customers, per month";
-    $("dock-net").textContent = moneyWords(nothing.total);
 
-    $("bars").innerHTML = options.map(function (o) {
-      var seg = function (cls, v) { return '<div class="seg ' + cls + '" style="width:' + (v / top * 100) + '%"></div>'; };
-      return '<div class="bar-row"><div class="bar-top"><span>' + o.name + (o === best && !zero ? ' <span class="pick">Costs least</span>' : '') + '</span><b>' + moneyWords(o.total) + '</b></div>'
-        + '<div class="track" aria-hidden="true">' + seg("loss", o.spoil) + seg("birds", o.birds) + seg("cost", o.action) + '</div></div>';
-    }).join("");
-
-    $("s-spoil").textContent = fmt(spoilT, 1) + " t";
-    $("s-spoil-sub").textContent = money(spoil) + " a month, without treatment";
-    $("s-birds-label").textContent = own ? "Lost in your flocks" : "Lost in your customers' flocks";
-    $("s-birds").textContent = money(nothing.birds);
-    $("s-birds-sub").textContent = "across about " + fmt(placed) + " birds a month";
-    $("s-tonne").textContent = money(state.tonnes > 0 ? nothing.total / state.tonnes : 0);
-    $("s-tonne-sub").textContent = "falls to " + money(state.tonnes > 0 ? treat.total / state.tonnes : 0) + " with treatment";
-    var avoided = nothing.total - (treat.total - treat.action);
-    $("s-ratio").textContent = treat.action > 0 ? "₹" + fmt(avoided / treat.action, 1) : "—";
-    $("s-ratio-sub").textContent = treat.action > 0 ? money(avoided) + " saved for " + money(treat.action) + " spent" : "no treatment cost entered";
-
+    var saved = nothing.total - flockLeft;
+    treat.note = treatCost > 0 && !zero ? "Each ₹1 spent on treatment saves ₹" + fmt(saved / treatCost, 1) + "." : "";
     // How much of the feed's value must come back before rejecting beats the cheaper of the other two.
     var other = Math.min(nothing.total, treat.total);
     var need = feedValue > 0 ? (1 - (other - spoil) / feedValue) * 100 : null;
-    $("even").innerHTML = level === 0
-      ? "With clean feed there is nothing to reject. Storage loss is the only cost."
-      : need === null || need > 100
-        ? "Rejecting this feed can't beat the other choices at these numbers."
-        : need <= 0
-          ? "Rejecting pays even if you get nothing back for the feed."
-          : "Rejecting pays only if you get back more than <strong>" + fmt(need, need > 99 ? 1 : 0) + "%</strong> of the feed's value.";
+    reject.note = need === null || need > 100 ? "Can't beat the other choices, even with all your money back."
+      : need <= 0 ? "Pays even if you get nothing back for the feed."
+        : "Pays only if you get back more than " + fmt(need, need > 99 ? 1 : 0) + "% of the feed's value.";
 
-    $("flock-title").textContent = own ? "In your flocks" : "In your customers' flocks";
-    $("flock-sub").textContent = own
-      ? "What this feed does to each bird, and to your profit on it."
-      : "This part is your customers' loss, not yours, but it is what they judge your feed by.";
-    var cols = [{ name: "Clean feed", o: clean }, { name: "This feed, untreated", o: used }, { name: "This feed, treated", o: treated }];
+    $("headline").classList.toggle("loss", !zero);
+    $("h-label").textContent = zero ? "No mould or mycotoxin cost at these numbers" : "Mould and mycotoxins cost this mill";
+    $("h-big").innerHTML = money(nothing.total) + " <small>a month</small>";
+    $("h-sub").textContent = zero ? "" : money(state.tonnes > 0 ? nothing.total / state.tonnes : 0) + " on every tonne · " + money(nothing.total * 12) + " a year";
+    $("h-split").hidden = zero;
+    $("h-store").textContent = money(spoil);
+    $("h-store-sub").textContent = "spoiled in storage (" + fmt(spoilT, 1) + " t of feed)";
+    $("h-flock").textContent = money(flockLoss);
+    $("h-best").innerHTML = zero ? "Enter a storage loss or pick a mycotoxin level."
+      : best === nothing ? "At these numbers, <strong>doing nothing</strong> costs least."
+        : "Best choice: <strong>" + best.name.toLowerCase() + "</strong>. It saves " + money(nothing.total - best.total) + " a month.";
+    $("dock-net").textContent = money(nothing.total);
+    $("f-rec").hidden = level === 0;
+
+    $("options").innerHTML = options.map(function (o) {
+      var parts = o.parts.filter(function (p) { return p[0] >= 1; }).map(function (p) { return money(p[0]) + " " + p[1]; }).join(" + ");
+      return '<div class="opt' + (o === best && !zero ? " best" : "") + '"><div class="opt-top"><span>' + o.name + (o === best && !zero ? ' <span class="pick">Costs least</span>' : "") + '</span><b>' + money(o.total) + '</b></div>'
+        + '<div class="track" aria-hidden="true"><div class="seg" style="width:' + (o.total / top * 100) + '%"></div></div>'
+        + '<p>' + (parts || "No cost.") + '</p>' + (o.note ? '<p class="note">' + o.note + '</p>' : "") + '</div>';
+    }).join("");
+
+    $("flock-sub").textContent = level === 0
+      ? "This feed is clean, so the three columns match. About " + count(placed) + " birds a month."
+      : "Per bird, across the " + count(placed) + " or so birds a month this feed grows.";
+    var rs = function (v) { return (v < 0 ? "−" : "") + rupees.format(Math.abs(v)); };
+    var cols = [{ name: "Clean feed", o: clean }, { name: "This feed", o: used }, { name: "This feed, treated", o: treated }];
     var rows = [
-      ["General mortality", function () { return fmt(state.mort, 1) + "%"; }, "sub"],
-      ["Feed-related mortality", function (o) { return fmt(o.feedDeaths, 1) + "%"; }, "sub"],
-      ["Weather-related mortality", function () { return fmt(state.wmort, 1) + "%"; }, "sub"],
-      ["Total mortality", function (o) { return fmt(o.deaths, 1) + "%"; }],
-      ["Birds sold a month", function (o) { return fmt(o.sold); }],
+      ["Mortality", function (o) { return fmt(o.deaths, 1) + "%"; }],
+      ["General", function () { return fmt(state.mort, 1) + "%"; }, "extra sub"],
+      ["From the feed", function (o) { return fmt(o.feedDeaths, 1) + "%"; }, "extra sub"],
+      ["From the weather", function () { return fmt(state.wmort, 1) + "%"; }, "extra sub"],
+      ["Birds sold a month", function (o) { return fmt(o.sold); }, "extra"],
       ["FCR", function (o) { return fmt(o.fcr, 2); }],
-      ["Live weight per bird", function (o) { return fmt(o.weight, 2) + " kg"; }],
-      ["Dressed weight per bird", function (o) { return fmt(o.dressed, 2) + " kg"; }],
-      ["Cost per bird", function (o) { return money(o.costBird); }],
-      ["Sale value per bird", function (o) { return money(o.salesBird); }],
-      ["Benefit-cost ratio", function (o) { return fmt(o.ratio, 2); }],
-      ["Cost per kg dressed", function (o) { return money(o.costDressed); }],
-      ["Profit per bird", function (o) { return money(o.profitBird); }, "total", function (o) { return o.profitBird < 0; }]
+      ["Live weight", function (o) { return fmt(o.weight, 2) + " kg"; }],
+      ["Dressed weight", function (o) { return fmt(o.dressed, 2) + " kg"; }, "extra"],
+      ["Cost per bird", function (o) { return rs(o.costBird); }, "extra"],
+      ["Sale value per bird", function (o) { return rs(o.salesBird); }, "extra"],
+      ["Cost per kg dressed", function (o) { return rs(o.costDressed); }, "extra"],
+      ["Benefit-cost ratio", function (o) { return fmt(o.ratio, 2); }, "extra"],
+      ["Profit per bird", function (o) { return rs(o.profitBird); }, "total", function (o) { return o.profitBird < 0; }]
     ];
-    $("flock-table").innerHTML = '<caption class="sr-only">Deaths, FCR, cost and profit per bird with clean, untreated and treated feed</caption><thead><tr><td></td>'
+    $("flock-table").innerHTML = '<caption class="sr-only">Deaths, FCR, weight and profit per bird with clean, untreated and treated feed</caption><thead><tr><td></td>'
       + cols.map(function (c) { return '<th scope="col">' + c.name + '</th>'; }).join("") + '</tr></thead><tbody>'
       + rows.map(function (r) {
         return '<tr class="' + (r[2] || "") + '"><th scope="row">' + r[0] + '</th>'
           + cols.map(function (c) { return '<td class="' + (r[3] && r[3](c.o) ? "neg" : "") + '">' + r[1](c.o) + '</td>'; }).join("") + '</tr>';
       }).join("") + '</tbody>';
 
+    var seasonName = CHOICES.season.options.filter(function (o) { return o[0] === state.season; })[0][1];
+    $("more-now").textContent = seasonName + " season · " + loose.format(state.wt) + " kg birds · FCR " + fmt(state.fcr, 2) + (state.acid ? " · acidifier" : "");
+
     var message = [
       "Hello, I used the feed mill calculator on your website.",
       "",
-      "Feed produced: " + fmt(state.tonnes) + " tonnes a month, worth " + money(state.value) + " a tonne",
+      "Feed produced: " + fmt(state.tonnes) + " tonnes a month, worth " + rupees.format(state.value) + " a tonne",
       "Lost to mould in storage: " + fmt(state.spoil, 1) + "%",
-      "Mycotoxin level: " + CHOICES.myco.options[+state.myco][1] + ". Season: " + state.season + ".",
-      "Birds grown by: " + (own ? "my own or contract farms" : "my customers"),
-      "Estimated cost of mould and mycotoxins: " + moneyWords(nothing.total) + " a month",
-      "Cheapest choice at these numbers: " + best.name.toLowerCase() + " (" + moneyWords(best.total) + " a month)",
+      "Mycotoxins in the feed: " + CHOICES.myco.options[+state.myco].slice(1).join(", ").toLowerCase() + ". Season: " + state.season + ".",
+      "Estimated cost of mould and mycotoxins: " + money(nothing.total) + " a month",
+      "Cheapest choice at these numbers: " + best.name.toLowerCase() + " (" + money(best.total) + " a month)",
       "",
       "I'd like advice on mould and mycotoxin control for my mill."
     ].join("\n");
@@ -542,7 +541,7 @@ details.more .field:first-of-type{border-top:0}
     clearTimeout(announceTimer);
     announceTimer = setTimeout(function () {
       $("announce").textContent = zero ? "No mould or mycotoxin cost at these numbers."
-        : "Mould and mycotoxins cost " + moneyWords(nothing.total) + " a month. Costs least: " + best.name.toLowerCase() + ", at " + moneyWords(best.total) + ".";
+        : "Mould and mycotoxins cost " + money(nothing.total) + " a month. Costs least: " + best.name.toLowerCase() + ", at " + money(best.total) + ".";
     }, 700);
     clearTimeout(urlTimer);
     urlTimer = setTimeout(function () { history.replaceState(null, "", location.pathname + "?" + query()); }, 400);
@@ -569,22 +568,28 @@ details.more .field:first-of-type{border-top:0}
   }
 
   ids.forEach(function (id) {
-    var box = $(id), r = slider(id);
-    r.addEventListener("input", function () { state[id] = FIELDS[id].log ? logFromSlider(+r.value) : +r.value; show(id); paint(id); update(); });
-    box.addEventListener("input", function () { fit(box); state[id] = clamp(id, parseNum(box.value)); paint(id); update(); });
+    var el = $(id), r = slider(id);
+    if (r) r.addEventListener("input", function () { state[id] = FIELDS[id].log ? logFromSlider(+r.value) : +r.value; show(id); paint(id); update(); });
+    el.addEventListener("input", function () { fit(el); state[id] = clamp(id, parseNum(el.value)); paint(id); update(); });
     // Tidy a typed value (range and 1,00,000-style grouping) when the visitor leaves the box.
-    box.addEventListener("change", function () { show(id); });
+    el.addEventListener("change", function () { show(id); });
   });
   choiceIds.forEach(function (id) {
     document.querySelectorAll('input[name="' + id + '"]').forEach(function (el) {
       el.addEventListener("change", function () {
         state[id] = el.value;
-        if (id === "season") { state.wmort = WEATHER_DEATHS[el.value]; show("wmort"); paint("wmort"); }
+        if (id === "season") { state.wmort = WEATHER_DEATHS[el.value]; show("wmort"); }
         update();
       });
     });
   });
   $("acid").addEventListener("change", function () { state.acid = $("acid").checked; update(); });
+
+  $("rows").addEventListener("click", function () {
+    var all = $("flock-table").classList.toggle("all");
+    $("rows").textContent = all ? "Show fewer bird figures" : "Show all the bird figures";
+    $("rows").setAttribute("aria-expanded", all);
+  });
 
   $("reset").addEventListener("click", function () {
     setAll(DEFAULTS);
