@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
+import Image from "next/image";
 import { Images } from "@/lib/assets";
 
 export default function ChatOverlay() {
@@ -133,16 +134,24 @@ export default function ChatOverlay() {
       >
         <div className="flex -space-x-4">
           <div className="w-10 h-10 rounded-full border-2 border-white bg-white overflow-hidden shadow-md flex-shrink-0 flex items-center justify-center p-0.5">
-            <img
+            {/* A small resized copy, loaded after the page's main picture (not the full 320x400 file, preloaded). */}
+            <Image
               src={Images.mascots.poultry}
               alt="Dr. Kukku"
+              width={320}
+              height={400}
+              sizes="32px"
               className="w-full h-full object-contain"
             />
           </div>
           <div className="w-10 h-10 rounded-full border-2 border-white bg-white overflow-hidden shadow-md flex-shrink-0 flex items-center justify-center p-0.5">
-            <img
+            {/* A small resized copy, loaded after the page's main picture (not the full 320x400 file, preloaded). */}
+            <Image
               src={Images.mascots.dairy}
               alt="Dr. Mikku"
+              width={320}
+              height={400}
+              sizes="32px"
               className="w-full h-full object-contain"
             />
           </div>
