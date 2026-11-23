@@ -124,7 +124,7 @@ export const PREVIEWS = [
     slug: "mould-loss-calculator",
     file: "mould-loss-calculator.html",
     title: "Mould-loss calculator",
-    description: "Farmers enter their feed, feed price and mould losses to see what prevention saves a year, based on the worked example in our Economics of Prevention article.",
+    description: "Farmers enter their feed, feed price and mould losses to see what prevention saves a year, based on the worked example in our Economics of Prevention article. A second tab, Broiler flock, compares using, treating or rejecting affected feed by mortality, FCR and profit per bird.",
   },
   {
     slug: "research-animations",
