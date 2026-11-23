@@ -29,6 +29,7 @@ export default function Header() {
   const locale = useLocale();
   // The page's address without its language prefix, to highlight the current page.
   const pathname = splitLocale(usePathname() ?? "/").path;
+  const onChat = pathname === "/chat" || pathname.startsWith("/chat/");
   const navLinks = NAV.map((link) => ({ label: t.nav[link.key], path: link.href, href: href(link.href) }));
   // Tamil's menu words are the longest: its desktop row is set smaller and closer, and starts at 1280px wide
   // rather than 1024px, where it can't fit beside the logo.
@@ -117,11 +118,26 @@ export default function Header() {
             <LanguageSwitcher />
           </nav>
 
+          {/* Phones and tablets: a way into the AI experts' chat that sits in the header, so it's easy to spot
+              and covers nothing. Laptops get the labelled chat bubble instead. Hidden on the chat pages themselves. */}
+          <div className={`${compact ? "xl:hidden" : "lg:hidden"} flex items-center gap-3 -mr-2.5`}>
+          {!onChat && (
+            <a
+              href={href("/chat")}
+              className="flex items-center gap-1.5 min-h-11 rounded-full bg-brand-orange-aa pl-1 pr-3 max-[359px]:pr-1 text-white shadow-md shadow-brand-orange/30 transition-colors hover:bg-brand-orange-aa-hover"
+            >
+              <span className="flex -space-x-2.5" aria-hidden="true">
+                <img src={Images.mascots.poultry} alt="" className="w-8 h-8 rounded-full border-2 border-white bg-white object-contain p-px" />
+                <img src={Images.mascots.dairy} alt="" className="w-8 h-8 rounded-full border-2 border-white bg-white object-contain p-px" />
+              </span>
+              <span className="whitespace-nowrap text-[13px] font-bold tracking-wide max-[359px]:sr-only">{t.nav.askAi}</span>
+            </a>
+          )}
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-expanded={mobileOpen}
             aria-controls="mobile-menu"
-            className={`${compact ? "xl:hidden" : "lg:hidden"} flex flex-col items-center justify-center gap-1.5 w-11 h-11 -mr-2.5`}
+            className="flex flex-col items-center justify-center gap-1.5 w-11 h-11"
             aria-label={t.nav.menu}
           >
             <span
@@ -134,6 +150,7 @@ export default function Header() {
               className={`block w-6 h-0.5 transition-all bg-brand-navy ${mobileOpen ? "-rotate-45 -translate-y-2" : ""}`}
             />
           </button>
+          </div>
         </div>
       </div>
 

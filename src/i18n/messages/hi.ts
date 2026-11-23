@@ -52,6 +52,7 @@ const hi: Messages = {
     careers: "करियर",
     contact: "संपर्क करें",
     menu: "मेनू खोलें या बंद करें",
+    askAi: "AI से पूछें",
     language: "भाषा",
   },
 

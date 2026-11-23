@@ -52,6 +52,7 @@ const bn: Messages = {
     careers: "ক্যারিয়ার",
     contact: "যোগাযোগ করুন",
     menu: "মেনু খুলুন বা বন্ধ করুন",
+    askAi: "AI-কে জিজ্ঞাসা",
     language: "ভাষা",
   },
 

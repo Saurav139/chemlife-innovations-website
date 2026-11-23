@@ -52,6 +52,7 @@ const kn: Messages = {
     careers: "ವೃತ್ತಿ",
     contact: "ಸಂಪರ್ಕಿಸಿ",
     menu: "ಮೆನು ತೆರೆಯಿರಿ ಅಥವಾ ಮುಚ್ಚಿ",
+    askAi: "AI ಕೇಳಿ",
     language: "ಭಾಷೆ",
   },
 

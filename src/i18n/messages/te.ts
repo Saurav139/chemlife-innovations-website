@@ -52,6 +52,7 @@ const te: Messages = {
     careers: "ఉద్యోగాలు",
     contact: "సంప్రదించండి",
     menu: "మెనూ తెరవండి లేదా మూసివేయండి",
+    askAi: "AI ని అడగండి",
     language: "భాష",
   },
 

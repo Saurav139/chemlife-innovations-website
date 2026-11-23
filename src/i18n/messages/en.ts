@@ -52,6 +52,7 @@ const en = {
     careers: "Careers",
     contact: "Contact Us",
     menu: "Toggle menu",
+    askAi: "Ask AI",
     language: "Language",
   },
 

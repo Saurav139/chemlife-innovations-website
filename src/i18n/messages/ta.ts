@@ -52,6 +52,7 @@ const ta: Messages = {
     careers: "வேலைவாய்ப்பு",
     contact: "தொடர்புகொள்ள",
     menu: "மெனுவைத் திற அல்லது மூடு",
+    askAi: "AI-யிடம் கேள்",
     language: "மொழி",
   },
 
