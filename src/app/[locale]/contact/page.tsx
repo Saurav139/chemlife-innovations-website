@@ -491,7 +491,7 @@ export default function ContactPage() {
                               rows={5}
                               value={formData.message}
                               onChange={handleInputChange}
-                              className={`w-full bg-white border ${errors.message ? "border-red-600" : "border-gray-250"
+                              className={`block w-full bg-white border ${errors.message ? "border-red-600" : "border-gray-250"
                                 } rounded-xl px-4 py-3.5 text-base md:text-sm text-brand-navy focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all resize-none`}
                               placeholder={t.messagePlaceholder}
                             />
@@ -525,15 +525,15 @@ export default function ContactPage() {
 
                           {errorBox}
 
-                          {/* Submit Button */}
-                          <div className="pt-2">
-                            <button type="submit" disabled={busy !== null || !captchaToken} className={primaryButton}>
+                          {/* Submit Button, with the note beside it on wider screens */}
+                          <div className="flex flex-col gap-3 md:flex-row md:items-center md:gap-5">
+                            <button type="submit" disabled={busy !== null || !captchaToken} className={`${primaryButton} shrink-0`}>
                               {busy ? <>{spinner}{d.sending}</> : t.send}
                             </button>
                             {TURNSTILE_SITE_KEY && !captchaToken && !busy ? (
-                              <p className="mt-2 text-xs text-slate-500" aria-live="polite">{t.captchaPending}</p>
+                              <p className="text-xs text-slate-500" aria-live="polite">{t.captchaPending}</p>
                             ) : (
-                              <p className="mt-2 text-xs text-slate-500">{t.codeHint}</p>
+                              <p className="text-xs text-slate-500">{t.codeHint}</p>
                             )}
                           </div>
                         </form>
