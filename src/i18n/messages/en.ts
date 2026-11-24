@@ -822,7 +822,7 @@ const en = {
     send: "Send Message",
     // The code step: before the message is sent, the visitor confirms their email address with a 4-digit code.
     // Its other wording (title, "send a new code", wrong-code errors) is the dossier form's, below.
-    codeHint: "We'll email you a 4-digit code to confirm your address before your message is sent.",
+    codeHint: "We'll email you a 4-digit code to confirm your email address before your message is sent.",
     // {email} is the visitor's address.
     codeText: "We've sent a 4-digit code to {email}. Enter it here to send your message.",
     verify: "Confirm and Send",
