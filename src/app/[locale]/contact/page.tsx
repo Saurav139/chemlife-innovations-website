@@ -127,6 +127,26 @@ export default function ContactPage() {
 
   const focusOnMount = useCallback((el: HTMLElement | null) => el?.focus({ preventScroll: true }), []);
 
+  // The Google map costs about half a megabyte of script, so it's only added once its box is close to the screen.
+  // (The iframe's own loading="lazy" starts it far too early: on phones it loaded with the page.)
+  const mapBox = useRef<HTMLDivElement>(null);
+  const [showMap, setShowMap] = useState(false);
+  useEffect(() => {
+    const box = mapBox.current;
+    if (!box || !("IntersectionObserver" in window)) return setShowMap(true);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          setShowMap(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "300px 0px" }
+    );
+    observer.observe(box);
+    return () => observer.disconnect();
+  }, []);
+
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
 
@@ -676,23 +696,25 @@ export default function ContactPage() {
 
                 {/* Google Maps Embed Container. The pin underneath shows while the map loads (it waits until it's near
                     the screen), so the box is never blank. */}
-                <div className="relative w-full aspect-[4/3] md:aspect-[16/9] lg:aspect-[4/3] rounded-3xl overflow-hidden border border-gray-200 shadow-sm bg-slate-100 select-none">
+                <div ref={mapBox} className="relative w-full aspect-[4/3] md:aspect-[16/9] lg:aspect-[4/3] rounded-3xl overflow-hidden border border-gray-200 shadow-sm bg-slate-100 select-none">
                   <div className="absolute inset-0 flex items-center justify-center text-slate-300" aria-hidden="true">
                     <svg className="w-12 h-12" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z" />
                     </svg>
                   </div>
-                  <iframe
-                    src="https://maps.google.com/maps?q=13.273301,77.576311+(Chemlife%20Innovations%20Pvt%20Ltd)&z=16&output=embed"
-                    width="100%"
-                    height="100%"
-                    style={{ border: 0 }}
-                    allowFullScreen
-                    loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"
-                    title={t.mapTitle}
-                    className="relative w-full h-full opacity-90 hover:opacity-100 transition-opacity duration-300"
-                  />
+                  {showMap && (
+                    <iframe
+                      src="https://maps.google.com/maps?q=13.273301,77.576311+(Chemlife%20Innovations%20Pvt%20Ltd)&z=16&output=embed"
+                      width="100%"
+                      height="100%"
+                      style={{ border: 0 }}
+                      allowFullScreen
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                      title={t.mapTitle}
+                      className="relative w-full h-full opacity-90 hover:opacity-100 transition-opacity duration-300"
+                    />
+                  )}
                 </div>
                 <a
                   href="https://www.google.com/maps/search/?api=1&query=13.273301,77.576311"
