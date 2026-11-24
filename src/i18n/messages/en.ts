@@ -816,7 +816,7 @@ const en = {
     sending: "Sending Message...",
     send: "Send Message",
     // The code step: before the message is sent, the visitor confirms their email address with a 4-digit code.
-    codeHint: "We'll email you a 4-digit code to confirm your address before your message is sent.",
+    codeHint: "We'll email you a 4-digit code to confirm your email address before your message is sent.",
     codeSending: "Sending...",
     codeTitle: "Check your email",
     // {email} is the visitor's address, {resend} the "send a new code" link, {left} a number.
