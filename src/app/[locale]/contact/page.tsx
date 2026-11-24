@@ -41,6 +41,26 @@ const EMPTY_FORM: FormData = {
 };
 
 type SubmitError = ContactErrorCode | "network";
+// The message, then the 4-digit code emailed to the visitor, then "sent".
+type Step = "form" | "code" | "sent";
+const CODE_LENGTH = 4;
+
+/** Posts one step to /api/contact. Returns the response body, or the reason it failed. */
+async function post(body: object): Promise<{ data?: Record<string, unknown>; error?: SubmitError; left?: number }> {
+  try {
+    const res = await fetch("/api/contact", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+      signal: AbortSignal.timeout(20_000),
+    });
+    const data = await res.json().catch(() => null);
+    if (res.ok && data) return { data };
+    return { error: typeof data?.error === "string" ? data.error : "send_failed", left: data?.left };
+  } catch {
+    return { error: "network" };
+  }
+}
 
 /** Fills {name} placeholders in a translated sentence with links or other elements. */
 function fill(template: string, parts: Record<string, React.ReactNode>) {
@@ -57,14 +77,18 @@ interface FormErrors {
 export default function ContactPage() {
   const t = useT().contact;
   const locale = useLocale();
-  // What to tell the visitor when the message couldn't be sent. All of them also offer to email it instead.
-  const SUBMIT_ERRORS: Record<SubmitError, string> = t.submitErrors;
   const [formData, setFormData] = useState<FormData>(EMPTY_FORM);
 
   const [errors, setErrors] = useState<FormErrors>({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [submitError, setSubmitError] = useState<SubmitError | null>(null);
+  const [step, setStep] = useState<Step>("form");
+  const [busy, setBusy] = useState<"submit" | "resend" | null>(null);
+  const [submitError, setSubmitError] = useState<{ code: SubmitError; left?: number } | null>(null);
+  // The signed challenge from /api/contact and the code the visitor types.
+  const [challenge, setChallenge] = useState("");
+  const [code, setCode] = useState("");
+  const [codeMissing, setCodeMissing] = useState(false);
+  const [resent, setResent] = useState(false);
+  const codeField = useRef<HTMLInputElement>(null);
   // The CAPTCHA token from the Turnstile widget. Null until the visitor passes; the form can't be sent without it.
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
   const captcha = useRef<TurnstileHandle>(null);
@@ -162,37 +186,58 @@ export default function ContactPage() {
     }
   };
 
-  // Emails the message to the team through /api/contact. "Sent" is only shown once the email has gone.
+  // Step 1: the message goes to /api/contact, which emails the visitor a code. Nothing reaches the team yet.
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateForm() || !captchaToken) return;
 
-    setIsSubmitting(true);
+    setBusy("submit");
     setSubmitError(null);
-    let error: SubmitError | null = null;
-    try {
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...formData, turnstileToken: captchaToken }),
-        signal: AbortSignal.timeout(20_000),
-      });
-      if (!res.ok) {
-        const code = (await res.json().catch(() => null))?.error;
-        error = code && code in SUBMIT_ERRORS ? code : "send_failed";
-      }
-    } catch {
-      error = "network";
-    }
-    setIsSubmitting(false);
+    const { data, error } = await post({ action: "start", ...formData, locale, turnstileToken: captchaToken });
+    setBusy(null);
     // Tokens are single-use: ask the widget for a fresh one before any further attempt.
     captcha.current?.reset();
+    if (error) return setSubmitError({ code: error });
+    // The widget leaves the page with the form, and makes a new token if the visitor comes back to it.
+    setCaptchaToken(null);
+    setChallenge(String(data?.challenge ?? ""));
+    setCode("");
+    setCodeMissing(false);
+    setResent(false);
+    setStep("code");
+  };
+
+  // Step 2: the right code emails the message to the team. "Sent" is only shown once the email has gone.
+  const submitCode = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (code.length !== CODE_LENGTH) {
+      setCodeMissing(true);
+      return codeField.current?.focus();
+    }
+    setBusy("submit");
+    setSubmitError(null);
+    setResent(false);
+    const { error, left } = await post({ action: "verify", challenge, code });
+    setBusy(null);
     if (error) {
-      setSubmitError(error);
-      return;
+      setSubmitError({ code: error, left });
+      return codeField.current?.select();
     }
     track("contact_form_submit", { inquiry_type: formData.inquiryType });
-    setIsSubmitted(true);
+    setStep("sent");
+  };
+
+  const resendCode = async () => {
+    setBusy("resend");
+    setSubmitError(null);
+    setResent(false);
+    const { data, error } = await post({ action: "resend", challenge });
+    setBusy(null);
+    if (error) return setSubmitError({ code: error });
+    setChallenge(String(data?.challenge ?? ""));
+    setCode("");
+    setResent(true);
+    codeField.current?.focus();
   };
 
   // The same message as a pre-filled email, for when the form can't send it.
@@ -201,6 +246,52 @@ export default function ContactPage() {
   )}&body=${encodeURIComponent(
     `${formData.message}\n\n${formData.name}${formData.phone ? `\n${formData.phone}` : ""}`
   )}`;
+
+  // Problems with the code itself are told plainly; anything else also offers to email or call instead.
+  const errorBox = submitError && (
+    <div role="alert" className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+      {submitError.code === "code_wrong" || submitError.code === "code_expired" || submitError.code === "code_attempts" ? (
+        <p className="font-semibold">
+          {submitError.code === "code_wrong"
+            ? fill(t.codeErrors.wrong, { left: submitError.left ?? 1 })
+            : submitError.code === "code_expired"
+              ? t.codeErrors.expired
+              : t.codeErrors.attempts}
+        </p>
+      ) : (
+        <>
+          <p className="font-semibold">
+            {t.submitErrors[submitError.code in t.submitErrors ? (submitError.code as keyof typeof t.submitErrors) : "send_failed"]}
+          </p>
+          <p className="mt-1">
+            {fill(t.fallback, {
+              email: (
+                <a href={fallbackEmail} className="underline font-semibold hover:text-red-800">
+                  {t.fallbackEmail}
+                </a>
+              ),
+              address: CONTACT_EMAIL,
+              phone: (
+                <a href={`tel:${CONTACT_PHONE.replace(/\s/g, "")}`} className="underline whitespace-nowrap hover:text-red-800">
+                  {CONTACT_PHONE}
+                </a>
+              ),
+            })}
+          </p>
+        </>
+      )}
+    </div>
+  );
+
+  const spinner = (
+    <svg aria-hidden="true" className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+    </svg>
+  );
+  const primaryButton =
+    "w-full md:w-auto px-8 py-3.5 bg-brand-navy text-white font-bold text-sm rounded-full hover:bg-teal-aa focus:outline-none transition-all duration-300 shadow-sm flex items-center justify-center gap-2 cursor-pointer disabled:bg-slate-400";
+  const textButton = "font-semibold text-teal-aa underline underline-offset-4 hover:text-brand-navy cursor-pointer disabled:opacity-60";
 
   return (
     <VariantProvider>
@@ -244,7 +335,7 @@ export default function ContactPage() {
               <div className="lg:col-span-7">
                 <div className="bg-gray-55 border border-gray-250 rounded-3xl p-8 md:p-10 shadow-sm relative overflow-hidden">
                   <AnimatePresence mode="wait">
-                    {!isSubmitted ? (
+                    {step === "form" ? (
                       <motion.div
                         key="contact-form"
                         initial={{ opacity: 1 }}
@@ -424,55 +515,105 @@ export default function ContactPage() {
                           {TURNSTILE_SITE_KEY ? (
                             <Turnstile ref={captcha} siteKey={TURNSTILE_SITE_KEY} language={locale} onToken={setCaptchaToken} />
                           ) : (
-                            submitError !== "unavailable" && (
-                              <p className="text-sm text-red-700">{SUBMIT_ERRORS.unavailable}</p>
+                            submitError?.code !== "unavailable" && (
+                              <p className="text-sm text-red-700">{t.submitErrors.unavailable}</p>
                             )
                           )}
 
-                          {submitError && (
-                            <div role="alert" className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-                              <p className="font-semibold">{SUBMIT_ERRORS[submitError]}</p>
-                              <p className="mt-1">
-                                {fill(t.fallback, {
-                                  email: (
-                                    <a href={fallbackEmail} className="underline font-semibold hover:text-red-800">
-                                      {t.fallbackEmail}
-                                    </a>
-                                  ),
-                                  address: CONTACT_EMAIL,
-                                  phone: (
-                                    <a href={`tel:${CONTACT_PHONE.replace(/\s/g, "")}`} className="underline whitespace-nowrap hover:text-red-800">
-                                      {CONTACT_PHONE}
-                                    </a>
-                                  ),
-                                })}
-                              </p>
-                            </div>
-                          )}
+                          {errorBox}
 
                           {/* Submit Button */}
                           <div className="pt-2">
-                            <button
-                              type="submit"
-                              disabled={isSubmitting || !captchaToken}
-                              className="w-full md:w-auto px-8 py-3.5 bg-brand-navy text-white font-bold text-sm rounded-full hover:bg-teal-aa focus:outline-none transition-all duration-300 shadow-sm flex items-center justify-center gap-2 cursor-pointer disabled:bg-slate-400"
-                            >
-                              {isSubmitting ? (
-                                <>
-                                  <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
-                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                                  </svg>
-                                  {t.sending}
-                                </>
-                              ) : (
-                                t.send
-                              )}
+                            <button type="submit" disabled={busy !== null || !captchaToken} className={primaryButton}>
+                              {busy ? <>{spinner}{t.codeSending}</> : t.send}
                             </button>
-                            {TURNSTILE_SITE_KEY && !captchaToken && !isSubmitting && (
+                            {TURNSTILE_SITE_KEY && !captchaToken && !busy ? (
                               <p className="mt-2 text-xs text-slate-500" aria-live="polite">{t.captchaPending}</p>
+                            ) : (
+                              <p className="mt-2 text-xs text-slate-500">{t.codeHint}</p>
                             )}
                           </div>
+                        </form>
+                      </motion.div>
+                    ) : step === "code" ? (
+                      <motion.div
+                        key="contact-code"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -20 }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        <h2 className="font-heading text-2xl md:text-3xl font-bold text-brand-navy mb-2">
+                          {t.codeTitle}
+                        </h2>
+                        <p className="text-gray-500 text-sm mb-8">
+                          {fill(t.codeText, {
+                            email: <strong className="font-semibold text-brand-navy break-all">{formData.email.trim()}</strong>,
+                          })}
+                        </p>
+
+                        <form onSubmit={submitCode} noValidate className="space-y-6">
+                          <div>
+                            <label htmlFor="code" className="block text-xs font-bold text-brand-navy uppercase tracking-wider mb-2">
+                              {t.codeLabel}
+                            </label>
+                            <input
+                              ref={codeField}
+                              autoFocus
+                              id="code"
+                              name="code"
+                              type="text"
+                              inputMode="numeric"
+                              autoComplete="one-time-code"
+                              pattern="[0-9]*"
+                              maxLength={CODE_LENGTH}
+                              value={code}
+                              onChange={(e) => {
+                                setCode(e.target.value.replace(/\D/g, "").slice(0, CODE_LENGTH));
+                                setCodeMissing(false);
+                              }}
+                              aria-invalid={codeMissing || undefined}
+                              aria-describedby={codeMissing ? "code-error" : undefined}
+                              className={`w-40 bg-white border ${codeMissing ? "border-red-600" : "border-gray-250"
+                                } rounded-xl pl-6 pr-4 py-3.5 text-center text-2xl font-bold tracking-[0.5em] text-brand-navy focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all`}
+                            />
+                            {codeMissing && (
+                              <p id="code-error" className="text-red-600 text-xs mt-1.5 font-medium">{t.codeErrors.empty}</p>
+                            )}
+                          </div>
+
+                          {errorBox}
+                          {resent && !submitError && (
+                            <p className="text-sm text-teal-aa font-semibold" aria-live="polite">{t.resent}</p>
+                          )}
+
+                          <div className="pt-2">
+                            <button type="submit" disabled={busy !== null} className={primaryButton}>
+                              {busy === "submit" ? <>{spinner}{t.sending}</> : t.verify}
+                            </button>
+                          </div>
+                          <p className="text-sm text-gray-500">
+                            {fill(t.resendPrompt, {
+                              resend: (
+                                <button type="button" onClick={resendCode} disabled={busy !== null} className={textButton}>
+                                  {busy === "resend" ? t.codeSending : t.resendLink}
+                                </button>
+                              ),
+                            })}
+                          </p>
+                          <p className="text-sm">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setSubmitError(null);
+                                setStep("form");
+                              }}
+                              disabled={busy !== null}
+                              className={textButton}
+                            >
+                              {t.changeEmail}
+                            </button>
+                          </p>
                         </form>
                       </motion.div>
                     ) : (
@@ -500,7 +641,7 @@ export default function ContactPage() {
                         <button
                           onClick={() => {
                             setFormData(EMPTY_FORM);
-                            setIsSubmitted(false);
+                            setStep("form");
                           }}
                           className="px-6 py-2.5 bg-gray-150 text-gray-700 hover:bg-gray-200 transition-colors font-bold text-xs rounded-full cursor-pointer"
                         >
