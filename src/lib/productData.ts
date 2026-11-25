@@ -496,6 +496,9 @@ export const SAFETY = {
   disposal: "Dispose of contents and container in accordance with applicable local, regional and national regulations. Do not reuse empty containers.",
 } as const;
 
+/** Where every product is made, as each Technical Data Sheet states. */
+export const FACILITY = "FAMI-QS-certified facility";
+
 /** The quality paragraph that closes every Technical Data Sheet. */
 export const qualityAssurance = (name: string) =>
   `${name} is manufactured in a FAMI-QS-certified facility using carefully selected raw materials and stringent quality management systems to ensure consistent product performance and batch-to-batch uniformity. Each production batch undergoes comprehensive quality control testing, including identity verification, physical characterization, and compliance with defined manufacturing specifications prior to release.`;

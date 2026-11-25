@@ -377,6 +377,8 @@ const en = {
     iconAlt: "icon",
     // Headings and labels for a product's approved technical data (src/lib/productData.ts). The data itself stays in English.
     data: {
+      onThisPage: "On this page",
+      manufacturing: "Manufacturing",
       heading: "Technical data",
       intro: "The approved figures from this product's technical data sheet, specification and safety data sheet.",
       englishNote: "Technical data is given in English.",
