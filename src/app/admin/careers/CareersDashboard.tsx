@@ -13,6 +13,8 @@ interface Props {
   applications: Application[];
   /** How many applications there are in all; more than are listed once there are very many. */
   total: number;
+  /** True once the dashboard holds all it can, and new applications are being turned away. */
+  full: boolean;
 }
 
 // Each use adds its own display class, so some can be hidden on narrow screens.
@@ -20,10 +22,10 @@ const quiet = "items-center min-h-10 px-3 rounded-full text-sm font-semibold whi
 
 type Tab = "applications" | "roles";
 
-export default function CareersDashboard({ builtIn, roles, applications, total }: Props) {
+export default function CareersDashboard({ builtIn, roles, applications, total, full }: Props) {
   const [tab, setTab] = useState<Tab>("applications");
   // Kept here so the tab's count stays right as applications are read, moved on or deleted.
-  const [received, setReceived] = useState({ applications, total });
+  const [received, setReceived] = useState({ applications, total, full });
   const list = received.applications;
   const newCount = list.filter((item) => item.status === "new").length;
 
@@ -97,7 +99,7 @@ export default function CareersDashboard({ builtIn, roles, applications, total }
 
         {/* Both stay on the page, so a half-written internship survives a look at the applications. */}
         <div role="tabpanel" id="panel-applications" aria-labelledby="tab-applications" hidden={tab !== "applications"}>
-          <Applications list={list} total={received.total} onChange={setReceived} />
+          <Applications list={list} total={received.total} full={received.full} onChange={setReceived} />
         </div>
         <div role="tabpanel" id="panel-roles" aria-labelledby="tab-roles" hidden={tab !== "roles"}>
           <CareersRoles builtIn={builtIn} initial={roles} />

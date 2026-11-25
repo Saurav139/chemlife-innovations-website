@@ -23,6 +23,12 @@ export class RateLimiter {
     this.windows.set(key, { start: now, count: 1 });
   }
 
+  /** Gives back one request counted with `consume`, e.g. when what it was reserved for didn't happen after all. */
+  refund(key: string, now = Date.now()): void {
+    const w = this.windows.get(key);
+    if (w && now - w.start < this.windowMs && w.count > 0) w.count--;
+  }
+
   /** Forgets `key`'s count, e.g. after a correct password. */
   reset(key: string): void {
     this.windows.delete(key);

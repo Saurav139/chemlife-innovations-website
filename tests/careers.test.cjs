@@ -85,3 +85,20 @@ test("an internship's application page exists in every language", () => {
   assert.equal(config.localizePath('/careers/apply/research-intern', 'en'), '/careers/apply/research-intern');
   assert.equal(config.isTranslatedPath('/careers/apply'), false);
 });
+
+test('an allowance reserved for something that then fails is given back', () => {
+  const { RateLimiter } = load('src/lib/rateLimit.ts');
+  const limit = new RateLimiter(2, 60_000);
+  limit.consume('a', 1000);
+  limit.consume('a', 1000);
+  assert.ok(limit.retryAfter('a', 1000) > 0);
+  limit.refund('a', 1000);
+  assert.equal(limit.retryAfter('a', 1000), 0);
+  // Nothing to give back to someone who has used none, and a refund never goes below zero.
+  limit.refund('b', 1000);
+  limit.refund('a', 1000);
+  limit.refund('a', 1000);
+  limit.consume('a', 1000);
+  limit.consume('a', 1000);
+  assert.ok(limit.retryAfter('a', 1000) > 0);
+});

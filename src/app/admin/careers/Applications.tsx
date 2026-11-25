@@ -24,14 +24,16 @@ interface Props {
   list: Application[];
   /** How many applications there are in all, which can be more than `list` holds. */
   total: number;
-  onChange: (received: { applications: Application[]; total: number }) => void;
+  /** True once the dashboard holds all it can, and new applications are being turned away. */
+  full: boolean;
+  onChange: (received: { applications: Application[]; total: number; full: boolean }) => void;
 }
 
 /** An address is only ever put in a link in a form that can't add recipients, a subject or anything else to it. */
 const mailto = (email: string, subject?: string) =>
   `mailto:${encodeURIComponent(email).replace(/%40/g, "@")}${subject ? `?subject=${encodeURIComponent(subject)}` : ""}`;
 
-export default function Applications({ list, total, onChange }: Props) {
+export default function Applications({ list, total, full, onChange }: Props) {
   const [status, setStatus] = useState<ApplicationStatus | "all">("all");
   const [role, setRole] = useState("all");
   const [query, setQuery] = useState("");
@@ -54,13 +56,20 @@ export default function Applications({ list, total, onChange }: Props) {
     setBusy(false);
     if (res?.status === 401) return window.location.reload();
     if (!res?.ok || !Array.isArray(data.applications)) return setError(data.error || "Couldn't reach the site. Check your connection and try again.");
-    onChange({ applications: data.applications, total: Number(data.total) || data.applications.length });
+    onChange({ applications: data.applications, total: Number(data.total) || data.applications.length, full: data.full === true });
     setNote(done);
   }
 
   function remove(item: Application) {
     if (!window.confirm(`Delete ${item.name}'s application and résumé for good?`)) return;
     send("DELETE", { id: item.id }, `${item.name}'s application was deleted.`);
+  }
+
+  /** Deletes everything the search and filters currently show, e.g. a batch of junk found by searching for its address. */
+  function removeShown() {
+    const ids = shown.map((item) => item.id);
+    if (!window.confirm(`Delete these ${ids.length} applications and their résumés for good? This can't be undone.`)) return;
+    send("DELETE", { ids }, `${ids.length} applications were deleted.`);
   }
 
   // Roles by the title they had when applied for, so applications for a since-deleted internship can still be found.
@@ -72,6 +81,7 @@ export default function Applications({ list, total, onChange }: Props) {
   };
   const inRole = list.filter((item) => (role === "all" || item.roleId === role) && matches(item));
   const shown = inRole.filter((item) => status === "all" || item.status === status);
+  const filtered = words.length > 0 || role !== "all" || status !== "all";
 
   /** Saves the applications on show as a spreadsheet file (CSV), for sharing or keeping outside the dashboard. */
   function exportCsv() {
@@ -124,6 +134,12 @@ export default function Applications({ list, total, onChange }: Props) {
           </button>
         ))}
         <span className="grow" />
+        {/* Only once the list has been narrowed, so it can't be mistaken for a way to clear a single application. */}
+        {filtered && shown.length > 1 && (
+          <button type="button" disabled={busy} onClick={removeShown} className={`${quiet} text-red-700 hover:bg-red-50 cursor-pointer disabled:opacity-60`}>
+            Delete these ({shown.length})
+          </button>
+        )}
         <button type="button" disabled={shown.length === 0} onClick={exportCsv} className={`${quiet} text-slate-600 hover:bg-slate-100 cursor-pointer disabled:opacity-50 disabled:cursor-default`}>
           Export CSV
         </button>
@@ -133,6 +149,12 @@ export default function Applications({ list, total, onChange }: Props) {
       </div>
 
       <p role="status" className="mt-3 min-h-5 text-sm font-semibold text-teal-aa">{note}</p>
+      {full && (
+        <p role="alert" className="mb-2 rounded-xl bg-red-50 border border-red-200 text-red-800 text-sm px-4 py-3">
+          <strong>The dashboard is full, and new applications are being turned away.</strong> Delete applications you no
+          longer need (search or filter, then &quot;Delete these&quot;) to make room.
+        </p>
+      )}
       {total > list.length && (
         <p className="mb-2 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-sm px-4 py-3">
           Showing the newest {list.length} of {total} applications. Delete ones you no longer need to see the older ones.

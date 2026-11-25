@@ -47,7 +47,7 @@ export default async function CareersDashboardPage() {
       requirements: english[i].requirements,
       picture: ROLE_PICTURES[i] ?? ROLE_PICTURES[0],
     }));
-    return <CareersDashboard builtIn={builtIn} roles={state} applications={received.applications} total={received.total} />;
+    return <CareersDashboard builtIn={builtIn} roles={state} applications={received.applications} total={received.total} full={received.full} />;
   } catch (error) {
     console.error("Roles dashboard: database error", error);
     const problem = databaseProblem(error);
