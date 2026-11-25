@@ -713,6 +713,20 @@ const en = {
     resumeHint: "PDF or Word file, up to 5 MB.",
     send: "Send Application",
     sending: "Sending...",
+    privacy: "We use these details only to review your application.",
+    chooseFile: "Choose file",
+    removeFile: "Remove",
+    // The application page's browser title; {role} is the internship.
+    applyTitle: "Apply: {role}",
+    // Shown instead of the form when the internship has been closed.
+    closedTitle: "This internship isn't taking applications right now",
+    closedText: "Have a look at the internships that are open.",
+    // The email that confirms an application has arrived (plain text). {role} is filled in by /api/careers;
+    // the greeting and sign-off are the code email's.
+    confirmEmail: {
+      subject: "We received your application for {role}",
+      body: "Thank you for applying for the {role} internship at ChemLife Innovations. Our hiring team has your application and résumé, and will write to you at this address if your profile is a match.",
+    },
     errors: {
       resume: "Please attach your résumé.",
       resumeType: "Please choose a PDF or Word file.",

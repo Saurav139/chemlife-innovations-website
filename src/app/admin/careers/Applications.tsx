@@ -23,6 +23,7 @@ const quiet = "inline-flex items-center min-h-10 px-3 rounded-full text-sm font-
 export default function Applications({ list, onChange }: { list: Application[]; onChange: (list: Application[]) => void }) {
   const [status, setStatus] = useState<ApplicationStatus | "all">("all");
   const [role, setRole] = useState("all");
+  const [query, setQuery] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [note, setNote] = useState("");
@@ -53,13 +54,55 @@ export default function Applications({ list, onChange }: { list: Application[]; 
 
   // Roles by the title they had when applied for, so applications for a since-deleted internship can still be found.
   const roles = [...new Map(list.map((item) => [item.roleId, item.roleTitle])).entries()];
-  const inRole = list.filter((item) => role === "all" || item.roleId === role);
+  const words = query.trim().toLowerCase().split(/\s+/).filter(Boolean);
+  const matches = (item: Application) => {
+    const text = `${item.name} ${item.email} ${item.phone} ${item.roleTitle} ${item.message}`.toLowerCase();
+    return words.every((word) => text.includes(word));
+  };
+  const inRole = list.filter((item) => (role === "all" || item.roleId === role) && matches(item));
   const shown = inRole.filter((item) => status === "all" || item.status === status);
+
+  /** Saves the applications on show as a spreadsheet file (CSV), for sharing or keeping outside the dashboard. */
+  function exportCsv() {
+    // Quoted throughout; a leading = + - or @ is defused so a spreadsheet never runs an applicant's text as a formula.
+    const cell = (value: string) => `"${(/^[=+\-@\t\r]/.test(value) ? `'${value}` : value).replace(/"/g, '""')}"`;
+    const rows = [
+      ["Received", "Name", "Email", "Phone", "Internship", "Department", "Status", "Message"],
+      ...shown.map((item) => [received(item.receivedAt), item.name, item.email, item.phone, item.roleTitle, item.department, STATUS_LABELS[item.status], item.message]),
+    ];
+    const csv = "\uFEFF" + rows.map((row) => row.map(cell).join(",")).join("\r\n");
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
+    link.download = `internship-applications-${new Date().toISOString().slice(0, 10)}.csv`;
+    link.click();
+    URL.revokeObjectURL(link.href);
+  }
   const chip = (active: boolean) =>
     `min-h-9 px-3.5 rounded-full border text-sm font-semibold cursor-pointer transition-colors ${active ? "bg-brand-navy border-brand-navy text-white" : "bg-white border-slate-200 text-slate-600 hover:border-slate-300"}`;
 
   return (
     <div>
+      <div className="flex flex-wrap items-center gap-2 mb-3">
+        <input
+          type="search"
+          aria-label="Search applications"
+          placeholder="Search by name, email, phone or message"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          className="min-h-10 grow basis-64 rounded-full border border-slate-200 bg-white px-4 text-sm focus:outline-none focus:border-teal-aa focus:ring-2 focus:ring-teal-aa/30"
+        />
+        {roles.length > 1 && (
+          <select
+            aria-label="Internship"
+            value={role}
+            onChange={(e) => setRole(e.target.value)}
+            className="min-h-10 max-w-[16rem] rounded-full border border-slate-200 bg-white px-3 text-sm font-semibold text-slate-700"
+          >
+            <option value="all">All internships</option>
+            {roles.map(([id, title]) => <option key={id} value={id}>{title}</option>)}
+          </select>
+        )}
+      </div>
       <div className="flex flex-wrap items-center gap-2">
         <button type="button" onClick={() => setStatus("all")} aria-pressed={status === "all"} className={chip(status === "all")}>
           All ({inRole.length})
@@ -70,17 +113,9 @@ export default function Applications({ list, onChange }: { list: Application[]; 
           </button>
         ))}
         <span className="grow" />
-        {roles.length > 1 && (
-          <select
-            aria-label="Internship"
-            value={role}
-            onChange={(e) => setRole(e.target.value)}
-            className="min-h-9 max-w-[16rem] rounded-full border border-slate-200 bg-white px-3 text-sm font-semibold text-slate-700"
-          >
-            <option value="all">All internships</option>
-            {roles.map(([id, title]) => <option key={id} value={id}>{title}</option>)}
-          </select>
-        )}
+        <button type="button" disabled={shown.length === 0} onClick={exportCsv} className={`${quiet} text-slate-600 hover:bg-slate-100 cursor-pointer disabled:opacity-50 disabled:cursor-default`}>
+          Export CSV
+        </button>
         <button type="button" disabled={busy} onClick={() => send("GET", undefined, "Up to date.")} className={`${quiet} text-teal-aa hover:bg-teal-50 cursor-pointer disabled:opacity-60`}>
           Refresh
         </button>

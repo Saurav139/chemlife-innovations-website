@@ -169,6 +169,13 @@ export async function POST(request: Request) {
       if (!sent) return fail("send_failed", 502);
     }
     check.use();
+    // A short note to the applicant that it arrived, in their language. The application stands whether or not it sends.
+    const t = (await getMessages(isLocale(check.data.locale) ? check.data.locale : DEFAULT_LOCALE)).careers;
+    const mine = (s: string) => s.replaceAll("{name}", form.name).replaceAll("{role}", role.title);
+    await emailVisitor(
+      { to: form.email, subject: mine(t.confirmEmail.subject), text: [t.codeEmail.greeting, t.confirmEmail.body, "", t.codeEmail.signoff].map(mine).join("\n") },
+      "careers",
+    );
     return NextResponse.json({ ok: true });
   }
 

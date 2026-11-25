@@ -152,7 +152,16 @@ export default function CareersView(careers: CareersProps) {
                         aria-selected={active}
                         aria-controls="role-panel"
                         tabIndex={active ? 0 : -1}
-                        onClick={() => setSelectedRoleId(role.id)}
+                        onClick={() => {
+                          setSelectedRoleId(role.id);
+                          // On a phone the tabs stack up and push the details off the screen: bring them back.
+                          requestAnimationFrame(() => {
+                            const panel = document.getElementById("role-panel");
+                            if (!panel || panel.getBoundingClientRect().top < window.innerHeight * 0.6) return;
+                            const calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+                            panel.scrollIntoView({ behavior: calm ? "auto" : "smooth", block: "start" });
+                          });
+                        }}
                         className={`text-left rounded-2xl border-2 px-5 py-4 transition-colors cursor-pointer ${
                           active ? "border-teal-aa bg-teal-50" : "border-gray-200 bg-white hover:border-teal-aa/50"
                         }`}
