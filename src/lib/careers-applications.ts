@@ -1,12 +1,12 @@
 import type { ResultSetHeader, RowDataPacket } from "mysql2/promise";
-import { APPLICATION_STATUSES, type Application, type ApplicationStatus } from "@/lib/careers";
+import { APPLICATION_STATUSES, RETENTION_MONTHS, type Application, type ApplicationStatus } from "@/lib/careers";
 import { database } from "@/lib/insights-store/db";
 
 // Internship applications, kept in the site's database with their résumés and shown in the dashboard at
 // /admin/careers. The table is created on first use.
 
 // Named for this version of the table's set-up, so a running server sets the table up again after an update.
-const g = globalThis as unknown as { careerApplicationsReady?: Promise<void> };
+const g = globalThis as unknown as { careerApplicationsReady?: Promise<void>; careerApplicationsTidied?: number };
 
 async function db() {
   const pool = await database();
@@ -42,6 +42,26 @@ async function db() {
   return pool;
 }
 
+/**
+ * Deletes applications (and their résumés) older than RETENTION_MONTHS. There's no timer on the server, so this runs
+ * when the dashboard is opened and when an application arrives, at most once a day per server process.
+ */
+export async function deleteOldApplications(): Promise<void> {
+  if (g.careerApplicationsTidied && Date.now() - g.careerApplicationsTidied < 24 * 3_600_000) return;
+  g.careerApplicationsTidied = Date.now();
+  try {
+    const [result] = await (await db()).execute<ResultSetHeader>(
+      "DELETE FROM career_applications WHERE received_at < DATE_SUB(?, INTERVAL ? MONTH)",
+      [new Date(), RETENTION_MONTHS],
+    );
+    if (result.affectedRows > 0) console.info(`[careers] Deleted ${result.affectedRows} application(s) older than ${RETENTION_MONTHS} months.`);
+  } catch (error) {
+    // Try again next time rather than in a day.
+    g.careerApplicationsTidied = undefined;
+    console.error("[careers] Couldn't delete old applications:", error instanceof Error ? error.message : error);
+  }
+}
+
 export interface NewApplication {
   roleId: string;
   roleTitle: string;
@@ -64,6 +84,8 @@ export async function saveApplication(a: NewApplication): Promise<boolean> {
      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'new', ?, ?)`,
     [a.roleId, a.roleTitle, a.department, a.name, a.email, a.phone, a.message, a.resumeName, a.resume, new Date(), a.fingerprint],
   );
+  // Not waited for: the applicant's answer doesn't depend on it.
+  void deleteOldApplications();
   return result.affectedRows > 0;
 }
 
@@ -72,6 +94,7 @@ export const LIST_LIMIT = 500;
 
 /** The newest applications first, without their résumés, and how many there are in all. */
 export async function listApplications(limit = LIST_LIMIT): Promise<{ applications: Application[]; total: number }> {
+  await deleteOldApplications();
   const pool = await db();
   const [[count]] = await pool.query<RowDataPacket[]>("SELECT COUNT(*) AS total FROM career_applications");
   const [rows] = await pool.query<RowDataPacket[]>(
