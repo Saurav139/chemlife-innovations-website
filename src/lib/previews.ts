@@ -5,6 +5,12 @@ import { isLiveHost } from "@/lib/seo";
 // the site instead. Never shown on the live site.
 export const PREVIEWS = [
   {
+    slug: "product-flagship",
+    href: "/previews/product-flagship",
+    title: "Product page: flagship design",
+    description: "One new product page, for any of the eight products with approved data: the photo dissolving into a navy hero, the lab-plate photographs and trial figures from the data sheets drawn as charts on a dark Evidence band, the inclusion rate on an orange panel with a batch calculator, and a bar that follows you down the page.",
+  },
+  {
     slug: "product-page",
     href: "/previews/product-page",
     title: "Product page: four corporate designs",
