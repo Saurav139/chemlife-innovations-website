@@ -709,6 +709,7 @@ const en = {
     resume: "Résumé / CV",
     resumeHint: "PDF or Word file, up to 5 MB.",
     send: "Send Application",
+    sending: "Sending...",
     privacy: "We use these details only to review your application.",
     errors: {
       resume: "Please attach your résumé.",
