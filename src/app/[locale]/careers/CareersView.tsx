@@ -69,7 +69,7 @@ export default function CareersView(careers: CareersProps) {
 
       <main id="main" tabIndex={-1} className="bg-white min-h-screen text-brand-navy">
         {/* A plain section, not a fade-in: it's the first screen, so it shows without waiting for the page's JavaScript. */}
-        <section className="pt-26 md:pt-32 pb-10 md:pb-16 lg:pt-36 lg:pb-20 text-white relative overflow-hidden bg-brand-navy flex items-center">
+        <section className="pt-40 md:pt-44 pb-10 md:pb-16 lg:pb-20 text-white relative overflow-hidden bg-brand-navy flex items-center">
           <div className="absolute inset-0 z-0">
             <Image src={Images.heroes.careers} alt={t.heroAlt} fill sizes="100vw" className="object-cover opacity-50" priority />
             <div className="absolute inset-0 bg-gradient-to-r from-brand-navy/95 via-brand-navy/80 to-brand-navy/60" />
