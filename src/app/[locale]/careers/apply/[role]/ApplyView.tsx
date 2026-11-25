@@ -150,7 +150,7 @@ export default function ApplyView({ roleId, ...careers }: CareersProps & { roleI
       <Header />
 
       <main id="main" tabIndex={-1} className="bg-gray-50 min-h-screen text-brand-navy">
-        <section className="bg-brand-navy text-white pt-28 md:pt-36 pb-24 md:pb-28">
+        <section className="bg-brand-navy text-white pt-36 md:pt-40 pb-24 md:pb-28">
           <div className="max-w-2xl mx-auto px-6">
             {backLink("inline-flex items-center gap-2 text-sm font-semibold text-white/80 hover:text-white mb-5")}
             {role ? (
