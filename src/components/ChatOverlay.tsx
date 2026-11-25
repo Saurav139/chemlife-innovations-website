@@ -1,18 +1,52 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import { Images } from "@/lib/assets";
 
+// Room left between the bubble and the footer's Privacy / Terms links when it moves up for them.
+const FOOTER_GAP = 8;
+
 export default function ChatOverlay() {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
+  const floater = useRef<HTMLDivElement>(null);
+
+  // Phones: once the footer's Privacy / Terms row reaches the bubble, the bubble rides up just above it, so the
+  // links can still be tapped. It follows the row as it scrolls (no transition, so it never lags onto the links).
+  useEffect(() => {
+    const el = floater.current;
+    const row = document.getElementById("footer-legal");
+    if (!el || !row || isOpen) return;
+    const phone = window.matchMedia("(max-width: 767px)");
+    let lift = 0;
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const next = phone.matches
+        ? Math.max(0, Math.ceil(el.getBoundingClientRect().bottom + lift + FOOTER_GAP - row.getBoundingClientRect().top))
+        : 0;
+      if (next === lift) return;
+      lift = next;
+      el.style.bottom = lift ? `calc(max(1rem, env(safe-area-inset-bottom)) + ${lift}px)` : "";
+    };
+    const schedule = () => { if (!frame) frame = requestAnimationFrame(update); };
+    update();
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", schedule);
+      el.style.bottom = "";
+    };
+  }, [isOpen]);
 
   return (
     // Moves with the search button onto the homepage hero's numbers strip (--float-lift, set by the hero).
-    <div className="fixed bottom-[max(1rem,env(safe-area-inset-bottom))] right-[max(1rem,env(safe-area-inset-right))] md:bottom-6 md:right-6 z-50 font-sans flex flex-col items-end [transform:translateY(calc(-1*var(--float-lift,0px)))] transition-transform duration-300 motion-reduce:transition-none">
+    <div ref={floater} className="fixed bottom-[max(1rem,env(safe-area-inset-bottom))] right-[max(1rem,env(safe-area-inset-right))] md:bottom-6 md:right-6 z-50 font-sans flex flex-col items-end [transform:translateY(calc(-1*var(--float-lift,0px)))] transition-transform duration-300 motion-reduce:transition-none">
       <AnimatePresence>
         {/* Expanded Panel */}
         {isOpen && (
