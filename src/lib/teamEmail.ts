@@ -1,6 +1,6 @@
 // Emails from the website's forms through Resend (resend.com): contact messages and internship applications to the
-// ChemLife team, and the codes that confirm visitors' addresses. RESEND_API_KEY turns this on; the sender address must be on a domain verified in Resend
-// (Resend refuses to send to anyone else's inbox from an unverified one).
+// ChemLife team, and the codes that confirm visitors' addresses. RESEND_API_KEY turns this on; the sender address
+// must be on a domain verified in Resend (Resend refuses to send to anyone else's inbox from an unverified one).
 
 import { CONTACT_EMAIL } from "@/lib/contact";
 
