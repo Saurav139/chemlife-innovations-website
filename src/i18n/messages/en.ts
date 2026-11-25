@@ -699,6 +699,7 @@ const en = {
     openText: "Choose an internship position below to see the details and apply.",
     noOpenTitle: "No open internships right now",
     noOpenText: "New openings will be listed here. Until then, you can email your résumé to {address}.",
+    selectPosition: "Select Internship Position",
     qualifications: "Required Qualifications",
     eligible: "Eligible Fields & Backgrounds",
     apply: "Apply for this Internship",
