@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import { cookies, headers } from "next/headers";
 import { ADMIN_COOKIE, adminConfigured, demoMode, validSession } from "@/lib/admin-auth";
 import { INTERNSHIP_ROLES } from "@/lib/catalog";
+import { ROLE_PICTURES } from "@/lib/careers";
 import { readCareers } from "@/lib/careers-store";
+import { getMessages } from "@/i18n/messages";
 import { databaseProblem, storeConfigured } from "@/lib/insights-store/db";
 import AdminLogin from "../insights/AdminLogin";
 import CareersRoles from "./CareersRoles";
@@ -33,7 +35,17 @@ export default async function CareersDashboardPage() {
 
   try {
     const state = await readCareers();
-    const builtIn = INTERNSHIP_ROLES.map((role) => ({ id: role.id, title: role.englishTitle, department: role.englishDepartment }));
+    // The built-in internships as the site has them, in English: what the dashboard shows, and starts from when one is edited.
+    const english = (await getMessages("en")).careers.roles;
+    const builtIn = INTERNSHIP_ROLES.map((role, i) => ({
+      id: role.id,
+      title: role.englishTitle,
+      department: role.englishDepartment,
+      roleScope: english[i].roleScope,
+      qualifications: english[i].qualifications,
+      requirements: english[i].requirements,
+      picture: ROLE_PICTURES[i] ?? ROLE_PICTURES[0],
+    }));
     return <CareersRoles builtIn={builtIn} initial={state} demo={demo} />;
   } catch (error) {
     console.error("Roles dashboard: database error", error);

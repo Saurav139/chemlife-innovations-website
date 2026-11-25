@@ -5,6 +5,6 @@ import { careersState } from "@/lib/careers-store";
 export const dynamic = "force-dynamic";
 
 export default async function CareersPage() {
-  const { closed, custom } = await careersState();
-  return <CareersView closedRoles={closed} customRoles={custom} />;
+  const { closed, custom, removed } = await careersState();
+  return <CareersView closedRoles={closed} customRoles={custom} removedRoles={removed} />;
 }

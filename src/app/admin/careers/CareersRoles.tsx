@@ -4,17 +4,15 @@ import { useState } from "react";
 import { ROLE_LIMITS, ROLE_PICTURES, linesOf, type CustomRole, type RoleContent, type RolePicture } from "@/lib/careers";
 import { Images } from "@/lib/assets";
 
-// The dashboard: a switch per internship, and a form to add an internship or change one added here. The three
-// internships that come with the site (translated into every language) can be opened and closed, not rewritten.
+// The dashboard: every internship has a switch, Edit and Delete, and there's a form to add one. The three that come
+// with the site are translated into every language until they're edited here; after that they show as written here.
 
-interface BuiltInRole {
-  id: string;
-  title: string;
-  department: string;
-}
 interface State {
   closed: string[];
+  /** Added internships, and rewritten built-in ones (under the built-in id). */
   custom: CustomRole[];
+  /** Ids of deleted built-in internships. */
+  removed: string[];
 }
 /** The form's boxes; the two lists are typed one entry per line. */
 interface Draft {
@@ -39,7 +37,7 @@ const box = "mt-1.5 w-full rounded-xl border border-slate-300 px-4 py-2.5 text-b
 const hint = "text-xs text-slate-500 mt-1";
 const quiet = "inline-flex items-center min-h-10 px-3 rounded-full text-sm font-semibold";
 
-export default function CareersRoles({ builtIn, initial, demo }: { builtIn: BuiltInRole[]; initial: State; demo: boolean }) {
+export default function CareersRoles({ builtIn, initial, demo }: { builtIn: CustomRole[]; initial: State; demo: boolean }) {
   const [state, setState] = useState(initial);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -62,17 +60,18 @@ export default function CareersRoles({ builtIn, initial, demo }: { builtIn: Buil
       window.location.reload();
       return false;
     }
-    if (!res?.ok || !Array.isArray(data.closed) || !Array.isArray(data.custom)) {
+    if (!res?.ok || !Array.isArray(data.closed) || !Array.isArray(data.custom) || !Array.isArray(data.removed)) {
       onError(data.error || "Couldn't reach the site. Check your connection and try again.");
       return false;
     }
-    setState({ closed: data.closed, custom: data.custom });
+    setState({ closed: data.closed, custom: data.custom, removed: data.removed });
     setSaved(done);
     return true;
   }
 
   function openForm(role?: CustomRole) {
     setEditing(role ? role.id : "new");
+    window.scrollTo({ top: 0 });
     setDraft(role ? draftOf(role) : EMPTY);
     setFormError("");
     setSaved("");
@@ -102,9 +101,18 @@ export default function CareersRoles({ builtIn, initial, demo }: { builtIn: Buil
   }
 
   const set = (key: keyof Draft) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setDraft((prev) => ({ ...prev, [key]: e.target.value }));
-  const roles = [...builtIn.map((role) => ({ ...role, custom: undefined as CustomRole | undefined })), ...state.custom.map((role) => ({ ...role, custom: role }))];
-  const openCount = roles.filter((role) => !state.closed.includes(role.id)).length;
-  const full = state.custom.length >= ROLE_LIMITS.roles;
+  // Built-in internships first (as rewritten here, or as the site has them), then the added ones.
+  const builtInIds = builtIn.map((role) => role.id);
+  const roles = [
+    ...builtIn.filter((role) => !state.removed.includes(role.id)).map((role) => {
+      const rewritten = state.custom.find((item) => item.id === role.id);
+      return { role: rewritten ?? role, translated: !rewritten };
+    }),
+    ...state.custom.filter((role) => !builtInIds.includes(role.id)).map((role) => ({ role, translated: false })),
+  ];
+  const openCount = roles.filter(({ role }) => !state.closed.includes(role.id)).length;
+  const full = state.custom.filter((role) => !builtInIds.includes(role.id)).length >= ROLE_LIMITS.roles;
+  const editingTranslated = roles.some(({ role, translated }) => role.id === editing && translated);
 
   return (
     <div className="min-h-screen">
@@ -158,6 +166,12 @@ export default function CareersRoles({ builtIn, initial, demo }: { builtIn: Buil
             <p className="text-sm text-slate-600 -mt-2">
               Write it in English. It appears as written on every language version of the Careers page.
             </p>
+            {editingTranslated && (
+              <p className="rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-sm px-4 py-3">
+                This internship is currently translated into all seven languages. Once you save changes, the other
+                languages show it in English, as written here.
+              </p>
+            )}
 
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
@@ -218,7 +232,7 @@ export default function CareersRoles({ builtIn, initial, demo }: { builtIn: Buil
         )}
 
         <ul className="mt-2 space-y-3">
-          {roles.map((role) => {
+          {roles.map(({ role, translated }) => {
             const open = !state.closed.includes(role.id);
             return (
               <li key={role.id} className={`rounded-2xl bg-white border shadow-sm p-5 ${editing === role.id ? "border-teal-aa" : "border-slate-200"}`}>
@@ -242,18 +256,15 @@ export default function CareersRoles({ builtIn, initial, demo }: { builtIn: Buil
                     </button>
                   </div>
                 </div>
-                {role.custom ? (
-                  <div className="mt-3 pt-3 border-t border-slate-100 flex items-center gap-1 -ml-3">
-                    <button type="button" disabled={busy} onClick={() => openForm(role.custom)} className={`${quiet} text-teal-aa hover:bg-teal-50 cursor-pointer`}>
-                      Edit
-                    </button>
-                    <button type="button" disabled={busy} onClick={() => remove(role.custom!)} className={`${quiet} text-red-700 hover:bg-red-50 cursor-pointer`}>
-                      Delete
-                    </button>
-                  </div>
-                ) : (
-                  <p className="mt-2 text-xs text-slate-500">Comes with the site, in every language. It can be opened and closed here; its text is changed in the site&apos;s code.</p>
-                )}
+                <div className="mt-3 pt-2 border-t border-slate-100 flex items-center gap-1 -ml-3">
+                  <button type="button" disabled={busy} onClick={() => openForm(role)} className={`${quiet} text-teal-aa hover:bg-teal-50 cursor-pointer`}>
+                    Edit
+                  </button>
+                  <button type="button" disabled={busy} onClick={() => remove(role)} className={`${quiet} text-red-700 hover:bg-red-50 cursor-pointer`}>
+                    Delete
+                  </button>
+                  <span className="ml-auto text-xs text-slate-500">{translated ? "In all seven languages" : "In English, as written here"}</span>
+                </div>
               </li>
             );
           })}

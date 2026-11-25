@@ -5,8 +5,8 @@ import { storeConfigured } from "@/lib/insights-store/db";
 
 export const dynamic = "force-dynamic";
 
-// The dashboard at /admin/careers: PUT opens or closes an internship, POST adds one, PATCH changes an added one's
-// content, DELETE removes an added one. Each answers with the dashboard's whole state.
+// The dashboard at /admin/careers: PUT opens or closes an internship, POST adds one, PATCH rewrites one,
+// DELETE removes one. Each answers with the dashboard's whole state.
 
 const refuse = (error: string, status: number) => Response.json({ error }, { status });
 const INCOMPLETE = "Give the internship a title, a department and a description, and keep each within its limit.";

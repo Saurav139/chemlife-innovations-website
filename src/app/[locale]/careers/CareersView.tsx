@@ -16,7 +16,7 @@ import { revealElement, useHashTarget } from "@/lib/deepLink";
 import { useLocale, useT } from "@/i18n/LocaleProvider";
 
 // The page: the open internships (pick one, read about it, apply beside it), then the programme's terms.
-// Internships closed in the dashboard (/admin/careers) are left out, and ones added there are shown. The site's own internships are listed in src/lib/catalog.ts; their titles, departments and descriptions are in the language
+// The dashboard (/admin/careers) can close, rewrite, delete and add internships. The site's own internships are listed in src/lib/catalog.ts; their titles, departments and descriptions are in the language
 // file (careers.roles), in the same order. Applications go to /api/careers, which emails them to the team.
 
 const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? "";
@@ -61,16 +61,31 @@ const fieldBox = (invalid?: string) =>
   `w-full bg-white border ${invalid ? "border-red-600" : "border-gray-250"} rounded-xl px-4 py-3 text-base text-brand-navy placeholder:text-gray-400 focus:outline-none focus:border-teal-aa transition-colors`;
 const fieldError = "text-red-600 text-xs mt-1.5 font-medium";
 
-export default function CareersView({ closedRoles, customRoles }: { closedRoles: string[]; customRoles: CustomRole[] }) {
+interface Props {
+  /** Ids of the internships closed to applications. */
+  closedRoles: string[];
+  /** Internships written in the dashboard: added ones, and rewritten built-in ones (under the built-in id). */
+  customRoles: CustomRole[];
+  /** Ids of the built-in internships deleted in the dashboard. */
+  removedRoles: string[];
+}
+
+export default function CareersView({ closedRoles, customRoles, removedRoles }: Props) {
   const messages = useT();
   const t = messages.careers;
   const shared = messages.contact;
   const locale = useLocale();
-  // The site's own internships, in the visitor's language, then the ones added in the dashboard, as written there.
+  // The site's own internships, then the ones added in the dashboard. A built-in internship is in the visitor's
+  // language until it's rewritten in the dashboard; from then on it shows as written there, like an added one.
+  const written = (role: CustomRole) => ({ ...role, bgImage: ROLE_PICTURE_FILES[role.picture] });
+  const builtInIds = INTERNSHIP_ROLES.map((role) => role.id);
   const roles = [
-    ...INTERNSHIP_ROLES.map((role, i) => ({ id: role.id, bgImage: role.bgImage, ...t.roles[i] })),
-    ...customRoles.map((role) => ({ ...role, bgImage: ROLE_PICTURE_FILES[role.picture] })),
-  ].filter((role) => !closedRoles.includes(role.id));
+    ...INTERNSHIP_ROLES.map((role, i) => {
+      const rewritten = customRoles.find((item) => item.id === role.id);
+      return rewritten ? written(rewritten) : { id: role.id, bgImage: role.bgImage, ...t.roles[i] };
+    }),
+    ...customRoles.filter((role) => !builtInIds.includes(role.id)).map(written),
+  ].filter((role) => !closedRoles.includes(role.id) && !removedRoles.includes(role.id));
   const [selectedRoleId, setSelectedRoleId] = useState(roles[0]?.id);
   // Undefined only when every internship is closed.
   const selectedRole = roles.find((role) => role.id === selectedRoleId) ?? roles[0];
