@@ -12,12 +12,30 @@ import { CONTACT_EMAIL, EMAIL_PATTERN } from "@/lib/contact";
 import { useHref, useLocale, useT } from "@/i18n/LocaleProvider";
 import { fill, useOpenRoles, type CareersProps } from "../../roles";
 
-// The application form for one internship. It goes to /api/careers, which emails it to the team with the résumé
-// attached; nothing opens on the visitor's side.
+// The application form for one internship, in three steps: the form (with the résumé and the CAPTCHA), then the
+// 4-digit code emailed to the applicant, then "sent". /api/careers keeps the application for the dashboard
+// (/admin/careers) once the code is right; nothing opens on the visitor's side.
 
 const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? "";
 
 type SubmitError = ApplicationErrorCode | "network";
+type Step = "form" | "code" | "sent";
+const CODE_LENGTH = 4;
+
+/** Posts one step to /api/careers. Returns the response body, or the reason it failed. */
+async function post(fields: Record<string, string | File>): Promise<{ data?: Record<string, unknown>; error?: SubmitError; left?: number }> {
+  const body = new FormData();
+  for (const [key, value] of Object.entries(fields)) body.set(key, value);
+  try {
+    const res = await fetch("/api/careers", { method: "POST", body, signal: AbortSignal.timeout(60_000) });
+    const data = await res.json().catch(() => null);
+    if (res.ok && data) return { data };
+    // A server in front of the site may refuse a large file before the site sees it.
+    return { error: typeof data?.error === "string" ? data.error : res.status === 413 ? "resume_size" : "send_failed", left: data?.left };
+  } catch {
+    return { error: "network" };
+  }
+}
 interface FieldErrors {
   name?: string;
   email?: string;
@@ -49,8 +67,15 @@ export default function ApplyView({ roleId, ...careers }: CareersProps & { roleI
   const [pickerKey, setPickerKey] = useState(0);
   const [website, setWebsite] = useState(""); // Spam trap: people never see it, bots fill it in.
   const [errors, setErrors] = useState<FieldErrors>({});
-  const [busy, setBusy] = useState(false);
-  const [submitError, setSubmitError] = useState<SubmitError | null>(null);
+  const [step, setStep] = useState<Step>("form");
+  const [busy, setBusy] = useState<"submit" | "resend" | null>(null);
+  const [submitError, setSubmitError] = useState<{ code: SubmitError; left?: number } | null>(null);
+  // The signed challenge from /api/careers and the code the applicant types.
+  const [challenge, setChallenge] = useState("");
+  const [code, setCode] = useState("");
+  const [codeMissing, setCodeMissing] = useState(false);
+  const [resent, setResent] = useState(false);
+  const codeField = useRef<HTMLInputElement>(null);
   // The application that went through, for the thank-you.
   const [sent, setSent] = useState<{ name: string; email: string } | null>(null);
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
@@ -68,6 +93,7 @@ export default function ApplyView({ roleId, ...careers }: CareersProps & { roleI
     setErrors((prev) => ({ ...prev, resume: file ? resumeProblem(file) : undefined }));
   };
 
+  // Step 1: the form and the résumé go to /api/careers, which checks them and emails the applicant a code.
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (busy) return;
@@ -84,38 +110,64 @@ export default function ApplyView({ roleId, ...careers }: CareersProps & { roleI
     }
     if (!captchaToken || !resume) return;
 
-    setBusy(true);
+    setBusy("submit");
     setSubmitError(null);
-    const body = new FormData();
-    body.set("role", roleId);
-    body.set("name", name);
-    body.set("email", email);
-    body.set("phone", phone);
-    body.set("message", message);
-    body.set("website", website);
-    body.set("turnstileToken", captchaToken);
-    body.set("resume", resume);
-    let error: SubmitError | null = null;
-    try {
-      const res = await fetch("/api/careers", { method: "POST", body, signal: AbortSignal.timeout(60_000) });
-      const data = await res.json().catch(() => null);
-      // A server in front of the site may refuse a large file before the site sees it.
-      if (!res.ok || !data) error = typeof data?.error === "string" ? data.error : res.status === 413 ? "resume_size" : "send_failed";
-    } catch {
-      error = "network";
-    }
-    setBusy(false);
+    const { data, error } = await post({ action: "start", role: roleId, name, email, phone, message, website, locale, turnstileToken: captchaToken, resume });
+    setBusy(null);
     // CAPTCHA tokens work once, so ask for a new one whatever happened.
     captcha.current?.reset();
+    if (error) return setSubmitError({ code: error });
+    // The widget leaves the page with the form, and makes a new token if the applicant comes back to it.
+    setCaptchaToken(null);
+    setChallenge(String(data?.challenge ?? ""));
+    setCode("");
+    setCodeMissing(false);
+    setResent(false);
+    setStep("code");
+    window.scrollTo({ top: 0 });
+  };
+
+  // Step 2: the right code, with the same résumé again, saves the application.
+  const submitCode = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (busy || !resume) return;
+    if (code.length !== CODE_LENGTH) {
+      setCodeMissing(true);
+      return codeField.current?.focus();
+    }
+    setBusy("submit");
+    setSubmitError(null);
+    setResent(false);
+    const { error, left } = await post({ action: "verify", challenge, code, resume });
+    setBusy(null);
     if (error) {
-      setSubmitError(error);
-      return;
+      setSubmitError({ code: error, left });
+      return codeField.current?.select();
     }
     setSent({ name: name.trim(), email: email.trim() });
     setMessage("");
     setResume(null);
     setPickerKey((key) => key + 1);
+    setStep("sent");
     window.scrollTo({ top: 0 });
+  };
+
+  const resendCode = async () => {
+    setBusy("resend");
+    setSubmitError(null);
+    setResent(false);
+    const { data, error } = await post({ action: "resend", challenge });
+    setBusy(null);
+    if (error) return setSubmitError({ code: error });
+    setChallenge(String(data?.challenge ?? ""));
+    setCode("");
+    setResent(true);
+    codeField.current?.focus();
+  };
+
+  const backToForm = () => {
+    setSubmitError(null);
+    setStep("form");
   };
 
   const errorText: Record<SubmitError, string> = {
@@ -128,12 +180,31 @@ export default function ApplyView({ roleId, ...careers }: CareersProps & { roleI
     unavailable: t.submitErrors.unavailable,
     send_failed: t.submitErrors.send_failed,
     network: shared.submitErrors.network,
+    code_wrong: t.codeErrors.wrong,
+    code_expired: t.codeErrors.expired,
+    code_attempts: t.codeErrors.attempts,
   };
   // When the form itself can't help, the visitor can still email their résumé.
   const emailInstead = fill(t.fallback, {
     address: <a href={`mailto:${CONTACT_EMAIL}`} className="font-semibold underline underline-offset-2 break-all">{CONTACT_EMAIL}</a>,
   });
-  const shownError: SubmitError | null = submitError ?? (TURNSTILE_SITE_KEY ? null : "unavailable");
+  const shownError: SubmitError | null = submitError?.code ?? (TURNSTILE_SITE_KEY ? null : "unavailable");
+  const errorBox = shownError && (
+    <div role="alert" className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
+      <p className="font-semibold">
+        {shownError === "code_wrong" ? fill(t.codeErrors.wrong, { left: submitError?.left ?? 1 }) : errorText[shownError]}
+      </p>
+      {(["rate_limited", "unavailable", "send_failed", "network"] as SubmitError[]).includes(shownError) && <p className="mt-1">{emailInstead}</p>}
+    </div>
+  );
+  const spinner = (
+    <svg aria-hidden="true" className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+    </svg>
+  );
+  const sendButton = "w-full md:w-auto shrink-0 px-10 py-3.5 rounded-full bg-brand-orange-aa hover:bg-brand-orange-aa-hover text-white font-bold text-base shadow-sm transition-colors cursor-pointer flex items-center justify-center disabled:bg-slate-400 disabled:cursor-default";
+  const textButton = "font-semibold text-teal-aa underline underline-offset-4 hover:text-brand-navy cursor-pointer disabled:opacity-60";
 
   const backLink = (className: string) => (
     <Link href={backToRoles} className={className}>
@@ -170,7 +241,7 @@ export default function ApplyView({ roleId, ...careers }: CareersProps & { roleI
             <div className={`${card} text-center`}>
               {backLink("inline-flex items-center gap-2 rounded-full bg-brand-orange-aa hover:bg-brand-orange-aa-hover px-7 py-3.5 text-sm font-bold text-white shadow transition-colors")}
             </div>
-          ) : sent ? (
+          ) : step === "sent" && sent ? (
             <div role="status" className={`${card} text-center`}>
               <div className="w-14 h-14 rounded-full bg-teal-50 text-teal-aa flex items-center justify-center mx-auto mb-4">
                 <svg aria-hidden="true" className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
@@ -189,13 +260,65 @@ export default function ApplyView({ roleId, ...careers }: CareersProps & { roleI
                 {backLink("inline-flex items-center gap-2 rounded-full bg-brand-navy hover:bg-teal-aa px-7 py-3.5 text-sm font-bold text-white transition-colors")}
                 <button
                   type="button"
-                  onClick={() => setSent(null)}
+                  onClick={() => setStep("form")}
                   className="font-semibold text-sm text-teal-aa underline underline-offset-4 hover:text-brand-navy cursor-pointer"
                 >
                   {t.applyAgain}
                 </button>
               </div>
             </div>
+          ) : step === "code" ? (
+            <form onSubmit={submitCode} noValidate className={`${card} space-y-5`}>
+              <div>
+                <h2 className="font-heading text-2xl font-bold text-brand-navy mb-2">{t.codeTitle}</h2>
+                <p className="text-gray-600 text-sm leading-relaxed">
+                  {fill(t.codeText, { email: <strong className="font-semibold text-brand-navy break-all">{email.trim()}</strong> })}
+                </p>
+              </div>
+
+              <div>
+                <label htmlFor="apply-code" className={fieldLabel}>{t.codeLabel}</label>
+                <input
+                  ref={(el) => {
+                    codeField.current = el;
+                  }}
+                  autoFocus
+                  type="text"
+                  id="apply-code"
+                  inputMode="numeric"
+                  autoComplete="one-time-code"
+                  maxLength={CODE_LENGTH}
+                  value={code}
+                  onChange={(e) => {
+                    setCode(e.target.value.replace(/\D/g, "").slice(0, CODE_LENGTH));
+                    setCodeMissing(false);
+                  }}
+                  aria-invalid={codeMissing ? true : undefined}
+                  aria-describedby={codeMissing ? "apply-code-error" : undefined}
+                  className={`w-40 bg-white border ${codeMissing ? "border-red-600" : "border-gray-250"} rounded-xl px-4 py-3 text-2xl font-bold tracking-[0.5em] text-center text-brand-navy focus:outline-none focus:border-teal-aa transition-colors`}
+                />
+                {codeMissing && <p id="apply-code-error" className={fieldError}>{t.codeErrors.empty}</p>}
+              </div>
+
+              {errorBox}
+              {resent && <p role="status" className="text-sm font-semibold text-teal-aa">{t.resent}</p>}
+
+              <button type="submit" disabled={busy !== null} className={sendButton}>
+                {busy === "submit" ? <>{spinner}{t.sending}</> : t.verify}
+              </button>
+              <p className="text-sm text-gray-500">
+                {fill(t.resendPrompt, {
+                  resend: (
+                    <button type="button" onClick={resendCode} disabled={busy !== null} className={textButton}>
+                      {t.resendLink}
+                    </button>
+                  ),
+                })}
+              </p>
+              <button type="button" onClick={backToForm} disabled={busy !== null} className={`${textButton} text-sm`}>
+                {t.changeEmail}
+              </button>
+            </form>
           ) : (
             <form ref={form} onSubmit={submit} noValidate className={`${card} space-y-5`}>
               <div className="grid gap-5 sm:grid-cols-2">
@@ -295,31 +418,14 @@ export default function ApplyView({ roleId, ...careers }: CareersProps & { roleI
               {/* CAPTCHA (Cloudflare Turnstile): takes up no room unless Cloudflare asks the visitor to tick a box. */}
               {TURNSTILE_SITE_KEY && <Turnstile ref={captcha} siteKey={TURNSTILE_SITE_KEY} language={locale} onToken={setCaptchaToken} />}
 
-              {shownError && (
-                <div role="alert" className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
-                  <p className="font-semibold">{errorText[shownError]}</p>
-                  {(["rate_limited", "unavailable", "send_failed", "network"] as SubmitError[]).includes(shownError) && (
-                    <p className="mt-1">{emailInstead}</p>
-                  )}
-                </div>
-              )}
+              {errorBox}
 
               <div className="flex flex-col gap-3 md:flex-row md:items-center md:gap-5 pt-1">
-                <button
-                  type="submit"
-                  disabled={busy || !captchaToken}
-                  className="w-full md:w-auto shrink-0 px-10 py-3.5 rounded-full bg-brand-orange-aa hover:bg-brand-orange-aa-hover text-white font-bold text-base shadow-sm transition-colors cursor-pointer flex items-center justify-center disabled:bg-slate-400 disabled:cursor-default"
-                >
-                  {busy && (
-                    <svg aria-hidden="true" className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                    </svg>
-                  )}
-                  {busy ? t.sending : t.send}
+                <button type="submit" disabled={busy !== null || !captchaToken} className={sendButton}>
+                  {busy ? <>{spinner}{t.sending}</> : t.send}
                 </button>
                 <p className="text-xs text-gray-500" aria-live="polite">
-                  {TURNSTILE_SITE_KEY && !captchaToken && !busy ? shared.captchaPending : t.privacy}
+                  {TURNSTILE_SITE_KEY && !captchaToken && !busy ? shared.captchaPending : t.codeHint}
                 </p>
               </div>
             </form>

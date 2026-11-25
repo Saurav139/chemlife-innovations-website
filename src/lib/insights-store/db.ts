@@ -39,7 +39,8 @@ export function databaseProblem(error: unknown): { hint: string; detail: string 
   return { hint: "The database couldn't be used. The details below say why.", detail };
 }
 
-/** The site's database connection, for the other tables kept in the same database (see src/lib/leads-store.ts). */
+/** The site's database connection, for the other tables kept in the same database (see src/lib/leads-store.ts and
+ *  src/lib/careers-applications.ts). */
 export function database(): Promise<Pool> {
   return pool();
 }

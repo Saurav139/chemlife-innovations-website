@@ -17,9 +17,33 @@ export const APPLICATION_LIMITS = { name: 100, email: 200, phone: 40, message: 3
 export const hasResumeExtension = (filename: string) =>
   RESUME_EXTENSIONS.some((extension) => filename.toLowerCase().endsWith(extension));
 
-/** Why /api/careers refused or couldn't send an application. */
+/** Why /api/careers refused or couldn't take an application, including a wrong, expired or used-up email code. */
 export type ApplicationErrorCode =
-  | "invalid" | "closed" | "resume_type" | "resume_size" | "captcha" | "rate_limited" | "unavailable" | "send_failed";
+  | "invalid" | "closed" | "resume_type" | "resume_size" | "captcha" | "rate_limited" | "unavailable" | "send_failed"
+  | "code_wrong" | "code_expired" | "code_attempts";
+
+// ---------- Applications in the dashboard (/admin/careers) ----------
+
+/** Where an application stands with the hiring team. Every application starts as "new". */
+export const APPLICATION_STATUSES = ["new", "reviewing", "shortlisted", "rejected"] as const;
+export type ApplicationStatus = (typeof APPLICATION_STATUSES)[number];
+
+/** An application as the dashboard lists it. The résumé itself is fetched separately, when it's downloaded. */
+export interface Application {
+  id: number;
+  roleId: string;
+  /** The internship's title and department when the application came in, in English. */
+  roleTitle: string;
+  department: string;
+  name: string;
+  email: string;
+  phone: string;
+  message: string;
+  resumeName: string;
+  status: ApplicationStatus;
+  /** When it arrived, as an ISO date. */
+  receivedAt: string;
+}
 
 // ---------- Internships added in the dashboard (/admin/careers) ----------
 
