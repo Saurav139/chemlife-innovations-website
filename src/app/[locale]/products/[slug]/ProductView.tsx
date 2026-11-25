@@ -1,5 +1,6 @@
 "use client";
 
+import type { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Header from "@/components/Header";
@@ -18,8 +19,11 @@ const CATEGORY_TAG: Record<string, string> = {
   "Value Addition": "bg-emerald-50 text-emerald-700",
 };
 
-/** One product's page: what it is, what it does, how to use it, and the other products for the same animals. */
-export default function ProductView({ index }: { index: number }) {
+/**
+ * One product's page: what it is, what it does, how to use it, and the other products for the same animals.
+ * `children` is the product's approved technical data, where it has any, shown before the other products.
+ */
+export default function ProductView({ index, children }: { index: number; children?: ReactNode }) {
   const all = useT();
   const t = all.products;
   const href = useHref();
@@ -132,6 +136,8 @@ export default function ProductView({ index }: { index: number }) {
             </Reveal>
           </div>
         </section>
+
+        {children}
 
         {/* Other products for the same animals */}
         {related.length > 0 && (
