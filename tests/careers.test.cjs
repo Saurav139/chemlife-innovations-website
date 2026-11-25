@@ -29,12 +29,23 @@ const role = {
   picture: 'lab',
 };
 
-test('a résumé must be a PDF or Word file, whatever the capitals in its name', () => {
+test('a résumé must be a PDF or .docx file, whatever the capitals in its name', () => {
   assert.equal(careers.hasResumeExtension('CV.PDF'), true);
   assert.equal(careers.hasResumeExtension('my cv.docx'), true);
-  assert.equal(careers.hasResumeExtension('old.doc'), true);
+  // The older .doc format is the one that carries macros.
+  assert.equal(careers.hasResumeExtension('old.doc'), false);
   assert.equal(careers.hasResumeExtension('photo.png'), false);
   assert.equal(careers.hasResumeExtension('cv.pdf.exe'), false);
+});
+
+test("an applicant's email address can't carry anything that would change a link or a header", () => {
+  const ok = (email) => careers.APPLICATION_EMAIL_PATTERN.test(email);
+  assert.equal(ok('asha.rao+jobs@example.co.in'), true);
+  assert.equal(ok("o'brien@example.com"), true);
+  assert.equal(ok('hr%40corp.com?bcc=x%40evil.com&y=@evil.com'), false);
+  assert.equal(ok('asha@example.com?subject=hi'), false);
+  assert.equal(ok('asha rao@example.com'), false);
+  assert.equal(ok('asha@example'), false);
 });
 
 test('a list typed one entry per line loses its blank lines and stray spaces', () => {

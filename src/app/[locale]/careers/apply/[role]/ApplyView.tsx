@@ -7,8 +7,8 @@ import Footer from "@/components/Footer";
 import { VariantProvider } from "@/context/VariantContext";
 import SiteSearch from "@/components/SiteSearch";
 import Turnstile, { type TurnstileHandle } from "@/components/Turnstile";
-import { APPLICATION_LIMITS, RESUME_ACCEPT, RESUME_MAX_BYTES, hasResumeExtension, type ApplicationErrorCode } from "@/lib/careers";
-import { CONTACT_EMAIL, EMAIL_PATTERN } from "@/lib/contact";
+import { APPLICATION_EMAIL_PATTERN, APPLICATION_LIMITS, RESUME_ACCEPT, RESUME_MAX_BYTES, hasResumeExtension, type ApplicationErrorCode } from "@/lib/careers";
+import { CONTACT_EMAIL } from "@/lib/contact";
 import { useHref, useLocale, useT } from "@/i18n/LocaleProvider";
 import { fill, useOpenRoles, type CareersProps } from "../../roles";
 
@@ -21,13 +21,15 @@ const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? "";
 type SubmitError = ApplicationErrorCode | "network";
 type Step = "form" | "code" | "sent";
 const CODE_LENGTH = 4;
+/** How long a half-finished application is remembered in this browser tab: as long as a new code can be asked for. */
+const REMEMBER_MS = 30 * 60_000;
 
 /** Posts one step to /api/careers. Returns the response body, or the reason it failed. */
 async function post(fields: Record<string, string | File>): Promise<{ data?: Record<string, unknown>; error?: SubmitError; left?: number }> {
   const body = new FormData();
   for (const [key, value] of Object.entries(fields)) body.set(key, value);
   try {
-    const res = await fetch("/api/careers", { method: "POST", body, signal: AbortSignal.timeout(60_000) });
+    const res = await fetch("/api/careers", { method: "POST", body, signal: AbortSignal.timeout(180_000) });
     const data = await res.json().catch(() => null);
     if (res.ok && data) return { data };
     // A server in front of the site may refuse a large file before the site sees it.
@@ -65,7 +67,7 @@ export default function ApplyView({ roleId, ...careers }: CareersProps & { roleI
   const [resume, setResume] = useState<File | null>(null);
   // Goes up after each application that's sent, which gives the form a new, empty file picker.
   const [pickerKey, setPickerKey] = useState(0);
-  const [website, setWebsite] = useState(""); // Spam trap: people never see it, bots fill it in.
+  const [reference, setReference] = useState(""); // Spam trap: people never see it, bots fill it in.
   const [errors, setErrors] = useState<FieldErrors>({});
   const [step, setStep] = useState<Step>("form");
   const [busy, setBusy] = useState<"submit" | "resend" | null>(null);
@@ -83,9 +85,48 @@ export default function ApplyView({ roleId, ...careers }: CareersProps & { roleI
   const form = useRef<HTMLFormElement>(null);
   const sentCard = useRef<HTMLDivElement>(null);
 
-  // The thank-you replaces the form: take the keyboard (and a screen reader) to it.
+  // Fetching the code means leaving for the mail app, and a phone may reload this tab meanwhile. What was typed, and
+  // the code step, are remembered in the tab until the application is sent; only the résumé has to be chosen again.
+  const storageKey = `careers-application:${roleId}`;
+  const [restored, setRestored] = useState(false);
+  // True when the tab came back at the code step without its résumé, which then has to be chosen again.
+  const [askResume, setAskResume] = useState(false);
+  useEffect(() => {
+    try {
+      const saved = JSON.parse(sessionStorage.getItem(storageKey) ?? "null");
+      if (saved && typeof saved === "object" && Date.now() - saved.at < REMEMBER_MS) {
+        setName(String(saved.name ?? ""));
+        setEmail(String(saved.email ?? ""));
+        setPhone(String(saved.phone ?? ""));
+        setMessage(String(saved.message ?? ""));
+        if (saved.step === "code" && typeof saved.challenge === "string" && saved.challenge) {
+          setChallenge(saved.challenge);
+          setStep("code");
+          setAskResume(true);
+        }
+      }
+    } catch {
+      // Private browsing can refuse storage: the form simply starts empty.
+    }
+    setRestored(true);
+  }, [storageKey]);
+  useEffect(() => {
+    if (!restored) return;
+    try {
+      if (step === "sent") sessionStorage.removeItem(storageKey);
+      else sessionStorage.setItem(storageKey, JSON.stringify({ name, email, phone, message, step, challenge: step === "code" ? challenge : "", at: Date.now() }));
+    } catch {
+      // Nothing is remembered; the form still works.
+    }
+  }, [restored, storageKey, name, email, phone, message, step, challenge]);
+
+  // Each step replaces the last: take the keyboard (and a screen reader) to the new one.
+  const lastStep = useRef<Step>("form");
   useEffect(() => {
     if (step === "sent") sentCard.current?.focus({ preventScroll: true });
+    if (step === "code") codeField.current?.focus({ preventScroll: true });
+    if (step === "form" && lastStep.current === "code") document.getElementById("apply-name")?.focus();
+    lastStep.current = step;
   }, [step]);
 
   const resumeProblem = (file: File | null) =>
@@ -105,7 +146,7 @@ export default function ApplyView({ roleId, ...careers }: CareersProps & { roleI
     if (busy) return;
     const found: FieldErrors = {
       name: name.trim() ? undefined : shared.errors.name,
-      email: !email.trim() ? shared.errors.email : EMAIL_PATTERN.test(email.trim()) ? undefined : shared.errors.emailInvalid,
+      email: !email.trim() ? shared.errors.email : APPLICATION_EMAIL_PATTERN.test(email.trim()) ? undefined : shared.errors.emailInvalid,
       resume: resumeProblem(resume),
     };
     setErrors(found);
@@ -118,7 +159,7 @@ export default function ApplyView({ roleId, ...careers }: CareersProps & { roleI
 
     setBusy("submit");
     setSubmitError(null);
-    const { data, error } = await post({ action: "start", role: roleId, name, email, phone, message, website, locale, turnstileToken: captchaToken, resume });
+    const { data, error } = await post({ action: "start", role: roleId, name, email, phone, message, reference, locale, turnstileToken: captchaToken, resume });
     setBusy(null);
     // CAPTCHA tokens work once, so ask for a new one whatever happened.
     captcha.current?.reset();
@@ -136,10 +177,16 @@ export default function ApplyView({ roleId, ...careers }: CareersProps & { roleI
   // Step 2: the right code, with the same résumé again, saves the application.
   const submitCode = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (busy || !resume) return;
+    if (busy) return;
     if (code.length !== CODE_LENGTH) {
       setCodeMissing(true);
       return codeField.current?.focus();
+    }
+    // After the tab was reloaded the résumé has to be chosen again; it must be the same file.
+    const problem = resumeProblem(resume);
+    if (problem || !resume) {
+      setErrors((prev) => ({ ...prev, resume: problem }));
+      return document.getElementById("apply-resume")?.focus();
     }
     setBusy("submit");
     setSubmitError(null);
@@ -164,7 +211,11 @@ export default function ApplyView({ roleId, ...careers }: CareersProps & { roleI
     setResent(false);
     const { data, error } = await post({ action: "resend", challenge });
     setBusy(null);
-    if (error) return setSubmitError({ code: error });
+    if (error) {
+      // Too long since the form was sent for another code: back to the form, which sends a fresh one.
+      if (error === "code_expired") setStep("form");
+      return setSubmitError({ code: error });
+    }
     setChallenge(String(data?.challenge ?? ""));
     setCode("");
     setResent(true);
@@ -208,6 +259,52 @@ export default function ApplyView({ roleId, ...careers }: CareersProps & { roleI
       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
     </svg>
+  );
+  const resumePicker = (
+      <div>
+        <span id="apply-resume-label" className={fieldLabel}>{t.resume}</span>
+        {/* The browser's own picker is kept for the keyboard and screen readers but not shown: its "Choose
+            file" text comes in the browser's language, not the page's. The button beside it opens it. */}
+        <div className={`flex items-center gap-3 rounded-xl border ${errors.resume ? "border-red-600" : "border-gray-250"} bg-white p-2 focus-within:border-teal-aa transition-colors`}>
+          <input
+            key={pickerKey}
+            type="file"
+            id="apply-resume"
+            accept={RESUME_ACCEPT}
+            onChange={(e) => chooseResume(e.target.files?.[0] ?? null)}
+            aria-labelledby="apply-resume-label"
+            aria-invalid={errors.resume ? true : undefined}
+            aria-describedby={errors.resume ? "apply-resume-error" : "apply-resume-hint"}
+            className="peer sr-only"
+          />
+          <label
+            htmlFor="apply-resume"
+            className="shrink-0 cursor-pointer rounded-lg bg-teal-50 hover:bg-teal-100 px-4 py-2 text-sm font-semibold text-brand-navy transition-colors peer-focus-visible:ring-2 peer-focus-visible:ring-teal-aa"
+          >
+            {t.chooseFile}
+          </label>
+          {resume && (
+            <>
+              <span className="min-w-0 flex-1 truncate text-sm text-gray-700">
+                {resume.name} <span className="text-gray-500">({resume.size < 1024 * 1024 ? `${Math.max(1, Math.round(resume.size / 1024))} KB` : `${(resume.size / 1024 / 1024).toFixed(1)} MB`})</span>
+              </span>
+              <button
+                type="button"
+                onClick={() => {
+                  chooseResume(null);
+                  setPickerKey((key) => key + 1);
+                }}
+                className="shrink-0 px-2 py-1 text-sm font-semibold text-gray-600 underline underline-offset-2 hover:text-brand-navy cursor-pointer"
+              >
+                {t.removeFile}
+              </button>
+            </>
+          )}
+        </div>
+        {errors.resume
+          ? <p id="apply-resume-error" className={fieldError}>{errors.resume}</p>
+          : <p id="apply-resume-hint" className="text-xs text-gray-500 mt-1.5">{t.resumeHint}</p>}
+      </div>
   );
   const sendButton = "w-full md:w-auto shrink-0 px-10 py-3.5 rounded-full bg-brand-orange-aa hover:bg-brand-orange-aa-hover text-white font-bold text-base shadow-sm transition-colors cursor-pointer flex items-center justify-center disabled:bg-slate-400 disabled:cursor-default";
   const textButton = "font-semibold text-teal-aa underline underline-offset-4 hover:text-brand-navy cursor-pointer disabled:opacity-60";
@@ -307,8 +404,11 @@ export default function ApplyView({ roleId, ...careers }: CareersProps & { roleI
                 {codeMissing && <p id="apply-code-error" className={fieldError}>{t.codeErrors.empty}</p>}
               </div>
 
+              {/* Only after this tab was reloaded: the résumé couldn't be remembered, so it's asked for again. */}
+              {askResume && resumePicker}
+
               {errorBox}
-              {resent && <p role="status" className="text-sm font-semibold text-teal-aa">{t.resent}</p>}
+              <p role="status" className="text-sm font-semibold text-teal-aa empty:hidden">{resent ? t.resent : ""}</p>
 
               <button type="submit" disabled={busy !== null} className={sendButton}>
                 {busy === "submit" ? <>{spinner}{t.sending}</> : t.verify}
@@ -385,50 +485,7 @@ export default function ApplyView({ roleId, ...careers }: CareersProps & { roleI
                 />
               </div>
 
-              <div>
-                <span id="apply-resume-label" className={fieldLabel}>{t.resume}</span>
-                {/* The browser's own picker is kept for the keyboard and screen readers but not shown: its "Choose
-                    file" text comes in the browser's language, not the page's. The button beside it opens it. */}
-                <div className={`flex items-center gap-3 rounded-xl border ${errors.resume ? "border-red-600" : "border-gray-250"} bg-white p-2 focus-within:border-teal-aa transition-colors`}>
-                  <input
-                    key={pickerKey}
-                    type="file"
-                    id="apply-resume"
-                    accept={RESUME_ACCEPT}
-                    onChange={(e) => chooseResume(e.target.files?.[0] ?? null)}
-                    aria-labelledby="apply-resume-label"
-                    aria-invalid={errors.resume ? true : undefined}
-                    aria-describedby={errors.resume ? "apply-resume-error" : "apply-resume-hint"}
-                    className="peer sr-only"
-                  />
-                  <label
-                    htmlFor="apply-resume"
-                    className="shrink-0 cursor-pointer rounded-lg bg-teal-50 hover:bg-teal-100 px-4 py-2 text-sm font-semibold text-brand-navy transition-colors peer-focus-visible:ring-2 peer-focus-visible:ring-teal-aa"
-                  >
-                    {t.chooseFile}
-                  </label>
-                  {resume && (
-                    <>
-                      <span className="min-w-0 flex-1 truncate text-sm text-gray-700">
-                        {resume.name} <span className="text-gray-500">({resume.size < 1024 * 1024 ? `${Math.max(1, Math.round(resume.size / 1024))} KB` : `${(resume.size / 1024 / 1024).toFixed(1)} MB`})</span>
-                      </span>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          chooseResume(null);
-                          setPickerKey((key) => key + 1);
-                        }}
-                        className="shrink-0 px-2 py-1 text-sm font-semibold text-gray-600 underline underline-offset-2 hover:text-brand-navy cursor-pointer"
-                      >
-                        {t.removeFile}
-                      </button>
-                    </>
-                  )}
-                </div>
-                {errors.resume
-                  ? <p id="apply-resume-error" className={fieldError}>{errors.resume}</p>
-                  : <p id="apply-resume-hint" className="text-xs text-gray-500 mt-1.5">{t.resumeHint}</p>}
-              </div>
+              {resumePicker}
 
               <div>
                 <label htmlFor="apply-message" className={fieldLabel}>
@@ -446,8 +503,8 @@ export default function ApplyView({ roleId, ...careers }: CareersProps & { roleI
 
               {/* Spam trap: hidden from people and screen readers, so only bots fill it in. */}
               <div aria-hidden="true" className="absolute -left-[10000px] top-auto w-px h-px overflow-hidden">
-                <label htmlFor="apply-website">Website</label>
-                <input type="text" id="apply-website" tabIndex={-1} autoComplete="off" value={website} onChange={(e) => setWebsite(e.target.value)} />
+                <label htmlFor="apply-reference">Leave this field empty</label>
+                <input type="text" id="apply-reference" tabIndex={-1} autoComplete="off" value={reference} onChange={(e) => setReference(e.target.value)} />
               </div>
 
               {/* CAPTCHA (Cloudflare Turnstile): takes up no room unless Cloudflare asks the visitor to tick a box. */}

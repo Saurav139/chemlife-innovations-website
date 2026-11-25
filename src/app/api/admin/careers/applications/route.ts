@@ -1,4 +1,4 @@
-import { requireAdmin } from "@/lib/admin-auth";
+import { requireCareersAdmin } from "@/lib/careers-admin";
 import { APPLICATION_STATUSES, type ApplicationStatus } from "@/lib/careers";
 import { deleteApplication, listApplications, setApplicationStatus } from "@/lib/careers-applications";
 import { storeConfigured } from "@/lib/insights-store/db";
@@ -6,12 +6,12 @@ import { storeConfigured } from "@/lib/insights-store/db";
 export const dynamic = "force-dynamic";
 
 // The dashboard's applications (/admin/careers): GET lists them, PATCH moves one to another status, DELETE removes
-// one with its résumé. Each answers with the whole list.
+// one with its résumé. Each answers with the list as it now is: { applications, total }.
 
 const refuse = (error: string, status: number) => Response.json({ error }, { status });
 
 async function answer(request: Request, act?: (body: Record<string, unknown>) => Promise<boolean | Response>) {
-  const denied = requireAdmin(request);
+  const denied = requireCareersAdmin(request);
   if (denied) return denied;
   if (!storeConfigured()) return refuse("The dashboard's database isn't set up.", 503);
   try {
@@ -22,7 +22,7 @@ async function answer(request: Request, act?: (body: Record<string, unknown>) =>
       if (done instanceof Response) return done;
       if (!done) return refuse("That application isn't in the dashboard any more. Reload the page.", 404);
     }
-    return Response.json({ applications: await listApplications() }, { headers: { "Cache-Control": "no-store" } });
+    return Response.json(await listApplications(), { headers: { "Cache-Control": "no-store" } });
   } catch {
     return refuse("Couldn't reach the database. Please try again.", 500);
   }

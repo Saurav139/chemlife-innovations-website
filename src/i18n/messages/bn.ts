@@ -709,7 +709,7 @@ const bn: Messages = {
     email: "ইমেল ঠিকানা",
     emailPlaceholder: "যেমন: amit@example.com",
     resume: "রেজ্যুমে / CV",
-    resumeHint: "PDF বা Word ফাইল, সর্বোচ্চ 5 MB।",
+    resumeHint: "PDF বা Word (.docx) ফাইল, সর্বোচ্চ 5 MB।",
     send: "আবেদন পাঠান",
     sending: "পাঠানো হচ্ছে...",
     privacy: "আমরা এই তথ্য শুধু আপনার আবেদন পর্যালোচনার জন্য ব্যবহার করি।",
@@ -724,7 +724,7 @@ const bn: Messages = {
     },
     errors: {
       resume: "অনুগ্রহ করে আপনার রেজ্যুমে সংযুক্ত করুন।",
-      resumeType: "অনুগ্রহ করে একটি PDF বা Word ফাইল বেছে নিন।",
+      resumeType: "অনুগ্রহ করে একটি PDF বা Word (.docx) ফাইল বেছে নিন।",
       resumeSize: "ফাইলটি 5 MB-র চেয়ে বড়।",
     },
     submitErrors: {

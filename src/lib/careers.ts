@@ -2,17 +2,24 @@
 
 /** Largest résumé accepted, in bytes (5 MB). The page's texts say "5 MB" too. */
 export const RESUME_MAX_BYTES = 5 * 1024 * 1024;
-export const RESUME_EXTENSIONS = [".pdf", ".doc", ".docx"] as const;
+// PDF and today's Word format only. The older .doc format is left out: it is the one that carries macros, and
+// these files are opened by the hiring team.
+export const RESUME_EXTENSIONS = [".pdf", ".docx"] as const;
 /** For the file picker's `accept`. */
 export const RESUME_ACCEPT = [
   ...RESUME_EXTENSIONS,
   "application/pdf",
-  "application/msword",
   "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
 ].join(",");
 
 /** Longest accepted value for each field, in characters. */
 export const APPLICATION_LIMITS = { name: 100, email: 200, phone: 40, message: 3000 } as const;
+
+/**
+ * An applicant's email address. Stricter than the contact form's pattern: no characters that could turn the address
+ * into something else where it's used later (the dashboard's "reply by email" link, an email header).
+ */
+export const APPLICATION_EMAIL_PATTERN = /^[a-z0-9._+'-]+@[a-z0-9-]+(\.[a-z0-9-]+)+$/i;
 
 export const hasResumeExtension = (filename: string) =>
   RESUME_EXTENSIONS.some((extension) => filename.toLowerCase().endsWith(extension));
@@ -53,6 +60,8 @@ export type RolePicture = (typeof ROLE_PICTURES)[number];
 
 /** Longest text, most list entries and most internships the dashboard accepts. */
 export const ROLE_LIMITS = { title: 100, department: 100, roleScope: 1500, listEntries: 10, listEntry: 200, roles: 20 } as const;
+/** Everything the dashboard holds about the internships is kept in one database cell, which takes 65,535 bytes. */
+export const ROLES_MAX_BYTES = 60_000;
 
 /** What the dashboard's form collects for an internship. Written once, in English, and shown as written in every language. */
 export interface RoleContent {

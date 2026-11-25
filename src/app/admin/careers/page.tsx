@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { cookies, headers } from "next/headers";
-import { ADMIN_COOKIE, adminConfigured, demoMode, validSession } from "@/lib/admin-auth";
+import { cookies } from "next/headers";
+import { ADMIN_COOKIE, adminConfigured, validSession } from "@/lib/admin-auth";
 import { INTERNSHIP_ROLES } from "@/lib/catalog";
 import { ROLE_PICTURES } from "@/lib/careers";
 import { listApplications } from "@/lib/careers-applications";
@@ -15,9 +15,9 @@ export const metadata: Metadata = { title: "Careers dashboard | ChemLife Innovat
 
 // The dashboard for reading applications and for opening, closing, adding and changing internships. Same sign-in and database as the Insights inbox.
 export default async function CareersDashboardPage() {
-  const demo = demoMode((await headers()).get("host") ?? "");
+  // Always behind the password, even where the Insights inbox is open for a demo: this page shows applicants' details.
   const missing = [
-    !adminConfigured() && !demo && "ADMIN_PASSWORD (the password to sign in with)",
+    !adminConfigured() && "ADMIN_PASSWORD (the password to sign in with)",
     !storeConfigured() && "DATABASE_URL (the MySQL database that keeps the applications and the internships)",
   ].filter(Boolean) as string[];
   if (missing.length) {
@@ -30,12 +30,12 @@ export default async function CareersDashboardPage() {
     );
   }
 
-  if (!demo && !validSession((await cookies()).get(ADMIN_COOKIE)?.value)) {
+  if (!validSession((await cookies()).get(ADMIN_COOKIE)?.value)) {
     return <AdminLogin title="Careers dashboard" blurb="Read applications and manage the internships on the Careers page." />;
   }
 
   try {
-    const [state, applications] = await Promise.all([readCareers(), listApplications()]);
+    const [state, received] = await Promise.all([readCareers(), listApplications()]);
     // The built-in internships as the site has them, in English: what the dashboard shows, and starts from when one is edited.
     const english = (await getMessages("en")).careers.roles;
     const builtIn = INTERNSHIP_ROLES.map((role, i) => ({
@@ -47,7 +47,7 @@ export default async function CareersDashboardPage() {
       requirements: english[i].requirements,
       picture: ROLE_PICTURES[i] ?? ROLE_PICTURES[0],
     }));
-    return <CareersDashboard builtIn={builtIn} roles={state} applications={applications} demo={demo} />;
+    return <CareersDashboard builtIn={builtIn} roles={state} applications={received.applications} total={received.total} />;
   } catch (error) {
     console.error("Roles dashboard: database error", error);
     const problem = databaseProblem(error);
