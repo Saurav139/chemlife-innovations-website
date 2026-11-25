@@ -3,9 +3,11 @@ import { notFound } from "next/navigation";
 import { DEFAULT_LOCALE, isLocale } from "@/i18n/config";
 import { getMessages } from "@/i18n/messages";
 import { PRODUCTS, productPath, slugify } from "@/lib/catalog";
+import { PRODUCT_DATA } from "@/lib/productData";
 import { pageMetadata } from "@/lib/seo";
 import { jsonLd, productBreadcrumbs } from "@/lib/structuredData";
 import ProductView from "./ProductView";
+import TechnicalData from "./TechnicalData";
 
 type Params = Promise<{ locale: string; slug: string }>;
 
@@ -40,9 +42,13 @@ export default async function ProductPage({ params }: { params: Params }) {
   const index = productIndex(slug);
   if (index < 0) notFound();
   const product = PRODUCTS[index];
-  const crumbs = productBreadcrumbs(lang, await getMessages(lang), { name: product.name, path: productPath(product.name) });
+  const messages = await getMessages(lang);
+  const crumbs = productBreadcrumbs(lang, messages, { name: product.name, path: productPath(product.name) });
+  const data = PRODUCT_DATA[product.name];
   return <>
     <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(crumbs)} />
-    <ProductView index={index} />
+    <ProductView index={index}>
+      {data && <TechnicalData name={product.name} data={data} t={messages.products.data} translated={lang !== DEFAULT_LOCALE} />}
+    </ProductView>
   </>;
 }
