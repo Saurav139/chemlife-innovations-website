@@ -1,4 +1,4 @@
-import { requireAdmin } from "@/lib/admin-auth";
+import { requireCareersAdmin } from "@/lib/careers-admin";
 import { readResume } from "@/lib/careers-applications";
 import { storeConfigured } from "@/lib/insights-store/db";
 
@@ -6,13 +6,13 @@ export const dynamic = "force-dynamic";
 
 const TYPES: Record<string, string> = {
   pdf: "application/pdf",
-  doc: "application/msword",
+  doc: "application/msword", // from before .doc files stopped being accepted
   docx: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
 };
 
 /** An applicant's résumé, for the signed-in dashboard only. Always a download, never opened inside the site. */
 export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
-  const denied = requireAdmin(request);
+  const denied = requireCareersAdmin(request);
   if (denied) return denied;
   if (!storeConfigured()) return Response.json({ error: "The dashboard's database isn't set up." }, { status: 503 });
   const id = Number((await params).id);

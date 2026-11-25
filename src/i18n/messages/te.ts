@@ -705,7 +705,7 @@ const te: Messages = {
     email: "ఇమెయిల్ చిరునామా",
     emailPlaceholder: "ఉదా. ravikumar@example.com",
     resume: "రెజ్యూమ్ / CV",
-    resumeHint: "PDF లేదా Word ఫైల్, గరిష్ఠంగా 5 MB.",
+    resumeHint: "PDF లేదా Word (.docx) ఫైల్, గరిష్ఠంగా 5 MB.",
     send: "దరఖాస్తు పంపండి",
     sending: "పంపుతోంది...",
     privacy: "ఈ వివరాలను మీ దరఖాస్తును పరిశీలించడానికి మాత్రమే ఉపయోగిస్తాం.",
@@ -720,7 +720,7 @@ const te: Messages = {
     },
     errors: {
       resume: "దయచేసి మీ రెజ్యూమ్‌ను జత చేయండి.",
-      resumeType: "దయచేసి PDF లేదా Word ఫైల్‌ను ఎంచుకోండి.",
+      resumeType: "దయచేసి PDF లేదా Word (.docx) ఫైల్‌ను ఎంచుకోండి.",
       resumeSize: "ఈ ఫైల్ 5 MB కంటే పెద్దది.",
     },
     submitErrors: {

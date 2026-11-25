@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ROLE_LIMITS, ROLE_PICTURES, linesOf, type CustomRole, type RoleContent, type RolePicture } from "@/lib/careers";
 import { Images } from "@/lib/assets";
 
@@ -46,6 +46,15 @@ export default function CareersRoles({ builtIn, initial }: { builtIn: CustomRole
   const [editing, setEditing] = useState<string | null>(null);
   const [draft, setDraft] = useState<Draft>(EMPTY);
   const [formError, setFormError] = useState("");
+  // Opening the form takes the keyboard (and a screen reader) to it; closing it hands them back to "Add an internship".
+  const formHeading = useRef<HTMLHeadingElement>(null);
+  const addButton = useRef<HTMLButtonElement>(null);
+  const wasEditing = useRef<string | null>(null);
+  useEffect(() => {
+    if (editing !== null) formHeading.current?.focus();
+    else if (wasEditing.current !== null) addButton.current?.focus();
+    wasEditing.current = editing;
+  }, [editing]);
 
   /** Sends one change. True when it was saved; the dashboard then shows what the site now holds. */
   async function send(method: string, body: object, done: string, onError: (message: string) => void = setError): Promise<boolean> {
@@ -118,6 +127,7 @@ export default function CareersRoles({ builtIn, initial }: { builtIn: CustomRole
           </p>
           {editing === null && (
             <button
+              ref={addButton}
               type="button"
               onClick={() => openForm()}
               disabled={full}
@@ -134,7 +144,7 @@ export default function CareersRoles({ builtIn, initial }: { builtIn: CustomRole
 
         {editing !== null && (
           <form onSubmit={saveForm} className="mt-2 mb-6 rounded-2xl bg-white border-2 border-teal-aa shadow-sm p-5 sm:p-6 space-y-4">
-            <h2 className="font-heading text-xl font-bold">{editing === "new" ? "Add an internship" : "Change this internship"}</h2>
+            <h2 ref={formHeading} tabIndex={-1} className="font-heading text-xl font-bold focus:outline-none">{editing === "new" ? "Add an internship" : "Change this internship"}</h2>
             <p className="text-sm text-slate-600 -mt-2">
               Write it in English. It appears as written on every language version of the Careers page.
             </p>
@@ -179,7 +189,7 @@ export default function CareersRoles({ builtIn, initial }: { builtIn: CustomRole
               <legend className={label}>Picture</legend>
               <div className="mt-1.5 grid grid-cols-3 gap-3">
                 {ROLE_PICTURES.map((picture) => (
-                  <label key={picture} className={`block rounded-xl border-2 p-1.5 cursor-pointer ${draft.picture === picture ? "border-teal-aa bg-teal-50" : "border-slate-200 hover:border-slate-300"}`}>
+                  <label key={picture} className={`block rounded-xl border-2 p-1.5 cursor-pointer has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-teal-aa has-[:focus-visible]:ring-offset-2 ${draft.picture === picture ? "border-teal-aa bg-teal-50" : "border-slate-200 hover:border-slate-300"}`}>
                     <input type="radio" name="role-picture" value={picture} checked={draft.picture === picture} onChange={() => setDraft((prev) => ({ ...prev, picture }))} className="sr-only" />
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src={PICTURES[picture].file} alt="" loading="lazy" className="h-20 w-full rounded-lg object-cover" />
@@ -229,10 +239,10 @@ export default function CareersRoles({ builtIn, initial }: { builtIn: CustomRole
                   </div>
                 </div>
                 <div className="mt-3 pt-2 border-t border-slate-100 flex items-center gap-1 -ml-3">
-                  <button type="button" disabled={busy} onClick={() => openForm(role)} className={`${quiet} text-teal-aa hover:bg-teal-50 cursor-pointer`}>
+                  <button type="button" disabled={busy} onClick={() => openForm(role)} aria-label={`Edit ${role.title}`} className={`${quiet} text-teal-aa hover:bg-teal-50 cursor-pointer`}>
                     Edit
                   </button>
-                  <button type="button" disabled={busy} onClick={() => remove(role)} className={`${quiet} text-red-700 hover:bg-red-50 cursor-pointer`}>
+                  <button type="button" disabled={busy} onClick={() => remove(role)} aria-label={`Delete ${role.title}`} className={`${quiet} text-red-700 hover:bg-red-50 cursor-pointer`}>
                     Delete
                   </button>
                   <span className="ml-auto text-xs text-slate-500">{translated ? "In all seven languages" : "In English, as written here"}</span>

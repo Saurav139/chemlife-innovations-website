@@ -705,7 +705,7 @@ const mr: Messages = {
     email: "ईमेल पत्ता",
     emailPlaceholder: "उदा. rahul@example.com",
     resume: "रेझ्युमे / CV",
-    resumeHint: "PDF किंवा Word फाइल, कमाल 5 MB.",
+    resumeHint: "PDF किंवा Word (.docx) फाइल, कमाल 5 MB.",
     send: "अर्ज पाठवा",
     sending: "पाठवत आहे...",
     privacy: "ही माहिती आम्ही फक्त तुमच्या अर्जाचा विचार करण्यासाठी वापरतो.",
@@ -720,7 +720,7 @@ const mr: Messages = {
     },
     errors: {
       resume: "कृपया तुमचा रेझ्युमे जोडा.",
-      resumeType: "कृपया PDF किंवा Word फाइल निवडा.",
+      resumeType: "कृपया PDF किंवा Word (.docx) फाइल निवडा.",
       resumeSize: "ही फाइल 5 MB पेक्षा मोठी आहे.",
     },
     submitErrors: {

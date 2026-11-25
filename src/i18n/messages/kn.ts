@@ -702,7 +702,7 @@ const kn: Messages = {
     email: "ಇಮೇಲ್ ವಿಳಾಸ",
     emailPlaceholder: "ಉದಾ. ramesh@example.com",
     resume: "ರೆಸ್ಯೂಮ್ / CV",
-    resumeHint: "PDF ಅಥವಾ Word ಫೈಲ್, ಗರಿಷ್ಠ 5 MB.",
+    resumeHint: "PDF ಅಥವಾ Word (.docx) ಫೈಲ್, ಗರಿಷ್ಠ 5 MB.",
     send: "ಅರ್ಜಿ ಕಳುಹಿಸಿ",
     sending: "ಕಳುಹಿಸಲಾಗುತ್ತಿದೆ...",
     privacy: "ಈ ವಿವರಗಳನ್ನು ನಿಮ್ಮ ಅರ್ಜಿಯನ್ನು ಪರಿಶೀಲಿಸಲು ಮಾತ್ರ ಬಳಸುತ್ತೇವೆ.",
@@ -717,7 +717,7 @@ const kn: Messages = {
     },
     errors: {
       resume: "ದಯವಿಟ್ಟು ನಿಮ್ಮ ರೆಸ್ಯೂಮ್ ಲಗತ್ತಿಸಿ.",
-      resumeType: "ದಯವಿಟ್ಟು PDF ಅಥವಾ Word ಫೈಲ್ ಆಯ್ಕೆಮಾಡಿ.",
+      resumeType: "ದಯವಿಟ್ಟು PDF ಅಥವಾ Word (.docx) ಫೈಲ್ ಆಯ್ಕೆಮಾಡಿ.",
       resumeSize: "ಈ ಫೈಲ್ 5 MB ಗಿಂತ ದೊಡ್ಡದಾಗಿದೆ.",
     },
     submitErrors: {

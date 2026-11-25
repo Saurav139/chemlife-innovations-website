@@ -5,11 +5,12 @@ import { database } from "@/lib/insights-store/db";
 // Internship applications, kept in the site's database with their résumés and shown in the dashboard at
 // /admin/careers. The table is created on first use.
 
-const g = globalThis as unknown as { careerApplicationsTable?: Promise<void> };
+// Named for this version of the table's set-up, so a running server sets the table up again after an update.
+const g = globalThis as unknown as { careerApplicationsReady?: Promise<void> };
 
 async function db() {
   const pool = await database();
-  g.careerApplicationsTable ??= pool
+  g.careerApplicationsReady ??= pool
     .query(`CREATE TABLE IF NOT EXISTS career_applications (
       id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
       role_id VARCHAR(80) NOT NULL,
@@ -25,12 +26,19 @@ async function db() {
       received_at DATETIME NOT NULL,
       KEY by_time (received_at)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`)
-    .then(() => undefined)
+    .then(async () => {
+      // Added after the first version: what makes an application the same one sent twice (see saveApplication).
+      // MySQL has no ADD COLUMN IF NOT EXISTS, so look first.
+      const [column] = await pool.query<RowDataPacket[]>(
+        "SELECT 1 FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'career_applications' AND COLUMN_NAME = 'fingerprint'",
+      );
+      if (column.length === 0) await pool.query("ALTER TABLE career_applications ADD COLUMN fingerprint CHAR(64) NULL, ADD UNIQUE KEY one_per_form (fingerprint)");
+    })
     .catch((error) => {
-      g.careerApplicationsTable = undefined;
+      g.careerApplicationsReady = undefined;
       throw error;
     });
-  await g.careerApplicationsTable;
+  await g.careerApplicationsReady;
   return pool;
 }
 
@@ -44,25 +52,34 @@ export interface NewApplication {
   message: string;
   resumeName: string;
   resume: Buffer;
+  /** The same for every code sent for one filled-in form, so that form can only ever become one application. */
+  fingerprint: string;
 }
 
-export async function saveApplication(a: NewApplication): Promise<number> {
+/** Keeps an application. Saving the same form again (a second code, a repeated or doubled request) changes nothing;
+ *  false says it was already there. */
+export async function saveApplication(a: NewApplication): Promise<boolean> {
   const [result] = await (await db()).execute<ResultSetHeader>(
-    `INSERT INTO career_applications (role_id, role_title, department, name, email, phone, message, resume_name, resume, status, received_at)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'new', ?)`,
-    [a.roleId, a.roleTitle, a.department, a.name, a.email, a.phone, a.message, a.resumeName, a.resume, new Date()],
+    `INSERT IGNORE INTO career_applications (role_id, role_title, department, name, email, phone, message, resume_name, resume, status, received_at, fingerprint)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'new', ?, ?)`,
+    [a.roleId, a.roleTitle, a.department, a.name, a.email, a.phone, a.message, a.resumeName, a.resume, new Date(), a.fingerprint],
   );
-  return result.insertId;
+  return result.affectedRows > 0;
 }
 
-/** The newest applications first, without their résumés. */
-export async function listApplications(limit = 500): Promise<Application[]> {
-  const [rows] = await (await db()).query<RowDataPacket[]>(
+/** The most the dashboard lists at once; `total` tells it when there are more. */
+export const LIST_LIMIT = 500;
+
+/** The newest applications first, without their résumés, and how many there are in all. */
+export async function listApplications(limit = LIST_LIMIT): Promise<{ applications: Application[]; total: number }> {
+  const pool = await db();
+  const [[count]] = await pool.query<RowDataPacket[]>("SELECT COUNT(*) AS total FROM career_applications");
+  const [rows] = await pool.query<RowDataPacket[]>(
     `SELECT id, role_id, role_title, department, name, email, phone, message, resume_name, status, received_at
      FROM career_applications ORDER BY received_at DESC, id DESC LIMIT ?`,
     [limit],
   );
-  return rows.map((row) => ({
+  const applications = rows.map((row) => ({
     id: row.id,
     roleId: row.role_id,
     roleTitle: row.role_title,
@@ -75,6 +92,7 @@ export async function listApplications(limit = 500): Promise<Application[]> {
     status: (APPLICATION_STATUSES as readonly string[]).includes(row.status) ? (row.status as ApplicationStatus) : "new",
     receivedAt: new Date(row.received_at).toISOString(),
   }));
+  return { applications, total: Number(count.total) };
 }
 
 export async function readResume(id: number): Promise<{ name: string; data: Buffer } | null> {

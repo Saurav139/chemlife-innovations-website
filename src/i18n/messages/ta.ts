@@ -705,7 +705,7 @@ const ta: Messages = {
     email: "மின்னஞ்சல் முகவரி",
     emailPlaceholder: "எ.கா. karthik@example.com",
     resume: "ரெஸ்யூம் / CV",
-    resumeHint: "PDF அல்லது Word கோப்பு, அதிகபட்சம் 5 MB.",
+    resumeHint: "PDF அல்லது Word (.docx) கோப்பு, அதிகபட்சம் 5 MB.",
     send: "விண்ணப்பத்தை அனுப்பு",
     sending: "அனுப்புகிறது...",
     privacy: "இந்த விவரங்களை உங்கள் விண்ணப்பத்தைப் பரிசீலிக்க மட்டுமே பயன்படுத்துகிறோம்.",
@@ -720,7 +720,7 @@ const ta: Messages = {
     },
     errors: {
       resume: "உங்கள் ரெஸ்யூமை இணைக்கவும்.",
-      resumeType: "PDF அல்லது Word கோப்பைத் தேர்ந்தெடுக்கவும்.",
+      resumeType: "PDF அல்லது Word (.docx) கோப்பைத் தேர்ந்தெடுக்கவும்.",
       resumeSize: "இந்தக் கோப்பு 5 MB-ஐ விடப் பெரியது.",
     },
     submitErrors: {

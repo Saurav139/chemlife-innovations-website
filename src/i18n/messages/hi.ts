@@ -702,7 +702,7 @@ const hi: Messages = {
     email: "ईमेल पता",
     emailPlaceholder: "जैसे rahul@example.com",
     resume: "रिज़्यूमे / CV",
-    resumeHint: "PDF या Word फ़ाइल, अधिकतम 5 MB।",
+    resumeHint: "PDF या Word (.docx) फ़ाइल, अधिकतम 5 MB।",
     send: "आवेदन भेजें",
     sending: "भेजा जा रहा है...",
     privacy: "हम इन जानकारियों का उपयोग केवल आपके आवेदन की समीक्षा के लिए करते हैं।",
@@ -717,7 +717,7 @@ const hi: Messages = {
     },
     errors: {
       resume: "कृपया अपना रिज़्यूमे जोड़ें।",
-      resumeType: "कृपया PDF या Word फ़ाइल चुनें।",
+      resumeType: "कृपया PDF या Word (.docx) फ़ाइल चुनें।",
       resumeSize: "यह फ़ाइल 5 MB से बड़ी है।",
     },
     submitErrors: {

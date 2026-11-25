@@ -11,16 +11,20 @@ interface Props {
   builtIn: CustomRole[];
   roles: { closed: string[]; custom: CustomRole[]; removed: string[] };
   applications: Application[];
-  demo: boolean;
+  /** How many applications there are in all; more than are listed once there are very many. */
+  total: number;
 }
 
 // Each use adds its own display class, so some can be hidden on narrow screens.
 const quiet = "items-center min-h-10 px-3 rounded-full text-sm font-semibold whitespace-nowrap";
 
-export default function CareersDashboard({ builtIn, roles, applications, demo }: Props) {
-  const [tab, setTab] = useState<"applications" | "roles">("applications");
+type Tab = "applications" | "roles";
+
+export default function CareersDashboard({ builtIn, roles, applications, total }: Props) {
+  const [tab, setTab] = useState<Tab>("applications");
   // Kept here so the tab's count stays right as applications are read, moved on or deleted.
-  const [list, setList] = useState(applications);
+  const [received, setReceived] = useState({ applications, total });
+  const list = received.applications;
   const newCount = list.filter((item) => item.status === "new").length;
 
   async function signOut() {
@@ -48,17 +52,27 @@ export default function CareersDashboard({ builtIn, roles, applications, demo }:
             <a href="/careers" target="_blank" rel="noopener" className={`hidden md:inline-flex ${quiet} text-teal-aa hover:bg-teal-50`}>
               View the Careers page ↗
             </a>
-            {!demo && (
-              <button type="button" onClick={signOut} className={`inline-flex ${quiet} text-slate-600 hover:bg-slate-100 cursor-pointer`}>
-                Sign out
-              </button>
-            )}
+            <button type="button" onClick={signOut} className={`inline-flex ${quiet} text-slate-600 hover:bg-slate-100 cursor-pointer`}>
+              Sign out
+            </button>
           </div>
         </div>
       </header>
 
       <main className="max-w-[860px] mx-auto px-4 sm:px-6 py-6">
-        <div role="tablist" aria-label="Careers dashboard" className="inline-flex rounded-full bg-white border border-slate-200 p-1 mb-6">
+        {/* Arrow keys move between the two tabs, as screen readers expect; Tab goes on into the open one. */}
+        <div
+          role="tablist"
+          aria-label="Careers dashboard"
+          className="inline-flex rounded-full bg-white border border-slate-200 p-1 mb-6"
+          onKeyDown={(e) => {
+            if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(e.key)) return;
+            e.preventDefault();
+            const next: Tab = e.key === "Home" ? "applications" : e.key === "End" ? "roles" : tab === "applications" ? "roles" : "applications";
+            setTab(next);
+            document.getElementById(`tab-${next}`)?.focus();
+          }}
+        >
           {tabs.map((item) => (
             <button
               key={item.id}
@@ -67,6 +81,7 @@ export default function CareersDashboard({ builtIn, roles, applications, demo }:
               id={`tab-${item.id}`}
               aria-selected={tab === item.id}
               aria-controls={`panel-${item.id}`}
+              tabIndex={tab === item.id ? 0 : -1}
               onClick={() => setTab(item.id)}
               className={`min-h-10 px-5 rounded-full text-sm font-bold cursor-pointer transition-colors ${tab === item.id ? "bg-brand-navy text-white" : "text-slate-600 hover:bg-slate-100"}`}
             >
@@ -82,7 +97,7 @@ export default function CareersDashboard({ builtIn, roles, applications, demo }:
 
         {/* Both stay on the page, so a half-written internship survives a look at the applications. */}
         <div role="tabpanel" id="panel-applications" aria-labelledby="tab-applications" hidden={tab !== "applications"}>
-          <Applications list={list} onChange={setList} />
+          <Applications list={list} total={received.total} onChange={setReceived} />
         </div>
         <div role="tabpanel" id="panel-roles" aria-labelledby="tab-roles" hidden={tab !== "roles"}>
           <CareersRoles builtIn={builtIn} initial={roles} />
