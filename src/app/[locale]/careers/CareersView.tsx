@@ -86,15 +86,6 @@ export default function CareersView(careers: CareersProps) {
             <p className="text-white/85 text-base md:text-lg leading-relaxed max-w-3xl font-light">
               {t.intro}
             </p>
-            <a
-              href="#open-internships"
-              className="mt-6 inline-flex items-center gap-2 rounded-full bg-brand-orange-aa hover:bg-brand-orange-aa-hover px-7 py-3.5 text-sm font-bold text-white shadow transition-colors"
-            >
-              {t.openTitle}
-              <svg aria-hidden="true" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
-                <path d="M12 5v14M19 12l-7 7-7-7" />
-              </svg>
-            </a>
           </div>
         </section>
 
