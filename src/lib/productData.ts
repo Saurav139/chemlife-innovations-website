@@ -10,6 +10,8 @@ type Row = readonly [label: string, value: string];
 export interface ProductData {
   /** Dry products raise dust; liquids don't. Decides the dust-mask line under Safety. */
   dry: boolean;
+  /** How it reaches the animal: mixed into feed, in drinking water, or sprayed on feed. Picks the "Used in" icon. */
+  route: "feed" | "water" | "spray";
   /** Four facts under the section heading. */
   glance: { form: string; active: string; shelfLife: string; usedIn: string };
   intendedUse: string;
@@ -34,6 +36,7 @@ export interface ProductData {
 export const PRODUCT_DATA: Record<string, ProductData> = {
   MaxDmold: {
     dry: true,
+    route: "feed",
     glance: {
       form: "Light green to dark green free-flowing powder",
       active: "Bioactive copper 57.0–63.0%",
@@ -97,6 +100,7 @@ export const PRODUCT_DATA: Record<string, ProductData> = {
 
   "MaxDmold Spray": {
     dry: false,
+    route: "spray",
     glance: {
       form: "Orange to reddish thick liquid",
       active: "Bioactive calcium 1.8–2.2%",
@@ -149,6 +153,7 @@ export const PRODUCT_DATA: Record<string, ProductData> = {
 
   MethioWiz: {
     dry: true,
+    route: "feed",
     glance: {
       form: "Off-white to pale yellow free-flowing granules",
       active: "Methionine 48.0–52.0%",
@@ -194,6 +199,7 @@ export const PRODUCT_DATA: Record<string, ProductData> = {
 
   "MBioWiz Plus": {
     dry: true,
+    route: "feed",
     glance: {
       form: "Light brown to brown free-flowing powder",
       active: "Yeast activity not less than 1800 billion CFU/kg",
@@ -244,6 +250,7 @@ export const PRODUCT_DATA: Record<string, ProductData> = {
 
   CholiWiz: {
     dry: true,
+    route: "feed",
     glance: {
       form: "Brown free-flowing pearls",
       active: "Choline chloride 28.0–32.0%",
@@ -292,6 +299,7 @@ export const PRODUCT_DATA: Record<string, ProductData> = {
 
   LivproGenie: {
     dry: false,
+    route: "water",
     glance: {
       form: "Light brown to dark brown liquid",
       active: "Choline chloride 9.5–10.5%",
@@ -353,6 +361,7 @@ export const PRODUCT_DATA: Record<string, ProductData> = {
 
   EggGenie: {
     dry: true,
+    route: "feed",
     glance: {
       form: "Off-white free-flowing powder",
       active: "Functional bioactive minerals 47–53 g/kg",
@@ -403,6 +412,7 @@ export const PRODUCT_DATA: Record<string, ProductData> = {
 
   GutproGenie: {
     dry: false,
+    route: "water",
     glance: {
       form: "Brown liquid",
       active: "Methionine activity (MHA) 25–27%",
