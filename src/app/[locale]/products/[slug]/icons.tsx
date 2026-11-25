@@ -21,7 +21,7 @@ export type IconName =
   | "safety";
 
 // [path, opacity]: the backing shape is drawn at 20%.
-const PATHS: Record<IconName, [d: string, opacity?: number][]> = {
+export const ICON_PATHS: Record<IconName, [d: string, opacity?: number][]> = {
   // flask
   form: [
     ["M208,216H48a8,8,0,0,1-6.86-12.12l30.48-50.8h0c13.23-2.48,32-1.41,56.37,10.92,32.25,16.33,54.75,12.91,67.5,7.65h0l19.34,32.23A8,8,0,0,1,208,216Z", 0.2],
@@ -112,7 +112,7 @@ const PATHS: Record<IconName, [d: string, opacity?: number][]> = {
 export function Icon({ name, className = "w-6 h-6" }: { name: IconName; className?: string }) {
   return (
     <svg aria-hidden="true" className={`${className} flex-shrink-0`} fill="currentColor" viewBox="0 0 256 256">
-      {PATHS[name].map(([d, opacity]) => (
+      {ICON_PATHS[name].map(([d, opacity]) => (
         <path key={d} d={d} opacity={opacity} />
       ))}
     </svg>

@@ -14,26 +14,32 @@ const prose = "text-slate-700 text-base md:text-lg leading-relaxed";
 // The page's header is fixed and 128px tall: a link to a section stops just below it.
 const section = "scroll-mt-32 py-12 md:py-20";
 
-/** An icon on a soft orange tile, beside a heading or a fact. */
-const IconTile = ({ name }: { name: IconName }) => (
-  <span className="flex-shrink-0 w-11 h-11 rounded-xl bg-orange-50 text-brand-orange-aa flex items-center justify-center">
-    <Icon name={name} />
-  </span>
-);
+/** An icon in its place: on a light card, on the navy band, or in a line of text. */
+export type Mark = (props: { name: IconName; on: "light" | "navy" | "inline" }) => ReactNode;
+
+/** The site's icon style: a duotone icon on a soft tile. The icon-style preview passes other styles in. */
+export const DuotoneMark: Mark = ({ name, on }) =>
+  on === "inline" ? (
+    <Icon name={name} className="w-6 h-6 text-brand-orange-aa" />
+  ) : (
+    <span className={`flex-shrink-0 w-11 h-11 rounded-xl flex items-center justify-center ${on === "navy" ? "bg-white text-brand-navy" : "bg-orange-50 text-brand-orange-aa"}`}>
+      <Icon name={name} />
+    </span>
+  );
 
 /** A card's heading with its icon. */
-const CardHeading = ({ icon, id, children }: { icon: IconName; id?: string; children: ReactNode }) => (
+const CardHeading = ({ Mark, icon, id, children }: { Mark: Mark; icon: IconName; id?: string; children: ReactNode }) => (
   <div className="flex items-center gap-3 mb-4">
-    <IconTile name={icon} />
+    <Mark name={icon} on="light" />
     <h3 id={id} className="font-heading text-xl font-bold text-brand-navy">{children}</h3>
   </div>
 );
 
 /** A two-column table: what is measured, and its value. */
-function DataTable({ title, id, icon, head, rows }: { title: string; id: string; icon: IconName; head: Row; rows: readonly Row[] }) {
+function DataTable({ Mark, title, id, icon, head, rows }: { Mark: Mark; title: string; id: string; icon: IconName; head: Row; rows: readonly Row[] }) {
   return (
     <div className={card}>
-      <CardHeading icon={icon} id={id}>{title}</CardHeading>
+      <CardHeading Mark={Mark} icon={icon} id={id}>{title}</CardHeading>
       <table aria-labelledby={id} className="w-full text-left text-[0.9375rem]">
         <thead className="sr-only">
           <tr>
@@ -55,11 +61,11 @@ function DataTable({ title, id, icon, head, rows }: { title: string; id: string;
 }
 
 /** The in-vitro results as bars: each organism's zone of inhibition against the widest one. */
-function ZoneChart({ title, head, rows }: { title: string; head: Row; rows: readonly Row[] }) {
+function ZoneChart({ Mark, title, head, rows }: { Mark: Mark; title: string; head: Row; rows: readonly Row[] }) {
   const widest = Math.max(...rows.map(([, mm]) => Number(mm)));
   return (
     <div className={card}>
-      <CardHeading icon="inVitro" id="in-vitro">{title}</CardHeading>
+      <CardHeading Mark={Mark} icon="inVitro" id="in-vitro">{title}</CardHeading>
       <table aria-labelledby="in-vitro" className="w-full text-left text-[0.9375rem]">
         <thead className="text-sm text-slate-aa">
           <tr>
@@ -90,9 +96,9 @@ function ZoneChart({ title, head, rows }: { title: string; head: Row; rows: read
 /**
  * A product's approved technical data, below its description: what's in it and how it works, how to use it,
  * and its quality and safety limits. Rendered on the server, so it's on the page without JavaScript.
- * The data is in English in every language; `translated` adds a line saying so.
+ * The data is in English in every language; `translated` adds a line saying so. `Mark` draws the icons.
  */
-export default function TechnicalData({ name, data, t, translated }: { name: string; data: ProductData; t: Labels; translated: boolean }) {
+export default function TechnicalData({ name, data, t, translated, Mark = DuotoneMark }: { name: string; data: ProductData; t: Labels; translated: boolean; Mark?: Mark }) {
   const requestHref = `mailto:innovate@chemlifeinnovations.com?subject=${encodeURIComponent(`TDS and SDS request: ${name}`)}&body=${encodeURIComponent(
     `Hi ChemLife Innovations team,\n\nPlease share the Technical Data Sheet and Safety Data Sheet for ${name}.\n\nBest regards,\n[Your Name]\n[Your Company]`
   )}`;
@@ -121,7 +127,7 @@ export default function TechnicalData({ name, data, t, translated }: { name: str
             <dl className="grid sm:grid-cols-2 lg:grid-cols-4 gap-px rounded-2xl overflow-hidden bg-slate-200 border border-slate-200">
               {glance.map(([icon, label, value]) => (
                 <div key={label} className="bg-white p-5 md:p-6 flex gap-4">
-                  <IconTile name={icon} />
+                  <Mark name={icon} on="light" />
                   <div>
                     <dt className="text-sm font-semibold text-slate-aa">{label}</dt>
                     <dd className="mt-1 text-brand-navy text-base md:text-lg font-bold leading-snug">{value}</dd>
@@ -174,8 +180,8 @@ export default function TechnicalData({ name, data, t, translated }: { name: str
             </Reveal>
 
             <Reveal delay={0.1} className="lg:col-span-5 space-y-6">
-              <DataTable title={t.specs} id="specifications" icon="specs" head={[t.parameter, t.specification]} rows={data.specs} />
-              <DataTable title={t.storage} id="storage" icon="storage" head={[t.parameter, t.specification]} rows={data.storage} />
+              <DataTable Mark={Mark} title={t.specs} id="specifications" icon="specs" head={[t.parameter, t.specification]} rows={data.specs} />
+              <DataTable Mark={Mark} title={t.storage} id="storage" icon="storage" head={[t.parameter, t.specification]} rows={data.storage} />
             </Reveal>
           </div>
         </div>
@@ -214,11 +220,11 @@ export default function TechnicalData({ name, data, t, translated }: { name: str
 
           <Reveal className="mt-10 md:mt-12 grid md:grid-cols-2 gap-6">
             <div className={card}>
-              <CardHeading icon="apply">{t.application}</CardHeading>
+              <CardHeading Mark={Mark} icon="apply">{t.application}</CardHeading>
               <p className="text-slate-700 leading-relaxed">{data.application}</p>
             </div>
             <div className={card}>
-              <CardHeading icon="compatibility">{t.compatibility}</CardHeading>
+              <CardHeading Mark={Mark} icon="compatibility">{t.compatibility}</CardHeading>
               <p className="text-slate-700 leading-relaxed">{data.compatibility}</p>
             </div>
           </Reveal>
@@ -228,7 +234,7 @@ export default function TechnicalData({ name, data, t, translated }: { name: str
               <h3 className={`${h3} mb-6`}>{t.trials}</h3>
               <div className="grid lg:grid-cols-12 gap-6 lg:gap-10 items-start">
                 <div className="lg:col-span-5">
-                  <ZoneChart title={t.inVitro} head={[t.organism, t.zone]} rows={data.efficacy.inVitro} />
+                  <ZoneChart Mark={Mark} title={t.inVitro} head={[t.organism, t.zone]} rows={data.efficacy.inVitro} />
                 </div>
                 <div className="lg:col-span-7 space-y-6">
                   <p className={prose}>{data.efficacy.inVitroNote}</p>
@@ -237,7 +243,7 @@ export default function TechnicalData({ name, data, t, translated }: { name: str
                       <h4 className="font-heading text-lg md:text-xl font-bold text-brand-navy mb-3">{t.inVivo}</h4>
                       <p className="text-slate-800 leading-relaxed">{data.efficacy.inVivo.text}</p>
                       <p className="mt-4 pt-4 border-t border-orange-200 flex items-start gap-3 text-sm font-semibold text-brand-navy">
-                        <Icon name="trial" className="w-6 h-6 text-brand-orange-aa" />
+                        <Mark name="trial" on="inline" />
                         <span>{data.efficacy.inVivo.source}</span>
                       </p>
                     </div>
@@ -259,9 +265,7 @@ export default function TechnicalData({ name, data, t, translated }: { name: str
             <dl className="grid md:grid-cols-3 gap-4">
               {assurances.map(([icon, label, value]) => (
                 <div key={label} className="flex gap-4 rounded-2xl border border-white/25 bg-white/[0.07] p-5 md:p-6">
-                  <span className="flex-shrink-0 w-11 h-11 rounded-xl bg-white text-brand-navy flex items-center justify-center">
-                    <Icon name={icon} />
-                  </span>
+                  <Mark name={icon} on="navy" />
                   <div>
                     <dt className="text-sm font-semibold text-white/75">{label}</dt>
                     <dd className="mt-1 text-white font-bold leading-snug">{value}</dd>
@@ -273,11 +277,11 @@ export default function TechnicalData({ name, data, t, translated }: { name: str
 
           <Reveal className="mt-4 grid lg:grid-cols-12 gap-4">
             <div className="lg:col-span-5">
-              <DataTable title={t.limits} id="purity-limits" icon="limits" head={[t.parameter, t.limit]} rows={PURITY_LIMITS} />
+              <DataTable Mark={Mark} title={t.limits} id="purity-limits" icon="limits" head={[t.parameter, t.limit]} rows={PURITY_LIMITS} />
             </div>
 
             <div className={`${card} lg:col-span-7`}>
-              <CardHeading icon="safety">{t.safety}</CardHeading>
+              <CardHeading Mark={Mark} icon="safety">{t.safety}</CardHeading>
               <div className="space-y-3 text-slate-700 leading-relaxed">
                 {data.handling.map((paragraph) => (
                   <p key={paragraph}>{paragraph}</p>
