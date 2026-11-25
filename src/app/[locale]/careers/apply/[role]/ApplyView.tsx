@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -81,6 +81,12 @@ export default function ApplyView({ roleId, ...careers }: CareersProps & { roleI
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
   const captcha = useRef<TurnstileHandle>(null);
   const form = useRef<HTMLFormElement>(null);
+  const sentCard = useRef<HTMLDivElement>(null);
+
+  // The thank-you replaces the form: take the keyboard (and a screen reader) to it.
+  useEffect(() => {
+    if (step === "sent") sentCard.current?.focus({ preventScroll: true });
+  }, [step]);
 
   const resumeProblem = (file: File | null) =>
     !file ? t.errors.resume
@@ -231,7 +237,7 @@ export default function ApplyView({ roleId, ...careers }: CareersProps & { roleI
                 <p className="text-white/75 text-sm md:text-base mt-2">{role.department} • {t.location}</p>
               </>
             ) : (
-              <h1 className="font-heading text-2xl md:text-3xl font-bold leading-tight text-white">{t.submitErrors.closed}</h1>
+              <h1 className="font-heading text-2xl md:text-3xl font-bold leading-tight text-white">{t.closedTitle}</h1>
             )}
           </div>
         </section>
@@ -239,10 +245,11 @@ export default function ApplyView({ roleId, ...careers }: CareersProps & { roleI
         <div className="px-6 -mt-14 md:-mt-16 pb-16 md:pb-24">
           {!role ? (
             <div className={`${card} text-center`}>
+              <p className="text-gray-600 text-base mb-6">{t.closedText}</p>
               {backLink("inline-flex items-center gap-2 rounded-full bg-brand-orange-aa hover:bg-brand-orange-aa-hover px-7 py-3.5 text-sm font-bold text-white shadow transition-colors")}
             </div>
           ) : step === "sent" && sent ? (
-            <div role="status" className={`${card} text-center`}>
+            <div ref={sentCard} tabIndex={-1} role="status" className={`${card} text-center focus:outline-none`}>
               <div className="w-14 h-14 rounded-full bg-teal-50 text-teal-aa flex items-center justify-center mx-auto mb-4">
                 <svg aria-hidden="true" className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
                   <path d="M20 6L9 17l-5-5" />
@@ -379,17 +386,45 @@ export default function ApplyView({ roleId, ...careers }: CareersProps & { roleI
               </div>
 
               <div>
-                <label htmlFor="apply-resume" className={fieldLabel}>{t.resume}</label>
-                <input
-                  key={pickerKey}
-                  type="file"
-                  id="apply-resume"
-                  accept={RESUME_ACCEPT}
-                  onChange={(e) => chooseResume(e.target.files?.[0] ?? null)}
-                  aria-invalid={errors.resume ? true : undefined}
-                  aria-describedby={errors.resume ? "apply-resume-error" : "apply-resume-hint"}
-                  className={`block w-full rounded-xl border ${errors.resume ? "border-red-600" : "border-gray-250"} bg-white p-2 text-sm text-gray-600 cursor-pointer focus:outline-none focus:border-teal-aa file:mr-3 file:cursor-pointer file:rounded-lg file:border-0 file:bg-teal-50 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-brand-navy`}
-                />
+                <span id="apply-resume-label" className={fieldLabel}>{t.resume}</span>
+                {/* The browser's own picker is kept for the keyboard and screen readers but not shown: its "Choose
+                    file" text comes in the browser's language, not the page's. The button beside it opens it. */}
+                <div className={`flex items-center gap-3 rounded-xl border ${errors.resume ? "border-red-600" : "border-gray-250"} bg-white p-2 focus-within:border-teal-aa transition-colors`}>
+                  <input
+                    key={pickerKey}
+                    type="file"
+                    id="apply-resume"
+                    accept={RESUME_ACCEPT}
+                    onChange={(e) => chooseResume(e.target.files?.[0] ?? null)}
+                    aria-labelledby="apply-resume-label"
+                    aria-invalid={errors.resume ? true : undefined}
+                    aria-describedby={errors.resume ? "apply-resume-error" : "apply-resume-hint"}
+                    className="peer sr-only"
+                  />
+                  <label
+                    htmlFor="apply-resume"
+                    className="shrink-0 cursor-pointer rounded-lg bg-teal-50 hover:bg-teal-100 px-4 py-2 text-sm font-semibold text-brand-navy transition-colors peer-focus-visible:ring-2 peer-focus-visible:ring-teal-aa"
+                  >
+                    {t.chooseFile}
+                  </label>
+                  {resume && (
+                    <>
+                      <span className="min-w-0 flex-1 truncate text-sm text-gray-700">
+                        {resume.name} <span className="text-gray-500">({resume.size < 1024 * 1024 ? `${Math.max(1, Math.round(resume.size / 1024))} KB` : `${(resume.size / 1024 / 1024).toFixed(1)} MB`})</span>
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          chooseResume(null);
+                          setPickerKey((key) => key + 1);
+                        }}
+                        className="shrink-0 px-2 py-1 text-sm font-semibold text-gray-600 underline underline-offset-2 hover:text-brand-navy cursor-pointer"
+                      >
+                        {t.removeFile}
+                      </button>
+                    </>
+                  )}
+                </div>
                 {errors.resume
                   ? <p id="apply-resume-error" className={fieldError}>{errors.resume}</p>
                   : <p id="apply-resume-hint" className="text-xs text-gray-500 mt-1.5">{t.resumeHint}</p>}
@@ -428,6 +463,10 @@ export default function ApplyView({ roleId, ...careers }: CareersProps & { roleI
                   {TURNSTILE_SITE_KEY && !captchaToken && !busy ? shared.captchaPending : t.codeHint}
                 </p>
               </div>
+              <p className="text-xs text-gray-500 border-t border-gray-100 pt-4">
+                {t.privacy}{" "}
+                <Link href={href("/privacy")} className="font-semibold underline underline-offset-2 hover:text-brand-navy">{messages.footer.privacy}</Link>
+              </p>
             </form>
           )}
         </div>
