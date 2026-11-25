@@ -5,6 +5,18 @@ import { isLiveHost } from "@/lib/seo";
 // the site instead. Never shown on the live site.
 export const PREVIEWS = [
   {
+    slug: "product-page",
+    href: "/previews/product-page",
+    title: "Product page: four corporate designs",
+    description: "A product page with its approved technical data in four layouts, for any of the eight products that have it: Marketplace (like an online-store listing, with an enquiry box), Data sheet (numbered, like the TDS), Executive (short and tabbed) and Split panel (a navy product panel beside the detail).",
+  },
+  {
+    slug: "product-icons",
+    href: "/previews/product-icons",
+    title: "Product pages: icons, four styles",
+    description: "Four styles for the icons in the product pages' new technical sections, side by side and then on MaxDmold's page: Duotone (now on the pages), Outline (thin navy), Solid (orange badges) and Two-colour (navy and orange, no tile).",
+  },
+  {
     slug: "certificates",
     href: "/previews/certificates",
     title: "Homepage: Certificates section, three designs",
