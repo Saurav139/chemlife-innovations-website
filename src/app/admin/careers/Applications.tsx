@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { APPLICATION_STATUSES, type Application, type ApplicationStatus } from "@/lib/careers";
+import { APPLICATION_STATUSES, RETENTION_MONTHS, type Application, type ApplicationStatus } from "@/lib/careers";
 
 // The dashboard's Applications tab: every application that has come in, newest first, with its résumé to download
 // and a status the team moves along as they deal with it.
@@ -142,13 +142,14 @@ export default function Applications({ list, total, onChange }: Props) {
 
       {list.length > 0 && (
         <p className="mb-3 text-xs text-slate-500">
-          Résumés come from people outside the company. Open Word files in Protected View, and don&apos;t enable editing or macros.
+          Applications and their résumés are deleted automatically {RETENTION_MONTHS} months after they arrive; export any you need to
+          keep. Résumés come from people outside the company: open Word files in Protected View, and don&apos;t enable editing or macros.
         </p>
       )}
       {shown.length === 0 ? (
         <div className="mt-2 rounded-2xl bg-white border border-slate-200 p-8 text-center text-slate-600">
           {list.length === 0
-            ? "No applications yet. They appear here as soon as someone applies on the Careers page."
+            ? `No applications yet. They appear here as soon as someone applies on the Careers page, and are deleted automatically after ${RETENTION_MONTHS} months.`
             : "No applications match these filters."}
         </div>
       ) : (

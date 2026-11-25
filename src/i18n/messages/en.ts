@@ -708,7 +708,8 @@ const en = {
     resumeHint: "PDF or Word (.docx) file, up to 5 MB.",
     send: "Send Application",
     sending: "Sending...",
-    privacy: "We use these details only to review your application.",
+    // The 12 months are RETENTION_MONTHS in src/lib/careers.ts: change both together.
+    privacy: "We use these details only to review your application, and delete them after 12 months.",
     chooseFile: "Choose file",
     removeFile: "Remove",
     // The application page's browser title; {role} is the internship.

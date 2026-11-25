@@ -31,6 +31,13 @@ export type ApplicationErrorCode =
 
 // ---------- Applications in the dashboard (/admin/careers) ----------
 
+/**
+ * How long an application and its résumé are kept. Older ones are deleted automatically, whatever their status
+ * (src/lib/careers-applications.ts). The application form tells applicants this period (careers.privacy in the
+ * language files), so change the two together.
+ */
+export const RETENTION_MONTHS = 12;
+
 /** Where an application stands with the hiring team. Every application starts as "new". */
 export const APPLICATION_STATUSES = ["new", "reviewing", "shortlisted", "rejected"] as const;
 export type ApplicationStatus = (typeof APPLICATION_STATUSES)[number];
