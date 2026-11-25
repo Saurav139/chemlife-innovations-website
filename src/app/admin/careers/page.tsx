@@ -28,7 +28,7 @@ export default async function CareersDashboardPage() {
   }
 
   if (!demo && !validSession((await cookies()).get(ADMIN_COOKIE)?.value)) {
-    return <AdminLogin title="Internship roles" text="Open and close internships on the Careers page." />;
+    return <AdminLogin title="Internship roles" blurb="Open and close internships on the Careers page." />;
   }
 
   try {
