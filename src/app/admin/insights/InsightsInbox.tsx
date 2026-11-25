@@ -410,7 +410,7 @@ export default function InsightsInbox({ initial, demo = false }: { initial: Data
           </div>
           <div className="flex items-center gap-1 sm:gap-2 shrink-0">
             <a href="/admin/careers" className="inline-flex items-center min-h-10 px-3 rounded-full text-sm font-semibold text-slate-600 hover:bg-slate-100">
-              Internship roles
+              Careers
             </a>
             <a href="/insights" target="_blank" rel="noopener" className="hidden sm:inline-flex items-center min-h-10 px-3 rounded-full text-sm font-semibold text-teal-aa hover:bg-teal-50">
               View the Insights page ↗

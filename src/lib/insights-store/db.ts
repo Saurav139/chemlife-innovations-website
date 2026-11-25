@@ -39,6 +39,9 @@ export function databaseProblem(error: unknown): { hint: string; detail: string 
   return { hint: "The database couldn't be used. The details below say why.", detail };
 }
 
+/** The site's database, for the other things kept in it (internship applications: src/lib/careers-applications.ts). */
+export const databasePool = () => pool();
+
 async function pool(): Promise<Pool> {
   const uri = process.env.DATABASE_URL;
   if (!uri) throw new Error("DATABASE_URL isn't set");

@@ -708,7 +708,6 @@ const en = {
     resumeHint: "PDF or Word file, up to 5 MB.",
     send: "Send Application",
     sending: "Sending...",
-    privacy: "We use these details only to review your application.",
     errors: {
       resume: "Please attach your résumé.",
       resumeType: "Please choose a PDF or Word file.",
@@ -722,6 +721,31 @@ const en = {
     },
     // {address} is the hiring team's email address, as a link.
     fallback: "You can email your résumé to {address} instead.",
+    // The code step: before the application is kept, the applicant confirms their email address with a 4-digit code.
+    codeHint: "We'll email you a 4-digit code to confirm your email address before your application is sent.",
+    codeTitle: "Check your email",
+    // {email} is the applicant's address, {resend} the "send a new code" link, {left} a number.
+    codeText: "We've sent a 4-digit code to {email}. Enter it here to send your application.",
+    codeLabel: "Code",
+    verify: "Confirm and Send",
+    resendPrompt: "Didn't get it? Check your spam folder, or {resend}.",
+    resendLink: "send a new code",
+    resent: "We've sent you a new code.",
+    changeEmail: "Use a different email",
+    codeErrors: {
+      empty: "Enter the 4-digit code from the email.",
+      wrong: "That code isn't right. Tries left: {left}.",
+      expired: "This code has expired. Send a new one below.",
+      attempts: "Too many wrong tries. Send a new code below.",
+    },
+    // The email with the code (plain text). {code}, {name} and {minutes} are filled in by /api/careers.
+    codeEmail: {
+      subject: "{code} is your ChemLife code",
+      greeting: "Hello {name},",
+      body: "Your code to send your internship application to ChemLife Innovations is {code}. It works for {minutes} minutes.",
+      ignore: "If you didn't apply for an internship with us, you can ignore this email.",
+      signoff: "ChemLife Innovations",
+    },
     sentTitle: "Application sent",
     // {name}, {role} and {email} are filled in by the page.
     sentText: "Thank you, {name}. Our hiring team has your application for {role} and will reply to {email}.",

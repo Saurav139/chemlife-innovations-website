@@ -4,7 +4,7 @@ import { useState } from "react";
 import { ROLE_LIMITS, ROLE_PICTURES, linesOf, type CustomRole, type RoleContent, type RolePicture } from "@/lib/careers";
 import { Images } from "@/lib/assets";
 
-// The dashboard: every internship has a switch, Edit and Delete, and there's a form to add one. The three that come
+// The dashboard's Roles tab: every internship has a switch, Edit and Delete, and there's a form to add one. The three that come
 // with the site are translated into every language until they're edited here; after that they show as written here.
 
 interface State {
@@ -37,7 +37,7 @@ const box = "mt-1.5 w-full rounded-xl border border-slate-300 px-4 py-2.5 text-b
 const hint = "text-xs text-slate-500 mt-1";
 const quiet = "inline-flex items-center min-h-10 px-3 rounded-full text-sm font-semibold";
 
-export default function CareersRoles({ builtIn, initial, demo }: { builtIn: CustomRole[]; initial: State; demo: boolean }) {
+export default function CareersRoles({ builtIn, initial }: { builtIn: CustomRole[]; initial: State }) {
   const [state, setState] = useState(initial);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -95,11 +95,6 @@ export default function CareersRoles({ builtIn, initial, demo }: { builtIn: Cust
     if (await send("DELETE", { id: role.id }, `${role.title} was deleted.`) && editing === role.id) setEditing(null);
   }
 
-  async function signOut() {
-    await fetch("/api/admin/session", { method: "DELETE" }).catch(() => null);
-    window.location.reload();
-  }
-
   const set = (key: keyof Draft) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setDraft((prev) => ({ ...prev, [key]: e.target.value }));
   // Built-in internships first (as rewritten here, or as the site has them), then the added ones.
   const builtInIds = builtIn.map((role) => role.id);
@@ -115,30 +110,7 @@ export default function CareersRoles({ builtIn, initial, demo }: { builtIn: Cust
   const editingTranslated = roles.some(({ role, translated }) => role.id === editing && translated);
 
   return (
-    <div className="min-h-screen">
-      <header className="bg-white border-b border-slate-200">
-        <div className="max-w-[1100px] mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
-          <div className="flex items-center gap-3 min-w-0">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/images/branding/logo-horizontal.png" alt="ChemLife Innovations" className="h-8 w-auto shrink-0" />
-            <span className="hidden sm:block h-6 w-px bg-slate-200" aria-hidden="true" />
-            <h1 className="font-heading text-lg font-bold truncate">Internship roles</h1>
-          </div>
-          <div className="flex items-center gap-1 sm:gap-2 shrink-0">
-            <a href="/admin/insights" className={`${quiet} text-slate-600 hover:bg-slate-100`}>Insights inbox</a>
-            <a href="/careers" target="_blank" rel="noopener" className={`hidden sm:inline-flex ${quiet} text-teal-aa hover:bg-teal-50`}>
-              View the Careers page ↗
-            </a>
-            {!demo && (
-              <button type="button" onClick={signOut} className={`${quiet} text-slate-600 hover:bg-slate-100 cursor-pointer`}>
-                Sign out
-              </button>
-            )}
-          </div>
-        </div>
-      </header>
-
-      <main className="max-w-[760px] mx-auto px-4 sm:px-6 py-8">
+      <div>
         <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
           <p className="text-slate-700">
             <strong>{openCount} of {roles.length}</strong> internships are open. A closed internship is taken off the Careers
@@ -269,7 +241,6 @@ export default function CareersRoles({ builtIn, initial, demo }: { builtIn: Cust
             );
           })}
         </ul>
-      </main>
-    </div>
+      </div>
   );
 }
