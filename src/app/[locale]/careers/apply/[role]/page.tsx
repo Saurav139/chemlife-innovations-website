@@ -22,6 +22,8 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   const found = roleNames(state).find((item) => item.id === role);
   if (!found) return {};
   const t = (await getMessages(lang)).careers;
+  // A closed internship's name stays out of the page, title included.
+  if (state.closed.includes(role)) return pageMetadata({ title: t.closedTitle, description: t.closedText, path: `/careers/apply/${role}`, locale: lang, noIndex: true });
   // A built-in internship is in the page's language until it's rewritten in the dashboard.
   const builtIn = INTERNSHIP_ROLES.findIndex((item) => item.id === role);
   const rewritten = state.custom.some((item) => item.id === role);
@@ -33,5 +35,7 @@ export default async function ApplyPage({ params }: { params: Params }) {
   const { role } = await params;
   const state = await careersState();
   if (!roleNames(state).some((item) => item.id === role)) notFound();
-  return <ApplyView roleId={role} closedRoles={state.closed} customRoles={state.custom} removedRoles={state.removed} />;
+  // Only this internship goes to the browser, and not even that if it's closed.
+  const mine = state.custom.filter((item) => item.id === role && !state.closed.includes(role));
+  return <ApplyView roleId={role} closedRoles={state.closed.filter((id) => id === role)} customRoles={mine} removedRoles={state.removed} />;
 }

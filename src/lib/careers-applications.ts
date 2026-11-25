@@ -6,7 +6,29 @@ import { database } from "@/lib/insights-store/db";
 // /admin/careers. The table is created on first use.
 
 // Named for this version of the table's set-up, so a running server sets the table up again after an update.
-const g = globalThis as unknown as { careerApplicationsReady?: Promise<void>; careerApplicationsTidied?: number };
+const g = globalThis as unknown as {
+  careerApplicationsReady?: Promise<void>;
+  careerApplicationsTidied?: number;
+  careerApplicationsRoom?: { full: boolean; at: number };
+};
+
+/** The most the dashboard keeps: this many applications, or this much résumé data. Past either, new applications are
+ *  turned away (the form offers the email address instead) until some are deleted, so that junk sent by a script
+ *  can't fill the site's database, which the Insights page shares. */
+export const STORAGE_LIMITS = { applications: 2000, bytes: 1024 * 1024 * 1024 } as const;
+
+/** Whether the dashboard has reached STORAGE_LIMITS. Looked up at most once a minute; false if it can't be told. */
+export async function storageFull(): Promise<boolean> {
+  if (g.careerApplicationsRoom && Date.now() - g.careerApplicationsRoom.at < 60_000) return g.careerApplicationsRoom.full;
+  try {
+    const [[row]] = await (await db()).query<RowDataPacket[]>("SELECT COUNT(*) AS n, COALESCE(SUM(LENGTH(resume)), 0) AS bytes FROM career_applications");
+    const full = Number(row.n) >= STORAGE_LIMITS.applications || Number(row.bytes) >= STORAGE_LIMITS.bytes;
+    g.careerApplicationsRoom = { full, at: Date.now() };
+    return full;
+  } catch {
+    return false;
+  }
+}
 
 async function db() {
   const pool = await database();
@@ -92,8 +114,8 @@ export async function saveApplication(a: NewApplication): Promise<boolean> {
 /** The most the dashboard lists at once; `total` tells it when there are more. */
 export const LIST_LIMIT = 500;
 
-/** The newest applications first, without their résumés, and how many there are in all. */
-export async function listApplications(limit = LIST_LIMIT): Promise<{ applications: Application[]; total: number }> {
+/** The newest applications first, without their résumés; how many there are in all; and whether the dashboard is full. */
+export async function listApplications(limit = LIST_LIMIT): Promise<{ applications: Application[]; total: number; full: boolean }> {
   await deleteOldApplications();
   const pool = await db();
   const [[count]] = await pool.query<RowDataPacket[]>("SELECT COUNT(*) AS total FROM career_applications");
@@ -115,7 +137,9 @@ export async function listApplications(limit = LIST_LIMIT): Promise<{ applicatio
     status: (APPLICATION_STATUSES as readonly string[]).includes(row.status) ? (row.status as ApplicationStatus) : "new",
     receivedAt: new Date(row.received_at).toISOString(),
   }));
-  return { applications, total: Number(count.total) };
+  // Asked afresh, so the dashboard's warning goes as soon as room has been made.
+  g.careerApplicationsRoom = undefined;
+  return { applications, total: Number(count.total), full: await storageFull() };
 }
 
 export async function readResume(id: number): Promise<{ name: string; data: Buffer } | null> {
@@ -129,8 +153,9 @@ export async function setApplicationStatus(id: number, status: ApplicationStatus
   return result.affectedRows > 0;
 }
 
-/** Removes an application and its résumé for good. False if there's no application with that id. */
-export async function deleteApplication(id: number): Promise<boolean> {
-  const [result] = await (await db()).execute<ResultSetHeader>("DELETE FROM career_applications WHERE id = ?", [id]);
+/** Removes applications and their résumés for good. False if none of them was there. */
+export async function deleteApplications(ids: number[]): Promise<boolean> {
+  if (ids.length === 0) return false;
+  const [result] = await (await db()).query<ResultSetHeader>("DELETE FROM career_applications WHERE id IN (?)", [ids]);
   return result.affectedRows > 0;
 }

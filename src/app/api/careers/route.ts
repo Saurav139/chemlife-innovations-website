@@ -1,10 +1,11 @@
 import { createHash, createHmac } from "node:crypto";
 import { NextResponse } from "next/server";
+import { sameOrigin } from "@/lib/admin-auth";
 import { RateLimiter, clientIp } from "@/lib/rateLimit";
 import { verifyTurnstile } from "@/lib/turnstile";
 import { emailTeam, emailVisitor } from "@/lib/teamEmail";
 import { CODE_MINUTES, CodeTries, contactSecret, issueChallenge, readChallenge } from "@/lib/emailCode";
-import { saveApplication } from "@/lib/careers-applications";
+import { saveApplication, storageFull } from "@/lib/careers-applications";
 import { careersState, roleNames } from "@/lib/careers-store";
 import { APPLICATION_EMAIL_PATTERN, APPLICATION_LIMITS, RESUME_MAX_BYTES, hasResumeExtension, type ApplicationErrorCode } from "@/lib/careers";
 import { storeConfigured } from "@/lib/insights-store/db";
@@ -20,13 +21,22 @@ import { getMessages } from "@/i18n/messages";
 // The résumé travels twice because nothing is kept on the server until the code is right. Should the database be
 // unreachable at that moment, the application is emailed to the team instead, so it isn't lost.
 //
-// What one pass of the CAPTCHA buys: codes to one address for half an hour, and at most one saved application
-// (every code sent for a form carries that form's fingerprint, and the database keeps one row per fingerprint).
+// What one pass of the CAPTCHA buys: four code emails to one address at most (the first and three more, within half
+// an hour) and at most one application, saved or emailed (every code sent for a form carries that form's
+// fingerprint; the database keeps one row per fingerprint, and the email path remembers what it has sent).
+// Requests must come from this site's own pages.
 
-// Generous for a person, tight for a script. Counted when a code email actually goes out.
+// Generous for a person, tight for a script. Reserved before a code email is sent and given back if it doesn't go.
 const perHour = new RateLimiter(5, 3_600_000);
 const perDay = new RateLimiter(10, 86_400_000);
+// New applications across the whole site in a day. Each one needed its own pass of the CAPTCHA.
 const siteWide = new RateLimiter(150, 86_400_000);
+// "Send a new code" has its own allowances, so that asking for new codes (which needs no CAPTCHA) can never use up
+// the room for new applications: three per filled-in form, and a day's total across the site.
+const resendsPerForm = new RateLimiter(3, 3_600_000);
+const resendsSiteWide = new RateLimiter(300, 86_400_000);
+// Forms already emailed to the team by the fallback path, which has no database to tell it.
+const emailedForms = new RateLimiter(1, 6 * 3_600_000);
 // Visitors whose address can't be told apart from the proxy's share one allowance, roomier than a single person's so
 // that a hosting change which hides addresses doesn't shut real applicants out.
 const unknownPerHour = new RateLimiter(30, 3_600_000);
@@ -66,6 +76,8 @@ function fail(error: ApplicationErrorCode, status: number, extra?: { retryAfter?
 
 const oneLine = (value: string) => value.replace(/\s+/g, " ").trim();
 const sha256 = (value: Buffer | string) => createHash("sha256").update(value).digest("hex");
+/** The same for every code sent for one filled-in form. */
+const fingerprintOf = (form: ApplicationDetails) => sha256(`${form.started}|${form.role}|${form.email.toLowerCase()}|${form.resume}`);
 
 /** The signing key for application codes, kept apart from the contact form's so a code for one is no use on the other. */
 function careersSecret(): Buffer | null {
@@ -93,12 +105,23 @@ async function readResume(file: FormDataEntryValue | null): Promise<{ bytes: Buf
 }
 
 /** Emails a new code to the applicant, in their language. Returns the challenge for the browser, or an error response. */
-async function sendCode(details: ApplicationDetails, locale: string, secret: Buffer, ip: string | null) {
+async function sendCode(details: ApplicationDetails, locale: string, secret: Buffer, ip: string | null, again: boolean) {
   const address = details.email.toLowerCase();
   const visitor = ip ?? "unknown";
-  const [hourly, daily] = ip ? [perHour, perDay] : [unknownPerHour, unknownPerDay];
-  const wait = hourly.retryAfter(visitor) || daily.retryAfter(visitor) || siteWide.retryAfter("site") || codesPerAddress.retryAfter(address);
+  const form = fingerprintOf(details);
+  // Every allowance this email counts against. A new code for a form already sent counts against the resend
+  // allowances instead of the site's room for new applications.
+  const allowances: [RateLimiter, string][] = [
+    ...(ip ? [[perHour, visitor], [perDay, visitor]] : [[unknownPerHour, visitor], [unknownPerDay, visitor]]) as [RateLimiter, string][],
+    [codesPerAddress, address],
+    ...(again ? [[resendsPerForm, form], [resendsSiteWide, "site"]] : [[siteWide, "site"]]) as [RateLimiter, string][],
+  ];
+  const wait = allowances.map(([limiter, key]) => limiter.retryAfter(key)).find(Boolean);
   if (wait) return fail("rate_limited", 429, { retryAfter: wait });
+  // Reserved before the email is sent (sending takes a moment, and requests arriving together must not all slip
+  // under the limit), and given back if it doesn't go, so a failed send costs nobody anything.
+  for (const [limiter, key] of allowances) limiter.consume(key);
+  const giveBack = () => allowances.forEach(([limiter, key]) => limiter.refund(key));
 
   const { code, challenge } = issueChallenge<ApplicationDetails>(details, locale, secret);
   const t = (await getMessages(isLocale(locale) ? locale : DEFAULT_LOCALE)).careers.codeEmail;
@@ -108,18 +131,18 @@ async function sendCode(details: ApplicationDetails, locale: string, secret: Buf
   // No greeting by name: until the code is entered the address isn't known to be the applicant's, and the name is
   // whatever was typed into the form.
   const sent = await emailVisitor({ to: details.email, subject: fill(t.subject), text: [t.body, t.ignore, "", t.signoff].map(fill).join("\n") }, "careers");
-  if (!sent) return fail("send_failed", 502);
-  // Counted only now that an email has gone, so refused requests can't use up everyone's allowance.
-  hourly.consume(visitor);
-  daily.consume(visitor);
-  siteWide.consume("site");
-  codesPerAddress.consume(address);
+  if (!sent) {
+    giveBack();
+    return fail("send_failed", 502);
+  }
   return NextResponse.json({ ok: true, challenge });
 }
 
 export async function POST(request: Request) {
   const secret = careersSecret();
   if (!process.env.RESEND_API_KEY || !process.env.TURNSTILE_SECRET_KEY || !secret) return fail("unavailable", 503);
+  // Only this site's own pages may post here: another site can't make a visitor's browser send requests for it.
+  if (!sameOrigin(request)) return fail("invalid", 403);
 
   const ip = clientIp(request);
   const visitor = ip ?? "unknown";
@@ -160,20 +183,28 @@ export async function POST(request: Request) {
 
       // The résumé is kept under the applicant's name, whatever the file was called.
       const resumeName = `${form.name.replace(/[^\p{L}\p{N} .-]/gu, "").trim() || "Applicant"} - Resume${resume.extension}`;
+      const fingerprint = fingerprintOf(form);
       let saved = false;
       let isNew = true;
       if (storeConfigured()) {
+        // The dashboard has all it can hold (see storageFull): nothing more is taken, by either route.
+        if (await storageFull()) return fail("unavailable", 503);
         try {
           isNew = await saveApplication({
             roleId: role.id, roleTitle: role.title, department: role.department,
             name: form.name, email: form.email, phone: form.phone, message: form.message,
             resumeName, resume: resume.bytes,
-            fingerprint: sha256(`${form.started}|${form.role}|${form.email.toLowerCase()}|${form.resume}`),
+            fingerprint,
           });
           saved = true;
         } catch (error) {
           console.error("[careers] Couldn't save an application; emailing it instead:", error instanceof Error ? error.message : error);
         }
+      }
+      if (!saved && emailedForms.retryAfter(fingerprint)) {
+        // This form has already gone to the team by email; a second code for it changes nothing.
+        check.use();
+        return NextResponse.json({ ok: true });
       }
       if (!saved) {
         const email = [
@@ -202,6 +233,7 @@ export async function POST(request: Request) {
           "careers",
         );
         if (!sent) return fail("send_failed", 502);
+        emailedForms.consume(fingerprint);
       }
       check.use();
       // The same form confirmed a second time: it's already kept, and the applicant has already been told.
@@ -225,7 +257,7 @@ export async function POST(request: Request) {
     if (!data || typeof data.details.started !== "number" || Date.now() - data.details.started > RESEND_MINUTES * 60_000) {
       return fail("code_expired", 410);
     }
-    return sendCode(data.details, data.locale, secret, ip);
+    return sendCode(data.details, data.locale, secret, ip, true);
   }
 
   // "start"
@@ -245,11 +277,13 @@ export async function POST(request: Request) {
   if (careers.closed.includes(role.id)) return fail("closed", 409);
   const resume = await readResume(body.get("resume"));
   if (resume instanceof Response) return resume;
+  // The dashboard has all it can hold: say so now rather than after the applicant has fetched a code.
+  if (storeConfigured() && (await storageFull())) return fail("unavailable", 503);
 
   // Bots fill in every field, including one people never see. Tell them it worked and send nothing.
   if (text("reference") !== "") return NextResponse.json({ ok: true, challenge: "" });
 
   // The CAPTCHA: no code is sent unless Cloudflare confirms the token came from this visitor's widget.
   if (!(await verifyTurnstile(text("turnstileToken"), ip))) return fail("captcha", 403);
-  return sendCode({ role: role.id, ...form, resume: sha256(resume.bytes), started: Date.now() }, text("locale"), secret, ip);
+  return sendCode({ role: role.id, ...form, resume: sha256(resume.bytes), started: Date.now() }, text("locale"), secret, ip, false);
 }
