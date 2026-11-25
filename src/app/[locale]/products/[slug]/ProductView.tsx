@@ -29,6 +29,15 @@ export default function ProductView({ index, children }: { index: number; childr
   const href = useHref();
   const product = { ...PRODUCTS[index], ...t.items[index] };
   const category = t.categories[product.category as keyof typeof t.categories];
+  // Products with technical data get links to each part of their longer page.
+  const jumps = children
+    ? [
+        ["about-product", t.about],
+        ["technical-data", t.data.heading],
+        ["use-application", t.data.use],
+        ["quality-safety", t.data.quality],
+      ]
+    : [];
   const related = PRODUCTS.map((p, i) => ({ ...p, ...t.items[i] })).filter((p) => p.category === product.category && p.id !== product.id);
 
   const emailHref = `mailto:innovate@chemlifeinnovations.com?subject=${encodeURIComponent(`Product Inquiry: ${product.name}`)}&body=${encodeURIComponent(
@@ -75,8 +84,22 @@ export default function ProductView({ index, children }: { index: number; childr
           </div>
         </section>
 
+        {jumps.length > 0 && (
+          <nav aria-label={t.data.onThisPage} className="border-b border-slate-200 bg-white">
+            <ul className="max-w-[1200px] mx-auto px-6 flex gap-x-7 md:gap-x-10 overflow-x-auto overflow-y-hidden [scrollbar-width:none]">
+              {jumps.map(([id, label]) => (
+                <li key={id} className="flex-shrink-0">
+                  <a href={`#${id}`} className="inline-flex items-center h-14 whitespace-nowrap border-b-2 border-transparent text-slate-700 font-semibold hover:text-brand-orange-aa hover:border-brand-orange-aa transition-colors">
+                    {label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        )}
+
         {/* The details: description, features and variants beside how it's used and packed */}
-        <section className="py-12 md:py-20">
+        <section id="about-product" className="scroll-mt-32 py-12 md:py-20">
           <div className="max-w-[1200px] mx-auto px-6 grid lg:grid-cols-12 gap-10 lg:gap-16">
             <Reveal
               className="lg:col-span-7 space-y-10"

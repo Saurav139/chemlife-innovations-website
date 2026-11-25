@@ -1,31 +1,66 @@
+import type { ReactNode } from "react";
+import Reveal from "@/components/Reveal";
 import type { Messages } from "@/i18n/messages/en";
-import { PURITY_LIMITS, SAFETY, qualityAssurance, type ProductData } from "@/lib/productData";
+import { FACILITY, PURITY_LIMITS, SAFETY, qualityAssurance, type ProductData } from "@/lib/productData";
 
 type Labels = Messages["products"]["data"];
 type Row = readonly [string, string];
 
 const h2 = "font-heading text-2xl md:text-3xl lg:text-4xl font-bold";
-const h3 = "font-heading text-xl md:text-2xl font-bold text-brand-navy mb-4";
+const h3 = "font-heading text-xl md:text-2xl font-bold text-brand-navy";
 const card = "rounded-2xl bg-white border border-slate-200 p-6 md:p-8";
 const prose = "text-slate-700 text-base md:text-lg leading-relaxed";
+// The page's header is fixed and 128px tall: a link to a section stops just below it.
+const section = "scroll-mt-32 py-12 md:py-20";
+
+// Line icons, drawn on a 24px grid.
+const ICONS = {
+  form: "M9 3h6M10 3v6.5L5.2 18a2 2 0 0 0 1.75 3h10.1a2 2 0 0 0 1.75-3L14 9.5V3M7.5 15h9",
+  active: "M12 2.75l8 4.6v9.3l-8 4.6-8-4.6v-9.3zM12 9.25a2.75 2.75 0 1 0 0 5.5 2.75 2.75 0 0 0 0-5.5z",
+  shelfLife: "M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM12 7.5V12l3 2",
+  feed: "M8.5 3h7l-1.4 3.4c3 1.8 4.4 4.9 4.4 8.1 0 3.6-2.6 6-6.5 6s-6.5-2.4-6.5-6c0-3.2 1.4-6.3 4.4-8.1zM9.9 6.4h4.2",
+  water: "M12 3s6 6.3 6 10.6a6 6 0 0 1-12 0C6 9.3 12 3 12 3zM9.5 14a2.5 2.5 0 0 0 2.5 2.5",
+  apply: "M4 6h10M4 12h16M4 18h7M17 4v4M15 6h4M14 16v4M12 18h4",
+  compatibility: "M9 4.5H5.5a1 1 0 0 0-1 1V9a2.25 2.25 0 1 1 0 4.5V17a1 1 0 0 0 1 1H9a2.25 2.25 0 1 1 4.5 0H17a1 1 0 0 0 1-1v-3.5a2.25 2.25 0 1 0 0-4.5V5.5a1 1 0 0 0-1-1h-3.5a2.25 2.25 0 1 0-4.5 0z",
+  facility: "M3 21V10l6 3.5V10l6 3.5V4h5v17zM7 17h2M12 17h2M17 17h1",
+  shield: "M12 3l7.5 2.8v5.4c0 4.4-3 8.2-7.5 9.8-4.5-1.6-7.5-5.4-7.5-9.8V5.8zM8.75 12l2.25 2.25 4.25-4.5",
+  transport: "M2.5 6.5h11v10h-11zM13.5 10h4l3 3.25v3.25h-7zM6.5 19a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM17 19a2 2 0 1 0 0-4 2 2 0 0 0 0 4z",
+  trial: "M12 4L2.5 8.5 12 13l9.5-4.5zM6.5 10.5V15c1.5 1.5 3.4 2.25 5.5 2.25s4-.75 5.5-2.25v-4.5M21.5 8.5V14",
+  check: "M5 13l4 4L19 7",
+} as const;
+
+function Icon({ name, className = "w-5 h-5" }: { name: keyof typeof ICONS; className?: string }) {
+  return (
+    <svg aria-hidden="true" className={`${className} flex-shrink-0`} fill="none" stroke="currentColor" strokeWidth={name === "check" ? 2.5 : 1.75} strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
+      <path d={ICONS[name]} />
+    </svg>
+  );
+}
+
+/** An icon on a soft orange tile, beside a heading or a fact. */
+const IconTile = ({ name }: { name: keyof typeof ICONS }) => (
+  <span className="flex-shrink-0 w-10 h-10 rounded-xl bg-orange-50 text-brand-orange-aa flex items-center justify-center">
+    <Icon name={name} />
+  </span>
+);
 
 /** A two-column table: what is measured, and its value. */
-function DataTable({ title, id, head, rows, showHead = false }: { title: string; id: string; head: Row; rows: readonly Row[]; showHead?: boolean }) {
+function DataTable({ title, id, head, rows }: { title: string; id: string; head: Row; rows: readonly Row[] }) {
   return (
     <div className={card}>
-      <h3 id={id} className="font-heading text-xl font-bold text-brand-navy mb-4">{title}</h3>
+      <h3 id={id} className="font-heading text-xl font-bold text-brand-navy mb-3">{title}</h3>
       <table aria-labelledby={id} className="w-full text-left text-[0.9375rem]">
-        <thead className={showHead ? "text-sm text-slate-aa border-b border-slate-200" : "sr-only"}>
+        <thead className="sr-only">
           <tr>
-            <th scope="col" className="pb-2 pr-4 font-semibold">{head[0]}</th>
-            <th scope="col" className="pb-2 font-semibold">{head[1]}</th>
+            <th scope="col">{head[0]}</th>
+            <th scope="col">{head[1]}</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-slate-200">
           {rows.map(([label, value]) => (
             <tr key={label}>
-              <th scope="row" className="py-2.5 pr-4 font-medium text-slate-600 align-top w-[46%]">{label}</th>
-              <td className="py-2.5 font-semibold text-brand-navy align-top">{value}</td>
+              <th scope="row" className="py-3 pr-4 font-medium text-slate-600 align-top w-[46%]">{label}</th>
+              <td className="py-3 font-semibold text-brand-navy align-top">{value}</td>
             </tr>
           ))}
         </tbody>
@@ -33,6 +68,47 @@ function DataTable({ title, id, head, rows, showHead = false }: { title: string;
     </div>
   );
 }
+
+/** The in-vitro results as bars: each organism's zone of inhibition against the widest one. */
+function ZoneChart({ title, head, rows }: { title: string; head: Row; rows: readonly Row[] }) {
+  const widest = Math.max(...rows.map(([, mm]) => Number(mm)));
+  return (
+    <div className={card}>
+      <h3 id="in-vitro" className="font-heading text-xl font-bold text-brand-navy mb-4">{title}</h3>
+      <table aria-labelledby="in-vitro" className="w-full text-left text-[0.9375rem]">
+        <thead className="text-sm text-slate-aa">
+          <tr>
+            <th scope="col" className="pb-2 pr-4 font-semibold">{head[0]}</th>
+            <th scope="col" className="pb-2 font-semibold">{head[1]}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map(([organism, mm]) => (
+            <tr key={organism}>
+              <th scope="row" className="py-2.5 pr-4 font-medium text-slate-700 italic whitespace-nowrap w-[34%]">{organism}</th>
+              <td className="py-2.5">
+                <div className="flex items-center gap-3">
+                  <div aria-hidden="true" className="flex-1 h-2.5 rounded-full bg-slate-100 overflow-hidden">
+                    <div className="h-full rounded-full bg-brand-orange" style={{ width: `${(Number(mm) / widest) * 100}%` }} />
+                  </div>
+                  <span className="w-7 text-right font-bold text-brand-navy tabular-nums">{mm}</span>
+                </div>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+/** A heading with its icon, for the cards in "Use and application". */
+const CardHeading = ({ icon, children }: { icon: keyof typeof ICONS; children: ReactNode }) => (
+  <div className="flex items-center gap-3 mb-4">
+    <IconTile name={icon} />
+    <h3 className="font-heading text-xl font-bold text-brand-navy">{children}</h3>
+  </div>
+);
 
 /**
  * A product's approved technical data, below its description: what's in it and how it works, how to use it,
@@ -43,39 +119,49 @@ export default function TechnicalData({ name, data, t, translated }: { name: str
   const requestHref = `mailto:innovate@chemlifeinnovations.com?subject=${encodeURIComponent(`TDS and SDS request: ${name}`)}&body=${encodeURIComponent(
     `Hi ChemLife Innovations team,\n\nPlease share the Technical Data Sheet and Safety Data Sheet for ${name}.\n\nBest regards,\n[Your Name]\n[Your Company]`
   )}`;
-  const glance: Row[] = [
-    [t.form, data.glance.form],
-    [t.active, data.glance.active],
-    [t.shelfLife, data.glance.shelfLife],
-    [t.usedIn, data.glance.usedIn],
+  const glance: [keyof typeof ICONS, string, string][] = [
+    ["form", t.form, data.glance.form],
+    ["active", t.active, data.glance.active],
+    ["shelfLife", t.shelfLife, data.glance.shelfLife],
+    [data.dry ? "feed" : "water", t.usedIn, data.glance.usedIn],
+  ];
+  const assurances: [keyof typeof ICONS, string, string][] = [
+    ["facility", t.manufacturing, FACILITY],
+    ["shield", t.classification, SAFETY.classification],
+    ["transport", t.transport, SAFETY.transport],
   ];
 
   return (
     <>
-      {/* What it is: composition, how it works, specifications, storage */}
-      <section aria-labelledby="technical-data" className="py-12 md:py-20 bg-slate-50">
+      {/* What it is: the facts at a glance, composition, how it works, specifications, storage */}
+      <section id="technical-data" aria-labelledby="technical-data-heading" className={`${section} bg-slate-50`}>
         <div className="max-w-[1200px] mx-auto px-6">
-          <h2 id="technical-data" className={`${h2} text-brand-navy`}>{t.heading}</h2>
+          <h2 id="technical-data-heading" className={`${h2} text-brand-navy`}>{t.heading}</h2>
           <p className={`${prose} mt-3 max-w-2xl`}>{t.intro}</p>
           {translated && <p className="text-slate-600 mt-2 max-w-2xl">{t.englishNote}</p>}
 
-          <dl className="mt-8 md:mt-10 grid grid-cols-2 lg:grid-cols-4 gap-px rounded-2xl overflow-hidden bg-slate-200 border border-slate-200">
-            {glance.map(([label, value]) => (
-              <div key={label} className="bg-white p-5 md:p-6">
-                <dt className="text-sm font-semibold text-slate-aa">{label}</dt>
-                <dd className="mt-1.5 text-brand-navy font-semibold leading-snug">{value}</dd>
-              </div>
-            ))}
-          </dl>
+          <Reveal className="mt-8 md:mt-10">
+            <dl className="grid sm:grid-cols-2 lg:grid-cols-4 gap-px rounded-2xl overflow-hidden bg-slate-200 border border-slate-200">
+              {glance.map(([icon, label, value]) => (
+                <div key={label} className="bg-white p-5 md:p-6 flex gap-4">
+                  <IconTile name={icon} />
+                  <div>
+                    <dt className="text-sm font-semibold text-slate-aa">{label}</dt>
+                    <dd className="mt-1 text-brand-navy text-base md:text-lg font-bold leading-snug">{value}</dd>
+                  </div>
+                </div>
+              ))}
+            </dl>
+          </Reveal>
 
           <div className="mt-10 md:mt-14 grid lg:grid-cols-12 gap-10 lg:gap-16">
-            <div className="lg:col-span-7 space-y-10">
+            <Reveal className="lg:col-span-7 space-y-10 md:space-y-12">
               <div>
-                <h3 className={h3}>{t.composition}</h3>
+                <h3 className={`${h3} mb-4`}>{t.composition}</h3>
                 {data.composition.items && (
                   <ul className="flex flex-wrap gap-2">
                     {data.composition.items.map((item) => (
-                      <li key={item} className="px-4 py-2 rounded-2xl bg-white border border-slate-200 text-brand-navy font-semibold">{item}</li>
+                      <li key={item} className="px-4 py-2.5 rounded-2xl bg-white border border-slate-200 text-brand-navy font-semibold">{item}</li>
                     ))}
                   </ul>
                 )}
@@ -86,7 +172,7 @@ export default function TechnicalData({ name, data, t, translated }: { name: str
                       {data.composition.table.map(([label, value]) => (
                         <div key={label} className="flex items-baseline justify-between gap-4 py-2.5 border-b border-slate-200 last:border-b-0 sm:[&:nth-last-child(2):nth-child(odd)]:border-b-0">
                           <dt className="text-slate-700">{label}</dt>
-                          <dd className="font-semibold text-brand-navy whitespace-nowrap">{value}</dd>
+                          <dd className="font-bold text-brand-navy whitespace-nowrap tabular-nums">{value}</dd>
                         </div>
                       ))}
                     </dl>
@@ -96,116 +182,129 @@ export default function TechnicalData({ name, data, t, translated }: { name: str
               </div>
 
               <div>
-                <h3 className={h3}>{t.mechanism}</h3>
-                <ol className="space-y-5">
+                <h3 className={`${h3} mb-5`}>{t.mechanism}</h3>
+                {/* Numbered steps joined by a line, so it reads as one chain of events. */}
+                <ol>
                   {data.mechanism.map(([step, text], i) => (
-                    <li key={step} className="flex gap-4">
-                      <span aria-hidden="true" className="flex-shrink-0 w-8 h-8 rounded-full bg-brand-navy text-white text-sm font-bold flex items-center justify-center mt-0.5">{i + 1}</span>
-                      <div>
-                        <p className="font-semibold text-brand-navy text-base md:text-lg">{step}</p>
-                        <p className="text-slate-700 leading-relaxed mt-1">{text}</p>
-                      </div>
+                    <li key={step} className="relative pl-14 pb-7 last:pb-0 before:absolute before:left-[1.1875rem] before:top-11 before:bottom-1 before:w-px before:bg-slate-300 last:before:hidden">
+                      <span aria-hidden="true" className="absolute left-0 top-0 w-10 h-10 rounded-full bg-brand-navy text-white font-bold flex items-center justify-center">{i + 1}</span>
+                      <p className="font-bold text-brand-navy text-base md:text-lg pt-1.5">{step}</p>
+                      <p className="text-slate-700 leading-relaxed mt-1">{text}</p>
                     </li>
                   ))}
                 </ol>
               </div>
-            </div>
+            </Reveal>
 
-            <div className="lg:col-span-5 space-y-6">
+            <Reveal delay={0.1} className="lg:col-span-5 space-y-6">
               <DataTable title={t.specs} id="specifications" head={[t.parameter, t.specification]} rows={data.specs} />
               <DataTable title={t.storage} id="storage" head={[t.parameter, t.specification]} rows={data.storage} />
-            </div>
+            </Reveal>
           </div>
         </div>
       </section>
 
-      {/* How it's used, what it gives, and trial results where there are any */}
-      <section aria-labelledby="use-application" className="py-12 md:py-20">
+      {/* Who it's for, what it gives, how to apply it, and trial results where there are any */}
+      <section id="use-application" aria-labelledby="use-application-heading" className={section}>
         <div className="max-w-[1200px] mx-auto px-6">
-          <h2 id="use-application" className={`${h2} text-brand-navy`}>{t.use}</h2>
-          <div className="mt-8 md:mt-10 grid lg:grid-cols-12 gap-10 lg:gap-16">
-            <div className="lg:col-span-7 space-y-10">
-              <div>
-                <h3 className={h3}>{t.intendedUse}</h3>
-                <p className={prose}>{data.intendedUse}</p>
-              </div>
-              <div>
-                <h3 className={h3}>{t.application}</h3>
-                <p className={prose}>{data.application}</p>
-              </div>
-              <div>
-                <h3 className={h3}>{t.compatibility}</h3>
-                <p className={prose}>{data.compatibility}</p>
-              </div>
+          <div className="grid lg:grid-cols-12 gap-x-16 gap-y-6">
+            <div className="lg:col-span-4">
+              <h2 id="use-application-heading" className={`${h2} text-brand-navy`}>{t.use}</h2>
             </div>
-
-            <div className="lg:col-span-5 space-y-6">
-              {data.benefits && (
-                <div className="rounded-2xl bg-slate-50 border border-slate-200 p-6 md:p-8">
-                  <h3 className="font-heading text-xl font-bold text-brand-navy mb-4">{t.benefits}</h3>
-                  <ul className="space-y-3">
-                    {data.benefits.map((benefit) => (
-                      <li key={benefit} className="flex items-start gap-3 text-slate-700">
-                        <svg aria-hidden="true" className="w-5 h-5 text-brand-orange mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7" />
-                        </svg>
-                        <span>{benefit}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
+            <div className="lg:col-span-8">
+              <h3 className="text-sm font-bold text-brand-orange-aa mb-2">{t.intendedUse}</h3>
+              <p className="text-slate-800 text-lg md:text-xl leading-relaxed">{data.intendedUse}</p>
             </div>
           </div>
 
-          {data.efficacy && (
-            <div className="mt-12 md:mt-16 pt-12 md:pt-16 border-t border-slate-200 grid lg:grid-cols-12 gap-10 lg:gap-16">
-              <div className="lg:col-span-7">
-                <h3 className={h3}>{t.trials}</h3>
-                <p className={prose}>{data.efficacy.inVitroNote}</p>
-                {data.efficacy.inVivo && (
-                  <>
-                    <h4 className="font-semibold text-brand-navy text-base md:text-lg mt-6 mb-2">{t.inVivo}</h4>
-                    <p className={prose}>{data.efficacy.inVivo.text}</p>
-                    <p className="text-slate-600 mt-3">{data.efficacy.inVivo.source}</p>
-                  </>
-                )}
-              </div>
-              <div className="lg:col-span-5">
-                <DataTable title={t.inVitro} id="in-vitro" head={[t.organism, t.zone]} rows={data.efficacy.inVitro} showHead />
-              </div>
+          {data.benefits && (
+            <Reveal className="mt-12 md:mt-16">
+              <h3 className={`${h3} mb-5`}>{t.benefits}</h3>
+              <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
+                {data.benefits.map((benefit) => (
+                  <li key={benefit} className="flex items-start gap-3 rounded-2xl bg-slate-50 border border-slate-200 p-4 md:p-5 text-brand-navy font-semibold leading-snug">
+                    <span className="flex-shrink-0 w-6 h-6 rounded-full bg-brand-orange-aa text-white flex items-center justify-center mt-px">
+                      <Icon name="check" className="w-3.5 h-3.5" />
+                    </span>
+                    <span>{benefit}</span>
+                  </li>
+                ))}
+              </ul>
+            </Reveal>
+          )}
+
+          <Reveal className="mt-10 md:mt-12 grid md:grid-cols-2 gap-6">
+            <div className={card}>
+              <CardHeading icon="apply">{t.application}</CardHeading>
+              <p className="text-slate-700 leading-relaxed">{data.application}</p>
             </div>
+            <div className={card}>
+              <CardHeading icon="compatibility">{t.compatibility}</CardHeading>
+              <p className="text-slate-700 leading-relaxed">{data.compatibility}</p>
+            </div>
+          </Reveal>
+
+          {data.efficacy && (
+            <Reveal className="mt-12 md:mt-16 pt-12 md:pt-16 border-t border-slate-200">
+              <h3 className={`${h3} mb-6`}>{t.trials}</h3>
+              <div className="grid lg:grid-cols-12 gap-6 lg:gap-10 items-start">
+                <div className="lg:col-span-5">
+                  <ZoneChart title={t.inVitro} head={[t.organism, t.zone]} rows={data.efficacy.inVitro} />
+                </div>
+                <div className="lg:col-span-7 space-y-6">
+                  <p className={prose}>{data.efficacy.inVitroNote}</p>
+                  {data.efficacy.inVivo && (
+                    <div className="rounded-2xl bg-orange-50 border border-orange-100 p-6 md:p-8">
+                      <h4 className="font-heading text-lg md:text-xl font-bold text-brand-navy mb-3">{t.inVivo}</h4>
+                      <p className="text-slate-800 leading-relaxed">{data.efficacy.inVivo.text}</p>
+                      <p className="mt-4 pt-4 border-t border-orange-200 flex items-start gap-3 text-sm font-semibold text-brand-navy">
+                        <Icon name="trial" className="w-5 h-5 text-brand-orange-aa" />
+                        <span>{data.efficacy.inVivo.source}</span>
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </Reveal>
           )}
         </div>
       </section>
 
-      {/* Quality and safety: purity limits, safe handling, quality assurance and the documents behind it all */}
-      <section aria-labelledby="quality-safety" className="py-12 md:py-20 bg-brand-navy text-white">
+      {/* Quality and safety: three assurances, purity limits, safe handling, and the documents behind it all */}
+      <section id="quality-safety" aria-labelledby="quality-safety-heading" className={`${section} bg-brand-navy text-white`}>
         <div className="max-w-[1200px] mx-auto px-6">
-          <h2 id="quality-safety" className={`${h2} text-white`}>{t.quality}</h2>
+          <h2 id="quality-safety-heading" className={`${h2} text-white`}>{t.quality}</h2>
           <p className="text-white/85 text-base md:text-lg leading-relaxed mt-3 max-w-3xl">{qualityAssurance(name)}</p>
 
-          <div className="mt-8 md:mt-10 grid lg:grid-cols-12 gap-6">
+          <Reveal className="mt-8 md:mt-10">
+            <dl className="grid md:grid-cols-3 gap-4">
+              {assurances.map(([icon, label, value]) => (
+                <div key={label} className="flex gap-4 rounded-2xl border border-white/25 bg-white/[0.07] p-5 md:p-6">
+                  <span className="flex-shrink-0 w-10 h-10 rounded-xl bg-white text-brand-navy flex items-center justify-center">
+                    <Icon name={icon} />
+                  </span>
+                  <div>
+                    <dt className="text-sm font-semibold text-white/75">{label}</dt>
+                    <dd className="mt-1 text-white font-bold leading-snug">{value}</dd>
+                  </div>
+                </div>
+              ))}
+            </dl>
+          </Reveal>
+
+          <Reveal className="mt-4 grid lg:grid-cols-12 gap-4">
             <div className="lg:col-span-5">
               <DataTable title={t.limits} id="purity-limits" head={[t.parameter, t.limit]} rows={PURITY_LIMITS} />
             </div>
 
             <div className={`${card} lg:col-span-7`}>
-              <h3 className="font-heading text-xl font-bold text-brand-navy mb-4">{t.safety}</h3>
+              <h3 className="font-heading text-xl font-bold text-brand-navy mb-3">{t.safety}</h3>
               <div className="space-y-3 text-slate-700 leading-relaxed">
                 {data.handling.map((paragraph) => (
                   <p key={paragraph}>{paragraph}</p>
                 ))}
               </div>
-              <dl className="mt-6 grid sm:grid-cols-2 gap-x-8 gap-y-5">
-                <div>
-                  <dt className="text-sm font-semibold text-slate-aa">{t.classification}</dt>
-                  <dd className="mt-1 text-brand-navy font-semibold">{SAFETY.classification}</dd>
-                </div>
-                <div>
-                  <dt className="text-sm font-semibold text-slate-aa">{t.transport}</dt>
-                  <dd className="mt-1 text-brand-navy font-semibold">{SAFETY.transport}</dd>
-                </div>
+              <dl className="mt-6 pt-6 border-t border-slate-200 grid sm:grid-cols-2 gap-x-8 gap-y-5">
                 <div>
                   <dt className="text-sm font-semibold text-slate-aa">{t.protection}</dt>
                   <dd className="mt-1 text-slate-700">{SAFETY.protection}{data.dry ? ` ${SAFETY.dustMask}` : ""}</dd>
@@ -217,9 +316,9 @@ export default function TechnicalData({ name, data, t, translated }: { name: str
               </dl>
               <p className="mt-5 text-slate-700">{SAFETY.restriction}</p>
 
-              <details className="mt-6 border-t border-slate-200 pt-4 group">
-                <summary className="tap-target cursor-pointer font-semibold text-brand-navy marker:text-brand-orange-aa">{t.firstAid}</summary>
-                <dl className="mt-3 space-y-3">
+              <details className="mt-6 rounded-xl bg-slate-50 border border-slate-200 px-5 py-1">
+                <summary className="cursor-pointer py-3 font-bold text-brand-navy marker:text-brand-orange-aa">{t.firstAid}</summary>
+                <dl className="pb-4 grid sm:grid-cols-2 gap-x-8 gap-y-4">
                   {SAFETY.firstAid.map(([route, advice]) => (
                     <div key={route}>
                       <dt className="text-sm font-semibold text-slate-aa">{route}</dt>
@@ -229,16 +328,16 @@ export default function TechnicalData({ name, data, t, translated }: { name: str
                 </dl>
               </details>
             </div>
-          </div>
+          </Reveal>
 
-          <div className="mt-8 md:mt-10 flex flex-wrap items-center justify-between gap-x-10 gap-y-5">
-            <dl className="text-white/85">
+          <div className="mt-8 md:mt-10 pt-8 border-t border-white/20 flex flex-wrap items-center justify-between gap-x-10 gap-y-5">
+            <dl className="text-white/90">
               <dt className="text-sm font-semibold text-white/75">{t.documents}</dt>
               <dd className="mt-1">
                 {t.tds} {data.documents.tds} <span aria-hidden="true" className="mx-1.5">·</span> {t.sds} {data.documents.sds}
               </dd>
             </dl>
-            <a href={requestHref} className="inline-flex items-center justify-center min-h-12 px-7 rounded-full border-2 border-white/80 text-white font-semibold hover:bg-white hover:text-brand-navy transition-colors">
+            <a href={requestHref} className="inline-flex items-center justify-center min-h-12 px-7 rounded-full bg-white text-brand-navy font-semibold hover:bg-brand-orange-aa hover:text-white transition-colors">
               {t.request}
             </a>
           </div>
