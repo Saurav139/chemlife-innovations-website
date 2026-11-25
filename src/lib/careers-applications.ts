@@ -1,6 +1,6 @@
 import type { ResultSetHeader, RowDataPacket } from "mysql2/promise";
 import { APPLICATION_STATUSES, type Application, type ApplicationStatus } from "@/lib/careers";
-import { databasePool } from "@/lib/insights-store/db";
+import { database } from "@/lib/insights-store/db";
 
 // Internship applications, kept in the site's database with their résumés and shown in the dashboard at
 // /admin/careers. The table is created on first use.
@@ -8,7 +8,7 @@ import { databasePool } from "@/lib/insights-store/db";
 const g = globalThis as unknown as { careerApplicationsTable?: Promise<void> };
 
 async function db() {
-  const pool = await databasePool();
+  const pool = await database();
   g.careerApplicationsTable ??= pool
     .query(`CREATE TABLE IF NOT EXISTS career_applications (
       id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
