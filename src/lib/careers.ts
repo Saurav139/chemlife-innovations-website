@@ -19,4 +19,4 @@ export const hasResumeExtension = (filename: string) =>
 
 /** Why /api/careers refused or couldn't send an application. */
 export type ApplicationErrorCode =
-  | "invalid" | "resume_type" | "resume_size" | "captcha" | "rate_limited" | "unavailable" | "send_failed";
+  | "invalid" | "closed" | "resume_type" | "resume_size" | "captcha" | "rate_limited" | "unavailable" | "send_failed";

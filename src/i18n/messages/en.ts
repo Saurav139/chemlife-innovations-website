@@ -697,6 +697,8 @@ const en = {
     opportunityText: "Successful completion of the internship program may lead to a permanent pre-placement offer (PPO) depending on performance.",
     openTitle: "Open Internships",
     openText: "Choose an internship position below to see the details and apply.",
+    noOpenTitle: "No open internships right now",
+    noOpenText: "New openings will be listed here. Until then, you can email your résumé to {address}.",
     qualifications: "Required Qualifications",
     eligible: "Eligible Fields & Backgrounds",
     apply: "Apply for this Internship",
@@ -717,6 +719,7 @@ const en = {
       resumeSize: "That file is larger than 5 MB.",
     },
     submitErrors: {
+      closed: "This internship has just closed for applications.",
       rate_limited: "Several applications were sent in a short time, so we've paused the form for a while.",
       unavailable: "The application form isn't available right now.",
       send_failed: "Your application couldn't be sent right now.",

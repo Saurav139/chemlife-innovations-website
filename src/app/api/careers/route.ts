@@ -4,6 +4,7 @@ import { verifyTurnstile } from "@/lib/turnstile";
 import { emailTeam } from "@/lib/teamEmail";
 import { EMAIL_PATTERN } from "@/lib/contact";
 import { INTERNSHIP_ROLES } from "@/lib/catalog";
+import { closedRoleIds } from "@/lib/careers-store";
 import { APPLICATION_LIMITS, RESUME_MAX_BYTES, hasResumeExtension, type ApplicationErrorCode } from "@/lib/careers";
 
 // Internship applications from the Careers page: the form (with the résumé as a file) arrives here and is emailed to
@@ -50,6 +51,8 @@ export async function POST(request: Request) {
     role && form.name && EMAIL_PATTERN.test(form.email) &&
     (Object.keys(APPLICATION_LIMITS) as (keyof typeof APPLICATION_LIMITS)[]).every((key) => form[key].length <= APPLICATION_LIMITS[key]);
   if (!valid) return fail("invalid", 400);
+  // Closed in the dashboard (/admin/careers) while the visitor had the page open.
+  if ((await closedRoleIds()).includes(role.id)) return fail("closed", 409);
 
   const resume = body.get("resume");
   if (!(resume instanceof File) || resume.size === 0) return fail("invalid", 400);
