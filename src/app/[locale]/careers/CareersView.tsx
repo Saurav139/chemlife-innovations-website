@@ -10,13 +10,13 @@ import SiteSearch from "@/components/SiteSearch";
 import Turnstile, { type TurnstileHandle } from "@/components/Turnstile";
 import { Images } from "@/lib/assets";
 import { INTERNSHIP_ROLES, roleAnchor } from "@/lib/catalog";
-import { APPLICATION_LIMITS, RESUME_ACCEPT, RESUME_MAX_BYTES, hasResumeExtension, type ApplicationErrorCode } from "@/lib/careers";
+import { APPLICATION_LIMITS, RESUME_ACCEPT, RESUME_MAX_BYTES, hasResumeExtension, type ApplicationErrorCode, type CustomRole } from "@/lib/careers";
 import { CONTACT_EMAIL, EMAIL_PATTERN } from "@/lib/contact";
 import { revealElement, useHashTarget } from "@/lib/deepLink";
 import { useLocale, useT } from "@/i18n/LocaleProvider";
 
 // The page: the open internships (pick one, read about it, apply beside it), then the programme's terms.
-// Internships closed in the dashboard (/admin/careers) are left out. The internships are listed in src/lib/catalog.ts; their titles, departments and descriptions are in the language
+// Internships closed in the dashboard (/admin/careers) are left out, and ones added there are shown. The site's own internships are listed in src/lib/catalog.ts; their titles, departments and descriptions are in the language
 // file (careers.roles), in the same order. Applications go to /api/careers, which emails them to the team.
 
 const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? "";
@@ -50,17 +50,27 @@ const ICONS = {
   travel: icon(<><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2" /><circle cx="7" cy="17" r="2" /><path d="M9 17h6" /><circle cx="17" cy="17" r="2" /></>),
 };
 
+const ROLE_PICTURE_FILES = {
+  lab: Images.careers.researchIntern,
+  nutrition: Images.careers.animalNutrition,
+  office: Images.careers.hrMarketing,
+};
+
 const fieldLabel = "block text-xs font-bold text-brand-navy uppercase tracking-wider mb-2";
 const fieldBox = (invalid?: string) =>
   `w-full bg-white border ${invalid ? "border-red-600" : "border-gray-250"} rounded-xl px-4 py-3 text-base text-brand-navy placeholder:text-gray-400 focus:outline-none focus:border-teal-aa transition-colors`;
 const fieldError = "text-red-600 text-xs mt-1.5 font-medium";
 
-export default function CareersView({ closedRoles }: { closedRoles: string[] }) {
+export default function CareersView({ closedRoles, customRoles }: { closedRoles: string[]; customRoles: CustomRole[] }) {
   const messages = useT();
   const t = messages.careers;
   const shared = messages.contact;
   const locale = useLocale();
-  const roles = INTERNSHIP_ROLES.map((role, i) => ({ ...role, ...t.roles[i] })).filter((role) => !closedRoles.includes(role.id));
+  // The site's own internships, in the visitor's language, then the ones added in the dashboard, as written there.
+  const roles = [
+    ...INTERNSHIP_ROLES.map((role, i) => ({ id: role.id, bgImage: role.bgImage, ...t.roles[i] })),
+    ...customRoles.map((role) => ({ ...role, bgImage: ROLE_PICTURE_FILES[role.picture] })),
+  ].filter((role) => !closedRoles.includes(role.id));
   const [selectedRoleId, setSelectedRoleId] = useState(roles[0]?.id);
   // Undefined only when every internship is closed.
   const selectedRole = roles.find((role) => role.id === selectedRoleId) ?? roles[0];
@@ -293,7 +303,7 @@ export default function CareersView({ closedRoles }: { closedRoles: string[] }) 
                   {[
                     { title: t.qualifications, items: selectedRole.qualifications },
                     { title: t.eligible, items: selectedRole.requirements },
-                  ].map((list) => (
+                  ].filter((list) => list.items.length > 0).map((list) => (
                     <div key={list.title}>
                       <h4 className="text-xs font-bold uppercase tracking-wider text-brand-navy/78 mb-3">{list.title}</h4>
                       <ul className="space-y-2">

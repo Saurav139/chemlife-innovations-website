@@ -3,8 +3,7 @@ import { RateLimiter, clientIp } from "@/lib/rateLimit";
 import { verifyTurnstile } from "@/lib/turnstile";
 import { emailTeam } from "@/lib/teamEmail";
 import { EMAIL_PATTERN } from "@/lib/contact";
-import { INTERNSHIP_ROLES } from "@/lib/catalog";
-import { closedRoleIds } from "@/lib/careers-store";
+import { careersState, roleNames } from "@/lib/careers-store";
 import { APPLICATION_LIMITS, RESUME_MAX_BYTES, hasResumeExtension, type ApplicationErrorCode } from "@/lib/careers";
 
 // Internship applications from the Careers page: the form (with the résumé as a file) arrives here and is emailed to
@@ -40,7 +39,8 @@ export async function POST(request: Request) {
     return typeof value === "string" ? value : "";
   };
 
-  const role = INTERNSHIP_ROLES.find((item) => item.id === text("role"));
+  const careers = await careersState();
+  const role = roleNames(careers).find((item) => item.id === text("role"));
   const form = {
     name: oneLine(text("name")),
     email: text("email").trim(),
@@ -52,7 +52,7 @@ export async function POST(request: Request) {
     (Object.keys(APPLICATION_LIMITS) as (keyof typeof APPLICATION_LIMITS)[]).every((key) => form[key].length <= APPLICATION_LIMITS[key]);
   if (!valid) return fail("invalid", 400);
   // Closed in the dashboard (/admin/careers) while the visitor had the page open.
-  if ((await closedRoleIds()).includes(role.id)) return fail("closed", 409);
+  if (careers.closed.includes(role.id)) return fail("closed", 409);
 
   const resume = body.get("resume");
   if (!(resume instanceof File) || resume.size === 0) return fail("invalid", 400);
@@ -75,8 +75,8 @@ export async function POST(request: Request) {
   const email = [
     "New internship application from the Careers page on chemlifeinnovations.com",
     "",
-    `Position: ${role.englishTitle}`,
-    `Department: ${role.englishDepartment}`,
+    `Position: ${role.title}`,
+    `Department: ${role.department}`,
     `Name: ${form.name}`,
     `Email: ${form.email}`,
     `Phone: ${form.phone || "not given"}`,
@@ -88,7 +88,7 @@ export async function POST(request: Request) {
   ].join("\n");
   const sent = await emailTeam(
     {
-      subject: `[Website] Internship application: ${role.englishTitle} (${form.name})`,
+      subject: `[Website] Internship application: ${role.title} (${form.name})`,
       text: email,
       replyTo: form.email,
       attachments: [{ filename, content: bytes.toString("base64") }],

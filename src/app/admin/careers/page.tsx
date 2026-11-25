@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { cookies, headers } from "next/headers";
 import { ADMIN_COOKIE, adminConfigured, demoMode, validSession } from "@/lib/admin-auth";
 import { INTERNSHIP_ROLES } from "@/lib/catalog";
-import { readClosedRoles } from "@/lib/careers-store";
+import { readCareers } from "@/lib/careers-store";
 import { databaseProblem, storeConfigured } from "@/lib/insights-store/db";
 import AdminLogin from "../insights/AdminLogin";
 import CareersRoles from "./CareersRoles";
@@ -10,7 +10,7 @@ import CareersRoles from "./CareersRoles";
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: "Internship roles | ChemLife Innovations" };
 
-// The dashboard for opening and closing internships. Same sign-in and database as the Insights inbox.
+// The dashboard for opening, closing, adding and changing internships. Same sign-in and database as the Insights inbox.
 export default async function CareersDashboardPage() {
   const demo = demoMode((await headers()).get("host") ?? "");
   const missing = [
@@ -28,13 +28,13 @@ export default async function CareersDashboardPage() {
   }
 
   if (!demo && !validSession((await cookies()).get(ADMIN_COOKIE)?.value)) {
-    return <AdminLogin title="Internship roles" blurb="Open and close internships on the Careers page." />;
+    return <AdminLogin title="Internship roles" blurb="Open, close and add internships on the Careers page." />;
   }
 
   try {
-    const closed = await readClosedRoles();
-    const roles = INTERNSHIP_ROLES.map((role) => ({ id: role.id, title: role.englishTitle, department: role.englishDepartment }));
-    return <CareersRoles roles={roles} initialClosed={closed} demo={demo} />;
+    const state = await readCareers();
+    const builtIn = INTERNSHIP_ROLES.map((role) => ({ id: role.id, title: role.englishTitle, department: role.englishDepartment }));
+    return <CareersRoles builtIn={builtIn} initial={state} demo={demo} />;
   } catch (error) {
     console.error("Roles dashboard: database error", error);
     const problem = databaseProblem(error);
